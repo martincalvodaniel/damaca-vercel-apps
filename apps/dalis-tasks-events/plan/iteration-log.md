@@ -1,5 +1,15 @@
 # Registro de iteraciones
 
+## 23n — Compatibilidad de Intl en calendario civil
+
+Implementación: `civil-date.ts` y `zoned-time.ts` fijan locale `en-US` y calendario `gregory`, para que ICU exponga era `AD`/`BC` incluso cuando Bun ejecuta en Linux. La guardia de calendario civil sigue rechazando fechas antes del año 0001; el resolver zoned-time reconoce muestras auxiliares BC sin confundirlas con el año 1.
+
+Regresiones: conversión del instante `0001-01-01` UTC, rechazo de año cero UTC y del año 1 al retroceder localmente a Honolulu, y resolución de `0001-01-01T00:00` en Honolulu. Se conserva la matriz previa de DST, día omitido, medianoche final, años bajos y eventos.
+
+Validación: focalizadas28pass/163skip/0fail/173 expect; suite completa1386pass/225skip/0fail/15108 expect. Biome8 archivos, TypeScript, build Next/Turbopack y `git diff --check` pasan. Bun1.4.4 en Linux devuelve sólo año con iso8601 y año+era AD con gregory, reproduciendo la causa y verificando el fix. Las regresiones conservan rechazo BC fuera de rango y cubren el cálculo auxiliar BC para medianoche local del año0001.
+
+La ejecución remota de Actions no se ha vuelto a lanzar: este checkout está en `main`, que permanece human-managed; no se hizo push ni despliegue. Sin DB, dependencias, esquema, cambios de zona por host ni artefactos de build versionados.
+
 ## 23m — Tipado oficial de vercel.ts
 
 vercel.ts importa type VercelConfig desde @vercel/config/v1 y anota config con el contrato oficial, sin casts ni tipos manuales. @vercel/config0.13.0 añadido como devDependency con versión exacta y bun.lock actualizado; instalación frozen aprobada sin cambios. No dependencia core ni import runtime: TypeScript elimina importtype. Export serializado comparado con23l idéntico (España/París/missing/deny), tipos del proyecto aprobados. Mismo esquema oficial validado en23l aplicable al objeto idéntico; no se atribuye despliegue ni prueba geográfica remota.

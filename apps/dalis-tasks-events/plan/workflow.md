@@ -1,5 +1,9 @@
 # Flujo de trabajo con Codex
 
+## 23n — Compatibilidad de Intl en calendario civil
+
+Corrección focalizada por fallo reproducible en GitHub Actions run 40020751338: ICU omite `era` con `calendar: "iso8601"`; `civilDateInTimeZone` interpretaba su ausencia como fecha fuera de rango. Formateadores civiles usan ahora calendario gregoriano explícito y conservan guardia AD. Regresiones para año 0001 UTC, BC, límite anterior por Honolulu y resolución de medianoche de año 0001 con muestra auxiliar BC. Bun1.4.4 Linux confirma era ausente en iso8601 y `AD` en gregory. Suite completa1386pass/225skip/0fail/15108aserciones; focalizadas28pass/163skip/0fail; lint8archivos, tipos, build y diff aprobados. Rama main humana, commit local sin push/despliegue; Actions remoto queda pendiente de publicación humana.
+
 ## 23a — Corrección focalizada posterior al cierre
 
 Regresión concreta del gesto mixto corregida, sin nuevos bloques de producto. Entrada100%5h/20%7d, reset1792704583; controles94/19,91/19 y82/17 entre implementación, pruebas y cierre. Reservas10%5h/1%7d; secuencial, sin créditos/reinicios/programación. UI propia, Mongo140 y DoD1357/lint/tipos/Webpack/worker46 aprobados; recursos propios retirados. Misma entrega con plan/log, commit y pushint, SHA remoto y consulta directa posterior. La matriz Next38 de22c1 es evidencia anterior; esta entrega añade el recorrido real de ordenar filas que faltaba, sin declarar nuevas pruebas físicas o productivas.

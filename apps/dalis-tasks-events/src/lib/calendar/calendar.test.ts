@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, test as it } from "bun:test"
 import {
   addCivilDays,
   civilDateInTimeZone,
@@ -35,7 +35,7 @@ const task = taskSchema.parse({
 })
 
 describe("civil calendar", () => {
-  test("uses the account's day at midnight rather than the UTC day", () => {
+  it("uses the account's day at midnight rather than the UTC day", () => {
     const instant = new Date("2026-10-06T22:30:00.000Z")
     expect(civilDateInTimeZone(instant, "Europe/Madrid")).toBe("2026-10-07")
     expect(civilDateInTimeZone(instant, "America/Los_Angeles")).toBe(
@@ -50,13 +50,25 @@ describe("civil calendar", () => {
     ).toBe("2025-12-31")
   })
 
-  test("civil day arithmetic survives leap years, DST and low years", () => {
+  it("civil day arithmetic survives leap years, DST and low years", () => {
     expect(addCivilDays("2024-02-28", 1)).toBe("2024-02-29")
     expect(addCivilDays("2025-02-28", 1)).toBe("2025-03-01")
     expect(addCivilDays("2026-12-31", 1)).toBe("2027-01-01")
     expect(addCivilDays("2026-03-29", 1)).toBe("2026-03-30")
     expect(addCivilDays("0099-12-31", 1)).toBe("0100-01-01")
     expect(addCivilDays("0100-01-01", -1)).toBe("0099-12-31")
+    expect(
+      civilDateInTimeZone(new Date("0001-01-01T00:00:00.000Z"), "UTC")
+    ).toBe("0001-01-01")
+    expect(() =>
+      civilDateInTimeZone(new Date("0000-12-31T23:59:59.999Z"), "UTC")
+    ).toThrow()
+    expect(() =>
+      civilDateInTimeZone(
+        new Date("0001-01-01T00:00:00.000Z"),
+        "Pacific/Honolulu"
+      )
+    ).toThrow()
     expect(
       civilDateInTimeZone(new Date("2026-03-29T01:30:00.000Z"), "Europe/Madrid")
     ).toBe("2026-03-29")
@@ -65,7 +77,7 @@ describe("civil calendar", () => {
     ).toBe("2026-10-25")
   })
 
-  test("rejects invalid dates, clocks, zones and unsupported overflow", () => {
+  it("rejects invalid dates, clocks, zones and unsupported overflow", () => {
     expect(() => addCivilDays("2025-02-29", 1)).toThrow()
     expect(() => addCivilDays("0000-01-01", 1)).toThrow()
     expect(() => addCivilDays("0001-01-01", -1)).toThrow()
@@ -75,7 +87,7 @@ describe("civil calendar", () => {
     expect(() => civilDateInTimeZone(new Date(), "Invalid/Zone")).toThrow()
   })
 
-  test("month grid covers complete Monday-first weeks and is bounded", () => {
+  it("month grid covers complete Monday-first weeks and is bounded", () => {
     expect(monthRange("2024-02-29")).toEqual({
       start: "2024-02-01",
       endExclusive: "2024-03-01",
@@ -96,7 +108,7 @@ describe("civil calendar", () => {
     ).toThrow()
   })
 
-  test("overdue changes at the local day boundary and preserves data", () => {
+  it("overdue changes at the local day boundary and preserves data", () => {
     const items = [task]
     expect(
       selectOverdueTasks(
@@ -123,7 +135,7 @@ describe("civil calendar", () => {
     ).toBe(true)
   })
 
-  test("excludes completed, deleted, future and non-task records", () => {
+  it("excludes completed, deleted, future and non-task records", () => {
     const birthday = calendarItemSchema.parse({
       ...metadata,
       id,
@@ -161,7 +173,7 @@ describe("civil calendar", () => {
     }
   })
 
-  test("recurring parents do not duplicate occurrences; cancellation is respected", () => {
+  it("recurring parents do not duplicate occurrences; cancellation is respected", () => {
     const series = taskSchema.parse({
       ...task,
       recurrence: {

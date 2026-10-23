@@ -1,5 +1,9 @@
 # Dalis Tasks & Events — plan maestro
 
+## 23n — Compatibilidad de calendario Intl
+
+Se fija `en-US` y `calendar: "gregory"` en los formateadores de calendario civil y zoned-time. El calendario `iso8601` puede omitir `era` en ICU/Linux; el código valida explícitamente `AD`, por lo que conversiones válidas fallan en CI. Se mantiene el rechazo de años fuera de 0001–9999 y se cubren muestras BC auxiliares en la resolución de medianoche del año 1.
+
 ## 23m — Tipado oficial de vercel.ts
 
 vercel.ts importa type VercelConfig desde @vercel/config/v1 y anota config con el contrato oficial, sin casts ni tipos manuales. @vercel/config0.13.0 añadido como devDependency con versión exacta y bun.lock actualizado; instalación frozen aprobada sin cambios. No dependencia core ni import runtime: TypeScript elimina importtype. Export serializado comparado con23l idéntico (España/París/missing/deny), tipos del proyecto aprobados. Mismo esquema oficial validado en23l aplicable al objeto idéntico; no se atribuye despliegue ni prueba geográfica remota.

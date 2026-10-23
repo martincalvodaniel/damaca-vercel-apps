@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, test as it } from "bun:test"
 import { resolveEventSchedule } from "@/lib/calendar/event-time"
 import {
   createZonedTimeResolver,
@@ -11,9 +11,17 @@ const isoCandidates = (local: string, zone: string) =>
   possibleZonedInstants(local, zone).map((instant) =>
     new Date(instant).toISOString()
   )
+const captureError = (callback: () => unknown): unknown => {
+  try {
+    callback()
+    return undefined
+  } catch (error) {
+    return error
+  }
+}
 
 describe("event exact time", () => {
-  test("resolves explicit zones, fractional offsets and low years without using the host zone", () => {
+  it("resolves explicit zones, fractional offsets and low years without using the host zone", () => {
     expect(isoCandidates("2026-10-07T00:00", "UTC")).toEqual([
       "2026-10-07T00:00:00.000Z",
     ])
@@ -29,6 +37,9 @@ describe("event exact time", () => {
     expect(isoCandidates("0001-01-01T00:00", "UTC")).toEqual([
       "0001-01-01T00:00:00.000Z",
     ])
+    expect(isoCandidates("0001-01-01T00:00", "Pacific/Honolulu")).toHaveLength(
+      1
+    )
     expect(isoCandidates("9999-12-31T23:59", "UTC")).toEqual([
       "9999-12-31T23:59:00.000Z",
     ])
@@ -36,7 +47,7 @@ describe("event exact time", () => {
       "1890-01-01T11:50:39.000Z",
     ])
   })
-  test("identifies full-hour and half-hour gaps and repeats without choosing an instant", () => {
+  it("identifies full-hour and half-hour gaps and repeats without choosing an instant", () => {
     for (const [local, zone] of [
       ["2026-03-29T02:30", "Europe/Madrid"],
       ["2026-03-08T02:30", "America/New_York"],
@@ -44,13 +55,9 @@ describe("event exact time", () => {
       ["2011-12-30T12:00", "Pacific/Apia"],
     ]) {
       expect(possibleZonedInstants(local, zone)).toEqual([])
-      try {
-        resolveZonedInstant(local, zone)
-        throw new Error("Expected missing time")
-      } catch (error) {
-        expect(error).toBeInstanceOf(ZonedTimeError)
-        expect((error as ZonedTimeError).reason).toBe("nonexistent")
-      }
+      const error = captureError(() => resolveZonedInstant(local, zone))
+      expect(error).toBeInstanceOf(ZonedTimeError)
+      expect((error as ZonedTimeError).reason).toBe("nonexistent")
     }
     expect(isoCandidates("2026-10-25T02:30", "Europe/Madrid")).toEqual([
       "2026-10-25T00:30:00.000Z",
@@ -68,7 +75,7 @@ describe("event exact time", () => {
       resolveZonedInstant("2026-10-25T02:30", "Europe/Madrid")
     ).toThrow(ZonedTimeError)
   })
-  test("uses elapsed duration across transitions, preserves no-end points and all-day civil ranges", () => {
+  it("uses elapsed duration across transitions, preserves no-end points and all-day civil ranges", () => {
     const schedule = {
       mode: "timed" as const,
       localStart: "2026-03-29T01:30",
@@ -104,7 +111,7 @@ describe("event exact time", () => {
     expect(resolveEventSchedule(allDay)).toEqual(allDay)
     expect(schedule.localStart).toBe("2026-03-29T01:30")
   })
-  test("rejects invalid local inputs, missing endpoint hours and non-positive ranges", () => {
+  it("rejects invalid local inputs, missing endpoint hours and non-positive ranges", () => {
     for (const [local, zone] of [
       ["2025-02-29T12:00", "UTC"],
       ["2026-01-01T24:00", "UTC"],
@@ -138,7 +145,7 @@ describe("event exact time", () => {
   })
 })
 
-test("reusable resolvers preserve candidates without sharing formatting zones", () => {
+it("reusable resolvers preserve candidates without sharing formatting zones", () => {
   const madrid = createZonedTimeResolver("Europe/Madrid")
   const apia = createZonedTimeResolver("Pacific/Apia")
   for (const date of [

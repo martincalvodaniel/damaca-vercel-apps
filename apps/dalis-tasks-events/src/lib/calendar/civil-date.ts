@@ -6,9 +6,9 @@ export function civilDateInTimeZone(instant: Date, timeZone: string): string {
   if (!Number.isFinite(instant.getTime())) {
     throw new RangeError("Invalid instant")
   }
-  const parts = new Intl.DateTimeFormat("en", {
+  const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: timeZoneSchema.parse(timeZone),
-    calendar: "iso8601",
+    calendar: "gregory",
     numberingSystem: "latn",
     year: "numeric",
     month: "2-digit",

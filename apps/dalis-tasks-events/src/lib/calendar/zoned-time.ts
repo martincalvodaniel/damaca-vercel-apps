@@ -11,7 +11,7 @@ export class ZonedTimeError extends RangeError {
 function formatterFor(timeZone: string) {
   return new Intl.DateTimeFormat("en-US", {
     timeZone: timeZoneSchema.parse(timeZone),
-    calendar: "iso8601",
+    calendar: "gregory",
     numberingSystem: "latn",
     era: "short",
     year: "numeric",
