@@ -30,8 +30,5 @@
     "knip": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
-  },
-  "engines": {
-    "node": ">=24 <25"
   }
 }
