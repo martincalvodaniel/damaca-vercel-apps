@@ -4,7 +4,7 @@ export const config: VercelConfig = {
   buildCommand: "turbo run build --filter @damaca/dalis-home-management",
   bunVersion: "1.x",
   installCommand:
-    '[ "$VERCEL_INSTALL_COMPLETED" = "1" ] || bun install --frozen-lockfile --filter @damaca/dalis-home-management',
+    '[ "$VERCEL_INSTALL_COMPLETED" = "1" ] || bunx bun@1.4.4 install --frozen-lockfile --filter @damaca/dalis-home-management',
   regions: ["cdg1"],
   routes: [
     {
