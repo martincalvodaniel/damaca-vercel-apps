@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "envMode": "strict",
+  "envMode": "loose",
   "globalEnv": ["!TURBO_TELEMETRY_DISABLED", "!VERCEL_DEPLOYMENT_ID", "!VERCEL_URL"],
   "tasks": {
     "build": {
