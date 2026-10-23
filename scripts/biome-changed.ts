@@ -48,7 +48,7 @@ const biomeArguments =
       )
 const base = configuredBase
   ? [configuredBase]
-  : gitOutput(["rev-list", "--max-parents=0", "HEAD"])
+  : gitOutput(["rev-list", "--max-parents=0", "HEAD"]).map((ref) => ref.trim())
 const baseRef = base[0]
 if (!baseRef) throw new Error("Unable to find the import baseline commit.")
 
