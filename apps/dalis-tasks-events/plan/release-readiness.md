@@ -5,7 +5,6 @@ Referencia: generación 6 de `int`, 21 de octubre de 2026. Este documento es el 
 ## Alcance fijado y límites
 
 Incluye las cuatro variantes de plan, editor común, listas Atrasadas/Hoy/Próximas, calendario, trabajo offline, Google y aislamiento de cuentas, categorías/asignaciones/orden, repetición y apariciones, zona personal sincronizada, tema local, copias y recuperación explícita de los casos compatibles. No se amplía la funcionalidad durante el cierre.
-
 - El usuario aprobó los diez pasos con dos dispositivos físicos el 17 de octubre; no se solicita repetirlos sin un cambio o fallo concreto. El arrastre también fue aceptado.
 - Padre recurrente eliminado, remoto desconocido y cadenas externas no admitidas quedan **pospuestos**. Sus guardias, pendientes, outcomes, tombstones y exportación se conservan; no se consideran implementados. Pueden bloquear cambios dependientes y requerir revisión manual. No se ofrecen decisiones sin evidencia.
 - La copia de serie completa queda fuera de esta versión. Cumpleaños sigue aparcado y compartir por Gmail está excluido.
@@ -14,15 +13,15 @@ Incluye las cuatro variantes de plan, editor común, listas Atrasadas/Hoy/Próxi
 
 ## Matriz de cierre — aprobada en `int`
 
-| Bloque | Estado y evidencia |
-| --- | --- |
-| Recorrido físico offline/multidispositivo | Aceptado por el usuario17oct; [checklist](manual-device-checklist.md). |
-| Sincronización y recuperación ordinaria | Activas en generación6; **38/38 escenarios completos automáticos Next6/Mongo** aprobados en22c1, exit0 y limpieza propia confirmada. [Resultado exacto](evidence/22c1-next-full-auto.json). No equivale a38 recorridos UI manuales. |
-| Calidad de código final | 23a:1357 pruebas aprobadas,225 opt-in omitidas,0 fallos; lint de 1074 archivos sin avisos, tipos, Webpack y worker de 46 recursos. Las omitidas requieren sus runners aislados; no son pruebas de producción. |
-| Navegación y teclado | 22a: título y foco por pantalla, historial sin remontar shell, mes con PageUp/PageDown sin perder foco, skip link y confirmación nativa/Escape. |
-| Formularios y ampliación | 22b: errores enlazados/foco/limpieza, borrador conservado ante fallo,320 px al 200% y390 px normal, claro/oscuro. Fecha/hora siguen en la misma fila a tamaño normal. |
-| Documentación y operación | Guía y política de índices actualizadas en22c; checklist de promoción inferior. |
-| Producción | No se despliega ni se inspecciona una DB del usuario en esta entrega. La verificación del entorno publicado va después de la promoción autorizada. |
+| Bloque                                    | Estado y evidencia                                                                                                                                                                                                                  |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Recorrido físico offline/multidispositivo | Aceptado por el usuario17oct; [checklist](manual-device-checklist.md).                                                                                                                                                              |
+| Sincronización y recuperación ordinaria   | Activas en generación6; **38/38 escenarios completos automáticos Next6/Mongo** aprobados en22c1, exit0 y limpieza propia confirmada. [Resultado exacto](evidence/22c1-next-full-auto.json). No equivale a38 recorridos UI manuales. |
+| Calidad de código final                   | 23a:1357 pruebas aprobadas,225 opt-in omitidas,0 fallos; lint de 1074 archivos sin avisos, tipos, Webpack y worker de 46 recursos. Las omitidas requieren sus runners aislados; no son pruebas de producción.                       |
+| Navegación y teclado                      | 22a: título y foco por pantalla, historial sin remontar shell, mes con PageUp/PageDown sin perder foco, skip link y confirmación nativa/Escape.                                                                                     |
+| Formularios y ampliación                  | 22b: errores enlazados/foco/limpieza, borrador conservado ante fallo,320 px al 200% y390 px normal, claro/oscuro. Fecha/hora siguen en la misma fila a tamaño normal.                                                               |
+| Documentación y operación                 | Guía y política de índices actualizadas en22c; checklist de promoción inferior.                                                                                                                                                     |
+| Producción                                | No se despliega ni se inspecciona una DB del usuario en esta entrega. La verificación del entorno publicado va después de la promoción autorizada.                                                                                  |
 
 Corrección23a posterior: el caso reportado de dos planes simples más una repetición ya permite reordenar ambos tipos en Mi espacio y Calendario. Eventos táctiles sintetizados por fixture sobre componentes reales, teclas, persistencia/recarga e IndexedDB propio aprobados; sólo cambia el orden de hoy. [Evidencia móvil](evidence/23a-home-order-mobile.png). Regresión Mongo140 aprobada con limpieza propia. La matriz automática38 anterior corresponde a22c1; no se declara una nueva ejecución Next38 ni una nueva prueba física por esta corrección.
 

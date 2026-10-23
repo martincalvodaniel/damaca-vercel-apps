@@ -47,7 +47,6 @@ La importación muestra una vista previa y crea copias nuevas de planes sin repe
 Si aparece un conflicto, Ajustes compara tu borrador, la versión remota conocida y el envío. La versión revisada puede haber cambiado después: una elección local todavía necesita confirmación del servidor y puede encontrar otro conflicto. Cancelar no escribe y las decisiones conservan el historial.
 
 Las opciones disponibles dependen de la evidencia y de los cambios relacionados:
-
 - **Plan sin repetición:** usar la versión remota o reenviar el borrador. Con un borrado remoto confirmado, crear una copia con identidad nueva.
 - **Apariciones:** revisar una aparición o una cohorte compatible de varias fechas; usar lo remoto o reenviar las excepciones revisadas. Una aparición remota cancelada/eliminada puede copiarse como plan independiente cuando el diálogo lo ofrece: conserva su borrador, sin repetición, categoría ni orden, y no resucita el original.
 - **Categorías:** revisar nombre/color, borrado u orden. Adoptar una categoría remota viva puede restaurar su visibilidad y la de sus asignaciones; no modifica el contenido de los planes.

@@ -25,16 +25,19 @@ This script creates realistic test data with:
 ### Usage
 
 #### Basic Usage (localhost:3000)
+
 ```bash
 bun run scripts/payments/loadRandomDataForMonth.ts 2025 1
 ```
 
 #### With Custom Base URL
+
 ```bash
 bun run scripts/payments/loadRandomDataForMonth.ts 2025 1 http://localhost:3000
 ```
 
 #### With Remote URL
+
 ```bash
 bun run scripts/payments/loadRandomDataForMonth.ts 2025 1 https://billing-poc.example.com
 ```
@@ -58,11 +61,11 @@ bun run scripts/payments/loadRandomDataForMonth.ts 2023 12
 
 ### Script Arguments
 
-| Argument | Type | Required | Description |
-|----------|------|----------|-------------|
-| year | number | Yes | The year for the payment date (e.g., 2024) |
-| month | number | Yes | The month for the payment date (1-12) |
-| baseUrl | string | No | API base URL (default: `http://localhost:3000`) |
+| Argument | Type   | Required | Description                                     |
+| -------- | ------ | -------- | ----------------------------------------------- |
+| year     | number | Yes      | The year for the payment date (e.g., 2024)      |
+| month    | number | Yes      | The month for the payment date (1-12)           |
+| baseUrl  | string | No       | API base URL (default: `http://localhost:3000`) |
 
 ---
 
@@ -82,16 +85,19 @@ This script:
 ### Usage
 
 #### Basic Usage (localhost:3000)
+
 ```bash
 bun run scripts/payments/loadRandomDataForYear.ts 2025
 ```
 
 #### With Custom Base URL
+
 ```bash
 bun run scripts/payments/loadRandomDataForYear.ts 2025 http://localhost:3000
 ```
 
 #### With Remote URL
+
 ```bash
 bun run scripts/payments/loadRandomDataForYear.ts 2025 https://billing-poc.example.com
 ```
@@ -110,10 +116,10 @@ bun run scripts/payments/loadRandomDataForYear.ts 2025 http://192.168.1.100:3000
 
 ### Script Arguments
 
-| Argument | Type | Required | Description |
-|----------|------|----------|-------------|
-| year | number | Yes | The year for the payment dates (e.g., 2024) |
-| baseUrl | string | No | API base URL (default: `http://localhost:3000`) |
+| Argument | Type   | Required | Description                                     |
+| -------- | ------ | -------- | ----------------------------------------------- |
+| year     | number | Yes      | The year for the payment dates (e.g., 2024)     |
+| baseUrl  | string | No       | API base URL (default: `http://localhost:3000`) |
 
 ### Output
 
@@ -134,6 +140,7 @@ The script displays:
 ## Data Generation Details
 
 ### Income Tags
+
 - Client Invoice
 - Consulting Fee
 - Software License
@@ -144,6 +151,7 @@ The script displays:
 - Maintenance Fee
 
 ### Outcome Tags
+
 - Office Supplies
 - Software License
 - Cloud Services
@@ -156,6 +164,7 @@ The script displays:
 - Travel Expenses
 
 ### Concept Names
+
 - Labor
 - Materials
 - Services

@@ -1189,7 +1189,6 @@ Nueve pruebas nuevas validan adoptar el catálogo observado o reaplicar únicame
 ## 19c6 — Elección visible de reenvío de aparición
 
 Estado: completado; adopción/retry activos con27Next6 ydiálogo real aprobados.
-
 - Objetivo: ofrecer retry ya probado con preview local completo, confirmación yUUIDestables, junto a adopción existente.
 - target_paths: src/features/sync/components/{plan-occurrence-incident-actions,plan-occurrence-resolution-dialog,plan-occurrence-resolution-ui.test}.tsx, test/next-settings-sync/features/appearance-retry-local-proof.ts.template y plan/**.
 - Dependencias:46944ac publicado,32%5h/89%7d, reservas10%/1%;27Next6 prueban cola/backup/ACK reales yrecarga. GuíasNext/skill React ya consultadas. Corte secuencial.
@@ -1199,7 +1198,6 @@ Estado: completado; adopción/retry activos con27Next6 ydiálogo real aprobados.
 ## 19c5 — Retry durable de toda la aparición y ACK reales
 
 Estado: completado;27Next6 correctos, retry durable/backup preparados y botón todavía oculto.
-
 - Objetivo: cerrar escritura de toda la cadena, evidencia portable yprueba remota real antes de ofrecer retry en UI.
 - target_paths: src/{lib/local-db/plan-occurrence-resolution.ts,lib/backup/local-backup.ts,lib/sync/plan-occurrence-resolution.test.ts,schemas/next-sync-test.ts}, test/next-settings-sync/features/** y plan/**.
 - Dependencias:71350a4 publicado,53%5h/93%7d, reservas10%/1%; planner completo19c4 yadopción activa19c3. Secuencial, sin cambios remotos de protocolo/índices.
@@ -1209,7 +1207,6 @@ Estado: completado;27Next6 correctos, retry durable/backup preparados y botón t
 ## 19c4 — Plan puro de reenvío completo de aparición
 
 Estado: completado; sólo planner preparado, retry rechazado por executor/backup y oculto en UI.
-
 - Objetivo: preparar un reintento de toda la excepción local usando comandos existentes, sin introducir protocolo/comando remoto nuevo.
 - target_paths: src/{schemas/plan-occurrence-resolution.ts,lib/sync/{plan-occurrence-resolution,plan-occurrence-retry,plan-occurrence-resolution.test}.ts,lib/local-db/plan-occurrence-resolution.ts,lib/backup/local-backup.ts} y plan/**.
 - Dependencias:dca6b47 publicado,60%5h/94%7d, reservas10%/1%; adopción activa19c3. Secuencial, planner sólo; executor/backup rechazan retry hasta su siguiente corte coherente.
@@ -1219,7 +1216,6 @@ Estado: completado; sólo planner preparado, retry rechazado por executor/backup
 ## 19c3 — Adopción visible de aparición en Ajustes
 
 Estado: completado; elección activa con26Next6 ydiálogo real aprobados.
-
 - Objetivo: habilitar la elección de remoto conocido ya probada, con preview completo de excepción yconfirmación explícita.
 - target_paths: src/features/sync/components/{plan-occurrence-incident-card,plan-occurrence-incident-version,plan-occurrence-incident-actions,plan-occurrence-resolution-dialog,plan-occurrence-resolution-ui.test,sync-incident-panel}.tsx, test/next-settings-sync/features/{appearance-recovery,appearance-resolution-local-proof,appearance-resolution-ui}*.template y plan/**.
 - Dependencias:90dbb27 publicado,75%5h/96%7d, reservas10%/1%;26Next6 prueban executor/backup reales. GuíasNext yskill vercel-react-best-practices consultadas; secuencial.
@@ -1229,7 +1225,6 @@ Estado: completado; elección activa con26Next6 ydiálogo real aprobados.
 ## 19c2 — Adopción durable y evidencia portable de aparición
 
 Estado: completado;26Next6 correctos y escritura/backup probados, UI pendiente.
-
 - Objetivo: persistir adopción sin ACK en la misma TX de proyección/cola/evidencia y probar conflicto remoto real antes de UI.
 - target_paths: src/{lib/local-db/{plan-occurrence-resolution,sync-store}.ts,lib/backup/local-backup.ts,schemas/{local-recurring-backup,next-sync-test}.ts,features/sync/local-plan-occurrence-resolution.ts}, pruebas delplanner/backup, test/next-settings-sync/features/** y plan/**.
 - Dependencias: bfba03c publicado,93%5h/99%7d, reservas10%/1%; contrato puro19c1. Next instalado consultado, Docker28.4.0/imagen pinnedamd64 revalidados. Secuencial.
@@ -1239,7 +1234,6 @@ Estado: completado;26Next6 correctos y escritura/backup probados, UI pendiente.
 ## 19c1 — Contrato puro de adopción de una aparición
 
 Estado: completado; preparación pura, sin elecciones activadas.
-
 - Objetivo: preparar adopción explícita de la excepción remota conocida de un único slot, sin modificar padre/otros slots ni fabricar ACK.
 - target_paths: src/{schemas,types,lib/sync}/plan-occurrence-resolution.ts, src/lib/sync/plan-occurrence-resolution.test.ts y plan/**.
 - Dependencias: a76721b/originint exactos y limpios;19c0 detecta dependientes externos. Renovación real100%5h/100%7d, reset nuevo1792300836, reservas10%/1%. Secuencial, sin activar UI/executor.
@@ -1276,7 +1270,6 @@ Estado: completado; preparación pura, sin elecciones activadas.
 ## 19c0 — Guardia de dependientes externos de apariciones
 
 Estado: completado; comparación reforzada, sin nuevas elecciones recurrentes.
-
 - Objetivo: completar la comparación de apariciones para detectar también dependientes externos que apuntan a su cadena, antes de preparar elecciones.
 - target_paths: src/lib/sync/recurring-incident-snapshot{,.test}.ts y plan/**.
 - Dependencias: a6e1aa4 publicado; 20%5h/73%7d, reservas10%/1%. Corte puro secuencial acotado, sin executor ni nuevas elecciones.
@@ -1286,7 +1279,6 @@ Estado: completado; comparación reforzada, sin nuevas elecciones recurrentes.
 ## 19b3 — Elección visible de zona en conflicto
 
 Estado: completado; opciones activas y 25 escenarios Next6 aprobados.
-
 - Objetivo: conectar acciones compactas de adoptar/reintentar settings con preview congelado yconfirmación real.
 - target_paths: src/features/sync/components/{personal-incident-card,sync-incident-panel,settings-incident-actions,settings-incident-resolution-dialog,settings-incident-ui.test}.tsx, src/schemas/next-sync-test.ts, test/next-settings-sync/features/**, plan/**.
 - Dependencias:5c10dd4 publicado,39%5h/76%7d, reservas10%/1%;25Next6 conexecutor/backup reales aprobados. GuíasNext/React leídas, secuencial.
@@ -1297,7 +1289,6 @@ Estado: completado; opciones activas y 25 escenarios Next6 aprobados.
 ## 19b2 — Transacción y evidencia de recuperación de zona
 
 Estado: completado,25Next6 correctos; registro yfeature disponibles, UI pendiente.
-
 - Objetivo: persistir decisiones de settings con backup3 validado y probar conflictos reales antes de habilitarUI.
 - target_paths: src/{lib/local-db/{sync-incidents,sync-store,settings-resolution}.ts,lib/backup/local-backup.ts,lib/sync/settings-resolution.test.ts,schemas/{local-recurring-backup,next-sync-test}.ts,features/sync/local-settings-resolution.ts}, test/next-settings-sync/features/**, plan/**.
 - Dependencias:b283633 publicado,53%5h/79%7d, reservas10%/1%;19b1validado. Secuencial, sólo recursos propios.
@@ -1308,7 +1299,6 @@ Estado: completado,25Next6 correctos; registro yfeature disponibles, UI pendient
 ## 19b1 — Contrato de recuperación de zona personal
 
 Estado: completado; preparación pura, sin nueva elección visible.
-
 - Objetivo: diseñar y probar adopción/reintento explícitos de settings, sin ofrecer botones antes del executor.
 - target_paths: src/{schemas/settings-resolution.ts,types/settings-resolution.ts,types/sync-incident.ts,lib/sync/{incident-snapshot.ts,settings-resolution.ts,settings-resolution.test.ts}}, plan/**.
 - Dependencias:2da06ca publicado,60%5h/80%7d, reservas10%/1%; settings6 y evidencia/incidentes activos. Secuencial.
@@ -1319,7 +1309,6 @@ Estado: completado; preparación pura, sin nueva elección visible.
 ## 19a4 — Elecciones comunes activas en Ajustes
 
 Estado: completado; opciones activas y24Next6 con feature/diálogo real correctos.
-
 - Objetivo: conectar coherentemente feature/executor/choices de planes simples tras prueba remota, con diálogo real validado.
 - target_paths: src/features/sync/{local-incidents.ts,components/{sync-incident-actions,sync-incident-card,sync-incident-version,common-plan-incident-ui.test}.tsx}, src/schemas/next-sync-test.ts, test/next-settings-sync/features/**, plan/**.
 - Dependencias:72e9f30 publicado,72%5h/82%7d yreservas10%/1%;19a1–3 aprobados, guíasNextuseclient/serveractions yReactbestpractices leídas. Secuencial.
@@ -1330,7 +1319,6 @@ Estado: completado; opciones activas y24Next6 con feature/diálogo real correcto
 ## 19a3 — Conflictos comunes reales y convergencia remota
 
 Estado: completado,24Next6 y4conflictosreales conconvergencia exacta aprobados.
-
 - Objetivo: demostrar recuperación privada con dosparticiones/Next/Mongo y productores reales antes deUI.
 - target_paths: src/schemas/next-sync-test.ts, test/next-settings-sync/features/{common-plan-recovery,local-client,device-client,controller}.*.template, plan/**.
 - Dependencias:a9f6bf3 publicado,82%5h/83%7d, reservas10%/1%; executorlocal probado. Dockerpinned revalidado, secuencial.
@@ -1341,7 +1329,6 @@ Estado: completado,24Next6 y4conflictosreales conconvergencia exacta aprobados.
 ## 19a2 — Executor durable de recuperación común, aún privado
 
 Estado: completado,23Next6correctos; UI sigue sin elecciones comunes.
-
 - Objetivo: pasar opt-in de planes al executor existente y comprobar transacción/replay/rollback/evidencia completa con settings presentes, sinhabilitarUI.
 - target_paths: src/lib/local-db/{sync-resolution,sync-store}.ts, src/schemas/next-sync-test.ts, test/next-settings-sync/features/{plan-recovery-proof,local-client,device-client,controller}.*.template, plan/**.
 - Dependencias:9685fce publicado,95%5h/85%7d, reservas10%/1%; planner19a1 puroprobado. Secuencial.
@@ -1352,7 +1339,6 @@ Estado: completado,23Next6correctos; UI sigue sin elecciones comunes.
 ## 19a1 — Planner de recuperación de planes comunes simples
 
 Estado: completado, opt-in privado sin elecciones nuevas enUI.
-
 - Objetivo: extender el contrato existente a las cuatro variantes sin repetición, conservando elecciones explícitas y una activación separada de callers/UI.
 - target_paths: src/lib/sync/{incident-resolution.ts,plan-incident-resolution.test.ts}, plan/{iterations,master,workflow,conflict-recovery,iteration-log}.md.
 - Dependencias:69149d2/originint exactos ylimpios; renovación real100%5h/86%7d, reset1792282775, reservas10%/1%. Secuencial; sin otros agentes o DBusuario.
@@ -1373,7 +1359,6 @@ Estado: completado, opt-in privado sin elecciones nuevas enUI.
 ## 15b1 — Guía de uso y checklist vigente
 
 Estado: completada la guía preparatoria;15a y cierre final15b siguen pendientes.
-
 - Objetivo: preparar la guía del producto activo6 y actualizar el recorrido físico, sin declarar cerrado15a/15b.
 - target_paths: README.md, plan/{user-guide,manual-device-checklist,master,iterations,iteration-log,workflow}.md.
 - Dependencias:3e2fb0b publicado,17%5h/87%7d, reservas10%/1%; pilotoPreview6 aprobado. Corte documental secuencial.
@@ -1384,7 +1369,6 @@ Estado: completada la guía preparatoria;15a y cierre final15b siguen pendientes
 ## 18e2c — Piloto Preview de zona personal6
 
 Estado: completado;2ACKsettingsreales yrestauraciónconservadora, sinpendientes.
-
 - Objetivo: verificar despliegueint/actualizaciónconservadora, cuentaGoogleexistente eíndicesettingsoperativovíabootstrap/readiness/ACKreal.
 - target_paths: plan/**; interacciónúnicamentePreviewautorizado, sinproducción/credenciales/delete.
 - Dependencias:57ebb5b publicado,26%5h/88%7d reserva10%/1%. Sesiónexistente disponible; clienteanterior muestraactualizacióndisponible.
@@ -1395,7 +1379,6 @@ Estado: completado;2ACKsettingsreales yrestauraciónconservadora, sinpendientes.
 ## 18e2b — Activación conjunta de ajustes6
 
 Estado: completado;6seleccionado y22casosconconfiguraciónreal correctos.
-
 - Objetivo: seleccionar6 enproducto paraidentidad/pull/acciones/retiro5/cliente/hook/provider/caché/incidentes/UI de forma conjunta.
 - target_paths: src/config/{common-plan-release.ts,product-sync-protocol.test.ts}, scripts/next-sync-test-runner.ts, src/features/sync/components/{device-sync-settings,sync-status-panel,personal-incident-version}.tsx y su pruebaSSR, plan/**.
 - Dependencias:8c3e26f publicado,31%5h/89%7d reserva10%/1%;22Next6incluyendoUIreal, bootstrapPreview/intautorizadoyvalidado, resto de puertos6preparados. Secuencial.
@@ -1406,7 +1389,6 @@ Estado: completado;6seleccionado y22casosconconfiguraciónreal correctos.
 ## 18e2a — Editor compacto de zona personal
 
 Estado: completado;22Next6incluyendoUIrealguardadooffline pasan, productoaún5.
-
 - Objetivo: edición explícita de zona offline desdeAjustes, aún guardada porprotocolo6 inactivo; refrescar caches propias paraHoy/Atrasadas.
 - target_paths: src/features/workspace/components/personal-time-zone-*.tsx, src/schemas/next-sync-test.ts, test/next-settings-sync/features/**, plan/**.
 - Dependencias:1571669 publicado,37%5h/90%7d, reserva10%/1%; bootstrapaprobado y21Next6, guíasNext/Reactleídas. Secuencial.
@@ -1417,7 +1399,6 @@ Estado: completado;22Next6incluyendoUIrealguardadooffline pasan, productoaún5.
 ## 18e1c2 — Bootstrap de índice settings autorizado
 
 Estado: completado; bootstrap validado8casosMongo, sóloPreview/int.
-
 - Objetivo: ensureIndexes desde singleton crea índice único settings sóloPreview/int, según permiso humano, sinactivar6.
 - target_paths: src/lib/db/{AGENTS.md,ensure-indexes.ts,ensure-indexes.test.ts,recurring-index-operator.integration.test.ts}, plan/**.
 - Dependencias: f8183b3 publicado,40%5h/91%7d, reserva10%/1%; autorización explícita sólouser_settings_user_uidx preproducción. Secuencial.
@@ -1428,7 +1409,6 @@ Estado: completado; bootstrap validado8casosMongo, sóloPreview/int.
 ## 18e1c1 — Consumidores6 y transición durable desde5
 
 Estado: completado; veintiún escenarios reales pasan, producto sigue5.
-
 - Objetivo: conectar lecturas de incidentes6 y capturaTX de resolución existente conservando settings, y probar cliente5 con handshake capturado/acciónretirada oausente sinACK/claimnuevo.
 - target_paths: `src/{features/sync/{local-incidents.ts,hooks/use-mixed-sync-engine-core.ts},lib/local-db/{sync-store,sync-incidents,sync-resolution}.ts,schemas/next-sync-test.ts}`, `test/next-settings-sync/features/**`, `plan/**`.
 - Dependencias:b6f21e5 publicado,54%5h/93%7d/reservas10%/1%,19Next6 correctos; permiso de índicePreview recibido: sólo user_settings_user_uidx enPreview/int, sinproducción/datosrepair. Secuencial, no selección6.
@@ -1438,7 +1418,6 @@ Estado: completado; veintiún escenarios reales pasan, producto sigue5.
 ## 18e1b2 — Resiliencia y proveedor6 real guardado
 
 Estado: completado; diecinueve escenarios Next6 pasan, selección productiva sigue5.
-
 - Objetivo: probar lostresponse/época/cuenta/conflicto de settings con dependientes y lifecycle del proveedor6 productivo, aún inactivo enflag5.
 - target_paths: `src/features/sync/components/{active-sync-provider,settings-sync-provider}.tsx`, `src/schemas/next-sync-test{,.test}.ts`, `test/next-settings-sync/features/**`, `plan/**`.
 - Dependencias:2716a29 publicado,66%5h/95%7d yreservas10%/1%; aceptación14Next6 de ACK/pull ya cerrada. Secuencial y mismos recursosownpinned, sin índicePreview o activación.
@@ -1448,7 +1427,6 @@ Estado: completado; diecinueve escenarios Next6 pasan, selección productiva sig
 ## 18e1b1 — ACK y descarga6 en dos particiones reales
 
 Estado: completado; catorce escenarios Next6 pasan, incluida convergencia exacta/recarga.
-
 - Objetivo: productores offline de zona/categoría/serie común y ACK/pull por cliente6/Next/Mongo reales con proyecciones exactas entre dos orígenes.
 - target_paths: `test/next-settings-sync/features/{local-client.ts,device-client.ts,controller.tsx,projection.ts}.template`, `src/schemas/next-sync-test{,.test}.ts`, `plan/**`.
 - Dependencias:18e1a1 publicado25c2a00,82%5h/97%7d/reservas10%/1%; callbacks/contratos6 cerrados, Mongoown/pinnedrevalidado. Secuencial, sin callerproducto6/DBusuario.
@@ -1458,7 +1436,6 @@ Estado: completado; catorce escenarios Next6 pasan, incluida convergencia exacta
 ## 18e1a1 — Frontera Next6 compilada de ajustes
 
 Estado: completado; nueve escenarios6 y diecinueve de regresión5 pasan, producto sigue5.
-
 - Objetivo: ejecutar action6/defaults/readiness/sesiones BetterAuth persistidas y matriz5↔6 con dos orígenes propios, manteniendo producto5.
 - target_paths: `scripts/{sync-db-test-runner,next-sync-test-runner}.ts`, `test/next-settings-sync/**`, `src/schemas/next-sync-test{,.test}.ts`, `src/lib/db/next-sync-fixture.ts`, `test/next-recurring-sync/features/release-profile.ts.template`, `plan/**`.
 - Dependencias: int202c24f/origin exactos y limpios, flags5 activos; cuota17oct99%5h/100%7d, reset1792264709, reservas10%/1%. Docker28.4linuxamd64 e imagen pinned Mongo revalidados. Secuencial; guíasNextServerActions/React vigentes leídas.
@@ -1468,7 +1445,6 @@ Estado: completado; nueve escenarios6 y diecinueve de regresión5 pasan, product
 ## 16c16 — Selector de tema por dispositivo
 
 Estado: completado; tres modos activos y persistidos por navegador/dispositivo, sin sincronización remota.
-
 - Objetivo: añadir Sistema/Claro/Oscuro compacto enAjustes con elección persistida offline y aplicada antes de hidratación, sin cambiar ajuste remoto de zona.
 - target_paths: `src/{app/{layout.tsx,globals.css},config/theme.ts,schemas/theme.ts,lib/theme/**,components/shared/theme-bootstrap.tsx,features/workspace/components/{device-settings,theme-settings}.tsx}`, `test/browser/theme.tsx`, `scripts/theme-test-server.ts`, `plan/**`.
 - Dependencias: petición humana tras explicación de tema automático, int5048ef5 limpio, cuota72%5h/5%7d y reservas10%/1%; guíaNextlayout/script y reglaReact hydration-no-flicker leídas. Secuencial, sin dependencia nueva/DB.
@@ -1478,7 +1454,6 @@ Estado: completado; tres modos activos y persistidos por navegador/dispositivo, 
 ## 16c15 — Muestra real del color de categoría
 
 Estado: completado; regla compacta excluye inputcolor y el swatch nativo vuelve a mostrar el valor.
-
 - Objetivo: corregir el swatch nativo colapsado/raya gris para mostrar el color elegido en creación/edición, conservando picker nativo accesible.
 - target_paths: `src/app/globals.css`, `test/browser/tag-color.tsx`, `scripts/tag-color-test-server.ts`, `plan/**`.
 - Dependencias: petición humana; int8952da0 limpio, cuota78%5h/6%7d/reservas10%/1%; guíasNext/use-client/React vigentes ya leídas. Corte secuencial UI sinDB/sync.
@@ -1488,7 +1463,6 @@ Estado: completado; regla compacta excluye inputcolor y el swatch nativo vuelve 
 ## 16c14b — Fecha y hora en una misma fila móvil
 
 Estado: completado; corrección visual verificada con formulario real.
-
 - Objetivo: corregir salto de hora introducido en16c14, reduciendo ancho de etiqueta/flechas/padding y manteniendo fecha+hora juntas.
 - target_paths: `src/components/ui/{civil-date-input,date-time-fields}.tsx`, `plan/**`; reutilizar fixture4266 existente sin lógica nueva.
 - Dependencias: petición humana explícita, HEAD5310b09/int limpio, guías Next/React leídas; cuota83%5h/7%7d/reservas10%/1%.
@@ -1498,7 +1472,6 @@ Estado: completado; corrección visual verificada con formulario real.
 ## 18e1a0 — Selección de frontera futura para la aceptación Next
 
 Estado: completado; selección6 permanece inactiva y evidencia Next aún pendiente.
-
 - Objetivo: preparar rutas productivas de identidad/pull y retiro de acción5 para el fixture compilado6, sin activar producto6.
 - target_paths: `src/config/{common-plan-release,product-sync-protocol,product-sync-protocol.test}.ts`, `src/app/api/sync/{identity,changes}/route.ts`, `src/features/sync/actions-v{5,6}.ts`, `plan/**`.
 - Dependencias: settings6 privado completo, próximo18e1a necesita usar referencias productivas reales; 16c14 publicado7ea2bcd, margen86%5h/7%7d con reservas10%/1%. Guía RouteHandlers instalada leída. Secuencial, sin DB/fixtureNuevo/activación.
@@ -1508,7 +1481,6 @@ Estado: completado; selección6 permanece inactiva y evidencia Next aún pendien
 ## 16c14 — Fechas correlacionadas, fin opcional y controles de día
 
 Estado: completado; validación y evidencia en iteration-log/item-editor-redesign.
-
 - Objetivo: al cambiar inicio desplazar fin explícito por el mismo número de días civiles; permitir quitar/añadir fin y flechas -/+día en fechas del editor.
 - target_paths: `src/components/ui/{civil-date-input,date-time-fields}.tsx`, `src/features/plans/{plan-form-dates,plan-form-dates.test}.ts`, `src/lib/calendar/form-date.ts`, `src/features/plans/components/{plan-form,plan-recurrence-fields}.tsx`, `test/browser/plan-form-dates.tsx`, `scripts/plan-form-dates-test-server.ts`, `plan/**`.
 - Dependencias: petición humana intercalada y guías Next/use-client/React vigentes; int23fc6c3 limpio, cuota real100%5h/9%7d, reset1791839451, reservas10%/1%. Secuencial, sin comenzar Nextsettings antes de cerrar esta petición.
@@ -1862,15 +1834,15 @@ Los `target_paths` describen el ámbito permitido; antes de editar, concretar ar
 
 ## Hitos y estado
 
-| Hito | Entregas | Estado |
-| --- | --- | --- |
-| Plan y reglas | `00` | Completada; validación documental registrada en el log. |
-| Responsive y lote desatendido | `00b` | Requisitos y protocolo incorporados. |
-| Identidad y base offline | `01a–04c` | Completada; identidad, persistencia, worker/cierre y barras comprobados. Google real y dispositivos físicos siguen en el piloto. |
-| Calendario personal y creación de tareas | `05a–07b` | Completadas, incluida reordenación local; orden remoto de tareas simples activado en `11c5a18`. |
-| Eventos, repetición y cumpleaños | `08–10` | Eventos simples operativos; repetición local parcial. Backlog/programación futura, sincronización de series y cumpleaños pendientes. |
-| Remoto, convergencia y recuperación | `11a–13c` | Tareas/eventos propios simples, categorías, asignaciones y orden simple activados y probados; recuperación y backup entregados. Extensión a series y preferencias residuales pendiente. |
-| Piloto y cierre | `15a–15b` | Pendiente; compartir14a–14c retirado del alcance. |
+| Hito                                     | Entregas  | Estado                                                                                                                                                                                  |
+| ---------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Plan y reglas                            | `00`      | Completada; validación documental registrada en el log.                                                                                                                                 |
+| Responsive y lote desatendido            | `00b`     | Requisitos y protocolo incorporados.                                                                                                                                                    |
+| Identidad y base offline                 | `01a–04c` | Completada; identidad, persistencia, worker/cierre y barras comprobados. Google real y dispositivos físicos siguen en el piloto.                                                        |
+| Calendario personal y creación de tareas | `05a–07b` | Completadas, incluida reordenación local; orden remoto de tareas simples activado en `11c5a18`.                                                                                         |
+| Eventos, repetición y cumpleaños         | `08–10`   | Eventos simples operativos; repetición local parcial. Backlog/programación futura, sincronización de series y cumpleaños pendientes.                                                    |
+| Remoto, convergencia y recuperación      | `11a–13c` | Tareas/eventos propios simples, categorías, asignaciones y orden simple activados y probados; recuperación y backup entregados. Extensión a series y preferencias residuales pendiente. |
+| Piloto y cierre                          | `15a–15b` | Pendiente; compartir14a–14c retirado del alcance.                                                                                                                                       |
 
 Para toda entrega con código: tipos, lint, pruebas pertinentes y build según [workflow.md](workflow.md). Los criterios siguientes añaden evidencia específica, no reemplazan esas comprobaciones. No marcar un hito terminado si falta una subentrega.
 
@@ -2301,7 +2273,6 @@ Compartir por Gmail (14a–14c) no se implementará por decisión humana del11oc
 ### 15a — Recorrido real y accesibilidad
 
 Estado parcial vigente17oct: recorrido físico de diez pasos aprobado por el usuario en15a3. Accesibilidad completa y casos de recuperación concurrente siguen pendientes; no exigir repetir los diez pasos sin cambios o fallos que lo justifiquen.
-
 - `target_paths`: solo los componentes/módulos que fallen en el recorrido, evidencia de aceptación, documentación de operación.
 - Dependencias: sincronización común, repetición remota y recuperación/backup (`13c`); cumpleaños aparcado y compartir fuera del alcance no son prerrequisitos.
 - Aceptación: ejecutar matriz siguiente en navegador/DB reales y build de producción; comprobar UI móvil, teclado, foco, nombres accesibles, formularios y contraste. Corregir fallos por entregas acotadas sin ampliar producto.
@@ -2315,17 +2286,17 @@ Estado parcial vigente17oct: recorrido físico de diez pasos aprobado por el usu
 
 ## Matriz de aceptación
 
-| Escenario | Evidencia requerida | Entrega principal |
-| --- | --- | --- |
-| Modo avión y reapertura completa | Shell, recursos y datos disponibles; navegar y recargar otro mes. | `04b`, `06`, `15a` |
-| Crear/editar las cuatro variantes de plan sin red | Guardado local y cola sobreviven cierre. | `16`, `17` |
-| Cambio de día y atrasadas | Estado conservado; completadas excluidas; historial intacto. | `07a`, `09b` |
-| Recurrencia y excepciones | DST, bisiestos, día 31, corte futuro y ocurrencias pendientes. | `09`, `10` |
-| Orden personal | Grupos/tareas/atrasadas; teclado; persiste y se sincroniza. | `07b`, `12b` |
-| Dos dispositivos, respuesta perdida | Convergencia, ID único, sin duplicados ni sobrescritura silenciosa. | `11b–13b` |
-| Cuenta diferente/ID ajeno | Aislamiento local y denegación remota, incluidas APIs y acciones. | `01b`, `03a`, `11b` |
-| Despliegue y migración con pendientes | Outbox intacta; versión compatible; reintento idempotente. | `04b`, `13b–13c` |
-| Cuota/backup/logout | Sin falso guardado ni descarte implícito; restauración validada. | `03a`, `04b`, `13c` |
+| Escenario                                         | Evidencia requerida                                                 | Entrega principal   |
+| ------------------------------------------------- | ------------------------------------------------------------------- | ------------------- |
+| Modo avión y reapertura completa                  | Shell, recursos y datos disponibles; navegar y recargar otro mes.   | `04b`, `06`, `15a`  |
+| Crear/editar las cuatro variantes de plan sin red | Guardado local y cola sobreviven cierre.                            | `16`, `17`          |
+| Cambio de día y atrasadas                         | Estado conservado; completadas excluidas; historial intacto.        | `07a`, `09b`        |
+| Recurrencia y excepciones                         | DST, bisiestos, día 31, corte futuro y ocurrencias pendientes.      | `09`, `10`          |
+| Orden personal                                    | Grupos/tareas/atrasadas; teclado; persiste y se sincroniza.         | `07b`, `12b`        |
+| Dos dispositivos, respuesta perdida               | Convergencia, ID único, sin duplicados ni sobrescritura silenciosa. | `11b–13b`           |
+| Cuenta diferente/ID ajeno                         | Aislamiento local y denegación remota, incluidas APIs y acciones.   | `01b`, `03a`, `11b` |
+| Despliegue y migración con pendientes             | Outbox intacta; versión compatible; reintento idempotente.          | `04b`, `13b–13c`    |
+| Cuota/backup/logout                               | Sin falso guardado ni descarte implícito; restauración validada.    | `03a`, `04b`, `13c` |
 
 Si el alcance de una subentrega supera el presupuesto, dividirla conservando estos criterios y registrar nuevos IDs antes de empezar. No marcar “parcialmente completa” una garantía crítica de sincronización.
 
@@ -2836,7 +2807,6 @@ Si el alcance de una subentrega supera el presupuesto, dividirla conservando est
 ## Intercalada 13b2b: cookies de acceso en preproducción protegida
 
 El 8 de octubre el usuario autoriza un intento mínimo con aproximadamente 8% de la ventana de 5h, consumiendo la reserva exclusivamente para esta corrección. Trabajo secuencial en `int`; no encadenar implementación al cerrar.
-
 - Objetivo: preparar recursos offline en un preview protegido sin omitir su cookie de acceso del mismo origen.
 - `target_paths`: `src/lib/pwa/service-worker.ts`, `src/lib/pwa/service-worker.test.ts`, `plan/{master,workflow,iterations,iteration-log}.md`.
 - Dependencias: worker existente, shell `/workspace` neutro y documentación instalada de Next sobre PWA; no cambios en hosting, permisos, secretos, DB o dependencias.

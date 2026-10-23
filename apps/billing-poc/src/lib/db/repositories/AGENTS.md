@@ -6,6 +6,7 @@ talk to the Mongo driver. Domain services, API routes, and components must
 never import from `mongodb` directly.
 
 ## Hexagonal Boundary
+
 - Each repo implements a port interface (e.g.
   `MongoPaymentRepository implements PaymentRepository`).
 - Domain entities (`src/lib/domain/entities/`) are plain TypeScript and never
@@ -23,6 +24,7 @@ never import from `mongodb` directly.
   shape-mapping on write. Never leak Mongo documents past the repository.
 
 ## Mongo Write Rule — Never Persist Nullish Field Values
+
 Documents must never contain `null` or `undefined` for optional fields. Use
 `omitNullish` to strip those keys before insert/update, and use `$unset`
 when the intent is to truly remove a previously-stored field.
@@ -70,6 +72,7 @@ Per-field examples:
 - `invoiceCounters`: only mutate `lastNumber`; no nullable fields.
 
 ## Read-Time Invoice Migration
+
 `MongoPaymentRepository.toDomain` delegates to `mapPaymentDocToDomain`
 (see `mongo-payment-repository-utils.ts`), which performs read-time
 migration of legacy persistence shapes onto the unified domain model:
@@ -86,6 +89,7 @@ mapper exists so existing documents continue to load without an offline
 backfill.
 
 ## ObjectId Boundary Conversions
+
 - Inbound (API → repo): incoming IDs are strings. Validate with
   `ObjectId.isValid(id)` (or a local `isValidObjectId` helper) and reject
   before calling `new ObjectId(id)` to avoid driver throws.
@@ -95,6 +99,7 @@ backfill.
   `ObjectId.equals`.
 
 ## Index Bootstrap — `ensureIndexesOnce`
+
 - Index specs live in `./ensure-indexes.ts` (`INDEX_SPECS`).
 - `src/lib/db/client.ts` calls `ensureIndexesOnce(db)` inside `getDatabase()`,
   which runs `ensureIndexes` exactly once per process (memoised promise,
@@ -104,6 +109,7 @@ backfill.
   repository method.
 
 ## Query Builders — Pure & Tested
+
 - Extract complex query shapes (date ranges, partial-date `$or`, etc.)
   into pure helper functions colocated with the repository (see
   `buildEventListQuery` in `mongo-event-repository-helpers.ts`).
@@ -113,6 +119,7 @@ backfill.
   helper, run the driver call, map with `toDomain`.
 
 ## Testing Pattern
+
 - Pure helpers (query builders, mappers, `omitNullish`, `setOrUnset`) get
   `*.test.ts` files alongside the source.
 - Do not write integration tests against a live Mongo instance from this
@@ -122,6 +129,7 @@ backfill.
   pure helper that can be tested in isolation.
 
 ## Don'ts
+
 - No raw `db.collection(...)` calls outside repositories.
 - No `as any` to silence Mongo typing — narrow with explicit casts to
   `MongoX` document types from `src/lib/db/types.ts`.

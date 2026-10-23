@@ -40,9 +40,9 @@
     "build": "turbo run build --concurrency=2",
     "type-check": "turbo run type-check",
     "test": "turbo run test",
-    "lint": "bun scripts/biome-changed.ts check",
-    "lint:fix": "bun scripts/biome-changed.ts check --write",
-    "format": "bun scripts/biome-changed.ts check --write"
+    "lint": "biome check --no-errors-on-unmatched",
+    "lint:fix": "biome check --no-errors-on-unmatched --write",
+    "format": "biome format --no-errors-on-unmatched --write"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",

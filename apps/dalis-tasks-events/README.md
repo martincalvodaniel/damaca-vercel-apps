@@ -1,7 +1,6 @@
 # Dalis Tasks & Events
 
 Mobile-first, offline-capable personal planning app built with Next.js, React, TypeScript, Better Auth and the native MongoDB driver. The interface is in Spanish.
-
 - [User guide (Spanish)](plan/user-guide.md)
 - [Release readiness and operating checklist (Spanish)](plan/release-readiness.md)
 - [Current plan and delivery status](plan/master.md)

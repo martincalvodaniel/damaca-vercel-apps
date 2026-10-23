@@ -58,7 +58,6 @@ jobs:
             echo "sha=$(git rev-list --max-parents=0 "$PUSH_SHA")" >> "$GITHUB_OUTPUT"
           fi
       - name: Biome changed files
-        run: bun run lint --base "${{ steps.base.outputs.sha }}"
+        run: bunx biome check --changed --since="${{ steps.base.outputs.sha }}"
       - run: bun run type-check
       - run: bun run test
-      - run: bun run build

@@ -27,7 +27,7 @@ Run a task for every application with `bun run build`, `bun run test`, or `bun r
 bun run build --filter=@damaca/billing-poc
 ```
 
-Run `bun run lint` to check changed and new files across the repository. Biome checks a complete file when it changes. The root catalog in `package.json` is the source for shared dependency versions; commit the root `bun.lock` after changing dependencies.
+Run `bun run lint` to check staged files across the repository, or `bun run lint:fix` to apply safe fixes to them. CI checks files changed from the relevant Git base. The root catalog in `package.json` is the source for shared dependency versions; commit the root `bun.lock` after changing dependencies.
 
 To share the Turbo cache locally, authenticate with `bun run turbo login` and link this repository with `bun run turbo link`.
 

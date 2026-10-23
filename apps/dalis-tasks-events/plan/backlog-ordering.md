@@ -5,7 +5,6 @@ Estado: diseño pendiente de validar; no existe ejecutor de movimiento overdue p
 ## Problema observado
 
 [orderPlacedTasks](../src/lib/ordering/task-order.ts) ordena primero colocaciones explícitas, después tareas implícitas por fecha/creación/ID. Al primer movimiento de tareas simples, el planner materializa posiciones de todos los peers del grupo. Ese contrato funciona para datos finitos existentes, pero una serie diaria desde0001 hasta9999 puede tener millones de apariciones pendientes.
-
 - Expandir todo ese historial dentro de una transacción bloquearía la interacción y generaría colocaciones innecesarias.
 - Materializar solo la página visible mueve sus elementos delante de todo el historial implícito restante, aunque el usuario pretendiera un cambio entre vecinos.
 - El resolver de referencias valida target y vecinos en tiempo acotado por slot, pero no demuestra que sean adyacentes en el grupo completo.
@@ -18,7 +17,6 @@ Estos son límites del algoritmo actual, no motivos para truncar o borrar datos.
 Evaluar una clave de orden lexicográfica opcional en la colocación, derivada por el ejecutor a partir de vecinos, junto a una clave implícita determinista por fecha/creación/identidad. Podría permitir insertar una aparición entre dos claves sin materializar todos los peers. No se adopta aún el formato ni se cambia el schema; primero demostrar comparación, inserción, límites y compatibilidad con un oráculo de grupos pequeños completamente expandidos.
 
 Requisitos del diseño:
-
 1. Mantener el orden que hoy producen los ranks numéricos existentes. Una migración o prefijo para legado no puede cambiar la vista sin una intención de usuario.
 2. Una aparición no colocada tiene una clave estable sin persistencia. Reprogramar cambia su fecha efectiva para la vista, conserva ID original; colocaciones de día/overdue permanecen separadas.
 3. Vecinos deben ser adyacentes después de retirar target en la vista completa. Incluir simples, virtuales pendientes y excepciones activas; excluir completadas/canceladas/borradas y aplicar categorías personales de serie.
@@ -31,14 +29,14 @@ Alternativas que deben compararse: claves lexicográficas dispersas con legado c
 
 ## Subentregas sugeridas
 
-| Corte | Resultado y criterio de cierre |
-| --- | --- |
-| 09b4b2a | Especificación concreta de claves/legado y motor puro; comparación con oráculo expandido, vecinos iguales, extremos y agotamiento. Solo elegir formato al pasar esas pruebas. |
-| 09b4b2a1 (entregado) | Adaptador puro de rank legado a clave textual: precisión y desempate demostrados. Clave implícita cubierta en09b4b2a2; inserción y agotamiento pendientes. |
-| 09b4b2a2 (entregado) | Clave implícita por fecha/creación/ID y oráculo mixto legado/implícito; inserción y agotamiento pendientes. |
-| 09b4b2b | Búsqueda paginada de vecinos virtuales/materializados; páginas vacías, series largas, completadas y reprogramadas; cursor de snapshot explícito. Sin escrituras. |
-| 09b4b2c | Ejecutor local completo con schema de colocación compatible, dependencias, CAS y rollback; IndexedDB real, concurrencia, recarga y regresión día/simple. Comando solo se habilita cuando ejecutor y lector convergen. |
-| 09b5 | Hook/lector/UI de repetición de tareas, backlog paginado y formulario compacto; estado/checklist/editar/cancelar/orden offline y calendario real. |
+| Corte                | Resultado y criterio de cierre                                                                                                                                                                                        |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 09b4b2a              | Especificación concreta de claves/legado y motor puro; comparación con oráculo expandido, vecinos iguales, extremos y agotamiento. Solo elegir formato al pasar esas pruebas.                                         |
+| 09b4b2a1 (entregado) | Adaptador puro de rank legado a clave textual: precisión y desempate demostrados. Clave implícita cubierta en09b4b2a2; inserción y agotamiento pendientes.                                                            |
+| 09b4b2a2 (entregado) | Clave implícita por fecha/creación/ID y oráculo mixto legado/implícito; inserción y agotamiento pendientes.                                                                                                           |
+| 09b4b2b              | Búsqueda paginada de vecinos virtuales/materializados; páginas vacías, series largas, completadas y reprogramadas; cursor de snapshot explícito. Sin escrituras.                                                      |
+| 09b4b2c              | Ejecutor local completo con schema de colocación compatible, dependencias, CAS y rollback; IndexedDB real, concurrencia, recarga y regresión día/simple. Comando solo se habilita cuando ejecutor y lector convergen. |
+| 09b5                 | Hook/lector/UI de repetición de tareas, backlog paginado y formulario compacto; estado/checklist/editar/cancelar/orden offline y calendario real.                                                                     |
 
 Si el motor requiere otro corte, registrar objetivo y aceptación antes de modificar código. Mantener commit/push int individual y consulta de ambas cuotas al terminar cada subentrega. Continuación futura sigue los límites de [workflow](workflow.md); no prometer consumo exacto.
 

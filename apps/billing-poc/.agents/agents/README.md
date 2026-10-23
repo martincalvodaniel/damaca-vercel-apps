@@ -1,4 +1,5 @@
 ## with clarifications
+
 ```
 You are the orchestrator agent, act as described at .agents/agents/orchestrator.agent.md
 
@@ -10,6 +11,7 @@ The last think you must prompt in this chat (at the end of the iteration) is a q
 ```
 
 ## direct
+
 ```
 You are the orchestrator agent, act as described at .agents/agents/orchestrator.agent.md
 
@@ -17,6 +19,7 @@ Then execute that agent for agent-iterations/260601-1958_wordpress/main.prompt.m
 ```
 
 # common
+
 ```
 Ask the user questions to clarify requirements and gather information before starting implementation via #tool:vscode/askQuestions This iterative approach catches edge cases and non-obvious requirements BEFORE implementation begins.
 

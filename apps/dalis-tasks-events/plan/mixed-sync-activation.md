@@ -10,12 +10,12 @@ Una cola histórica con `task.move` sin confirmar puede bloquear categorías pos
 
 ## Versiones que deben mantenerse separadas
 
-| Contrato | Valor para la transición | Regla |
-| --- | --- | --- |
-| Intención durable / fingerprint | 1 | Conservar UUID, payload y base de operaciones intentadas. |
-| Transporte / anuncio del servidor | 2 | Envelope nuevo y lectura íntegra de journal mixto. |
-| Evidencia local | Formatos legacy y 2 | Decodificar antes de seleccionar familia; replay histórico no prueba ancestralidad. |
-| Backup portable | Leer 1 y 2; exportar 2 | Conservar historia y pendientes, importar mediante copias nuevas. |
+| Contrato                          | Valor para la transición | Regla                                                                               |
+| --------------------------------- | ------------------------ | ----------------------------------------------------------------------------------- |
+| Intención durable / fingerprint   | 1                        | Conservar UUID, payload y base de operaciones intentadas.                           |
+| Transporte / anuncio del servidor | 2                        | Envelope nuevo y lectura íntegra de journal mixto.                                  |
+| Evidencia local                   | Formatos legacy y 2      | Decodificar antes de seleccionar familia; replay histórico no prueba ancestralidad. |
+| Backup portable                   | Leer 1 y 2; exportar 2   | Conservar historia y pendientes, importar mediante copias nuevas.                   |
 
 [`sync-protocol.ts`](../src/config/sync-protocol.ts) mantiene por ahora ambos valores activos en 1. Cambiar sólo el anuncio no basta: el servicio legacy verifica la versión de intención, que debe seguir siendo 1. La acción pública también debe rechazar transporte antiguo antes de ejecutar.
 
@@ -32,14 +32,14 @@ Cada corte incluye sus rutas, aceptación, pruebas, plan, commit/push en `int` y
 
 ## Matriz obligatoria de compatibilidad
 
-| Cliente / servidor | Resultado requerido antes de efectos |
-| --- | --- |
-| Cliente 1 / servidor 2 | Actualización requerida antes de pull y ejecución; cursor y pendientes intactos. |
-| Cliente 2 / servidor 1 | Actualización requerida al leer anuncio 1; no interpretar página legacy como mixta. |
-| Push legacy iniciado tras un handshake 1 anterior | La nueva acción exige envelope 2 y no llama al executor. |
-| Transporte 2 / intención futura | Rechazar antes de ejecutor; no reinterpretar intención ni fingerprint. |
-| Transporte 2 / índice faltante o incompatible | Escrituras personales deshabilitadas; pendientes conservados. |
-| Cuenta remota distinta / cierre local durante red | Ningún resultado tardío aplicado; liberar únicamente lease propio anterior. |
+| Cliente / servidor                                | Resultado requerido antes de efectos                                                |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Cliente 1 / servidor 2                            | Actualización requerida antes de pull y ejecución; cursor y pendientes intactos.    |
+| Cliente 2 / servidor 1                            | Actualización requerida al leer anuncio 1; no interpretar página legacy como mixta. |
+| Push legacy iniciado tras un handshake 1 anterior | La nueva acción exige envelope 2 y no llama al executor.                            |
+| Transporte 2 / intención futura                   | Rechazar antes de ejecutor; no reinterpretar intención ni fingerprint.              |
+| Transporte 2 / índice faltante o incompatible     | Escrituras personales deshabilitadas; pendientes conservados.                       |
+| Cuenta remota distinta / cierre local durante red | Ningún resultado tardío aplicado; liberar únicamente lease propio anterior.         |
 
 No anunciar un rango 1–2 para permitir al cliente antiguo saltarse efectos personales. Si alguna prueba de transición falla, no habilitar la nueva frontera.
 
@@ -133,7 +133,6 @@ Ensamblajecliente11c4a9c1: dispatcher2 y resumen guardado independientes, SyncAt
 Con los índices Preview ya listos, se prepara `src/features/sync/hooks/use-mixed-sync-engine.ts` sin caller activo. Reutilizar `createMixedSyncClient`, `SyncSchedulerV2`, `isAccountSyncCacheKey` y las señales existentes, sin duplicar algoritmos de envío/scheduling. Capturar userId/epoch; usar un cache key de resumen separado de transporte1 que conserve las tres primeras posiciones de cuenta (por ejemplo, `["dalis:sync-queue", userId, epoch, 2]`). Notificaciones deben refrescar ese key y los incidentes propios; refresh general conserva el filtro de cuenta. Cancelar intento/scheduler/listeners al desmontar, impedir actualizaciones tardías con disposed y no reutilizar estado de otra época. Summary y result son mixtos; alcance preparado no se muestra desde el proveedor actual. Esta entrega requiere prueba de lifecycle real del hook, además de los controles y composición ya probados; dividir hook/prueba antes de abrir si el coste no cabe.
 
 La conexión productiva es un corte posterior conjunto, condicionado al recibo de índices de preproducción ready+closed:
-
 - `src/app/api/sync/identity/route.ts`: anunciar2 explícito con identidad autorizada vigente.
 - `src/app/api/sync/changes/route.ts`: delegar en getAuthenticatedSyncChangesResponseV2; routing únicamente.
 - `src/features/sync/actions.ts`: retirar ejecución legacy mediante rejectRetiredSyncPush y headers reales; conservar resultado legacy cuando se pueda resolver esa referencia.

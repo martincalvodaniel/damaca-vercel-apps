@@ -27,6 +27,7 @@ A proof-of-concept billing system for managing and tracking income and outcome p
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 20+ and bun
 - MongoDB running locally or MongoDB Atlas account
 

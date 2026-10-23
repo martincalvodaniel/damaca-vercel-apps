@@ -15,7 +15,6 @@ El journal nuevo personal representa todos los efectos de una operación en una 
 ## Unidad atómica propuesta
 
 Segundo corte11c2b2: ejecutor server-only preparatorio, sin callers productivos ni activación de índices. Actor suministrado por servicio autenticado; intención validada antes de IO. Una misma sesión snapshot/majority contiene:
-
 1. Lectura del recibo propio y comparación de fingerprint. Replay devuelve el resultado durable exacto sin escribir revisiones, contador ni journal.
 2. Lecturas de categorías completas o vista/item/tag propios vigentes. Para vistas, contenido activo simple y categoría activa/null; no conceder compartidos por tener una vista propia.
 3. Planner puro, CAS de cada efecto respecto a su documento leído y revisión siguiente propia. Compactación escribe el conjunto completo; cualquier CAS fallido aborta toda la transacción.
@@ -29,12 +28,12 @@ Errores de duplicado abortan la transacción; nunca capturarlos para continuar e
 
 ## Aceptación posterior
 
-| Corte | Evidencia necesaria |
-| --- | --- |
-|11c2b1|Schemas estrictos puros; legacy exacto adaptado sin mutación; applied/conflict por familia; actor/identidades/sequence/UTF8/futuro; wire e historia almacenada actuales sin cambios.|
-|11c2b2|Mongo propio: CAS multirregistro, fallo después del último efecto/counter/journal con rollback íntegro; mismas operaciones concurrentes un recibo/journal; replay perdido exacto e identidad reutilizada rechazada.|
-|11c2b3|Barreras en tests para snapshots solapados: catálogo/vecinos frente a create/delete, nombres NFKC concurrentes y autorización de vista frente a item.delete; demostrar contador común, retry y ausencia de efectos parciales.|
-|11c3a–4b|Handshake/lectores de ambas historias, ACK/pull/backup atómicos, conflictos visibles y dos dispositivos; solo después provisionamiento/activación explícitos.|
+| Corte    | Evidencia necesaria                                                                                                                                                                                                           |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 11c2b1   | Schemas estrictos puros; legacy exacto adaptado sin mutación; applied/conflict por familia; actor/identidades/sequence/UTF8/futuro; wire e historia almacenada actuales sin cambios.                                          |
+| 11c2b2   | Mongo propio: CAS multirregistro, fallo después del último efecto/counter/journal con rollback íntegro; mismas operaciones concurrentes un recibo/journal; replay perdido exacto e identidad reutilizada rechazada.           |
+| 11c2b3   | Barreras en tests para snapshots solapados: catálogo/vecinos frente a create/delete, nombres NFKC concurrentes y autorización de vista frente a item.delete; demostrar contador común, retry y ausencia de efectos parciales. |
+| 11c3a–4b | Handshake/lectores de ambas historias, ACK/pull/backup atómicos, conflictos visibles y dos dispositivos; solo después provisionamiento/activación explícitos.                                                                 |
 
 Estos cortes actualizan plan y registro, pruebas/lint/tipos/build, commit+push enint y consulta de ambas cuotas. Las pruebas de repositorios11c2a1/2 no sustituyen las pruebas de recibo/journal/autorización del ejecutor.
 

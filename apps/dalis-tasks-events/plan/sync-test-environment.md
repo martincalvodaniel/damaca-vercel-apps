@@ -28,7 +28,6 @@ Probe reutilizaauthVerification solo en la DB de prueba; no nueva colección/ind
 Avance11a1b1: runner incluye [repositorio propio](../src/lib/db/remote-items.ts) ycuatro tests deCAS/owner/tombstone/paginación/corrupción. Colecciónitems eíndiceownerId+_id registrados centralmente, unicidadglobalpor_id; no driver fueraDB. Recibos/journal/servicio todavía pendientes. Total6tests/33aserciones reales.
 
 Rutas previstas: configuración tipada en `src/config/**`, soporte de test y fixture de integración en `src/lib/db/**`, scripts TypeScript de ejecución/limpieza bajo `scripts/**` y este plan. Respetar [reglas DB](../src/lib/db/AGENTS.md): driver solo en la capa DB, servidor aislado del cliente, conexión singleton y registro central de colecciones/índices.
-
 1. Comprobar runtime Docker existente antes de elegir una imagen compatible y fijar versión. Preparar instancia de test propia con replica set de un nodo, puerto loopback y almacenamiento temporal; registrar identificador único de la ejecución. No usar volumen ni contenedor del usuario.
 2. Proponer opt-in separado `RUN_SYNC_DB_TESTS=1`, validado desdeconfig, y DB `dalis-sync-test-<run-id>` creada para esa ejecución. Antes de abrir/limpiar: verificar esquema URI local, todos los hosts loopback, nombre exacto y ownership del recurso del runner. Rechazar URI remota/multihost no local, prefijo auth y DB normal. No leer secretos para construir la fixture.
 3. Esperar disponibilidad/elegibilidad del replica set con timeout acotado. Un ping no prueba soporte transaccional; la aceptación exige escribir y abortar/confirmar transacciones reales. Declarar fallo si el runtime falta; tests omitidos no cuentan como evidencia de transacciones.
@@ -39,20 +38,20 @@ Salida: runner reproducible, guards de aislamiento probados y evidencia de commi
 
 ## Matriz de aceptación por corte
 
-| Corte | Escenario | Resultado observable |
-| --- | --- | --- |
-| 11a1a | Dos escrituras en una transacción confirmada | Ambas visibles desde otra sesión. |
-| 11a1a | Fallo tras primera escritura y aborto | Ninguna escritura visible; siguiente transacción funciona. |
-| 11a1a | Configuración remota, DB no propia o auth | Rechazo antes de conexión destructiva/limpieza. |
-| 11a1a | Cierre/fallo de arranque | Recursos propios liberados; ninguna DB del usuario tocada. |
-| 11a1b | Dos editores con misma revisión | Solo uno modifica; otro obtiene conflicto; revisión sube una vez. |
-| 11a1b | Leer/editar/borrar ID de otra cuenta | Ningún dato expuesto/modificado; tombstone conserva identidad. |
-| 11b1 | Repetir operationId y payload válido | Mismo recibo; una sola mutación/revisión/entrada journal. |
-| 11b1 | Reutilizar operationId con payload distinto | Rechazo; recibo y datos previos intactos. |
-| 11b1 | Fallo en recibo o journal tras mutación | Todo revierte, incluidos contador y revisión. |
-| 11b1 | Dos operaciones concurrentes del receptor | Secuencias únicas; ninguna modificación confirmada queda detrás de cursor ya consumido. |
-| 11b1 | Comando sin soporte o lote con fallos parciales | Resultado por operación; nunca ACK ficticio ni pérdida de pendientes. |
-| 12 | Corte de red antes/después del commit remoto | Reintento con mismo ID; shadow/ACK/cursor locales atómicos; pendientes intactos. |
+| Corte | Escenario                                       | Resultado observable                                                                    |
+| ----- | ----------------------------------------------- | --------------------------------------------------------------------------------------- |
+| 11a1a | Dos escrituras en una transacción confirmada    | Ambas visibles desde otra sesión.                                                       |
+| 11a1a | Fallo tras primera escritura y aborto           | Ninguna escritura visible; siguiente transacción funciona.                              |
+| 11a1a | Configuración remota, DB no propia o auth       | Rechazo antes de conexión destructiva/limpieza.                                         |
+| 11a1a | Cierre/fallo de arranque                        | Recursos propios liberados; ninguna DB del usuario tocada.                              |
+| 11a1b | Dos editores con misma revisión                 | Solo uno modifica; otro obtiene conflicto; revisión sube una vez.                       |
+| 11a1b | Leer/editar/borrar ID de otra cuenta            | Ningún dato expuesto/modificado; tombstone conserva identidad.                          |
+| 11b1  | Repetir operationId y payload válido            | Mismo recibo; una sola mutación/revisión/entrada journal.                               |
+| 11b1  | Reutilizar operationId con payload distinto     | Rechazo; recibo y datos previos intactos.                                               |
+| 11b1  | Fallo en recibo o journal tras mutación         | Todo revierte, incluidos contador y revisión.                                           |
+| 11b1  | Dos operaciones concurrentes del receptor       | Secuencias únicas; ninguna modificación confirmada queda detrás de cursor ya consumido. |
+| 11b1  | Comando sin soporte o lote con fallos parciales | Resultado por operación; nunca ACK ficticio ni pérdida de pendientes.                   |
+| 12    | Corte de red antes/después del commit remoto    | Reintento con mismo ID; shadow/ACK/cursor locales atómicos; pendientes intactos.        |
 
 Las pruebas de actor/membresía en acciones se añaden en11b1 con sesiones verificadas, además de aislamiento del repositorio. Preferencias, descarga completa y reconciliación son necesarias antes de anunciar convergencia del espacio en dos dispositivos. La matriz no sustituye implementar esas capas.
 

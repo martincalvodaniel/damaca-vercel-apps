@@ -20,20 +20,20 @@ Navegación se construye en `04c`, sobre el shell offline ya operativo. Cada ite
 
 Una familia `CalendarItem` validada por `kind`: `task`, `event` o `birthday`. Base común, campos específicos y componentes de formulario separados. Colección común `items`; no tres CRUD inconexos ni una entidad con muchos campos opcionales sin restricciones.
 
-| Entidad | Identidad y campos principales | Reglas |
-| --- | --- | --- |
-| `User` | ID estable de Better Auth, email verificado, nombre | Identidad remota persistente. El email sirve para invitar, no como clave mutable de todos los datos. |
-| `UserSettings` | `userId`, `timeZone`, `weekStartsOn`, `locale`, `revision` | Zona IANA; valor inicial propuesto `Europe/Madrid`, editable. UI `es-ES`, lunes. |
-| `CalendarItem` | `id`, `kind`, `ownerId`, `title`, `description`, `revision`, `createdAt`, `updatedAt`, `deletedAt` | UUID generado localmente; propietario derivado de sesión al crear en remoto. Borrado lógico. |
-| `Task` | `scheduledDate`, `status`, `checklist`, `recurrence` opcional | Fecha civil obligatoria en MVP; estados `not_started`, `in_progress`, `completed`. |
-| `Event` | `allDay`, fechas civiles o `localStart`, `localEnd`, `timeZone`, instantes UTC derivados; `recurrence` opcional | Evento/cita es el mismo tipo. Inicio obligatorio, fin opcional; duración positiva si hay fin. |
-| `Birthday` | `month`, `day`, `birthYear` opcional, `timeZone` | Día completo, anual; título identifica a la persona. No estado de tarea ni checklist. |
-| `Tag` | `id`, `userId`, `name`, `color`, `position`, `revision` | Categoría personal; nombre normalizado único por usuario. |
-| `ItemView` | `userId`, `itemId`, `primaryTagId` opcional, preferencias | Clasificación personal: compartir un elemento no expone categorías privadas. |
-| `TaskPlacement` | `userId`, `occurrenceId`, `scope`, `date`, `tagId`, `position`, `revision` | Orden personal por fecha/categoría o grupo de atrasadas; `scope` diferencia ambas vistas y no altera la planificación compartida. |
-| `ItemOccurrence` | `id`, `seriesId`, `slotKey`, fecha original, excepciones, estado/checklist cuando corresponda | Solo se persisten excepciones y cambios; ocurrencias sin cambios se generan desde la serie. |
-| `ItemMembership` | `itemId`, `userId`, `role`, `revision`, `revokedAt` | Lector/editor; propietario en `ownerId`. Compartir una serie concede sus ocurrencias. |
-| `ShareInvitation` | `id`, `itemId`, destinatario normalizado, `role`, `status`, `expiresAt` | Estados `pending`, `accepted`, `declined`, `revoked`, `expired`. Se acepta online con email verificado coincidente. |
+| Entidad           | Identidad y campos principales                                                                                  | Reglas                                                                                                                            |
+| ----------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `User`            | ID estable de Better Auth, email verificado, nombre                                                             | Identidad remota persistente. El email sirve para invitar, no como clave mutable de todos los datos.                              |
+| `UserSettings`    | `userId`, `timeZone`, `weekStartsOn`, `locale`, `revision`                                                      | Zona IANA; valor inicial propuesto `Europe/Madrid`, editable. UI `es-ES`, lunes.                                                  |
+| `CalendarItem`    | `id`, `kind`, `ownerId`, `title`, `description`, `revision`, `createdAt`, `updatedAt`, `deletedAt`              | UUID generado localmente; propietario derivado de sesión al crear en remoto. Borrado lógico.                                      |
+| `Task`            | `scheduledDate`, `status`, `checklist`, `recurrence` opcional                                                   | Fecha civil obligatoria en MVP; estados `not_started`, `in_progress`, `completed`.                                                |
+| `Event`           | `allDay`, fechas civiles o `localStart`, `localEnd`, `timeZone`, instantes UTC derivados; `recurrence` opcional | Evento/cita es el mismo tipo. Inicio obligatorio, fin opcional; duración positiva si hay fin.                                     |
+| `Birthday`        | `month`, `day`, `birthYear` opcional, `timeZone`                                                                | Día completo, anual; título identifica a la persona. No estado de tarea ni checklist.                                             |
+| `Tag`             | `id`, `userId`, `name`, `color`, `position`, `revision`                                                         | Categoría personal; nombre normalizado único por usuario.                                                                         |
+| `ItemView`        | `userId`, `itemId`, `primaryTagId` opcional, preferencias                                                       | Clasificación personal: compartir un elemento no expone categorías privadas.                                                      |
+| `TaskPlacement`   | `userId`, `occurrenceId`, `scope`, `date`, `tagId`, `position`, `revision`                                      | Orden personal por fecha/categoría o grupo de atrasadas; `scope` diferencia ambas vistas y no altera la planificación compartida. |
+| `ItemOccurrence`  | `id`, `seriesId`, `slotKey`, fecha original, excepciones, estado/checklist cuando corresponda                   | Solo se persisten excepciones y cambios; ocurrencias sin cambios se generan desde la serie.                                       |
+| `ItemMembership`  | `itemId`, `userId`, `role`, `revision`, `revokedAt`                                                             | Lector/editor; propietario en `ownerId`. Compartir una serie concede sus ocurrencias.                                             |
+| `ShareInvitation` | `id`, `itemId`, destinatario normalizado, `role`, `status`, `expiresAt`                                         | Estados `pending`, `accepted`, `declined`, `revoked`, `expired`. Se acepta online con email verificado coincidente.               |
 
 Tipos de dominio sin `ObjectId`, driver MongoDB ni imports Next.js en `src/types/**`. Zod compartido en `src/schemas/**`. Tipos de persistencia y mapeos de MongoDB en `src/lib/db/**`.
 
@@ -83,7 +83,6 @@ Ejemplo: una tarea prevista para el 6 de octubre que esté `in_progress` aparece
 ## Repetición
 
 Alcance MVP: diaria, semanal con días seleccionados, mensual y anual; intervalo positivo; final opcional por fecha o número de apariciones. No se promete RRULE completo.
-
 - Regla tipada con frecuencia, intervalo, fecha ancla, zona y límite. Validación compartida y generación pura en `src/lib/calendar/**`.
 - Identidad determinista de ocurrencia a partir de `seriesId` y `slotKey` original. Reprogramar una sola aparición conserva esa identidad; no recalcularla desde la fecha modificada.
 - Cada ocurrencia de tarea comienza `not_started`, con una copia de la plantilla de checklist y sus IDs de punto. Completar una no completa las siguientes ni las anteriores.

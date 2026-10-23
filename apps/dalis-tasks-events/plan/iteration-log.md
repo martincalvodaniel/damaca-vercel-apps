@@ -1363,17 +1363,17 @@ Cerrado11oct tras renovación real100%5h/69%7d, reset1791761185. Nuevo puerto pr
 
 ## Plantilla para próximas entradas
 
-| Campo | Qué registrar |
-| --- | --- |
-| ID, fecha, rama | La entrega concreta y la rama actual. |
-| Presupuesto inicial | Lecturas restantes de 5h/7d y fuente; reinicios o incertidumbre si los hay. |
-| Objetivo y `target_paths` | Alcance decidido antes de editar; responsables si hay paralelo. |
-| Resultado | Comportamiento entregado y criterios cumplidos. |
-| Evidencias | Comandos, escenarios reales, resultado y limitaciones precisas. |
-| Decisiones revisadas | Motivo y documentos/contratos actualizados. |
-| Cierre | Estado y título del commit; hash comprobado comunicado al usuario. |
-| Próxima candidata | Dependencias, tamaño y propuesta secuencial/paralela. |
-| Control siguiente | Pregunta de ambos presupuestos; valores nuevos se anotan al abrir la siguiente entrega. |
+| Campo                     | Qué registrar                                                                           |
+| ------------------------- | --------------------------------------------------------------------------------------- |
+| ID, fecha, rama           | La entrega concreta y la rama actual.                                                   |
+| Presupuesto inicial       | Lecturas restantes de 5h/7d y fuente; reinicios o incertidumbre si los hay.             |
+| Objetivo y `target_paths` | Alcance decidido antes de editar; responsables si hay paralelo.                         |
+| Resultado                 | Comportamiento entregado y criterios cumplidos.                                         |
+| Evidencias                | Comandos, escenarios reales, resultado y limitaciones precisas.                         |
+| Decisiones revisadas      | Motivo y documentos/contratos actualizados.                                             |
+| Cierre                    | Estado y título del commit; hash comprobado comunicado al usuario.                      |
+| Próxima candidata         | Dependencias, tamaño y propuesta secuencial/paralela.                                   |
+| Control siguiente         | Pregunta de ambos presupuestos; valores nuevos se anotan al abrir la siguiente entrega. |
 
 No rellenar evidencias a partir de intención o memoria. Un test no ejecutado es una comprobación pendiente, no un resultado aprobado.
 
@@ -1771,7 +1771,6 @@ El piloto de Google y RPC de Next real sigue pendiente. Preferencias, series, cu
 ## Intercalada 13b2b: cookies de acceso en preproducción protegida
 
 El 8 de octubre el usuario autoriza un intento mínimo con aproximadamente 8% de la ventana de 5h, consumiendo la reserva exclusivamente para esta corrección. Trabajo secuencial en `int`; no encadenar implementación al cerrar.
-
 - Objetivo: preparar recursos offline en un preview protegido sin omitir su cookie de acceso del mismo origen.
 - `target_paths`: `src/lib/pwa/service-worker.ts`, `src/lib/pwa/service-worker.test.ts`, `plan/{master,workflow,iterations,iteration-log}.md`.
 - Dependencias: worker existente, shell `/workspace` neutro y documentación instalada de Next sobre PWA; no cambios en hosting, permisos, secretos, DB o dependencias.

@@ -308,12 +308,12 @@ Inicial: 6 de octubre de 2026, `5h = 99%`, `7d = 44%`. Usar el menor valor como 
 
 Política inicial del proyecto, **no un límite oficial de OpenAI**:
 
-| Menor porcentaje restante | Decisión inicial |
-| --- | --- |
-| Más del 40% | Una entrega pequeña/mediana. Paralelo solo si hay beneficio claro y margen observado. |
-| Del 20% al 40%, inclusive | Una entrega pequeña secuencial; partir entregas medianas o con incertidumbre. |
-| Más del 10% y menos del 20% | Solo una entrega mínima cuyo cierre esté bien acotado; en caso de duda, detener. |
-| 10% o menos | Para 5h, no empezar. Para 7d, aplicar la reserva vigente del 1% y el coste observado de la entrega completa. |
+| Menor porcentaje restante   | Decisión inicial                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Más del 40%                 | Una entrega pequeña/mediana. Paralelo solo si hay beneficio claro y margen observado.                        |
+| Del 20% al 40%, inclusive   | Una entrega pequeña secuencial; partir entregas medianas o con incertidumbre.                                |
+| Más del 10% y menos del 20% | Solo una entrega mínima cuyo cierre esté bien acotado; en caso de duda, detener.                             |
+| 10% o menos                 | Para 5h, no empezar. Para 7d, aplicar la reserva vigente del 1% y el coste observado de la entrega completa. |
 
 Objetivo vigente: conservar al menos **10% en 5h y 1% en 7d**, con reserva mayor en sincronización, migraciones o fallos difíciles de reproducir. Es una heurística revisable, no una garantía de que Codex nunca alcanzará un límite. El coste real depende de contexto, modelo, herramientas y pruebas; contrastar con la [documentación oficial de uso](https://learn.chatgpt.com/docs/pricing#what-are-the-usage-limits-for-my-plan).
 
@@ -334,7 +334,6 @@ La consulta automática es el protocolo normal tanto interactivo como desatendid
 ## Lote desatendido autorizado el 6 de octubre de 2026
 
 El usuario ha autorizado continuar varias iteraciones sin feedback mientras duerme, con commit individual y evitando quedar a mitad de una tarea. Lectura inicial: **5h 82%; 7d 41% restantes**, contrastada con la consulta de uso de la cuenta. Esta excepción solo aplica al lote actual; no cambia permanentemente el protocolo interactivo.
-
 - Ejecutar secuencialmente y consultar las dos ventanas después de cada commit. Calcular restante como `100 - usedPercent`; no confundir consumido con disponible. Las cuotas son compartidas por toda la cuenta.
 - Reserva reforzada: no comenzar una entrega si alguna ventana tiene **20% o menos** restante, ni si el coste alto observado de entregas similares más margen de cierre haría cruzar esa reserva. No consumir reinicios gratuitos o créditos por iniciativa propia.
 - Primera candidata `01b`; después `02a`, `02b` y base IndexedDB si el margen lo permite. Cerrar cada subentrega antes de elegir otra; no prometer llegar a un hito que dependa de decisiones pendientes.

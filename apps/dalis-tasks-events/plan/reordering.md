@@ -12,7 +12,6 @@ Referencia del problema de arbitration: [MDN touch-action](https://developer.moz
 
 ## Histórico de implementación y contratos
 
-
 Diseño previo a implementar. `07a` ya agrupa y deriva atrasadas; aún no hay controles ni comandos de reordenación. Este corte documental concreta las siguientes entregas sin aceptar operaciones que el motor todavía no sabe ejecutar.
 
 Estado posterior: `07b1a–07b3b` entregados y verificados; los párrafos de base describen el snapshot previo al bloque. Botones, selector de categoría y arrastre usan los mismos ejecutores atómicos. Queda el piloto táctil de dispositivo real en `15` y sincronización remota en `11–13`.
@@ -50,12 +49,12 @@ Reutilizar `byPosition` y `byDateAndScope`. Evaluar índices locales si aparece 
 
 ## Entregas y aceptación
 
-| Corte | Alcance y rutas | Evidencia de cierre |
-| --- | --- | --- |
-| `07b0` | Este diseño y reparto en `plan/**`; sin cambios de código. | Referencias/consistencia/diff y commit documental. |
-| `07b1a / 07b1b` | Ranking y categorías (`07b1a`); colocaciones y tareas (`07b1b`). `schemas/**`, `types/**`, `lib/ordering/**`, `lib/local-db/**`, lectores, pruebas/plan. Cada comando se añade junto a su ejecutor. | Mover inicio/medio/final, mismo UUID, vecinos obsoletos, cuentas aisladas, destino borrado, posición agotada, rollback tras fallo de outbox y lectura tras recarga en IndexedDB real. Compatibilidad de registros previos. |
-| `07b2a / 07b2b` | Botones de categorías (`07b2a`); lectores y controles de grupos/tareas (`07b2b`) en `features/tasks/**` y `features/tags/**`; fixtures/plan. | Botones Arriba/Abajo y elección de categoría con teclado/móvil; orden real del día y atrasadas, recarga sin servidor, un solo commit por intención, errores españoles y foco conservado. Actualizar ambas barras si se añade una pantalla. |
-| `07b3a / 07b3b` | Handle compartido y categorías (`07b3a`); tareas/grupos (`07b3b`), sin sustituir botones. | Cancelar arrastre no escribe; soltar invoca el mismo comando una vez; funciona con scroll móvil y alternativa de teclado. Sin dependencias nuevas. |
+| Corte           | Alcance y rutas                                                                                                                                                                                     | Evidencia de cierre                                                                                                                                                                                                                        |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `07b0`          | Este diseño y reparto en `plan/**`; sin cambios de código.                                                                                                                                          | Referencias/consistencia/diff y commit documental.                                                                                                                                                                                         |
+| `07b1a / 07b1b` | Ranking y categorías (`07b1a`); colocaciones y tareas (`07b1b`). `schemas/**`, `types/**`, `lib/ordering/**`, `lib/local-db/**`, lectores, pruebas/plan. Cada comando se añade junto a su ejecutor. | Mover inicio/medio/final, mismo UUID, vecinos obsoletos, cuentas aisladas, destino borrado, posición agotada, rollback tras fallo de outbox y lectura tras recarga en IndexedDB real. Compatibilidad de registros previos.                 |
+| `07b2a / 07b2b` | Botones de categorías (`07b2a`); lectores y controles de grupos/tareas (`07b2b`) en `features/tasks/**` y `features/tags/**`; fixtures/plan.                                                        | Botones Arriba/Abajo y elección de categoría con teclado/móvil; orden real del día y atrasadas, recarga sin servidor, un solo commit por intención, errores españoles y foco conservado. Actualizar ambas barras si se añade una pantalla. |
+| `07b3a / 07b3b` | Handle compartido y categorías (`07b3a`); tareas/grupos (`07b3b`), sin sustituir botones.                                                                                                           | Cancelar arrastre no escribe; soltar invoca el mismo comando una vez; funciona con scroll móvil y alternativa de teclado. Sin dependencias nuevas.                                                                                         |
 
 Cada corte requiere su commit y control de ambas ventanas. `08` comienza después de completar todos los cortes de código. Presupuesto y disponibilidad de pruebas pueden dividirlos más antes de editar; no separar la aceptación de un comando de su ejecución atómica.
 

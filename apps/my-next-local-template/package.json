@@ -5,10 +5,7 @@
   "scripts": {
     "build": "next build && bun run scripts/build-service-worker.ts",
     "dev": "next dev --port 3003",
-    "format": "bun ../../scripts/biome-changed.ts check --write",
     "knip": "knip",
-    "lint": "bun ../../scripts/biome-changed.ts check",
-    "lint:fix": "bun ../../scripts/biome-changed.ts check --write",
     "start": "bun run scripts/preview.ts",
     "test": "bun test",
     "test:watch": "bun test --watch",

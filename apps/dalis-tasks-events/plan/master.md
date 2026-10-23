@@ -854,7 +854,6 @@ Siguiente corte coherente: contrato puro de recuperación de una aparición, con
 
 ### Entregas del lote
 
-
 **18e2c entregado: pilotoGooglePreview6 aprobado.** Zona personal sincronizada yrestauradaEurope/Madridrevision2 con2ACKremotosreales, shadows/outcomesconservados y0pendientes;6items/restocoleccionesintactos, recargapersistente. Índicesettingsoperativovíabootstrap/readiness6; producciónintacta. Preferenciasresiduales: recuperaciónexplícitadeconflictos, noediciónde zona.
 
 **18e2b entregado: generación6 activada conjuntamente enint.** Zona horaria editableoffline ysincronizada porcuenta, sinreprogramarplanes.22escenariosNextpropiossinaliaspasan;830pass/223skip/0fail, lint850/tipos/Webpack/worker46. ÍndicesettingscentralautorizadosóloPreview/int; confirmaroperativoenpilotoGoogletrasdespliegue. No producción/nuevapruebafísicadedosdispositivos. Siguenrecuperaciónresidualyaceptaciónfinal.
@@ -925,7 +924,6 @@ Orden restante:
 Si se retoma cumpleaños, el total anterior rondaba15% pendiente (10–20%). Las estimaciones históricas20–25% preceden a la activación de repetición.
 
 ## Histórico — lote puntual de las 01:27 del 12 de octubre
-
 
 **Lote01:27 cerrado tras17e1b5a.** Ocho cortes publicados enint: fronteraNext5, colaantigua conservada, recuperación/convergencia, hook/época, productoraparición/replay, preferencias/conflictos/tombstones, operadoríndices y cuentaRemota. Dieciséis escenarios reales Next/React/IndexedDB/Mongo propios pasan; operadorCLI trescasos100aserciones y regresiónNext4 diecinuevecasos aprobados. ÚltimoDoD751pass/206skip/0fail, lint779/tipos/buildWebpack/worker46. **Producto sigue generación4; repetición remota NO activada.**
 
@@ -1004,7 +1002,6 @@ Nueva petición humana11oct: continuación puntual programada hoy20:26Europe/Mad
 Queda aproximadamente **20–25% del alcance actual** (75–80% completado). Estimación ponderada por complejidad, no por commits ni duración. Al retirar compartir (13puntos del alcance original), quedan alrededor de20puntos sobre87: repetición remota/series/apariciones y orden10, cumpleaños5, preferencias residuales/aceptación final5. La mejora del porcentaje corresponde a una reducción de alcance, no a implementar compartir.
 
 Orden recomendado, sujeto a elección del usuario:
-
 1. **Sincronizar repetición y apariciones**: identidad de serie/slot, progreso independiente, excepciones, backlog/reprogramación y orden entre dispositivos; conservar cambios offline y resolver conflictos.
 2. **Cumpleaños** (`10`): creación/edición, regla anual, año opcional, política del29febrero y sincronización.
 3. **Cierre del MVP** (`15a–15b`): preferencias/configuración residual, recuperación explícita de incidentes que falten, aceptación en móviles/dispositivos físicos, offline, accesibilidad y guía de uso.
@@ -1025,27 +1022,26 @@ Este documento es la entrada al plan. La iteración `00` entregó la planificaci
 
 ## Documentos
 
-| Documento | Contenido |
-| --- | --- |
-| [Evidencia local de preferencias](local-preference-evidence.md) | Transición de shadow/outcome/backup y orden de lectores antes de writers. |
-| [Producto y modelo](product-and-model.md) | Comportamiento, entidades, fechas, repetición, orden y permisos. |
-| [Offline, sincronización y arquitectura](offline-and-sync.md) | Almacenamiento local, cola, conflictos, seguridad y rutas. |
-| [Activación personal](mixed-sync-activation.md) | Fronteras, índices, transición y evidencia de activación del transporte 3. |
-| [Preferencias personales](preference-sync.md) | Contratos, compatibilidad y cortes para sincronizar categorías/vistas/orden sin alterar pendientes. |
-| [Pruebas de sincronización](sync-test-environment.md) | Entorno aislado, transacciones/CAS/recibos y pruebas de dos particiones con MongoDB real. |
-| [Iteraciones](iterations.md) | Entregas pequeñas, dependencias, rutas y aceptación. |
-| [Flujo de trabajo](workflow.md) | Ventanas de Codex, cierre, commits, pruebas y paralelismo. |
-| [Backup y recuperación](backup-recovery.md) | Contrato portable, conservación de pendientes y cortes de exportación/importación. |
-| [Recuperación de conflictos](conflict-recovery.md) | Evidencias conservadas y cortes de elección explícita. |
-| [Reordenación](reordering.md) | Intenciones, ranking, alcances y cortes concretos de `07b`. |
-| [Orden del backlog repetido](backlog-ordering.md) | Problema de ranks implícitos, propuesta a validar y próximos cortes de `09b4b2`. |
-| [Registro de iteraciones](iteration-log.md) | Trabajo completado, evidencias y siguiente candidata. |
-| [Operación de auth](auth-operations.md) | Transición de sesiones antiguas y verificación vigente. |
+| Documento                                                       | Contenido                                                                                           |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| [Evidencia local de preferencias](local-preference-evidence.md) | Transición de shadow/outcome/backup y orden de lectores antes de writers.                           |
+| [Producto y modelo](product-and-model.md)                       | Comportamiento, entidades, fechas, repetición, orden y permisos.                                    |
+| [Offline, sincronización y arquitectura](offline-and-sync.md)   | Almacenamiento local, cola, conflictos, seguridad y rutas.                                          |
+| [Activación personal](mixed-sync-activation.md)                 | Fronteras, índices, transición y evidencia de activación del transporte 3.                          |
+| [Preferencias personales](preference-sync.md)                   | Contratos, compatibilidad y cortes para sincronizar categorías/vistas/orden sin alterar pendientes. |
+| [Pruebas de sincronización](sync-test-environment.md)           | Entorno aislado, transacciones/CAS/recibos y pruebas de dos particiones con MongoDB real.           |
+| [Iteraciones](iterations.md)                                    | Entregas pequeñas, dependencias, rutas y aceptación.                                                |
+| [Flujo de trabajo](workflow.md)                                 | Ventanas de Codex, cierre, commits, pruebas y paralelismo.                                          |
+| [Backup y recuperación](backup-recovery.md)                     | Contrato portable, conservación de pendientes y cortes de exportación/importación.                  |
+| [Recuperación de conflictos](conflict-recovery.md)              | Evidencias conservadas y cortes de elección explícita.                                              |
+| [Reordenación](reordering.md)                                   | Intenciones, ranking, alcances y cortes concretos de `07b`.                                         |
+| [Orden del backlog repetido](backlog-ordering.md)               | Problema de ranks implícitos, propuesta a validar y próximos cortes de `09b4b2`.                    |
+| [Registro de iteraciones](iteration-log.md)                     | Trabajo completado, evidencias y siguiente candidata.                                               |
+| [Operación de auth](auth-operations.md)                         | Transición de sesiones antiguas y verificación vigente.                                             |
 
 ## Estado real del repositorio
 
 Observaciones de archivos versionados; no se ha probado el login de producción ni inspeccionado credenciales.
-
 - Next.js `16.3.8`, React `19.3.0`, Better Auth `1.7.7`, MongoDB driver `7.7.0`, SWR `2.5.1`, Zod `4.6.5`, TypeScript. Versiones de [package.json](../package.json).
 - Google social login configurado en [auth.ts](../src/lib/auth/auth.ts), cliente de autenticación existente y UI de acceso en español.
 - El layout de dashboard verifica sesión mediante [session.ts](../src/lib/auth/session.ts); [proxy.ts](../src/proxy.ts) realiza un filtro inicial por cookie.
@@ -1058,7 +1054,6 @@ Observaciones de archivos versionados; no se ha probado el login de producción 
 ## Decisiones de producto
 
 Prioridad visual añadida por el usuario el 7 de octubre: UI minimalista y densa, especialmente en móvil. Filas compactas, menos título/subtítulo redundante y acciones secundarias/detalles desplegables; evitar que botones y tarjetas consuman la pantalla. Mantener creación accesible y controles táctiles utilizables. Intercalar revisión de la UI actual después de `08b`, antes del formulario de eventos.
-
 1. **Modelo común elegido por el usuario**: `plan` con variantes `task`, `event`, `appointment` y `note`, mismas opciones/progreso y diferencia visual en el icono. `birthday` mantiene contrato específico anual y bloque de implementación posterior; reemplaza la decisión inicial de tratar cita como evento.
 2. **Un botón principal `+`** siempre accesible abre editor común con Tarea, Evento, Cita y Nota. Crear desde un día usa ese día como valor inicial; cumpleaños se añadirá cuando su pantalla funcione.
 3. **Lectura y escritura locales**: IndexedDB alimenta la UI; MongoDB mantiene el estado remoto aceptado. Guardar no depende de la red.
@@ -1070,14 +1065,14 @@ Prioridad visual añadida por el usuario el 7 de octubre: UI minimalista y densa
 
 ## Alcance offline
 
-| Operación | Sin conexión |
-| --- | --- |
-| Abrir y recargar la app ya preparada | Sí, incluido cierre y reapertura del navegador. |
-| Consultar meses y días con datos descargados | Sí; todas las series descargadas se expanden localmente. |
-| Crear, editar, borrar, clasificar y reordenar | Sí, con guardado local y cola persistente. |
-| Cambiar estado, checklist y repetición | Sí, incluso con sesión remota caducada. |
-| Iniciar sesión con Google en un dispositivo nuevo | Requiere conexión. |
-| Recibir modificaciones de otros usuarios/dispositivos | Requiere conexión. |
+| Operación                                             | Sin conexión                                             |
+| ----------------------------------------------------- | -------------------------------------------------------- |
+| Abrir y recargar la app ya preparada                  | Sí, incluido cierre y reapertura del navegador.          |
+| Consultar meses y días con datos descargados          | Sí; todas las series descargadas se expanden localmente. |
+| Crear, editar, borrar, clasificar y reordenar         | Sí, con guardado local y cola persistente.               |
+| Cambiar estado, checklist y repetición                | Sí, incluso con sesión remota caducada.                  |
+| Iniciar sesión con Google en un dispositivo nuevo     | Requiere conexión.                                       |
+| Recibir modificaciones de otros usuarios/dispositivos | Requiere conexión.                                       |
 
 No se promete abrir una web nunca descargada sin red. El almacenamiento del navegador puede perderse si el usuario lo borra o el navegador lo expulsa; habrá persistencia solicitada, detección de errores y exportación/importación local. Estos límites se reflejarán en la UI donde afecten a una decisión.
 
@@ -1117,7 +1112,6 @@ Lote cerrado tras `03b`: lectura automática **5h 61%; 7d 38% restantes** antes 
 ## Fuentes y decisiones
 
 La arquitectura y las reglas funcionales son decisiones de este proyecto. Las limitaciones de plataforma se contrastan con fuentes primarias:
-
 - Guías instaladas de Next.js: [PWA](../node_modules/next/dist/docs/01-app/02-guides/progressive-web-apps.md) y [Server Actions](../node_modules/next/dist/docs/01-app/02-guides/server-actions.md). Consultarlas de nuevo en la iteración que escriba ese código; instalar una PWA no garantiza funcionamiento offline.
 - [IndexedDB — MDN](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API): almacenamiento local indexado y transaccional.
 - [Persistencia y cuotas — MDN](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria): almacenamiento sujeto a cuotas y posible expulsión.

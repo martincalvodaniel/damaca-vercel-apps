@@ -16,16 +16,16 @@ Objetivo: demostrar que Next compila y referencia la acción4 real, y que sus de
 
 Reutilizar el aislamiento y sesiones BetterAuth existentes. Nueva referencia directa action4 en compilación; el wrapper debe conservar actor/headers/defaults. Prueba de ID ausente debe pasar por RPC real compilado, no llamar al método directamente. Guardar métricas de recibos/journal/proyecciones antes y después de cada rechazo. No extrapolar resultados de templates3.
 
-| Caso | Evidencia exigida |
-| --- | --- |
-| Cliente4/servidor3 y cliente3/servidor4 | Rechazo por header antes body, caché, cursor o claim; proyección/cola conservadas. |
-| Sesión válida y actor esperado | Productor real guarda plan+asignación; action4 emite ACK real y pull4 converge en la segunda partición. |
-| Sesión revocada/cambio de cuenta | Sin efecto remoto ni ACK; intención y lease propios quedan recuperables. |
-| Readiness no válida | Rechazo antes executor; sin recibo de éxito ni avance de cursor. |
-| Identity3/pull3 capturados, luego retirada3 | Respuesta update_required anterior a readiness/executor y sin ACK. |
-| ID antiguo ausente en build Next | Error RPC real sin ACK; siguiente handshake exige4 antes claim. |
-| Respuesta action4 perdida | Replay de UUID/payload/dependencias exactos y un recibo; dependientes llegan después. |
-| Hook4: montar/desmontar, listener, cuenta/época | Sin callbacks antiguos ni doble ejecución; ninguna inferencia de cancelación de red ya enviada. |
+| Caso                                            | Evidencia exigida                                                                                       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Cliente4/servidor3 y cliente3/servidor4         | Rechazo por header antes body, caché, cursor o claim; proyección/cola conservadas.                      |
+| Sesión válida y actor esperado                  | Productor real guarda plan+asignación; action4 emite ACK real y pull4 converge en la segunda partición. |
+| Sesión revocada/cambio de cuenta                | Sin efecto remoto ni ACK; intención y lease propios quedan recuperables.                                |
+| Readiness no válida                             | Rechazo antes executor; sin recibo de éxito ni avance de cursor.                                        |
+| Identity3/pull3 capturados, luego retirada3     | Respuesta update_required anterior a readiness/executor y sin ACK.                                      |
+| ID antiguo ausente en build Next                | Error RPC real sin ACK; siguiente handshake exige4 antes claim.                                         |
+| Respuesta action4 perdida                       | Replay de UUID/payload/dependencias exactos y un recibo; dependientes llegan después.                   |
+| Hook4: montar/desmontar, listener, cuenta/época | Sin callbacks antiguos ni doble ejecución; ninguna inferencia de cancelación de red ya enviada.         |
 
 Dividir en frontera/negociación y productor/lifecycle si no cabe una entrega completa. Cada corte ejecuta prueba propia real, suite/lint/tipos/build y limpieza antes de commit/push/HEAD/cuotas. Fixture autenticada BetterAuth no prueba login interactivo Google ni ID del deployment Preview.
 

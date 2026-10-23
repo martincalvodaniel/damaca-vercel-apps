@@ -27,7 +27,6 @@ in one responsive interface.
 ## Local setup
 
 Requirements:
-
 - Bun
 - A MongoDB database
 - Google OAuth credentials

@@ -8,24 +8,24 @@ SWR puede suscribirse a lecturas locales y gestionar revalidación, sin converti
 
 ## Estructura propuesta
 
-| Ruta | Responsabilidad |
-| --- | --- |
-| `src/app/(auth)/**` | Páginas de autenticación existentes. |
-| `src/app/(dashboard)/**` | Entrada protegida online; mantener comprobación de sesión en layout. |
-| `src/app/(offline)/workspace/page.tsx` | Envoltorio neutro prerenderizable, sin datos personales ni auth de servidor; monta el espacio local. |
-| `src/app/manifest.ts` | Manifest PWA, inicio en `/workspace`, metadata de instalación. |
-| `src/app/api/sync/{identity,bootstrap,changes,protocol}/route.ts` | Lecturas autenticadas y handshake; thin handlers, lógica fuera de `app`. |
-| `src/features/{tasks,events,birthdays,tags,calendar,sharing}/**` | Componentes, hooks y casos de uso por dominio. |
-| `src/features/sync/actions.ts` | Server Action de lote que valida y aplica intenciones pendientes. |
-| `src/features/sync/**` | Coordinador, estados, reconciliación, conflictos y componentes. |
-| `src/features/workspace/**` | Arranque local, cambio de cuenta y shell reutilizado por ambas entradas. |
-| `src/lib/local-db/**` | Cliente IndexedDB, repositorios locales, migraciones y backup; frontera cliente. |
-| `src/lib/calendar/**` | Reglas puras: rangos, fechas civiles, ocurrencias y atrasadas. |
-| `src/lib/db/**` | Repositorios MongoDB, transacciones, adaptador auth y mapeos server-only. |
-| `src/lib/pwa/service-worker.ts` | Fuente TypeScript del worker; salida JavaScript generada durante build. |
-| `src/schemas/**`, `src/types/**` | Contratos compartidos, sin dependencias de Next.js ni driver. |
-| `src/config/**` | Configuración servidor y configuración pública explícita, sin filtrar secretos. |
-| `src/proxy.ts` | Permitir shell y assets neutros; APIs verifican sesión real, no solo cookie. |
+| Ruta                                                              | Responsabilidad                                                                                      |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `src/app/(auth)/**`                                               | Páginas de autenticación existentes.                                                                 |
+| `src/app/(dashboard)/**`                                          | Entrada protegida online; mantener comprobación de sesión en layout.                                 |
+| `src/app/(offline)/workspace/page.tsx`                            | Envoltorio neutro prerenderizable, sin datos personales ni auth de servidor; monta el espacio local. |
+| `src/app/manifest.ts`                                             | Manifest PWA, inicio en `/workspace`, metadata de instalación.                                       |
+| `src/app/api/sync/{identity,bootstrap,changes,protocol}/route.ts` | Lecturas autenticadas y handshake; thin handlers, lógica fuera de `app`.                             |
+| `src/features/{tasks,events,birthdays,tags,calendar,sharing}/**`  | Componentes, hooks y casos de uso por dominio.                                                       |
+| `src/features/sync/actions.ts`                                    | Server Action de lote que valida y aplica intenciones pendientes.                                    |
+| `src/features/sync/**`                                            | Coordinador, estados, reconciliación, conflictos y componentes.                                      |
+| `src/features/workspace/**`                                       | Arranque local, cambio de cuenta y shell reutilizado por ambas entradas.                             |
+| `src/lib/local-db/**`                                             | Cliente IndexedDB, repositorios locales, migraciones y backup; frontera cliente.                     |
+| `src/lib/calendar/**`                                             | Reglas puras: rangos, fechas civiles, ocurrencias y atrasadas.                                       |
+| `src/lib/db/**`                                                   | Repositorios MongoDB, transacciones, adaptador auth y mapeos server-only.                            |
+| `src/lib/pwa/service-worker.ts`                                   | Fuente TypeScript del worker; salida JavaScript generada durante build.                              |
+| `src/schemas/**`, `src/types/**`                                  | Contratos compartidos, sin dependencias de Next.js ni driver.                                        |
+| `src/config/**`                                                   | Configuración servidor y configuración pública explícita, sin filtrar secretos.                      |
+| `src/proxy.ts`                                                    | Permitir shell y assets neutros; APIs verifican sesión real, no solo cookie.                         |
 
 La ruta `/workspace` y la UI interactiva cliente son una desviación deliberada del server-first para satisfacer la reapertura offline. No exponen datos remotos ni sustituyen autenticación de APIs/acciones. Se conserva el layout protegido para la entrada online existente. `app/manifest.ts` es metadata oficial del framework; ningún caso de uso se mueve a `app/**`.
 
@@ -56,7 +56,6 @@ Auth conserva las escrituras atómicas por documento y los índices únicos, sin
 ## IndexedDB
 
 Stores propuestos: `items`, `occurrences`, `tags`, `itemViews`, `taskPlacements`, `settings`, `memberships`, `invitations`, `outbox`, `remoteShadows`, `syncMetadata`, `conflicts`. Representación elegida en `03a`: una base `dalis-account:<userId codificado>` por usuario estable. Versión inicial 1 con ocho stores de dominio; `03b` migra a versión 2 añadiendo `outbox`, `remoteShadows` y `syncMetadata`, sin borrar registros. `13a` reutiliza `syncMetadata` para outcomes y resoluciones con claves propias; no necesita un store `conflicts` separado ni una migración física adicional. Repositorios cliente validados por Zod y preferencias personales comprobadas contra la partición.
-
 - Índices locales por tipo/fecha, serie, usuario, categoría y operaciones pendientes según consultas reales.
 - Outbox guarda intención tipada: ID UUID de operación, ID entidad, tipo, `baseRevision`, payload validado, orden local, dependencias y versión de protocolo. No guardar un POST de Next.js ni su action ID.
 - `remoteShadows` mantiene la última versión remota aceptada; la vista local añade las intenciones pendientes encima. Esto evita que un pull borre un cambio offline.
@@ -88,7 +87,6 @@ Disparadores: arranque, conexión recuperada, retorno al primer plano, nueva ope
 No prometer sincronización con la app cerrada. [Background Sync](https://developer.mozilla.org/en-US/docs/Web/API/Background_Synchronization_API) tiene disponibilidad limitada y no es requisito del MVP. Se puede evaluar después de tener un transporte compatible.
 
 Secuencia del ciclo:
-
 1. Adquirir lease de sincronización por cuenta en IndexedDB; coordinar pestañas con `BroadcastChannel`. Lease expira y puede recuperarse si la pestaña muere; deduplicación remota sigue siendo necesaria.
 2. Confirmar sesión e identidad. Obtener versión de protocolo y compatibilidad de build mediante una lectura sin caché. Pausar si requiere login o actualización.
 3. Descargar cambios desde cursor y reconciliarlos con shadows/intenciones. Aplicar datos y cursor en la **misma transacción local**.
@@ -103,7 +101,6 @@ Server Actions cambian de ID entre builds. La [guía instalada](../node_modules/
 Primer avance preparatorio11b0: [operation-fingerprint.ts](../src/lib/sync/operation-fingerprint.ts), módulo server-only, valida el payload con syncOperationSchema y calcula SHA256 hexadecimal de64 caracteres. Canonicalización propia v1: ordenar claves de objetos por comparación binaria en todos los niveles, conservar orden de arrays y serializar JSON tras normalización de Zod; prefijo `sync-operation-fingerprint:v1\n` antes del JSON, UTF8. Incluye operationId/protocolVersion/baseRevision/command. No es una implementación de un estándar externo de JSON canónico; futuros cambios de normalización/schema requieren revisar compatibilidad de recibos.
 
 El servidor futuro recalcula la huella y busca recibo por actor de sesión+operationId; nunca acepta una huella del cliente como prueba de ejecución/autorización. Desde11b1a hay [ejecutor atómico](../src/lib/db/remote-item-commands.ts), colecciones de recibos/journal/contadores e integración real para tareas/eventos simples propios. Desde11b1b existe acción autenticada de subida por lotes, aún sin coordinador ni sincronización activa. Persistencia transaccional y replay remoto deben probarse en11a/11b; la huella por sí sola no impide duplicados. Alcance inicial remoto adelantado a tareas/eventos simples, antes de09c/10; comandos todavía sin soporte conservan cola pendiente y no se confirman.
-
 - Derivar actor de la sesión persistida; comprobar dueño/membresía en cada lectura y mutación. Validar estructura con Zod no autoriza un ID ajeno.
 - Aplicar control optimista por `baseRevision` con compare-and-swap y subir `revision` en el servidor. No usar timestamps del cliente como ganador.
 - Recibo de operación único por `(actorUserId, operationId)` y hash de payload: repetir devuelve el mismo resultado; reutilizar ID con otro contenido se rechaza. Conservar recibos durante el horizonte compatible; no TTL arbitrario que permita reproducir una operación antigua.
@@ -120,7 +117,6 @@ MongoDB garantiza operaciones atómicas por documento y transacciones entre docu
 ## Conflictos y permisos revocados
 
 MVP conservador: un desajuste de revisión no sobrescribe automáticamente contenido remoto. Guardar conflicto con versión base, estado remoto e intención local; pausar operaciones dependientes de esa entidad y continuar otras independientes.
-
 - Mostrar versión local/remota y permitir conservar remoto o reaplicar el cambio propio sobre la revisión actual, con un nuevo operation ID y validación de permisos. Preservar el original como evidencia hasta resolverlo.
 - Checklist por IDs permite una fusión explícita de puntos independientes en una ampliación; no asumir que todos los cambios pueden fusionarse.
 - Eliminación frente a edición: no resucitar. Si el dueño quiere recuperar, crear una copia nueva con ID nuevo y confirmación explícita.
@@ -132,7 +128,6 @@ MVP conservador: un desajuste de revisión no sobrescribe automáticamente conte
 Registrar al implementar, nunca crear índices desde una acción: `users/accounts/sessions` del adaptador auth, `items`, `occurrences`, `tags`, `item_views`, `task_placements`, `user_settings`, `item_memberships`, `share_invitations`, `sync_operations`, `sync_changes`, `sync_counters`.
 
 Evaluaciones previstas, ajustadas a las consultas reales de cada iteración:
-
 - Unicidad de ID de elemento y de `(seriesId, slotKey)` en excepciones.
 - Ítems por propietario/borrado/tipo/fecha; series por propietario/tipo y rango aplicable.
 - Tags únicos por usuario/nombre normalizado; preferencias por usuario/elemento y usuario/ocurrencia.

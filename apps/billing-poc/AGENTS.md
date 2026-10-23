@@ -1,9 +1,11 @@
 # Billing POC — Agent Guidelines
 
 ## Stack
+
 Next.js 16 (App Router), React 19, TypeScript 6 (strict), MongoDB 7, Tailwind CSS 4, Zod 4 (validation), SWR 2 (client data fetching), Biome (lint + format), Bun (runtime, package manager, test runner).
 
 ## Architecture — Hexagonal (Ports & Adapters)
+
 ```
 lib/constants.ts              → Shared CHART_COLORS
 lib/formatters.ts             → Shared formatCurrency, formatDate, formatMonthYear
@@ -24,6 +26,7 @@ src/lib/domain/services/      → Business logic (calculators, Zod validators, a
 ```
 
 ## Authentication
+
 - **NextAuth.js v5** with Google OAuth provider, JWT sessions (stateless)
 - Email allowlist via `ALLOWED_EMAILS` env var (`src/lib/domain/services/auth.ts`)
 - Middleware (`src/proxy.ts`) protects all routes except `/auth/*` and `/api/auth/*`
@@ -34,6 +37,7 @@ src/lib/domain/services/      → Business logic (calculators, Zod validators, a
 - `SessionProvider` wraps app via `src/components/shared/Providers.tsx`; `SWRConfig` is mounted inside `SessionProvider` in the same file
 
 ## Universal Rules
+
 - All code files must be written in English, including comments, variable names, and commit messages
 - TypeScript strict mode everywhere; no `any` without `unknown` guard
 - Before implementing UI or stateful behavior ad hoc, actively search for existing patterns in the codebase and prefer extracting or extending shared reusable components/utilities instead of duplicating similar functionality
@@ -48,6 +52,7 @@ src/lib/domain/services/      → Business logic (calculators, Zod validators, a
 - Currency: EUR with `es-ES` via `Intl.NumberFormat`; dates: `en-US` via `toLocaleDateString`
 
 ## Client-Side Data Fetching (SWR)
+
 - **Never call `fetch` directly from a client component or `useEffect`.** Use SWR hooks from `src/features/<feature>/hooks/` (or add a new one there).
 - **GETs** → `useSWR` via a hook that exposes `buildXKey`, `buildXUrl`, `isXKey`, and `useX(args)` (e.g., `usePayments`, `useClients`, `useTags`). Keys MUST be stable tuples of primitives — never inline objects.
 - **POST/PUT/DELETE** → `useSWRMutation` via `useXMutation` hooks (e.g., `useCreatePayment`). Each mutation hook invalidates its resource cache via `mutate(isXKey, undefined, { revalidate: true })` from `useSWRConfig` on success — call sites MUST NOT add manual `mutate()` bridges.
@@ -58,6 +63,7 @@ src/lib/domain/services/      → Business logic (calculators, Zod validators, a
 - **Tests**: each hook exports pure helpers (`buildXKey`, `buildXUrl`, `isXKey`, request builders) covered by `bun:test` unit tests under `src/features/<feature>/hooks/*.test.ts`. Avoid React-render tests for hooks.
 
 ## Commands
+
 | Command                           | Purpose                              |
 | --------------------------------- | ------------------------------------ |
 | `bun install`                     | Install dependencies                 |
@@ -70,6 +76,7 @@ src/lib/domain/services/      → Business logic (calculators, Zod validators, a
 | `bun run load-data:year YYYY`     | Load sample data for all 12 months   |
 
 ## Quality Checklist
+
 - Domain logic goes in `src/lib/domain/services/`, never in API routes or components
 - API routes use repository adapters + Zod schemas, never raw MongoDB queries
 - Validation via Zod schemas (`src/schemas/*-validator.ts`)
@@ -81,11 +88,13 @@ src/lib/domain/services/      → Business logic (calculators, Zod validators, a
 - Focus indicators on all interactive elements
 
 ## Debugging
+
 - API issues: browser Network tab + console logs
 - MongoDB: verify URI and container (`docker start mongodb`)
 - Types: `bunx tsc --noEmit`
 - Build: clear `.next/` then `bun run build`
 ## Dynamic Context Enhancement
+
 - Before planning or making changes under the `src/app/` directory, always read `src/app/AGENTS.md`.
 - Before planning or making changes under the `src/app/api` directory, always read `src/app/api/AGENTS.md`.
 - Before planning or making changes under the `src/lib/db/repositories/` directory, always read `src/lib/db/repositories/AGENTS.md`.

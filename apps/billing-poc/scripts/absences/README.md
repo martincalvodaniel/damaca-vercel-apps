@@ -24,12 +24,12 @@ bun run load-data:absences 2026 4 --baseUrl=http://localhost:3000 --count=30
 
 ## Arguments
 
-| Arg          | Type   | Default               | Description                |
-| ------------ | ------ | --------------------- | -------------------------- |
-| year         | number | current year          | Target year                |
-| month        | number | current month (1-12)  | Target month               |
+| Arg          | Type   | Default                 | Description               |
+| ------------ | ------ | ----------------------- | ------------------------- |
+| year         | number | current year            | Target year               |
+| month        | number | current month (1-12)    | Target month              |
 | `--baseUrl=` | string | `http://localhost:3000` | API base URL              |
-| `--count=`   | number | 15–25 (random)        | Number of records to post  |
+| `--count=`   | number | 15–25 (random)          | Number of records to post |
 
 ## Auth note
 

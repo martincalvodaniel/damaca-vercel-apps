@@ -7,7 +7,6 @@
 
 La cantidad utilizada en una receta no suele coincidir con la presentación en
 la que se compra un producto:
-
 - Una receta puede necesitar 225 g de lentejas, pero las lentejas se compran en
   bolsas de 500 g o 1 kg.
 - Un plato puede consumir una parte de una bolsa de queso rallado, mientras que
@@ -38,7 +37,6 @@ contenido puede variar.
 ## Separación de conceptos
 
 El dominio debe separar tres cantidades:
-
 1. **Cantidad de consumo**: lo que utiliza una receta.
 2. **Cantidad de inventario**: lo que hay disponible en casa.
 3. **Cantidad de compra**: el número de paquetes o envases que se comprará.
@@ -49,13 +47,11 @@ compra utiliza un formato comercial que indica cuánto contiene cada paquete.
 ## Unidades base
 
 Las cantidades deberían almacenarse normalizadas en una de estas unidades:
-
 - `gram`
 - `milliliter`
 - `unit`
 
 Los kilogramos y litros serían unidades de entrada o visualización:
-
 - 1 kg se almacena como 1000 g.
 - 1,5 l se almacena como 1500 ml.
 
@@ -116,7 +112,6 @@ const lentils: Product = {
 ```
 
 Reglas recomendadas:
-
 - Los identificadores de formato deben ser estables.
 - Solo puede existir un formato predeterminado por producto.
 - `contentQuantity` siempre se expresa en la unidad base del producto.
@@ -174,7 +169,6 @@ comportamiento más predecible al actualizar el inventario.
 
 Para productos sin formato, la línea puede seguir usando una cantidad directa
 en la unidad base. La implementación debería tratar explícitamente ambos modos:
-
 - Compra por paquetes completos.
 - Compra directa o a granel.
 
@@ -283,7 +277,6 @@ semanal fuese de 10 unidades, se propondrían 2 paquetes y se incorporarían 16.
 ### Edición de producto
 
 El formulario de producto debería permitir:
-
 - Seleccionar su unidad base.
 - Añadir, editar y eliminar formatos de compra.
 - Elegir el formato predeterminado.
@@ -327,7 +320,6 @@ Añadirá 500 g al inventario
 ```
 
 El usuario debería poder:
-
 - Cambiar el número de paquetes.
 - Cambiar entre los formatos disponibles.
 - Ver cuánto falta según menú e inventario.
@@ -377,7 +369,6 @@ Los presets como `⅓ bolsa` o “Poco” deberían quedar para una segunda iter
 ## Decisiones pendientes
 
 Antes de implementar conviene decidir:
-
 1. Si un formato puede estar asociado a varios lugares de compra o solo uno.
 2. Si Compra guarda un snapshot del formato o siempre utiliza su versión actual.
 3. Cómo se representa la compra a granel y cuál es su incremento mínimo.

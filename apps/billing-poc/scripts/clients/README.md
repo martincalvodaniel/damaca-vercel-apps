@@ -22,19 +22,16 @@ bun run scripts/clients/loadSampleClients.ts 15 http://localhost:3000
 ```
 
 **Arguments:**
-
 - `count` (optional): Number of clients to generate (default: 10, max: 1000)
 - `baseUrl` (optional): Base URL for the API (default: http://localhost:3000)
 
 **Output:**
-
 - Generates a mix of individual clients (persons/freelancers) and company clients
 - Each client has realistic Spanish names, tax IDs (NIF/CIF format), and addresses
 - Progress bar shows insertion status
 - Sample data displayed after successful load
 
 **Sample Generated Data:**
-
 - **Individuals**: Full name, NIF (8 digits + letter), address in Spanish format
 - **Companies**: Business name, CIF (letter + 7 digits + letter), address in Spanish format
 - Addresses include street, number, postal code, and city
@@ -62,7 +59,6 @@ bun run scripts/clients/loadSampleClients.ts 5 https://billing-app.vercel.app
 ## Utilities
 
 The `utils.ts` file provides utility functions for generating and loading client data:
-
 - `generateIndividualClient()` - Generate a random individual client
 - `generateCompanyClient()` - Generate a random company client
 - `generateClients(count)` - Generate multiple clients

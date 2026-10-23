@@ -10,12 +10,12 @@ Las preferencias son personales: actor derivado de sesión, cada registro perten
 
 ## Identidades y ámbito del cambio
 
-| Registro | Identidad lógica | Observación |
-| --- | --- | --- |
-| Categoría | userId + id | normalizedName tiene que coincidir con NFKC/lowercase; duplicados activos necesitan la misma regla que el reductor local. |
-| Vista | userId + itemId | Categoría personal, no cambio de contenido. Validar existencia/acceso vigente del elemento al ejecutar. |
+| Registro   | Identidad lógica                     | Observación                                                                                                                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Categoría  | userId + id                          | normalizedName tiene que coincidir con NFKC/lowercase; duplicados activos necesitan la misma regla que el reductor local.                               |
+| Vista      | userId + itemId                      | Categoría personal, no cambio de contenido. Validar existencia/acceso vigente del elemento al ejecutar.                                                 |
 | Colocación | userId + occurrenceId + scope + date | Usar la clave compuesta existente; atrasadas usa date=0001-01-01 aunque command.date mantiene el día de contexto. tagId no forma parte de la identidad. |
-| Ajustes | userId | Contrato existente de zona/locale/lunes; settings.update figura en sync schema, pero su cola local todavía no tiene productor autorizado. |
+| Ajustes    | userId                               | Contrato existente de zona/locale/lunes; settings.update figura en sync schema, pero su cola local todavía no tiene productor autorizado.               |
 
 Contratos de registro en [preferences.ts](../src/schemas/preferences.ts), claves de cola en [local-sync.ts:20](../src/schemas/local-sync.ts:20) y colocación en [ordering.ts](../src/schemas/ordering.ts). Revisiones son por registro; el contador de journal del receptor es otra magnitud. No reinterpretar baseRevision como un contador global de preferencias.
 
@@ -26,7 +26,6 @@ Una operación puede cambiar varias categorías al reequilibrar ranks, o una vis
 ## Contrato preparatorio11c1a
 
 DTO framework-agnóstico de un conjunto acotado de efectos: actor userId, operationId, sequence y lista discriminada por store (tags, itemViews, taskPlacements, settings) con registro validado. Settings se representa para evolución posterior; no habilita un productor o mutación ausentes hoy. Incluir versión propia del DTO sin cambiar intención durable1. Este DTO prepara representación y validación; por sí solo no autoriza comandos, no da ACK y no modifica el contrato activo de red.
-
 - Todos los userId coinciden; identidades compuestas canónicas, únicas dentro del conjunto, incluido settings único. No unir por título o nombre normalizado: la regla de nombre se aplica al ejecutar la categoría.
 - Revisiones remotas positivas, registros íntegros, tombstones preservados. No aceptar registros de revisión0 como efectos remotos confirmados. Los ajustes/categorías/vistas/colocaciones no conceden acceso al contenido al que hacen referencia.
 - Entre1 y10000 efectos, conjunto UTF8<=512KiB antes de persistir; exceso no se trunca ni aplica parcialmente. El corte de ejecutor deberá tratar un cambio demasiado grande explícitamente, conservando su intención para recuperación; no convertir ese caso en éxito vacío.
@@ -47,17 +46,17 @@ Backup portable1 representa intención1, no automáticamente transporte1. Nueva 
 
 ## Orden de entregas
 
-| Corte | Rutas previstas | Aceptación y prueba |
-| --- | --- | --- |
-|11c1a|schemas/types y lib/sync puros|DTO de efectos y claves/propiedad/límites; no wire activo.|
-|11c1b|reductor puro personal y tests|CAS y efectos completos de tag.save/delete/move/item-view.set; duplicados/tombstone/rank/dependencias; límites sin resultado parcial. task.move/settings permanecen pendientes de política/productor.|
-|11c2a|lib/db, índices centrales y tests aislados|Repositorios personales por actor, CAS/identidades, unicidad activa de categorías y consultas reales; MongoDB propio con concurrencia. Registrar solo índices de consultas implementadas.|
-|11c2b|recibos/journal/executor remoto|Efectos+recibo+contador+journal atómicos; replay/identidad reutilizada, fallo tardío, permisos vigentes para vistas. Sin activar envío todavía.|
-|11c3a|wire/protocol/transport y tests|Separar intención1/transporte2, envelopes discriminados, adaptación de historia y pausa cliente/servidor mixtos; no huecos de cursor.|
-|11c3b|schemas backup/local-sync, local-db y fixtures|ACK/pull/shadows/outcomes/backup completos, rollback y replay, preservación de cadenas y cuenta/época; evolución versionada sin borrado.|
-|11c4a|coordinador y resumen/UI actuales|Selección por capacidades y dependencias, no mandar lo no soportado; conflictos personales conservados y visibles sin elecciones engañosas.|
-|11c4b|fixtures dos dispositivos/Mongo, piloto|Categorías/vistas/ranks convergen, colisión nombres/edición concurrente/tombstones, desconexión/recarga/replay y clientes mixtos. Activación solo después de evidencia completa.|
-|11c5|task.move y settings productor/reconciliación|Resolver contexto civil diferido y multiregistro, backlog/repetición pendiente; después pruebas de orden y zona en ambos dispositivos. No prometer fecha o granularidad antes del análisis de ese corte.|
+| Corte | Rutas previstas                                | Aceptación y prueba                                                                                                                                                                                      |
+| ----- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 11c1a | schemas/types y lib/sync puros                 | DTO de efectos y claves/propiedad/límites; no wire activo.                                                                                                                                               |
+| 11c1b | reductor puro personal y tests                 | CAS y efectos completos de tag.save/delete/move/item-view.set; duplicados/tombstone/rank/dependencias; límites sin resultado parcial. task.move/settings permanecen pendientes de política/productor.    |
+| 11c2a | lib/db, índices centrales y tests aislados     | Repositorios personales por actor, CAS/identidades, unicidad activa de categorías y consultas reales; MongoDB propio con concurrencia. Registrar solo índices de consultas implementadas.                |
+| 11c2b | recibos/journal/executor remoto                | Efectos+recibo+contador+journal atómicos; replay/identidad reutilizada, fallo tardío, permisos vigentes para vistas. Sin activar envío todavía.                                                          |
+| 11c3a | wire/protocol/transport y tests                | Separar intención1/transporte2, envelopes discriminados, adaptación de historia y pausa cliente/servidor mixtos; no huecos de cursor.                                                                    |
+| 11c3b | schemas backup/local-sync, local-db y fixtures | ACK/pull/shadows/outcomes/backup completos, rollback y replay, preservación de cadenas y cuenta/época; evolución versionada sin borrado.                                                                 |
+| 11c4a | coordinador y resumen/UI actuales              | Selección por capacidades y dependencias, no mandar lo no soportado; conflictos personales conservados y visibles sin elecciones engañosas.                                                              |
+| 11c4b | fixtures dos dispositivos/Mongo, piloto        | Categorías/vistas/ranks convergen, colisión nombres/edición concurrente/tombstones, desconexión/recarga/replay y clientes mixtos. Activación solo después de evidencia completa.                         |
+| 11c5  | task.move y settings productor/reconciliación  | Resolver contexto civil diferido y multiregistro, backlog/repetición pendiente; después pruebas de orden y zona en ambos dispositivos. No prometer fecha o granularidad antes del análisis de ese corte. |
 
 Cada entrega conserva commit/push/cuotas y definición de terminado. Cambios de código: tests pertinentes, lint, tipos y build; DB/IndexedDB con fixtures propias cuando se implementen. Solo de lectura/documentación: referencias, coherencia ydiff-check. No nuevos paquetes, secretos, permisos o cambios de hosting.
 

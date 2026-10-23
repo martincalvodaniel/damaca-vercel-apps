@@ -25,15 +25,15 @@ Series/apariciones tienen repetición y progreso **locales**, pero todavía no e
 
 Destino verificado: proyecto/clúster `atlas-dalis-tasks-events-debug`, proyecto Atlas `6ac6750220c6cbecd1c55b2c`, base `dalis-tasks-events`. Borrado bulk con filtro None, confirmación y resultado de éxito por colección. Sin drop de colección/base/índices, sin cambios de permisos/hosting. Recuento final refrescado:
 
-| Colección | Antes | Después | Índices conservados |
-| --- | ---: | ---: | ---: |
-| items | 13 | 0 | 2 |
-| item_views | 4 | 0 | 2 |
-| tags | 6 | 0 | 3 |
-| task_placements | 1 | 0 | 2 |
-| sync_operations | 58 | 0 | 2 |
-| sync_changes | 57 | 0 | 2 |
-| sync_counters | 1 | 0 | 1 |
+| Colección       | Antes | Después | Índices conservados |
+| --------------- | ----: | ------: | ------------------: |
+| items           |    13 |       0 |                   2 |
+| item_views      |     4 |       0 |                   2 |
+| tags            |     6 |       0 |                   3 |
+| task_placements |     1 |       0 |                   2 |
+| sync_operations |    58 |       0 |                   2 |
+| sync_changes    |    57 |       0 |                   2 |
+| sync_counters   |     1 |       0 |                   1 |
 
 Autenticación sin alteración: `users`3/índices2, `accounts`3/índices3, `sessions`5/índices3, `verifications`0/índices2, iguales antes/después. Evidencia visual `/private/tmp/dalis-preview-content-reset.png`. Producción no abierta ni modificada. El primer diálogo de item_views mostró Update en lugar de Delete; guardia de ámbito detuvo la operación y se canceló sin escribir, luego Delete comprobado y ejecutado.
 
