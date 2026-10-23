@@ -34,7 +34,7 @@
   },
   "scripts": {
     "dev": "turbo run dev --parallel",
-    "build": "turbo run build --concurrency=2",
+    "build": "TURBO_TELEMETRY_DISABLED=1 turbo run build --concurrency=2",
     "type-check": "turbo run type-check",
     "test": "turbo run test",
     "lint": "biome check --no-errors-on-unmatched",
