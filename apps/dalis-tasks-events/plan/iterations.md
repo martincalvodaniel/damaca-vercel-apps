@@ -1,0 +1,5074 @@
+# Iteraciones de implementación
+
+## 23m — Tipado oficial de configuración Vercel
+
+Objetivo: añadir import type VercelConfig desde @vercel/config/v1 y verificar config contra contrato oficial, preservando España/París. target_paths: vercel.ts, package.json, bun.lock, plan/master.md, iterations.md e iteration-log.md. Dependencia c229c25 limpia en main; paquete de herramientas de configuración como devDependency solicitado por tipado, sin dependencia core/runtime. Aceptación: compilación sin casts ni tipos manuales, misma configuración serializada y esquema oficial válido. Validación lint/tipos/suite/build/worker/diff. Commit local main sin push. Entrada28%5h/70%7d, reservas10%/1%, secuencial.
+
+Resultado23m: tipo oficial VercelConfig y devDependency exacta0.13.0, export idéntico a23l y frozen coherente. DoD1386/225skip/0fail/lint1117/tipos/Webpack/worker46 aprobados. Commit local main sin push.
+
+## 23l — Configuración Vercel: España y París
+
+Objetivo: añadir vercel.ts con export config, bloqueo mitigate deny para todas las rutas cuyo x-vercel-ip-country no sea ES y región cdg1; sin modificar panel ni desplegar. target_paths: vercel.ts, plan/master.md, iterations.md e iteration-log.md. Dependencia7cbc184 limpia en main humano; commit local en rama actual, sin pushmain. Configuración estática TypeScript sin dependencias nuevas; documentación oficial Vercel confirma exportconfig, routes/mitigate/missing y región. Aceptación: España continúa a rutas Next, otros países y país ausente bloqueados, funciones en París; nombreOnlySpain es referencia del requisito, no campo no admitido en routes. Validar export TS y esquema oficial, lint/tipos del archivo, diff. No cambios de código de aplicación ni DB; validación remota sólo después de desplegar. Entrada33%5h/71%7d, reservas10%/1%, secuencial.
+
+Resultado23l: vercel.ts creado, export/esquema oficial/lint/tipos y DoD1386/225skip/0fail/lint1117/Webpack/worker46 aprobados. Sin pushmain ni aplicación remota; detalle en iteration-log.
+
+## 23k — Categorías sin desplegable y acciones SVG directas
+
+Objetivo: categorías con lápiz y cruz roja a la derecha, sin details/summary, conservando nombre/color/orden/disabled y confirmación. target_paths: tags/components/tag-card y test; components/ui/row-actions nuevo reutilizado desde plans/components/plan-card para no duplicar SVG/estilos; fixture tag-color con modo de prueba de fila y diálogos existentes; plan/log/guía. Dependencia02e7ab7 limpia en int, entrada67%5h/76%7d, reservas10%/1%, secuencial. Área táctil44px y nombres/tooltip españoles; color y título largo no solapan iconos, acciones no inician arrastre. Editor/borrado reales de TagManager siguen conectados. SSR normal/busy/long/orderControl y regresión PlanCard, QA móvil320/390 con componentes reales sin DB (abrir edición/cancelar confirmación), suite/lint/tipos/Webpack/worker/diff; mismo commit/pushint/SHA/cuotas. Sin datos/índices/protocolo/dependencias/producción.
+
+Resultado23k: categorías sin desplegable, acciones SVG compartidas con planes y confirmación intacta. DoD1386/225skip/0fail/15104, lint1116/tipos/Webpack/worker46 aprobados. QA visual pendiente por navegador CUA no disponible; fixture propia preparada y servidor retirado. Detalle en iteration-log.
+
+## 23j — Espaciado compacto y agenda sin Ver más
+
+Objetivo: quitar margen superior de primera sección de Mi espacio y padding vertical del calendario; Atrasadas/Próximas cargan todas las páginas de su intervalo sin Ver más. target_paths: plans/components/plan-agenda y plan-list, hooks/use-plan-appearances; lib/calendar/plan-appearance-selection y tests; calendar/components/month-grid; plan/log/guía. Dependencia4f1febb limpia en int, entrada24%5h/88%7d, reservas10%/1%, secuencial. Intervalos son finitos: Atrasadas desde ancla histórica hasta ayer; repeticiones Próximas mantienen horizonte30días ampliable, sin intentar materializar serie infinita. Lectura pura all drena cursor con guardia de avance, no recorta ni crea ACK, preserva modo numérico paginado de otros callers y mes acotado. UI sin botones/cursor parcial para este modo; márgenes de separación de las demás secciones conservados. Prueba>50series en intervalo con identidad/estado y paginado numérico previo, QA propia con muchas series y CSS real, suite/lint/tipos/Webpack/worker/diff, mismo commit/pushint/SHA/cuotas. Sin DBusuario/producción/índices/protocolo/dependencias.
+
+Resultado23j: primer margen y padding vertical eliminados; Atrasadas/Próximas drenan páginas sin Ver más dentro de rango finito. Prueba122slots/61series y UI62planesHoy,5Próximas,0botones. DoD1384/225skip/0fail/15090, lint1114/tipos/Webpack/worker46 aprobados; detalle/límites en iteration-log.
+
+## 23i — Planes sin desplegable y títulos móviles discretos
+
+Objetivo: eliminar details/summary y selector de categoría en filas, mostrar lápiz y cruz roja SVG a la derecha con controles táctiles/nombres españoles, conservar datos/progreso/checklist/gestos/confirmaciones. H1 de destinos de navegación no visibles en móvil pero semánticos/foco accesible y visibles escritorio. target_paths: plans/components/plan-card y tests, plan-list, workspace/components/workspace-heading y test, fixture plan-order-ui y accesibilidad si precisa; plan/log/guía. Dependencia bc39313 limpia en int, entrada34%5h/90%7d, reservas10%/1%, secuencial. Descripción visible compacta y contexto de serie accesible; no borrar opciones del editor. Adaptar superficie de fixture al encabezado no interactivo. SSR acciones/busy/sin selector ni disclosure, título responsive, QA390px de iconos/editar/cancelar borrado y gesto regresión, suite/lint/tipos/Webpack/worker/diff. Mismo commit/pushint/SHA/cuotas. Sin DBusuario/producción/índices/protocolo/dependencias.
+
+Resultado23i: filas sin disclosure/selector, iconos SVG directos y H1 oculto visualmente en móvil activos.6focalizadas/142aserciones; DoD1383/225skip/0fail/15084, lint1114/tipos/Webpack/worker46. UI editar/cancelar borrado/gesto y H1 foco390px/visible1024px aprobados; recursos propios limpios. Detalle en iteration-log.
+
+## 23h — Días de calendario más compactos
+
+Objetivo: reducir altura mínima de las celdas de56a44px conservando superficie táctil usable, navegación/arrastre y estados de color. target_paths: calendar/components/month-grid.tsx; plan/master.md, iterations.md e iteration-log.md. Dependencia60bb310 limpia en int, entrada39%5h/90%7d, reservas10%/1%, secuencial. Cambio CSS acotado sin nuevas pruebas que dupliquen implementación; suite/lint/tipos/Webpack/worker, QA390px de tamaño y screenshot propios, diff. Mismo ConventionalCommit/pushint/SHA/cuotas. Sin datos, protocolo, índices, dependencias o producción.
+
+Resultado23h: celdas44px verificadas en UI390px; DoD1381/225skip/0fail/15041, lint1113/tipos/Webpack/worker46/diff aprobados. Recursos propios limpios; detalle en iteration-log.
+
+## 23g — Arrastrar entre categorías y elegir posición en el día
+
+Objetivo: Hoy de Mi espacio y día del Calendario aceptan soltar antes/después de una fila de otra categoría, o en cabecera/zona de categoría vacía, con cambio de categoría+posición en un único task.move productivo atómico. target_paths: components/ui/long-press-order, tasks/components/task-group, plans/components/plan-list y helpers/tests de selección/agrupación; nuevo núcleo puro de vecinos entre grupos y tests; fixture test/browser/plan-order-ui; plan/log/guía. Dependencia3eae346 limpia en int, entrada59%5h/94%7d, reservas10%/1%, secuencial. Reutilizar productor/executor remoto existentes sin modificar protocolos/índices/TX. Destinos limitados a misma sección/día/cuenta y catálogo completo; categorías vacías y Sin categoría disponibles durante gesto, sin ruido persistente. Un plan de serie cambia categoría del padre/toda serie, orden sólo en fecha/slot elegido; destinos deben incluir hermanos visibles de ese padre al calcular vecinos. Fecha/contenido/progreso y otras preferencias intactos. Preservar gesto actual, teclado dentro de categoría, selector accesible y arrastre a fecha; cancelar/busy/snapshot obsoleto no escriben. Contratos puros probados contra planner real, SSR de zonas y pruebas UI Touch sintetizadas sobre componentes reales+IndexedDB: ambas vistas, antes/después/vacío/Sin categoría, simple/aparición, recarga/cola/rollback cuando pertinente; sin ACK falso. DoD suite/lint/tipos/Webpack/worker y evidencia en mismo ConventionalCommit/pushint/SHA/cuotas. Mongo propio sólo si cambio remoto o evidencia necesaria lo justifica; no DBusuario/producción/dependencias.
+
+Resultado23g: arrastre entre categorías/posiciones del mismo día activo con tarea y aparición, destinos vacíos y Sin categoría.20focalizadas/205aserciones/planner real; UI dosvistas+recarga+cancelación/pulsación inmóvil, cinco comandos atómicos pending sinACK y regresión intragrupo aprobadas. DoD1381/225skip/0fail/15041, lint1113/tipos/Webpack/worker46; límites/evidencia en iteration-log.
+
+## 23f — Completados azules y expansión mensual automática
+
+Objetivo: sustituir verde por azul/negrita y corregir la causa verificable que oculta completados cuando la primera página mensual deja nextCursor. target_paths: calendar/components/month-grid y SSR; plans/calendar-plans y tests, components/plan-calendar-board; plan/log/guía. Dependencia17c686f limpia en int, entrada66%5h/95%7d, reservas10%/1%, secuencial. Expandir automáticamente el mes local con lector existente,500porpágina y50páginas como máximo; conservar guardia de incompletitud/errores si se alcanza límite, sin afirmar azul de datos desconocidos. No cambiar paginación de Mi espacio ni días individuales. Pruebas de más de50slots con excepciones completas y posterior pendiente/rollback de estado, SSR azul seleccionado y rojo/vacíos, UI real completar/reabrir, suite/lint/tipos/Webpack/worker/diff. Mismo commit/pushint/SHA/cuotas. Sin datos de usuario/producción/índices/protocolo/dependencias.
+
+Resultado23f: azul visible y expansión mensual automática activos, sin guardia falsa por primera página.17focalizadas/127aserciones y prueba93slots; DoD1370/225skip/0fail/14939, lint1111/tipos/Webpack/worker46 y QA390px azul→rojo aprobados. Detalle/límites en iteration-log.
+
+## 23e — Estado en el número del día, sin recuento ni punto
+
+Objetivo solicitado: sustituir número de planes/punto por número del día rojo+negrita con al menos un pendiente y verde+negrita si todos sus planes están completados; fechas vacías neutras. target_paths: calendar/components/month-grid, month-view.test y plans/components/plan-calendar-board; plan/log/guía. Dependencia f37580d limpio en int, entrada73%5h/96%7d, reservas10%/1%, secuencial. Reutilizar resumen diario activo de planes/apariciones, sin persistencia o lecturas nuevas. Seleccionado/hoy siguen reconocibles con borde/fondo sin tapar color del número, ambos temas y descripción accesible española sin recuento. No afirmar todos completados mientras falten páginas o haya apariciones con errores; mensaje de carga sin recuento visual. Preservar navegación/swipe/destinos de arrastre. SSR estados y selección/carga parcial, QA real completar/reabrir, suite/lint/tipos/Webpack/worker/diff; mismo commit/pushint/SHA/cuotas. Sin DBusuario/producción/índices/protocolo/dependencias.
+
+Resultado23e: indicador de estado en número del día activo, sin recuento/punto/leyenda. Guardia contra verde sin evidencia completa; DoD1368/225skip/0fail/14929, lint1111/tipos/Webpack/worker46, SSR y QA390px completar/reabrir aprobados. Detalle en iteration-log.
+
+## 23d — Agenda cronológica sin bloques fuera de Hoy
+
+Objetivo: Mi espacio conserva categorías en Hoy y muestra Atrasadas/Próximas como listas continuas por fecha civil ascendente, respetando el orden manual existente dentro de cada categoría/fecha y color propio de cada fila. target_paths: features/plans/plan-agenda-rows y tests, components/plan-agenda y plan-list, tasks/components/task-group y pruebas de presentación; plan/log/guía. Dependencia cbe67b9 limpio en int, entrada83%5h/97%7d, reservas10%/1%, secuencial. No comparar rangos de categorías independientes como un orden global ni permitir que un orden antiguo salte fechas. Conservar productores/identidad de aparición, gestos dentro del contexto válido, contadores/desplegables/paginación, categoría editable e iconos/checklist. Calendario y otras listas conservan agrupación. Pruebas de fechas entre categorías, orden manual mixto, colores/metadatos y SSR sin encabezados, QA local propia pertinente, suite/lint/tipos/Webpack/worker/diff, mismo commit/pushint/SHA/cuotas. Sin persistencia, protocolo, índices, dependencias o DBusuario/producción.
+
+Resultado23d: listas continuas cronológicas activas sólo en Atrasadas/Próximas, categoría/color/posiciones propios conservados.14focalizadas/88aserciones; DoD1364/225skip/0fail/14892, lint1111/tipos/Webpack/worker46 y QA390px propios aprobados. Detalle y límites en iteration-log.
+
+## 23c — Actualizar dependencias a latest
+
+Objetivo solicitado: ejecutar `bun update --latest && bun install` y publicar sólo si validaciones completas pasan. target_paths: package.json, bun.lock, biome.json y adaptaciones estrictamente necesarias por incompatibilidad; plan/master.md, iterations.md e iteration-log.md. Dependencia cf06e16 limpio en int; entrada88%5h/98%7d, reservas10%/1%, secuencial. Aceptación: instalación coherente sin secretos ni nuevas dependencias core deliberadas, revisar cambios directos/transitivos, suite/lint/tipos/buildWebpack y worker aprobados; si falla corregir incompatibilidad acotada o informar sin commit de código roto. Mismo commit/pushint/HEAD remoto/cuotas. No DBusuario, producción o configuración de hosting.
+
+Resultado23c: instalación final coherente, sin cambios de aplicación;1360pass/225skip/0fail/14873aserciones, lint1110/tipos/Webpack16.4.2/worker46 aprobados. Configuración de Biome conserva política previa ante formato y diagnósticos nuevos; detalle en iteration-log. Sin auditoría de seguridad ni piloto RPC nuevos.
+
+## 23b — Punto rojo cuando quedan planes sin completar
+
+Objetivo: mantener el número total de planes del calendario y colorear sólo su punto si hay algún plan sin empezar/en progreso, incluidas apariciones y cuatro variantes. target_paths: features/plans/calendar-plans y tests, plan-calendar-board, calendar/components/month-grid y SSR existente; plan/log/guía. Dependencia c88f3ed limpio en int, entrada100%5h/100%7d, reservas10%/1%, secuencial. Aceptación: estado derivado en el mismo cálculo del recuento; sin contar padres, cancelados o borrados; cambio inmediato al completar/reactivar, punto neutro con todo completado, número intacto y descripción accesible española. Pruebas de estados/intervalos/apariciones y SSR, QA de componentes reales en fixture propia, lint/tipos/Webpack/worker, mismo commit/pushint/SHA/cuotas. Sin persistencia/protocolo/índices/dependencias nuevos ni DBusuario/producción.
+
+Resultado23b: completo, punto rojo/neutro reactivo con total intacto;11focalizadas/80aserciones, DoD1360/225skip/0fail/14873, lint1074/tipos/Webpack/worker46. QA real propia de completar/reabrir y limpieza aprobadas; detalle y aviso de build en iteration-log. Mismo commit/pushint/SHA/cuotas.
+
+## 23a — Reordenación de planes y apariciones en la agenda
+
+Objetivo: corregir la regresión reportada con Plan1/Plan2 de hoy y Plan3 diario durante3días. target_paths: features/plans/plan-order-selection y sus tests, components/plan-list, fixture UI propia de orden y servidor, documentación vigente/registro. Dependencia bd27132 limpio en int; entrada100%5h/20%7d, reset1792704583, reservas10%/1%; secuencial. Aplicar guías Next instalada y vercel-react-best-practices. Aceptación: activar gesto y teclado para vecinos simples/recurrentes del mismo contexto en Mi espacio y Calendario; identidad original de aparición y fecha efectiva, orden diario independiente, no editar padre/horarios/otras fechas/categorías. Conservar guardias de carga incompleta, busy/cuenta/época y transacciones/ACK reales; no cambiar protocolo, índices o permisos. Reutilizar motor recurrente activo y calcular vecinos una sola vez por fila. Cubrir mixtos/cancelados/movidos/multidía/atrasadas/próximas y el comando real con planner; prueba UI de componentes productivos+IndexedDB propio (selección prolongada y orden, ambas vistas/recarga/cola sin ACK falso), regresión remota aislada pertinente, lint/tipos/Webpack/worker/diff. Plan/log en mismo ConventionalCommit inglés, pushorigin/int y SHA remoto exacto, ambas cuotas directamente al cerrar y antes de pruebas costosas. Sin DBusuario/producción, dependencias nuevas o reabrir recuperaciones pospuestas.
+
+Resultado23a: completada la corrección de vecinos mixtos/comando original de slot y validada UI real de ambas vistas+recarga+IndexedDB propio. Siete casos de orden,17focalizadas160aserciones; Mongo140/1904 y DoD1357/225skip/0fail/14841, lint1074/tipos/Webpack/worker46 aprobados. Capturas en plan/evidence, recursos propios retirados, sin DBusuario/producción ni cambios de protocolo/índices. Se mantiene el alcance de lanzamiento; esta regresión queda corregida con evidencia específica.
+
+## 22c1 — Matriz automática explícita, sin sustituir la aceptación UI
+
+Objetivo: ejecutar los 38 escenarios completos de sincronización mediante las features reales sin depender de decisiones manuales seriales; mantener full y scopes UI actuales intactos. target_paths: schemas/next-sync-test y tests, templates controller y seis oráculos de recuperación/puertos, dos pruebas locales de aparición y su dispatch, host real del editor de zona y automatización de sus controles en full-auto, documentación de prueba y plan. Dependencia8541667 limpio/origin/int, entrada100%5h/29%7d, reset5h1792633934, reservas10%/1%; secuencial. Aceptación: full-auto explícito y validado anuncia evidencia automática, ejecuta los mismos escenarios/CAS/replay/rollback/UUID/convergencia/cuentas/defaults en dosorígenes IndexedDB/Mongo/Next propios. Sólo sustituye interacciones UI por sus features productivas; no inventa UUID UI ni atribuye cancelación/diálogos al modo automático. full conserva defaults/UI y scopes focalizados. Guardias de rollback de aparición se ejecutan también sin UI. No cambia producto/protocolo/índices/datos de usuario. Pruebas de schema/matriz, Next compilado real y DoD después de limpiar proyecto temporal. Mismo ConventionalCommit/plan/log/pushint/HEAD/cuotas; controles antes de RPC/DoD y cierre temprano con margen para publicación. Después completar sólo la evidencia UI que falte y cerrar checklist, sin nuevas familias de producto.
+
+Resultado22c1: **38/38 automáticos aprobados** en runf7a895f9-b3a8-4ce7-9003-481bacacd0f8, exit0 y limpieza propia confirmada; primer intento32 terminó por host del editor todavía manual y se corrigió antes de repetir. DoD1352pass/225skip/0fail/14758aserciones, lint1072/tipos/Webpack/worker46. Resultado y captura en plan/evidence; full/UI conservados y aceptación física17oct intacta. Cierre de desarrollo vigente aprobado, sin nuevas funcionalidades pendientes del alcance. Siguiente actuación sólo operativa: promoción y smoke separados según release-readiness; no reabrir pospuestos ni iniciar producción automáticamente.
+
+## 22c0 — Cierre seguro; regresión conjunta todavía pendiente
+
+22a/22b están completos y publicados en9712bf5/5d611c9: foco/títulos/calendario y errores/reflujo del editor. Este corte prepara el cierre operativo, no declara terminado22c. README elimina la política Preview obsoleta: ensureIndexes aplica todo el registro en cualquier rama/entorno. Guía de uso y release-readiness distinguen alcance fijado, recuperación excepcional pospuesta, aceptación física17oct ya cerrada y promoción a main no ejecutada. Capturas propias sin datos personales guardadas en plan/evidence.
+
+Tres intentos de fullNext6 con sesiones BetterAuth persistidas/dosorígenes IndexedDB/Mongo propios:5abefe35 se interrumpió en interacción categoría/orden;5a8ee973 aprobó también orden recurrente/grupo mixto pero una elección manual incorrecta en orden simple invalidó el intento;17fae900 aprobó17de38 escenarios y terminó sin aprobación en orden de categorías. No atribuir el fallo genérico a producto ni afirmar matriz completa. Última ejecución ya acreditó todas las familias anteriores hasta borrado de categoría; otras pruebas focalizadas históricas permanecen separadas. Todos los runners terminaron exit1 y confirmaron retirada de contenedor/almacenamiento propios; el controlador intentó limpieza de particiones/sesiones y cerró su peer. Pestañas propias cerradas/viewport restaurado. No DBusuario/producción.
+
+Instrumentación preparatoria: plazo global de runner settings30min (resto10min), sin relajar plazos/aceptación por caso;14hosts UI muestran instrucción española con la elección esperada, comparten helper privado y lo retiran al cerrar. No cambia producto, comandos, datos, guardias o aserciones. Next compilado validó estos templates y17escenarios ejecutados con indicaciones; el operador debe completar cancelar/reabrir/confirmar cada elección y no inferir la familia por un botón compartido. Bootstrap inicial del script rechazó recuento14≠13 antes de mutar templates, corregido con verificación de anclajes.
+
+Entrada22c73%5h/39%7d; controles intermedios54/36,48/36,32/33,27/32,22/32 y cierre10/30. Se detiene trabajo nuevo al llegar a reserva10%; no abrir otra prueba o recuperación. DoD de cierre:1349pass/225opt-in skip/0fail/14738aserciones, lint1072sinavisos/tipos/Webpack/worker46/diff aprobados después de retirar Next temporal. Commit/pushint/HEAD/cuotas al cerrar. Siguiente único bloqueo de lanzamiento22c1: completar la matriz, con ejecución que no dependa de inferir pasos manuales; diseñar scope backend explícito separado de UI si se necesita, conservando full y aceptación UI, nunca rebajar aserciones ni anunciar38por17. No nuevos bloques de producto ni programación automática.
+
+## 22c — Regresión consolidada y cierre de la versión
+
+Objetivo: finalizar alcance de lanzamiento elegido tras recomendación humana, sin ampliar recuperación excepcional. target_paths: README.md, nuevo plan/release-readiness.md, user-guide.md, master/workflow/iterations/iteration-log y referencias de alcance; scripts/next-sync-test-runner.ts para plazo global acotado de30min de la matriz completa con diálogos seriales (antes10min), sin cambiar plazos/aceptación por caso ni producto. Tras error manual de elección en la matriz, templates de revisión UI reciben una indicación visible compartida de la elección de prueba esperada; conserva esquema, snapshots, IDs, cancelación y todas las aserciones. No es UI de producto. Dependencias22a/22b publicadas (5d611c9), entrada73%5h/39%7d, reservas10%/1%; secuencial. Aceptación: ejecutar scope full Next6 compilado/defaults/sesiones BetterAuth persistidas/dosorígenes IndexedDB/Mongo propios, evidenciar resultado y limpieza exacta; DoD vigente del código intacto. Actualizar guía a funciones activas y limitaciones, quitar de README exclusión Preview obsoleta de índices, registrar promoción/backup/diagnóstico/rollback seguro sin ejecutar producción. Separar aceptación física17oct ya cerrada, revisión AX/teclado/reflujo de22a/b y ausencia de certificación auditiva externa. Clasificar padre borrado/remoto desconocido/cadenas externas como pospuestos, no completos ni pérdida de datos; cumpleaños aparcado/Gmail fuera. Documentos consistentes y enlaces existentes/diff, ConventionalCommit/pushint/HEAD/cuotas. Si regresión revela un fallo real, corregirlo en corte acotado con pruebas y DoD antes de declarar cierre; no relajar guardias ni fabricar evidencia. No modificar DBusuario/producción/hosting/secretos/permisos/índices ni programar nueva ejecución.
+
+## 22b — Editor accesible y reflujo cerrado
+
+Errores de PlanForm se anuncian y enfocan el control pertinente, con aria-invalid y descripción enlazada al mensaje; limpieza restaura atributos previos. Reintento del mismo error vuelve a enfocar; fallo de guardado enfoca resumen y conserva borrador. Zona oculta se revela antes de enfocar. Nombres de checklist permiten localizar el paso correcto. No cambian schema, payload ni sincronización.
+
+QA de componentes reales en loopback4266 sin DB: título/paso vacíos, zona inválida efectiva en plan con hora, intervalo0, reintento, corrección/guardado conservando paso, marcas limpiadas y fallo simulado sin pérdida. Tres pruebas con errores reales del schema/6aserciones; fixture inicial tenía IDs noUUID y se corrigieron sin relajar schema. Inspección visual detectó solapamiento de variantes y fecha recortada al200% además de desbordamiento de repetición. Adaptación por ancho relativo sólo en formulario/fechas: tipos2columnas, filas/fechas apiladas y controles completos cuando hace falta; tamaño normal conserva4tipos y fecha/hora en la mismafila a320/390px. Sin overflow320 a200% en claro/oscuro; colores auxiliares con contraste oscuro mejorado. Capturas /private/tmp/dalis-22b-editor-mobile.png y /private/tmp/dalis-22b-editor-320-text200-final.png. Viewport/tab/servidor propios retirados. No certificación de lector humano.
+
+DoD1349pass/225opt-in skip/0fail/14738aserciones, lint1072sinavisos/tipos/Webpack/worker46/diff sobre fuentes finales aprobados. Entrada86%5h/42%7d, control75%/40%, reservas10%/1%; commit/pushint/HEAD/cuotas. Siguiente22c: regresión Next6 completa con dosorígenes/Mongo propios, guía de uso actualizada y runbook de cierre; no nuevas funcionalidades ni recuperación excepcional. Sin DBusuario/producción/índices/dependencias/nueva programación.
+
+## 22b — Errores del editor accesibles y accionables
+
+Objetivo: al guardar un plan inválido, anunciar el error y enfocar el primer control pertinente sin perder el borrador. target_paths: PlanForm, nuevo feedback específico del editor, nombres de ChecklistFields, fixture plan-form-dates y pruebas pertinentes; DateTimeFields/PlanRecurrenceFields/estilos por desbordamiento real de texto200% detectado enQA; plan/log. Dependencia9712bf5 publicado, entrada86%5h/42%7d, reservas10%/1%, secuencial. Aceptación: título vacío, checklist vacío, fechas/horas, repetición y zona (revelar details) tienen destino visible con aria-invalid/aria-describedby; reintento del mismo error vuelve a enfocarlo y éxito/cancelar limpian atributos temporales. Error de almacenamiento permanece anunciado sin afirmar guardado. Sin cambiar validación/payload/modelo/sync. Navegador loopback propio/CSS real para teclado/errores/corrección/guardado, regresión completa/lint/tipos/Webpack/worker/diff y mismo commit/pushint/HEAD/cuotas. No añadir nuevos requisitos de producto; sigue22c.
+
+## 22a — Navegación accesible cerrada
+
+WorkspaceHeading actualiza título por destino y enfoca el h1 sólo cuando cambia la pantalla; las actualizaciones dentro de la misma pantalla mantienen foco y shell. Calendario permite PageUp/PageDown desde sus controles y conserva foco en la región al retirar celdas; mes anunciado con aria-live. Estilos compartidos dan foco visible, margen respecto a navegación fija y scroll contenido en diálogos. Detectado y corregido desbordamiento del encabezado de mes con texto al200%.
+
+Prueba de componentes reales en loopback propio4277 sin cuenta/DB: navegación→h1/título, Atrás, UUID de montaje idéntico, PageDown→noviembre con foco conservado, confirmación nativa/Escape→botón original. A320px texto200%, scrollWidth320 en claro y oscuro, sin elementos desbordados; captura /private/tmp/dalis-22a-calendar-320-text200.png. Primer fixture falló por NextImage sin process.env: configuración ficticia aislada añadida sólo al servidor de prueba; producto no afectado. Viewport restablecido/tab/servidor propios cerrados. No prueba de lector de pantalla humano ni certificación WCAG. Guías Next instaladas/Vercel aplicadas.
+
+DoD1346pass/225opt-in skip/0fail/14732aserciones, lint1069sinavisos/tipos/Webpack/worker46/diff aprobados sobre fuentes finales. Entrada100%5h/44%7d; control93%/43%, reservas10%/1%. Commit/pushint/HEAD/cuotas; sigue22b errores enfocados del editor, luego22c regresión/cierre operativo. Recuperaciones excepcionales quedan pospuestas conservando protecciones, no completadas. Sin DBusuario/producción/índices/dependencias ni nueva programación.
+
+## 22a — Navegación y foco accesibles para cerrar la versión
+
+Objetivo: cerrar barreras concretas de teclado en las pantallas principales, conservando navegación sin recarga. target_paths: nuevo WorkspaceHeading y su integración en Workspace, MonthGrid/useMonthSwipe, estilos globales y fixture loopback de accesibilidad; tests SSR pertinentes y plan. Dependencias: 64a82c5 limpio/origin/int y continuación humana del21oct tras la recomendación de cierre. Entrada100%5h/44%7d, reset5h1792614756, reservas10%/1%; secuencial. Aceptación: título español por pantalla, foco en encabezado sólo al cambiar de destino (sin robarlo en actualizaciones del mismo día/lista), volver/avanzar coherentes, calendario enfocable con PageUp/PageDown sin perder foco al retirar celdas, foco visible y fuera de navegación fija, diálogo con scroll contenido. Verificar con navegador propio sin DB/auth y CSS real, teclado/semántica/320px y ampliación; suite/lint/tipos/Webpack/worker/diff antes de publicar. No reabrir arrastre/aceptación física ni implementar nuevas familias de recuperación. Las recuperaciones excepcionales de padre eliminado/remoto desconocido/cadenas externas se aplazan explícitamente a después de esta versión, manteniendo guardias, evidencia y exportación; no se dan por completadas. Cumpleaños aparcado/Gmail fuera. Sigue22b errores del editor y22c regresión/documentación de cierre acotadas a hallazgos reales.
+
+## 21q1 — Cierre seguro y comprobaciones de cuota intermedias
+
+Objetivo: hacer permanente la petición del usuario del21oct de evitar otro agotamiento antes de publicar. target_paths: AGENTS.md, workflow/master/iterations/iteration-log y remote-absence-recovery para consistencia del alcance cerrado. Dependencia19l5b publicado, entrada23%5h/45%7d; reservas10%/1%. Aceptación: lectura directa antes de empezar, entre fases largas/antes de RPC o validación costosa y tras fallo inesperado, además de cada commit; coste restante incluye reparación/plan/commit/push/verificación/cuota, sin perseguir el10% como objetivo de consumo. Si siguiente corte no cabe completo, cerrar con repo limpio aunque quede más reserva. No cambia reserva ni autoriza programación/créditos/reset. Contrato de copia resume estado actual sin condiciones históricas contradictorias (counter ausente se rechaza). Validación documental, referencias locales/consistencia/diff, ConventionalCommit/pushint/HEAD/cuotas; sin nuevos tests de código.
+
+## 19l5b — Copia de una aparición cancelada activa en Ajustes
+
+Botón «Crear copia de este día» sólo para cuenta propia y comparación de un slot admitida. Antes de abrir, lee de nuevo el overview completo en TX readonly y verifica cuenta/época; congela request y tres UUID reales generados por UI. Confirmación reusa esos IDs, cancela sin escribir, valida nuevamente en writer y sólo invalida cachés de su cuenta/época. Componente identificado por cuenta/época/operación y mounted guardado; no expone copia para ausencia desconocida, padre borrado o cohorte externa. Adopción existente permanece disponible. La copia es un plan independiente sin repetición/categoría/orden; nunca resucita el original.
+
+Once escenarios Next6 focalizados `appearance-copy-ui` aprobados con sesiones BetterAuth persistidas/dos orígenes IndexedDB/Mongo propios. Cuatro variantes remotas: task interactiva con abrir/cancelar/reabrir/confirmar, tres UUID UI distintos del request preliminar y snapshot fresco idéntico; las otras tres usan la feature directamente. Cuatro respuestas perdidas/recargas/replays obtienen un ACK real único por copia y proyecciones/shadows/cursor exactos; padre, cancelación, otros slots y preferencias intactos. No full38, Google interactivo o nuevos físicos. Run5d38f512-4000-42fd-9155-cb71d80ec8c3 exit0 y retirada de recursos propios confirmada; tabs/proyectos/procesos propios cerrados. Captura `/private/tmp/dalis-21-appearance-copy-ui-next.png`.
+
+25 pruebas focalizadas/209 aserciones de SSR/selector, incluidas actor/null/cadena sin botón y schema estricto del host. DoD1346pass/225opt-in skip/0fail/14732 aserciones, lint1066 sin avisos/tipos/Webpack/worker46/diff aprobados después de limpiar Next temporal. Entrada34%5h/46%7d; controles31%/46% antes de interacción y26%/45% tras prueba; reservas10%/1%, secuencial. Sin índices/protocolo/dependencias ni DBusuario nuevos. Recuperación de copia de un slot cancelado cerrada en este alcance. Padre borrado, remoto desconocido y cadenas externas conservan guardias; no ampliar a copia completa de serie. Siguiente: contratos residuales acotados, accesibilidad y cierre operativo según dependencias; no abrir otro bloque grande con el margen de cierre de este lote.
+
+## 19l5b — Activación de copia con interacción Next real
+
+Objetivo: botón guardado y revisión fresca antes de confirmar, activados sólo al pasar UI real. target_paths: features/sync/local-plan-occurrence-copy, nuevo PlanOccurrenceCopyActions y PlanOccurrenceIncidentActions/SSR; schemas/next-sync-test/test, templates controller/device/local-client/appearance-copy-recovery y host appearance-copy-resolution-ui. Dependencias19l5a, entrada34%5h/46%7d, reservas10%/1%, secuencial. Aceptación: comparación readonly completa desde store y actor/época antes/después; request/IDs reales de UI congelados al abrir, mounted/clave de cuenta/época y caché propia; cancelar sin writes. Scope appearance-copy-ui mantiene cuatro casos remotos y selecciona uno interactivo (task): abrir/cancelar/reabrir/confirmar, tres UUID UI distintos del preliminar, pérdida/recarga/replay/ACK único y copia exacta. Otros tres usan feature directa, no atribuirles interacción; full38 permanece disponible. Probar caller antes del commit, no mostrar opción para remoto desconocido/parent borrado/cohorte externa. DoD después de cleanup Next/Mongo, plan/log/commit/pushint/HEAD/cuotas. Control de cuota durante implementación y antes de prueba; ante reparación que agote margen, no publicar activación incompleta.
+
+## 19l5a — Diálogo de copia preparado y revisado en móvil
+
+Disponibilidad usa el mismo planner y el tamaño completo de recibo; IDs representativos privados sólo miden la representación, nunca alcanzan writer o ejecutor. APIs públicas siguen exigiendo IDs nuevos. Diálogo recibe request real congelado, valida actor/evidencia, compara el plan nuevo con el original cancelado y explica sin repetición/categoría/orden, historial conservado y pending hasta confirmación. Vista nueva muestra el borrador sin UUID ni revisión técnica. No hay caller activo aún.
+
+Cinco SSR con cuatro variantes/guardias/busy y pruebas de disponibilidad en snapshots inválidos y desbordamiento de recibo; 46 pruebas focalizadas/357 aserciones junto al planner. QA CSS final390×844: página390/dialog356 sin desbordamiento, botones50px accesibles tras scroll y cancelar cierra sin datos/DB. Captura `/private/tmp/dalis-21-appearance-copy-dialog-mobile-final.png`; viewport restaurado, tab/servidor propios cerrados. DoD1345pass/225opt-in skip/0fail/14723 aserciones, lint1065 sin avisos/tipos/Webpack/worker46/diff aprobados. Entrada47%5h/48%7d, control37%/47%, reservas10%/1%, secuencial. Sin IO/índices/protocolo/dependencias nuevos. Siguiente19l5b: lectura fresca de comparación, botón y modal con IDs reales estables/cuenta/época/mounted/cache; interacción real cancelar/reabrir/confirmar con UUID UI y replay remoto antes de publicar activación.
+
+## 19l5a — Disponibilidad y diálogo de copia preparados
+
+Objetivo: presentación compacta de la copia frente a la cancelación original sin caller activo aún. target_paths: lib/sync/plan-occurrence-copy y tests de disponibilidad; nuevos componentes plan-occurrence-copy-dialog/SSR; test/browser/appearance-copy-review y selector privado scripts/plan-agenda-ui-test-server. Dependencias19l4, entrada47%5h/48%7d, reservas10%/1%, secuencial. Aceptación: disponibilidad valida el mismo planner y bytes de recibo con IDs representativos privados, nunca enviados a writer; actor/familia/ausencia/cadena inválidos sin elección. Diálogo recibe request real congelado y muestra copia exacta/slot original, sin repetición/categoría/orden, cambios sustituidos e historial/pending/posible conflicto. IDs reales estables durante revisión; cancelar sólo cierra. Reutilizar ConfirmationDialog y versiones existentes, QA390px con CSS/controles accesibles, SSR de campos/consecuencias/guardias/busy, DoD/plan/log/commit/pushint/HEAD/cuotas. No conectar caller hasta19l5b con interacción Next/Mongo real.
+
+## 19l4 — Copia de aparición acreditada con Next6 y Mongo
+
+Once escenarios Next6 focalizados (`appearance-copy`) pasan con acciones/defaults reales, sesiones BetterAuth persistidas y dos orígenes IndexedDB/Mongo propios. Cuatro variantes: excepción editada offline frente a cancelación concurrente, cuatro intenciones del mismo slot y borrador posterior al outcome. Cuenta/época/stale no escriben. Decisión local conserva originales y outcome exactos, crea un plan independiente sin repetición/categoría/orden y no confirma nada remotamente.
+
+Cuatro respuestas perdidas después de crear copia dejan el mismo UUID pending attempt1 sin lease; recarga conserva todos los stores, replay obtiene ACK real attempt2 con un único recibo/journal. Padre, cancelación, segundo slot y preferencias intactos. Ambas particiones terminan con la copia revisión1, proyecciones/shadows/cursor exactos contra Mongo y replay durable sin retroceder estado. No se atribuye convergencia global de otros históricos, Google interactivo o nuevos dispositivos físicos; full38 disponible sin ejecución completa. Primera compilación detectó que la sombra portable de item requiere decoder (puede carecer de kind); fixture corregida con decoder productivo sin cambiar datos o protocolo. Run54a3de2b falló antes de casos y confirmó limpieza; run61e76880-d916-4192-96cf-94a715f992a8 terminó exit0 y retiró contenedor/almacenamiento propios. Captura `/private/tmp/dalis-21-appearance-copy-next.png`, tabs/proyectos/procesos propios cerrados.
+
+DoD1340pass/225opt-in skip/0fail/14631 aserciones, lint1062 sin avisos/tipos/Webpack/worker46/diff aprobados después de limpiar Next temporal. Selector/matriz estrictos con ocho aserciones nuevas. Entrada60%5h/50%7d; control al terminar RPC48%/49%; reservas10%/1%, secuencial. Sin índices, dependencias, protocolo ni DBusuario nuevos. Siguiente19l5: disponibilidad/preview guardados, diálogo de copia y caller sólo para este alcance, con cancelar/reabrir/confirmar/UUID UI reales y QA móvil antes de activar. No hay botón de copia recurrente activo todavía.
+
+## 19l4 — Copia de aparición contra Next6 y Mongo propios
+
+Objetivo: cuatro variantes con cancelación concurrente real y copia independiente tras conflicto, respuesta perdida y recarga. target_paths: schemas/next-sync-test y test; templates Next controller/device/local-client y nuevo appearance-copy-recovery. Dependencias19l3, entrada60%5h/50%7d, reservas10%/1%, secuencial. Aceptación: productores reales save-plan/commit-occurrence, sesiones BetterAuth persistidas/dos orígenes IndexedDB/Mongo descriptor propio; borrador posterior al outcome, originales exactos y cancelación/padre/otro slot conservados. Un item.create sin categoría/orden/repetición, pending attempt1 tras pérdida y mismo UUID→ACK real attempt2, un recibo/journal, replay durable y proyecciones/shadows/cursor exactos en ambos orígenes. Guardias actor/época/stale sin mutación. Scope backend explícito appearance-copy; full38 disponible, no atribuirle ejecución completa ni Google/físicos. Revalidar Docker/imagen pinned/ownership y limpiar recursos propios. DoD sólo tras limpieza del Next temporal; plan/log/commit/pushint/HEAD/cuotas. UI19l5 separada y oculta hasta evidencia remota aprobada.
+
+## 19l3 — Copia de aparición guardada atómicamente en local
+
+Writer preparatorio relee la comparación completa y outcomes con nueve stores en una TX readwrite. Original remoto cancelado/tombstone, copia, originales superseded exactos, un item.create independiente, counter y recibo se guardan juntos. Comprueba IDs contra items/tombstones, sombras, cola y metadata (incluidas otras decisiones/importaciones); límites posteriores +1item/+1outbox/+1recibo. Counter ausente/atrasado/agotado se rechaza sin reparar. Replay valida el recibo antes de capturar o escribir y conserva ediciones posteriores. Store sólo notifica tras commit aplicado; feature valida cuenta/época antes/después y cierra conexión en finally. No hay botón de copia recurrente todavía.
+
+17 comprobaciones IndexedDB reales propias aprobadas: captura sin escrituras, stale/foreign/padre/outcome/remoto cambiados, otras fechas/cadena incierta, dependiente externo válido protegido, IDs históricos/metadata, límites completos de items/cola/metadata, counter, rollback tardío de todos los efectos, copia+backup coherentes sin modificar padre/otros slots/preferencias, recarga/replay/identidad reutilizada, época durante apertura, carrera equivalente con un commit/un aviso, y época posterior al commit que rechaza la respuesta pero conserva copia pendiente para replay con época vigente. Runs finales `15a19fb3-3820-4710-a6b6-62369c7f57df`; partición/control propios eliminados, pestaña y servidor cerrados. Captura `/private/tmp/dalis-21-appearance-copy-indexeddb-final.png`. No Mongo/RPC nuevos en este corte.
+
+DoD1339pass/225opt-in skip/0fail/14623 aserciones, lint1062 sin avisos/tipos/Webpack/worker46/diff aprobados. Fixture formateada hasta quedar estable; cuenta de actor inyectable sólo para pruebas propias. Entrada76%5h/53%7d; control intermedio66%/52%; reservas10%/1%, secuencial. Sin nuevos índices/protocolo/dependencias ni DBusuario. Siguiente19l4: productor real de excepción y cancelación concurrente con Next6/BetterAuth persistido/dos orígenes IndexedDB/Mongo propios, pérdida tras crear copia, recarga/replay/ACK único y proyecciones exactas. Separar la futura UI19l5 hasta que esa evidencia remota pase.
+
+## 19l3 — Guardado atómico de copia de aparición
+
+Objetivo: TX9stores de original cancelado, copia, supersesión exacta, operación independiente, counter y recibo; replay no reescribe ediciones posteriores. target_paths: nuevo lib/local-db/plan-occurrence-copy, sync-store, features/sync/local-plan-occurrence-copy, fixture actor inyectable, test/browser/plan-occurrence-copy y selector scripts/browser-test-server. Dependencias19l1–2, entrada76%5h/53%7d, reservas10%/1%, secuencial. Aceptación: releer captura completa y outcome en mismaTX, IDs libres en items/tombstones/shadows/historia/metadata, límites POST +1item/+1outbox/+1recibo y counter requerido válido (ausencia es corrupción, no reparación). Operación nueva sin dependencias, padre/otros slots/preferencias intactos, cuenta/época antes/después y notificación sólo tras commit aplicado. IndexedDB real: stale/foreign/unknown/cadenas, IDs/capacidad/overflow, rollback tardío incl copia/slot/cola/counter/recibo, replay/recarga/carrera/backup coherente/época. Sin caller UI ni actuación en DBusuario. DoD/plan/log/commit/pushint/HEAD/cuotas; dividir antes de empezar RPC si margen exige.
+
+## 19l2 — Copia de aparición preservada en backup3
+
+Codec añade rama explícita occurrence_copy con recibo replanificado. Exige originales superseded exactos, outcome congelado persistido (no sólo DTO), reemplazo exacto de la nueva entidad/fecha/secuencia/dependencias y presencia de copia/padre/slot originales. Acepta copias editadas después y pending intentados tras respuesta perdida sin exigir la proyección inicial. Rechaza dependientes externos, nuevas confirmaciones de originales nunca intentados, identidad de copia usada antes, colisiones globales entre operaciones/decisiones/copias y doble atribución de originales. Superseded no equivale a ACK. Las tres pruebas antiguas de quitar un marcador ahora seleccionan su familia explícita para no quitar el marcador de la nueva familia por accidente.
+
+16 pruebas/72 aserciones: roundtrip cuatro variantes, truncación/corrupción, originales y reemplazo alterados, edición posterior, pending intentado, ACK con outcome aplicado modelado coherente (no prueba Mongo nueva), DTO congelado falsificado, IDs y exclusividad entre familias. Se corrigieron entityKey y narrowing de una fixture con schema compartido; contratos estrictos conservaron sus rechazos. DoD final1339pass/225opt-in skip/0fail/14623 aserciones, lint1059 sin avisos/tipos/Webpack/worker46/diff aprobados. Entrada84%5h/54%7d, control intermedio78%/53%, reservas10%/1%, secuencial. Sin IO, TX ni caller nuevos: copia recurrente aún oculta. Siguiente19l3: captura y guardado atómicos con todos los IDs/capacidad/cuenta/época/replay, y comprobaciones IndexedDB propias antes de Next/Mongo/UI.
+
+## 19l2 — Evidencia portable de copia de aparición
+
+Objetivo: backup3 acepta únicamente decisiones occurrence_copy replanificables, con copia presente e historia exacta. target_paths: schemas/local-recurring-backup, lib/backup/local-backup, nuevo plan-occurrence-copy-evidence/fixture/backup.test. Dependencia19l1, entrada84%5h/54%7d, reservas10%/1%, secuencial. Aceptación: originales superseded exactos (incluidos attempts/seq/deps/fechas), outcome congelado real, nuevo item.create exacto y secuencia posterior/deps vacías; copia y padre/slot presentes sin exigir proyección inicial tras ediciones posteriores. IDs y exclusividad globales; no ACK sin outcome aplicado, no dependencia externa sobre originales ni copia-ID usada previamente. Roundtrip cuatro variantes, truncación/corrupción, respuesta perdida pendiente, ACK modelado y ediciones posteriores, colisiones entre familias. Sin TX/caller/IO nuevos. DoD completo/plan/log/commit/pushint/HEAD/cuotas.
+
+## 19l1 — Copia de una aparición cancelada preparada
+
+Contrato [ausencia y copia](remote-absence-recovery.md) distingue versión cancelada/tombstone conocida de remoto desconocido: `unavailable`, null o ausencia en pull no autorizan recreación ni ACK. Planner separado recupera una sola aparición como plan nuevo sin repetición, categoría u orden; conserva variante, contenido efectivo, horario, progreso y checklist actuales. Original permanece cancelado/tombstone y el padre no cambia. Cadena aislada del mismo slot con raíz conflict intentada y dependientes pending no intentados/directos, sin referencias externas. IDs nuevos, snapshot exacto, recibo replanificado y límite5MiB. Comparación existente exportada sin ampliar las decisiones activas.
+
+41 tests/265 aserciones acreditan cuatro variantes × all-day/timed × contenido propio/heredado, cambio local posterior, nueva identidad, cancelación/tombstone original intactos, stale/foreign/ausencia/cadena/IDs/recibo corrupto, evidencia que desborda al añadir recibo y hora civil ambigua rechazada por el oráculo productivo. Se corrigieron fixtures de captura, contenido heredado y narrowing null; el primer horario de prueba caía en la hora ambigua del cambio de octubre y ahora tiene prueba de rechazo explícita. Validación final1323pass/225opt-in skip/0fail/14551 aserciones, lint1056 sin avisos, tipos/Webpack/worker46/diff aprobados. Sin writer/portable/UI/IO nuevos: la opción de copia recurrente aún no se ofrece. Entrada94%5h/56%7d, control intermedio89%/55%, reservas10%/1%, secuencial. Siguiente19l2 portable, después TX/Next/UI según el contrato; no resucitar originales ni descartar otras cadenas.
+
+## 19l1 — Contrato y planner de copia de una aparición cancelada
+
+Objetivo: recuperar explícitamente el borrador de una única aparición como plan independiente, sin revivir la excepción remota cancelada ni duplicar la serie. target_paths: nuevo plan/remote-absence-recovery.md, schemas/types/plan-occurrence-copy, lib/sync/plan-occurrence-copy y sus pruebas; exportar el validador existente de comparación de aparición sin ampliar sus decisiones. Dependencias: 19c6 y recuperación multi-slot existentes, 19k6f cerrado. Entrada94%5h/56%7d, reservas10%/1%, secuencial.
+
+Aceptación: padre propio vivo recurrente confirmado, remoto conocido cancelado/tombstone y borrador local vivo; cadena aislada de un slot sin leases, intentos inciertos ni dependencias externas. IDs nuevos/distintos, expected exacto y evidencia durable revalidable; un item.create base0 sin categoría, orden ni repetición conserva variante, contenido efectivo, fecha/hora, estado y checklist de ese slot. Original queda en remoto conocido; nunca ACK ni copia de otros slots. Ausencia/null/unavailable no acredita borrado ni permiso y conserva protección. Sin portable/writer/caller todavía: no ofrecer esta nueva elección hasta pruebas atómicas y remotas posteriores. Validación: oráculo applyPlanCommand, cuatro variantes, horarios y contenido propio/heredado, borrador posterior, guardias de cuenta/cadena/evidencia/identidad/stale/bytes, inmutabilidad, DoD completo, plan/log, commit/pushint/HEAD/cuotas.
+
+## 19k6f — Recuperación conjunta de categoría y orden visible
+
+Ajustes permite revisar y resolver movimientos entre categorías de un plan simple o una aparición recurrente con posiciones conocidas. La lectura adaptativa selecciona la familia explícita; el diálogo muestra categorías y colores conocidos, grupos origen/destino, slot exacto y hermanos. Advierte que la categoría cambia para todas las fechas del padre y que las posiciones manuales de otras fechas se conservan. Una posición eliminada se identifica como «Sin posición manual», sin presentar el plan como eliminado. Cuenta, época, caché y UUID estable por confirmación protegidos; cancelar no escribe y la elección local no fabrica ACK.
+
+Evidencia: scope `category-placement-ui`, once escenarios Next6 compilados con defaults, sesiones BetterAuth persistidas, dos orígenes IndexedDB y Mongo propios. Seis casos simple/moved/implicit × adoptar/reintentar; dos interactivos (simple/adoptar y moved/reintentar) con cancelar/reabrir/confirmar y UUID generados por UI. Tres respuestas perdidas tras commit, recarga, replay con el mismo UUID y ACK único; catálogos, shadows y cursor exactos. Los otros cuatro casos usan la feature directamente. No se atribuye ejecución completa de full37 ni autenticación Google o dispositivos físicos nuevos. Primer intento agotó el plazo del comando del fixture; ambos comandos UI nuevos usan ahora el plazo interactivo ya existente. Segundo run `99c095a8-906c-417a-bc97-d204104ebd42` finalizó correctamente y confirmó limpieza de contenedor y almacenamiento propios.
+
+Catorce pruebas SSR con 205 aserciones y QA con CSS a 390 × 844: sin desbordamiento horizontal, opciones y cancelar accesibles. Capturas: `/private/tmp/dalis-1843-category-ui-next.png` y `/private/tmp/dalis-1843-category-review-390.png`. Pestañas, servidores y proyectos temporales propios cerrados; pestaña humana preservada. Validación final al retomar: 1282 pass / 225 opt-in skip / 0 fail / 14286 aserciones, lint1051 sin avisos, tipos, build Webpack y worker46 aprobados.
+
+La ejecución anterior alcanzó el límite antes de este cierre; no había publicado el caller. Retomada el 21 de octubre con 100%5h/57%7d, reset5h observado 1792576248 y reservas 10%/1%. Se comprueban cuotas también durante entregas largas, además de después de cada commit; no abrir otro corte sin margen para reparar, publicar y cerrar. La revisión puntual antigua de las 18:43 se ha eliminado; esta continuación es interactiva y no crea otra programación. Sin índices, protocolo, dependencias, DB del usuario ni producción nuevos. Siguiente: delimitar recuperación residual de ausencia remota/copia y cadenas externas antes de cualquier caller; después accesibilidad y cierre operativo.
+
+### Cierre y dependencias siguientes
+
+19k6f completado con el alcance y la validación anteriores; las familias previas mantienen sus guardias. Antes del próximo corte: contrato de ausencia remota/copia para planes comunes, con evidencia explícita de borrado frente a desconocimiento, conservación de dependencias y nuevo UUID sólo por elección humana. No ampliar automáticamente a series ni cadenas externas. Definir objetivo, target_paths, aceptación y validación antes de editar. No reabrir los recorridos físicos ya aceptados sin fallo o cambio concreto.
+
+## 19k6e — Categoría yorden probados conRPC6/Mongo
+
+Once escenariosNext6 focalizados (`category-placement`) aprobados conacciones/defaults reales, sesionesBetterAuth persistidas ydosorígenesIndexedDB/Mongo propios. Seiscasos simple/moved/implicit×adopt/retry usan productores reales, grupos origen/destino yposiciones comprometidas incluidaotrafecha. Competidor cambiaCASprimario sinrecategorizar remoto; colaoffline conserva comandos/UUID/dependencias exactos. Guardias actor/época/stale sinwrites; adopción0ops yretryúltimocomando conCASactual/vista independiente. Tres pérdidastrascommit mantienen pendingattempt1, recarga yreplay mismoUUID→ACKrealattempt2 único/unjournal.
+
+Ambosorígenes terminan concatálogos completos devistas/posiciones, shadows ycursor exactos contraMongo. Parent category se mueve conjunto, posiciones deotrasfechas/contenido/reglas/apariciones/categorías/settings intactos. Replay durable no retrocede estado. Scopefull37 disponible, no ejecutado completo niUI/Google/físicos. Primerlauncher propio detenido antesdeloscasos trasrevisar vecino delorigen; sucontenedor37f31051 ausente confirmado pornombre exacto. Run83bf3c96-25a2-4664-aaa3-114485cebf69 exit0/cleanup propio confirmado. Captura /private/tmp/dalis-1843-category-next.png; pestañas/servidores/Next temporal propios cerrados ytabhumana preservada.
+
+Schema/matrizdecomandos estrictos con7aserciones nuevas. DoD1268pass/225skip/0fail/14079aserciones, lint1047sinavisos/tipos/Webpack/worker46/diff aprobados. Entrada48%5h/64%7d, reservas10%/1%, secuencial. Siníndice/protocolo/dependencia/DBusuario nuevos. Siguiente19k6f: diálogo compacto conorigen/destino/colores/slot yadvertencia todaslasfechas/posicionesfuturas preservadas, calleradaptativo, ambasdecisionesUIreales cancelar/reabrir/confirmar/IDsUI antes depublicar. Backend noofrece aún nuevasopciones alusuario.
+
+
+## 19k6e — Evidencia remota de movimientos entre categorías
+
+Objetivo: seis casos simple/moved/implicit×adopt/retry con productores task.move reales, Next6 compilado/defaults/BetterAuthpersistido/dosorígenesIndexedDB/Mongo propios. target_paths: schemas/next-sync-test ytest, templates Next controller/device/local-client ycategory-placement-recovery. Dependencias19k6d, entrada48%5h/64%7d, reservas10%/1%, secuencial. Aceptación: semilla origen/destino/futura fecha conposiciones conocidas, conflictoCAS real queconserva vista remota origen, decisión conjunta vista+posiciones, preserva posiciones deotrasfechas ycontenido/categorías/settings/slots, pérdida trascommit/recarga/replay/ACKúnico ycatálogos/shadows/cursor exactos. Guardias actor/epoch/stale sinwrites. Scopefocalizado/full37 disponible; no UI/Google/físicos nuevos. Docker/descriptor/pinnedimage ycleanupown; schemas/matriz/DoD/plan/log/commit/pushint/HEAD/cuotas. UI conjunta posterior antescalleractivo.
+
+
+## 19k6d — Categoría yorden guardados atómicamente en local
+
+Familia category_movement usa captura propia sobreTX9stores ywriter compartido tipado; APIs previas siguenstrict. Relee contexto/cola/frozen/sombras/prerequisitosACK conoutcomes aplicados reales antes deescribir. Guarda vista delpadre+posiciones, originales superseded exactos,0/1reemplazo, counter/tail/recibo enuncommit. Replay primero no retrocede trabajo posterior; límitescompletos/IDs/counter/tail/capacidad posterior antes deescrituras. Feature/store conprotocolo6/cuenta/época antes-después yfinallyclose; aviso sólo trasaplicado, noreplay/fallo. SincallerUI nuevo.
+
+39comprobaciones IndexedDB propias pasan:13cada una simple/moved/implicit. Readonly/familiasprevias protegidas, actor/contexto/foreign/unknownshadows/localrev0/colaexterna, fallo tardío derecibo revierte tambiénvista, IDs/overflow, retry+backup/tail/recarga/replay, adopción sinops que restaura categoría, capacidad contando tail faltante/recibo yreplay lleno, ACKDTO sinoutcome rechazado yACKconoutcome coincidente admitido, época duranteopen ydosconfirmaciones→unaplicado/unreplay/unaviso. Fixturadeactor inyectable sólo para cuentasUUID propias. Se corrigió nombre camelCase delnuevofixture antesejecutar. Particiones/control/tab/server propios retirados; pestaña humana intacta. Capturas /private/tmp/dalis-1843-category-native-{simple,moved,implicit}.png.
+
+DoD1267pass/225skip/0fail/14072aserciones, lint1047sinavisos/tipos/Webpack/worker46/diff aprobados. Entrada58%5h/66%7d, reservas10%/1%, secuencial. Siníndice/protocolo/dependencia/DBusuario/IOremoto nuevos. Siguiente19k6e: productores reales de movimientos entrecategorías conNext6/defaults/sesionespersistidas/dosorígenes/Mongo propios; CASindependientes/vista deparent yotrasfechas, pérdida/recarga/ACKúnico/catálogos/sombras/cursor. Después representación/UI conadvertencia sobre todoelplan antes deofrecer opciones activas.
+
+
+## 19k6d — Persistencia conjunta local yguardias de cuenta
+
+Objetivo: política category_movement deTX9stores concaptura exacta yvista+posiciones/supersesión/reemplazo/counter/tail/recibo atómicos. target_paths: local-db/placement-resolution{,-capture}, sync-store, feature local-category-placement-resolution; fixtures puras conactor inyectable, nuevo browser/category-placement-resolution yselector. Dependencias19k6c, entrada58%5h/66%7d, reservas10%/1%, secuencial. Aceptación: replay previo sinretroceder ediciónposterior, reread exacto deparent/vista/catalogos/cola/outcome/ACKs acreditados, capacidadposterior yIDsglobales; escrituras fallidas revierten tambiénvista, aviso sólo aplicado. NativeIndexedDB propio simple/moved/implicit constale/foreign/epoch/latefailure/colaexterna/unknown/shadows/counter/tail/capacidad/race/backup/recarga. No UI nueva, niIOremoto/índice/protocolo. DoD/plan/log/commit/pushint/HEAD/cuotas antesNext/Mongo/UI.
+
+
+## 19k6c — Evidencia portable conjunta preservada
+
+Backup3 incorpora category_movement antes defamilias previas yreconstruye record completo, incluida vista elegida/posiciones. Reutiliza guardias comunes deoriginales superseded/outcome congelado/prerequisitos conhistoria youtcomes aplicados/reemplazo exacto/exclusividad/IDsglobales. Quitar familia ovista, alterar revisión/categoría/cuenta ohistoria rechaza; superseded noACK. Pending intentado trasrespuesta perdida yedicionesposteriores permanecen portables sinretroceder proyección. Sombras de categorías/vistas/padres/apariciones/posiciones incluidas enfixture.
+
+19tests/96aserciones: simple/moved/implicit×day/overdue×adopt/retry, roundtrip, formatoanterior, truncación/corrupción, prerequisitosDTO sinoutcome aplicado rechazados, reemplazoexacto/IDs/exclusividad. Modelo puro deACKmultiefecto actualiza vista yposiciones conrevisiones independientes usando planners productivos; noesACKMongo nuevo. Recordpuede conservar evidencia aunque proyecciónactual haya cambiado después. Sinrepair/migrador nuevo.
+
+DoD1267pass/225skip/0fail/14072aserciones, lint1045sinavisos/tipos/Webpack/worker46/diff aprobados. Entrada63%5h/67%7d, reservas10%/1%, secuencial. Sinwriter/caller/IO/índice/dependencia/DBusuario nuevos. Siguiente19k6d: captura ywriter conjuntoTX9stores queguarde tambiénvista, acredite prerequisitos reales, capacitépostwrite/IDs/counter/tail/replay/rollback; validaciónIndexedDB nativaantes deNext/Mongo/UI.
+
+
+## 19k6c — Evidencia portable conjunta de categoría yorden
+
+Objetivo: backup3 valida familia category_movement antes defamilias previas yconserva vista/posiciones elegidas con historiaexacta. target_paths: schemas/local-recurring-backup, backup/local-backup/placement-resolution-evidence yfixture/tests categoría; fixture pura añade referencia known paraoráculo. Dependencias19k6b2, entrada63%5h/67%7d, reservas10%/1%, secuencial. Aceptación: replanificar decisión completa, originales/outcome raíz exactos, prerequisitosACK acreditados porhistoria+outcome aplicado coincidentes, reemplazo usuario/entidad/fecha/secuencia/payload/deps exactos, exclusividad/IDsglobales; pending intentado yedicionesposteriores portables sinACK inventado. Modelos deACKpuros no son Mongo. Roundtrip válido/adopt/retry, corrupto/truncado/prerequisitos/familias/IDs/resultado multiefecto, DoD/plan/log/commit/pushint/HEAD/cuotas. Sinwriter/caller aún.
+
+
+## 19k6b2 — Decisión pura de categoría yorden preparada
+
+Familia category_movement separada conserva snapshot canónico decatálogos/raízconflict/cola/outcome congelado/clausura deACKs. Reutiliza guardias deplacement conpolítica privada adicional, sinampliar APIs simples/mixed_group/recurring_primary. Contenido/apariciones/categorías yotrasvistas exactos; review nuevo acredita vista delpadre ygrupos. Cadenas intentadas/desconectadas/otrosdestinos/externos/identidadesausentes protegenhistoria. PrerrequisitosACK sonestructura todavía: portable/writer deberán acreditarlos conoutcomes aplicados reales.
+
+Adoptar conserva vista yposiciones observadas sinoperación; retry reconstruye últimocomando absoluto exacto conUUIDnuevo/CASprimario conocido. Planner productivo justifica efectosdevista/posiciones únicamente yoptimismo conserva cada revisión observada. Rechaza retry si exige posición noobservada; tombstone primario sólo adopción. Record incluye vista elegida ycatálogo deposiciones conIDs/bytes/replanificación estrictos, sin fabricarACK.
+
+16tests/213aserciones: simple/moved/implicit×day/overdue×dosdecisiones, oráculo multiefecto conCASindependientes, familiasprevias siguenstrict, incapacidadretry porpeer desconocido, tombstoneadoptable, stale/foreign/cadena/frozen/IDs/registrocorrupto. Fixture lastmove ajustado a vecino válidodeldestino; preview usa timestamp representativo ysecompara orden sin exigir fecharreal deconfirmación. Suite detectó8regresiones sólo demensaje deerror existente: sepreservó eltexto original enfamiliasvigentes, sinrelajar guardias. DoD1248pass/225skip/0fail/13976aserciones, lint1043sinavisos/tipos/Webpack/worker46/diff aprobados.
+
+Entrada69%5h/68%7d, reservas10%/1%, secuencial. SinIO/portable/writer/caller nuevos; categoría+orden recuperable aún noofrecido enUI. Siguiente19k6c portable3 conoriginales/outcomes/prerequisitos yambosdominios, luegoTX/capacidad/replay/rollback/Mongo/Next/UI. Siníndice/protocolo/dependencia/DBusuario nuevos.
+
+
+## 19k6b2 — Snapshot ydecisión conjunta entre categorías
+
+Objetivo: nueva familia category_movement conserva captura exacta decola/outcome/clausura ydecide vista+posiciones juntas usandooráculo productivo. target_paths: sync/placement-resolution (política privada adicional/exports separados), nuevos schemas/types/category-placement-resolution, sync/category-placement-decision/fixture/tests. Dependencias19k6b1, entrada69%5h/68%7d, reservas10%/1%, secuencial. Aceptación: familias vigentes noampliadas, catálogos/parent/slot/cadena aislada/outcome congelado exactos; prerequisitosACK puramente estructurales aún noacreditan recibos. Adopción0ops oúltimo comando absoluto intacto/CASprimario actual, vista yposición conservan revisión observada enoptimismo; todoslosefectos deben tenerposiciónobservadaconocida. IDs/bytes/stale/categorías/ausencia/external protegidos. Sinportable/writer/caller hasta pruebasposteriores. Validación fixtures productor/plannerpuros, oráculos/inmutabilidad/guardias/DoD/plan/log/commit/pushint/HEAD/cuotas.
+
+
+## 19k6b1 — Grupos entre categorías comparados por núcleo puro
+
+Nuevo reviewCategoryPlacementGroups compara origen/destino con catálogos propios completos yacotados. Sólo vista delpadre puede diferir; contenido/reglas/apariciones/categorías yotrasvistas exactos. Distingue categoría efectiva local/observada delpadre ycategoría histórica deposición, sinocultar elplan porunrank deotrogrupo. Parent_all_dates declaraalcance deasignación sobre todoelplan, mientras primaryId conserva slotexacto yparentVisibleIds sushermanos delámbito. Orden porgrupo usa oráculo productivo yposiciones conocidas deambosestados; otrasfechas/otrosgrupos/intenciones desconocidas nodeben reinterpretarse.
+
+32tests/480aserciones: primaria simple/moved/implicit×day/overdue×cuatrovariantes, sincategoría explícita, categoría histórica distintadevista, hermanos conranks independientes, otrasfechas preservadas, catálogos parciales/extra/duplicados/foreign/stale/deleted/otrasvistas/contenido rechazados. Planner remoto productivo acredita efectos sobre vista yposiciones únicamente; noes unACKni pruebaMongo. Ambas APIs antiguas siguenrechazando cross-category. Fixtures corregidas trasreferencia equivocada ainputproyectado envez decapture, narrowing TS, snapshotsindependientes yvecino deldestino; schemas productivos estrictos detectaron unaedición inicial enrankenvez decomando yse corrigió sólofixture. Non-nullassertions sustituidas porguard de fixture, sinavisos.
+
+DoD1232pass/225skip/0fail/13763aserciones, lint1038sinavisos/tipos/Webpack/worker46/diff aprobados. Entrada76%5h/69%7d, reservas10%/1%, secuencial. target_paths nuevos schemas/types/category-placement-review ysync review/fixture/tests; sincaller/decisiones/portable/writer/IO/índice/dependencia nuevos. Siguiente19k6b2: snapshot decadena/outcome/ACKprerequisitos ydecisiónconjunta conservadora conCASprimario yvistaindependientes; después portable/TX/Next/UI antes ofrecer nuevasopciones.
+
+
+## 19k6b1 — Revisión pura de movimiento entre categorías
+
+Objetivo: comparar grupos deorigen/destino ycategoría efectiva delpadre separados delas categorías históricas deposiciones, sin ampliar recoveryvigente. target_paths: schemas/types/category-placement-review, sync/category-placement-review yfixture/tests; plan. Dependencias19k5 cerrado/contrato category-movement-recovery.md. Entrada76%5h/69%7d, reservas10%/1%, secuencial. Aceptación: padres simples/recurrentes, moved/implicit/day/overdue, catálogos propios completos/acotados, sólo vista delpadre puede diferir, CAS/revisiones independientes, posiciones conocidas enambos estados yotrasfechas intactas. Orden productivo porgrupo/slotexacto, alcance padre/todasfechas explícito. Ausencias/inciertas/categorías borradas/contenido/otrasvistas/otrosgrupos protegidos. Sin decisiones/portable/writer/caller nuevo aún. Oráculos puros contra planner productivo, inmutabilidad/bordes/capacidad/identidad, DoD/plan/log/commit/pushint/HEAD/cuotas.
+
+
+## 19k5f2 — Recuperación de orden recurrente visible en Ajustes
+
+Lectura adaptativa conserva unúnico LocalSyncStore yrevalida cuenta/época antes/después de cada familia simple/mixed_group/recurring_primary. Acción deAjustes sólo ofrece alternativas trascomparación completa validada yelige schema/writer explícitos; UUIDs estables encada confirmación, caché sólo decuenta/época propia. Revisión señala elslotexacto, vecinos/fechas implícitas yoriginales reprogramadas; no cambia contenido/categoría/fechas ni fabricaACK. Cancelar sinwrites, dependencias externas ygrupos desconocidos conservan protección.
+
+Once escenariosNext6 focalizados UI pasan con dosorígenesIndexedDB/sesionesBetterAuth persistidas/Mongo propios: moved/implicit×adopt/retry, cancelar/reabrir/confirmar reales, IDsgeneradosporUI diferentes delpreliminar, dos pérdidas después decommit/recarga/replay/mismoUUID→ACKreal único, catálogos/shadows/cursor exactos ydominios ajenos intactos. Scope backend mantenido, full36 disponible sinatribuir ejecucióncompleta/Google/físicos. Run5fcc72a4-1deb-4f2b-8634-34d1727228e2 exit0/cleanup propio confirmado; pestaña humana intacta. Captura /private/tmp/dalis-1843-recurring-ui-next.png. FixtureUI reutiliza harness deinteracción yaexistente con familia específica. Unaaserción SSR usaba motivo rechazado inexistente: corregida ainvalid_command antes detipos, sinrelajar contrato.
+
+Dos SSR nuevos decandidatura/guardias yschemaUI estricto. DoD1200pass/225skip/0fail/13283aserciones, lint1033sinavisos/tipos/Webpack/worker46/diff aprobados. Entrada91%5h/71%7d, reservas10%/1%, secuencial. Siníndice/protocolo/dependencia/DBusuario nuevos.19k5 cerrado para primaria recurrente aislada same-category/posiciones conocidas; movimientos entrecategorías/ausencia/cadenas externas siguen protegidos. Siguiente19k6b1: oráculo puro de grupos entrecategorías con asignación padre/efectos otrasfechas yCASindependientes según category-movement-recovery.md, antes decontrato/portable/TX/Next/UI posteriores.
+
+
+## 19k5f2 — Activación de revisión recurrente e interacción real
+
+Objetivo: lectura adaptativa enmismostore yfamilia recurring_primary explícita enacciones deAjustes conUUIDestables/cuenta/época/caché propia. target_paths: local-placement-resolution, PlacementIncidentActions, SSR recurrente, schemas/next-sync-test ytest, templates Next controller/device/local-client/recovery yhost UI recurrente. Dependencias19k5e aprobado. Entrada91%5h/71%7d, reservas10%/1%, secuencial. Aceptación antes publicar: ambasdecisiones deaparición moved/implicit porUIreal cancelar/reabrir/confirmar/IDsUI, pérdida trascommit/recarga/replay/ACKúnico ycatálogos exactos enNext6/Mongo/dosorígenes propios. Familias simples/mixed_group strict; sin elecciones antes derevisión válida ysinwrites alcancelar. Validación schemas/SSR, scopeUIvalidado/full36disponible, pruebaUI focalizada, suite/lint/tipos/Webpack/worker/plan/log/commit/pushint/HEAD/cuotas. Siníndice/protocolo/dependencia/DBusuario nuevos.
+
+
+## 19k5e — Recuperación recurrente acreditada contra Next y Mongo
+
+Once escenarios Next6 focalizados (`recurring-placement`) aprobados con acción/defaults reales, sesiones BetterAuth persistidas y dosorígenesIndexedDB/Mongo propios. Cuatrocasos moved/implicit×adopt/retry acreditan productores reales, cadena UUID/payload/dependencias intactos, guardias actor/epoch/stale sinwrites, adopción0ops yretry conCASprimario observado. Dos pérdidas trascommit conservan pendingattempt1 sinACK, recarga yreplay delmismoUUID→ACKrealattempt2 conunrecibo/journal único. Catálogos completos/shadows/cursor exactos contraMongo, contenido/vistas/categorías/apariciones/settings intactos yreplay durable sinretroceso. Scopefull36 disponible, no ejecutado completo ni atribuido aGoogle/físicos.
+
+Run1638b6d4-01e6-416a-af88-424ac611f3b6 exit0 yrecibo de retirada decontenedor/almacenamiento propios. Servidores/Next temporal/sesiones/particiones ytabs propios cerrados, pestaña humana preservada. Docker28.4.0/imagenpinned amd64 revalidados; recurso residual anterior5eff retirado trasidentidad exacta. Captura /private/tmp/dalis-1843-recurring-next.png. Sin cambios decódigo desdeDoD1198pass/225skip/0fail/lint1033/tipos/Webpack/worker46 previamente aprobada; compilación Next real nueva aprobada. Validación documental/consistencia/diff; commit/pushint/HEAD/cuotas. Entrada100%5h/72%7d, reset1792532603/reservas10%/1%, continuación18:43 puntualsecuencial. Siguiente19k5f2: caller/familia adaptativa yambas decisiones UI real cancelar/reabrir/confirmar/IDsUI antes depublicaractivación. No se anuncia UI recurrente activa todavía.
+
+
+## Reanudación puntual del 20 de octubre, 18:43 — 19k5e
+
+Renovación real confirmada100%5h/72%7d; reset5h1792532603, reservas10%/1%, secuencial. HEAD4285514 yorigin/int exactos, sin cambios ajenos. El usuario ha reiniciado Colima y confirma operativo: Docker28.4.0 eimagen pinned amd64 comprobados. Recurso residual5effb543-bfc0-45de-bd6e-57037c00cc6d identificado por nombre/label/imagen yretirado conrecibo; no se atribuye limpieza deotros recursos. No reinicio adicional ni permisos nuevos.
+
+Objetivo19k5e: acreditar scope recurring-placement preparado conNext6 compilado/defaults/sesionesBetterAuth persistidas/dosorígenesIndexedDB/Mongo propios. target_paths: fixtures Next settings yschemas sólo si fallos reales lo requieren; plan/master,iterations,workflow,conflict-recovery,iteration-log para evidencia/estado. Dependencias19k5a–d/f1 completas. Aceptación: moved/implicit×adopt/retry, UUID/payload/dependencias exactos, CAS/guardias/pérdida trascommit/recarga/replay/ACKúnico/catálogos/shadows/cursor ydominios ajenos intactos. UI todavía sincaller nuevo. Validación focalizada real, suite/lint/tipos/Webpack/worker si haycódigo, referencias/diff, commit/pushint/HEAD/cuotas. Revisión puntual18:43 autorizada; finalizarla sin cadena nueva al cerrar. Después19k5f2 interacción/caller con pruebas reales antes deactivación;19k6b posterior.
+
+
+## 19k6a — Contrato acotado de recuperación entre categorías
+
+Completado como planificación: contrato enlazado y referencias/diff verificados. Sin nueva implementación.
+
+Planificación independiente mientras Docker requiere respuesta humana. Objetivo: especificar captura/decisión/evidencia/TX/UI de movimientos entre categorías usando semántica productiva existente y delimitando posiciones desconocidas. target_paths: nuevo plan/category-movement-recovery.md y enlaces/estado en master/iterations/conflict-recovery/log. Dependencias puras de19k5a–d listas; implementación/activación posteriores a19k5e/f. Entrada22%5h/74%7d, reservas10%/1%, secuencial. Aceptación: fuentes verificables, CAS de posición separado de vista, alcance de categoría en todo el padre, adopción/retry explícitos sin reescribir originales, límites/casos fuera claros. Validación documental de referencias/consistencia/diff, commit/push/HEAD/cuotas; ningún código ni autorización nueva de datos/VM.
+
+## 19k5f1 — Revisión visual recurrente preparada sin caller
+
+Completado:10 SSR/151 aserciones, QA390px sin overflow, DoD1198pass/225skip/0fail, lint1033/tipos/Webpack/worker46. Sin caller activo.
+
+Objetivo independiente del bloqueo Docker: reutilizar diálogo/versión de orden con política explícita recurring_primary, destacar el slot exacto y mostrar hora original si fue reprogramada. target_paths: PlacementIncidentResolutionDialog/MixedPlacementResolutionVersion, nuevos tests SSR y fixture visual/selector; plan. Dependencias de contrato/decisión/portable/TX19k5a–d completas;19k5e remoto pendiente. Entrada36%5h/76%7d, reservas10%/1%, secuencial. Aceptación: sólo opciones revalidadas por familia, todos los vecinos e implícitos, mismo orden productivo, tombstone sin borrarplan y local/remote contenido/fechas/estado preservados. No conectar acciones activas ni ofrecer recuperación nueva antes de Next/UI reales. Tests SSR/guardias/familia/orden/horas y QA móvil con CSS propio sin DB; DoD/commit/push/HEAD/cuotas. Optimización de lookup por mapa en el componente compartido, sin nueva dependencia.
+
+## 19k5e1 — Prueba preparada y diagnóstico de bloqueo externo
+
+Preparación completada con DoD1188pass/225skip/0fail y lint1031/tipos/Webpack/worker46.19k5e remoto sigue pendiente por Docker no responsivo; pregunta humana abierta.
+
+Corte preparatorio: cuatro casos remotos con productor real de intención, fase/clase/código finitos de bootstrap sin PII/credenciales y UUID propio registrado antes de crear contenedor. Incluye clasificación estricta de ausencia: fallo/timeout de Docker no demuestra contenedor inexistente ni limpieza. target_paths: los de19k5e más next-sync-fixture/handler, runner y helper/test sync-test-container-inspection. Aceptación sólo esquemas/compilación/DoD/diagnóstico/ownership;19k5e remoto sigue pendiente, sin UI activa. Detectado MongoServerSelectionError en prepare y ping del socket Colima agotado a3s, aunque VM informa running. Reinicio requiere respuesta humana por afectar contenedores ajenos; no ejecutado. Rutas nuevas de fixture y cambios preparatorios se conservarán coherentes mientras se espera respuesta.
+
+## 19k5e — Evidencia remota de primaria recurrente
+
+Objetivo: Next6 compilado/defaults con productores reales recurrentes y cuatro casos moved/implicit × adopción/retry, antes de activar UI. target_paths: schemas/next-sync-test ytest, templates settings controller/device/local-client y nueva prueba recurring-placement-recovery; diagnóstico finito de fase de bootstrap en next-sync-fixture/handler sin URI/cookies/PII; plan. Dependencias19k5d, entrada70%5h/81%7d, reservas10%/1%, secuencial. Aceptación: commit-recurring-move-entry estricto con UUID conservado, CAS conflictivo, vecinos confirmados, evidencia/familia/actor/epoch/stale protegidos, pérdida trascommit/recarga/replay/ACK único, proyección/shadows/cursor exactos porgrupo en dos orígenes IndexedDB/Mongo/sesiones BetterAuth propios. Scope focalizado explícito/full disponible sin atribuirles UI/Google/físicos. Docker28.4.0/imagenpinned amd64 revalidados; cleanup propio, DoD ycommit/push/HEAD/cuotas. UI y pruebas interactivas posteriores19k5f.
+
+## 19k5d — Persistencia local de primaria recurrente
+
+Completado:11 checks IndexedDB moved y11 implicit; DoD1184pass/225skip/0fail, lint1029/tipos/Webpack/worker46. Sin caller nuevo.
+
+Objetivo: integrar familia recurring_primary en captura y ejecutor de placements sin ampliar APIs simples/mixed_group. target_paths: local-db/placement-resolution{,-capture}, sync-store, nueva feature local-recurring-placement-resolution y fixture browser/selector; plan. Dependencias19k5a–c, entrada83%5h/83%7d, reservas10%/1%, secuencial. Aceptación: TX9stores relee padre/slot/vista/catálogos/cola/ACKs, valida familia/cuenta/epoch/UUID/capacidad/counter/tail y guarda posiciones/historia/0–1reemplazo/recibo atómicos. Replay primero no modifica ediciones posteriores; aviso sólo tras commit aplicado. Native IndexedDB: lectura readonly, stale/foreign/missing/otraintención, rollback tardío, capacidad/tail/IDs/overflow, recarga/replay, epoch/carrera y backup3 exacto. DoD/lint/tipos/Webpack/worker/commit/push/HEAD/cuotas; Next/UI posteriores sin caller activo nuevo.
+
+## 19k5c — Evidencia portable de primaria recurrente
+
+Completado:14 tests/72 aserciones, DoD1184pass/225skip/0fail, lint1027/tipos/Webpack/worker46 aprobados.
+
+Objetivo: incluir familia recurring_primary en backup3 con evidencia exacta y conservar rechazo de otros formatos/familias. target_paths: schemas/local-recurring-backup, backup/local-backup/placement-resolution-evidence y nueva fixture/tests recurrentes; plan. Dependencias19k5b, entrada86%5h/84%7d, reservas10%/1%, secuencial. Aceptación: originales/outcome raíz/ACK previos acreditados/reemplazo exacto, IDs globales y exclusividad; pending intentado tras respuesta perdida portable, nunca ACK sólo por DTO; slots/padre/shadows preservados. Casos adopt/retry/implicit/overdue/ediciones posteriores, corrupción/truncación/familia/IDs/ACK contra planners productivos puros; DoD/commit/push/HEAD/cuotas. Writer/UI posteriores, sin IO nuevo.
+
+## 19k5b — Decisión preparada para primaria recurrente
+
+Completado:7 tests/76 aserciones, DoD1170pass/225skip/0fail, lint1025/tipos/Webpack/worker46 aprobados. Portable/writer/UI posteriores.
+
+Objetivo: request/record explícitos recurring_primary yplanner puro de adoptar posiciones conocidas o reenviar sólo último movimiento conUUIDnuevo/CAS porposición. target_paths: schemas/types/recurring-placement-resolution, sync/recurring-placement-decision ytests, fixture recurrente; plan. Dependencias19k5a, entrada93%5h/85%7d, reservas10%/1%, secuencial. Aceptación: ninguna ampliación de familias simples/mixed_group, resultado exacto reconstruible yoptimismo sin avanzar revisión; catálogos/supersesión/evidencia inmutables, adopción0ops yguardias de identidad/stale/outcome/cancelación/tombstone/reranking. Portable ywriter posteriores, sin UI/IO todavía. Tests puros/plannerremoto/DoD/commit/push/HEAD/cuotas.
+
+## 19k5a — Contrato de recuperación con aparición como primaria
+
+Completado:15tests/136aserciones; DoD1163pass/225skip/0fail, lint1021/tipos/Webpack/worker46 aprobados. Sin caller nuevo.
+
+Objetivo: revisión y snapshot puros de una cadena aislada de movimientos de la misma aparición/día/categoría, incluidos slots implícitos/reprogramados y vecinos simples/recurrentes. target_paths: schemas/placement-group-review, sync/placement-group-review yplacement-resolution, nueva fixture/tests recurring-placement-resolution; plan/workflow. Dependencias19k4 cerrado, entrada100%5h/86%7d, reservas10%/1%; nuevo resetreal1792514544, continuación puntual13:42 autorizada ysecuencial. Aceptación: identidad primaria de slot exacta, padre/asignación/contenido comprometidos sin cambios, catálogo completo y CAS porposición; guardias vigentes simples intactas. Sin otras intenciones/otros slots ni cross-category, ausencia/cancelación/posición desconocida protegidas. Snapshot conserva originales/outcomes/prerrequisitos sin ACK ficticio. Sin writer/portable/caller nuevo todavía. Validación pura de variantes/civil/implícito/timed/stale/actor/catálogo/grafo/outcome/reranking; DoD/lint/tipos/Webpack/worker/commit/push/HEAD/cuotas.19k5b posterior decisión preparada, luego persistencia/evidencia/Next/UI antesactivar. Cross-category separado19k6 para incluir asignación padre yefectos sobreotrasfechas.
+
+
+## 19k4b2 — Recuperación de orden mixto disponible en Ajustes
+
+La revisión de orden captura primero el caso simple y, si no es válido, relee el contrato mixto completo en el mismo LocalSyncStore, con cuenta/época antes/después. Cada opción se ofrece sólo tras validar la familia; la UI genera IDs estables y elige explícitamente writer simple o marcado mixed_group. Mantiene isolation por cuenta/época/raíz, mounted y caché propia. Writers simples siguen strict. El diálogo completo incluye todos los vecinos simples y fechas recurrentes, posición implícita, títulos de excepciones y fechas originales/movidas; no cambia contenido ni asignaciones.
+
+Once escenarios Next6 focalizados UI con dos orígenes IndexedDB, BetterAuth persistido y Mongo propios aprobados. Ambas elecciones realizadas desde PersonalIncidentCard real: abrir/cancelar/reabrir/confirmar, selección de alternativa y UUID generado por UI distinto del preliminar. Cancelar preserva todos los stores; adopción no envía operación. Retry conserva último comando con nuevo UUID/CAS; pérdida tras commit→pendingattempt1, recarga/replay→ACKrealattempt2 único, posiciones/shadows/cursor exactos contra Mongo y todos los dominios ajenos intactos. No extrapolar a full35/Google/físicos. Captura /private/tmp/dalis-mixed-placement-ui-proof.png. Primera compilación detectó alias duplicado en host de fixture; corregido antes de segundo run aprobado, ambos recursos propios retirados. Sólo pestaña humana conservada.
+
+DoD1148pass/225skip/0fail/12814aserciones, lint1019 sin avisos/tipos/Webpack/worker46/diff aprobados. SSR añade candidatura mixta sin decisiones antes de captura. Entrada26%5h/88%7d, reservas10%/1%, secuencial. Rutas feature local-placement-resolution, PlacementIncidentActions, schema/test y templates de fixture mixtos; sin protocolo/índice/dependencias/DBusuario nuevos.
+
+Cierra19k4 para primaria simple en grupo de misma categoría con vecinos recurrentes y posiciones comprometidas conocidas. No cierra primaria recurrente, cambios entre categorías, posiciones locales sin remoto acreditado ni otras intenciones externas. Siguiente19k5: delimitar contrato puro de esos movimientos con asignación de padre/efectos de otras fechas y catálogo completo, antes de permitir decisiones/persistencia/portable/Next/UI. Después ausencia/copia, accesibilidad ypreparación final según dependencias. Preservar historia yguardias; sin migradores ni descarte automático.
+
+
+## 19k4b2 — Activación de la revisión mixta en Ajustes
+
+Objetivo: integrar captura adaptativa propia, marcador mixto explícito y diálogo completo con prueba UI real antes de publicar. target_paths: feature local-placement-resolution, PlacementIncidentActions, schemas/next-sync-test ytest, templates Next mixed-placement-recovery/controller/device/local-client y nuevo host UI; plan. Dependencias19k4a/b1, entrada26%5h/88%7d, reservas10%/1%, secuencial. Aceptación: simple sigue strict, cuenta/epoch antes-después enmismostore, ninguna elección antes de comparación válida, IDs estables ante retry/cache propia; dos decisiones por UI real con cancelar/reabrir/confirmar/UUID UI, pérdida/recarga/replay/ACK único y proyecciones exactas contra Mongo. Scope backend se mantiene; recursos propios/DoD/commit/push/HEAD/cuotas. Primaria recurrente/cross-category/posiciones desconocidas siguen bloqueadas.
+
+## 19k4b1 — Recuperación mixta probada contra Next/Mongo
+
+Nuevo scope explícito mixed-placement mantiene full35 disponible. Once escenarios focalizados Next6 compilado/defaults/sesiones BetterAuth persistidas/dos orígenes IndexedDB/Mongo propios aprobados: adopción y retry con productores reales, tres planes simples y serie con dos fechas visibles en el mismo día (una movida y otra implícita). Antes del conflicto todas las posiciones de vecinos se confirman y sus revisiones independientes quedan conocidas; el slot implícito no se convierte en excepción. Guardias actor/epoch/snapshot obsoleto conservan todos los stores.
+
+Se conserva la cadena original exacta de dos movimientos; elección local no crea historia remota ni cambia contenido/vistas/categorías/apariciones/settings/shadows. Adopción0ops o retry del último comando con UUIDnuevo/CAS2. Pérdida tras commit→pendingattempt1sinlease; recarga conserva UUID ypayload, replay→ACKrealattempt2 con un solo recibo y entrada de journal. Ambos orígenes terminan con catálogo completo de posiciones, shadows ycursor exactamente iguales a Mongo; replay durable no retrocede el estado. Convergencia por grupo revisado, no global de históricos protegidos. No UI interactiva/Google/físicos nuevos. Captura /private/tmp/dalis-mixed-placement-next-proof.png.
+
+El primer build de fixture detectó unión legacy de apariciones: se filtró explícitamente kind=plan antes del catálogo recurrente, sin cambiar producto. Segundo run aprobado; recursos propios de ambos runs retirados, pestaña cerrada. Contrato nuevo valida marcador mixed_group, scope ycomandos estrictos, rechaza destinoextra/familia simple/selectorUI aún no implementado. DoD1147pass/225skip/0fail/12810aserciones, lint1019 sin avisos/tipos/Webpack/worker46/diff aprobados. Entrada33%5h/90%7d, reservas10%/1%, secuencial. Sin protocolo/índice/dependencia/DBusuario/caller mixto activo nuevos.
+
+Siguiente19k4b2: lectura adaptativa propia y familia explícita, conexión a Ajustes con UUID estable/caché cuenta/época, ambas elecciones UI reales con cancelar/reabrir/confirmar y repetir pérdida/recarga/replay antes de publicar caller. Los scopes backend permanecen disponibles sin atribuirles interacción. Primaria recurrente, cross-category y posiciones locales no comprometidas conservan protección.
+
+
+## 19k4b1 — Evidencia remota focalizada de recuperación mixta
+
+Objetivo: ejecutar adopción/retry de orden mixto con productores reales, CAS conflictivo, vecinos recurrentes confirmados, pérdida de respuesta, recarga/replay y recibo único. target_paths: schemas/next-sync-test ytest, templates Next settings controller/device/local-client y nueva prueba mixed-placement-recovery; plan. Dependencias19k1–3/19k4a, entrada33%5h/90%7d, reservas10%/1%, secuencial. Aceptación: dos orígenes IndexedDB, BetterAuth persistido y Mongo propios; historia exacta, posiciones/shadows/cursor iguales a Mongo y contenido/vistas/apariciones intactos; feature guards actor/epoch/stale sinwrites. Scope focalizado explícito mantiene suite full disponible; no atribuir interacción ni activar UI aún. Docker/imagenpinned revalidados, cleanup propio, DoD/commit/push/HEAD/cuotas.19k4b2 posterior conecta y prueba interacción completa antes del caller.
+
+## 19k4a — Representación completa de grupos mixtos preparada
+
+Diálogo de orden añade variante explícita mixed_group sin cambiar el caller simple. Revalida opciones mediante el planner mixto y muestra todos los vecinos visibles con el mismo orden productivo, incluidas fechas implícitas sin posición y excepciones con título propio. Fecha original reprogramada y efectiva diferenciadas; una posición tombstone vuelve al orden automático sin tachar ni eliminar el plan. Explica alcance recurrente, conservación de contenido/estado/historial, envío pendiente y última observación conocida. No hay caller mixto activo todavía.
+
+Siete tests nuevos SSR/88 aserciones y regresión simple aprobados: día/atrasadas, ambas elecciones, orden exacto con miembro implícito, título de excepción, tombstone sin borrado de plan, cuenta/contexto/familia/ocupado e inmutabilidad. Dos fixtures corregidas tras detectar referencia primaria incorrecta y parámetro default ambiguo; producto mantuvo schemas estrictos. SSR no prueba interacción ni Mongo. DoD1146pass/225skip/0fail/12800aserciones, lint1019 sin avisos/tipos/Webpack/worker46/diff aprobados.
+
+Entrada38%5h/90%7d, reservas10%/1%, secuencial. Rutas placement-incident-resolution-dialog y nuevos mixed-placement-resolution-version/ui.test. Sin índice/protocolo/dependencias/DBusuario nuevos. Siguiente19k4b1: prueba remota focalizada con productores reales y posiciones de vecinos comprometidas antes de activar; después19k4b2 conexión/UI con cancelar/reabrir/confirmar y UUID propios. Separación por presupuesto, sin retirar guardias simples.
+
+
+## 19k4a — Revisión visual preparatoria de grupos mixtos
+
+Objetivo: representar todos los vecinos visibles, simples y recurrentes, antes de conectar la recuperación mixta a Ajustes. target_paths: components/placement-incident-resolution-dialog, nuevo mixed-placement-resolution-version y tests SSR; plan. Dependencias19k1–3 completas, entrada38%5h/90%7d, reservas10%/1%, secuencial. Aceptación: opciones revalidadas por familia, títulos conocidos de padre/excepción, fechas efectivas y originales diferenciadas, posiciones implícitas y tombstones sin afirmar borrado de plan, orden idéntico al planner. Caller simple intacto; no ofrecer nueva recuperación aún. Validación: SSR/orden/guardias/inmutabilidad, suite/lint/tipos/Webpack/worker y commit/push/HEAD/cuotas.19k4b posterior integra con prueba real Next/Mongo/dos orígenes y UI antes de publicar caller.
+
+## 19k3 — Persistencia y frontera local de orden mixto
+
+Captura y writer mixtos separados reutilizan el ejecutor de placements con política privada y resultados tipados; las APIs simples mantienen schemas/guardias anteriores. Una TX9stores relee catálogo completo y evidencia, valida familia/replay/identidades/contador ycapacidad posterior incluyendo tail faltante más recibo. Guarda posiciones elegidas, supersesión exacta,0/1reemplazo pendiente, tail/counter ydecisión atómicamente. Replay primero no reescribe trabajo posterior ni añade espacio. Posiciones locales sin remoto conocido y otras intenciones continúan protegidas.
+
+LocalSyncStore/feature añaden métodos mixtos con actor/protocolo6/cuenta/época antes-después de abrir/operar y cierre siempre. Aviso local sólo tras commit aplicado, nunca fallo/replay. No promete cancelación atómica a través de la DB de control. Aún no hay caller UI mixto.
+
+Once checks IndexedDB reales aprobados: lectura sin writes/camino simple protegido, actor/staleparent/slot/vista, remoto ausente/posición local desconocida, intención externa, rollback tardío de posiciones derivadas/cola/tail/counter/recibo, IDs/overflow, retry+backup/recarga/replay sin retroceso, adopción sin ops/tail, últimos espacios para recibo ytail, epoch cambiada duranteopen y dos confirmaciones simultáneas→uncommit/unreplay/unaviso. Partición ycontrol propios eliminados; pestaña/servidor retirados. No Mongo/Next/Google nuevos.
+
+DoD1139pass/225opt-in skip/0fail/12712aserciones, lint1017 sin avisos/tipos/Webpack/worker46/diff aprobados. Se ajustó sólo el texto de la fixture después de la ejecución nativa. Entrada50%5h/92%7d, reservas10%/1%, secuencial. Rutas placement-resolution{,-capture}, sync-store, feature local-mixed-placement-resolution, test/browser/mixed-placement-resolution yselector. Sin protocolo/índice/dependencia/DBusuario nuevos.
+
+Siguiente19k4: integración conjunta de revisión/adopción/retry mixtos en Ajustes más representación completa de vecinos simples y slots con títulos/fechas conocidas y orden implícito. Lectura adaptativa validada en la misma cuenta, marcador mixto explícito al escribir; no aceptar mezclas en el writer simple. Probar productores reales con posiciones de vecinos ya comprometidas, conflictoCAS, cancelación UI/reabrir/confirmar, UUID UI, pérdida/replay/recarga/ACK único y proyecciones de ambos orígenes contra Mongo antes de publicar caller. Declarar posiciones locales desconocidas/cross-category/primaria recurrente pendientes. La UI no debe listar sólo posiciones materializadas ni confundir borrar posición con borrar plan.
+
+## 19k2 — Evidencia portable de orden mixto
+
+Backup3 admite la familia marcada reviewKind=mixed_group. El validador distingue esa marca antes de validar la decisión y reutiliza la evidencia común de placements: originales exactos superseded, outcome congelado, prerrequisitos con operaciones/outcomes aplicados coincidentes y reemplazo exacto por usuario/entidad/payload/fecha/secuencia/dependencias. Superseded no es ACK. La propiedad exclusiva de originales y los IDs globales se conservan; quitar la marca no convierte el caso mixto en una decisión simple válida.
+
+Ocho tests nuevos/42 aserciones: roundtrip adopción/retry con contexto recurrente/posiciones derivadas, formato2 rechazado, pending intentado y ediciones posteriores, truncación/corrupción/familia, operaciones originales y correspondencia de reemplazo, ACK previo real en la historia portable frente a DTO sinoutcome, IDs/supersesión y resultado multiefecto producido por planners productivos puros. Tras esa proyección el backup conserva evidencia y posiciones confirmadas exactas, incluidos vecinos nuevos. Esto no acredita nuevos recibos Mongo/Next ni IO. Se corrigieron entityKey y envoltorio de snapshots en la fixture manteniendo schemas estrictos.
+
+DoD1139pass/225opt-in skip/0fail/12712aserciones, lint1015 sin avisos/tipos/Webpack/worker46/diff aprobados. Entrada59%5h/94%7d, reservas10%/1%, secuencial. Rutas local-recurring-backup, backup/local-backup/placement-resolution-evidence y fixture/test mixed-placement-resolution. Sin writer/caller/UI/índice/protocolo/dependencia/DBusuario nuevos; el resolver simple vigente conserva sus límites.
+
+Siguiente19k3: captura/writer mixtos separados del camino simple, mismaTX9stores y replay primero, contador/capacidad/IDs globales/tail/historia/rollback y puente de cuenta/época/notificación sólo tras commit. Prueba IndexedDB nativa antes de Next/UI19k4. Conservar posiciones locales desconocidas, cambios de asignación/contenido y primarias recurrentes protegidos; no activar retirando una guardia.
+
+## 19k1b — Decisión preparatoria de orden mixto
+
+Captura y validación mixtas reutilizan las guardias de cadena, outcome congelado, primaria, catálogos canónicos y prerrequisitos del resolver de placements. Una política privada separa ambos caminos: las funciones vigentes siguen rechazando grupos recurrentes; sólo las nuevas funciones preparatorias admiten vecinos visibles recurrentes tras reviewPlacementGroup. La primaria sigue siendo un plan común simple y la categoría no cambia.
+
+La decisión explícita reviewKind=mixed_group conserva la forma existente y clave placement-resolution. Adoptar conserva posiciones remotas conocidas sin operación; retry_latest_move reutiliza el planner existente con nuevo UUID/CAS de primaria, sólo si los vecinos siguen válidos y todos los efectos son posiciones de ese grupo. Cada efecto optimista conserva la revisión observada (0 para una nueva posición derivada), sin ACK local. IDs/bytes/actor/stale y evidencia íntegra protegidos; snapshot/record se reconstruyen al validar. No se registra aún en backup ni se persiste por un writer/caller.
+
+Seis tests nuevos/47 aserciones más regresiones simples y de contexto: día/atrasadas, adopción, último comando exacto/CAS2, varias fechas y vecinos implícitos, guardias/IDs/efectos alterados, tombstone/vecinos obsoletos sólo adopción y protección externa. La fixture stale se corrigió para cambiar un vecino manteniendo la primaria exacta; sin relajar validación. DoD1131pass/225opt-in skip/0fail/12670aserciones, lint1013 sin avisos/tipos/Webpack/worker46/diff aprobados.
+
+Entrada64%5h/94%7d, reservas10%/1%, secuencial. Rutas placement-resolution/placement-decision, schemas/types/mixed-placement-resolution, mixed-placement-decision/fixture/tests y fixture de grupo con actor. Sin IO/protocolo/índice/dependencia/UI/DBusuario nuevos. Catálogos con posiciones locales no observadas, otro contenido/asignación pendiente, primaria recurrente o cross-category siguen bloqueados. Siguiente19k2: evidencia portable3 de la familia marcada, usando historia/outcomes/ACK reales y reemplazo exacto, sin mezclar el validador simple; después TX/cuenta/Next/UI. No activar retirando una guardia aisladamente.
+
+## 19k1a — Contexto puro de orden en grupos mixtos
+
+Contrato preparatorio de revisión para un plan principal simple con vecinos simples/recurrentes en la misma categoría. Valida catálogos acotados propios y comprometidos, igualdad de contenido/apariciones/categorías/vistas entre local y observado, asignaciones conocidas de cada padre visible y pertenencia civil explícita. Materializa sólo para comparar: conserva identidad de slots originales, fecha efectiva, orden local/observado y claves de posiciones cambiadas. Un slot implícito no se convierte en excepción o posición durable.
+
+Cambios de posición sólo dentro del grupo visible revisado, sin retroceder revisiones ni cambiar creación/identidad. Ausencias, catálogos duplicados/ajenos/parciales, padres o asignaciones incorrectos, posiciones de vecinos cancelados/externos y contexto divergente bloquean. Primaria recurrente y cambio de categoría requieren contratos distintos. Los catálogos son estado conocido, no prueba de completitud actual del servidor ni autorización para escribir.
+
+Once tests nuevos/80 aserciones: cuatro variantes, slot movido e implícito del mismo padre, día/atrasadas con día de referencia y sentinel permanente, inmutabilidad, guardia activa intacta, cuentas/contexto/límites/cancelaciones y compactación real por planner remoto puro. La compactación incluye vecino implícito con revisión1 y vecinos existentes desde su revisión independiente, sin efecto de vista. Se corrigieron dirección de vecinos y posiciones densas en la fixture, sin relajar el planner.
+
+DoD1125pass/225opt-in skip/0fail/12623aserciones, lint1008 sin avisos/tipos/Webpack/worker46/diff aprobados. Entrada72%5h/96%7d, reservas10%/1%, secuencial. Rutas schemas/types/placement-group-review y lib/sync/placement-group-review{,-fixture,-test}; sin IO/caller/backup/writer/UI/índice/protocolo/dependencia nuevos. El resolver activo todavía rechaza grupos recurrentes. Siguiente19k1b: snapshot y decisión preparatorios para grupos mixtos con evidencia exacta de cadena/prerrequisitos y efectos independientes, conservando el camino simple vigente; después portátil/TX/Next/UI antes de activar. Cross-category requiere además asignación y efectos de serie; no se deduce de este contrato.
+
+## 19j5b — Recuperación multi-slot disponible en Ajustes
+
+La raíz propia de un conflicto con intenciones de varias fechas muestra «Revisar fechas relacionadas». La candidatura sólo abre revisión; no autoriza ni ofrece decisiones desde el DTO. La feature captura comparación completa en IndexedDB y verifica cuenta/época. El componente queda aislado por cuenta, época y raíz; conserva IDs al reintentar, evita estados después de desmontarse e invalida sólo caché de su cuenta/época. La resolución de una sola aparición conserva su comportamiento.
+
+El diálogo publicado permite adoptar todos los remotos conocidos o enviar todos los borradores completos. Cancelar no escribe y reabrir relee la comparación. Las versiones por fecha se pliegan, muestran contenido/horario/estado/checklist y advierten del alcance conjunto, historial conservado, confirmación pendiente y estados intermedios. Guías Next instalada y vercel-react-best-practices aplicadas; sin nuevas rutas de navegación, índices, protocolos o dependencias.
+
+Once escenarios Next6 focalizados con dos sesiones BetterAuth persistidas, dos orígenes IndexedDB y Mongo propios aprobados: ambas elecciones por UI real con cancelar/reabrir/confirmar, IDs generados por UI, pérdida tras commit, recarga, replay durable con mismo UUID/ACK único y proyecciones/shadows/cursor exactos por serie. No full34 ni Google interactivo o nuevos físicos. La primera ejecución detectó un error de fixture: el replay debía usar el UUID del registro generado por UI y no el preliminar del controlador. Corregido sin relajar producto; segunda ejecución aprobada y ambos recursos propios limpios.
+
+QA con CSS del build y390px: texto largo/pasos caben, documento390/dialog358/scroll356 sin desbordamiento horizontal, secciones plegables y confirmación/cancelación accesibles. Captura /private/tmp/dalis-multi-date-review-mobile.png. Vista previa sin bases; servidor/pestaña propios cerrados y viewport restablecido. Sólo pestaña humana conservada.
+
+DoD1114pass/225opt-in skip/0fail/12543aserciones, lint1003 sin avisos/tipos/Webpack/worker46/diff aprobados tras limpiar Next temporal. Rutas lib/sync/plan-occurrence-cohort-review, componentes de acciones/SSR, schemas de fixture y templates Next, test/browser/appearance-cohort-review y selector visual. Entrada94%5h/99%7d, reservas10%/1%, secuencial. Sin DBusuario/producción. Recuperación multi-slot queda cerrada para las cadenas aisladas contempladas; otras familias/dependencias/ausencias conservan protección. Siguiente19k1: delimitar contratos de recuperación de orden entre categorías y grupos mixtos con catálogos completos, efectos y revisiones independientes; luego persistencia/portable/Next/UI por dependencias. No ampliar automáticamente supersesión a operaciones externas. Después ausencia/copia y accesibilidad/preparación final según el plan.
+
+## 19j5a — Revisión visual conjunta de varias apariciones
+
+Disponibilidad pura revalida comparación completa y actor antes de presentar opciones. Reintento exige todos los borradores y cadenas válidas, revisiones seguras y capacidad de cola; casos con borrador ausente o remoto cancelado/eliminado/agotado conservan adopción. Esto sólo presenta opciones: el writer sigue releyendo todos los datos en su transacción.
+
+Diálogo preparado reutiliza ConfirmationDialog y PlanOccurrenceIncidentVersion. Cada fecha muestra estado elegido en resumen plegable y ambas versiones completas al expandir; primera fecha abierta, diseño móvil compacto. Indica cantidad de fechas e intenciones, sustitución de toda la cadena, conservación de historial, remoto conocido, envío pendiente y estados intermedios. No promete que cambie una única fecha. Todavía no está conectado a Ajustes.
+
+Nueve pruebas puras/SSR y57 aserciones: cuenta/snapshot alterados sin acciones, fechas/versiones/consecuencias, contenido/horario/checklist/cancelación, adopción protegida y controles ocupados. Se ajustó una expectativa al texto existente «En proceso» y se retiró una fixture sin uso; sin cambiar copias ajenas. DoD1112pass/225opt-in skip/0fail/12529aserciones, lint1000 sin avisos/tipos/Webpack/worker46/diff aprobados. SSR no acredita interacción. Sin IO, índices, protocolo, dependencias ni DB del usuario.
+
+Entrada99%5h/100%7d, reservas10%/1%, secuencial. Rutas lib/sync/plan-occurrence-cohort-resolution.ts y features/sync/components/plan-occurrence-cohort-resolution-{dialog,ui.test}. Guía Next instalada y skill vercel-react-best-practices aplicadas. Siguiente19j5b: conectar revisión a la raíz de conflicto multi-slot con cuenta/época/mounted/IDs estables/cache propios y pruebas UI reales en Next/Mongo/dos orígenes antes de publicar el caller.
+
+## 19j4a — Prueba integrada focalizada de varias apariciones
+
+Next6 compilado con defaults productivos, dos sesiones BetterAuth persistidas, dos orígenes IndexedDB y Mongo propios aprueba once escenarios focalizados: diez de frontera autenticada/matriz5↔6/readiness/replay y uno nuevo con adopción y reintento de tres intenciones intercaladas entre dos fechas. Usa productores reales, snapshot capturado y feature de cuenta/época. El scope explícito appearance-cohort conserva full34 disponible; no se ha ejecutado full34 ni Google interactivo o nuevos dispositivos físicos.
+
+La adopción conserva remotos conocidos sin crear recibos remotos. El reintento conserva UUID/payload/dependencias de todas las originales y añade la cadena completa con CAS independiente por slot. Pérdida tras primer commit remoto deja mismo UUID pending/attempt1, cero ACK local; recarga conserva backup/cola/decisión, replay recibe ACK real attempt2 y los demás attempt1. Número de recibos y journal aumenta exactamente una vez por reemplazo; ambos orígenes terminan con padre/excepciones/shadows/cursor exactos respecto al journal por serie. Superseded nunca es ACK; no se afirma convergencia global de históricos bloqueados.
+
+Se corrigieron dos supuestos de la prueba, sin relajar el producto: la cola exportada se ordena por secuencia antes de elegir raíz (su orden físico es UUID); updatedAt/completedAt son autoritativos del ejecutor remoto. Se verifica igualdad de todos los demás campos elegidos, presencia de completado coherente y registro remoto completo exacto contra journal/shadows al terminar. Tercera ejecución aprobada; las dos anteriores limpiaron también sus recursos propios. TypeScript detectó el literal choice ensanchado en la fixture del test de schema y se estrechó desde el registro validado.
+
+DoD1103pass/225opt-in skip/0fail/12472aserciones, lint998 sin avisos/tipos/Webpack/worker46/diff aprobados. Docker28.4.0/imagen Mongo pinned amd64 revalidados; tres contenedores/almacenamientos/proyectos Next propios retirados, particiones/sesiones cerradas, sólo pestaña humana conservada. Sin DBusuario/producción/índice/dependencia nuevos. Rutas schema/testnext-sync-test y templates local/device/controller/appearance-cohort-recovery. Entrada28%5h/6%7d, reservas10%/1%, secuencial; cuota durante cierre16%5h/4%7d. No interfaz nueva activada.
+
+Siguiente19j5a: disponibilidad pura por cuenta y comparación revalidada más diálogo conjunto preparado, reutilizando ConfirmationDialog y PlanOccurrenceIncidentVersion por fecha. Mostrar contenido, fecha, progreso, checklist y cancelación elegidos, cantidad total de intenciones/fechas, consecuencias de sustituir toda la cohorte, remoto conocido, envío pendiente y estado intermedio. No prometer que sólo cambia una fecha. Actor/snapshot inválidos sin elecciones; remoto cancelado/eliminado o borrador ausente sólo adopción. Pruebas SSR/puras antes de caller.
+
+Después19j5b: conectar revisión desde PlanOccurrenceIncidentActions sólo para raíz de conflicto multi-slot; leer comparación completa antes de mostrar elecciones, IDs estables y cuenta/época/mounted/cache protegidos. Scope UI propio con ambas elecciones cancelar/reabrir/confirmar, UUID generados por UI, pérdida/recarga/ACK único y convergencia por serie en Next/Mongo/dos orígenes antes de publicar el caller. No inferir interacción de SSR ni reutilizar la promesa del diálogo de una sola aparición. Sigue recuperación residual de grupos mixtos/ausencia y accesibilidad/preparación final según plan.
+
+## 19j3c — Frontera local de cuenta y notificación
+
+LocalSyncStore y featurecliente exponen comparación/resolución preparatorias multi-slot. Protocolo6, identidad yépoca se verifican antes deabrir, después deabrir ydespués deoperar; la conexión secierrasiempre. No ofrece aún nuevas elecciones UI. La cuenta decontrol está enotraDB: estas guardias son antes/después yno prometen cancelación atómica durante unaTX.
+
+Sólo unresultado aplicado tras oncomplete emite elaviso local deoutbox; replay/error noemiten. Quince checksIndexedDB nativos aprobados (treceanteriores más dosdelafrontera): actor/epochincorrectos yepochcambiada duranteopen noescriben niavisan, lectura readonly, fallo tardío sinaviso, commitdurable observado desdeelsuscriptor yunúnicoeventolocal, replay sinwrites/evento. BroadcastChannelpuedeentregar además elaviso deotrorreceptor: laprueba distingue esa entrega delúnicoeventolocal, sinintroducir deduplicación ajena. Partición ycontrol propios eliminados, pestaña yservidor propios cerrados.
+
+DoD1102pass/225opt-in skip/0fail/12466aserciones, lint998 sinavisos/tipos/Webpack/worker46/diff aprobados. Tras ajustar sólo lafixture deavisos serepitieron pruebanativa/lint/tipos; bundleproductivo sin cambiosadicionales. Entrada32%5h/6%7d, reservas10%/1%, secuencial. Rutas sync-store.ts, features/sync/local-plan-occurrence-cohort-resolution.ts, browserproof yplan. Sin nuevotransporte, protocolo, índice, UI odependencia. Siguiente19j4: productoresreales yRPCNext6/Mongo/dosparticiones para conflictos multi-slot, respuesta perdida/recarga/replay/ACKúnico yproyeccionesexactas; después19j5UI revisable.
+
+## 19j3b — Persistencia atómica de recuperación multi-slot
+
+Captura readonly y writer preparatorio en una TX9stores. Relee padre actual, excepciones de la serie, cola completa ordenada porsecuencia, sombras youtcomes; la decisión requiere comparación exacta, prerrequisitos conoutcomes yclausura ya probados. Unslot conIDdelparent pero seriesIdcorrupto no se oculta como borrador ausente. La escritura conserva todas las originales, supersede sólo lacohorte y guarda0/Nreemplazos, todas las excepciones elegidas, contador yrecibo enel mismo commit IndexedDB.
+
+Antes de escribir valida IDs contra cola/metadata, capacidad posterior ycounter seguro/adelantado respecto al historial. Replay consulta primero elrecibo, revalida decisión yno toca ediciones posteriores ni exige espacio nuevo. Sin ACK local, limpieza dehistoria, reparación decontadores ni callerUI. No cambia padre, preferencias, orden, outcomes o sombras. Infraestructura departición propia: guardias de cuenta/época ynotificaciones se conectarán en siguiente corte defeature.
+
+Trece checksIndexedDB nativos aprobados: lectura coherente, actor/staleparent/local/remoto, posterior intentada/dependiente externo, outcome/remotoausente, ACK transitivo sinoutcome, slotcorrupto, rollback tardío enrecibo detodas las escrituras, colisiones, counterausente/atrasado/overflow, reintento+backup+replay tras recarga/edición, adopción sinops/counter, metadata alúltimoespacio ycola9998 quenoadmite4ops perosíadopción. Se usaron sólo partición/origenbrowser-testpropios; partición eliminada, pestaña cerrada yservidor detenido. No DBusuario, Mongo, Next oGoogle nuevos.
+
+DoD1102pass/225opt-in skip/0fail/12466aserciones, lint997 sin avisos/tipos/Webpack/worker46/diff aprobados. Se corrigieron nulabilidad delstatus yformato enfixture antes delcierre. Entrada39%5h/8%7d, reservas10%/1%, secuencial. Rutas nuevas lib/local-db/plan-occurrence-cohort-{capture,resolution}, test/browser yselectorprivado, fixtures admitenactorpropio. Sin protocolo/índice/dependencia nuevo. Siguiente19j3c: conexión aLocalSyncStore/feature conguardias cuenta/época ynotificaciones sólo tras commit, pruebas nativas delciclo; después19j4 productoresreales/Next/Mongo/dosparticiones antes de19j5UI.
+
+## 19j3a — Evidencia portable de recuperación conjunta
+
+Backup3 admite la decisión multi-slot y valida contra historia durable: originales superseded exactos, outcomes citados y prerrequisitos aplicados reales, cadena nueva completa con payload/usuario/fecha/secuencias/dependencias exactos. Un snapshot de ACK no sustituye el outcome. Las decisiones no pueden compartir originales ni reutilizar identidades; la guardia de propiedad exclusiva también protege las familias anteriores.
+
+Diez tests nuevos/42 aserciones: adopción/reintento, roundtrip, pending intentado sin ACK, ediciones posteriores permitidas, evidencia truncada/alterada, prerrequisitos y decisiones duplicadas. Cada resultado aplicado producido por los planners remotos/locales existentes conserva un backup válido durante toda la cadena de cuatro comandos, con tres originales superseded. Esto prueba codec y proyección pura; no añade IO ni acredita nuevos recibos Mongo/Next. Se corrigió el estrechamiento de tipo de la fixture de aparición común tras detectar tsc el acceso a content en una unión.
+
+DoD1102pass/225opt-in skip/0fail/12466aserciones, lint994 sin avisos/tipos/Webpack/worker46/diff aprobados. Entrada50%5h/9%7d, reservas10%/1%, secuencial. Rutas schemas/local-recurring-backup.ts y lib/backup, sin writer/caller/UI/protocolo/índice nuevos. Siguiente19j3b: captura y escritura atómicas en IndexedDB con relectura completa, IDs/capacidad/counter/replay y rollback nativos; después prueba Mongo/Next y UI según dependencias.
+
+## 19j2 — Decisión conjunta de varias apariciones
+
+Planner puro permite adoptar todos los remotos revisados, sin reemplazos, o reconstruir todos los borradores como una sola cadena nueva de comandos existentes. Cada slot calcula su CAS desde su revisión remota, no desde el índice global; la siguiente fecha depende de la última operación de la anterior. Las originales y sus dependencias permanecen exactas en la evidencia; la supersesión sólo se declara, sin escrituras ni ACK.
+
+IDs nuevos y distintos contra toda la cola capturada, comparación/cuenta exactas, post-capacidad de outbox y revisiones seguras protegidos. Si falta un borrador o el remoto está cancelado/eliminado, sólo puede planificarse adopción conjunta. El registro tiene límite de bytes y se revalida reconstruyendo operaciones, proyecciones y dependencias. La capacidad completa de metadata y sus colisiones quedan obligatoriamente para la futura transacción.
+
+Ocho tests nuevos/42 aserciones: adopción íntegra, CAS9/10 y2/3, cadena global, planner remoto puro acepta cada comando y reproduce cada excepción exacta, stale/actor/IDs/cantidad, borradores/remotos protegidos, overflow por slot, registros alterados y cola llena de10000 entradas con historia intacta. DoD1092pass/225opt-in skip/0fail/12424aserciones; lint991 sin avisos/tipos/Webpack/worker46/diff aprobados. No nuevas pruebas Mongo/Next ni inferencia de ACK/convergencia real.
+
+Entrada56%5h/10%7d, reservas10%/1%, secuencial. Rutas nuevas schemas/types/lib/sync de plan-occurrence-cohort-resolution y sus tests; sin caller, writer o codec de backup todavía. Siguiente19j3: evidencia portable3 y contrato de captura transaccional antes de persistir decisiones, conservando originales/outcomes/prerrequisitos y reemplazos exactos; después IndexedDB/Mongo/Next/UI según dependencias y margen.
+
+## 19j1b — Comparación exacta de varias apariciones
+
+Contrato puro y revalidable de la cohorte completa: conserva el catálogo de origen, el orden global, las dependencias entre fechas y el padre actual/congelado. Cada slot retiene su borrador y la versión remota conocida más reciente con revisión independiente. Sombras contradictorias o anteriores a la evidencia durable, cuenta/padre incorrectos, catálogos duplicados y ausencia remota desconocida siguen protegidos. Los prerrequisitos transitivos requieren outcomes aplicados exactos; un DTO de ACK no basta. Cancelación/tombstone remotos se conservan sin revivir nada.
+
+Rutas: schemas/types y lib/sync/plan-occurrence-cohort-comparison, fixture propia plan-occurrence-cohort-fixture y pruebas. Snapshot con límite conservador de 5 MiB y catálogos de 10000 registros; serialización se reconstruye y compara con su fuente. No IO, writer, supersesión, elección visible ni nueva rama de backup. La captura futura debe releer todos los datos en una única transacción: el DTO no autoriza escrituras.
+
+Diez tests nuevos y 40 aserciones: múltiples slots intercalados, revisiones 9/2 independientes, historia inmutable, remoto ausente/local ausente, evidencia posterior y replay antiguo, contradicción/stale, actor/padre/intención, duplicados/corrupción, tombstone/cancelación, ACK transitivos de dos slots y límites estrictos. Se corrigió la fixture para separar comandos locales de CAS remoto, añadir la secuencia del outcome aplicado y asociar cada snapshot al slot correcto; no se relajó validación del producto. DoD:1084 pass/225 opt-in skip/0 fail/12382 aserciones; lint987 sin avisos, tipos, Webpack/worker46 y diff aprobados. Sin Mongo/Next/Google nuevos ni DB del usuario.
+
+Entrada66%5h/12%7d, reservas10%/1%, secuencial, int desdee50fcd3. Siguiente19j2: decisión pura de adoptar los remotos de todos los slots o reconstruir los borradores en una sola cadena nueva, con CAS independiente por aparición, IDs/capacidad/evidencia protegidos. Después TX/evidencia/Next-Mongo/UI según dependencias, sin ofrecer elecciones prematuras.
+
+## 16c14 — Secciones plegables y días completos
+
+Objetivo y rutas: Atrasadas/Hoy/Próximas plegables con recuentos, en plan-agenda/plan-list y la nueva cabecera extraída. La lista conserva detalles abiertos al plegarse porque mantiene su contenido montado. Los recuentos incompletos usan «+» y una explicación accesible; no anuncian cero mientras se está cargando. «Ver más» y «Ampliar 30 días» pasan a controles secundarios de 32 px sin borde.
+
+Hoy y el día seleccionado del calendario cargan todas las páginas locales automáticamente. El lector preparado valida e indexa el catálogo una vez por snapshot, reutilizándolo entre páginas, y detecta cursores que no avanzan. Los intervalos de Atrasadas/Próximas y el recuento mensual mantienen su paginación. No se cambia la selección civil ni se alteran apariciones, UUID, progreso, datos o sincronización. Sin consultas Mongo nuevas ni necesidad de índices.
+
+Aceptación: siete pruebas nuevas de lectura diaria y cabecera, además de las nueve regresiones del lector paginado, pasan. Incluyen 61 series en un día, excepciones/cancelaciones/traslados/solapamientos, intervalos paginados y recuentos/aria. Interacción real en fixture propia a 390 px: Hoy muestra 62 filas y ningún botón de carga; plegar/reabrir con Enter conserva los detalles abiertos. Las tres secciones se pliegan y «Ver más» de Próximas pasa de 2 a 3 filas. La lista diaria compartida con calendario muestra 60 filas, cero botones de carga, 4 al cambiar de día y 60 al volver. Ancho de documento/viewport 390 px, sin desbordamiento. Captura: /private/tmp/dalis-agenda-sections-mobile.png. Bases/particiones/pestaña/servidor de prueba limpiados y viewport restablecido; ningún dispositivo o dato del usuario modificado.
+
+Validación final: 1074 tests aprobados, 225 opt-in omitidos, cero fallos y 12342 aserciones; lint de 982 archivos sin avisos, tipos, Webpack y worker de 46 recursos aprobados. Guía Next instalada y skill vercel-react-best-practices aplicadas. Entrada: 81% de 5h y 14% semanal; reservas 10%/1%. Entrega en int con commit/push, HEAD remoto y consulta de ambas cuotas; sin promoción a main ni continuación de otros bloques.
+
+## 19p1 — Índices automáticos independientes del despliegue
+
+Objetivo y autorización: aplicar todos los índices registrados al arrancar, con el mismo comportamiento al promover `int` a `main`. La instrucción humana del 19 de octubre de 2026 sustituye las restricciones anteriores de preview/int. Dependencias: registro central y singleton existentes; sin índices nuevos, migraciones ni wipe.
+
+Rutas: `src/lib/db/{client,ensure-indexes,AGENTS.md}`, `src/config/env`, pruebas de bootstrap/readiness/operadores, `scripts/ensure-indexes.ts`, su comando en `package.json` y documentación de provisión. Aceptación: 15 definiciones exactas en cualquier rama y entorno; creación idempotente; datos intactos y fallo sin reparación ante duplicados o definiciones incompatibles; reintento posterior posible. Los operadores mantienen su guardia de destino y reflejan que el bootstrap completo precede al diagnóstico por ámbito. El comando público carga los módulos de servidor y no imprime errores Mongo con datos.
+
+Validación: 1067 tests aprobados, 225 opt-in omitidos, cero fallos y 12317 aserciones. Mongo propio: 10 tests de arranque/comando/matriz, 3 del operador personal, 3 de placements, 2 de provisión y 140 de repositorios/transacciones: 158 tests y 2277 aserciones, sin fallos. La matriz usa NODE_ENV real de producción/desarrollo/test y combinaciones de Vercel/rama; cubre arranque desde cero, repetición, actualización con documentos existentes, duplicados, definiciones incompatibles y destinos rechazados sin conexión. Lint de 978 archivos, tipos, Webpack y worker de 46 recursos aprobados. El primer build sin configuración falló por GOOGLE_CLIENT_ID ausente; repetido con valores ficticios y una URI loopback no operativa, sin credenciales del usuario, pasó.
+
+Publicación cerrada: el usuario autorizó expresamente la clave SSH personal existente y se publicó 383f2c3 en origin/int, con HEAD remoto verificado y sin cambiar la configuración global. El primer rechazo de credenciales quedó resuelto; main se conservó en d4d33a9 durante esa entrega. No se ha conectado ni modificado directamente ninguna base del usuario, ni desplegado producción. Al promover y desplegar este cambio, el primer acceso a MongoDB de cada proceso aplica el registro completo. No transforma datos antiguos ni resuelve sus conflictos automáticamente. Entrada: 98% de 5h y 17% semanal; reservas 10%/1%. La petición está cerrada; el próximo corte general sigue siendo 19j1b, sin abrirlo en esta iteración.
+
+## 19z11 — Cierre de la continuación puntual del 19 de octubre, 03:25
+
+Objetivo documental: dejar estado publicado, aceptación y próximo corte verificables. Rutas: plan/master.md, iterations.md, workflow.md e iteration-log.md. Dependencias: diez cortes de código completos y publicados:414bb36,2fcccc5,06aeed5,30f9b1f,e9a6f9a,dff14ef,79638f4,6cfb95e,b872999,e8b502e. Último código e8b502e04d016382ff26ddbc2c779156215c371d, HEAD deorigin/int exacto; sin WIP ni cambios del checkout humano. Este cierre sólo requiere coherencia, referencias y diff; no repetir DoD sin nuevo código.
+
+Entregado en Ajustes: recuperación explícita de eliminación aislada de categoría y de cadena de orden de planes simples dentro de la misma categoría. Adopción o reintento conservan toda historia y efectos independientes; UI compacta muestra consecuencias, permite cancelar y no fabrica ACK. Protección nueva del contexto recurrente evita reintentar un orden con catálogo incompleto; grupos con series, cambio de categoría, referencias ausentes y otras cadenas externas siguen fuera de ese resolver. Clasificación pura de varias apariciones preparada, sin caller ni nuevas elecciones.
+
+Validación final:1067pass/223opt-in skip/0fail/12320aserciones, lint978 sin avisos, tipos, Webpack y worker46. Cuatro ejecuciones Next6 focalizadas de once escenarios aprobaron (borrado backend/UI y orden backend/UI); no equivale a ejecutar full33. Dos orígenes IndexedDB, sesiones BetterAuth persistidas y Mongo propios acreditan pérdida tras commit, recarga, UUID intactos, ACK real único y catálogos/cursor exactos por ámbito. No Google interactivo ni nueva aceptación física; checklist humana del17oct permanece cerrada. Nueve checks IndexedDB de orden aprobados y repetidos después del ajuste de contexto. QA visual390px sin overflow; capturas /private/tmp/dalis-tag-delete-dialog-mobile.png y /private/tmp/dalis-placement-dialog-mobile.png.
+
+Cuota después del último código:15%5h/18%7d. Reserva10%/1%. El siguiente contrato de captura multi-slot requiere más de los cinco puntos libres incluyendo pruebas/reparación/publicación/cierre: no se abre. Reset5h observado1792391120,19oct08:25:20 Europe/Madrid; se registra, no se programa otra ejecución. La automatización continuar-el-plan-a-las-21-19 queda PAUSED por automation_update; verificados prompt, regla puntual, mismo chat y failed_runs_only conservados. Esta autorización era puntual: no hay cadena adicional. OpenAI Docs consultada para el cierre; configuración modificada sólo con herramienta de app, sin editar TOML.
+
+Recursos propios de Mongo, proyectos Next temporales, particiones, pestañas y servidores retirados; viewport restablecido, pestaña humana de preproducción intacta. Sin producción/DB del usuario, nuevos índices, secretos, hosting, permisos, dependencias, créditos ni reinicios. Cumpleaños aparcado, Gmail fuera y arrastre aceptado.
+
+Siguiente19j1b: contrato de comparación de cohorte con padre y cada slot local/remoto/outcome exactos, revisiones independientes y clausura completa. Clasificación estructural/DTO ACK no acreditan ejecución ni autorizan supersesión. Si falta remoto conocido de un slot, conservar protección: ausencia de sombra no se convierte en excepción remota por defecto. Después decisión/portable/TX/Next-Mongo/UI según dependencias; quedan también recuperación de movimientos entre categorías/grupos mixtos, ausencia/copia, accesibilidad y preparación final de producción.
+
+
+## 19j1a — Clasificación estructural de varias apariciones
+
+Núcleo puro identifica cohorte completa item:seriesId conraíz conflict ycola posterior pending0 sinlease,≥2slots actuales válidos deparent propio vivo/recurrente/confirmado. Conserva orden global, comandos, UUID ydependencias cruzadas entre slots intercalados; agruparlos no los vuelve entidades aisladas. Otras operaciones delparent/dependientes externos/colas parciales oinciertas bloquean; clausura ACK transitiva sóloDTO, sin acreditarrecibos remotos.
+
+Seis tests/30aserciones: slots intercalados/historiainmutable, casoúnico conservaresolveranterior, firstroot/partial/duplicate/disconnected/attempts/foreign, parent externo/dependientes, ACKtransitivo, parent/slot inválidos ylímite/strict. Unaaserción esperaba unerror demasiado específico: elprerequisito quepasabaa pending esdelmismoparent yse rechaza antes como primerconflicto incorrecto; se conserva rechazo sinrelajar guardia. DoD1067pass/223skip/0fail/12320aserciones, lint978 sinavisos/tipos/Webpack/worker46/diff aprobados.
+
+Entrada21%5h/19%7d, reservas10%/1%, secuencial. Ningún caller/elección/TX/backup nuevo: clasificación noautoriza superseder ni recuperarslots. Siguiente19j1b: contrato de comparación exacta deparent/cada slot/local/remoto/outcome yclausura; sólo después decisión/portable/TX/Mongo/Next/UI. Este lote cierra sin abrir ese bloque mayor ni nueva programación.
+
+
+## 19j1a — Delimitación de clasificación estructural de varios slots
+
+- Objetivo: identificar sinIO una cohorte deapariciones deuna serie propia conraíz conflict ycola posterior pending0, conservando orden global ydependencias entre slots. target_paths: schemas/plan-occurrence-cohort.ts, lib/sync/plan-occurrence-cohort{,.test}.ts yplan/**. Dependencia recuperación aislada19c yguardias19c0 cerradas;21%5h/19%7d, reservas10%/1%, secuencial. Corte mínimoestimado6+reparación2+cierre1 dentro de11puntos libres; sin iniciar captura/writer/UI enestelote.
+- Aceptación: parentvivorecurrente/revisiónpositiva yslots válidos actuales, cohorte item:seriesId completa con≥2slots; raíz primera, children conectados sinintentos/lease. Otroscambios delparent/dependientes externos/inciertos/ausencias/referencias desordenadas bloquean; clausura ACK transitiva conservaDTO pero no acredita outcome. Agruparslots sin aislar ni reescribir susintenciones/dependencias. Resultado sólo clasificación, nuncapermiso para superseder oelección.
+- Validación: orden yslotsintercalados, cadena parcial/incierta/ajena, referencias/dependientes externos, ACKtransitivo, parent/slot inválidos ylímites/entrada inmutable. DoDcompleto, commit/push/HEAD/cuotas. Después cierreseguro delheartbeat puntual; siguiente19j1b contratosnapshot exacto padre/slots/remotos/outcomes yclausura antes deTX/evidencia/UI.
+
+## 19i7 — Elecciones de orden limitadas por evidencia durable
+
+Disponibilidad ypreview deorden comprueban ahora elrecibo completo con elmismo constructor puro queelwriter. Un snapshot por debajode5MiB no basta si al añadir placements/intención/recibo se supera eltope: enesecaso no se ofrecen elecciones imposibles deguardar. IDs conocidos se usan sólo como placeholders demedida, nuncasepersisten nienvían; la decisión real mantiene IDs nuevos/distintos ysnapshot exacto. Esto no afirma espacio físico disponible: capacidad postwrite, ACKs yguardias siguenacreditándose enTX.
+
+Regresión desnapshot justodebajo dellímite peroambos registrosfuera aprobada, sinmutar entrada;16tests focalizados/125aserciones. DoD1061pass/223skip/0fail/12290aserciones, lint975 sinavisos/tipos/Webpack/worker46/diff aprobados. Entrada24%5h/20%7d, reservas10%/1%, secuencial. SinIO/caller/wire/índice/DBusuario. Constructor real conservaforma ypayload ya probados; nueva disponibilidad pura/SSR cubierta sin repetir runnerNext completo innecesariamente. Siguiente19j: clasificador preparatorio de múltiples slots/cadenas recurrentes, sólo si cabe entrega completa y cierre; no nuevas elecciones antes deevidencia/ejecutor.
+
+
+## 19i7 — Delimitación de presupuesto de evidencia antes de ofrecer elecciones
+
+- Objetivo: no ofrecer decisiones deorden cuyo recibo intrínseco supera5MiB ocatálogo máximo, aunque snapshot individual todavía sea válido. target_paths: lib/sync/placement-decision{,.test}.ts yplan/**. Dependencia19i6/6cfb95e publicado;24%5h/20%7d, reservas10%/1%, secuencial. Corteestimado5puntos+reparación/cierre3, dentro demargen.
+- Aceptación: disponibilidad ypreview calculan representación completa mediante mismo constructor puro delwriter; IDs conocidos sólo como placeholders demedida, nuncapersistidos/ACK. Decisión real conserva guardias deIDs nuevos ysnapshot exacto. Presupuesto intrínseco no equivale acuota física IndexedDB/capacidad cola: writer sigueacreditando capacidad postwrite enTX.
+- Validación: snapshot justodebajo5MiB conregistro completo fuera de límite noofreceopciones, entrada inmutable yvalidadores/IDs/reintentos existentes preservados; DoDcompleto ycommit/push/HEAD/cuotas. SinIO/caller/protocolo/índice nuevos. No abrir siguiente bloque mayor si coste observado cruzareserva.
+
+## 19i6 — Recuperación de orden simple visible
+
+Ajustes conecta revisión de cadena task.move simple con cuenta/época/montaje/cache propios yUUID estables. Diálogo compacto muestra grupo/categoría/color/fecha civil, orden actual yresultado, títulos conocidos, primaria yposición eliminada sin afirmar que se borró elplan. Adopción noreenvía; retry sóloúltimomovimiento, con vecinos revisados yposible reranking delgrupo, pending hastaACK. No cambia fechas/contenido/asignaciones. Mezclas conseries, cambiosdegrupo, ausencia yotros pendientes siguenprotegidos. Cancelar sinwrites yerror conservaintención.
+
+SeisSSR/guardias/versiones yschemas estrictos,19focalizados/123aserciones. OnceNext6 UI focalizados pasan: cancelar/reabrir/confirmar ambas decisiones conUUID generados porUI; cuatrovariantes/day/overdue,3pérdidastrascommit/recarga/mismoUUID→ACKreal único, catálogos/shadows/cursor exactos en dosorígenesIndexedDB/Mongo propios. Full33 disponible sinatribuirle ejecución completa; noGoogle/físicos nuevos. Fixture CSSfinal a390px muestra diálogo358px yscroll390px, sinoverflow; captura /private/tmp/dalis-placement-dialog-mobile.png. UI Next sinCSS prueba interacción, no QAvisual.
+
+DoD1060pass/223skip/0fail/12283aserciones, lint975 sinavisos/tipos/Webpack/worker46/diff aprobados. Recursospropios retirados/viewportrestablecido, mainhumano preservado. Entrada38%5h/22%7d, reservas10%/1%, secuencial. Siníndice/protocolo/DBusuario nuevos. Siguiente segúnmargen: guardias residuales de capacidad/presentación, después cohortes recurrentes/múltiples slots oausencia/copy yaccesibilidad/preparación final; no ampliar elecciones sincontrato/ejecutor/evidencia probados.
+
+
+## 19i6 — Delimitación de recuperación de orden visible
+
+- Objetivo: comparación compacta ycaller guardado paraorden simple ya probado. target_paths: features/sync/components/{placement-incident-actions,placement-incident-resolution-dialog,placement-resolution-version,placement-incident-ui.test,personal-incident-card}.*, schemas/next-sync-test{,.test}.ts, templates Next placement/local/device/controller, fixturevisual/servidor yplan/**. Dependencia19i5/79638f4 publicado;38%5h/22%7d, reservas10%/1%, secuencial.
+- Aceptación: captura completa antes de elecciones, rango/categoría/fecha civil visibles, orden actual yresultante connuombres conocidos/colores, primariaytombstones distinguidos. Adoptar noreenvía; retry sóloúltimomovimiento, puede rerank peers delgrupo yqueda pending. No cambiafechas/contenido/asignaciones; mezcla recurrente sigue protegida. Cuenta/época/montaje/cache/UUIDestables, cancelarsinwrites.
+- Validación: SSR/guardias/preview, scope placement-ui estricto; onceNext6 focalizados conambas elecciones UIreal cancelar/reabrir/confirmar, UUIDUI/pérdida/recarga/ACKúnico/convergencia porcatálogo. CSSreal móvil sinDB; cleanup yDoDcompleto. No ofrecer antes deaceptación, sinnuevoíndice/protocolo/DBusuario.
+
+## 19i5 — Orden simple probado con productor real y RPC6
+
+Once escenarios Next6 focalizados (`placement`) pasan con acción/defaults reales, sesiones BetterAuth persistidas y dos orígenes IndexedDB/Mongo propios. moveLocalPlan productivo crea la cadena exacta conflict+hijo; cuatro variantes/day/overdue con adopción y3retry conservan UUID/payload/dependencias, producen pérdida después decommit/recarga/mismoUUIDpendingattempt1→ACKrealattempt2 único. Catálogos completos deplacements, sombras ycursor exactos frente aMongo, otrasfamilias intactas yreplay durable sinretroceso. Scopevalidado, full33 disponible sinatribuir ejecucióncompleta; noGoogle/físicos nuevos.
+
+La primera ejecución reveló vecinos recurrentes engrupo sincategoría delbaseline. Se incorpora contexto deapariciones local/observado íntegro yreutiliza planner recurrente6 activo; guardia explícita bloquea grupo revisado quecontenga serie viva. Fixture usa categoría propia yconserva serie ajena enotrogrupo. Regresión pura depeer recurrente y31tests focalizados/177aserciones aprobados; nuevechecks IndexedDB repetidos pasan trasajuste decaptura. No relajar vecinos ni reinterpretar cola paraaprobar. Cambios sólo preparatorios; no existían recibosdeorden deusuario que migrar. Se corrigió además estrechamiento literal delcomando deltest yun reemplazo deformato quehabía cambiado unaaserción, conservando suvalor correcto.
+
+DoD1054pass/223skip/0fail/12236aserciones, lint970 sinavisos/tipos/Webpack/worker46/diff aprobados. Recursospropios limpios; capturas /private/tmp/dalis-placement-recovery-next.png y /private/tmp/dalis-placement-recovery-context.png. Siníndice/protocolo/DBusuario/UI. Entrada56%5h/25%7d, reservas10%/1%, secuencial; siguiente19i6 diálogo/caller guardado yambas elecciones conUI real antes depublicar, segúnmargen trascuotas.
+
+
+### Ajuste comprobado durante19i5
+
+La primera ejecución real llegó al catálogo mixto del productor6 y detectó vecinos recurrentes enelgrupo sin categoría. No se relaja validación de vecinos: elcontrato preparatorio incorpora apariciones locales/observadas exactas y reutiliza planner recurrente6 activo, con guardia explícita contra series vivas dentro del grupo revisado. La fixture separa sus planes en categoría propia, conservando la serie ajena del baseline enotra categoría. Se añade regresión pura depeer recurrente enelgrupo. Rutas adicionales justificadas: schemas/placement-resolution.ts, lib/sync/{placement-resolution,placement-decision}{,.test}.ts, lib/backup/placement-resolution-fixture.ts, lib/local-db/placement-resolution-capture.ts. Repetir IndexedDB9 yDoD después deNext; seguir sincallerUI hastaaceptación. No migración: registros preparados deorden sólo existieron enDBs de prueba ya limpiadas.
+
+## 19i5 — Delimitación de prueba remota de orden recuperado
+
+- Objetivo: demostrar recuperación de orden simple con productor real moveLocalPlan y RPCNext6/defaults/BetterAuth/dos particionesIndexedDB/Mongo propios antes de UI. target_paths: schemas/next-sync-test{,.test}.ts, templates Next {placement-recovery,local-client,device-client,controller} yplan/**. Dependencias19i4/dff14ef cerrado;56%5h/25%7d, reservas10%/1%, secuencial.
+- Aceptación: cuatro variantes, day yoverdue, cadena originalconflict+hijo exactos, CAS concurrente, actor/epoch/stale sinwrites; adopción oúltimomovimiento sólo delgrupo. Replaytrasrespuesta perdida/recarga mismoUUID→ACK real único; vecinos/revisiones/proyecciones/cursor exactos yotrasfamilias intactas. Scope estricto placement/full33 disponible. Productor fixture commit-local usa legacytaskmove: añadir comando explícito simple que invoque moveLocalPlan productivo, no relajar legado.
+- Validación: schema/matriz, Docker/imagenpinned revalidados, runnerNext6 real focalizado11, cleanup yDoD raíz después de borrar proyectoNexttemporal. SinGoogle/físicos nuevos niíndice/protocolo/callerUI.
+
+## 19i4 — Orden simple con decisión local atómica
+
+CapturaTX9stores reconstruye todos los catálogos locales/sombras, cola y resultado congelado, y acredita prerrequisitos ACK con outcomes aplicados antes de comparar o escribir. Writer guarda placements elegidos, cadena original superseded exacta,0/1reemplazo pending, counter/tail/recibo en una única TX. Guardias de partición/cuenta/época/snapshot, IDs globales/capacidad/counter/tail antes de writes; replay previo valida recibo y no retrocede ediciones posteriores ni notifica. No altera contenido/vistas/categorías/apariciones/settings/outcomes/sombras.
+
+Nueve checks IndexedDB propios aprobados: readonly/reapertura, actor/stale/sombra ausente, rollback tardío de todos los stores, otro pending protegido, IDs/overflow/tail/capacidad contando tail ausente, ACKDTOvsoutcome aplicado, retry sinACK/replay posterior y adopción sin nuevo contador. Backup3 válido en resultados; evidencia /private/tmp/dalis-placement-recovery-native.png. Fixture corregida para liberar primero las secuencias antes de insertar ACKancestro, y no asumir una sola entrega de aviso cuando existen evento local y BroadcastChannel. No se modificó producto para ocultar esos fallos del test. Partición/pestaña/servidor propios retirados.
+
+DoD1052pass/223skip/0fail/12227aserciones, lint970 sin avisos/tipos/Webpack/worker46/diff aprobados; lint/tipos repetidos tras ajuste final de aserción nativa, build y suite productiva sin cambio semántico adicional. Entrada65%5h/26%7d, reservas10%/1%, secuencial. Sin nuevo índice/protocolo/DBusuario/UI. Siguiente19i5: productores task.move reales y Next6/Mongo/dos particiones con CAS, pérdida/replay/ACK único y catálogo exacto, luego19i6 UI revisada.
+
+
+## 19i4 — Delimitación de transacción local de orden de planes
+
+- Objetivo: captura readonly ydecisión durable deorden simple enTX9stores antes deNext/UI. target_paths: lib/local-db/{placement-resolution-capture,placement-resolution,sync-store}.ts, features/sync/local-placement-resolution.ts, scripts/browser-test-server.ts, test/browser/placement-resolution.ts yplan/**. Dependencia19i3/e9a6f9a cerrado;65%5h/26%7d, reservas10%/1%, secuencial.
+- Aceptación: reconstruir catálogos/cola/outcomes/sombras yacreditar ACKs enmismaTX; guardias partición/cuenta/época. Catálogo elegido, originales superseded exactos,0/1reemplazo pending, counter/tail/recibo atómicos; capacidad postwrite, IDs globales ymetadatos antes deescribir. Replay previo no reescribe cambios posteriores ni notifica. Conservar otras familias, asignaciones youtcomes; ausencia no permiso.
+- Validación: IndexedDB propio para readonly/reapertura/stale/foreign/missing, rollbacktardío incluyendo peers/counter/recibo, ACKDTOvsoutcome, capacidad/IDs/tail/overflow yreplay/ambas decisiones/backup. DoDcompleto ycleanupown, commit/push/HEAD/cuotas. Sin UI/índice/protocolo/DBusuario.
+
+## 19i3 — Orden de planes con evidencia portable
+
+Backup3 admite decisiones de orden con rama expected.incident propia: valida catálogo/decisión replanificados, originales superseded exactos, outcome frozen intacto y clausura de ACKs contra resultados aplicados y operaciones reales conservados. Reemplazo0/1 mantiene usuario/entidad/fecha/secuencia posterior/comando/depsvacías exactos; IDs globales centrales rechazan colisiones. No exige retroceder proyección actual ni convierte superseded en ACK.
+
+Ocho tests/35aserciones: roundtrip ambas elecciones, pendientes intentados/lateredits, ausencia oalteración deoriginal/outcome/reemplazo/recibo/catálogos/revisiones, prerequisitosDTO sin outcome yIDs. DoD1052pass/223skip/0fail/12227aserciones, lint966 sin avisos/tipos/Webpack/worker46/diff aprobados. Entrada69%5h/27%7d, reservas10%/1%, secuencial. Sin IO/writer/UI nuevos, DBusuario, índice o protocolo. Siguiente19i4 capturaTX9stores ywriter atómico con capacidad/counter/tail/IDs/replay/rollback nativo antes deNext/UI.
+
+
+## 19i3 — Delimitación de evidencia portable de orden de planes
+
+- Objetivo: backup3 íntegro de decisiones de orden antes de writer. target_paths: schemas/local-recurring-backup.ts, lib/backup/{placement-resolution-evidence,placement-resolution-backup.test,local-backup}.ts yplan/**. Dependencia19i2/30f9b1f publicado;69%5h/27%7d, reservas10%/1%, secuencial.
+- Aceptación: originales superseded exactos, outcome frozen y clausura de prerrequisitos con ACKs aplicados reales,0/1reemplazos exactos/sequence posterior/depsvacías. Catálogo completo replanificado, IDs globales centrales y evidencia actual distinta del snapshot histórico sin retroceder cambios posteriores. Superseded noACK y DTO ACK no prueba resultado.
+- Validación: roundtrip ambas elecciones, truncado/corrupción/catálogos/reemplazo/outcomes/prerrequisitos/IDs globales, pendingintentado tras respuesta perdida yediciones posteriores; DoD completo, commit/push/HEAD/cuotas. Sin IO/writer/UI/protocolo/índice nuevos; después TXcaptura9stores acreditada ypruebas IndexedDB reales.
+
+## 19i2 — Decisión de orden preparada sin caller
+
+Contrato puro permite adoptar catálogo observado de placements o reaplicar sólo el último task.move exacto de la cadena revisada. Nuevo UUID y CAS de primaria observado; planner remoto común calcula reranking multirregistro/revisiones independientes, mientras proyección optimista conserva revisión conocida o0 si crea un rank nuevo. Rechaza efectos en vistas/otro grupo, primarias eliminadas, vecinos obsoletos y desbordamientos; en esos casos sólo adopción del catálogo conocido. No envía todo orden local ni inventa ACK. Recibo5MiB replanificable conserva toda cadena y decisión explícita, identidades/snapshot/cuenta exactos.
+
+Nueve tests nuevos/73aserciones;22focalizados/141aserciones. DoD1044pass/223skip/0fail/12192aserciones, lint964 sin avisos/tipos/Webpack/worker46/diff aprobados. Fixture reranking corregida para elegir vecinos según su orden real por UUID cuando posiciones empatan; una aserción TS estrechada sin cambiar producto. Cuatro variantes/day/overdue, adopción/retry/tombstone/revisión agotada/vecinos/reranking/stale/IDs/registro corrupto aprobados. Entrada73%5h/27%7d, reservas10%/1%, secuencial. Sin IO, backup/writer/UI, índice o protocolo nuevos. Siguiente19i3 evidencia portable; después TX9stores con ACKs acreditados, pruebas remotas y UI antes de ofrecer elecciones.
+
+
+## 19i2 — Delimitación de decisión pura de orden de planes
+
+- Objetivo: decisión replanificable de adoptar placements observados o reaplicar sólo último movimiento dentro del grupo revisado. target_paths: schemas/types/placement-resolution.ts, lib/sync/placement-decision{,.test}.ts yplan/**. Dependencias19i1/06aeed5 cerrado;73%5h/27%7d, reservas10%/1%, secuencial.
+- Aceptación: UUID nuevo/distinto y CAS de primaria observado; comando original exacto del último hijo, no enviar todo catálogo local. Planner común remoto calcula efectos/reranking y revisiones independientes; proyección optimista conserva revisión observada o0 para nueva identidad, sin ACK. Sólo placements y grupo revisado; no modificación implícita de vistas. Adopción acepta tombstone conocido, retry no resucita. Catálogo/snapshot/recibo acotados, replay validable sin IO.
+- Validación: cuatro variantes/day/overdue, adopción/retry/IDs/stale/foreign, vecinos obsoletos/tombstones/revisión agotada, reranking y efectos multirregistro comparados con planner real. DoD completo, plan/registro mismo commit/push/HEAD/cuotas. Después portable y TX con outcomes de ACK reales antes de UI/prueba remota; sin caller/índice/protocolo nuevos.
+
+## 19i1 — Captura pura de orden de planes simples
+
+Contrato de catálogo local/observado canónico para cadena task.move de misma primaria, scope, fecha civil y categoría. Cuatro variantes propias simples con contenido/categorías/vistas confirmados exactos; placement local optimista puede diferir sólo dentro del grupo revisado. Revisión positiva y conjunto de identidades conocido en ambos lados evita inferir ausencia o borrar rangos locales sin evidencia. Remoto tombstone primario puede conservarse como observación, nunca restauración automática de vecinos. Otro pending, cambio de categoría, serie, slot, catálogo parcial/ajeno/duplicado y revisión desconocida siguen protegidos.
+
+Raíz conflict/attempted sinlease e hijos pending0 conectados conservan UUID/payload/dependencias. Captura clausura ACK transitiva; su DTO no sustituye futura acreditación con outcomes aplicados. Outcome frozen, local/remote primarios y frescura remota exactos; observación posterior no se llama ancestro. Scope overdue usa fecha civil declarada y sentinel durable; sin reloj remoto.
+
+Trece tests/68aserciones y DoD1035pass/223skip/0fail/12119aserciones, lint962 sin avisos/tipos/Webpack/worker46/diff aprobados. Se corrigieron estrechamiento de tipo de efectos y una entrada deliberadamente inválida del test para que el rechazo ocurriera dentro del capture; no relajación de guardias. Sin IO, backup, writer, elecciones o UI nuevos; sin DBusuario/índices/protocolo. Entrada79%5h/28%7d, reservas10%/1%, secuencial. Siguiente19i2 decisión pura de adoptar catálogo de placements conocido o reaplicar último movimiento con CAS primario fresco y multiefectos; luego evidencia/TX/prueba remota/UI según dependencias.
+
+
+## 19i1 — Delimitación de recuperación de orden de planes simples
+
+- Objetivo: contrato/captura pura del catálogo revisado para una cadena task.move de misma primaria y grupo, antes de decisiones/writer/UI. target_paths: schemas/types/placement-resolution.ts, lib/sync/placement-resolution{,.test}.ts, lib/backup/placement-resolution-fixture.ts yplan/**. Dependencias: planner remoto común y diagnóstico6 existentes;19h4 publicado. Entrada79%5h/28%7d, reservas10%/1%, secuencial.
+- Alcance inicial explícito: planes propios simples (cuatro variantes), occurrenceIdnull, mismo scope/fecha civil/tag en toda cadena. Contenido/categorías/vistas locales coinciden exactamente con sombras observadas; sólo placement local optimista del grupo revisado puede diferir. Catálogos íntegros y propios, revisiones positivas, identidades locales/observadas exactas; ausencia/localrevision0, cambio de categoría, series/otros slots y otras intenciones sin confirmar siguen protegidos. No atribuir catálogo observado a estado actual garantizado del servidor.
+- Aceptación: raíz conflict/attempted sinlease, hijos pending0 conectados; captura de clausura transitiva ACK sin confundir DTO con resultado aplicado. Outcome y comparación primaria exactos con frescura remota, revisiones independientes/peers/tombstones preservados; canonizar arrays sin reescribir historia ni intención. Rechazar parcial/duplicado/ajeno, dependencia externa/incierta, observación contradictoria y grupos distintos.
+- Validación: oráculos puros de las cuatro variantes/day/overdue, cadena/dependencias/metadata/ownership/catálogos/frescura/ausencias y entradas inmutables; DoD completo. Sin IO, backup/writer/elecciones/caller nuevos. Después19i2 decisión de adoptar placements observados o reaplicar último movimiento con CAS primario fresco y multiefectos del planner, después evidencia/TX/Mongo/Next/UI según margen.
+
+## 19h4 — Recuperación de borrado visible y probada
+
+Ajustes conecta revisión guardada de tag.delete aislado: captura completa antes de mostrar elecciones, cuenta/época/montaje, UUID estables y cache de la propia cuenta. Diálogo reutiliza ConfirmationDialog y catálogo con color/tombstones; explica restauración y agrupación derivada sin modificar planes/vistas, o nueva solicitud pendiente sin ACK local. Remoto ya eliminado sólo permite adoptar. Preview puro comparte planner; cancelar no escribe y error conserva intención.
+
+Seis pruebas SSR/preview/guardias y scopes estrictos; dieciocho tests focalizados/113aserciones. Once escenarios Next6 UI focalizados pasan con cancelar/reabrir/confirmar ambas elecciones, UUID generados por UI, respuesta perdida tras commit, recarga, ACK remoto único y catálogos/shadows/cursor exactos en dos particiones/Mongo propios. Full32 sigue disponible; no atribuirlo al scope11 ni afirmar Google/nuevos físicos. Fixture visual con CSS real a390px: diálogo358px, scroll390px sin overflowhorizontal; captura /private/tmp/dalis-tag-delete-dialog-mobile.png. UI Next sinCSS sólo acredita interacción. Se corrigió fixture tombstone para que comparación remota coincidiera exactamente con su catálogo; no se relajó guardia.
+
+DoD1022pass/223skip/0fail/12051aserciones, lint957 sinavisos/tipos/Webpack/worker46/diff aprobados. Corregidas líneas vacías finales de docs19h3; comprobación final limpia. Recursos propios retirados yviewport restablecido; main humano preservado. Sin índice/protocolo/DBusuario/producción nuevos. Entrada90%5h/30%7d, reservas10%/1%; siguiente recuperación residual deplacements/cohortes recurrentes/ausencia según dependencias, después accesibilidad/preparación final.
+
+
+## 19h4 — Delimitación de recuperación de borrado visible
+
+- Objetivo: conectar revisión explícita de categoría eliminada tras prueba remota19h3 aprobada. target_paths: lib/sync/tag-delete-decision.ts, features/sync/components/{tag-delete-incident-actions,tag-delete-incident-resolution-dialog,tag-delete-incident-ui.test,personal-incident-card}.*, schemas/next-sync-test{,.test}.ts, templates Next de borrado/local/device/controller, fixture visual/servidor yplan/**.
+- Dependencias:414bb36 publicado;90%5h/30%7d, reservas10%/1%, secuencial. Reutilizar ConfirmationDialog y TagOrderResolutionVersion, patrón montado/cuenta/época/cache/UUID estable; no ampliar semántica ni protocolo.
+- Aceptación: comparación completa antes de elecciones, adopción viva restaura categoría y visibilidad derivada sin modificar vistas/planes; remoto tombstone sólo adopción; retry exacto queda pendiente, no ACK. Cancelación sinwrites, error conserva intención y guardias. Preview usa planner puro, no IDs persistidos.
+- Validación: SSR/guardias/preview, scope estricto tag-delete-ui y once escenarios reales Next/IndexedDB/Mongo con cancelar/reabrir/confirmar ambas elecciones y IDs generados por UI, respuesta perdida/recarga/ACK único. CSS real móvil sin DB en fixture visual; cleanup y DoD raíz después de runner. Corregir nuevas líneas vacías al EOF de documentación19h3, sin cambios semánticos.
+
+## 19h3 — Recuperación de borrado probada con RPC real
+
+Once escenarios Next6 focalizados (`scope=tag-delete`) aprobados con acción/defaults reales, sesiones BetterAuth persistidas y dos orígenes IndexedDB/Mongo propios. Productores tag.save/tag.delete generan conflicto real; se prueban adopción remota viva, retry_delete y adopción de tombstone posterior. Guardias actor/epoch/stale no escriben; UUID/payload/dependencias/original superseded/outcomes permanecen exactos. Plan asignado y vista siguen intactos; sólo cambia visibilidad derivada de la categoría. Respuesta perdida después de commit, recarga pending/attempt1 y replay del mismo UUID producen ACK real/attempt2 y un único recibo/journal. Catálogos completos, sombras y cursor coinciden con Mongo; replay durable no retrocede estado confirmado.
+
+DoD:1016pass/223skip/0fail/12004aserciones, lint953 sin avisos, tipos, Webpack, worker46 y diff aprobados. Scope estricto y comandos nuevos validados; full32 disponible, sin atribuirle ejecución completa. Se corrigió antes de compilar una importación de snapshot que sólo se exporta en el schema de catálogo. Recursos propios limpios; evidencia `/private/tmp/dalis-tag-delete-next.png`. Sin Google interactivo ni nuevos dispositivos físicos, DB del usuario, protocolo, índice o callerUI. Siguiente19h4: diálogo/caller de borrado, cancelar/reabrir/confirmar ambas elecciones con UI real antes de publicar.
+
+
+## 19h3 — Delimitación del lote03:25
+
+- Renovación real comprobada:100%5h/31%7d al despertar; nueva lectura97%/31%, reset1792391120. Continuación puntual autorizada, reservas10%/1%, secuencial; pausar heartbeat al cerrar, sin nueva cadena. HEAD2ef37ab limpio e idéntico aorigin/int; main humano sin cambios.
+- Objetivo: demostrar recuperación de borrado aislado con productores reales, RPC Next6/defaults/BetterAuth y dos particiones/Mongo propios antes de ofrecer UI.
+- target_paths: src/schemas/next-sync-test{,.test}.ts, test/next-settings-sync/features/{tag-delete-recovery,local-client,device-client,controller}.*.template y plan/**. Dependencias19h1–2 cerradas. Sin cambios de producto/protocolo/índices.
+- Aceptación: adoptar remoto vivo, reintentar borrado y adoptar tombstone posterior; conflicto real, actor/epoch/stale sin escrituras, originales/outcomes/otras familias íntegros. Respuesta perdida/recarga/mismoUUID→ACK único, replay durable y catálogo/shadows/cursor exactos. Scope estricto tag-delete y full32 disponible, sin atribuir ejecución completa ni Google/físicos.
+- Validación: schemas/matriz, Docker28.4.0 e imagen pinnedamd64 revalidados; runnerNext/Mongo propio y después cleanup y DoD raíz completo. Registrar resultado antes de commit/push/HEAD/cuotas.
+
+
+## 19z10 — Cierre del lote22:24 y continuación19oct03:25
+
+Doce cortes de código publicados enint conHEADremoto verificado ycuotas tras cadaentrega:7b37727/b24e25d/a8a380b/2ba5139/9761353/c9911e0/a4212bc/646af39/fb8cabd/7d9bbc4/9bad58b/da4ac47. Home queda Atrasadas/Hoy/Próximas yrecuperación deorden aislado visible enAjustes. Recuperacióndeborrado tienecontrato/captura/TX/backup cerrados con10checksIndexedDB; todavía sinpruebaremota/callerUI.1015pass/223skip/0fail/11998aserciones, lint953sinavisos/tipos/Webpack/worker46. Next6 deorden11backend+11UI focalizados aprobados; full31 disponible,noejecucióncompleta atribuida.
+
+Última lectura después decódigo20%5h/32%7d; reservas10%/1%. PruebaNext/Mongo comparable19g3consumió14puntos incluyendoreparaciones: no abrir19h3con10puntos libres sobre reserva máspublicación/cierre. Repo sinWIP, mainhumano limpio ypreservado; todos recursos propiosMongo/browser/servidores retirados, viewportrestaurado ytabhumanodepreproducción conservado. SinDBusuario/producción/secretos/permisos/créditos/reinicios.
+
+Elusuario intercaló separación dehome ypide continuar alas03:25 alacercarnos alcierre. Nueva instrucción sustituye pausa delheartbeat actual sóloparaesta próximacontinuación. Automation_update reutiliza continuar-el-plan-a-las-21-19, renombra Continuar el plan a las03:25 yguarda ACTIVE/unaejecución/mismochat/failed_runs_only; camposyprompt verificados desdeconfiguración guardada. NoTOMLmanual, duplicado onuevacadena. Próxima fecha19oct2026,03:25Europe/Madrid; resetpublicado1792373057=03:24:17Madrid deja43segundos: verificar renovación/margen reales aldespertar. Pausaralterminar esa revisión salvootraordenhumana. OpenAI Docs/documentaciónoficial detareasprogramadas consultada paraelcierre; laherramientadeapp gestionalaacción.
+
+Este cierre sólo documenta estado/objetivo/próximocorte/programación; validarreferencias/coherencia/diff, mismoConventionalCommitpushint/HEAD/cuotas. No repetirDoDdecódigo sin nuevasmodificaciones. Cumpleañosaparcado, Gmailfuera, arrastreaceptado ychecklistfísica17octcerrada siguenintactos.
+
+## 19h3 — Prueba remota de recuperación de borrado (pendiente)
+
+- Objetivo: probar decisión de borrado con productores reales yNext6 compilado/defaults/sesionesBetterAuth propias/dosorígenesIndexedDB/Mongo antes deUI.
+- target_paths previstos: schemas/next-sync-test{,.test}.ts, test/next-settings-sync/features/{tag-delete-recovery,local-client,device-client,controller}.*.template yplan/**; concretar alcance trascuotas/lectura.
+- Dependencias:19h1a/b y19h2a/b cerrados; captura/planner/writer/backup3 preparados. Reutilizar tag-order/tag-recovery ycomando commit-local queyaadmite tag.delete. Descriptor/pinnedimage Docker debenrevalidarse antesdeusar sólo recursospropios.
+- Aceptación: conflicto real por cambio remotocategoría, adopción yretry_delete, remoto yatombstone, actor/epoch/stale sinwrites; preservar UUID/payload/source/outcomes/clausura yplanes/asignaciones/placements/otrascategorías. Pérdida trascommit/recarga antesACK/mismoUUID→ACKaplicado único yreplaydurable, catálogo/shadows/cursor exactos. Scope focalizado explícito/strict ymantenerfull disponible sinatribuirle ejecucióncompleta. NoGoogle/físicos nuevos, ausenciaremota siguefuera. Noañadir callerUI hastaaceptación.
+- Validación prevista: matriz/schemas, Next/Mongo/dosorígenes, cleanupown yluegoDoDraíz secuencial (su tscincluyebuild/ si fixtureNexttemporal siguepresente). Después19h4 diálogo/caller guardados yambas eleccionesUIreales concancelar/reabrir/confirmar; advertirvisibilidadderivada deasignaciones alrestaurar/eliminar lacategoría.
+
+## 19h2b — Borrado aislado con transacción local preparada
+
+Captura9stores reconstruye catálogo/cola/clausura yacredita prerrequisitosACK conoutcomes aplicados antesdecomparar oescribir. Writer guarda catálogo elegido, original superseded exacto,0/1reemplazo pending, contador/tail/recibo atómicos; noACKlocal ni cambios deasignaciones/otrasfamilias/sombras/outcomes. Adopción puede restaurar explícitamente laprimaria revisada omantener tombstone remoto. Replay previo conserva edits posteriores ynonotifica. Actor/partición/snapshot/IDs/capacidad/counter/tail yfeaturecuenta/época guardados; faltantetail cuenta capacidad ycorrupciónnorepara.
+
+Diez checksIndexedDB propios aprobados: readonly/reapertura, actor/stale, rollbacktardío, asignaciones/movimientos protegidos, referenciasincompletas/ajenas, IDs/overflow/capacidad, ACKDTOvsoutcome, retry/nextdependiente/replay, tail, adopciónremotaviva ytombstone. Backup3 valida resultados; captura /private/tmp/dalis-tag-delete-native.png. Partición/pestaña/servidor propios retirados.1015pass/223skip/0fail/11998aserciones, lint953sinavisos/tipos/Webpack/worker46/diff aprobados. Formatter necesitó segundapass sobreunacadena de lafixture, corregido antesdeDoDfinal.
+
+Entrada26%5h/33%7d, reservas10%/1%, secuencial. SinNext/Mongo/UI nuevos, producción/DBusuario/índices/wire. Siguiente19h3: prueba Next6 compilado conproductores reales de borrado, dosparticiones/Mongo, adopción/retry/tombstone, guardias ypérdida/recarga/replay/ACKúnico; sólodespués19h4 UI. Decidir trascuota si cabe entrega completa o cerrar yreactivar03:25 autorizado.
+
+## 19h2b — Delimitación previa (completada arriba)
+
+- Objetivo: reconstruir captura enTXyguardardecisión deaceptar/remitirborrado, antes deNext/UI.
+- target_paths: schemas/types/tag-delete-resolution.ts, lib/local-db/{tag-delete-resolution,tag-delete-resolution-capture,sync-store}.ts, features/sync/local-tag-delete-resolution.ts, scripts/browser-test-server.ts, test/browser/tag-delete-resolution.ts yplan/**.
+- Dependencias:9bad58b/19h2a publicado;26%5h/33%7d, reservas10%/1%; corteacotado reutilizapatrónorden, costeestimado8puntos másreparación/cierre3, secuencial. NoabrirNext/UI eneste corte.
+- Aceptación: catálogo/cola/outcomes/clausura enTX9stores, ACKsprevios conresultadoaplicado real;0/1reemplazo pending, root/outcome intactos,supersedednoACK. Replay previo no retrocede edits ni notifica; actor/partición/epoch/snapshot/IDs/capacidad/counter/tail anteswrites. Catálogo elegido puede restaurarprimaria sóloelección explícita, conserva tombstones/otrasfamilias/asignaciones. Guardiasynotificación trascommit; faltantetail contabilizado,nocorregircorrupción.
+- Validación: IndexedDB nativo propio readonly/reapertura/stale/actor/rollback/catálogos/pendientes/ACK/IDs/overflow/capacidad/tail/replay/adopciónremotaviva/tombstone ybackup; DoDcompleto,mismoConventionalCommitpushint/HEAD/cuotas. Pausaravance si margenrequerido cruzareserva;03:25 autorizado para siguientecontinuación.
+
+## 19h2a — Borrado aislado con evidencia portable
+
+Backup3 admite decisión deaceptar catálogo oreintentartag.delete conramaexpected.incident propia. Valida originalsuperseded exacto, outcomefrozen intacto, prerrequisitosACK conoutcomes realmente aplicados, reemplazo0/1 exacto ysecuencia posterior/depsvacías, más IDsglobales centrales. No obliga a retroceder proyección actual: lateredits ypendingintentado se conservan sinfabricarACK.
+
+Siete tests nuevos/25aserciones de roundtrip/adopción/retry/truncado/alteración/prerrequisitos/IDs/catálogos;1015pass/223skip/0fail/11998aserciones, lint949sinavisos/tipos/Webpack/worker46/diff aprobados. Se corrigió unaaserción que asumía queprimariaera primerUUIDordenado, ahora localiza porID exacto. Sinwriter/UI/Mongo/browser/DBusuario/wire/índice nuevos. Entrada29%5h/34%7d, reservas10%/1%, secuencial. Siguiente19h2b TXguardada/IndexedDB; Next/UI sólo después deaceptación ymargen real.
+
+## 19h2a — Delimitación previa (completada arriba)
+
+- Objetivo: conservar decisión/catálogos/root/outcome/prerrequisitos/reemplazo enbackup3 antes dewriter.
+- target_paths: schemas/local-recurring-backup.ts, lib/backup/{tag-delete-resolution-evidence,tag-delete-resolution-backup.test,local-backup}.ts yplan/**.
+- Dependencias:19h1b/7d9bbc4 publicado;29%5h/34%7d, reservas10%/1%, secuencial.
+- Aceptación: ramaexpected.incident explícita; original superseded íntegro, outcome congelado exacto yACKs previos acreditados conoutcomes aplicados.0/1reemplazos exactos conentidad/UUID/CAS/comando/fecha/secuencia posterior/deps vacías; IDs globales centrales. Adopción/restauración/tombstone yretry no implicanACKlocal, lateredits/pendingintentados conservados. SinUI/writer/índice/wire nuevo.
+- Validación: roundtrip deambas decisiones, truncado/corrupción/identidades/prerrequisitos yediciones posteriores; DoD completo,mismo ConventionalCommitpushint/HEAD/cuotas.
+
+## 19h1b — Decisión de borrado preparada sin caller
+
+Contrato puro admite aceptar catálogo observado oreintentar exactamente tag.delete conUUID nuevo/CAS primario observado. Adopción acepta tombstone remoto orestaura explícitamente sólolacategoría revisada; retry requiereprimariaviva yrevisión noagotada, sininferirACK. Catálogooptimista conserva campos/revisionesobservadas depeers; sólo cambia tombstone/timestamp deprimaria, mientras elexecutorremoto calcularásurevisión confirmada. No modificaasignaciones: suvisibilidadderivada cambiará segúnsucategoría ydeberá explicarseenUI. Recibo5MiB replanificableexacto, snapshot/actor/IDs nuevos/historia protegidos. Ausenciadesconocida siguefuera.
+
+Seis tests nuevos/37aserciones,13focalizados/61aserciones;1008pass/223skip/0fail/11973aserciones, lint947sinavisos/tipos/Webpack/worker46/diff aprobados. Elajuste final deltexto deerror de19h1a necesitaba salto delformatter; se corrige yrepiteDoD completoenestecorte. Sin writer/backup/UI nuevos niMongo/browser/DBusuario. Entrada33%5h/34%7d, reservas10%/1%, secuencial. Siguiente19h2a evidencia portable; después TX/Next/UI segúnmargen. No ofrecer elecciones hastaejecutor/evidencia/pruebasreales.
+
+## 19h1b — Delimitación previa (completada arriba)
+
+- Objetivo: aceptar explícitamente el catálogo remoto conocido oreintentar exactamente elborrado deunacategoría, sininferenciaACK.
+- target_paths: schemas/types/tag-delete-resolution.ts, lib/sync/tag-delete-decision{,.test}.ts yplan/**.
+- Dependencias:19h1a/fb8cabd publicado;33%5h/34%7d, reservas10%/1%, secuencial.
+- Aceptación: snapshotexacto/actor/UUIDs nuevos; adoptar puede mantener tombstone remoto orestaurarúnicamentelaprimaria revisada deformaexplícita. Retry sólo primariaviva conrevisión disponible, comando original tag.delete/CASobservado y0/1nuevaoperación. Catálogo elegido conserva camposremotos depeers yrevisionesobservadas; nuevos timestamps sólo optimistic, noACK. Recibo acotado replanificable yoriginalexacto superseded; no modificarasignaciones, sólo suvisibilidadderivada podrácambiarsegúncategoríaeliminada/restaurada. Sinwriter/backup/UI nuevos.
+- Validación: adopción/remotoborrado/retry/overflow/ausencia/stale/actor/IDs/corrupción/inmutabilidad/plannerremoto, DoD completo,mismo ConventionalCommitpushint/HEAD/cuotas.
+
+## 19h1a — Captura de borrado aislado preparada
+
+Evidencia pura deunaúnica raíz tag.delete propia enconflicto: exige tombstone local, catálogo observado completo conprimaria conocida viva oeliminada, outcome exacto yclausura deACKs capturada. Ausencia remota, otroscambiospersonales/dependientes, envíosinciertos, datosajenos/duplicados/parciales ycapacidad siguenprotegidos. Sólo laprimaria revisada puede restaurarse desde untombstonelocal mediante unaelección explícita posterior; ningúnpeer se resucita. No choices/writer/backup/UI nuevos todavía.
+
+Guardias comunes de catálogo/frescura/cola se extraen a tag-catalog-resolution paraevitarduplicación. Wrappers deorden conservan estructura/formato yrestricciónaprimariaviva. Siete tests nuevos/24aserciones,29tests focalizados/129aserciones ydocechecksIndexedDB deorden repetidos aprobados; captura /private/tmp/dalis-tag-order-shared-guards.png.1002pass/223skip/0fail/11936aserciones, lint943sinavisos/tipos/Webpack/worker46/diff aprobados. Partición/pestaña/servidor propios limpios; sinNext/Mongo nuevos/DBusuario/protocolo/índices.
+
+Entrada38%5h/35%7d, reservas10%/1%, secuencial. Siguiente19h1b decisión explícita deaceptar catálogo observado oreintentar borrado conCASnuevo, despuésportable/TX/pruebaremota/UI. Mantener distinción entre capturaACKDTO ysuacreditación real; elcatálogo observado noes unestadoactual garantizado delservidor.
+
+## 19h1a — Delimitación previa (completada arriba)
+
+- Objetivo: delimitar evidencia de un tag.delete enconflicto antes deofrecer adopción oreintento explícitos.
+- target_paths: schemas/types/tag-catalog-resolution.ts, schemas/tag-order-resolution.ts, lib/sync/{tag-catalog-resolution,tag-order-resolution,tag-delete-resolution,tag-delete-resolution.test}.ts, lib/backup/tag-delete-resolution-fixture.ts yplan/**.
+- Dependencias:646af39/orden visible cerrado;38%5h/35%7d, reservas10%/1%, secuencial.
+- Decisión: reutilizar guardias decatálogos/clausura/frescura deorden enunnúcleo puro común, wrappers existentes conservan elcontrato. Borrado sólo unaraíz tag.delete propia conflict/attempted sinlease ylocaltombstone; remoto conocido vivo otombstone, ausencia siguefuera. Sólo laprimaria revisada puede adoptar explícitamente remoto vivo frente atombstonelocal; otras eliminaciones no se resucitan.
+- Aceptación: catálogos completos, sinotroscambiospersonales/dependientes no revisados; ACKDTOs debenacreditarseenfuturoTX/backup. Frozenoutcome exacto, shadowposteriornoancestro, límites/actor/identidades/clausura intactos. Sin choices/writer/backup/UI nuevos.
+- Validación: oráculospuro deconflicto/tombstone/ausencia/cola/prerrequisitos/frescura/límites; regresiónorden y12checksIndexedDB propios trasextraer núcleo; DoDcompleto,mismoConventionalCommitpushint/HEAD/cuotas.
+
+## 19g4b — Revisión de orden visible en Ajustes
+
+PersonalIncidentCard ofrece Revisar orden para conflicto propio tag.move. Botón sólo inicia lectura completa guardada; opciones noautorizan porDTO. Captura/confirmación cuentan conactor/época/mounted/cache propios, UUIDs estables enref ycancelación sinwrites. UIcompacta compara catálogos, mantiene guardias devecinos/otrascohortes ynomuestra retryinviable. Historial íntegro ysinACKlocal.
+
+Once Next6 focalizados tag-order-ui aprobados: ambas elecciones conCancelar/Reabrir/Confirmar reales yUUID generados porUI, guardias deactor/epoch/stale, dospérdidas trascommit/recarga/replay/ACKreal único, reranking depeers yvecinoborrado. Proyección/shadows/cursor decatálogos coinciden conMongo endosorígenes/sesionesBetterAuth propios. Full31 sigue disponible, no se atribuye su ejecución completa nifísicos/Google nuevos. PrimeraSSR detectó nombre de comando mal reemplazado enelcandidate, corregido antesNext.
+
+La fixtureNext valida interacción pero no cargaCSS deproducto. Se añade modo visual explícito tag-order-review alservidor propio existente; revisión conCSS real delbuild enescritorio ymóvil390px, screenshot /private/tmp/dalis-tag-order-dialog-{desktop,mobile}.png. No abre DB ni guarda datos enese modo. La pruebaNext tiene captura /private/tmp/dalis-tag-order-ui-next.png. Docker28.4.0/imagenpinnedamd64 revalidados; runnerexit0, recursosMongo/particiones/control/sesiones/pestañas/servidores propios limpios yviewportrestaurado.
+
+995pass/223skip/0fail/11912aserciones, lint937sinavisos/tipos/Webpack/worker46/diff aprobados. Entrada49%5h/37%7d, reservas10%/1%, secuencial. Sin nuevoíndice/wire/DBusuario/producción. Recuperación deuna primaria tag.move cerrada; otrasprimarias/dependencias quedan protegidas. Siguen borradodecategorías/placements, cohortes recurrentes/ausencia, accesibilidad/preparación final.03:25 sigueprogramación humana pendiente paraelcierre deesta ventana.
+
+## 19g4b — Delimitación previa (completada arriba)
+
+- Objetivo: conectar revisión de tag.move desde Ajustes sólo tras captura completa guardada yprobar ambas elecciones reales antesdepublicar.
+- target_paths: features/sync/components/{tag-order-incident-actions,personal-incident-card,tag-order-incident-ui.test}.tsx, schemas/next-sync-test{,.test}.ts, test/next-settings-sync/features/{tag-order-resolution-ui,tag-order-recovery,local-client,device-client,controller}.*.template más scripts/plan-agenda-ui-test-server.ts/test/browser/tag-order-review.tsx paraCSSreal yplan/**.
+- Dependencias:a4212bc/19g4a publicado;49%5h/37%7d, reservas10%/1%, secuencial. SkillReact/guíasNext vigentes; Docker/image revalidados antesMongo propio.
+- Aceptación: botón noautoriza; snapshot completo leído antesdeopciones. Actor/epoch/mounted/cache propios eIDs estables enref. Cancelar noescribe; cambio dechoice resetea intención nueva. Previews exactos; guardias deotrascohortes/vecinos/busy conservadas. Full31 disponible yscope tag-order-ui estricto11 focalizados concancelar/reabrir/confirmar yUUID generados porUI deambas elecciones, luego replay/recarga/ACKúnico ycatálogos convergentes. NoGoogle/físicos nuevos.
+- Validación: SSR/guardias/schemas yUIrealNext conMongo/dosorígenes propios, DoD secuencial trascleanup, plan/log,mismoConventionalCommitpushint/HEAD/cuotas. Sinwire/índice/DBusuario nuevo.
+
+## 19g4a — Diálogo de orden preparado sin caller
+
+Preview puro reutiliza planificación exacta sincrearIDs durables niACK. Diálogo compara catálogo local ycatálogo elegido completo, ordenado visualmente ydesplazable; nombres/colores/revisiones/tombstones yprimaria resaltada. Opciones explícitas usan remoto conocido oreaplican sólo últimomovimiento, conadvertencia sobrecamposremotos, historia conservada, sustitución deintenciones ypending sinconfirmación. Guardiasactor/retryinviable/busy/cancelar; ConfirmationDialog reutilizado ycomponentes extraídos, sin estado derivado por effect.
+
+CuatroSSR/40aserciones ypreviewpuro/4aserciones nuevos,14tests focalizados/103aserciones;994pass/223skip/0fail/11905aserciones, lint935sinavisos/tipos/Webpack/worker46/diff aprobados. Sin interacción browser nueva ocalleractivo. Nextbackend11focalizados sigue cerrado en19g3; siguiente19g4b lectura/confirmación guardadas yambas elecciones reales concancelar/reabrir/confirmar enNext antesdepublicarAjustes. Entrada52%5h/37%7d, reservas10%/1%, secuencial.
+
+## 19g4a — Delimitación previa (completada arriba)
+
+- Objetivo: revisión compacta que compara catálogo local con el elegido, sin caller activo todavía.
+- target_paths: lib/sync/tag-order-decision{,.test}.ts, features/sync/components/{tag-order-resolution-version,tag-order-incident-resolution-dialog,tag-order-incident-ui.test}.tsx yplan/**.
+- Dependencias:19g3/c9911e0 publicado;52%5h/37%7d, reservas10%/1%. SkillReact/guíasNext vigentes; secuencial.
+- Aceptación: preview usa mismo planner puro sinIDs durables niACK, muestra orden real/nombres/colores/tombstones/revisión porcategoría yprimaria resaltada; opciones explícitas adoptar catálogo observado o reaplicar últimomovimiento, no todo ordenlocal. Advierte sustitución explícita/intenciones/historia/pending/catálogo quizáposterior; busy/cancelar/actor yretryinviable protegidos. Listado completo desplazable sintruncamiento. Componentes extraídos, sin effects paraestado derivado yreutilizando ConfirmationDialog.
+- Validación: previewpuro/SSR deambas elecciones/orden/color/nombre/tombstone/actor/retryinviable/busy; DoD completo,mismo ConventionalCommitpushint/HEAD/cuotas. Activación posterior exige lector guardado ypruebaUIrealNext.
+
+## 19g3 — Orden recuperado con Next/Mongo y dos particiones
+
+Once escenarios focalizados tag-order deNext6 compilado/defaults/sesionesBetterAuth persistidas ydosorígenes IndexedDB/Mongo propios aprobados. Productores reales generan raízconflict yúltimo movimiento conectado conUUID/payload/dependencias exactos. Dosadopciones (incluyevecinoborrado/tombstone) ydosretry (incluyerernumeración conrevisiones independientes depeers) conservan originales/outcomes/otrasfamilias. Cuenta/época/stale rechazan sinmutaciones. Dos respuestas perdidas trascommit, recargaantesACK yreplay delmismoUUID→ACKattempt2 producen unúnicorecibo/journal porreemplazo. Catálogo completo de categorías/proyección/sombras/cursor coincide exactamente conMongo enambasparticiones; no equivale aconvergencia global deotrasfamilias niGoogle/físicos nuevos.
+
+Full31 queda disponible; estaejecución acredita sólo11focalizados. La primera compilación detectó directiveuseclient detrás deimport enlasplantillas nuevas; corregido antesdeRPC. Primerrecorrido detectó queelschema de fixture no admitía tag.move/delete; ampliado explícitamente conregresión. UnDoD durantefixturetemporal incluyó suárbol bajo build/ yfalló tipos; repetido secuencialmente trascleanup, junto alestrechamiento de literals deltest. ÚltimaDoD989pass/223skip/0fail/11861aserciones, lint932sinavisos/tipos/Webpack/worker46/diff aprobados. Docker28.4.0/pinneddigestamd64 revalidados; runnerexit0, contenedor/proxy/temporales/sesiones/particiones/pestañas propios limpios. Captura /private/tmp/dalis-tag-order-next.png.
+
+Entrada66%5h/39%7d, reservas10%/1%, secuencial. Sin nuevo protocolo/índice/DBusuario oUIactiva. Siguiente19g4 preview/diálogo guardado yambas eleccionesUIreales antesdepublicar caller enAjustes.
+
+## 19g3 — Delimitación previa (completada arriba)
+
+- Objetivo: probar productores reales de tag.move, conflicto y recuperación sobre Next6 compilado/defaults/sesiones BetterAuth propias/Mongo antes de UI.
+- target_paths: schemas/next-sync-test{,.test}.ts, test/next-settings-sync/features/{tag-order-recovery,local-client,device-client,controller}.*.template yplan/**.
+- Dependencias:9761353/19g2b publicado;66%5h/39%7d, reservas10%/1%. SkillReact/guíasNext vigentes; Docker/pinnedimage se revalidan antes recursos propios. Secuencial.
+- Aceptación: scope explícito tag-order ejecuta diezfronteras+cohorte orden, full31 disponible; no atribuir full almodo focalizado. Adopción yretry delúltimo movimiento, multiefecto/reranking conrevisiones propias, vecinoborrado/tombstone protegido; epoch/actor/stale sinwrites, originales/outcomes intactos. Dos pérdidas trascommit/recarga/mismoUUID→ACKúnico, proyecciones/shadows/cursor exactos para todo catálogo de categorías observado. No convergencia global deotrasfamilias niGoogle/físicos nuevos.
+- Validación: matriz/schemas/regresión, Next propio compilado yDoD completo, limpieza ownership,mismoConventionalCommitpushint/HEAD/cuotas. Sin nuevosíndices/wire/DBusuario oUIactiva.
+
+## 19g2b — Recuperación de orden atómica y portable preparada
+
+Captura9stores reconstruye catálogo local, todas las sombras propias, cola yclausura ACK enmismaTX; outcomes realmente aplicados acreditan prerrequisitos antes deofrecer comparación o escribir. Writer guarda catálogo observado/adoptado o preview multiefecto, originales supersedidos íntegros,0/1reemplazo pending, contador yrecibo atómicos. Replay previo valida decisión sinreescribir trabajo posterior ni notificar. Guardias deactor/partición/snapshot/identidades globales/capacidad/counter anteswrites, featurecuenta/epoch antes/después ynotificación sólo trascommit.
+
+Retry actualiza preference-tail paraque unmovimiento posterior deotraprimaria dependa delreemplazo. Si faltaba, se contabiliza suclave adicional antesdeescribir; un tail corrupto no se repara. No se cambia contenido/vistas/placements/settings/sombras/outcomes ni se inventa ACK. Adopción conserva altas/tombstones observados yno avanza contador.
+
+Doce checks nativos IndexedDB propios aprobados: readonly/reapertura, actor/stale/catálogos, rollbacktardío, intenciones protegidas, referencias parciales/ajenas/límite10001, IDs/overflow, capacidad conysintail, ACKDTO frentearesultado aplicado, retry/nuevodependiente/replay, reranking depeers conrevisiones independientes yadopción/tombstone. Backup3 valida cadaresultado; captura /private/tmp/dalis-tag-order-native.png. Partición/pestaña/servidor propios retirados.987pass/223skip/0fail/11852aserciones, lint932sinavisos/tipos/Webpack/worker46/diff aprobados. Se corrigió la firma options delproductor enlafixture antesdelaprimeraejecución. Entrada72%5h/40%7d, reservas10%/1%, secuencial. SinNext/Mongo/UI nuevos; siguiente19g3 prueba remota antesdeofrecer elecciones.
+
+## 19g2b — Delimitación previa (completada arriba)
+
+- Objetivo: reconstruir la comparación y guardar catálogo/cola/contador/recibo de orden en una únicaTX, antes de callerUI.
+- target_paths: lib/local-db/{tag-order-resolution,tag-order-resolution-capture,sync-store}.ts, features/sync/local-tag-order-resolution.ts, scripts/browser-test-server.ts, test/browser/tag-order-resolution.ts yplan/**.
+- Dependencias:19g2a/2ba5139 publicado;72%5h/40%7d, reservas10%/1%, secuencial; AGENTlocal leído.
+- Aceptación: TX9stores con catálogos ycola completos bounded10001/ACKs acreditados poroutcomes reales; no unir resultados deTX distintas ni sombras/outcomes para inventar catálogo. Replay previo sinreescribir/notificar; snapshot exacto/IDs globales/capacidad/counter anteswrites.0/1intención nueva pending, originales superseded exactos, proyección deotrasfamilias ysombras/outcomes intactos. Retryactualiza preference-tail para que unmovimiento posterior deotracategoría dependa delreemplazo; contabilizar clave adicional si faltaba, nunca reparar tail corrupto. Featurecuenta/epoch antes/después, notificación trascommit.
+- Validación: IndexedDB nativo propio para readonly/reapertura/stale/actor/catálogos/pertenencia/ACKfalso/rollbacktardío/multiefectos/IDs/counter/capacidad/tail/replay/adopción/backup. DoD completo y mismo ConventionalCommitpushint/HEAD/cuotas. SinNext/Mongo/UI nuevos aún.
+
+## 19g2a — Evidencia portable de orden preparada
+
+Backup3 admite la decisión de orden con rama específica expected.incident, replanificación exacta de catálogo/último movimiento y originales supersedidos íntegros. Exige outcome congelado original, clausura de prerrequisitos con outcomes aplicados reales, correspondencia exacta de0/1 reemplazos (UUID/comando/CAS/fecha/entidad/secuencia posterior/dependencias vacías) yguardias globales deidentidad. Un DTO de ACK no basta. Proyección actual puede avanzar después de la decisión sin que el recibo la retroceda; pending intentado sigue siendo pending.
+
+Ocho tests nuevos/36aserciones de roundtrip/adopción/retry/truncado/corrupción/ACK/IDs;987pass/223skip/0fail/11852aserciones, lint928sinavisos/tipos/Webpack/worker46/diff aprobados. Sin writer/UI nuevos, Mongo/browser/DBusuario/protocolo/índice. Entrada77%5h/41%7d, reservas10%/1%, secuencial. Siguiente19g2b capturaTX/writer yrollback/replay/capacidad enIndexedDB propio, antes deNext/UI.
+
+## 19g2a — Delimitación previa (completada arriba)
+
+- Objetivo: hacer portable la decisión preparada antes de añadir un writer que pueda producirla.
+- target_paths: schemas/local-recurring-backup.ts, lib/backup/{tag-order-resolution-evidence,tag-order-resolution-backup.test,local-backup}.ts yplan/**.
+- Dependencias:19g1a/b publicados, home16c19 cerrada;77%5h/41%7d, reservas10%/1%, secuencial.
+- Aceptación: backup3 conserva catálogo observado/local completo, cadena exacta supersedida, outcome original, clausura ACK acreditada por outcomes realmente aplicados y0/1 reemplazos exactos con secuencia posterior y sin dependencias antiguas. Validar decisión por replanificación y rama expected.incident; identidades globales ya centrales. Ediciones posteriores y pending intentado se conservan sin obligar a reescribir proyección actual. Sin writer/UI/protocolo/índice nuevo.
+- Validación: ambos roundtrip, truncado/corrupción de originales/outcomes/catálogos/reemplazos, actor/IDs/prerrequisitos DTO vsACK ydatos posteriores. DoD completo; mismo ConventionalCommitpushint/HEAD/cuotas.
+
+## 16c19 — Home separada en Atrasadas, Hoy y Próximas
+
+Petición humana atendida: tres secciones compactas con la misma agrupación por categoría, colores, checklist y orden. Hoy conserva intervalos activos, incluso nocturnos/de varios días; Próximas excluye los que incluyen hoy para no duplicar la misma fila. El filtro se aplica a planes simples y apariciones (incluidas excepciones reprogramadas) y no cambia la selección inclusiva del calendario u otros listados. Usa el día de la zona personal; no necesita calcular mañana, incluso en9999-12-31. No mutaciones ni nuevos fetches remotos/protocolo/índices.
+
+Tres regresiones nuevas/16aserciones;979pass/223skip/0fail/11816aserciones, lint926/tipos/Webpack/worker46/diff aprobados. Fixture propia dehome con cuatrovariantes, categorías yseries probada con páginas completas enescritorio y390px móvil; capturas /private/tmp/dalis-home-sections-{desktop,mobile}.png. Partición/control/session de prueba, pestaña yservidor propios retirados; viewport restablecido ypreproducción humana intacta. NoGoogle/Mongo/físicos nuevos. Entrada81%5h/42%7d, reservas10%/1%, secuencial; skill vercel-react-best-practices aplicada yguíaNext vigente.
+
+Se retoma19g2. El usuario pide que, al acercarnos al cierre de5h ysi queda trabajo, se reprograme este mismoheartbeat para19oct03:25Europe/Madrid. Esa nueva autorización sustituye la pausa puntual anterior sólo paraesta siguiente continuación; verificar reset/cuotas reales aldespertar, sinotra cadena automática.
+
+## 16c19 — Delimitación previa (completada arriba)
+
+- Objetivo: atender la petición humana de separar hoy de los próximos planes, conservando atrasadas, categorías, orden y apariciones.
+- target_paths: features/plans/{agenda-selection,plan-agenda-rows}{,.test}.ts, components/{plan-agenda,plan-list}.tsx, fixture plan-agenda-ui yplan/**.
+- Dependencias:b24e25d publicado,81%5h/42%7d, reservas10%/1%. Se intercala antes de19g2. SkillReact/guíaNext vigente; secuencial.
+- Aceptación: tressecciones compactas ordenadas Atrasadas/Hoy/Próximas; Hoy incluye intervalos que cruzan hoy, Próximas los excluye para no duplicar la misma fila. Aplicar también aapariciones/materializadas yconservar comportamiento inclusivo de calendarios/listados anteriores. Sin nuevosfetchesremotos/protocolo/mutaciones/índices. SWR deduplica mismafuente; selección derivada sin effects nuevos.
+- Validación: regresión deplanes simples/intervalos/timed/series/movidos/estados yborde de fecha, UI propia enmóvil/escritorio; DoD completo,plan/log,mismo ConventionalCommitpushint/HEAD/cuotas.
+
+## 19g1b — Decisión y preview de orden preparados
+
+Nueve pruebas nuevas validan adoptar el catálogo observado o reaplicar únicamente el último tag.move de la cadena. La nueva operación usa UUID nuevo/CAS primario observado y vecinos originales; todos los efectos de reranking se calculan con el planner remoto existente, con límites de bytes y revisión por entidad. El preview conserva revisiones observadas, nombres/colores y tombstones remotos; no simula ACK ni reenvía campos locales obsoletos. Vecinos ausentes/no adyacentes, primaria borrada, revisión primaria/peer agotada o efectos demasiado grandes dejan sólo adopción. Registros durables se replanifican exactamente para detectar corrupción.
+
+21pruebas focalizadas/101aserciones;976pass/223skip/0fail/11800aserciones, lint926 sinavisos/tipos/Webpack/worker46/diff aprobados. Se corrigieron copias independientes de intenciones en la fixture y dos estrechamientos de tipos de las aserciones. Sin writer/backup/UI nuevos, Mongo/browser o DBusuario. Siguiente19g2: reconstrucción TX y evidencia portable antes de ofrecer elecciones. Se intercala la petición humana de separar la home en Atrasadas/Hoy/Próximas.
+
+## 19g1b — Delimitación previa (completada arriba)
+
+- Objetivo: decisión pura para adoptar todo el catálogo observado o reaplicar exclusivamente el último movimiento revisado sobre ese catálogo, con efectos multirregistro explícitos y sin simular ACK.
+- target_paths: schemas/types/tag-order-resolution.ts, lib/sync/tag-order-decision{,.test}.ts y plan/**.
+- Dependencias:19g1a/7b37727 publicado;89%5h/43%7d, reservas10%/1%, secuencial.
+- Aceptación: snapshot exacto/actor/identidades nuevas, originales intactos; adopción cero operaciones, retry un tag.move con vecinos originales y CAS primario observado. Planner remoto valida adyacencia, tombstones, reranking, revisiones de todos los efectos y bytes; proyección optimista conserva revisiones observadas y campos remotos, nunca reenvía nombres/colores locales. Ausencia de vecinos o agotamiento permite sólo adopción. Recibo validable por replanificación exacta y acotado; sin writer/backup/UI todavía.
+- Validación: oráculos puros de última intención, nombres remotos, alta/tombstone, vecinos cambiados, reranking/revisiones independientes, overflow, IDs, stale/corrupción/actor/inmutabilidad y DoD completo. Mismo ConventionalCommit/pushint/HEAD/cuotas.
+
+## 19g1a — Completada: captura pura de una cadena aislada de orden
+
+- Estado:12pruebas puras/42aserciones,967tests/DoD completos; sin elecciones ni mutaciones nuevas.
+- Objetivo: delimitar la evidencia revisable de `tag.move` antes de diseñar elecciones multirregistro.
+- `target_paths`: src/{schemas,types,lib/sync}/tag-order-resolution{,.test}.ts, fixture de prueba bajo src/lib/backup/tag-order-resolution-fixture.ts y plan/**.
+- Dependencias: e6f6f2c y origin/int exactos; renovación real100%5h/45%7d, reset1792373057, reservas10%/1%. Secuencial. Dependencias fijadas restauradas sólo en node_modules propio de int tras desaparecer el destino del enlace a main; lockfile intacto. Guía Next instalada leída.
+- Aceptación: una sola categoría primaria, raíz conflict real y cola completa ordenada; hijos sólo tag.move pending sin intento, clausura ACK y dependientes externos protegidos. Catálogo local completo y todas las sombras de categorías observadas, propios/únicos/comprometidos; ningún local sin evidencia remota, ninguna resurrección. Lectura parcial, corrupción, revisiones contradictorias, otros tag.save/delete/move y asignaciones/movimientos personales pendientes se rechazan; actividad de contenido independiente se conserva.
+- Límite: el catálogo observado es el conocido en este dispositivo, no garantía de catálogo actual del servidor ni ancestro. Requerir pull si el conflicto conoce una versión más nueva que la sombra. Un ACK en DTO deberá acreditarse contra outcomes reales al capturar en TX y validar backup.
+- Validación: oráculos de catálogos y grafo, replay tardío/frescura, cuenta/IDs/límites/cadena incierta/actividad independiente; DoD completo, plan/log mismo commitpushint/HEAD y cuotas. Sin writer/backup/UI nuevos ni pruebas de convergencia.19g1b definirá adoptar catálogo conocido o reaplicar explícitamente el último movimiento sobre él, con preview, antes de mutación.
+
+## 19z10 — Continuación puntual solicitada para las 22:24
+
+- Objetivo: programar la reanudación del plan completo hoy 18 de octubre de 2026 a las 22:24, Europe/Madrid, desde el último commit cerrado de `int`.
+- `target_paths`: plan/{master,workflow,iterations,iteration-log}.md y automatización heartbeat existente gestionada mediante la app; sin código de producto.
+- Dependencias: código f4ebaec, cierre2a36cd4 y `origin/int` exacto, sin cambios ajenos. Cuotas consultadas:16% de5h y45% semanal; reservas10%/1%, sin implementación ahora.
+- Aceptación: reutilizar `continuar-el-plan-a-las-21-19`, nombre «Continuar el plan a las 22:24», ACTIVE y ejecución única, mismo chat y política `failed_runs_only`. No nueva cadena ni duplicado. Reset real publicado1792354998,22:23:18Madrid; la hora humana deja42segundos, por lo que el siguiente lote debe verificar la renovación real sin asumirla por reloj.
+- Validación: configuración guardada, horario/fecha/prompt/estado/chat/política verificados; referencias/coherencia/diff, Conventional Commit/push aint/HEAD remoto y consulta de ambas cuotas. Próxima candidata19g1: contrato de recuperación de orden de categorías; después dependencias vigentes. Pausar al concluir la continuación puntual.
+- Estado: completado; programación actualizada con la herramienta de la app y configuración guardada verificada.
+
+## 19z9 — Cierre puntual 18oct17:23
+
+- Objetivo/target_paths: registrar cierre coherente en plan/{master,workflow,iterations,iteration-log}.md y pausar la automatización puntual existente.
+- Dependencias: siete cortes publicados hastaf4ebaec,20%5h/46%7d frenteareservas10%/1%; no abrir nueva recuperación multirregistro con coste completo incierto.
+- Aceptación: int/HEADremoto exacto, mainhumano intacto, ceroWIP yrecursos propios retirados; heartbeat PAUSED mismochat/política verificado, sin nueva cadena.
+- Validación: DoD de código cerrado en19f6; esta entrega sólo referencias/coherencia/diff/ConventionalCommitpushint/HEAD ycuotas finales.
+- Estado: completado; automatización pausada mediante herramienta deapp yconfiguración guardada verificada.
+
+## 19g1 — Contrato de orden de categorías (cortes en curso)
+
+- Objetivo: delimitar recuperación explícita de una cadena propia tag.move y sus efectos multirregistro, sin copiar ciegamente el flujo aislado tag.save.
+- target_paths previstos: src/lib/sync/tag-order-resolution{,.test}.ts, src/schemas/tag-order-resolution.ts, src/types/tag-order-resolution.ts yplan/**; concretar después deleer planner/captura reales.
+- Dependencias:19f6 cerrado. Reutilizar planRemoteTagOperation/applyTagMoveCommand, snapshots personales ygrafo completo; no nuevo comando, protocolo oíndice por suposición.
+- Aceptación preparatoria: catálogos propios completos yrevisiones porentidad; primary yvecinos/efectos de reranking explícitos. Proteger tag.save/delete/asignaciones/movimientos/dependientes externos afectados, incertidumbre, ausencias ycatálogos parciales. Una sombra observada noacredita ancestro nicatálogo remoto completo. No ofrecer adopción/retry antes decontrato coherente, writer/evidencia/pruebas reales.
+- Validación prevista: oráculos puros de identidad/clausura/CAS/reranking/vecinos borrados/revisionesagotadas/actividadindependiente/capacidad. Después capturaTX/evidenciaportable/NextMongo dosparticiones/UI por cortes separados. Registrar ambigüedades sin inventar permiso ni descargar evidencia.
+- Estado:19g1a cerrado;19g1b decisión/preview cerrado, después TX/backup/Next/UI. Primer alcance sólo una primaria con cadena de movimientos; otras cohortes siguen protegidas.
+
+## 19f6 — Completada: identidades globales de decisiones portables
+
+- Estado: tresregresiones nuevas/51backups/955tests/DoD completos aprobados.
+- Objetivo: cerrar la discrepancia entre writers y backup: los writers impiden reutilizarUUID de decisión en otrodominio uoperación, pero el validatorportable sólo exige clavesmetadata únicas yguardias parciales porfamilia.
+- target_paths: src/lib/backup/{local-backup,local-backup-identities.test}.ts yplan/**.
+- Dependencias:0b04a31 publicado,23%5h/46%7d, reservas10%/1%; corte puro acotado sinMongo/Next/UI nuevos.
+- Aceptación: rechazar dos resolutionId iguales aunque sus prefijosmetadata sean distintos, y decisión que colisione con cualquier operación conservada, incluso ajena a sucohorte o ACKhistórico. No rechazar operaciones referenciadas legítimamente por outcome/replacement ni mezclar IDsdeentidad/importación conesta regla. No mutación/compactación/reescritura.
+- Validación: backup3 combinado válido de decisiones independientes ycasos colisionados, regresión debackups anteriores yDoD completo; plan/log/mismoConventionalCommitpushint/HEAD/cuotas. Sin afirmar pruebasbrowser nuevas.
+
+## 19f5 — Completada: asignación aislada de series propias
+
+- Estado: nuevechecksIndexedDB/onceNext6 nointeractivos/952tests/DoD aprobados,aparición confirmada conservada.
+- Objetivo: permitir el mismo flujo de asignación para una serie viva sin contenido/apariciones/movimientos pendientes, conservando íntegra la serie y sus slots.
+- target_paths: src/lib/sync/item-view-resolution{,.test}.ts, src/lib/backup/item-view-resolution-fixture.ts, src/features/sync/components/item-view-incident-ui.test.tsx, test/browser/item-view-resolution.ts, src/schemas/next-sync-test{,.test}.ts, test/next-settings-sync/features/{item-view-recovery,controller}.*.template yplan/**.
+- Dependencias:19f4/c1b0fa3 publicado,31%5h/48%7d, reservas10%/1%. Limitar coste: reutilizar UI sin editarla; scope explícito assignment-series ejecuta11escenarios sininteracción, conserva full30/assignment interactivos. Docker/descriptor pinned revalidados antesMongo propio. Secuencial.
+- Justificación: executor remoto6 ya admite item-view.set de serie con autorización/guard compartido yCAS. Recuperación sólo escribe vista, no padre niapariciones; la restricción local simple era conservadora. Cola completa rechaza cualquier otra operación unresolved conitemId=serie, inclusootros slots sin dependencia explícita. No relajar guardias ni superseder otros slots.
+- Aceptación: contrato puro/SSR de serie propia, concurrencia de slots/movimientos protegida;9checksIndexedDB conpadre recurrente yNext/Mongo dosparticiones conevent/note recurrentes, pérdida/recarga/ACKúnico, aparición confirmada conservada yproyecciónexacta. Sin nuevaUI/protocolo/índice/permiso/DBusuario.
+- Validación: DoD completo,cleanupown,plan/log/mismoConventionalCommitpushint/HEAD/cuotas. El modo nointeractivo no prueba nuevas interacciones; UI de19f4 ya probada y SSR de nuevosdatos.
+
+## 19f4 — Completada: revisión visible de asignaciones y prueba interactiva
+
+- Estado: UI activa tras once escenarios Next6 focalizados finales/947tests/DoD aprobados ycleanup completo.
+- Objetivo: conectar revisión de asignaciones desde Ajustes sólo después de captura guardada; probar ambas elecciones en UI real antes de publicar.
+- target_paths: src/features/sync/components/{item-view-incident-actions,item-view-incident-resolution-dialog,item-view-incident-ui.test,personal-incident-card}.tsx, src/lib/sync/item-view-resolution{,.test}.ts, src/schemas/next-sync-test.ts, test/next-settings-sync/features/{item-view-resolution-ui,item-view-recovery,local-client,device-client,controller}.*.template yplan/**.
+- Dependencias:19f3/c5a77a9 publicado,57%5h/52%7d, reservas10%/1%; Next/React vigentes, secuencial. Sin planner/wire/índice nuevos.
+- Aceptación: botón de revisión noautoriza nada; lectura completa acredita padre/cola/prerrequisitos antes de opciones. Snapshot exacto, UUIDsestables, cuenta/epoch/mounted/caché propios, radios yconfirmación compactos españoles, cancelar sinwrites. No inventar nombre/color remoto; sólo coincidencia de categoría conocida.
+- Validación: SSR/guardias yNext assignment focalizado11, las elecciones adopt/retry de task/event porUI real cancelar/reabrir/confirmar con IDsgenerados porUI; demás variantes/loss/reload/replay/ACKúnico/convergencia porplan. Full30 sigue disponible sin atribuirle ejecución completa. DoD/cleanup/plan/log/ConventionalCommitpushint/HEAD/cuotas.
+
+## 19f3 — Completada: prueba remota de recuperación de asignaciones
+
+- Estado: once escenarios focalizados aprobados, cuatro variantes/ACKreales/convergencia porplan;941tests/DoD completos. UI sigueoculta.
+- Objetivo: demostrar conflicto y recuperación de asignación con productores reales, dos particiones IndexedDB y Next6/Mongo propios antes de ofrecer UI.
+- target_paths: src/schemas/next-sync-test{,.test}.ts, test/next-settings-sync/features/{item-view-recovery,local-client,device-client,controller}.*.template yplan/**.
+- Dependencias:25410d7/19f2 publicado,65%5h/53%7d, reservas10%/1%; descriptor/imagen Docker se revalidan antes de crear recursos propios. Guías Next vigentes, secuencial.
+- Aceptación: cuatro variantes, cadena de asignaciones reales, adopción/retry, guardias cuenta/epoch/stale, conservación exacta de contenido/categorías/orden/outcomes/originales, respuesta perdida trascommit/recarga/mismoUUID yACKreal único. Proyección/shadow/cursor exactos en ambas particiones porplan, no convergencia global niGoogle/físicos nuevos.
+- Validación: selector estricto full|joint-ui|assignment y matriz disponible; ejecutar diezfronteras+asignación (once), full pasa a30disponibles sinatribuirlos almodo focalizado. Cleanupown/DoD/plan/log/mismo commitpushint/HEAD/cuotas. UI sólo en19f4 tras aceptación.
+
+## 19f2 — Completada: persistencia y evidencia de recuperación de asignación
+
+- Estado: nueve checksIndexedDB yseis testsportables nuevos aprobados;941 tests/DoD completos. SinUI/Next nuevos todavía.
+- Objetivo: reconstruir la comparación dentro deTX y guardar vista/cola/counter/recibo atómicos, con evidencia portable completa antes de callerUI.
+- target_paths: src/lib/local-db/{item-view-resolution,item-view-resolution-capture,sync-store}.ts, src/features/sync/local-item-view-resolution.ts, src/lib/backup/{item-view-resolution-evidence,item-view-resolution-fixture,item-view-resolution-backup.test,local-backup}.ts, src/lib/sync/item-view-resolution.test.ts, src/schemas/local-recurring-backup.ts, scripts/browser-test-server.ts, test/browser/item-view-resolution.ts yplan/**.
+- Dependencias:19f1 publicado f8d8cd5,75%5h/54%7d, reservas10%/1%; AGENTlocal leído, secuencial. Sin RPC/UI nuevos ni cambio de wire/índices.
+- Aceptación: captura9stores, padre/categoría/cola/outcomes enmismaTX, ACKs previos acreditados porresultados reales; replay previo conserva ediciones posteriores; IDs globales/capacidad/counter seguros antes writes.0/1 reemplazos, originales superseded exactos, ceroACKlocal. Backup3 valida originales/resultado/prerrequisitos/reemplazo exacto sinreinterpretar expected.incident como expected.entry. Cuenta/epoch/notificaciones trascommit. No modifica item/tags/orden.
+- Validación: backup válido/pendienteintentado/truncado/corrupto, IndexedDB propio rollbacktardío/stale/cuenta/dependencias/colisión/capacidad/replay/adopción/reapertura; DoD, cleanup, mismo commitpushint/HEAD/cuotas. Next yUI soncortes posteriores.
+
+## 19f1 — Completada: contrato de recuperación de asignaciones aisladas
+
+- Estado: diez pruebas puras/86 aserciones,935 tests yDoD aprobados; sin mutación niUI activada.
+- Objetivo: preparar una elección explícita para conflictos `item-view.set` de planes propios simples, sin mutar contenido, categorías u orden.
+- target_paths: src/{schemas,types,lib/sync}/item-view-resolution{,.test}.ts y plan/**.
+- Dependencias:19e5b publicado en22cb3d2;81%5h/55%7d, reservas10%/1%. Secuencial, sin caller, writer, backup o UI nuevos hasta pruebas posteriores.
+- Aceptación: captura exige cola completa validada, padre propio vivo sin repetición y cadena exacta de asignaciones; dependientes externos, contenido/movimientos del mismo plan, referencias ausentes e intenciones inciertas bloquean. Snapshot compacto conserva prerrequisitos ACK como evidencia que el writer/backup deberán acreditar contra outcomes reales. Adopción usa remoto vivo conocido sin operación; retry sólo categoría propia viva confirmada o ninguna, CAS nuevo de vista y UUID nuevo; remoto ausente/tombstone no se resucita. Proyección de contenido/categoría/orden intacta.
+- Validación: cuatro variantes, cadena y dependencias, frescura sin ancestro ficticio, categoría desconocida/borrada/sinconfirmar, revisión agotada, identidad/corrupción, planner remoto puro; DoD y mismo commit/push/HEAD/cuotas. No atribuir convergencia a pruebas puras ni ofrecer elecciones todavía.
+
+## 19e5b — Completada: revisión conjunta visible e interacción real
+
+- Estado: UI conectada después de once escenarios Next6 focalizados aprobados, ambas elecciones con cancelación/reapertura reales;925 tests/DoD/cleanup completos.
+- Objetivo: conectar lectura/elección guardada desde Ajustes para conflictos propios simples conasignaciones relacionadas, validar UIreal antes depublicar.
+- target_paths: src/features/sync/components/{plan-category-incident-actions.tsx,sync-incident-actions.tsx,plan-category-incident-ui.test.tsx,common-plan-incident-ui.test.tsx}, src/schemas/next-sync-test{,.test}.ts, test/next-settings-sync/features/{plan-category-resolution-ui.tsx,plan-category-recovery.ts,local-client.ts,device-client.ts,controller.tsx}.template, plan/**.
+- Dependencias: b8f982f/HEADorigin exactos, mainhumano limpio, renovación real100%5h/58%7d yreset1792354998. Reservas10%/1%, continuación puntual17:23 autorizada. Docker28.4.0/imagenpinnedamd64 revalidados; skillReact/guíasNext vigentes, secuencial.
+- Aceptación: revisión lee snapshot completo antes deofrecer opciones; cuenta/epoch/IDsestables/guardias stale, cancelación sinwrites, caché sólo propia, scopesremontados al cambiarcuenta/epoch/incidente. Casos externos desconocidos no reciben opciones. Reutilizar diálogo19e5a, sin cambiar planner/ejecutor ni wires/índices.
+- Validación: selector strict full|joint-ui (defaultfull, inválido rechazado); modoNext focalizado10fronteras+casoconjunto cuatrovariantes, ambas elecciones UIreal cancelar/reabrir/confirmar yUUIDgenerados porUI hastaACK/convergencia; conservar29escenarios completos disponibles sinatribuirlos a esta ejecución. SSR/guardias/DoD/cleanup/plan/log/mismo commitpushint/HEAD/cuotas antesdepublicar caller.
+
+## 19z8 — Continuación puntual del18oct a las17:23
+
+- Objetivo: programar la continuación solicitada para hoy18oct2026,17:23 Europe/Madrid, desde últimoHEAD cerrado deint.
+- target_paths: plan/{iterations,workflow,iteration-log}.md yheartbeat gestionado existente; sin código deproducto.
+- Dependencias: código c42bde7/cierre667c950 publicados, repo limpio y22%5h/59%7d. Reservas10%/1%, noabrir implementación ahora.
+- Aceptación: reutilizar continuar-el-plan-a-las-21-19 mediante automation_update, nombre17:23/ACTIVE/COUNT1 y mismochat/política failed_runs_only verificados. Reset realpublicado1792336934/17:22:14 deja46segundos: comprobar renovación/cuotas reales aldespertar, sin asumirlas porreloj. Pausar alconcluir yno crearotracadena.
+- Validación: horario/fecha/prompt/estado/chat/política guardados yverificados, referencias/coherencia/diff; ConventionalCommit/pushorigin/int/HEADremoto/cuotas. Reanudar19e5b UIguardada yprueba real antes deconectarAjustes, después dependencias vigentes. No producción ni repeticiónfísica.
+- Estado: completado; programación puntual yhandoff actualizados mediante herramienta deapp.
+
+## 19z7 — Cierre puntual18oct12:22
+
+- Objetivo/target_paths: cierre seguro en plan/{master,iterations,workflow,iteration-log}.md ypausar elheartbeat puntual existente.
+- Dependencias: cuatro cortes publicados6165517/8a5e99d/ec623bf/c42bde7, HEADorigin exacto ysin cambios ajenos. Lectura24%5h/59%7d, reservas10%/1%.
+- Aceptación: recursos propios retirados, mainhumano preservado, heartbeatPAUSED mismochat/política verificado ysin otra programación. No abrir conexiónUI+Next cuyo costeobservado conreparación/cierre pueda cruzar reserva;19e5b queda candidato completo.
+- Validación:29Next6 backend/11IndexedDB propios/923tests yDoD cerrados enrespectivos cortes; este cierre sólo referencias/coherencia/diff/ConventionalCommit/pushint/HEAD/cuotas. No producción/DBusuario ni nueva checklistfísica.
+- Estado: completado; automatización pausada mediante herramienta deapp yconfiguración guardada verificada.
+
+## 19e5b — Delimitación previa (completada arriba)
+
+- Estado histórico: completada en la entrada19e5b vigente; se conserva esta delimitación como antecedente.
+- Objetivo: ofrecer revisión conjunta desde SyncIncidentActions sólo para planpropio simple/conflicto; capturar comparación mediante featurecuenta/epoch yofrecer elecciones únicamente trasvalidación completa. Confirmación conUUIDs estables enref, noelección porDTOajeno; cancelación noescribe, stale obligarevisar, invalidación sólo caché de cuenta/época.
+- target_paths previstos: nuevo src/features/sync/components/plan-category-incident-actions.tsx, sync-incident-actions.tsx, pruebasUI, test/next-settings-sync/features/{plan-category-resolution-ui,plan-category-recovery,local-client,device-client,controller} yschemas/next-sync-test.ts/plan/**.
+- Dependencias:19e3b1/b2/19e4/19e5a cerrados. Reutilizar diálogo preparado yfeature guardada, no ampliar alcance aapariciones/ausencia remota/cadenas externas. No nuevos comandos/protocolo/índice.
+- Aceptación/validación: ambas elecciones UIreal con cancelar/reabrir/confirmar yUUID generados porUI hastaACK remoto único/convergencia porcohorte enNext/Mongo/dosorígenes propios. La evidencia29Next6 cerrada cubre backend; recorridoUI específico puede ejecutar sólofrontera+casoconjunto paraevitar repeticiones deotros diálogos, sin atribuirle las29regresiones. Si se selecciona modo focalizado, validarlo expresamente ymantener suitecompleta disponible. SSR/guardias/DoD/cleanup/plan/log/commitpushint/HEAD/cuotas antes deactivar caller. Concretar corte ypresupuesto antes deeditar.
+
+## 19e5a — Preview conjunto y opciones revisadas (sin caller activo)
+
+- Estado: completado; seis tests SSR/76aserciones ytest puro/5aserciones;DoD923pass/223skip/0fail.
+- Objetivo: preparar diálogo fiel decontenido/asignación ycontrato de opciones sobre snapshot ya capturado, antes de la conexión UIinteractiva19e5b.
+- target_paths: src/lib/sync/plan-category-resolution{,.test}.ts, src/features/sync/components/{plan-category-incident-resolution-dialog.tsx,plan-category-incident-ui.test.tsx} yplan/**.
+- Dependencias:ec623bf publicado,29Next6 completos ywriter/backup aprobados.28%5h/60%7d, reservas10%/1%; no abrir toda integraciónUI+Next si reparación/cierre pueden cruzarlas. Skill React/guíasNext ya consultadas; secuencial.
+- Aceptación: adoptar muestra plan/vista remotos conocidos yretry borrador/asignación locales, nombre/color local sólo cuando identidad coincide; categoría desconocida se indica sininventar nombre. Estado/checklist/fecha/revisiones visibles,radio de elección yconfirmación española compacta, cancelación yguardias busy heredadas. Opciones compactas noautorizan escritura: writer reread completo obligatorio. Sin caller activo ni cambio aSyncIncidentActions.
+- Validación: SSR cuatrovariantes, ambas elecciones,preview/guardias/unknown ytextos; tests purechoice, DoD/plan/log/mismo commitpushint/HEAD/cuotas.19e5b deberá conectar lectura guardada/cuenta/epoch/IDsestables/cache yprobar cancelar/reabrir/confirmar enNext real antes deactivar.
+
+## 19e4 — Recuperación conjunta con productores y Mongo/Next reales
+
+- Estado: completado;29Next6 con cuatrovariantes ydos pérdidas derespuesta aprobados, DoD916pass/223skip/0fail.
+- Objetivo: demostrar adopción/retry de contenido+categoría en cuatrovariantes con productores reales, sesiones persistidas ydosorígenes IndexedDB antes deUI.
+- target_paths: src/schemas/next-sync-test{,.test}.ts, test/next-settings-sync/features/{plan-category-recovery,local-client,device-client,controller}.template ylos cuatro adaptadores *resolution-ui.tsx.template para estrechar unionbackup ampliado, yplan/**.
+- Dependencias:8a5e99d publicado,88%5h/69%7d yreservas10%/1%;19e3b1/b2 aprobados. Docker28.4.0 yMongo pinnedamd64 revalidados. Skill React/guíasNext instaladas consultadas.
+- Extensión por diagnóstico: src/lib/db/next-sync-fixture.ts ysrc/lib/sync/next-settings-fixture-journal{,.test}.ts; el snapshot diagnóstico debe recorrer páginas productivas de100 hasta checkpoint completo, sinampliar límites del transporte ni omitir historia. Queries existentes de journal, sin nuevos índices.
+- Aceptación: conflicto CAS real consaveLocalPlan/progreso, cohorte exacta yvista nointentada; decisión local no toca Mongo. CASindependientes,0o2ACK remotos nuevos, originales/outcomes intactos, respuestaperdida decontenido yvista/recarga/replay sinrecibos duplicados, peer observa estado intermedio válido yconvergencia exacta porcohorte. Guardias cuenta/epoch/stale antesdeescritura. Mantener otros históricos bloqueados, no convergencia global niGoogle físico.
+- Validación: Next6 compilado/defaults/BetterAuth persistido conescenario adicional y28regresiones, prueba de schema estricto, DoD/cleanup/plan/log/mismo commitpushint/HEAD/cuotas. SóloMongo/browser propios; noUI nueva/DBusuario/índice/wireproductivo.
+
+## 19e3b2 — Persistencia conjunta atómica y guardias de cuenta
+
+- Estado: completado; once checks IndexedDB reales propios yDoD910pass/223skip/0fail.
+- Objetivo: cerrar writer local durable de contenido+asignación usando captura19e3a yportabilidad19e3b1, todavía sin UI conjunta.
+- target_paths: src/lib/local-db/{plan-category-resolution.ts,sync-store.ts}, src/features/sync/local-plan-category-resolution.ts, test/browser/plan-category-resolution.ts, scripts/browser-test-server.ts yplan/**.
+- Dependencias:6165517 publicado/HEADremoto exacto,94%5h/70%7d, reservas10%/1%. Secuencial; no nuevo wire/índice/DBusuario.
+- Aceptación:9stores enmismaTX para reread+item/view+superseded+0/2reemplazos+counter+recibo, vista depende sólo delnuevoUUIDcontenido. Replay previo valida petición/recibo yno reescribe estado posterior. IDs contra cola/metadata ycapacidad/counter antes deguardar. Feature6 valida cuenta/epoch antes/después; notificar sólo commit aplicado.
+- Validación: IndexedDB real propio stale/foreign/epoch, fallotardío/rollback completo, UUIDmetadata/reutilizado/overflow/capacidad, replaytrasnuevasediciones ybackup portable pendiente/intentado. DoD/cleanup/plan/log/mismo commitpushint/HEAD/cuotas; luego19e4 Next/Mongo antes de19e5 UI.
+
+## 19e3b1 — Evidencia portable de decisión conjunta
+
+- Estado: completado; ocho tests/47aserciones, DoD910pass/223skip/0fail.
+- Objetivo: cerrar validación de backup3 del registro conjunto preparado, sin activar writer ni UI.
+- target_paths: src/{schemas/local-recurring-backup.ts,lib/backup/{local-backup.ts,plan-category-resolution-evidence.ts,plan-category-resolution-backup.test.ts}}, src/lib/backup/plan-category-resolution-fixture.ts y plan/**.
+- Dependencias:19e1/19e2/19e3a y e14cc2f publicados, int/origin exactos ymain humano limpio. Renovación real100%5h/71%7d; reset1792336934, reservas10%/1%. Continuación puntual12:22 autorizada, sin nueva cadena.
+- Aceptación: rama explícita para expected.incident+viewIntentions, replantear recibo, originales exactos enambosdominios yACKs directos contra outcomes reales, dosreemplazos consecutivos conCASindependientes yúnicadependencia vista→contenido. SinACK por supersesión, ni borrar evidencia, ni validar proyección final contra un estado anterior.
+- Validación: roundtrip/adopción/retry/pendingintentado/respuestaperdida, corrupción/truncado/ACKfabricado/IDs/orden/dependencias/originales; suite/lint/tipos/Webpack/worker/plan/log/commitpushint/HEAD/cuotas. Después19e3b2 TXlocal/guardias/pruebaIndexedDB antes de19e4 remoto y19e5 UI.
+
+## 19z6 — Continuación puntual del18oct a las12:22
+
+- Objetivo: programar la continuación solicitada por el usuario para hoy18oct2026,12:22 Europe/Madrid, desde el último commit completo deint.
+- target_paths: plan/{iterations,workflow,iteration-log}.md y heartbeat gestionado existente; sin código de producto.
+- Dependencias: código0665080 y cierre b2c2d99 publicados, repo limpio; lectura real8%5h/71%7d, reservas10%/1%. No abrir implementación ahora.
+- Aceptación: reutilizar continuar-el-plan-a-las-21-19 mediante automation_update, ACTIVE/puntual/COUNT1, mismochat ynotificación failed_runs_only. Verificar cuotas al despertar; reset publicado1792318896 (12:21:36Madrid), sólo24segundos antes de la hora humana solicitada, nunca asumir renovación por reloj. Pausar al terminar, sin nueva cadena.
+- Validación: configuración guardada verificada, referencias/coherencia/diff; mismo ConventionalCommit ypushorigin/int/HEADremoto/cuotas. Siguiente19e3b durable/portable, luego19e4 remoto y19e5 UI según dependencias. No repetir checklist física aceptada ni tocar producción.
+- Estado: completado; horario/chat/política verificados tras actualizar la automatización.
+
+## 19e3b — Decisión conjunta durable y portable (dividida)
+
+- Estado: portable19e3b1 ywriter19e3b2 cerrados. Siguiente19e4 prueba Next/Mongo conproductores reales antes deUI19e5; renovación12:22 comprobada.
+- Objetivo: usar queueLocalPlanCategoryResolutionCapture dentro de unaTX readwrite de9stores y persistir item/view, supersesión explícita de toda la cohorte, cero o dosreemplazos, counter yrecibo. El segundo reemplazo debe depender exclusivamente delUUIDnuevo decontenido; CASdeitem yvista independientes.
+- target_paths previstos: nuevo src/lib/local-db/plan-category-resolution.ts, LocalSyncStore/feature guardada, schemas/local-recurring-backup.ts, lib/backup/local-backup.ts, pruebas propias yplan. Concretar el corte antes de editar.
+- Dependencias:19e1/19e2/19e3a preparados,0665080 publicado; noactivar UI todavía. No nuevos comandos/protocolos/índices remotos.
+- Aceptación: replay previo no reescribe cambios posteriores; reread de clausura/categoría/vista/remotos en mismaTX, cuenta/epoch antes/después, IDsglobales también contra metadata, capacidad de0/2ops+1recibo/counter seguro. Mantener UUID/payload/deps/intentadas/outcomes/tombstones originales; superseded noACK.
+- Portable: registro19e2 todavía NO pertenece alunionbackup3. Añadir rama específica: expected contiene incident+viewIntentions, no reutilizar a ciegas expected.intentions del flujo común. Verificar originales deambosdominios, ACKs previos contra historia/outcomes reales yambosreemplazos exactos (usuario/entidad/fecha/secuencia/payload/dep). No inferir recibo deunACK capturado ni permitirdescartar dependientes.
+- Validación: stale/foreign/epoch/late-rollback (también view/counter/recibo), IDreuse/overflow/capacidad, replaytrasnuevaedición, backupválido/truncado/corrupto ypendingintentado sinACK. Después19e4 conflicto real deproductores/Next/Mongo/dosparticiones/respuestaperdida/recarga/CASindependientes/convergencia porcohorte; sólo entonces19e5 UI completa. Dividir antes de abrir si no cabe entrega cerrada.
+
+## 19z5 — Cierre puntual del lote07:21
+
+- Objetivo/target_paths: cierre seguro yhandoff en plan/{master,iterations,workflow,iteration-log}.md; pausar heartbeat gestionado existente.
+- Dependencias: nueve cortes de código completos, último0665080 publicado/HEADremoto exacto,16%5h/72%7d yreserva10%/1%.
+- Aceptación/validación: repo coherente ysin cambios ajenos, recursos propios limpios, mainhumano intacto, lectura real de cuotas, referencias/coherencia/diff; mismo ConventionalCommit/pushint/HEAD/cuotas. No código parcial, nueva cadena ni producción.
+- Estado: completado; continuar-el-plan-a-las-21-19 pausado mediante automation_update, mismochat/política/COUNT1 conservados.
+
+## 19e3a — Captura conjunta en una transacción local
+
+- Estado: completado; ocho checks IndexedDB propios, lector privado sin nuevas elecciones ni escrituras.
+- Objetivo: reconstruir snapshot conjunto19e2 dentro de unaTX IndexedDB compartida por todo elgrafo, vista/categoría/shadow remotos actuales.
+- target_paths: src/lib/local-db/plan-category-resolution-capture.ts, src/types/plan-category-resolution.ts, test/browser/plan-category-capture.ts, scripts/browser-test-server.ts yplan/**.
+- Dependencias:be34aaa publicado,23%5h/73%7d yreservas10%/1%; captura pura19e2/guardia19e1 aprobadas. Corte secuencial menor que writer+portable+integración, no abrir éstos ahora.
+- Aceptación: unaTX de9stores, peticiones síncronas sinIO externo; actor/partición/UUID revalidados ytodos los registros completos antes de devolver. Reutilizar lectorevidencia/cola, leer vista yshadow exactos porID; falta de remoto noes permiso. Categoría local ausente capturada comonull; helpers obligan relectura futura enTX deescritura. Lectura no modifica cola/evidencia ni fabricaACK.
+- Validación: IndexedDB propio readonly exacto/stale deotra versión/independientes/actor/ausencias/corrupción/intentadas/dependientes/reapertura; DoD/cleanup/plan/log/mismo commitpushint/HEAD/cuotas. Siguiente19e3b writer+portable/rollback/replay, luego Next/UI; sinMongo/DBusuario/índices nuevos.
+
+## 19c8 — Capacidad posterior de recuperación común y zona
+
+- Estado: completado; ocho checks IndexedDB propios aprobados.
+- Objetivo: aplicar el mismo límite completo de outbox/metadata a decisiones activas comunes/settings, incluyendo copia que añade un item.
+- target_paths: src/lib/local-db/{sync-resolution,settings-resolution}.ts, test/browser/resolution-capacity.ts, scripts/browser-test-server.ts yplan/**.
+- Dependencias:820596b publicado,31%5h/75%7d yreservas10%/1%; schema compartido19d2 yguardia19c7 probados. Secuencial.
+- Aceptación: antes de escribir, contar todas las filas posteriores (replacement+recibo ycopy cuando corresponde), rechazar exceso sincompactarhistoria. Replay durable anterior a los límites no reescribe ni duplica. Adoptar permitecola llena si no añadeoperación.
+- Validación: IndexedDB propio para comunes/settings conmetadata/cola llenas, frontera exacta/replay ycopialimitada; suite/lint/tipos/Webpack/worker/cleanup/plan/log/mismo commitpushint/HEAD/cuotas. NoRPC/Mongo/DBusuario/índices/wire nuevos. Continuar19e3 sólo si cabe corte completo.
+
+## 19e2 — Contrato puro de decisión conjunta
+
+- Estado: completado; nueve tests/78 aserciones, sin escritura/backup/UI nueva.
+- Objetivo: capturar comparación compacta de contenido/asignación/categoría con clausura de cola completa y planificar adoptar ambos remotos o reenviar ambos borradores como dos operaciones nuevas enlazables.
+- target_paths: src/{schemas/plan-category-resolution.ts,types/plan-category-resolution.ts,lib/sync/{plan-category-resolution,plan-category-resolution.test}.ts} yplan/**.
+- Dependencias:7cad063 publicado,37%5h/76%7d yreservas10%/1%; clasificador19e1 yplanners remotos comunes existentes. Secuencial.
+- Aceptación: snapshot exacto de contenido/vista/categoría yprerrequisitosACK directos, sin congelar historia independiente. Revalidar clausura concola completa antes de cada planificación; snapshot compacto nuncaautoriza escritura por sí mismo. Adoptar no generaoperaciones; retry genera content+view UUIDdistintos/CASindependientes, mismoitem, categoría propia viva conocida, sinorden/copias/resurrección. Registro replanteable conserva todoslosIDsoriginales, estados/intenciones/outcomes sinmodificar.
+- Validación: cuatrovariantes/preview completo, reglas puras de los executors de contenido/vista yCASindependiente, cuenta/epoch no inferido, captura obsoleta, vistas faltantes/tombstones/categoría no confirmada, dependencias/identidades/corrupción. DoD/plan/log/mismo commitpushint/HEAD/cuotas. SiguienteTXlector/portable/rollback/Next real antesUI.
+
+## 19e1 — Cohorte segura de contenido y asignación
+
+- Estado: completado; nueve tests/45 aserciones, sin nuevas elecciones.
+- Objetivo: demostrar con cola completa cuándo se puede revisar conjuntamente un conflicto de plan simple y sus asignaciones item-view.set dependientes, preservando otros datos.
+- target_paths: src/{schemas/plan-category-recovery-chain.ts,lib/sync/{plan-category-recovery-chain,plan-category-recovery-chain.test}.ts} yplan/{master,iterations,workflow,conflict-recovery,iteration-log}.md.
+- Dependencias:868a173 publicado,42%5h/76%7d yreservas10%/1%; recuperación común ycatálogo6 activos, categorías19d4 cerradas. Secuencial.
+- Aceptación: grafo completo propio/ordenado sin truncar, cadena decontenido exacta y asignaciones delmismo plan sólo pendingattempt0; dependencias fuera de cohorte sóloACK, dependientes externos o movimientos del mismo plan bloqueados aunque falte arista. Normalizar guardia común únicamente después de demostrar clausura; no modificar UUID/payloads/deps/estado ni anunciarACK/permisos.
+- Validación: cuatro variantes, intercalado, cuenta/IDs/refs incompletos, intentadas/leases/rechazos, incoming/outgoing/ACK/superseded, recurrencia/borrados ysemántica de movimientos; DoD/plan/log/mismo commitpushint/HEAD/cuotas. Después contrato deelección/snapshots completos yTX/evidencia/pruebas reales antesUI. SinMongo/DBusuario/índices/wire nuevos.
+
+## 19d4 — Elecciones de categoría visibles en Ajustes
+
+- Estado: completado; dos tests SSR/30 aserciones y 28 escenarios Next6 con diálogos reales aprobados.
+- Objetivo: ofrecer adopción/retry de nombre/color ya probado, conpreview/confirmación/UUIDestables yexplicación delorden remoto conservado.
+- target_paths: src/features/sync/components/{tag-incident-actions,tag-incident-resolution-dialog,tag-incident-ui.test,sync-incident-panel.test,personal-incident-card,personal-incident-version}.tsx, src/schemas/next-sync-test.ts, test/next-settings-sync/features/{tag-resolution-ui.tsx,tag-recovery.ts,local-client.ts,device-client.ts}.template yplan/**.
+- Dependencias:e905112 publicado,65%5h/80%7d yreservas10%/1%;28Next6 reales aprobados. GuíaNext useclient/serveractions yskill React consultadas; secuencial, sinnuevo destino.
+- Aceptación: cuenta propia6/guardias ychoices coinciden conplanner; selección congela comparación, cancelar noescribe, IDsse conservan alconfirmar. Previewnombre/color yposición remota exactos; historial/pendiente/nuevo conflicto explicados, sinresucitar borrado/orden/cadenas externas. Cachés sólo cuenta/época propia.
+- Validación: SSR deacciones/actor/guardias/preview/colores ydiálogo real enconflictoNext, cancelar/reabrir/confirmar/adopción/retry continuando respuesta perdida/recarga/ACK28Next6; DoD/cleanup/plan/log/mismo commitpushint/HEAD/cuotas. NoGoogle/DBusuario/protocolo/índices nuevos.
+
+## 19d3 — Recuperación de categoría con Next y Mongo reales
+
+- Estado: completado;28Next6 aprobados concleanup propio; UI todavía oculta hasta19d4.
+- Objetivo: generar conflictos reales de nombre/color con productores tag.save, resolver adopción/retry mediante feature y confirmar replay/ACK/convergencia exacta de esa categoría en dosparticiones.
+- target_paths: src/schemas/next-sync-test.ts, test/next-settings-sync/features/{tag-recovery.ts,local-client.ts,device-client.ts,controller.tsx}.template yplan/**.
+- Dependencias:d92a8f5 publicado,82%5h/83%7d yreserva10%/1%; contrato/executor/backup19d1–2 aprobados. Docker/imagenpinned propios a revalidar; Nextinstalado consultado.
+- Aceptación: guardias deactor/epoch/stale sinmutación; adopción noescribeMongo/ACK, retry conserva posición remota/nombrecolorlocal yhistoria; respuestaperdida trascommitreal mantiene mismoUUIDpendingattempt1, recarga antesACK yreplay genera unúnico receipt/journal/ACK. Proyección/shadow/cursor iguales aMongo endosorígenes para esa categoría; no convergencia global dehistorias bloqueadas aparte.
+- Validación:28Next6 compilado/defaults/BetterAuth persistido/Mongo/IndexedDB propios, mismos27previos, cleanupown, suite/lint/tipos/Webpack/worker/plan/log/mismo commitpushint/HEAD/cuotas. NoGoogle ni pruebasfísicas nuevas/DBusuario.
+
+## 19d2 — Decisión de categoría durable y portable
+
+- Estado: completado; cinco checks IndexedDB propios, UI oculta hasta prueba remota real.
+- Objetivo: guardar categoría elegida, supersesión explícita, reemplazo/counter yrecibo en unaTX local; replay sinreescritura ybackup íntegro.
+- target_paths: src/{schemas/{local-resolution-capacity,plan-occurrence-resolution,local-recurring-backup}.ts,lib/local-db/{tag-resolution,sync-store}.ts,lib/backup/local-backup.ts,features/sync/local-tag-resolution.ts,lib/sync/tag-resolution.test.ts}, test/browser/tag-resolution.ts, scripts/browser-test-server.ts yplan/**.
+- Dependencias: fed43db publicado,87%5h/84%7d yreservas10%/1%; planner/guardia19d1 preparados, schema completo/evidencia existentes. Secuencial.
+- Aceptación: cuenta/partición/snapshot/dependencias/UUIDglobales/counter/capacidad revalidados antes deguardar; originales youtcomes intactos como superseded, sinACK local; notificar sólo trascommit. Registro portable replanteado exige cada reemplazo/original exacto; antiguos lectores rechazan metadata desconocida sinborrar. Feature conserva cuenta/epoch6.
+- Validación: pruebas puros debackupalterado/truncado, IndexedDB propio stale/foreign/dependiente/late-rollback/replaytrasnuevaedición/notificación ypersistencia, regresión capacidad/apariciones/settings; DoD/cleanup/plan/log/mismo commitpushint/HEAD/cuotas. SinMongo/DBusuario/wire/índices nuevos; siguiente19d3 evidencia remota antesUI.
+
+## 19d1 — Contrato puro de recuperación de nombre/color de categoría
+
+- Estado: completado, contrato puro; sin nuevas elecciones UI.
+- Objetivo: adoptar una categoría remota viva conocida o reenviar el nombre/color local conUUID/CAS nuevos, conservando el orden remoto. Sólo cadenas aisladas tag.save; movimientos/borrado/asignaciones/dependencias externas siguen protegidos.
+- target_paths: src/{schemas/tag-resolution.ts,types/tag-resolution.ts,lib/sync/{tag-resolution,tag-resolution.test,incident-snapshot}.ts} y plan/{master,iterations,conflict-recovery,iteration-log,workflow}.md.
+- Dependencias:699ec2a publicado y93%5h/84%7d, reservas10%/1%. Evidencia personal/snapshot/exec remoto tag.save ya activos6. Secuencial.
+- Aceptación: validar cuenta/identidad/toda cadena/snapshot/outcome exactos, revisions observadas sinancestro inventado, nombres duplicados del catálogo; adoptar sinACK, retry sólo nombre/color conposición remota. Registrar decisión replanteable, sin escritura/backup/UI todavía. Bloqueos de dependencia externa calculados también para categorías.
+- Validación: planner/registro/actores/frescura/tombstones/IDs/catálogo/cadenas yregresión de incidentes/settings; DoD completo/plan/log/mismo commitpushint/HEAD/cuotas. NoMongo/índices nuevos niDBusuario.
+
+## 19c7 — Capacidad posterior antes de recuperar apariciones
+
+- Estado: completado; cinco checks IndexedDB propios y876tests aprobados.
+- Objetivo: rechazar una decisión nueva si sus reemplazos o recibo exceden los10.000 registros que los lectores capturan íntegros; no borrar ni compactar historia.
+- target_paths: src/schemas/plan-occurrence-resolution.ts, src/lib/local-db/plan-occurrence-resolution.ts, src/lib/sync/plan-occurrence-resolution.test.ts, test/browser/appearance-resolution-capacity.ts, scripts/browser-test-server.ts y plan/{master,iterations,workflow,conflict-recovery,iteration-log}.md.
+- Dependencias: e2973c2 local/originint exactos y limpios; renovación100%5h/85%7d, reset1792318896, reserva10%/1%. Continuación puntual secuencial; guíaNext instalada consultada.
+- Aceptación: suma posterior de outbox ymetadata validada antes de escrituras; adopción cuenta cero reemplazos y un recibo; retry cuenta todos losreemplazos y un recibo, contador yaexistente no añade fila. Replay previo continúa sin escrituras aunque no quede capacidad. Preservar todoestado alrechazar, sinACK nuevo. No índices/DBusuario/wire nuevos.
+- Validación: schema estricto/fronteras0/1/103/exceso/enteros, IndexedDB nativo con cola/metadata llenas ycomparación exacta antes/después, éxito hasta ellímite yreplay; suite/lint/tipos/Webpack/worker/diff, plan/log mismo commitpushint/HEAD/cuotas. No nueva pruebaGoogle ni física.
+
+## 19z4 — Continuación puntual18oct07:21
+
+- Objetivo: programar la continuación solicitada para hoy18oct2026 a las07:21 Europe/Madrid, sin abrir código con8%5h/86%7d.
+- target_paths: plan/{iterations,workflow,iteration-log}.md yheartbeat gestionado existente.
+- Dependencias: dc325ce publicado, ramaint limpia; último códigobfa0fc5 y19c7 candidata vigente.
+- Aceptación: reutilizar continuar-el-plan-a-las-21-19 conhora07:21, ACTIVE/COUNT1, mismochat yfailed_runs_only; verificar cuota real aldisparar. Resetpublicado1792300836 (07:20:36Madrid), reserva10%5h/1%7d. Mantenerhora humana aunque margen alreset sea24segundos, sin asumirrenovación. Pausar alconcluir, sin nuevacadena.
+- Validación: configuración gestionada comprobada, referencias/coherencia/diff; mismoConventionalCommit/pushint/HEAD/cuotas. Sin pruebas físicas repetidas ni producción.
+- Estado: completado; programación verificada medianteherramienta ylectura deconfiguración.
+
+## 19c7 — Próxima candidata: capacidad posterior a la resolución
+
+- Estado: candidata histórica de cierre bfa0fc5; completada en699ec2a durante continuación07:21.
+- Objetivo: antes de escribir una cadena nueva ysu recibo, validar que el total posterior deoutbox/metadata siga dentro dellímite de captura completa existente. No borrar historia para hacer sitio ni reescribir pendientes. La lectura ya rechaza exceso de10.000registros; falta garantizar límite después deañadir reemplazos/recibo.
+- target_paths previstos: schemas/planner/ejecutor local deapariciones, pruebas de frontera yplan; cerrar rutas/aceptación/alcance antes de editar. Sin IOremoto/índices/DBusuario. Después retomar contenido+categoría, otraspreferencias ycasos recurrentes protegidos; accesibilidad siguependiente.
+
+## 19z3 — Cierre puntual del lote de apariciones
+
+- Objetivo/target_paths: registrar cierre seguro yestado vigente en plan/{master,iterations,workflow,iteration-log}.md; pausar heartbeat gestionado existente.
+- Dependencias: bfa0fc5 publicado/HEADremoto exacto, seis cortes19c1–6 completos,13%5h/86%7d yreserva10%/1%.
+- Aceptación/validación: repo coherente, recursos propios limpios, guía ypendientes exactos, referencias/diff; mismo commitpushint/HEAD ycuota real. Sin otra cadena programada, pruebas físicas repetidas, código oproducción.
+- Estado: completado; heartbeat continuar-el-plan-a-las-21-19 pausado por automation_update.
+
+## 19c6 — Elección visible de reenvío de aparición
+
+Estado: completado; adopción/retry activos con27Next6 ydiálogo real aprobados.
+
+- Objetivo: ofrecer retry ya probado con preview local completo, confirmación yUUIDestables, junto a adopción existente.
+- target_paths: src/features/sync/components/{plan-occurrence-incident-actions,plan-occurrence-resolution-dialog,plan-occurrence-resolution-ui.test}.tsx, test/next-settings-sync/features/appearance-retry-local-proof.ts.template y plan/**.
+- Dependencias:46944ac publicado,32%5h/89%7d, reservas10%/1%;27Next6 prueban cola/backup/ACK reales yrecarga. GuíasNext/skill React ya consultadas. Corte secuencial.
+- Aceptación: ofrecer sólo elecciones seguras ypropias; preview de todo elborrador elegido ycancelación cuando corresponda. Explicar sustitución revisada/historial, pendiente deconfirmación, ausencia defusión automática yestado intermedio enpeer. Generar todoslosIDs una solavez alconfirmar; cancelar noescribe. Remoto cancelado/tombstone no permite retry. Cuenta/epoch/caché guardados.
+- Validación: SSR deopciones/preview/guardias ydiálogo real cancelar/reabrir/confirmar, continuandorespuestaperdida/recarga/replay/ACK27Next6; suite/lint/tipos/Webpack/worker/cleanup/plan/log/commitpushint/HEAD/cuotas. Sin nuevos destinos, DBusuario, formato remoto oíndices.
+
+## 19c5 — Retry durable de toda la aparición y ACK reales
+
+Estado: completado;27Next6 correctos, retry durable/backup preparados y botón todavía oculto.
+
+- Objetivo: cerrar escritura de toda la cadena, evidencia portable yprueba remota real antes de ofrecer retry en UI.
+- target_paths: src/{lib/local-db/plan-occurrence-resolution.ts,lib/backup/local-backup.ts,lib/sync/plan-occurrence-resolution.test.ts,schemas/next-sync-test.ts}, test/next-settings-sync/features/** y plan/**.
+- Dependencias:71350a4 publicado,53%5h/93%7d, reservas10%/1%; planner completo19c4 yadopción activa19c3. Secuencial, sin cambios remotos de protocolo/índices.
+- Aceptación: todos los reemplazos/counter/proyección/recibo/superseded juntos enunaTX; UUID/distinción/overflow/cuenta/epoch/dependencias revalidados. Backup exige cadaoperación/dependencia/orden/fecha exactos youtcomes trasACK; replay conserva cambios posteriores. CadaACKreal único, respuestaperdida mantiene primeros intentos yresto sinintento; contenido/checklist/progreso/cancelación finales iguales aMongo en dosparticiones. No atomicidad remota multicomando ni convergencia global ante casos bloqueados aparte.
+- Validación: backup válido ytruncado/corrupto, late-rollback de cadena/counter/recibo, guardias yNext/Mongo/IndexedDB propios con productores reales, peer ve etapa intermedia antesdeconvergencia, replay/ACK final/recarga. Suite/lint/tipos/Webpack/worker/cleanup/plan/log/commitpushint/HEAD/cuotas. UI retry oculta hasta19c6.
+
+## 19c4 — Plan puro de reenvío completo de aparición
+
+Estado: completado; sólo planner preparado, retry rechazado por executor/backup y oculto en UI.
+
+- Objetivo: preparar un reintento de toda la excepción local usando comandos existentes, sin introducir protocolo/comando remoto nuevo.
+- target_paths: src/{schemas/plan-occurrence-resolution.ts,lib/sync/{plan-occurrence-resolution,plan-occurrence-retry,plan-occurrence-resolution.test}.ts,lib/local-db/plan-occurrence-resolution.ts,lib/backup/local-backup.ts} y plan/**.
+- Dependencias:dca6b47 publicado,60%5h/94%7d, reservas10%/1%; adopción activa19c3. Secuencial, planner sólo; executor/backup rechazan retry hasta su siguiente corte coherente.
+- Aceptación: contenido/horario/checklist/progreso/cancelación completos elegidos explícitamente, cadena nueva de1–103 comandos soportados conUUIDdistintos yCAS previsto porpaso. Registro conserva reemplazos ordenados yoriginales. No resucitar remoto cancelado/tombstone, no inferir ancestro niACK. Adopción yrecibos existentes inalterados; no ofrecer botón retry antes executor/backup/prueba real.
+- Validación: planner remoto real puro porpaso, predicción deCAS yACK directo sin alterar payloads, máximo100pasos/cancelación, identidades/cantidad/rango yguardias; regresiónadopción/backup yDoD completo/plan/log/commitpushint/HEAD/cuotas. Sin DBusuario, índices odependencias nuevas.
+
+## 19c3 — Adopción visible de aparición en Ajustes
+
+Estado: completado; elección activa con26Next6 ydiálogo real aprobados.
+
+- Objetivo: habilitar la elección de remoto conocido ya probada, con preview completo de excepción yconfirmación explícita.
+- target_paths: src/features/sync/components/{plan-occurrence-incident-card,plan-occurrence-incident-version,plan-occurrence-incident-actions,plan-occurrence-resolution-dialog,plan-occurrence-resolution-ui.test,sync-incident-panel}.tsx, test/next-settings-sync/features/{appearance-recovery,appearance-resolution-local-proof,appearance-resolution-ui}*.template y plan/**.
+- Dependencias:90dbb27 publicado,75%5h/96%7d, reservas10%/1%;26Next6 prueban executor/backup reales. GuíasNext yskill vercel-react-best-practices consultadas; secuencial.
+- Aceptación: sólo comparación completa propia segura ofrece adopción, sin retry/copia. Preview muestra título/descripción/horario completo/estado/checklist/cancelación yfechaoriginal, cuenta toda la cadena revisada, explica historial sinACK/cambio de otros días o padre. Cancelar noescribe; confirmar utiliza feature real, UUIDestable ycache sólo cuenta/epoch. Casos bloqueados conservados sin botón.
+- Validación: SSR de opciones/guardias/preview ydiálogo real cancel/reabrir/confirm dentro de conflicto Next/Mongo/IndexedDB;26escenarios/DoD completo/cleanup/plan/log/commitpushint/HEAD/cuotas. Sin nuevo destino, cambios DB oíndices.
+
+## 19c2 — Adopción durable y evidencia portable de aparición
+
+Estado: completado;26Next6 correctos y escritura/backup probados, UI pendiente.
+
+- Objetivo: persistir adopción sin ACK en la misma TX de proyección/cola/evidencia y probar conflicto remoto real antes de UI.
+- target_paths: src/{lib/local-db/{plan-occurrence-resolution,sync-store}.ts,lib/backup/local-backup.ts,schemas/{local-recurring-backup,next-sync-test}.ts,features/sync/local-plan-occurrence-resolution.ts}, pruebas delplanner/backup, test/next-settings-sync/features/** y plan/**.
+- Dependencias: bfba03c publicado,93%5h/99%7d, reservas10%/1%; contrato puro19c1. Next instalado consultado, Docker28.4.0/imagen pinnedamd64 revalidados. Secuencial.
+- Aceptación: reconstrucción de9stores enmismaTX, actor/epoch/IDs/counter/evidencia exactos, sólo slot elegido ycadena revisada, registro+superseded juntos, notificación trascommit yreplay sinreescribir cambios posteriores. Backup3 reconoce/revalida metadata local nueva, sin cambiar wire6/intenciones1/evidencia2. Guardias externas se revalidan con cola completa, sin borrar odesbloquearotros slots. No UIactivada.
+- Validación: backup válido/corrupto/rechazolectorprevio yNext/IndexedDB/Mongo propios con productor real, conflictos CAS, stale/cuenta/epoch/rollback tardío, adopción sinrecibo remoto yreplay posterior, proyección/cursor exactos por serie en dosparticiones, cancelación remota. Suite/lint/tipos/Webpack/worker/cleanup/plan/log/commitpushint/HEAD/cuotas.
+
+## 19c1 — Contrato puro de adopción de una aparición
+
+Estado: completado; preparación pura, sin elecciones activadas.
+
+- Objetivo: preparar adopción explícita de la excepción remota conocida de un único slot, sin modificar padre/otros slots ni fabricar ACK.
+- target_paths: src/{schemas,types,lib/sync}/plan-occurrence-resolution.ts, src/lib/sync/plan-occurrence-resolution.test.ts y plan/**.
+- Dependencias: a76721b/originint exactos y limpios;19c0 detecta dependientes externos. Renovación real100%5h/100%7d, reset nuevo1792300836, reservas10%/1%. Secuencial, sin activar UI/executor.
+- Aceptación: snapshot exacto y propio de padre/slot/evidencia/cadena; sólo conflicto conocido con remoto comprometido y padre recurrente vivo. Conservar identidad y toda evidencia; superseder exclusivamente la cadena revisada del slot. Bloquear otros slots, mutaciones de padre, dependencias externas e intentos inciertos. Adoptar cancelación/tombstone conserva ese estado; remoto ausente requiere política futura y no ofrece elección. Retry/copia no se anuncian ni reinterpretan como adopción.
+- Validación: pruebas puras de actor/revisión/slot/cadena/concurrencia/replay tardío/evidencia corrupta; suite/lint/tipos/Webpack/worker/diff y plan/log mismo commitpushint/HEAD/cuotas. Ninguna operación remota nueva, formato escrito o índice/DBusuario.
+
+## 19z2 — Continuación puntual a las02:20
+
+- Objetivo: programar la continuación solicitada para el18oct2026 a las02:20 Europe/Madrid, verificando cuotas antes de empezar.
+- target_paths: plan/{iterations,workflow,iteration-log}.md y heartbeat gestionado existente.
+- Dependencias: e120b6e publicado; generación6 activa, recuperación residual pendiente y checklist física aprobada. Petición humana explícita de hora; 10%5h/72%7d y reset real1792282775,18oct02:19:35Madrid.
+- Aceptación: reutilizar la única programación existente, mismo chat y política; revisión puntual COUNT1 activa, sin cadena adicional, reservas10%/1%, consulta directa de cuotas, commit/pushint/HEAD por entrega y main humano preservado. No asumir renovación por reloj ni autorizar producción.
+- Validación: automation_update confirma ACTIVE y archivo gestionado confirma hora/COUNT/chat/política; referencias/coherencia/diff y commit/pushint/HEAD. Sólo programación y registro, sin abrir implementación con el margen actual.
+- Estado: completado; automatización continuar-el-plan-a-las-21-19 renombrada «Continuar el plan a las02:20».
+
+## 19z1 — Cuotas consultadas directamente
+
+- Objetivo: eliminar la pregunta redundante de cuotas cuando get_usage_limits ya puede leer ambas ventanas.
+- target_paths: AGENTS.md, plan/{AGENTS,master,workflow,iterations,iteration-log}.md.
+- Dependencias:98307c0/originint exactos y limpios; corrección humana explícita. Lectura real13%5h/72%7d, reservas10%/1%; corte sólo documental, sin abrir implementación de conflictos.
+- Aceptación: protocolo interactivo y desatendido consultan ambas cuotas directamente; preguntar sólo si no se pueden leer. Mantener reservas y límites de autorización/automatización/créditos. No editar main humano.
+- Validación: coherencia de reglas vigentes, referencias y diff; mismo ConventionalCommit/pushint/HEAD y consulta de uso posterior.
+- Estado: completado; no autoriza una nueva ejecución desatendida.
+
+## 15a3 — Aceptación humana del recorrido físico
+
+- Objetivo: registrar la confirmación del usuario de que los diez pasos de la checklist física han pasado.
+- target_paths: plan/{manual-device-checklist,user-guide,master,iterations,workflow,iteration-log}.md.
+- Dependencias: generación6 activa, checklist de diez pasos entregada y confirmación humana explícita del17oct2026; HEAD e29a794/originint exactos y worktree limpio.
+- Aceptación: cerrar exclusivamente el recorrido secuencial descrito, incluidos reapertura offline/reconexión, sincronización de contenido/categoría/orden/repetición/zona y tema local; atribuir el resultado al usuario, sin inventar navegadores/dispositivos ni pruebas propias. No cerrar conflictos concurrentes, accesibilidad completa o publicación productiva.
+- Validación: referencias locales, coherencia de estados vigentes y git diff --check. Sólo documentación; mismo commit/pushint/HEAD. No nuevas pruebas de código ni cambios de datos.
+- Estado: completado por confirmación humana; no equivale al cierre completo de15a/15b.
+
+## 19c0 — Guardia de dependientes externos de apariciones
+
+Estado: completado; comparación reforzada, sin nuevas elecciones recurrentes.
+
+- Objetivo: completar la comparación de apariciones para detectar también dependientes externos que apuntan a su cadena, antes de preparar elecciones.
+- target_paths: src/lib/sync/recurring-incident-snapshot{,.test}.ts y plan/**.
+- Dependencias: a6e1aa4 publicado; 20%5h/73%7d, reservas10%/1%. Corte puro secuencial acotado, sin executor ni nuevas elecciones.
+- Aceptación: un dependiente personal sin confirmar bloquea la futura resolución de aparición; una preferencia independiente o un registro ya superseded no la bloquean por esa razón. Cola, UUID, payload, dependencias, outcomes y otras colecciones permanecen intactos. La validación completa sigue rechazando referencias ausentes o desordenadas, sin convertirlas en permiso.
+- Validación: escenarios de comparación con dependencia saliente/independiente/histórica, regresiones de snapshots; suite/lint/tipos/Webpack/worker/diff/plan/log/commitpushint/HEAD/cuotas. Sin DBusuario, formato nuevo o activación de recuperación recurrente.
+
+## 19b3 — Elección visible de zona en conflicto
+
+Estado: completado; opciones activas y 25 escenarios Next6 aprobados.
+
+- Objetivo: conectar acciones compactas de adoptar/reintentar settings con preview congelado yconfirmación real.
+- target_paths: src/features/sync/components/{personal-incident-card,sync-incident-panel,settings-incident-actions,settings-incident-resolution-dialog,settings-incident-ui.test}.tsx, src/schemas/next-sync-test.ts, test/next-settings-sync/features/**, plan/**.
+- Dependencias:5c10dd4 publicado,39%5h/76%7d, reservas10%/1%;25Next6 conexecutor/backup reales aprobados. GuíasNext/React leídas, secuencial.
+- Aceptación: sólo conflicto settings propio completo ofrece opciones; otraspreferencias/guardias siguen protegidas. Diálogo compara zona local/remota, cuenta sólointenciones settings, cancelar noescribe y confirmar crea decisión/replacementpending; UI yfeature reales recibenACK posterior único yconvergen sinreprogramarplanes. Refrescar cachés sólocuenta/epoch.
+- Validación: SSR guardias/preview yNext/Mongo/IndexedDB condiálogo real, regresiones25casos/DoDcompleto/cleanup/plan/log/commitpushint/HEAD/cuotas. Sin nuevo destino de navegación niDBusuario.
+
+
+## 19b2 — Transacción y evidencia de recuperación de zona
+
+Estado: completado,25Next6 correctos; registro yfeature disponibles, UI pendiente.
+
+- Objetivo: persistir decisiones de settings con backup3 validado y probar conflictos reales antes de habilitarUI.
+- target_paths: src/{lib/local-db/{sync-incidents,sync-store,settings-resolution}.ts,lib/backup/local-backup.ts,lib/sync/settings-resolution.test.ts,schemas/{local-recurring-backup,next-sync-test}.ts,features/sync/local-settings-resolution.ts}, test/next-settings-sync/features/**, plan/**.
+- Dependencias:b283633 publicado,53%5h/79%7d, reservas10%/1%;19b1validado. Secuencial, sólo recursos propios.
+- Aceptación: snapshot9stores enmismaTX, exactexpected/actor/epoch/IDs/counter, superseded sinACK, replacementpending0, registro+proyección atómicos yreplay sinreescribir. Backup3 reconoce/revalida registro nuevo; intenciones1/evidencia2/wire6 sin cambios. Readerviejo conserva rechazo conservador de metadata desconocida; no wipe/migración.
+- Validación: conflicto real settings conchild, stale/epoch/rollback/notificación, adopción sin escritura remota, retry/respuesta perdida/ACKúnico ysettings/shadow/cursor iguales en dosparticiones; otras colecciones conservadas. Next/Mongo/IndexedDB propios yDoDcompleto/cleanup/plan/log/commitpushint/HEAD/cuotas. UI pendiente19b3.
+
+
+## 19b1 — Contrato de recuperación de zona personal
+
+Estado: completado; preparación pura, sin nueva elección visible.
+
+- Objetivo: diseñar y probar adopción/reintento explícitos de settings, sin ofrecer botones antes del executor.
+- target_paths: src/{schemas/settings-resolution.ts,types/settings-resolution.ts,types/sync-incident.ts,lib/sync/{incident-snapshot.ts,settings-resolution.ts,settings-resolution.test.ts}}, plan/**.
+- Dependencias:2da06ca publicado,60%5h/80%7d, reservas10%/1%; settings6 y evidencia/incidentes activos. Secuencial.
+- Aceptación: sólo conflicto propio de settings con remoto vivo conocido; adoptar sinACK o retryconUUIDnuevo/CASremoto; cadena settings completa sin incertidumbre/cadenasexternas, categoriasindependientes conservadas. Snapshotexacto y evidencia validada, nofusión/ancestro. Registro durable diseñado pero aún no integrado enbackup/executor/UI.
+- Validación: pruebas puras de cambios posteriores/replaytardío/identidad/cuenta/cola/tombstones, regresiones yDoDcompleto/plan/log/commitpushint/HEAD/cuotas. Sinwire/DB/indexnuevo.
+
+
+## 19a4 — Elecciones comunes activas en Ajustes
+
+Estado: completado; opciones activas y24Next6 con feature/diálogo real correctos.
+
+- Objetivo: conectar coherentemente feature/executor/choices de planes simples tras prueba remota, con diálogo real validado.
+- target_paths: src/features/sync/{local-incidents.ts,components/{sync-incident-actions,sync-incident-card,sync-incident-version,common-plan-incident-ui.test}.tsx}, src/schemas/next-sync-test.ts, test/next-settings-sync/features/**, plan/**.
+- Dependencias:72e9f30 publicado,72%5h/82%7d yreservas10%/1%;19a1–3 aprobados, guíasNextuseclient/serveractions yReactbestpractices leídas. Secuencial.
+- Aceptación:4variantes simples ofrecen adoptar/retry/copy cuando corresponda, feature/accountguard real; series/cadenasexternas/rechazos siguen sin elecciones. Diálogo muestra borrador completo, cancelar noescribe, confirmar crea decisión durable ynuevoUUID sólo pending; ACK/pull real posterior yconvergencia exacta. Sin nuevos formatos/protocolo niDBusuario.
+- Validación: SSR de opciones/preview/guardias, componenteReact real dentroNext/Mongo yrecuperación4variantes, DoDcompleto/cleanup/plan/log/commitpushint/HEAD/cuotas. Noafirmar recuperación de ediciónconviewdependiente ni series.
+
+
+## 19a3 — Conflictos comunes reales y convergencia remota
+
+Estado: completado,24Next6 y4conflictosreales conconvergencia exacta aprobados.
+
+- Objetivo: demostrar recuperación privada con dosparticiones/Next/Mongo y productores reales antes deUI.
+- target_paths: src/schemas/next-sync-test.ts, test/next-settings-sync/features/{common-plan-recovery,local-client,device-client,controller}.*.template, plan/**.
+- Dependencias:a9f6bf3 publicado,82%5h/83%7d, reservas10%/1%; executorlocal probado. Dockerpinned revalidado, secuencial.
+- Aceptación:4variantes conconflictoCASreal ydependiente nointentado; adoptar sinACK/escritura remota, retryUUIDnuevo ycopyIDnuevo ante tombstone; respuesta perdida/replayúnico, superseded conserva evidencias ybackup3, proyecciones/cursor exactos en6stores entreparticiones/Mongo. NoUI/producción/DBusuario.
+- Validación: Next6real ampliado conproductores progreso/guardado/borrado, authpersistida/defaults, DoDcompleto/cleanup/plan/log/commitpushint/HEAD/cuotas. NoafirmarGoogle ni dispositivosfísicos; cadenas externas siguenprotegidas.
+
+
+## 19a2 — Executor durable de recuperación común, aún privado
+
+Estado: completado,23Next6correctos; UI sigue sin elecciones comunes.
+
+- Objetivo: pasar opt-in de planes al executor existente y comprobar transacción/replay/rollback/evidencia completa con settings presentes, sinhabilitarUI.
+- target_paths: src/lib/local-db/{sync-resolution,sync-store}.ts, src/schemas/next-sync-test.ts, test/next-settings-sync/features/{plan-recovery-proof,local-client,device-client,controller}.*.template, plan/**.
+- Dependencias:9685fce publicado,95%5h/85%7d, reservas10%/1%; planner19a1 puroprobado. Secuencial.
+- Aceptación:4variantes conadopción/retry/copy conservanUUID/outcomes ymarcansuperseded nuncaACK; pendingreplacement correcto; rollbacktardío revierte todosstores/contador/noaviso; replaydespuésedición noescribe ysnapshotobsoleto rechaza. Backup3validado ysettings/categorías/vistas/placements/apariciones preservados. Opt-in exige snapshotcompleto.
+- Validación: Nextcompilado/IndexedDB reales conconflictoslocales explícitamentesembrados, sinatribuirACKremotoparaellos; regresiones22escenarios/Mongo yDoDcompleto, cleanupown/plan/log/commitpushint/HEAD/cuotas. Después19a3pruebaremota real antesUI.
+
+
+## 19a1 — Planner de recuperación de planes comunes simples
+
+Estado: completado, opt-in privado sin elecciones nuevas enUI.
+
+- Objetivo: extender el contrato existente a las cuatro variantes sin repetición, conservando elecciones explícitas y una activación separada de callers/UI.
+- target_paths: src/lib/sync/{incident-resolution.ts,plan-incident-resolution.test.ts}, plan/{iterations,master,workflow,conflict-recovery,iteration-log}.md.
+- Dependencias:69149d2/originint exactos ylimpios; renovación real100%5h/86%7d, reset1792282775, reservas10%/1%. Secuencial; sin otros agentes o DBusuario.
+- Aceptación: opt-in preparatorio deplan sin cambiar llamadas actuales; adoptar sinACK, retry del borrador completo sobre revisión remota, copiar tombstone conIDnuevo; conservarvariant/status/checklist/schedule, bloquearseries/comandosajenos/cadenasexternas/intentadas inciertas/snapshotobsoleto. No fusionar ni considerar shadowancestro.
+- Validación: pruebas puras de4variantes/elecciones/invariantes y regresiónlegacy, lint/tipos/suite/buildWebpack/worker/diff; plan/logmismo commitpushint/HEAD/cuotas. UI sólo tras executor y prueba integrada posterior.
+
+
+## 18z2 — Continuación puntual a las21:19
+
+- Objetivo: programar la continuación pedida para el17oct2026 a las21:19 Europe/Madrid, comprobando renovación antes de reanudar recuperación residual.
+- target_paths: plan/{iterations,workflow,iteration-log}.md y automatización heartbeat gestionada por la app.
+- Dependencias:7000ecf publicado; estado completo6 y pilotoPreview ya cerrados; petición humana explícita de hora.
+- Aceptación: una única revisión puntual en este chat, activa, COUNT1, reservas10%5h/1%7d y sin otra cadena; cuota real antes de trabajar, commit/pushint/HEAD/cuotas por entrega. Sin reabrir sincronización ya entregada ni tocar producción.
+- Validación: automation_update confirma creación, archivo gestionado confirma estado/horario/chat/política; referencias/coherencia ydiff limpio, mismo commit/pushint/HEAD.
+- Estado: completado; id `continuar-el-plan-a-las-21-19`, notificaciones failed_runs_only. Reset5h observado21:18:29, no se presupone renovación por reloj.
+
+
+## 15b1 — Guía de uso y checklist vigente
+
+Estado: completada la guía preparatoria;15a y cierre final15b siguen pendientes.
+
+- Objetivo: preparar la guía del producto activo6 y actualizar el recorrido físico, sin declarar cerrado15a/15b.
+- target_paths: README.md, plan/{user-guide,manual-device-checklist,master,iterations,iteration-log,workflow}.md.
+- Dependencias:3e2fb0b publicado,17%5h/87%7d, reservas10%/1%; pilotoPreview6 aprobado. Corte documental secuencial.
+- Aceptación: guía offline/sync/cuentas/backup/actualización/zona/tema y límites reales; checklist añade zona compartida y tema por dispositivo, resultados físicos siguen pendientes; cumpleaños/sharing excluidos de aceptación vigente.
+- Validación: contraste con componentes/contratos, enlaces locales ydiff, mismo commitpushint/HEAD/cuotas. Sin pruebas repetidas ni cambio de código/datos.
+
+
+## 18e2c — Piloto Preview de zona personal6
+
+Estado: completado;2ACKsettingsreales yrestauraciónconservadora, sinpendientes.
+
+- Objetivo: verificar despliegueint/actualizaciónconservadora, cuentaGoogleexistente eíndicesettingsoperativovíabootstrap/readiness/ACKreal.
+- target_paths: plan/**; interacciónúnicamentePreviewautorizado, sinproducción/credenciales/delete.
+- Dependencias:57ebb5b publicado,26%5h/88%7d reserva10%/1%. Sesiónexistente disponible; clienteanterior muestraactualizacióndisponible.
+- Aceptación: conservar6elementosycola, actualizarcerrando/reabriendo, cambiarzonapersonalexplícita yrestauraroriginal conACKremotoúnico/recarga; evidenciaUI sinPIIenplan. Noafirmardosdispositivosfísicos.
+- Validación: navegadorreal/cuentaGooglePreview, evidenciahonesta/plan/log/diff/commitpushint/HEAD/cuotas; siaccesoointervenciónfaltan pedirsoloeso.
+
+
+## 18e2b — Activación conjunta de ajustes6
+
+Estado: completado;6seleccionado y22casosconconfiguraciónreal correctos.
+
+- Objetivo: seleccionar6 enproducto paraidentidad/pull/acciones/retiro5/cliente/hook/provider/caché/incidentes/UI de forma conjunta.
+- target_paths: src/config/{common-plan-release.ts,product-sync-protocol.test.ts}, scripts/next-sync-test-runner.ts, src/features/sync/components/{device-sync-settings,sync-status-panel,personal-incident-version}.tsx y su pruebaSSR, plan/**.
+- Dependencias:8c3e26f publicado,31%5h/89%7d reserva10%/1%;22Next6incluyendoUIreal, bootstrapPreview/intautorizadoyvalidado, resto de puertos6preparados. Secuencial.
+- Aceptación: fixture6 usa configuraciónproductiva real sin alias;22casos pasan enNext/IndexedDB/Mongo conUIoffline y nofalsoACK; índicecentral/readiness6/retirement5 coherentes; ningún cambio dedatos/formatos/producción.
+- Validación: Next6completo sinperfilpreparatorio, DoD/lint/tipos/build/worker, cleanupown/plan/log/mismo commitpushint/HEAD/cuotas. PilotoGooglePreview aparte siaccesible; nunca dosdispositivosfísicos porfixture.
+
+
+## 18e2a — Editor compacto de zona personal
+
+Estado: completado;22Next6incluyendoUIrealguardadooffline pasan, productoaún5.
+
+- Objetivo: edición explícita de zona offline desdeAjustes, aún guardada porprotocolo6 inactivo; refrescar caches propias paraHoy/Atrasadas.
+- target_paths: src/features/workspace/components/personal-time-zone-*.tsx, src/schemas/next-sync-test.ts, test/next-settings-sync/features/**, plan/**.
+- Dependencias:1571669 publicado,37%5h/90%7d, reserva10%/1%; bootstrapaprobado y21Next6, guíasNext/Reactleídas. Secuencial.
+- Aceptación: formulario compacto accesible conzonaIANA validada, cancelar/guardar/errores españoles; expectedrecord ycuentaepoch capturados, nored para guardar, recargaconserva; sólozone conlocaleesES/week1; cachéscuentaaisladas, todayusaajuste sinreprogramarplanes. Scope5 conserva fila readonly.
+- Validación: componente real enNextpropio dosparticiones/Mongo, guardadoUIoffline+ACK único+pullpeer+convergencia de store6, DoDcompleto/cleanup/commitpushint/HEAD/cuotas.
+
+
+## 18e1c2 — Bootstrap de índice settings autorizado
+
+Estado: completado; bootstrap validado8casosMongo, sóloPreview/int.
+
+- Objetivo: ensureIndexes desde singleton crea índice único settings sóloPreview/int, según permiso humano, sinactivar6.
+- target_paths: src/lib/db/{AGENTS.md,ensure-indexes.ts,ensure-indexes.test.ts,recurring-index-operator.integration.test.ts}, plan/**.
+- Dependencias: f8183b3 publicado,40%5h/91%7d, reserva10%/1%; autorización explícita sólouser_settings_user_uidx preproducción. Secuencial.
+- Aceptación: producción/local/otrasramas sinnuevoíndice; Preview/int crea ambos índices autorizados yreintento idempotente; duplicados/incompatibilidad se conservan sinrepair, conexióncerrada yerror saneado. Índicesrestantes explícitos siguenstaged.
+- Validación: bootstrapreal enMongo propio/pinned, testsfull/lint/tipos/build/worker, plan/logmismo commitpushint/HEAD/cuotas. No credenciales/Vercel ni conexiónoperadora aDBusuario.
+
+
+## 18e1c1 — Consumidores6 y transición durable desde5
+
+Estado: completado; veintiún escenarios reales pasan, producto sigue5.
+
+- Objetivo: conectar lecturas de incidentes6 y capturaTX de resolución existente conservando settings, y probar cliente5 con handshake capturado/acciónretirada oausente sinACK/claimnuevo.
+- target_paths: `src/{features/sync/{local-incidents.ts,hooks/use-mixed-sync-engine-core.ts},lib/local-db/{sync-store,sync-incidents,sync-resolution}.ts,schemas/next-sync-test.ts}`, `test/next-settings-sync/features/**`, `plan/**`.
+- Dependencias:b6f21e5 publicado,54%5h/93%7d/reservas10%/1%,19Next6 correctos; permiso de índicePreview recibido: sólo user_settings_user_uidx enPreview/int, sinproducción/datosrepair. Secuencial, no selección6.
+- Aceptación: lectura porfeature real incluye settings; resoluciónlegacy existente adopta remoto/supersede sólo su cadena sinACK y conserva resto de stores/evidencia; no se amplían elecciones de recuperación deplanescomunes/series. Runtime5 con identidad/pull5 capturados libera sóloleasepropia,conservaUUID/deps/outcomes/cursor, IDausente409marcado y siguientehandshake6 bloquea antesclaim; cliente6 recupera originalunaúnicavez. Cachédeincidentesmuta mismakey conprotocolo.
+- Validación: Next6 real ampliado/IndexedDB/Mongo, regresiones y DoDcompleto, cleanupown/plan/log/mismo commitpushint/HEAD/cuotas. Seedconflictlegacy de prueba explícito, no atribuirlo a ejecuciónremota6 ni crear ACK local.
+
+## 18e1b2 — Resiliencia y proveedor6 real guardado
+
+Estado: completado; diecinueve escenarios Next6 pasan, selección productiva sigue5.
+
+- Objetivo: probar lostresponse/época/cuenta/conflicto de settings con dependientes y lifecycle del proveedor6 productivo, aún inactivo enflag5.
+- target_paths: `src/features/sync/components/{active-sync-provider,settings-sync-provider}.tsx`, `src/schemas/next-sync-test{,.test}.ts`, `test/next-settings-sync/features/**`, `plan/**`.
+- Dependencias:2716a29 publicado,66%5h/95%7d yreservas10%/1%; aceptación14Next6 de ACK/pull ya cerrada. Secuencial y mismos recursosownpinned, sin índicePreview o activación.
+- Aceptación: respuesta perdida deja intento/child/lease sin ACK falso, replay único permitechildpending0; epoch trascommit conservaUUID/outcomes y freshclient recupera; hook6/cache5 separados/cambioépoca/remontaje/listeners/unmount sinwrites; sesiónotra cuenta bloquea antesclaim; conflicto local congela intención ychild pero categoría independiente avanza. Provider6 sólo se selecciona por protocolo6 completo.
+- Validación: fixtureNext6 con dos particiones/Mongo reales y nuevos escenarios; pruebas pertinentes/DoD/lint/tipos/build/worker, cleanupown, plan/log mismo commitpushint/HEAD/cuotas. Retiro5concoladuradera y resoluciónrootconsettings serán siguiente corte si margen requiere.
+
+## 18e1b1 — ACK y descarga6 en dos particiones reales
+
+Estado: completado; catorce escenarios Next6 pasan, incluida convergencia exacta/recarga.
+
+- Objetivo: productores offline de zona/categoría/serie común y ACK/pull por cliente6/Next/Mongo reales con proyecciones exactas entre dos orígenes.
+- target_paths: `test/next-settings-sync/features/{local-client.ts,device-client.ts,controller.tsx,projection.ts}.template`, `src/schemas/next-sync-test{,.test}.ts`, `plan/**`.
+- Dependencias:18e1a1 publicado25c2a00,82%5h/97%7d/reservas10%/1%; callbacks/contratos6 cerrados, Mongoown/pinnedrevalidado. Secuencial, sin callerproducto6/DBusuario.
+- Aceptación: dos particiones propias+cuentas persistidas, productor de zona con expectedSettings exacto, cola durable sin fetch/ACK offline; children sólo pending0 rebasedirecto trasACK, UUID/command/deps intactos. Categoría yserie/aparición no se reprograman al cambiar zona; snapshots/proyecciones ycursor exactos frenteMongo, recarga conserva. Pérdidarespuesta y lifecycle serán cortes separados si exceden alcance.
+- Validación: fixtureNext6 ampliado y schemas límites, DoD/lint/tipos/suite/build/worker, cleanupown/plan/log/commitpushint/HEAD/cuotas. No afirmar Google ni dos dispositivos físicos; scopeactivo5 intacto.
+
+## 18e1a1 — Frontera Next6 compilada de ajustes
+
+Estado: completado; nueve escenarios6 y diecinueve de regresión5 pasan, producto sigue5.
+
+- Objetivo: ejecutar action6/defaults/readiness/sesiones BetterAuth persistidas y matriz5↔6 con dos orígenes propios, manteniendo producto5.
+- target_paths: `scripts/{sync-db-test-runner,next-sync-test-runner}.ts`, `test/next-settings-sync/**`, `src/schemas/next-sync-test{,.test}.ts`, `src/lib/db/next-sync-fixture.ts`, `test/next-recurring-sync/features/release-profile.ts.template`, `plan/**`.
+- Dependencias: int202c24f/origin exactos y limpios, flags5 activos; cuota17oct99%5h/100%7d, reset1792264709, reservas10%/1%. Docker28.4linuxamd64 e imagen pinned Mongo revalidados. Secuencial; guíasNextServerActions/React vigentes leídas.
+- Aceptación: fixture6 explícito con referencias reales action6/retire5 inventariadas, seis índices del registro sólo DBdescriptor; sin sesión/actor distinto/readiness bloquean; header incompatible se rechaza antesbody; IDausente comprobado Next sinACK; settingsCAS/recibo/journal reales yreplay exacto. Ninguna selección6 o provisión enDBusuario.
+- Validación: ejecución Next/Mongo propia y saneada, DoD/lint/tipos/suite/build/worker, limpieza own, plan/log mismo commitpushint/HEAD/cuotas. Este corte no afirma ACK/pullIndexedDB ni lifecycle/convergencia; siguiente18e1b de clientes locales6.
+
+## 16c16 — Selector de tema por dispositivo
+
+Estado: completado; tres modos activos y persistidos por navegador/dispositivo, sin sincronización remota.
+
+- Objetivo: añadir Sistema/Claro/Oscuro compacto enAjustes con elección persistida offline y aplicada antes de hidratación, sin cambiar ajuste remoto de zona.
+- target_paths: `src/{app/{layout.tsx,globals.css},config/theme.ts,schemas/theme.ts,lib/theme/**,components/shared/theme-bootstrap.tsx,features/workspace/components/{device-settings,theme-settings}.tsx}`, `test/browser/theme.tsx`, `scripts/theme-test-server.ts`, `plan/**`.
+- Dependencias: petición humana tras explicación de tema automático, int5048ef5 limpio, cuota72%5h/5%7d y reservas10%/1%; guíaNextlayout/script y reglaReact hydration-no-flicker leídas. Secuencial, sin dependencia nueva/DB.
+- Aceptación: modo predeterminadoSistema sigue prefers-color-scheme, explícitos overrideOS en todas las darkclasses/variables/nativecontroles; cambio inmediato/recarga/otra pestaña; valor inválido/bloqueo storage conservador y mensaje honesto si no persiste. Inicialización temprana evita aplicar tema sólo con efecto después del render; datos/cuentas/sync no afectados.
+- Validación: schema/bootstrap puro corrupt/default/blocked, fixtureReact/CSS propio4268 modos/valor exacto/recarga/peer/limpieza; lint/tipos/suite/build/worker/diff y plan/log mismo commitpushint/HEAD/cuotas. Sin añadir tema a userSettings ni activar generación6.
+
+## 16c15 — Muestra real del color de categoría
+
+Estado: completado; regla compacta excluye inputcolor y el swatch nativo vuelve a mostrar el valor.
+
+- Objetivo: corregir el swatch nativo colapsado/raya gris para mostrar el color elegido en creación/edición, conservando picker nativo accesible.
+- target_paths: `src/app/globals.css`, `test/browser/tag-color.tsx`, `scripts/tag-color-test-server.ts`, `plan/**`.
+- Dependencias: petición humana; int8952da0 limpio, cuota78%5h/6%7d/reservas10%/1%; guíasNext/use-client/React vigentes ya leídas. Corte secuencial UI sinDB/sync.
+- Aceptación: muestra inicial verde/valor editado y actualización inmediata al cambiar color; mismo valor exacto enFormData/onSave, foco/label/inputdisabled intactos, móvil compacto. Nativepicker no se sustituye por dependencia nueva.
+- Validación: React/CSS reales propios4267 creación/edición/color+guardado y estado disabled, lint/tipos/suite/build/worker/diff, plan/log mismo commitpushint/HEAD/cuotas. Sin tests espejo deCSS ni escrituras de usuario.
+
+## 16c14b — Fecha y hora en una misma fila móvil
+
+Estado: completado; corrección visual verificada con formulario real.
+
+- Objetivo: corregir salto de hora introducido en16c14, reduciendo ancho de etiqueta/flechas/padding y manteniendo fecha+hora juntas.
+- target_paths: `src/components/ui/{civil-date-input,date-time-fields}.tsx`, `plan/**`; reutilizar fixture4266 existente sin lógica nueva.
+- Dependencias: petición humana explícita, HEAD5310b09/int limpio, guías Next/React leídas; cuota83%5h/7%7d/reservas10%/1%.
+- Aceptación: inicio y fin timed en una fila desde320px; fecha/hora legibles y utilizables, flechas con targets32×44px, ningún overflow. Todo el día continúa sin horas y conserva correlación/fin opcional.
+- Validación: browserReact/CSS compilados a320/desktop con medición de rectángulos y guardado trasflecha; lint/tipos/suite/build/worker/diff, plan/log y commitpushint/HEAD/cuotas. Sin tests espejo paraCSS ni cambiosDB/sync.
+
+## 18e1a0 — Selección de frontera futura para la aceptación Next
+
+Estado: completado; selección6 permanece inactiva y evidencia Next aún pendiente.
+
+- Objetivo: preparar rutas productivas de identidad/pull y retiro de acción5 para el fixture compilado6, sin activar producto6.
+- target_paths: `src/config/{common-plan-release,product-sync-protocol,product-sync-protocol.test}.ts`, `src/app/api/sync/{identity,changes}/route.ts`, `src/features/sync/actions-v{5,6}.ts`, `plan/**`.
+- Dependencias: settings6 privado completo, próximo18e1a necesita usar referencias productivas reales; 16c14 publicado7ea2bcd, margen86%5h/7%7d con reservas10%/1%. Guía RouteHandlers instalada leída. Secuencial, sin DB/fixtureNuevo/activación.
+- Aceptación: selector respeta dependencias common/recurring/settings y mantiene5 actual; únicamente selección6 elige identidad/pull6 y retira acción5 antes readiness/ejecutor. Acción6 permanece inaccesible en producto5. No activar provider/editor ni mutar flags activos, DB o formatos.
+- Validación: matriz de selección, pruebas existentes authenticated-settings/pull/retirement, lint/tipos/suite/build/worker/diff; plan/log mismo commitpushint/HEAD/cuotas. No declarar pruebaNext6 ni convergencia por tests puros.
+
+## 16c14 — Fechas correlacionadas, fin opcional y controles de día
+
+Estado: completado; validación y evidencia en iteration-log/item-editor-redesign.
+
+- Objetivo: al cambiar inicio desplazar fin explícito por el mismo número de días civiles; permitir quitar/añadir fin y flechas -/+día en fechas del editor.
+- target_paths: `src/components/ui/{civil-date-input,date-time-fields}.tsx`, `src/features/plans/{plan-form-dates,plan-form-dates.test}.ts`, `src/lib/calendar/form-date.ts`, `src/features/plans/components/{plan-form,plan-recurrence-fields}.tsx`, `test/browser/plan-form-dates.tsx`, `scripts/plan-form-dates-test-server.ts`, `plan/**`.
+- Dependencias: petición humana intercalada y guías Next/use-client/React vigentes; int23fc6c3 limpio, cuota real100%5h/9%7d, reset1791839451, reservas10%/1%. Secuencial, sin comenzar Nextsettings antes de cerrar esta petición.
+- Aceptación: creación/edición de cuatro variantes conserva intervalo civil y horas, cambios manuales del fin definen nuevo intervalo; fin quitado no se inventa al mover inicio; todo el día sin fin explícito ocupa un día y timed localEndnull; entradas incompletas no rompen y límites civiles no desbordan. Flechas visualmente pequeñas con touch targets usables, incluidas última fecha de repetición; sin guardar hasta submit ni cambiar contratos/persistencia.
+- Validación: casos civiles/leap/límites, interacción React real con formulario y payloads onSave de fixture, variantes/crear/editar/optional/timed/repetition; lint/tipos/suite/build/worker/plan/log/commitpushint/HEAD/cuotas. Sin consultasMongo/índices nuevos.
+
+## 15p1 — Aceptación de arrastre y checklist física
+
+- Objetivo: registrar aceptación humana del arrastre y entregar recorrido de dos dispositivos físicos para generación5 ya activa.
+- target_paths: `plan/master.md`, `plan/workflow.md`, `plan/manual-device-checklist.md`, `plan/iterations.md`, `plan/iteration-log.md`.
+- Dependencias: HEAD1382754 limpio/int; petición humana específica de checklist y arrastre terminado. Corte exclusivamente documental, sin reabrir implementación con cuota9%5h/10%7d.
+- Aceptación: arrastre cerrado por decisión humana, prueba física aún pendiente y resultados no inventados; mismo entorno/cuenta, operaciones secuenciales, categoría/estado/checklist/orden/repetición/offline/reconexión/borrado y criterios observables. Ajustes6 quedan fuera porque no están activados.
+- Validación: referencias/coherencia/diff, Conventional Commit/push int/HEAD y consulta final de cuotas; sin pruebas de código ni nuevos recursos.
+
+## 18z1 — Cierre del lote de nueva ventana
+
+- Objetivo: registrar quince entregas publicadas, cuotas reales y siguiente aceptación delimitada, sin abrir Next amplio con margen insuficiente.
+- target_paths: `plan/master.md`, `plan/workflow.md`, `plan/settings-sync.md`, `plan/iterations.md`, `plan/iteration-log.md`.
+- Dependencias: último código completo 5cd93f4, HEAD remoto exacto, ambos checkouts limpios; entrada 13% 5h / 11% 7d, reservas 10% / 1%.
+- Aceptación: estado activo 5 y settings privado 6 diferenciados; recursos propios retirados, main intacto, siguiente corte concreto y sin nueva automatización/DBusuario/producción.
+- Validación: referencias locales/coherencia/diff, Conventional Commit + push int/HEAD remoto y lectura final de ambas cuotas; sin repetir tests de código ya aprobados.
+
+## 18e1a — Próxima aceptación Next de ajustes
+
+- Objetivo: frontera 6 compilada con referencia productiva real y sesiones BetterAuth propias persistidas, seguida de dos particiones/ACK-pull exactos.
+- target_paths previstos: `scripts/next-sync-test-runner.ts`, `test/next-settings-sync/**`, `src/{config/common-plan-release.ts,schemas/next-sync-test.ts,lib/db/next-sync-fixture.ts}`, `src/app/api/sync/**`, `src/features/sync/{actions-v5.ts,components/active-sync-provider.tsx}`, y puertos de fixture necesarios. Delimitar subcortes antes de editar; integración de un único dueño.
+- Dependencias: 18a–18e0b cerrados, defaults de transporte/acción/runtime/ACK/pull/evidencia6 privados. Descriptor Mongo propio con imagen pinned y límites propios; leer guía Next instalada relevante.
+- Preparación: selección futura de identidad/pull/retirement5/proveedor coherente, guard global todavía false en el producto. Fixture sólo en proyecto/orígenes propios selecciona 6 y provisiona seis índices mediante ensureIndexes del registro central; ninguna DB usuario. Extender runner/template/config de forma explícita por scope, sin reemplazos amplios de números ni mutar artefactos históricos.
+- Aceptación frontera: SDK→referencia real compilada actions-v6→defaults/readiness6/session/allowlist/expected actor; matriz cliente5-servidor6 y cliente6-servidor5 rechaza header antes body/claim/cache/cursor. Acción5 capturada se retira antes readiness/executor; ID5 ausente/404 conserva cola y sólo libera lease propia, siguiente handshake incompatible no claim.
+- Aceptación persistencia: productores reales settings y categoría/serie/aparición, UUID/payload/deps intactos; desconexión/respuesta perdida→replay→ACK remoto único→hijo pending0 rebasa sin tocar intentadas; cambios independientes ante conflicto; igualdad de proyecciones/shadows/cursor en dos particiones con Mongo real, no sólo status settled. Zona no reprograma fechas/anclas/as-of existentes. Hook6 lifecycle real: sesión revocada/cambio de cuenta/epoch/cierre/desmontaje/listeners/deadline; no confundir bloqueo de consumo con cancelación de red en vuelo.
+- Después: editor compacto y consumo de zona en reloj civil común, selección conjunta del producto6, índices Preview por singleton central con alcance autorizado revisado y piloto Google. Mantener generación5 hasta cerrar requisitos. No wipe ni migradores, no producción. Cumpleaños aparcado/sharing excluido.
+- Validación: pruebas propias adecuadas, DoD/worker, recursos limpios, plan/log/commit/push/HEAD/cuotas por subcorte. No empezar esta aceptación amplia en 13% con reserva 10%.
+
+## 18e0b — Zona almacenada visible en Ajustes
+
+- Objetivo: mostrar la zona personal local en una fila compacta, sin controles de edición ni anuncio de sincronización.
+- target_paths: `src/features/workspace/components/{personal-time-zone-info,personal-time-zone-settings,device-settings}.tsx`, `plan/**`.
+- Dependencias: reader con guard de cuenta 18e0 publicado 76d192a; entrada 18% 5h / 12% 7d, reservas 10% / 1%, secuencial.
+- Aceptación: dato sólo de cuenta/epoch activos, caché separada sin arrastrar valores ajenos; estado neutro estable mientras lee, null/error honestos; UI española/minimalista, sin guardar ni anunciar ACK. No cambia cálculo de hoy/atrasadas, fechas, recurrencia o transporte5.
+- Validación: inspección visual del componente puro en origen propio, regresiones/suite/lint/tipos/build/worker, plan/log/commit/push/HEAD/cuotas. Sin pruebas espejo para este ajuste reversible; datos/guards cubiertos por 18e0. Después cierre seguro antes de Next amplio.
+
+## 18e0 — Puertos de zona personal con guardias de cuenta
+
+- Objetivo: lectura/guardado de feature para el editor futuro, usando productor atómico y cuenta/epoch capturados.
+- target_paths: `src/features/workspace/local-personal-settings.ts`, `src/features/workspace/local-personal-settings.test.ts`, `plan/**`.
+- Dependencias: consumidores/fronteras preparados 18d3b publicado 68951c1; entrada 22% 5h / 12% 7d, reserva 10% / 1%, secuencial.
+- Aceptación: validate actor/epoch/input/expected ownership antes IO; guardias antes y después de lecturas y commit; cierre de repos/outbox en defaults; CAS/cola intactos, sin reprogramar planes ni usar revisión local como ACK. Cierre de cuenta tras commit no afirma rollback ni éxito para otra cuenta. Sin caller/UI activa.
+- Validación: puertos/orden/expected/invalid/foreign/cambio de cuenta/commit errors, DoD/worker/registro/commit/push/HEAD/cuotas. IndexedDB atómico ya probado, guardias reales de lifecycle siguen fixture Next pendiente.
+
+## 18d3b — Identidad y descarga autenticadas privadas 6
+
+- Objetivo: endpoints internos coherentes con transport 6, sin conectar las rutas activas.
+- target_paths: `src/features/sync/{pull-recurring-response,authenticated-settings-pull,authenticated-settings-pull.test,settings-identity-response}.ts`, `plan/**`.
+- Dependencias: 18d3a publicado 3b05f33 y reader/readiness6 preparados; entrada 24% 5h / 13% 7d, reserva 10% / 1%, secuencial.
+- Aceptación: identidad expone sólo userId autorizado/header6/no-store; pull valida sesión/query/expected actor antes readiness6 y reader privado, valida página completa settings antes devolver; foreign/corrupt/errors no filtran ni exponen datos/secretos. Reader/respuesta 5 activos intactos.
+- Validación: puertos de auth/query/orden/readiness/errores/cursor/header/privacy, DoD/worker/plan/log/commit/push/HEAD/cuotas. Sin rutas activas/DB usuario; fixture Next y activación siguen pendientes.
+
+## 18d3a — Referencia action/cliente/hook 6 privada
+
+- Objetivo: conectar internamente defaults 6 y cache por generación sin seleccionar el proveedor activo.
+- target_paths: `src/config/common-plan-release.ts`, `src/features/sync/{actions-v6,client-action-v6,mixed-sync-client-v6,mixed-sync-client-v6.test,sync-summary-cache-key,sync-summary-cache-key.test}.ts`, `src/features/sync/hooks/{use-mixed-sync-engine-core,use-settings-sync-engine}.ts`, `plan/**`.
+- Dependencias: frontera 18d2 publicada 75f0b49; entrada 29% 5h / 13% 7d, reservas 10% / 1%, secuencial.
+- Aceptación: referencia server-action propia, guard inactivo sin executor, dispatcher en startTransition, default transport/summary/runtime 6 juntos, cache separada con posiciones de cuenta intactas; stop/cambio de cuenta/invalid inputs cierran recursos y no informan éxito. Generación activa 5 intacta.
+- Validación: guías Next locales antes de editar acción, pruebas de cliente/guards/cache, suite/lint/tipos/build/worker, plan/log/commit/push/HEAD/cuotas. Hook lifecycle real y referencia Next desplegada siguen aceptación posterior, no extrapolar tests puros.
+
+## 18d2 — Frontera autenticada y readiness de ajustes
+
+- Objetivo: defaults privados de envío settings, dispatcher/replay remoto, seis índices registrados y retiro 5 sin ejecutar.
+- target_paths: `src/lib/db/{mixed-sync-index-specs,mixed-sync-index-readiness,remote-recurring-operation-commands,remote-user-settings.integration.test,settings-index-readiness.test}.ts`, `src/schemas/settings-sync-index-provisioning.ts`, `src/features/sync/{authenticated-settings-push,retired-sync-push-v5,authenticated-settings-push.test}.ts`, `plan/**`.
+- Dependencias: 18d1 publicado e23d26c; entrada 33% 5h / 14% 7d, reservas 10% / 1%, secuencial.
+- Aceptación: sesión/expected actor/schema preceden readiness; una inspección readonly por lote y settings/otras familias pasan al executor adecuado; replay conserva UUID/resultado; readiness exige seis definiciones exactas sin crear índices; retiro 5 devuelve sobre 2 update_required sin readiness/executor. No action/caller activo/bootstrap ni DB usuario.
+- Validación: puertos auth/retirement/readiness y Mongo propio del dispatcher/replay, suite/lint/tipos/build/worker/plan/log/commit/push/HEAD/cuotas. Frontera Next y activación posteriores.
+
+## 18d1 — HTTP de ajustes con negociación exclusiva 6
+
+- Objetivo: frontera cliente 6 que rechaza servidores incompatibles antes del body y conserva intención 1/sobres 2.
+- target_paths: `src/config/sync-protocol.ts`, `src/features/sync/http-recurring-transport.ts`, `src/features/sync/http-settings-transport.test.ts`, `plan/**`.
+- Dependencias: bundle privado 18c5 publicado 2b51bf4; entrada 38% 5h / 15% 7d, reservas 10% / 1%, secuencial.
+- Aceptación: factory futura selecciona rango exclusivo 6 y consumidor settings; factory activa 5 intacta; identity/pull no leen body con header 5/rango5–6/ausente; same-origin credentials conserva protección Preview; expected actor validado antes send; deadlines no fabrican ACK.
+- Validación: matriz de headers/body, efectos/actor, credentials/timeout y suite/lint/tipos/build/worker, plan/log/commit/push/HEAD/cuotas. No acción, ruta ni capacidad activa todavía.
+
+## 18c5 — Composición privada de ajustes
+
+- Objetivo: política, diagnóstico/resumen, store, coordinador y runtime seleccionan juntos ajustes sin cambiar callers 5.
+- target_paths: `src/lib/sync/settings-sync-capabilities.ts`, `src/lib/local-db/mixed-sync-store.ts`, `src/features/sync/{recurring-coordinator,local-recurring-runtime,mixed-sync-summary,settings-coordinator.test}.ts`, `test/browser/user-settings-results.ts`, `test/browser/user-settings-pull.ts`, `plan/**`.
+- Dependencias: 18c4b publicado 702f858, todos los puertos ACK/pull/evidencia propios probados; entrada 43% 5h / 15% 7d, reservas 10% / 1%, secuencial.
+- Aceptación: nuevo bundle admite settings/update exclusivamente preparado, misma validación recurrente/resto unsupported; resumen y coordinador coherentes antes/después del claim; store futuro usa ACK/pull completos; guardias de cuenta/epoch y cierre existentes reutilizadas. No nueva negociación, UI, índices bootstrap ni caller activo.
+- Validación: capability/diagnóstico/coordinador por puertos con guards/rechazo/corrupción y store IndexedDB propio; DoD/worker/registro/commit/push/HEAD/cuotas. Fixture no equivale a convergencia/Google; frontera 6 posterior.
+
+## 18c4b — Evidencia actual y copia de ajustes
+
+- Objetivo: comparar settings actual/local al resultado/base observada/último remoto y demostrar exportación portable sin inventar ausencia.
+- target_paths: `src/schemas/{sync-incident,recurring-sync-incident}.ts`, `src/lib/sync/{incident-snapshot,recurring-incident-snapshot}.ts`, `src/lib/local-db/sync-incidents.ts`, `src/lib/sync/settings-incidents.test.ts`, `test/browser/user-settings-results.ts`, `plan/**`.
+- Dependencias: ACK/outcomes/shadows preparados y reader remoto 18c4a publicado cfa5a54; entrada 48% 5h / 16% 7d, reserva 10% / 1%, secuencial.
+- Aceptación: captura readonly única incluye settings actuales; foreign/corrupt rechaza snapshot; comparación conserva evidencia congelada y distingue local posterior; backup 3 preserva settings/cola/outcomes/shadows sin escrituras ni bump cosmético. Puertos activos intactos, sin resolución/supersesión/ACK/UI nuevos.
+- Validación: IndexedDB real con conflicto/outcome de fixture, modificación posterior, backup roundtrip/recarga y limpieza propia; DoD/worker/plan/log/commit/push/HEAD/cuotas.
+
+## 18c4a — Reader privado de ajustes remotos
+
+- Objetivo: página histórica de ajustes con autorización actual y snapshot transaccional, sin modificar el reader 5 activo.
+- target_paths: `src/lib/db/remote-changes-v2.ts`, `src/lib/db/remote-user-settings.integration.test.ts`, `plan/**`.
+- Dependencias: 18b executor/repo y 18c3b consumidor publicados; entrada 51% 5h / 17% 7d, reservas 10% / 1%, secuencial.
+- Aceptación: ajustes del actor existen e identidad/revisión actuales autorizan cada efecto; tombstones preservan historia; ausencia/otra cuenta/revisión insuficiente/corrupción rechazan toda página sin cursor parcial; páginas/replay mantienen bytes/checkpoint exactos. Reader 5 rechaza settings, sin caller/API/bootstrap nuevos.
+- Validación: Mongo propio descriptor/imagen pinned/Docker revalidados, ejecución real y limpieza propia; suite/lint/tipos/build/worker, plan/log/commit/push/HEAD/cuotas. Índice userId ya registrado en 18b, sin consulta nueva adicional.
+
+## 18c3b — Descarga de ajustes y cursor atómicos
+
+- Objetivo: consumir una página completa con ajustes, categorías, planes y apariciones sin filtrar familias ni fabricar ACK.
+- target_paths: `src/lib/sync/local-recurring-pull.ts`, `src/lib/local-db/pull-recurring-changes.ts`, `src/lib/sync/settings-pull.test.ts`, `test/browser/user-settings-pull.ts`, `scripts/user-settings-pull-test-server.ts`, `plan/**`.
+- Dependencias: 18c3a publicado c5cb506; entrada 56% 5h / 18% 7d, reserva 10% / 1%, secuencial.
+- Aceptación: página/actor/checkpoint completos validados; ajustes locales pendientes preservados sin congelar categorías; categorías pendientes no impiden ajustes; cursor/datos/shadows en una TX; error tardío revierte todo; páginas viejas no degradan evidencias; generaciones activas estrictas, cola/outcomes intactos.
+- Validación: pruebas puras y IndexedDB propio, fallo tardío/corrupción/recarga, DoD/worker, registro/commit/push/HEAD/cuotas. No motor/UI/negociación activa ni DB usuario.
+
+## 18c3a — Confirmación durable de ajustes
+
+- Objetivo: ACK personal futuro con ajustes en una TX IndexedDB, conservando todas las familias recurrentes y la independencia de categorías.
+- target_paths: `src/lib/local-db/preference-sync-results.ts`, `src/lib/sync/recurring-preference-result-plan.ts`, `test/browser/user-settings-results.ts`, `scripts/user-settings-results-test-server.ts`, `plan/**`.
+- Dependencias: 18c2 publicado e4f25a3; entrada 61% 5h / 18% 7d, reservas 10% / 1%, secuencial.
+- Aceptación: valor/cola/shadow/outcome atómicos; fallo tardío revierte todo; replay no restaura local posterior; lease/actor/registro extranjero rechazados; dependiente pendiente sin intentos rebasa y los intentados conservan identidad; consumidores 5 siguen estrictos. No activar ni fabricar respuesta remota.
+- Validación: IndexedDB real con respuestas de fixture explícitas, recarga y limpieza propia; suite, lint, tipos, build/worker, plan/log/commit/push/HEAD/cuotas. Descarga/cursor será 18c3b.
+
+## 18c2 — Proyección y plan ACK con ajustes independientes
+
+- Estado: en validación.
+- Objetivo: proyectar ajustes y otras preferencias por separado y planear resultados settings.update sin activar consumidor/ACK durable.
+- target_paths: `src/schemas/preference-projection.ts`, `src/lib/sync/{preference-projection,settings-preference-projection,preference-result-plan,settings-preference-result-plan.test}.ts`, `plan/**`.
+- Dependencias: 18c1 publicado2e0b18b; entrada74%5h/20%7d, reservas10%/1%, secuencial.
+- Aceptación: validación íntegra de contexto/cola/ownership antes de dividir dominios; ajustes no congelan categorías ni a la inversa. Shadow reciente se conserva; ACK requiere lease propio, replay idéntico no sobrescribe ediciones y dependiente sólo pending0/directo se rebasa. CAS posterior deliberado no se rebaja por ACK viejo. Settings effects exclusivos de su comando, consumidores actuales estrictos. Sin IO/caller nuevo.
+- Validación: independencia/lease/replay/CAS/resultados tardíos/tombstones/corrupción y DoD, plan/log/commitpushint/HEAD/cuotas. Atomicidad durable queda18c3.
+
+## 18c1 — Productor offline de ajustes
+
+- Estado: completada; nueve checks IndexedDB y recarga, más tests puros y DoD aprobados. Sin UI/transporte activo.
+- Objetivo: guardar zona y una intención propia atómicamente, manteniendo generación5 sin soporte/productor UI.
+- target_paths: `src/schemas/{user-settings-key,local-sync,user-settings-key.test}.ts`, `src/lib/local-db/{user-settings-outbox,outbox}.ts`, `test/browser/user-settings-outbox.ts`, `scripts/user-settings-outbox-test-server.ts`, `plan/**`.
+- Dependencias: 18b publicado489d262, schemas settings y mutation helper; entrada86%5h/22%7d, reservas10%/1%, secuencial.
+- Aceptación: partición/cuenta exacta; settings:actor canónico, shadow observado para CAS, revisión provisional local no ACK. Una operación/replay exacto, dependency sólo cola propia de ajustes; otras preferencias no bloquean este registro independiente. Esperado exacto contra otro editor, intentadas intactas, rollback tardío y notificación sólo después del commit. Sin UI/capacidad/transporte activo nuevos.
+- Validación: browser/IndexedDB propio y recarga con fallos/ownership/replay/cola/epoch en futuro caller; tests puros, lint/tipos/suite/build/worker, plan/log/commitpushint/HEAD/cuotas.
+
+## 18b — Ajustes remotos y commit atómico
+
+- Estado: completada; seis casos Mongo/56 aserciones y seis de regresión/126, DoD aprobado. Sin caller ni índice DBusuario.
+- Objetivo: repo privado y executor settings.update preparatorios con replay/CAS/recibo/journal/counter atómicos.
+- target_paths: `src/lib/db/{collections,ensure-indexes,remote-user-settings,remote-user-settings-commands,remote-user-settings.integration.test}.ts`, `src/lib/db/ensure-indexes.test.ts`, `scripts/sync-db-test-runner.ts`, `plan/**`.
+- Dependencias: 18a publicado08adf08; entrada94%5h/23%7d, reservas10%/1%, secuencial.
+- Aceptación: registro único por usuario, identidad canónica, revisión propia positiva/CAS; replay común antes lectura y fingerprint intacto; settings+receipt+journal/counter commit o rollback completos, pérdida de respuesta/retry/carreras/ownership/tombstones. Índice user_settings_user_uidx explícito registrado, sin bootstrap/callers/DBusuario nuevos.
+- Validación: Mongo propio con descriptor/pinned image, limpieza propia; suite/lint/tipos/build/worker, plan/log, commit+pushint/HEAD/cuotas.
+
+## 18a — Zona personal: comando y CAS puros
+
+- Estado: completada; siete tests nuevos / 23 aserciones, DoD aprobado; generación5 intacta.
+- Objetivo: preparar settings.update sin activar UI/transporte ni cambiar la generación5 existente.
+- target_paths: `src/{schemas,types}/remote-user-settings-planning.ts`, `src/lib/preferences/{user-settings-command,remote-user-settings-plan,remote-user-settings-plan.test}.ts`, `plan/**`.
+- Dependencias: comando/settings schema existente, 16c13 publicado e354005; entrada100%5h/24%7d, reservas10%/1%, secuencial. Reinicio5h observado1791818023.
+- Aceptación: actor derivado por futura frontera, registro único propio/revisión remota positiva, creaciónCAS0/updateCASexacto, timestamps/creación conservados, tombstone sin resurrección, overflow sin efecto. Sólo zona horaria; lunes y español se mantienen según schema vigente. No ACK/IO/caller nuevo.
+- Validación: cambios/replay semántico/ownership/strictinput/colas futuras/revisiones/tombstone/noop; lint/tipos/suite/build/worker, plan/log/commit+push/HEAD/cuotas.
+
+## 16c13 — Agarre táctil sin competencia con scroll
+
+- Estado: completada; ensayos táctiles en navegador para orden/fecha y recarga, DoD aprobado.
+- Objetivo: mejorar activación y arrastre para ordenar y reprogramar, preservando scroll previo y controles interactivos. Cumpleaños aparcado por decisión humana.
+- target_paths: `src/components/ui/{long-press-order,order-drag-preview}.tsx`, `src/lib/ordering/{long-press,long-press.test}.ts`, `test/browser/plan-gestures.tsx`, `plan/**`.
+- Dependencias: gesto/productores existentes y sincronización5 activa; entrada17% /26%, reservas10% /1%, corte acotado secuencial.
+- Aceptación: TouchEvents propios tras350ms, movimiento previo cancela y permite scroll; después de agarrar touchmove cancelable bloquea scroll, pointercancel no corta el gesto táctil; etiqueta visible sigue dedo y destino. Mouse/teclado/cancelación y scroll automático conservados. Sólo una intención por drop; ninguna por cancelación.
+- Validación: navegador con componentes/CSS/IndexedDB reales para orden y cambio de día simple/aparición, eventos táctiles sintéticos (no prueba física), suite/lint/tipos/build/worker, plan/log/commit+push/HEAD/cuotas.
+
+## 10a — Apariciones anuales de cumpleaños
+
+- Estado: completada; seis tests nuevos / 37 aserciones y DoD aprobados. Sin UI ni soporte remoto de cumpleaños activado.
+- Objetivo: generador civil puro, paginado y validado para el contrato específico de cumpleaños existente.
+- target_paths: `src/schemas/birthday-appearance.ts`, `src/types/birthday-appearance.ts`, `src/lib/calendar/{birthday-appearances,birthday-appearances.test}.ts`, `plan/**`.
+- Dependencias: cumpleaños/schema civil existentes y repetición remota cerrada; entrada 22% / 27%, reservas 10% / 1%.
+- Aceptación: aparición anual de día completo sin progreso/checklist, edad sólo con año, sin fechas anteriores al nacimiento; 29feb sólo en años bisiestos, igual que regla anual vigente. Identidad por fecha civil, paginación sin pérdidas/duplicados y sin cambio por zona/UTC. No persistencia, UI ni soporte remoto nuevo.
+- Validación: límites/centurias/año opcional/paginación/mutación/inputs inválidos, lint/tipos/suite/build/worker; registro/commit+push/HEAD/cuotas. Sin nuevas consultas DB, no requiere nuevo índice.
+
+## 17e2b2c — Piloto recurrente Preview con sesión Google existente
+
+- Estado: completada; piloto Google Preview, cuatro ACK reales, codec 3 validado y persistencia tras recarga.
+- Objetivo: verificar el deployment publicado y el bootstrap/readiness mediante ACK real de serie/aparición.
+- target_paths: `plan/{master,iterations,iteration-log,recurrence-sync,recurring-index-provisioning}.md`; piloto en UI Preview, sin producción ni credenciales manuales.
+- Dependencias: 375cafe publicado, sesión Google existente, 28% / 28%; reservas 10% / 1%.
+- Aceptación: preservar datos anteriores; crear un plan diario de piloto, modificar una aparición desde la lista, obtener ACK remoto y persistencia tras recarga/export portable 3. No declarar dos dispositivos físicos por pestañas ni resolver históricos automáticamente.
+- Validación: UI real, diagnóstico/backup del producto saneado, captura sin credenciales, documentación/diff/commit+push/HEAD/cuotas.
+
+## 17e2b2b — Activación conjunta de repetición remota
+
+- Estado: completada; 19 escenarios Next5 con configuración productiva real y DoD aprobados. Piloto Preview es la siguiente entrega.
+- Objetivo: activar todos los puertos recurrentes ya integrados con bootstrap Preview central y readiness obligatorio.
+- target_paths: `src/config/common-plan-release.ts`, `scripts/next-sync-test-runner.ts`, `plan/**`.
+- Dependencias: 17e2b2a publicado `b9f1005`, autorización y conexión Preview existentes; 32% / 29%, reservas 10% / 1%, secuencial.
+- Aceptación: generación 5 exclusiva en identidad/descarga/acciones/proveedor/consumidores/productores; retiro 4 sin ACK; fixture compilada utiliza la configuración real sin alias preparatorio. No reescribir históricos ni desplegar producción. Readiness obliga a cinco índices antes de aceptar comandos.
+- Validación: 19 escenarios Next5/IndexedDB/Mongo propios, suite/lint/tipos/build/worker; publicación int/HEAD/cuotas y comprobación de deployment Preview si disponible. Piloto Google distinto de la evidencia sintética, sin declarar dispositivos físicos por pestañas.
+
+## 17e2b2a — Índice de aparición desde el arranque Preview
+
+- Estado: completada; seis pruebas Mongo / 120 aserciones, suite 755 pass / 209 skip, lint 783, tipos/build/worker aprobados.
+- Objetivo: sustituir la ejecución externa por el singleton de la propia web, según petición humana explícita; sin acceso a secretos Vercel.
+- target_paths: `src/config/{env,env.test}.ts`, `src/lib/db/{client,ensure-indexes,ensure-indexes.test,recurring-index-operator.integration.test}.ts`, `src/lib/db/AGENTS.md` y `plan/**`.
+- Dependencias: índice registrado, autorización Preview concedida, conexión Preview distinta de Production previamente comprobada; 36% / 30%, reservas 10% / 1%, secuencial.
+- Aceptación: sólo Preview de `int` añade el índice de aparición; producción/local/otra rama conservan bootstrap9. Creación única e idempotente, duplicados conservados y parada ante error, sin reparar datos. Generación 4 permanece activa hasta verificar readiness desplegado.
+- Validación: matriz de configuración, selección central y bootstrap real en Mongo propio; lint/tipos/suite/build, plan/log, commit + push y cuotas.
+
+## 17z2 — Cierre documental legible de la continuación general
+
+- Estado: completada; referencias, consistencia y diff aprobados. Documentación únicamente.
+- Objetivo: resumir el estado actual, la evidencia y la actuación humana pendiente sin confundir preparación con activación.
+- target_paths: `plan/{master,workflow,iterations,recurrence-sync,iteration-log,recurring-index-provisioning}.md`.
+- Dependencias: 17e2b1 publicado; entrada 42% de 5h / 30% semanal, reservas 10% / 1%.
+- Aceptación: commits y cifras comprobados, producto 4 activo / perfil 5 preparado, permiso Preview pendiente y fuente verificada. Historia anterior conservada y sin nuevas actuaciones externas.
+- Validación: referencias, consistencia y `git diff --check`; commit + push a `int`, HEAD remoto y ambas cuotas.
+
+## 17e2b2 — Provisión Preview y activación
+
+- Estado: autorización concedida; el usuario sustituye el operador por creación desde el arranque web en 17e2b2a; selector 5 activado en 17e2b2b, piloto Preview pendiente.
+- Objetivo: ejecutar el procedimiento validado en Preview, obtener recibo `ready` / `closed` y readiness 5; activar la selección conjunta y realizar el piloto Preview/Google.
+- target_paths: `src/config/common-plan-release.ts` y `plan/**`; creación central desde el singleton Preview de `int`, sin captura de URI.
+- Dependencias: 17e2b1, autorización afirmativa, fuente y destino verificados. Nombre de DB confirmado: `dalis-tasks-events`; no repreguntarlo.
+- Aceptación: sólo índices registrados faltantes en Preview, conservación de datos y parada ante incompatibilidades o duplicados. Selector conjunto de identidad/pull/acciones/proveedor/codec/incidentes/CAS/orden; UUID y evidencia intactos. Históricos sin CAS conservados como unsupported.
+- Fuente: `MONGODB_URI` de Preview está vinculada al recurso Atlas debug, distinto del recurso de Production. Sin `MONGODB_DB` ni override de `int` visible. Guía disponible con secreto oculto; pestaña 60 conservada. No se han capturado credenciales ni abierto Mongo del usuario.
+- Validación: recibo saneado, readiness y DoD; commit + push / HEAD remoto / cuotas. El piloto Google y el deployment exacto requieren evidencia propia; dos pestañas no son dos dispositivos físicos.
+
+## 17e2b1 — Conexión conjunta con perfil todavía desactivado
+
+- Estado: completada; código `d0f7334`.
+- Objetivo: seleccionar todos los puertos del producto 5 juntos y conservar el producto 4 hasta la provisión autorizada.
+- target_paths: configuración de release, ruta de descarga, acciones 4/5, proveedor/contexto, productores de aparición/orden, backup/importación/incidentes, snapshot del resolver y fixtures Next 4/5.
+- Dependencias: 17e1 y 17e2a; entrada 68% / 34%, reservas 10% / 1%, trabajo secuencial.
+- Aceptación: perfil 5 aislado usa rutas y acciones productivas, proveedor real, productores de la UI y funciones de backup de cuenta. La referencia 5 desactivada rechaza antes de readiness/ejecución incluso con índices preparados. Política de resolución anterior conservada; ninguna elección nueva para apariciones.
+- Validación: 19 escenarios Next 5 y 20 Next 4 aprobados, suite 753 pass / 206 skip / 0 fail, lint 782, tipos, build Webpack y worker 46. Recursos propios limpiados; sin actuación en DB del usuario.
+
+## 17e2a2 — Comparación y UI de incidentes recurrentes
+
+- Estado: completada; código `3fe46ea`.
+- Objetivo: overview completo en una TX y comparación compacta de apariciones, junto a incidentes de contenido y preferencias.
+- target_paths: schemas/types de incidentes, planners y reader IndexedDB, panel/versiones de aparición y fixtures Next 5.
+- Dependencias: 17c3 y 17e2a1; entrada 78% / 36%, reservas 10% / 1%.
+- Aceptación: snapshot bounded, ownership y decoders coherentes; padre, aparición, estado local, evidencia congelada y remoto conocido separados. Sin escrituras, ACK ni resolución nueva.
+- Validación: test puro/SSR de corrupción y comparación mixta, lectura de conflicto real con dependiente conservado; 19 escenarios Next 5 y DoD aprobados.
+
+## 17e2a1 — Importación y lectura portable recurrentes
+
+- Estado: completada; código `22cd1aa`.
+- Objetivo: leer/exportar formato 3 e importar copias de planes simples en presencia de evidencia recurrente, manteniendo los consumidores activos estrictos.
+- target_paths: schemas/types de importación, codecs/planners, reader/importer IndexedDB y fixtures Next 5.
+- Dependencias: 17c5 y 17e1b5b; entrada 89% / 38%, reservas 10% / 1%.
+- Aceptación: snapshot completo, copias con UUID nuevos, conservación de cola/evidencia y archivos originales opacos. Rechazar selección de series/apariciones; rollback y replay atómicos.
+- Validación: 34 tests de backup, fallo inducido en el último recibo, retry/replay y ACK remoto único de una copia; 18 escenarios Next 5 y DoD aprobados.
+
+## 17e1b5b — Época después de commit remoto en vuelo
+
+- Estado: completada; código `05cdeb8`.
+- Objetivo: cambiar la época durable después del commit Mongo y antes de entregar su respuesta al runtime anterior.
+- target_paths: schema de fixture, comandos/dispositivo/controlador Next 5 y plan.
+- Dependencias: 17e1b5a; entrada 99% / 39%, reservas 10% / 1%.
+- Aceptación: root pending1 y dependiente pending0 intactos, sin ACK ni lease; pasada anterior account_changed. Cliente fresco confirma ambos originales con dos recibos únicos, proyecciones/cursor exactos y peer sin cambios.
+- Validación: 17 escenarios Next 5, sesiones persistidas, IndexedDB/Mongo propios y DoD aprobados.
+
+## 17e1b5a — Cuenta remota distinta conserva cola propia
+
+- Estado: completada12oct; dieciséis escenarios propios pasan, actor distinto no claim/ACK y reauth confirma dos intenciones únicas. Lote puntual cerrado después.
+
+- Objetivo: prueba pequeña de sesión BetterAuth distinta con cliente5 anterior y recuperación del mismo actor, sinclaim/ACK bajo cuenta extranjera.
+- target_paths: test/next-recurring-sync/features/controller.tsx.template y plan. Dependencias:17e1b4; entrada20%5h/41%7d, reserva10%/1%, corte final acotado mientras permisoíndice pendiente.
+- Aceptación: plan/vista reales pending0, sesiónotra devuelve account_changed antesclaim; stores/ownerMongo intactos y otra cuenta sinrecibos; reauthowner obtiene dos ACK únicos originales y no cambia peerconflictivo.
+- Validación: Next5/IndexedDB/Mongo real yDoD, plan/log mismo commitpushint/HEAD/cuotas. No abrir después guardiaen-vuelo/integración amplia; cerrar ejecución puntual.
+
+## 17e1c1 — Operador de índice recurrente validado
+
+- Estado: completada12oct; tres escenarios CLI/Mongo propios100aserciones pasan, no provisiónPreview; permiso específico solicitado y pendiente.
+
+- Objetivo: procedimiento explícito separado para los cinco índices registrados, target validado antes de abrir y cierre saneado; probar defaults/CLI/partialretry/noop sólo con Mongo propio.
+- target_paths: src/schemas/recurring-sync-index-provisioning.ts, lib/db/{recurring-sync-index-provisioning,recurring-index-execution,recurring-index-operator,recurring-index-operator.integration.test}.ts, scripts/{provision-recurring-indexes,sync-db-test-runner}.ts, plan. Dependencias:core deíndices/selector5/readiness preparados; entrada25%5h/42%7d, reserva10%/1%, secuencial.
+- Aceptación: configuración/target/acuse bootstrap antes conexión; singleton/ensureIndexes centrales; sólo nombres registrados, incompatibles/duplicados sin repair/delete; bootstrap9+personal5, prefix4/retry únicamente aparición y no-op/closed/exit. FuentePreview/destino/autorización específica externos y pendientes, no actuar DBusuario.
+- Validación: tres escenarios CLI/Mongo propios yDoD, plan/log mismo commitpushint/HEAD/cuotas; no comenzar otra entrega amplia tras este corte.
+
+## 17e1b4 — Categoría/orden recurrentes, conflicto y tombstone
+
+- Estado: completada12oct; quince escenarios reales pasan, journal18/receipts19; peer con conflicto intencional conserva dependiente y no se declara convergente.
+
+- Objetivo: integrar productor real de asignación/posición de aparición y conflicto stale entre clientes, seguido de cancelación/borrado con historia descargable y replay anterior conservado.
+- target_paths: src/schemas/next-sync-test.ts y test, test/next-recurring-sync/features/{local-client,device-client,controller}.ts*.template y plan. Dependencias:17e1b3; entrada48%5h/45%7d, secuencial/reservas10%/1%.
+- Aceptación: categoría/vista/placement con CAS independiente y cinco proyecciones convergentes; conflicto conserva payload intentado y dependiente pending0 sinACK; cancelación/root-tombstone descargas completas/cursor sin perder placement/historia; replayCreation antiguo no resucita datos. No llamar convergente a partición con conflicto intencional.
+- Validación: Next5/IndexedDB/Mongo propios yDoD, plan/log mismo commitpushint/HEAD/cuotas. Sin DBusuario/activación/Google.
+
+## 17e1b3 — Aparición local, respuesta perdida y dependencia real
+
+- Estado: completada12oct; doce escenarios Next5/IndexedDB/Mongo propios pasan, slot revision2 y journal12 convergentes.
+
+- Objetivo: productor local real con CAS capturado, pérdida de respuesta después de commit remoto y replay/ACK/rebase de dependiente nointentado.
+- target_paths: src/schemas/next-sync-test.ts y test, test/next-recurring-sync/features/{local-client,device-client,controller,projection}.ts*.template y plan. Dependencias:17e1b2/ACK productor preparados; entrada56%5h/46%7d, reservas10%/1%, secuencial.
+- Aceptación: raízserie confirmada1, slotnuevo CAS0 y dos UUID originales; primer commit confirmado enMongo sinACKlocal, dependiente pending0 y lease propio liberado; replay único de primera aparición y CAS1 del dependiente sólo nointentado, revisiónfinal2/cursor/proyecciones exactas en ambos clientes y padresemántico intacto. Helpers de comparación reutilizados.
+- Validación: Next5/IndexedDB/Mongo reales yDoD, plan/log mismo commitpushint/HEAD/cuotas; sin Google/activación/DBusuario.
+
+## 17e1b2 — Lifecycle React real del hook5
+
+- Estado: completada12oct; once escenarios Next5/React/IndexedDB/Mongo propios pasan, epoch/cache/listeners y ACKdurables probados.
+
+- Objetivo: validar hook5 real/caché5 frente a4, notificación/ACK, época/unkeyedrerender y limpieza de listeners sin reports/writes tardíos.
+- target_paths: test/next-recurring-sync/features/{hook-engine,hook-host,local-client,device-client,controller}.ts*.template y plan. Dependencias:17e1b1; entrada62%5h/47%7d, reservas10%/1%, secuencial.
+- Aceptación: productor real de plan/vista, resumen pending y ACK únicos víahook, cache4 conservada/cache5 presente; cliente anterior inválido tras época, mismo componente sinestado obsoleto; unmount más outbox/wake conserva nueva cola sinintentos, recuperación5 final y ambos clientes reachjournal. SinGoogle/productorlocalaparición declarado todavía.
+- Validación: Next real/React/IndexedDB/Mongo propios yDoD, plan/log mismo commitpushint/HEAD/cuotas; sin producción/DBusuario/activación.
+
+## 17e1b1 — Recuperación por defecto5 y convergencia durable
+
+- Estado: completada12oct; diez escenarios Next5 reales pasan, seis recibos/journal y cinco proyecciones exactas en dos particiones.
+
+- Objetivo: recuperar raíces/vistas exactas conservadas por17e1a2 usando cliente/runtime/action5 predeterminados y converger dos particiones con serie/aparición Mongo reales.
+- target_paths: test/next-recurring-sync/features/controller.tsx.template y plan. Dependencias:17e1a1–2; entrada69%5h/48%7d, secuencial/reservas10%/1%.
+- Aceptación: ACKs remotos únicos de las cuatro intenciones originales, UUID/payload y dependencia intactos, dos runtimes cerrados/reabiertos, cursor y proyección exactos para items/tags/views/placements/occurrences contra journalMongo; idle sin nuevos recibos. No afirmar todavía productores locales de aparición ni lifecyclehook5/Google.
+- Validación: Next compilado/IndexedDB/Mongo propios, regresiones/lint/tipos/build/worker/diff, plan/log mismo commitpushint/HEAD/cuotas. Sin DBusuario ni activación.
+
+## 17e1a2 — Cola conservada ante retiro4 y referencia ausente
+
+- Estado: completada12oct; nueve escenarios Next5/IndexedDB/Mongo propios pasan, sinACK antiguo y sin mutaciónremota por rechazos.
+
+- Objetivo: conectar en fixture aislada dos particiones propias y conservar UUID/payload/deps/stores/cursor ante acciónausente Next16.4 y retiro preparatorio4 tras handshake4 capturado realmente.
+- target_paths: test/next-recurring-sync/features/{local-client,device-client,controller}.ts*.template y plan. Dependencias:17e1a1, productores/backup/runtime privados existentes; entrada80%5h/50%7d.
+- Aceptación: root y asignación dependiente producidos atómicamente, intento viejo sólo incrementa attempts/libera lease propio sinACK, segundo handshake5 bloquea antesclaim, Mongo intacto. Orígenes/control/particiones/sesiones propios limpiados. No afirmar recuperación/convergencia5 ni lifecyclehook en este corte.
+- Validación: Next compilado/defaults reales/IndexedDB/Mongo, suite/lint/tipos/build/worker/diff, plan/log mismo commitpushint/HEAD/cuotas. Secuencial/reservas10%/1%; sin DBusuario/activación.
+
+## 17e1a1 — Frontera recurrente Next aislada
+
+- Estado: completada12oct; ocho escenarios Next5/Mongo propios y regresión diecinueve escenariosNext4 aprobados; generación4 activa intacta.
+
+- Objetivo: preparar y ejecutar referencia compilada real action5/defaults con sesiones propias y matriz4↔5, retiro preparatorio4 sin efectos y guardias de actor/readiness.
+- target_paths: scripts/{sync-db-test-runner,next-sync-test-runner}.ts, test/next-recurring-sync/** overlays sobre fixture4 y test/next-sync/features/{local-client,controller} para corregir assertion409 observado en Next16.4, src/lib/db/next-sync-fixture.ts, src/schemas/next-sync-test.ts y tests, plan.
+- Dependencias:17d1–5; Mongo propio/pinnedimage revalidados; int en worktree propio porque carpeta principal humana está enmain. Renovación real100%5h/53%7d, reset1791779244, reservas10%/1%, secuencial.
+- Aceptación: fixture4 conservada; referencia realaction5; retiro4 mediante wrapper preparatorio declarado como tal, no ID de producto todavía activo4; ausencia de ID409 con marcaaction-not-found verificada en Next16.4; sesión/expectedactor/readiness5 antes ejecución; rechazo header antesbody en matrix, recibos/journal no alterados por rechazos. Cierre/cookies/recursos únicamente propios.
+- Validación: buildNext real/Webpack soportado, dos sesiones persistidas/Mongo propios, regresiones/lint/tipos/build y plan/log mismo commitpushint/HEAD/cuotas. Sin IndexedDB/lifecycle/convergencia5 atribuidos en este corte ni provisiónPreview/activación.
+
+## 17z3 — Estimación y continuación puntual01:27
+
+- Objetivo: responder estado global y programar continuación solicitada para12oct01:27Europe/Madrid.
+- target_paths: plan/{master,workflow,iterations,iteration-log}.md y heartbeat existente. Dependencias:16c12 cerrado, cuota/reset reales.
+- Estado/aceptación: estimación20% pendiente y tres bloques en orden; heartbeat puntual ACTIVE confirmado sin duplicado, revisar renovación real antes17e1a, reservas10%/1%, sin código ni otra autorizaciónDB.
+- Validación: consistencia/referencias/diff; mismo commitpushint/HEAD y consulta final.
+
+## 16c12 — Controles y editor más compactos
+
+- Estado: completada; botones y controles de36px comprobados con CSS compilado y componentes reales en navegador propio.
+
+- Objetivo: petición humana de menor altura en acciones de categorías/ajustes y controles del editor común de planes.
+- target_paths: app/globals.css, features/{tags,workspace,plans}/components/{tag-form,tag-card,device-settings,plan-form,plan-recurrence-fields}.tsx y plan.
+- Dependencias:16c6/editor común activo; lectura13%5h/55%7d. Corte visual único solicitado, sin retomar sincronización ni automatización.
+- Aceptación: botones/selectores/campos36px en esos ámbitos, área de botón44px mediante extensión invisible sin solapar filas; espaciado y descripción reducidos, foco/labels/acciones/tipos/estado preservados. Fuera de estos ámbitos, controles actuales intactos.
+- Validación: inspección visual/control de CSS compilado, regresiones existentes, lint/tipos/build/diff; sin pruebas nuevas que sólo reflejen clases, plan/log y commitpushint/HEAD. Al cerrar preguntar ambas ventanas según protocolo normal.
+
+Cada identificador, incluidas letras (`01a`, `01b`), representa una entrega con **su propio commit y pregunta de presupuesto**. No ejecutar automáticamente todo un bloque numerado. El orden es secuencial salvo decisión explícita conforme a [workflow.md](workflow.md).
+
+Los `target_paths` describen el ámbito permitido; antes de editar, concretar archivos y leer instrucciones anidadas. Las rutas de pruebas se colocan junto al módulo cuando proceda. No crear todas las carpetas ni archivos vacíos por anticipado.
+
+## Hitos y estado
+
+| Hito | Entregas | Estado |
+| --- | --- | --- |
+| Plan y reglas | `00` | Completada; validación documental registrada en el log. |
+| Responsive y lote desatendido | `00b` | Requisitos y protocolo incorporados. |
+| Identidad y base offline | `01a–04c` | Completada; identidad, persistencia, worker/cierre y barras comprobados. Google real y dispositivos físicos siguen en el piloto. |
+| Calendario personal y creación de tareas | `05a–07b` | Completadas, incluida reordenación local; orden remoto de tareas simples activado en `11c5a18`. |
+| Eventos, repetición y cumpleaños | `08–10` | Eventos simples operativos; repetición local parcial. Backlog/programación futura, sincronización de series y cumpleaños pendientes. |
+| Remoto, convergencia y recuperación | `11a–13c` | Tareas/eventos propios simples, categorías, asignaciones y orden simple activados y probados; recuperación y backup entregados. Extensión a series y preferencias residuales pendiente. |
+| Piloto y cierre | `15a–15b` | Pendiente; compartir14a–14c retirado del alcance. |
+
+Para toda entrega con código: tipos, lint, pruebas pertinentes y build según [workflow.md](workflow.md). Los criterios siguientes añaden evidencia específica, no reemplazan esas comprobaciones. No marcar un hito terminado si falta una subentrega.
+
+Toda nueva pantalla importante debe actualizar en la misma entrega el registro único que alimenta navegación inferior móvil y superior escritorio, después de construirlas en `04c`. Las entregas de UI incluyen comprobación responsive, interacción táctil/teclado y contenido no tapado por barras fijas.
+
+## 00 — Plan inicial
+
+- Objetivo: documentar producto, decisiones, arquitectura, secuencia y reglas de trabajo.
+- `target_paths`: `plan/**`, `AGENTS.md`.
+- Dependencias: inspección del estado real del repositorio y restricciones del usuario.
+- Aceptación: todos los requisitos tienen decisión y entrega; reglas de idioma, commit y ambas ventanas persistidas; enlaces locales válidos, diff limpio y commit en la rama actual.
+- Siguiente candidata: `01a`, secuencial; confirmar lectura nueva de ambas ventanas antes de empezar.
+
+## 01 — Identidad persistente y separación de cuentas
+
+### 01a — Adaptador de identidad
+
+- Estado: completada la integración y sus comprobaciones automatizadas; verificación interactiva con Google real en `15a`.
+- Objetivo: persistir usuarios y cuentas de Google con ID estable, reutilizando singleton y adaptador Better Auth existente.
+- `target_paths`: `src/lib/auth/auth.ts`, `src/lib/db/{client,collections,ensure-indexes}.ts`, `src/lib/db/{auth-adapter,auth-models}.ts`, pruebas de DB/auth, configuración de seguridad de la DB de test en `src/config/env.ts` e instrucciones de la capa DB.
+- Dependencias: `00`; revisar tipos/documentación instalada del adaptador; acceso a base de pruebas. No abrir otro cliente ni crear índices fuera del registro central.
+- Aceptación automatizada: misma cuenta obtiene el mismo ID tras cerrar sesión/reconectar y desde dos clientes HTTP con cookies independientes; cuentas distintas tienen IDs distintos; índices de auth registrados; URL de autorización Google conserva proveedor, client ID y callback. Firmas/emisor/audiencia se verifican con clave de prueba y MongoDB real. El recorrido interactivo completo en dos navegadores y Google real se verifica en `15a`, sin atribuir esa evidencia a esta entrega.
+- Ajuste de validación: clientes HTTP independientes hacen la comprobación reproducible de persistencia sin cuentas personales ni intervención OAuth; el test usa el handler real y solo sustituye el origen de claves públicas. Los detalles de ejecución están en [el registro](iteration-log.md).
+- Riesgo/corte: si el arranque async del adaptador afecta a la API actual, documentar y resolver en esta entrega; no avanzar a datos de producto con identidad transitoria.
+
+### 01b — Sesiones anteriores, autorización y cuenta activa
+
+- Estado: completada; política y operación en [auth-operations.md](auth-operations.md).
+- Objetivo: endurecer verificación vigente para sync y definir transición desde auth sin DB.
+- `target_paths`: `src/lib/auth/{session,authorized-session,auth}.ts`, pruebas de auth y suite DB de identidad, documentación de setup.
+- Dependencias: `01a`; mantener `ALLOWED_EMAILS` como restricción del piloto.
+- Aceptación: sesión vieja sin identidad persistida exige login; sesión revocada/caducada no autoriza remoto; usuario no autorizado no entra; no registrar tokens/PII. Prueba con dos cuentas autorizadas de prueba, sin escribir sus emails en el plan.
+
+### 00c — Eliminar ruido de lint
+
+- Estado: completada por petición expresa del usuario durante el lote desatendido.
+- Objetivo y `target_paths`: añadir títulos accesibles en español a `public/{file,globe,next,vercel,window}.svg`; registrar el cierre en `plan/**`.
+- Dependencias: ninguna funcional; se intercala antes de `02b`.
+- Aceptación y validación: lint global sin errores, tipos y build aprobados; sin desactivar reglas ni cambiar el dibujo de los assets.
+
+## 02 — Contratos y reglas básicas del dominio
+
+### 02a — Entidades y comandos
+
+- Estado: contratos iniciales implementados y comprobados; generación de recurrencia y mutaciones remotas siguen en sus entregas.
+- `target_paths`: `src/types/{calendar-item,preferences,sharing,sync}.ts`, `src/schemas/**` relevantes.
+- Dependencias: `01b` para confirmar tipo de identidad; reglas de [product-and-model.md](product-and-model.md).
+- Aceptación: unión discriminada tarea/evento/cumpleaños, checklist por ID, preferencias personales, esquemas de intenciones/versiones; rechazar datos incompatibles por tipo, títulos vacíos, fechas imposibles y payloads desmesurados. Tipos/esquemas sin imports de framework/driver.
+- Alcance: contratos iniciales, sin implementar aún auth, transporte, UI ni recurrencia completa.
+
+### 02b — Fechas civiles y atrasadas
+
+- Estado: completada; aritmética civil y selección probadas, conexión con UI prevista en `06–07`.
+- `target_paths`: `src/lib/calendar/{civil-date,date-range,overdue}.ts`, pruebas asociadas.
+- Dependencias: `02a`.
+- Aceptación: fecha local no cambia por offset UTC; atraso conserva estado y fecha; completadas/eventos/cumpleaños excluidos; pruebas de cambio de día, mes/año y zona, con reloj inyectable.
+
+## 03 — Persistencia local y outbox
+
+### 03a — Repositorios IndexedDB
+
+- Estado: completada; ocho comprobaciones en navegador real, incluida recarga; escritura con outbox se incorpora en `03b`.
+- `target_paths`: `src/lib/local-db/**`, tipos/esquemas locales específicos.
+- Dependencias: `02b`.
+- Aceptación: crear/leer/editar/borrar lógico persiste tras recarga; datos de dos cuentas aislados; stores e índices locales definidos; migración inicial versionada; error de almacenamiento no devuelve guardado exitoso.
+- Validación adicional: navegador real, no solo mock en memoria.
+
+### 03b — Escritura atómica e intenciones
+
+- Estado: completada para infraestructura y mutaciones básicas de elementos; comandos de categorías/preferencias/orden se conectan en `05b/07b`, ocurrencias en `09b` y ACK/reconciliación en `12b`.
+- `target_paths`: outbox y transacciones en `src/lib/local-db/**`, `src/features/sync/**` local, contratos afectados en `src/schemas/**`.
+- Dependencias: `03a`.
+- Aceptación: dato+operación en una transacción; UUID estable en reintentos; orden/dependencias de crear-editar-borrar; recuperar envío interrumpido; shadow remoto separado. Ninguna llamada a red necesaria para guardar.
+- Validación adicional: interrumpir la transacción y comprobar que no existe cambio sin operación ni operación sin cambio.
+
+## 04 — Arranque y reapertura offline
+
+### 04a — Shell neutro y preparación PWA
+
+- Estado: completada, incluyendo recarga de producción con servidor detenido. Navegador de Codex comprobado; Safari/iPhone/Android físicos pendientes del piloto.
+- `target_paths`: `src/app/(offline)/workspace/page.tsx`, `src/app/manifest.ts`, `src/features/workspace/**`, `src/lib/pwa/**`, `src/proxy.ts`, assets `public/**`, configuración/build del worker si hace falta.
+- Dependencias: `03b`; leer guía PWA instalada y precisar navegadores del piloto. Un único responsable de configuración compartida.
+- Aceptación: entrada neutra sin datos privados, cliente con partición preparada, worker TypeScript compilado y assets necesarios cacheados; `/workspace` y manifest no bloqueados por auth; API sigue protegida; “Disponible sin conexión” solo tras preparar recursos y datos.
+- Corte: no dar por completado por obtener un icono instalable; primero probar que el shell funciona offline en build de producción.
+
+### 04b — Cierre, cuenta y versión
+
+- Estado: completada en navegador de Codex; cierre de todas las pestañas y nueva webview sin servidor, aislamiento y actualización probados. Reinicio físico de navegadores móviles pendiente de `15a`.
+
+- `target_paths`: `src/features/workspace/**`, `src/lib/pwa/**`, arranque de `src/lib/local-db/**` y pruebas de navegador.
+- Dependencias: `04a`.
+- Aceptación: cerrar navegador, desconectar y abrir shell; partición persistida disponible sin sesión remota vigente; logout oculta datos en todas las pestañas; cambio de cuenta no arrastra cola. Actualizar shell conserva IndexedDB y no interrumpe una escritura.
+
+### 04c — Navegación responsive mobile-first
+
+- Estado: completada para barras, resumen/ajustes, navegación offline y texto al 200%; creación operativa se conecta en `05a`.
+
+- Corte de implementación: resumen y ajustes reales de dispositivo; el botón `+` se activa con el formulario operativo de `05a`, inmediatamente después, sin destino ficticio en esta entrega.
+
+- `target_paths`: componentes extraídos en `src/components/shared/**` para barra inferior/superior, SVG en `src/components/ui/**`, registro tipado en `src/config/navigation.ts` y shell de workspace.
+- Dependencias: `04b`; solo incluir pantallas que existan. Un registro de destinos, dos presentaciones responsive; sin nuevo kit de UI.
+- Aceptación: móvil con barra inferior de iconos SVG y labels en español; escritorio con navbar superior; estado activo y navegación por teclado; botón `+` accesible; safe areas y padding impiden tapar contenido. Verificar a 320/390/768/1280px y con texto ampliado; navegación entre destinos locales disponible offline.
+- Mantenimiento: actualizar ambas variantes al introducir calendario/agenda, compartidos o ajustes; no añadir botones sin implementación ni duplicar registros.
+
+## 05 — Crear y editar tareas
+
+### 05a — Botón `+` y formulario (dividida para el lote)
+
+- `target_paths`: `src/features/tasks/components/**`, `src/features/workspace/components/**`, primitivas realmente reutilizables en `src/components/ui/**`.
+- Dependencias: `04c`.
+- Aceptación: botón principal accesible; tarea con título, fecha, descripción y checklist se guarda offline; errores en español; fecha seleccionada precargada; edición y borrado lógico funcionan tras recarga.
+- Alcance: mostrar solo opciones de creación ya operativas; añadir evento/cumpleaños en `08/10`, sin botones que simulen guardar.
+
+
+#### 05a1 — Crear y listar tareas offline
+
+- Estado: completada; formulario y guardado offline probados en producción, incluidas recarga y outbox.
+
+- Objetivo: activar `+`, crear tarea simple validada con fecha/descripcion/checklist inicial y listar datos locales, con modal accesible y guardado dato+outbox.
+- `target_paths`: `src/features/tasks/{local-tasks.ts,hooks/**,components/**}`, integración en workspace/resumen y ambas barras; revalidación de foco en `local-db/account-control.ts`; fixture y plan. Dependencias: `04c`, contratos/IndexedDB de `02–03`; sin nuevas dependencias.
+- Aceptación/validación: hoy de la zona de la cuenta precargado; errores españoles; no afirmar guardado antes de commit transaccional; tarea creada sin servidor se conserva tras recarga; outbox verificable; móvil/teclado; tipos, lint, pruebas, build. Estado/checklist existentes solo lectura en esta entrega.
+
+#### 05a2 — Editar y borrar tareas offline
+
+- Estado: completada; edición/borrado y recarga sin servidor en Chrome de producción, outbox y rechazo de edición obsoleta comprobados.
+
+- Objetivo y `target_paths`: ampliar formulario/listado y `local-tasks.ts` para actualizar y borrar lógicamente mediante outbox; plan y fixture pertinente. Dependencia: `05a1`.
+- Aceptación: editar título/fecha/descripción/checklist conserva identidad/estado; borrar pide confirmación explícita y crea tombstone, sin borrar cola; recarga sin servidor conserva ambos resultados; comprobación de dependencias de intenciones.
+
+### 05b — Categorías y estados (dividida)
+
+- Estado: completada mediante `05b1–05b3`; clasificación personal desde cada tarea ya guardada.
+
+- `target_paths`: `src/features/tags/**`, estado/checklist en `src/features/tasks/**`, repositorios locales afectados.
+- Dependencias: `05a2`.
+- Aceptación: crear/elegir categoría; “Sin categoría”; empezar/completar/reabrir; marcar checklist no completa tarea implícitamente; borrar categoría conserva tareas; todos los cambios escriben outbox y sobreviven offline.
+
+#### 05b1 — Estado y checklist interactivos
+
+- Estado: completada; estados/checklist y siete intenciones encadenadas de una tarea conservados tras recarga sin servidor.
+
+- Objetivo: empezar, completar y reabrir tareas simples; marcar pasos sin completar implícitamente la tarea.
+- `target_paths`: servicio/componentes/hooks de tareas, comando de checklist compartido y mutación local, pruebas y plan. Dependencia: `05a2`.
+- Aceptación: cambios por ID y campo, dato+outbox atómicos, estado/checklist persisten tras recarga offline; fallo visible y bloqueo de doble envío mientras guarda. Conserva fechas y contenido; no edita padres recurrentes como si fueran ocurrencias.
+- Validación: casos de completar/reabrir/paso inexistente, cola y dependencias en IndexedDB, UI real sin servidor, tipos/lint/tests/build.
+
+#### 05b2 — Intenciones locales para categorías y preferencias
+
+- Estado: completada; transacciones, duplicados concurrentes, dependencias, rollback e inspección tras nueva carga comprobados en IndexedDB real.
+
+- Objetivo: contratos y transacciones de crear/editar/borrar categoría personal y asignar categoría al elemento sin alterar su contenido.
+- `target_paths`: schemas/types compartidos, outbox/mutaciones de preferencias en `lib/local-db/**`, pruebas y plan. Dependencia: `05b1`.
+- Aceptación: pertenencia a cuenta validada, nombres duplicados tratados explícitamente, borrado conserva tareas y cola; asignaciones y categoría/orden quedan listos para transporte remoto. Evaluar índices y compatibilidad de registros existentes antes de editar.
+
+#### 05b3 — Categorías en la interfaz
+
+- Estado: completada; gestión/asignación/borrado y recarga offline con cola comprobados, ambas barras actualizadas y texto al 200% sin desbordamiento.
+
+- Objetivo: crear/elegir/gestionar categorías; tareas sin categoría siguen accesibles.
+- `target_paths`: `features/tags/**`, integración en tareas/workspace y registro de navegación si añade pantalla importante; fixture y plan. Dependencia: `05b2`.
+- Aceptación: operaciones reales offline con errores españoles, asignar y retirar categoría, borrar categoría conserva tareas, recarga mantiene resultado. Si añade destino, actualizar ambas barras en la misma entrega.
+
+## 05c — Preparación tras Google y pruebas en desarrollo
+
+- Estado: completada; cinco casos de desarrollo y seis de producción, recarga/navegación/creación sin servidores y captura móvil comprobados con identidades ficticias.
+- Objetivo: abrir automáticamente el espacio de una sesión autorizada y permitir probar tareas/categorías en desarrollo sin exigir el worker de producción.
+- `target_paths`: `features/workspace/local-account.ts`, hook y textos de workspace/ajustes, pruebas de navegador aisladas y scripts de fixture; `plan/**`. Dependencias: `04b`, `05b3`; ejecución secuencial.
+- Aceptación: sesión verificada activa la partición local y el `+`; un 401 solicita Google sin activar datos; desarrollo restaura datos sin worker y explica que la reapertura offline requiere producción; producción sigue exigiendo shell preparado. Cierre pendiente y época invalidada impiden reactivación; se conservan particiones y outbox.
+- Validación: fixture con identidad ficticia servida únicamente en loopback, preparación/recarga/401/cierre y producción sin servidor; lint, tipos, tests, build y revisión de diff. No modifica Google, allowlist ni autorización remota.
+
+## 06 — Calendario mensual y apertura del día
+
+- Estado: completada; mes/día/creación y recarga sin servidores comprobados, ambas barras actualizadas, extremos de fecha y reflow al 200% validados. Entrada automática 48%/92%, secuencial.
+- Objetivo: mes y día reales con enlaces offline, creación preseleccionada desde el día y ambas barras actualizadas.
+- `target_paths`: `src/features/calendar/**`, filtro del listado/composer de tareas, workspace, registro/links/iconos de navegación, pruebas y `plan/**`.
+- Dependencias: `05b3`, corrección intercalada `05c`.
+- Aceptación: mes anterior/siguiente, “Hoy”, lunes como inicio, selección y URL del día; contadores e indicadores; abrir día muestra tareas reales; navegar a otro mes y recargar sin red; móvil y teclado usables.
+- Alcance: cuadrícula propia sencilla, sin nueva librería de calendario. Contar eventos/cumpleaños cuando existan, no fabricar contenido de ejemplo como estado real.
+- Hito: primera demostración útil de calendario personal offline.
+
+## 07 — Agenda agrupada, orden y atrasadas
+
+### 07a — Grupos y atrasadas
+
+- Estado: completada; grupos, atrasadas, completar/recargar offline, historial original y cambio de día sin nuevas intenciones comprobados. Entrada automática 38%/90%, entrega secuencial.
+- Objetivo: grupos personales en el día y sección global de atrasadas que conserva fecha/estado y se recalcula al cambiar de día.
+- `target_paths`: selectores/componentes de tareas y calendario, hook de día de cuenta, resumen del workspace, pruebas/fixtures y `plan/**`.
+- Dependencias: `06` y reglas de `02b`.
+- Aceptación: título de categoría con sus tareas debajo; sección “Atrasadas” global con fecha original/estado; cambio de día y reentrada recalculan; completar retira de atrasadas; historial del día original preservado.
+- Validación: selectores para categorías ausentes/borradas y completadas; reloj/foco con tiempo simulado únicamente en iframe de fixture; recorrido offline de completar y recargar, inspección de datos/cola; lint, tipos, tests y build. Reutiliza ambas pantallas existentes, sin nuevos destinos.
+
+### 07b — Reordenación persistente (dividida)
+
+- Diseño y cortes: [reordering.md](reordering.md). `07b0–07b3b` completos; candidata `08`, dividir antes de implementar.
+- `target_paths`: componentes/hooks de orden en `src/features/tasks/**` y `src/features/tags/**`, preferencias en `src/lib/local-db/**`.
+- Dependencias: `07a`.
+- Aceptación: mover grupos y tareas, cambiar categoría personal, ordenar atrasadas; alternativa de teclado a drag-and-drop; recarga conserva orden; operaciones por ID/intención, sin reemplazo global de arrays.
+
+#### 07b0 — Diseño de intenciones
+
+- Estado: completada, exclusivamente documental. Entrada 29%/89%; `target_paths`: `plan/**`, dependencias `07a` y código de preferencias vigente.
+- Objetivo: concretar scopes, clave global de atrasadas, validaciones transaccionales y separación de persistencia/controles/arrastre. Aceptación: rutas y evidencias de cada corte, sin habilitar comandos no implementados. Validación: referencias locales, consistencia y `git diff --check`.
+
+#### 07b1a — Ranking y movimiento atómico de categorías
+
+- Estado: completada, secuencial. Reanudación autorizada «Continua»; lectura automática 5h 100% / 7d 87%. Árbol limpio, rama `main`.
+- Objetivo: `tag.move` con vecinos activos, orden determinista por posición/ID, compactación local y una sola intención atómica e idempotente.
+- `target_paths`: `schemas/sync.ts`, `schemas/local-sync.ts`, `types/local-sync.ts`, ranking en `lib/ordering/**`, mutaciones/outbox de preferencias, lectores de categorías/grupos, fixture `test/browser/ordering.ts`, registro del servidor de fixtures y `plan/**`. Un responsable, sin paralelo.
+- Dependencias: `07b0`, `05b2`, `07a`; reutiliza índice `byPosition`, stores y versión actuales. Sin consultas MongoDB ni nuevos paquetes.
+- Aceptación: inicio/medio/final, vecinos obsoletos/borrados/self rechazados, desempate estable frente a renombrar, compactación acotada, revisión/contenido preservados, replay sin doble movimiento, colisión de UUID rechazada, particiones separadas, rollback tras fallo de cola y persistencia tras recarga. Colas anteriores legibles; no habilitar movimiento de tareas aquí.
+- Validación: tests de ranking/contrato, IndexedDB real (concurrencia, rollback, recarga), tipos/lint/build, diff y referencias. Tras commit consultar ambas ventanas automáticamente durante la continuación autorizada; conservar reserva del 20%.
+
+#### 07b1b — Movimiento atómico de tareas y colocaciones
+
+- Estado: completada, secuencial. Entrada automática 5h 93% / 7d 86%, después de `08aa120`.
+- Objetivo y alcance decidido: `task.move` para tareas simples, nueva clave personal de colocación, ejecutor separado de movimiento y helper de planificación, schemas/types, fixture de IndexedDB/servidor y `plan/**`. Un responsable; sin controles de UI todavía.
+- Fecha de atrasadas: el campo de comando `date` existente indica el día de evaluación y debe coincidir con hoy según ajustes de cuenta/reloj al escribir; la colocación/clave usan siempre `0001-01-01`. Mantener lectura de comandos antiguos con ocurrencia no nula/clave item; no ejecutarlos en la capa de tareas simples.
+- Legado: las tiendas existen pero no hay escritor de producto de colocaciones. Leer/validar registros existentes; un registro activo de atrasadas con fecha no canónica bloquea ese movimiento con error técnico y conserva todo, hasta migración separada. Colocaciones de otro día/categoría se conservan y no imponen rango en el destino.
+- Orden inicial: colocaciones compatibles primero por posición/ID; filas sin posición después por fecha/creación/ID. Materializar filas implícitas del destino dentro de la misma transacción, con compactación si las posiciones exceden límites. Esta política será usada por lectores de `07b2`.
+- `target_paths`: schemas/types de movimientos, preferencias/colocaciones en `lib/local-db/**`, pruebas y plan. Dependencia: `07b1a`.
+- Aceptación: tareas simples por día y atrasadas, vecinos/actor/scope validados; categoría+colocación/compactación en una transacción; replay, rollback, legado y recarga comprobados. Evaluar colocaciones existentes antes de escribir. No escribir posiciones desde componentes.
+
+#### 07b2a — Botones accesibles para categorías
+
+- Estado: completada, secuencial; entrada automática 5h 86% / 7d 85%, después de `4e6e345`.
+- Objetivo: Subir/Bajar categorías desde gestión, usar `tag.move`, conservar foco y bloquear duplicados durante guardado. Sin nueva pantalla; registro de ambas barras se conserva.
+- `target_paths`: controles/icono genéricos en `components/ui/**`, helper de vecinos, servicio/hook/card/manager de categorías, fixture workspace/evidencia y `plan/**`. Dependencias `07b1a`, `07b1b`; reutilizar SWR/intent/account guard.
+- Aceptación: orden confirmado y persistido tras recarga, inicio/final no escriben, teclado Enter/Espacio y foco conservado, reintentos no duplican, UI española legible en móvil/escritorio/200%, offline real con servidores detenidos. Una intención por movimiento; nombres/color/edición siguen operativos.
+- Validación: fixture con cuenta ficticia y build de producción, inspección de cola, lint/tipos/tests/build, referencias/diff. Sin dependencia adicional.
+
+#### 07b2b — Orden visible y controles de tareas
+
+- Estado: completa, secuencial; entrada automática 5h 76% / 7d 83%, tras `678ac64`.
+- Objetivo: leer colocaciones de forma independiente (fallo de preferencias no oculta tareas), ordenar por día o global atrasadas, botones Subir/Bajar, cambio de categoría vía `task.move` y grupos con `tag.move`. Una intención por movimiento; fechas intactas.
+- Alcance: `features/tasks/**`, selector de categoría compartido, helper de vecinos visibles/rangos, fixture workspace/servidor/evidencia y `plan/**`. Dependencias `07b1b`, `07b2a`; reutilizar controles, SWR/intent y cuenta. Sin nueva pantalla ni destinos.
+- Foco: preservar botón al reordenar; al cambiar grupo, recuperar el selector de la tarea en su nueva fila dentro de la sección. Grupos saltan categorías vacías mediante vecinos de la lista completa; Sin categoría permanece al final.
+- Hoy y próximas: ordenar y mover dentro de la fecha original de cada tarea, sin cruzar días. Atrasadas usa lista global; completar conserva colocaciones/historial y cambio de día no escribe.
+- Aceptación/validación: prueba de producción con servidores detenidos, día/atrasadas, grupo vacío intermedio, cambio de categoría atómico, teclado/foco, recarga, inspección de cola y estado, 320/390/escritorio/200%, tipos/lint/tests/build, referencias/diff.
+- Resultado: todos los criterios anteriores comprobados; 62 tests aprobados, 7 auth opt-in omitidos, cero fallos; lint/tipos/build aprobados. Inspector confirma 19 operaciones consecutivas y cinco colocaciones, sin cambiar fechas; [evidencia móvil](evidence/07b2b-mobile.png).
+- `target_paths`: lecturas/selectores/hooks y controles de grupos/tareas, fixture/plan. Dependencias: `07b1b`, `07b2a`.
+- Aceptación: movimientos por botones y categoría con teclado/móvil; orden real por día y global atrasadas, recarga offline, una sola intención por cambio, errores españoles y foco conservado. Usar el mismo planificador de orden inicial; no mover fechas. Añadir controles de grupos si aportan acceso directo útil. Actualizar ambas barras si se añade pantalla.
+
+#### 07b3a — Arrastre de categorías y control compartido
+
+- Estado: completa, secuencial; entrada automática 5h 67% / 7d 82%, tras `29e0d7b`. División decidida antes de editar para probar el gesto antes de conectarlo a tareas/grupos.
+- Objetivo: handle de Pointer Events para ratón/táctil con umbral, captura, cancelación por Escape/pérdida de foco, indicador de destino y scroll en bordes; una operación solo al soltar en un destino válido. Reutilizar `tag.move` y Subir/Bajar.
+- `target_paths`: `components/ui/drag-order-handle.tsx`, icono SVG, helper puro de vecinos de drop y tests, manager/card de categorías, fixture/servidor/evidencias y plan. Dependencias `07b2b`. Sin nueva pantalla, paquetes, esquema o índice.
+- Aceptación: cancelación y click sin mover no escriben; soltar guarda una intención, límites/destinos obsoletos no inventan vecinos, foco tras guardar, recarga offline; arrastre con scroll y teclado alternativo. Prueba real de ratón más secuencia táctil en fixture aislado, responsividad; lint/tipos/tests/build/referencias/diff.
+- Resultado: ratón real con servidores detenidos, cancelación fuera de lista, un `tag.move` y recarga comprobados; secuencia táctil sintética con captura sustituida solo en fixture comprueba handlers/cancelación/scroll. No sustituye piloto táctil de dispositivo real. 63 tests, lint/tipos/build aprobados; [controles móviles](evidence/07b3a-mobile.png).
+
+#### 07b3b — Arrastre de tareas y grupos
+
+- Estado: completa, secuencial; entrada automática 5h 56% / 7d 80%, tras `58abe8f`.
+- `target_paths`: filas/controles de tareas y grupos, pruebas/fixture, plan. Dependencia: `07b3a`.
+- Objetivo: conectar el control compartido a comandos existentes por día/global atrasadas y al orden de grupos; categoría se cambia con selector accesible. No cruzar días ni modificar fechas.
+- Detalle previo: cada lista de grupo identifica sus filas; peers de tarea solo incluyen mismo día (o global overdue). El hit-test rechaza una fila de otro día o grupo antes de calcular vecinos; grupos usan vecinos completos para saltar categorías vacías. Sin categoría queda fijo. Foco/errores/cola reutilizan hooks existentes.
+- Validación: arrastre real de ratón offline en día/atrasadas/grupos, rechazo fuera de lista/otro día, inspector con una intención por drop y fechas intactas; fixture táctil del handle conserva cancelación/scroll. Recarga, móvil/escritorio/200%, lint/tipos/tests/build/referencias/diff.
+- Resultado: 19 operaciones consecutivas, tres `task.move` y un `tag.move` sobre seis tareas, sin modificar fechas/estado; drop entre días rechazado. 63 tests, lint/tipos/build aprobados, fixture táctil añade destino incompatible/lista cambiante; [móvil](evidence/07b3b-mobile.png).
+- Aceptación: arrastre táctil/ratón y cancelación, una intención al soltar, scroll móvil; alternativa por botones permanece operativa. Sin biblioteca nueva.
+
+#### 07b3 — Arrastre con el mismo comando (bloque)
+
+- `target_paths`: filas/controles de orden y pruebas, plan. Dependencia: `07b2b`.
+- Aceptación: arrastre táctil/ratón y cancelación, una intención al soltar, scroll móvil; alternativa por botones permanece operativa. Sin biblioteca nueva.
+
+## 08 — Eventos y citas
+
+- `target_paths`: `src/features/events/**`, selectores de calendario, reglas de zonas en `src/lib/calendar/**`, schemas de evento.
+- Dependencias: `07b1a–07b3b`.
+- Aceptación: activar “Evento o cita”; hora, categoría, descripción, duración opcional y día completo; orden cronológico; evento que cruza medianoche visible en los días correctos; editar/borrar offline. Validar horas ambiguas/inexistentes y duración antes de guardar.
+- Corte: si conversión de zona requiere aprobación de dependencia, cerrar primero su análisis; no aproximar horas silenciosamente.
+
+### 08a — Conversión de hora/zona y validación temporal
+
+- Estado: completa, secuencial; entrada automática 5h 48% / 7d 79%, tras `0d544c2`. Cuota recibida tras demora; no se editó código antes de recibirla.
+- `target_paths`: `lib/calendar/zoned-time.ts`, `event-time.ts`, tests/fixture de runtime y plan. Dependencias `07b3b`, schemas de `02a`. Sin UI nueva, dependencia, store, índice o cambio de formato persistido.
+- Objetivo: convertir fecha/hora local con Intl y comprobar candidatos UTC mediante vuelta exacta; distinguir instante único, hora repetida y hora inexistente. Validar inicio/fin y duración real antes del futuro guardado. Todo el día conserva fechas civiles/final exclusivo; fin opcional no inventa duración.
+- Política MVP: no hay campo persistido que distinga las dos apariciones de una hora repetida. Rechazar esa programación y pedir otra hora válida explícitamente; no elegir antes/después silenciosamente. Una futura elección de offset exige contrato separado compatible. Mantener schema almacenado para no invalidar datos antiguos; la validación temporal se aplicará al input de producto en `08b`.
+- Validación: UTC, Madrid/NY, transición de media hora, salto de día, offsets fraccionarios/históricos, años extremos, medianoche/duración real y casos inválidos; runtime Bun y navegador aislado, lint/tipos/tests/build/referencias/diff.
+- Resultado: 67 tests pasan (cuatro nuevos), casos temporales repetidos con host TZ Honolulu y en navegador; sin normalización, escrituras o cuenta. Lint/tipos/build aprobados, [evidencia](evidence/08a-browser.png).
+
+### 08b — Persistencia atómica y lectura de eventos
+
+- Estado: completada, secuencial; entrada automática 5h 43% / 7d 78%, tras `587e12b`. IndexedDB real verifica cinco intenciones, rechazo sin escrituras, CAS, replay histórico y rollback; detalle en el registro.
+- `target_paths`: `features/events/local-events.ts`, validación de input temporal compartida, mutación/outbox existente y fixture/tests, plan. Dependencia `08a`.
+- Objetivo: crear/editar/borrar eventos simples, rechazar horas inválidas antes de guardar, mismo UUID y CAS conservados; lector separado de tareas, datos/cola atómicos. No activar UI antes de completar motor.
+- Detalle previo: schema de input temporal separado del schema almacenado; validarlo en ejecutor local después de replay/guardias, antes de escribir. Reutilizar outbox item y singleton local; servicio valida estructura y guardia de cuenta. Lectura no reconvierte/rechaza registros históricos ambiguos. Recurrencia en input pendiente de `09c`.
+- Aceptación: creación/edición/borrado simples, rechazo gap/repetición sin secuencia ni escritura, CAS/editor obsoleto, replay sin duplicar, legado legible y replay anterior preservado; IndexedDB real, cuentas aisladas, fallo de outbox revierte todo. Lint/tipos/tests/build/referencias/diff; sin pantalla/índice/dependencia nuevos.
+
+### 08c1 / 08c2 — Crear/ver, después editar/borrar eventos
+
+- `target_paths`: composer/list/card de eventos, creación compartida del workspace, selectores de calendario y plan. Dependencias `08b`; separar creación/listado de edición/borrado antes de empezar según cuota.
+- Aceptación conjunta: selector + con Evento o cita activo, día completo/hora/duración/descripcion/categoría, cronología y días correctos, UI española y navegación responsive, offline/recarga/una intención, errores horarios explícitos y foco.
+
+## 09 — Series y ocurrencias
+
+### 09a — Motor de repetición
+
+- `target_paths`: `src/lib/calendar/{recurrence,occurrences}.ts`, schemas de reglas y pruebas.
+- Dependencias: `08`.
+- Aceptación: diaria/semanal/mensual/anual, intervalo y límites; IDs deterministas; rango paginado; regla del día 31; misma hora local en cambios DST; fechas/zonas válidas. No expandir infinito.
+
+### 09b — Ocurrencias de tareas y backlog
+
+- `target_paths`: `src/features/tasks/**`, selectores de agenda, repositorios de excepciones locales.
+- Dependencias: `09a`.
+- Aceptación: estado/checklist por aparición; completar una no afecta a otra; atrasadas repetidas desde ancla hasta hoy por páginas, incluso fuera del mes visible; editar/cancelar solo una mantiene slot original.
+
+### 09c — Eventos repetidos y programación futura
+
+- `target_paths`: `src/features/events/**`, formularios compartidos de recurrencia, repositorios/contratos de separación de serie.
+- Dependencias: `09b`.
+- Aceptación: eventos repetidos y formulario de repetición; “Solo esta” y “Esta y las siguientes”; separación en una transacción local con comando remoto correspondiente; conserva pendientes anteriores e IDs históricos. Borrar futuras no borra checklist/estados pasados.
+- Riesgo: no partir este comando entre dos entregas que dejen tramos incoherentes; cerrar modelo+persistencia+UI de la operación juntos.
+
+## 10 — Cumpleaños
+
+- Estado vigente: **aparcada por decisión humana**, sin implementar pantalla/persistencia/sincronización. 10a conserva su generador preparado sin caller; no retomarlo hasta nueva elección.
+
+- `target_paths`: `src/features/birthdays/**`, variantes de calendario, regla anual y schemas asociados.
+- Dependencias: `09c`.
+- Aceptación: activar “Cumpleaños”; persona, día/mes y año opcional; aparición anual de día completo; edad solo si hay año; política de 29 de febrero visible y probada; sin estado/checklist; editar/borrar offline.
+
+## 11 — Persistencia remota autorizada
+
+Prioridad revisada el7oct: adelantar sincronización del alcance local ya operativo, a petición del usuario.09b4b2a/09c/10 quedan aplazadas; no son prerrequisitos de persistencia de tareas/eventos simples. Primer corte11b0 prepara huella de recibos sin IO; después11a1 confirma transacciones en DB de prueba y desarrolla repositorios/índices, antes de activar acciones11b. No ACK ni envío de comandos sin ejecutor remoto probado; recurrencia/cumpleaños/sharing se incorporan después sin borrar intenciones pendientes.
+
+### 11a — Repositorios, índices y transacciones
+
+- `target_paths`: `src/lib/db/**`, tests de integración, scripts de setup estrictamente necesarios.
+- Dependencias revisadas para11a1: contratos/outbox y tareas/eventos simples ya entregados; confirmar replica set/clúster compatible sin exponer URI ni modificar datos reales. Cobertura de separar serie y cumpleaños espera09c/10 y se añade después; no declararla probada en el primer corte.
+- Aceptación: repositorios de entidades personales, compare-and-swap, borrados y comando de separar serie; mapeos sin driver fuera de DB; índices exactos centralizados; operación fallida revierte transacción. Preparar DB de prueba reproducible.
+- Corte: si infraestructura no soporta transacciones, replantear garantía del journal antes de continuar.
+
+Primeros cortes revisados:11a1a configura/valida replica set de prueba aislado y comprueba commit/rollback sin acceder a datos reales;11a1b introduce repositorio de elementos simples con CAS y registro central de índices, conflictos/concurrencia/borrados comprobados contra esa DB. Revisar estado de herramientas existentes al abrir, no instalar servicios ni cambiar configuración de hosting por iniciativa propia. Después11b1 integra recibo+mutación+journal atómicos, autorización y replay, antes de exponer acción de subida. Preferencias pendientes deben viajar antes de anunciar convergencia completa del espacio.
+
+### 11a0 — Entorno y matriz de pruebas de sincronización
+
+- Objetivo documental: dejar11a1a listo para implementación con aislamiento, ejecución y pruebas concretas. Entrada14%/59%, secuencial enint; usuario pide otra entrega mínima. No configurar ni arrancar servicios en este corte.
+- `target_paths`: `plan/{sync-test-environment,master,iterations,iteration-log,offline-and-sync}.md`. Dependencias:11b0, singleton/índices y fixture de auth existentes. Herramientas locales inspeccionadas sin credenciales/conexión DB.
+- Aceptación: distinguir tooling disponible de runtime/replica set no comprobados; definir guards de configuración/limpieza, lifecycle y casos verificables de atomicidad/CAS/replay/journal. Separar11a1a de11a1b/11b1 sin afirmar garantías remotas ni añadir índices especulativos.
+- Validación: referencias/consistencia/diff, commit/push int y ambas cuotas. Código sin cambios; no requiere repetir build para documentación.
+
+- Resultado: [entorno/matriz](sync-test-environment.md) documentados con guards, lifecycle y12 escenarios por cortes. Docker CLI29.8.2 confirmado, runtime/replica set pendientes; no se inició servicio ni se conectó a una DB. Referencias/diff/consistencia aprobados. Siguiente11a1a implementa runner y prueba commit/rollback reales.
+
+### 11a1a1 — Contrato de configuración aislada de test
+
+- Objetivo: validator puro del descriptor que consumirá el futuro runner antes de conectar. Entrada12%/59%, entrega mínima explícita, secuencial enint. `target_paths`: `src/schemas/sync-database-test.ts`, su test, `plan/{master,iterations,iteration-log,sync-test-environment}.md`. Depende de11a0/Zod existente; no API nueva de Next, guía instalada ya revisada.
+- Aceptación: UUID de ejecución/puerto acotado, DB exacta derivada del UUID y URI única loopback de replica set de test; rechazar URI normal/remota/SRV/multihost/credenciales, DB auth/otra ejecución, campos extra. No leer env ni abrir DB; validar descriptor no prueba ownership ni transacciones. Tests, lint/tipos/build/diff/referencias, commit/pushint y cuotas.
+
+- Resultado: tres tests/24 aserciones, configuración válida/extremos de puerto y conexiones/DB inválidas comprobadas. Lint217 archivos, tipos y suite122 pass/7auth opt-in skip/0fallos; build/cierre enregistro. Sin IO ni consumidor; siguiente11a1a2 conecta este guard al runner aislado y verifica ownership/commit/rollback reales.
+
+### 11a1a2 — Runner y transacciones reales aisladas
+
+- Entrada100%/58%, int/secuencial, reserva10% autorizada enworkflow. Objetivo: runner propio consumiendo descriptor/guard, MongoDB8.2.11 fijado por digest, probar commit/rollback con singleton y limpiar solo recursos propios.
+- `target_paths`: `scripts/sync-db-test-runner.ts`, `src/config/{env,sync-test-runner}.ts`, `src/lib/db/transactions.integration.test.ts`, package.json yplan. Dependencias11a1a1/Docker existente. Guía instalada de ServerActions y documentación MongoDB transacciones/replica set consultadas.
+- Aceptación: puerto loopback dinámico, runId/label/imagen verificados antes de test y limpieza, sin bind/volumen del usuario. Configdeproceso testeada antes de conexión, opt-in separado; readinessprimary con plazo, driver soloDB/singleton. Confirmar dos escrituras, aborto por fallo intermedio sin cambios parciales, recuperación y lecturas fuera de sesión. Testnormal omite integración; runner real la ejecuta y falla si nohay runtime. No nueva colección/índice: probe solo enauthVerification de DB propia, índice_id existente.
+- Validación: integración real, limpieza verificada, suite/lint/tipos/build/diff/ref; plan/registro, commit+pushint ycuotas. Siguiente11a1b repositorio/CAS; no endpoint ni sync activos todavía.
+
+- Ajuste antes de integrar: Docker es un daemon Ubuntu/x86_64 accesible por socketunix; publicar127.0.0.1 queda en el host del daemon y el puerto fue ECONNREFUSED desde macOS. El primer intento falló y limpió su contenedor propio. Runner usará proxyTCP local127.0.0.1 haciaDocker exec/bash del contenedor propio, sin publicar puertosMongoDB. Solo APIs nativas Node, no dependencias/credenciales nuevas; cerrar sockets/procesos al limpiar. La URI validada/singleton y prueba de transacción permanecen iguales.
+
+- Resultado: runner propio, guard de env y pruebas reales pasan; dos tests/seis aserciones, recuperación después de rollback y lecturas externas. SIGTERM exit1/limpieza comprobados y listado de contenedores propios vacío. Lint220 archivos/tipos/build29recursos aprobados; suite122pass/11opt-in skip/0fallos. Siguiente11a1b1 repositorio simple/CAS con índices de producto, antes de subir operaciones.
+
+### 11a1b1 — Repositorio remoto propio y CAS
+
+- Entrada92%/57%, secuencial/int. Objetivo: persistir registros CalendarItem validados enitems, con actor vinculado al repositorio y escrituras por revisión; todavía sin ejecutor de comandos/endpoint.
+- `target_paths`: `src/lib/db/{collections,ensure-indexes,ensure-indexes.test,remote-items,remote-items.integration.test}.ts`, `src/schemas/remote-items.ts`, runner yplan. Depende de11a1a2/schema existente; guía Next data-security revisada. Driver y tipos físicos soloDB; singleton/getCollection.
+- Aceptación: IDs únicos globales, insert revision1/no borrado; CAS base→base+1 con owner/id/kind/createdAt activo, tombstones conservados y sin resurrección. Lectura/página propias (incluye tombstones), cursor_ID ylimit1–100 validados; índiceownerId+_id por consulta real. Otra cuenta/registro corrupto rechazado sin datos ajenos. Dos editores de misma revisión solo uno modifica, duplicatecreate no sobrescribe; paginación y aislamiento enMongo real. Source/tests/lint/tipos/build/diff/ref, plan/registro/commit+pushint/cuotas. Recibos/journal todavía posteriores.
+
+- Resultado: repo server-only yDTO CalendarItem propios, CAS/duplicados/tombstones/paginación/corrupción pasan enMongoDB8.2.11 propio. Cuatro tests nuevos; runner6pass/33aserciones, normal123pass/17opt-in skip/0fallos, lint223files/tipos/build29recursos pasan. ÍndiceownerId+_id registrado, sin ad hoc. Siguiente11a1b2 reductor de comandos simples compartido, después11b1 recibo/journal transaccionales; sin transporte activo todavía.
+
+### 11b — Acción validada e idempotencia
+
+- `target_paths`: `src/features/sync/actions.ts`, validadores de sync, recibos/transacciones en DB, pruebas de autorización.
+- Dependencias: `11a`.
+- Aceptación: actor de sesión, input Zod limitado, recibo+mutación atómicos; mismo operation ID no duplica; payload diferente con ID reutilizado falla; revisión incorrecta devuelve conflicto; datos de otra cuenta rechazados. Separar resultado por operación del lote.
+
+### 11b0 — Huella validada de operaciones (preparatoria)
+
+- Objetivo: huella SHA256 determinista del payload validado para futuros recibos idempotentes; entrada17%/60%, secuencial enint, entrega mínima pedida explícitamente. No depende de DB ni de11a; acciones/remoto aún pendientes.
+- `target_paths`: `src/lib/sync/operation-fingerprint.ts`, su test, `plan/{master,iterations,iteration-log,offline-and-sync}.md`. Dependencias: `syncOperationSchema`, Node crypto instalado; guía use-server instalada revisada. Módulo server-only sin endpoint, credenciales, auth nueva, persistencia o índices.
+- Aceptación: orden de propiedades irrelevante en cualquier nivel; array ordenado y campos significativos cambian huella; semántica normalizada por schemas existentes; todos los campos de operación incluidos, formato canonical versionado, rechazar input inválido/extra. Hash no autoriza al actor ni prueba que una operación se ejecutó. Oráculo independiente SHA256 y input intacto.
+- Validación: tests/suite, lint/tipos/build, diff/referencias, plan/registro y commit/push int; cuotas al cerrar. Siguiente11a1 replica set de prueba/repo inicial; no abrir conexión ni declarar sincronización en esta entrega.
+
+- Resultado: cuatro tests/18 aserciones, oráculo independiente WebCrypto, canonicalización/normalización, cambios significativos, input intacto y rechazo validado pasan. Suite119 pass/7auth opt-in skip/0fallos, lint215 archivos/tipos aprobados; build y cierre enregistro. No hay llamadas ni mutaciones remotas. Siguiente11a1 verifica replica set de prueba y primer repositorio/índices.
+
+## 12 — Descarga incremental y conexión automática
+
+### 12a — Journal y bootstrap
+
+- `target_paths`: repositorios/counters de sync en DB, servicios server de `src/features/sync/**`, rutas GET `src/app/api/sync/**`.
+- Dependencias: `11b`.
+- Aceptación: cursor por usuario estable bajo transacciones concurrentes; bootstrap paginado no omite modificaciones durante descarga; journal+recibo+mutación atómicos; borrados y preferencias viajan; lecturas privadas sin caché pública y con autorización. Cursor y query input validados.
+
+### 12b — Coordinador local
+
+- `target_paths`: hooks/coordinador de `src/features/sync/**`, outbox y reconciliación de `src/lib/local-db/**`, componentes de estado.
+- Dependencias: `12a`.
+- Aceptación: mismo flujo con/sin conexión; detectar identidad antes de push; pull no borra pendientes; ACK/cursor locales atómicos; lease entre pestañas; reintento con mismo ID y backoff; polling visible recibe cambios de otro dispositivo.
+- Hito: dos dispositivos de la misma cuenta convergen al conectarse.
+
+## 13 — Conflictos y recuperación
+
+### 13a — Resolución visible
+
+- `target_paths`: `src/features/sync/components/**`, registro/resolución de conflictos locales, schemas de resolución.
+- Dependencias: `12b`.
+- Aceptación: dos cambios incompatibles dejan conflicto legible, no pérdida silenciosa; conservar remoto o reaplicar sobre revisión actual; nuevo ID de resolución; tombstone impide resurrección; otras entidades siguen sincronizando.
+
+### 13b — Sesión, cierre y despliegue
+
+- `target_paths`: recuperación/coordinador de sync, shell/worker, handshake de protocolo y pruebas de integración.
+- Dependencias: `13a`.
+- Aceptación: respuesta perdida después de commit remoto no duplica; cierre durante envío recuperable; login requerido conserva cola; bundle antiguo tras despliegue pausa, actualiza y reintenta; versión incompatible conserva/exporta pendientes, sin falso éxito.
+
+### 13c — Backup y fallos de almacenamiento
+
+- `target_paths`: `src/lib/local-db/{backup,migrations}.ts`, schemas de backup, UI de workspace para almacenamiento/importación.
+- Dependencias: `13b`.
+- Aceptación: exportar pendientes offline; importar JSON validado/versionado solo a cuenta activa, revisar duplicados y generar nuevas intenciones; fallo de cuota no borra datos ni confirma guardado; denegación de persistencia explicada; migración preserva outbox.
+
+## 14 — Retirado del alcance
+
+Compartir por Gmail (14a–14c) no se implementará por decisión humana del11oct. Sin invitaciones, colaboradores ni requisitos de compartición en el piloto.
+
+## 15 — Piloto y aceptación completa
+
+### 15a — Recorrido real y accesibilidad
+
+Estado parcial vigente17oct: recorrido físico de diez pasos aprobado por el usuario en15a3. Accesibilidad completa y casos de recuperación concurrente siguen pendientes; no exigir repetir los diez pasos sin cambios o fallos que lo justifiquen.
+
+- `target_paths`: solo los componentes/módulos que fallen en el recorrido, evidencia de aceptación, documentación de operación.
+- Dependencias: sincronización común, repetición remota y recuperación/backup (`13c`); cumpleaños aparcado y compartir fuera del alcance no son prerrequisitos.
+- Aceptación: ejecutar matriz siguiente en navegador/DB reales y build de producción; comprobar UI móvil, teclado, foco, nombres accesibles, formularios y contraste. Corregir fallos por entregas acotadas sin ampliar producto.
+- Incluir login Google interactivo en dos navegadores y tras cerrar sesión, complementando la evidencia automatizada de `01a`. Los cinco avisos iniciales de accesibilidad de SVG de plantilla se corrigieron en `00c`; revisar los assets usados en la UI durante el recorrido.
+
+### 15b — Cierre del MVP y guía de uso
+
+- `target_paths`: `README.md`, `plan/**`, setup/configuración solo si la aceptación lo requiere.
+- Dependencias: `15a`, todas las pruebas críticas aprobadas.
+- Aceptación: instrucciones de preparación offline, sync, aislamiento de cuentas, backup y recuperación; checks de código completos; registrar límites reales de navegadores y decisiones revisadas; commit final del hito. Publicar solo si se ha autorizado como parte de esta entrega.
+
+## Matriz de aceptación
+
+| Escenario | Evidencia requerida | Entrega principal |
+| --- | --- | --- |
+| Modo avión y reapertura completa | Shell, recursos y datos disponibles; navegar y recargar otro mes. | `04b`, `06`, `15a` |
+| Crear/editar las cuatro variantes de plan sin red | Guardado local y cola sobreviven cierre. | `16`, `17` |
+| Cambio de día y atrasadas | Estado conservado; completadas excluidas; historial intacto. | `07a`, `09b` |
+| Recurrencia y excepciones | DST, bisiestos, día 31, corte futuro y ocurrencias pendientes. | `09`, `10` |
+| Orden personal | Grupos/tareas/atrasadas; teclado; persiste y se sincroniza. | `07b`, `12b` |
+| Dos dispositivos, respuesta perdida | Convergencia, ID único, sin duplicados ni sobrescritura silenciosa. | `11b–13b` |
+| Cuenta diferente/ID ajeno | Aislamiento local y denegación remota, incluidas APIs y acciones. | `01b`, `03a`, `11b` |
+| Despliegue y migración con pendientes | Outbox intacta; versión compatible; reintento idempotente. | `04b`, `13b–13c` |
+| Cuota/backup/logout | Sin falso guardado ni descarte implícito; restauración validada. | `03a`, `04b`, `13c` |
+
+Si el alcance de una subentrega supera el presupuesto, dividirla conservando estos criterios y registrar nuevos IDs antes de empezar. No marcar “parcialmente completa” una garantía crítica de sincronización.
+
+### 07c — Corrección intercalada de home, navegación y diálogos
+
+- Estado: completada, secuencial; solicitada por el usuario tras `07b0`.
+- Objetivo: retirar resumen redundante de home, adaptar fuente móvil y corregir apertura de `+` en desarrollo.
+- `target_paths`: resumen del workspace, links de navegación, composer de tarea, confirmación compartida, fixture de workspace, evidencia y `plan/**`.
+- Dependencias: `05c`, `06`, `07a`; sin cambios de contratos/persistencia.
+- Aceptación: home muestra agenda directamente; etiquetas legibles a 320/390px; `+`, edición y confirmaciones abren y cierran correctamente con Strict Mode, incluidos Cancelar/Escape; crear persiste tras recarga; navegación desktop y ampliación al 200% sin desbordamiento de página.
+- Validación: reproducción previa en React de desarrollo, recorrido posterior, lint/tipos/tests/build y diff. Presupuesto automático 21%/88%; se prioriza esta corrección explícita y pequeña antes de cerrar el lote, aunque el margen reforzado ya no permite otra iteración de producto.
+- Resultado: bloque retirado; etiquetas completas a 320/390px, barra superior a 1280px. Diálogos operativos bajo Strict Mode; Escape/Cancelar/reapertura y creación persistida tras recarga aprobados. Texto al 200% en iframe de 310px sin desbordamiento: barra 236px, reserva 576px.
+- Cierre: lint/tipos/build aprobados; 46 tests pasan, 7 auth opt-in omitidos, cero fallos. Fixture ahora monta Strict Mode y permite ampliar texto. Datos ficticios limpiados y servidor aislado detenido.
+
+## 07d — UI móvil compacta (intercalada antes de 08c1)
+
+- Estado: completada, secuencial; entrada automática 5h 37% / 7d 77%, tras `27db322`. Prioridad explícita del usuario. Evidencia de filas de 66px/targets de 44px, 25 intenciones verificadas offline y reflow 200% en el registro.
+- Objetivo/target_paths: cards/listas/grupos de tareas, controles de estado, cabecera de Workspace y helpers UI estrictamente necesarios, fixture/evidencia y plan. Dependencias: 07b completo; sin cambios en persistencia, permisos, contratos o navegación.
+- Aceptación: fila compacta con título, fecha/estado y progreso de checklist; completar/reabrir accesible directamente. Descripción, checklist, categoría, orden, editar/borrar desplegables; estado abierto y foco conservados al cambiar de grupo. Cabecera móvil sin marca/subtítulo redundantes; separación y vacíos reducidos. Grupo con orden desplegable. 320/390px, desktop y texto 200% sin desbordamiento; tap esencial >=44px, teclado, CRUD/estado/categoría/orden y recarga offline operativos. Lint/tipos/tests/build/diff/referencias.
+- Corte: compactar agenda y chrome primero; formularios/categorías/ajustes se revisarán en entregas pequeñas posteriores siguiendo el criterio permanente. No reducir indiscriminadamente todos los targets táctiles.
+
+## 07d2 — Formulario de tareas compacto
+
+- Estado: completada, secuencial; entrada automática 5h 29% / 7d 76%, tras `2ed4ec1`. Corte menor de densidad antes del formulario de eventos; margen estimado a partir de 07d y alcance reducido, reserva 20% vigente.
+- Objetivo/target_paths: TaskComposer, TaskForm, ChecklistFields, fixture/evidencia y plan. Dependencias 07d. Reducir padding, título y espaciado; campos/botones >=44px. Descripción/pasos opcionales desplegables al crear, abiertos cuando hay contenido al editar; conservar contenido al plegar y abrir si la validación señala pasos inválidos.
+- Aceptación: crear/cancelar/Escape/editar siguen operativos, campos opcionales cerrados no desaparecen de FormData, errores no ocultan paso inválido, offline y recarga conservan datos; 320px y 200% sin overflow, lint/tipos/tests/build/diff/referencias. Sin cambios de contratos, outbox, navegación ni dependencias.
+
+## 07d3 — Categorías compactas
+
+- Estado: completada; secuencial, entrada 24%/75% tras `206fac6`, continuación explícita del usuario y reserva temporal en workflow.
+- Objetivo/target_paths: TagCard/TagManager/TagForm, fixture/evidencias y plan. Dependencias 07b y criterio07d. Filas compactas con nombre/color y controles secundarios desplegables, padding/formulario reducidos, sin texto redundante.
+- Aceptación: crear/editar/borrar, ordenar por botones y arrastre siguen accesibles; detalle abierto conserva foco al reordenar, 320px/200% sin overflow, pulsaciones >=44px. Prueba offline y recarga; lint/tipos/tests/build/diff/referencias. Persistencia/contratos/permisos/navegación intactos.
+
+### 08c1a — Selección de eventos por día y rango
+
+- Estado: completada, secuencial; entrada automática17%/74% tras6216981. Rama actual `int` observada al commit anterior; no se ha cambiado por el agente.
+- Objetivo/target_paths: helpers puros de selección de eventos y tests, plan. Dependencias08a–08b. Corte previo a UI: día/rango y orden cronológico sin expandir recurrencias, ni enumerar rangos infinitos.
+- Aceptación: todo el día usa fechas civiles/final exclusivo; temporizados aparecen en días de la zona de la cuenta según instantes, cruces de medianoche y DST, fin nulo, fin exacto medianoche; eventos inválidos históricos identificados sin ocultar válidos, exclusión de tombstones y series pendientes; IDs/orden deterministas, rangos/zonas validados. Consulta civil inclusiva de1–62días para incluir31/12/9999 sin inventar año10000; programas all-day mantienen fin exclusivo. Lint/tipos/tests/build/diff/referencias, sin UI/DB/contrato/dependencia nuevos.
+
+### 08c1a2 — Reutilizar el formateador temporal por consulta
+
+- Estado: completada, secuencial; entrada13%/73% tras3667c97 y push verificado aorigin/int. Corte mínimo previo a UI, sin confiar en renovación.
+- Objetivo/target_paths: factory de resolver en zoned-time, selector de eventos, test de equivalencia y plan. Dependencias08c1a. Diagnóstico:12eventos/rango mensual24ms frente a31consultas independientes5161ms; cada minuto construye Intl.DateTimeFormat nuevo.
+- Aceptación: un formateador por consulta/zona, sin cache global ni política de offsets elegida; mismos candidatos normales/históricos/gaps/repeticiones, no mezclar zonas al reutilizar. Medir mismo fixture, lint/tipos/tests/build/diff/referencias, commit+push int. No conectar contadores aún; preparación mensual sigue siendo corte siguiente.
+
+### 08c1b0 — Snapshot mensual de eventos
+
+- Estado: completada, secuencial; int, entrada100%/73% después de renovación confirmada y071a2c4 publicado.
+- Objetivo/target_paths: selector/calendar snapshot y tests, hook local de eventos, plan. Dependencias08c1a2. Preparar programas y resolver de cuenta una sola vez, compartir cache local entre consultas de las celdas, entregar contadores/listado sin reparse por render. Sin estado global o petición por celda.
+- Aceptación: mismo resultado de consultas aisladas, rango1–62días/fechas extremas, casos DST/Apia/rollback/legado preservados, eventos simples una vez por día aunque cruce medianoche. Hook separado por account+epoch y lector validado. Medir12eventos mensual; lint/tipos/tests/build/diff/referencias, commit+push int. Sin UI aún.
+
+### 08c1b1 — Crear y ver eventos en agenda/calendario
+
+- Estado: completada; int secuencial, entrada97%/72% tras05ce7fd y renovación. Scope antes de editar: EventForm/Card/List/Agenda/hooks de calendario, creación compartida Workspace (+), CalendarBoard/MonthGrid y registry copy, fixture/evidencia/tests pertinentes y plan. Dependencias08b,08c1b0,07d.
+- Objetivo: selector de tipo desde+, Tarea y Evento o cita operativos; evento simple todo el día o hora/fin opcional/zona, descripción opcional; elegir otra hora ante gap/repetición. Leer en día/mes y próximas2semanas de home, cronología, categoría personal tras guardar mediante mismo selector de tareas. Actualizar copy de destino Calendario en ambas barras, sin nueva pantalla ficticia.
+- Aceptación: crear/cancelar/Escape/cambiar tipo conserva campos, una intención por evento y datos sin red/recarga; errores españoles y foco, horas inexistentes/ambiguas rechazadas; all-day final exclusivo explicado mediante última fecha inclusiva en UI; medianoche/zonas/contadores correctos; categorización separada atómica, no falso guardado conjunto. Compacta320/390px/200% y escritorio, targets>=44px; no esconder tareas si falla eventos. Lint/tipos/tests/build/diff/referencias, commit+pushint.
+- Corte: editar/borrar evento después en08c2; recurrencia/cumpleaños siguen09–10. No activar esas opciones anticipadamente, sin cambios de core/deps/auth/remoto.
+
+- Resultado08c1b1: selector conserva borradores, eventos simples guardados y leídos sin red, categoría personal reutilizada, contadores5/1 y fin a medianoche exclusivo comprobados. Filas52px a320px, iframe280px/texto200% sin overflow horizontal del diálogo, navegación superior1280px. 79tests pasan/7auth opt-in omitidos; lint/tipos/build aprobados. Edición/borrado siguen08c2.
+
+### 08c2 — Editar/borrar y reparar eventos
+
+- Estado: completada; int secuencial, entrada84%/70% tras08705cc publicado y Vercel success. Dependencias08b,08c1b1. Scope antes de editar: EventForm/Card/List, EventComposer/acciones/borrado, fixture de conflicto/legado y plan/evidencias/tests pertinentes.
+- Objetivo: editar programa/descripcion/título con snapshot esperado; borrar solo tras confirmación; reparar o borrar legado ambiguo/inexistente desde lista explícita. Reutilizar confirmación compartida y formulario compacto, sin controles nuevos en filas plegadas.
+- Aceptación: editar todo el día/timed/fin opcional/zona conserva valores y final inclusivo; cambio a all-day conserva descripción; calendario/agenda revalidan al guardar, borrar usa tombstone/intención única y no pierde categoría ni tarea. Cancelar/Escape no escribe. Edición/borrado con expected antiguo falla sin sobrescribir otra pestaña y mantiene datos; reparación legado no requiere reinterpretarlo para abrir formulario. Offline/recarga,320px/200%/desktop, lint/tipos/tests/build/diff/ref, commit+pushint y cuotas al cerrar.
+- Límites: simples, no recurrencia ni birthday; mutaciones atómicas08b se reutilizan sin cambios de schema/DB/deps/auth/remoto. Lector conserva legado; no migración automática destructiva.
+
+- Resultado08c2: formulario edición/confirmación operativos, reparación/borrado de legado y CAS en dos pestañas; caché revalidada tras rechazo conservando borrador. Inspector16intenciones/7updates/2tombstones, tarea y categoría intactas; recarga sin servidores y contadores2/1; desarrolloStrictMode,320px y200% sin overflow. Lint/tipos/build/79tests+7skip aprobados; próxima09a.
+
+### 09a1 — Fechas civiles de recurrencia paginadas
+
+- Estado: completada; int secuencial, entrada71%/68% trasfe47801 publicado. Dependencias08; scope antes de editar: lib/calendar/recurrence.ts y tests, schema de consulta compartido si necesario, plan. Corte de09a: fechas civiles primero; proyección de eventos/ocurrencias y DST después09a2, UI09b–09c.
+- Decisiones: días semanales0domingo–6sábado, semanaslunes; intervalo semanal anclado a semana del inicio, primera semana omite días anteriores al ancla. Until inclusivo; count cuenta fechas programadas válidas (meses sin31 y años sin29feb se omiten, no consumen count). Rango de consulta inclusivo0001–9999, cursorfecha exclusivo, límite1–500 y nextAfter explícito cuando quedan resultados; no truncado silencioso.
+- Aceptación: diaria/semanal/mensual/anual conintervalo/límites, no mutar regla ni depender de zona host; ancla/cadencia estables al consultar páginas o fechas lejanas; count global no se reinicia por rango/página; calendario31/bisiestos/centurias y años extremos. Saltar directamente a rango, sin recorrer millones de días; prefixcalendar400años solo donde haga falta, trabajo acotado. Tests ejemplos+oráculo independiente/paginación, medir rango remoto; lint/tipos/tests/build/diff/ref y commit+pushint.
+- No materializar ocurrencias/activar repetición todavía; contrato de series actual intacto, sin DB/deps.09a2 resolverá slots/IDs y problemas horarios explícitos, sin normalizar una cita silenciosamente.
+
+- Resultado09a1: cuatro frecuencias paginadas, count global/ciclo400años/oráculo independiente192combinaciones y hostTZHonolulu aprobados. Cien consultas0001→9999 con página3:13ms observados. Lint/tipos/build,86tests+7skip; siguiente09a2 slots/ocurrencias, sin UI nueva.
+
+### 09a2 — Proyección pura de ocurrencias y problemas horarios
+
+- Estado: completada; int secuencial, entrada67%/68% tras4b1aa2a publicado. Dependencias09a1/08a; scope antes de editar: lib/calendar/occurrences.ts/tests, esquemas/tipos compartidos existentes solo si necesario y plan.
+- Objetivo: página de slots originales con IDseriesId:slotKey; tareas empiezan sin empezar/checklistcopia no completada, eventos all-day conservan longitudcivil; timed desplaza fecha de inicio y final el mismo número de díasciviles, conservando ambas horas locales/zona (duración exacta puede variar porDST).
+- Decisión: limit/count cuentan slots de fechas civiles, aunque un horario resultegap/fold; devolver issueconID/slot/reason, no normalizar ni sustituir porotrafecha. nextAfter sigue la página de slots aunque todos fallen. Query se refiere a fechas de inicio en zona de serie; selección por zona de cuenta/solapes será integración09c. Cumpleaños y excepciones/materialización09b–10 posteriores.
+- Aceptación: IDs/páginas deterministas, tareaestado/checklist independientes sin mutar padre ni otraaparición; medianoche/duracióncivil/DSTsin24hfijo; gaps/folds/fin inválido y desbordamiento9999 explícitos con IDs conservados y otrasapariciones válidas; count/cursor no duplican slots; tombstonepadre vacío, schemas/zonas/extremos validados. Tests/hostTZalterno/lint/tipos/build/diff/ref, commit+pushint, cuotas. Sin UI/mutaciones nuevas ni deps/DB.
+
+- Resultado09a2: IDs/metadata/checklist independientes, extremos/gaps/folds/Apia y endpointsDST/cursor comprobados;91tests+7skip, hostHonolulu, lint/tipos/build aprobados. Página500timed:269ms observados, sin expandir más slots que el límite. Siguiente09b1 ejecutor local para estado/excepciones de tareas.
+
+### 09b1 — Progreso atómico por aparición de tarea
+
+- Estado: completada; int secuencial, entrada65%/67% tras7b1b8f9 publicado. Dependencias09a2/03b/05b1; scope antes de editar: local-db/occurrence-progress y occurrence-outbox, routerLocalOutbox existente, servicio de progreso si necesario, tests puros/IndexedDB fixture+script y plan.
+- Corte: estado/checklist de aparición; edición/reprogramación/cancelación en09b2 y lectura/formulario en09b3+. Reutilizar task.set-status/task.set-checklist-entry con occurrenceId no nulo, crear excepción al primer cambio dentro de misma transacción que cola/secuencia. No comando nuevo ni UI anticipada.
+- Decisión: entityKey item:seriesId y baseRevision de serie mantienen protocolo agregado existente; dependencias serializan creación/edición/progreso de la serie. El registro padre no cambia localmente al cambiar progreso; revision de excepción conservada. Remoto11–12 deberá publicar/aplicar excepciones junto con revisión agregada, sin afirmar sync ahora.
+- Aceptación: validar propiedad/serie activa/ID de slot civil y pertenencia al generar primera excepción, las existentes conservan su checklist/historia aunque la plantilla futura cambie; canceladas/tombstones no admiten progreso. Intenciones por campo sobre registroactual preservan otros campos, completedAt/reapertura correctos, sin afectar otrasapariciones/padre. Replay antes de guardias, mismoUUID/command idempotente y payload distinto rechazado; fallo outbox revierte excepción/secuencia, aislamiento/recarga y cola/despendencias. Tests/IndexedDB real/lint/tipos/build/diff/ref, commit+pushint y cuotas. Sin DBversion/index/deps/auth nuevo.
+
+- Resultado 09b1: tres apariciones con progreso independiente y siete intenciones consecutivas sobreviven recarga; replay, aislamiento, CAS y rollback de primera materialización comprobados en IndexedDB real. Regresión de outbox y eventos con recarga aprobada; 93 tests pasan, 7 auth opt-in omitidos, lint/tipos/build aprobados. Siguiente 09b2: editar/reprogramar/cancelar una aparición con identidad original.
+
+### 09b2 — Editar, reprogramar y cancelar una aparición de tarea
+
+- Estado: completada; `int`, secuencial, entrada 5h 56% / 7d 66% tras 5448f71 publicado. Dependencias 09b1. Scope previo: schemas occurrence/sync y tipos de comandos, motor/guardia de apariciones y transacción existentes, LocalOutbox, tests puros/fixture IndexedDB/script y plan.
+- Corte: comandos task.update-occurrence/task.cancel-occurrence con ejecutor atómico; solo una aparición de tarea. Eventos y separación futura siguen 09c, lectura/UI 09b3+. No habilitar controles antes de lectura/orden compatibles.
+- Modelo: contenido opcional {title, description} en excepción de tarea, compatible con registros antiguos sin ese campo; materializar congela contenido heredado. Checklist editada recibe IDs/textos, conserva completado de IDs existentes y empieza nuevos false; estado/completedAt se cambian únicamente con comandos de progreso. Reprogramar conserva ID y slot original. Cancelar conserva todo el registro y marca cancelled; no borrado físico.
+- Aceptación: progreso/otras apariciones/padre intactos; primera edición/cancelación genera excepción válida. Comandos estrictos no admiten cambiar status/kind/serie/regla/identidad; expectedItem y expectedOccurrence obligatorios para edición/cancelación, comparados dentro de transacción con snapshot virtual o persistido. Editor obsoleto, slot falso, otra cuenta, cancelada/borrada rechazan sin escrituras; replay previo devuelve recibo. Rollback revierte excepción y secuencia, dependencias agregadas como 09b1; recarga/IndexedDB real, regresión progreso, lint/tipos/tests/build/diff/ref, commit+push int y cuotas.
+
+- Resultado 09b2: edición/reprogramación/cancelación con CAS de padre y aparición, contenido compatible, progreso conservado y replay/rollback verificados. Cinco checks IndexedDB y nueve intenciones sobreviven recarga; regresión de progreso aprobada. Lint/tipos/build, 96 tests y 7 auth opt-in omitidos; siguiente 09b3a, lectura pura paginada de tareas con excepciones.
+
+### 09b3a — Lectura paginada de tareas repetidas con excepciones
+
+- Estado: completada; `int`, secuencial, entrada 50%/65% tras 852266f publicado. Dependencias 09b2. Scope antes de editar: lector puro/index de tareas repetidas y tests, schemas de consulta compartidos y plan. Sin UI/DB/mutaciones nuevas.
+- Objetivo: snapshot de series y excepciones de una cuenta; proyección paginada de slots virtuales por serie y página independiente de excepciones ordenadas por fecha efectiva/ID. Toda excepción suprime su slot virtual, incluso cancelada/borrada o reprogramada fuera del rango; una movida desde otro mes entra por su fecha efectiva y conserva ID. Contenido antiguo sin content hereda padre.
+- Decisión: dos flujos con cursors propios, porque materializadas pueden estar fuera del rango original y su fecha puede cambiar. Una página virtual consume slots, no solo pendientes: páginas vacías con nextAfter siguen explícitamente hasta agotar backlog. Excepciones paginadas con cursor compuesto fecha+ID; quien integre debe agotar ambos flujos y ordenar resultados visibles, sin resetear el otro cursor ni declarar atrasadas completas tras la primera página. Corte siguiente lector IndexedDB/hook, después orden/UI.
+- Aceptación: propiedad/series activas, canceladas/tombstones/orphans excluidos; excepciones históricas sobreviven cambios de regla/plantilla; duplicados/mismatch de identidad rechazados. Consultas civiles 0001–9999/límite 1–500, completar excluye solo cuando includeCompleted=false; contenido/checklist/progreso no mutados, una aparición nunca duplicada entre flujos. Paginación cuenta global y continúa por largas series completadas/canceladas, ejemplos reprogramadas/extremos y tests; lint/tipos/build/diff/ref, commit+push int/cuotas.
+
+- Resultado 09b3a: dos flujos sin duplicados, fechas efectivas/legacy/historia, cursores y páginas vacías comprobados; consultas de excepciones usan índice preparado y búsqueda binaria, sin recorrer completadas en cada página. Cinco tests/56 aserciones y host Honolulu pasan; suite 101 pass/7 skip, lint/tipos/build aprobados. Cien consultas remotas de diez apariciones: 17ms observados; siguiente 09b3b snapshot IndexedDB.
+
+### 09b3b — Snapshot local coherente para tareas repetidas
+
+- Estado: completada; `int`, secuencial, entrada 46%/64% tras 7af654e publicado. Dependencias 09b3a. Scope previo: local-db/task-snapshot, servicio features/tasks/local-recurring-tasks, fixture IndexedDB y script, plan. Sin UI/hook anticipado ni nuevas mutaciones/DB version/índices/dependencias.
+- Objetivo: leer items, occurrences (incluidas canceladas/tombstones) y settings en una única transacción readonly. Validar registros y settings propios/activos; resolver solo al complete. Servicio verifica cuenta+epoch antes/después, cierra conexión en finally y devuelve índice preparado y zona, sin red.
+- Aceptación: no filtrar tombstones antes del índice (suprimen slots); concurrente snapshot refleja un estado completo anterior/posterior, nunca registros mezclados. Cuenta ajena/epoch obsoleto y settings inválidos/ausentes fallan; apertura repetida/recarga no encola comandos. Error de schema no expone resultado parcial. IndexedDB real, aislamiento/recarga/concurrencia/guardias, lint/tipos/tests/build/diff/ref, commit+push int/cuotas. Después 09b4 colocaciones por aparición antes de integrar UI.
+
+- Resultado 09b3b: snapshot de tres stores validado al complete, servicio con doble guardia y finally. Concurrencia real devuelve generaciones 1/2 completas; corrupción, settings borrados/ausentes, cuenta/epoch y cierre durante lectura rechazan. Canceladas/tombstones suprimen slots tras recarga; no se añaden intenciones. Lint/tipos/build/101 tests + 7 skip aprobados. Siguiente 09b4a: colocaciones de apariciones en un día, separadas de backlog.
+
+### 09b4a — Colocaciones mixtas en el día
+
+- Estado: completada; `int`, secuencial, entrada 39%/63% tras d5082cc publicado. Dependencias 09b3b. Scope previo: planner de movimientos del día y helper de ranks compartido, tipos estructurales de orden, task-move-outbox/snapshot, schema de vecinos, tests/fixture/script y plan. Sin UI, dependencias ni DB version nuevos.
+- Objetivo: mover dentro de un día tareas simples y apariciones (virtuales o reprogramadas), con vecinos mezclados y ranking atómico; guardar solo colocaciones/preferencia/cola, sin materializar progreso ni alterar padre/otras fechas. Leer excepciones en misma transacción. Backlog de apariciones queda explícitamente rechazado hasta 09b4b.
+- Decisión: categoría personal pertenece al elemento/serie como ItemView existente. Cambiar categoría mediante aparición cambia la categoría de la serie; las demás apariciones de esa serie en ese día pertenecen al nuevo grupo y entran al cálculo. La futura UI lo indicará como categoría de serie; no inventar un override distinto por aparición. Orden sí tiene identidad de aparición+scope+date propia.
+- Aceptación: grupo completo del día proyectado sin expandir historia; todas las excepciones de ese día recuperadas por páginas, sin truncar a500. ID/fecha efectiva y vecinos/categorías activos validados dentro de transacción; canceladas/borradas/otra cuenta y editores de día obsoleto rechazan. Ranks/compactación/revisión personal/replay/rollback/dependencias conservados; schema admite vecinos de aparición para mover una simple y exige identidades distintas. Regresión simples/day/overdue, IndexedDB real/recarga, lint/tipos/tests/build/diff/ref, commit+push int/cuotas.
+
+- Resultado 09b4a: vecinos mixtos, identidad/fecha efectiva/categoría de serie y grupo de 502 apariciones comprobados; transacción solo escribe preferencias/colocaciones/cola. IndexedDB: nueve intenciones/recarga/rollback/replay/cancelación/aislamiento; regresión simple conserva ocho colocaciones y dieciséis operaciones. Lint/tipos/build, 104 tests + 7 skip aprobados; siguiente 09b4b, orden de backlog de apariciones.
+
+### 09b4b1 — Resolver referencias activas sin expandir backlog
+
+- Estado: completada; `int`, secuencial, entrada 31%/62% tras 6ea331b publicado. Dependencias 09b4a. Corte de 09b4b previo a ranking de backlog. Scope: lib/calendar/task-reference, tests, guardia del planner del día y plan. No habilitar movement overdue de apariciones ni UI/hook nuevos.
+- Objetivo: índice validado de padres/excepciones de cuenta, resolver UUID simple o UUID:slot civil en consulta de una fecha; heredada virtual se genera solo para ese slot. Excepciones históricas/reprogramadas conservan su identidad/progreso aunque la regla futura cambie. Reusar resolver en target del día antes de proyectar peers.
+- Aceptación: padre recurrente no es tarea ejecutable; otra cuenta/cancelada/borrada/orphan no se resuelve, slot falso fuera de count/cadencia devuelve ausencia. Input corrupto/ID mal formado/duplicados rechaza; devuelve copias sin mutar snapshot. Fechas lejanas/extremos y reprogramación, regresión día/orden y tests, medir consultas sin expansión histórica; lint/tipos/build/diff/ref, commit+push int/cuotas. Próximo 09b4b2 tendrá que resolver adyacencia y ranks del backlog con límites explícitos; no sustituir grupo completo por página cargada silenciosamente.
+
+- Resultado 09b4b1: referencias propias activas, copias e historia/identidad comprobadas; lookup único sin expandir intervalo. Guardia del día reutiliza resolver y comprueba identidad simple/aparición. Tres tests/27 aserciones, regresión IndexedDB de orden mixto y recarga; lint/tipos/build/107 pass + 7 skip aprobados. Mil referencias9999 desdeancla0001:116ms observados. Siguiente09b4b2, adyacencia/ranks del backlog paginado.
+
+### 09b4b0 — Diseño y cierre del lote antes de ordenar backlog
+
+- Estado: completada; documental secuencial, `int`, entrada28%/61% después de7c8dc42. Scope previo: plan/backlog-ordering.md, master/iterations/workflow/log/reordering. Dependencias09b4b1; sin código ni cambios de datos/contratos.
+- Objetivo: documentar problema real de ranks explícitos/implícitos, opción acotada a validar y subentregas para evitar expandir historia o mover slots no cargados silenciosamente. Registrar cierre: últimas entregas comparables de código consumieron7/8 puntos de5h; ocho puntos sobre reserva no cubren siguiente cambio de orden+paginación+persistencia con incertidumbre y margen de reparaciones.
+- Aceptación: opciones/propuesta y decisiones no validadas claramente separadas del comportamiento entregado; casos de adyacencia/legado/snapshot/paginación/extremos; pasos concretos y rollback completo antes deUI. Enlaces/diff/consistencia, commit+push int y cuotafinal. No iniciar implementación09b4b2 en este lote.
+
+- Resultado09b4b0: problema de ranks observado documentado, alternativas/propuesta no validada y cuatro cortes definidos, sin schema/código abiertos. Referencias/consistencia/diff comprobados; cierre en commit+push int, cuotas finales al usuario. Próxima09b4b2a con presupuesto renovado suficiente.
+
+### 09b4b2a1 — Compatibilidad del orden numérico en claves textuales
+
+- Objetivo: primer corte puro de09b4b2a, representar el orden legado de posiciones sin pérdida de precisión. Entrada23%/61%, secuencial enint, solicitud expresa de una entrega pequeña.
+- `target_paths`: `src/lib/ordering/legacy-rank-key.ts`, su test y `plan/{master,iterations,iteration-log,backlog-ordering}.md`. Depende de09b4b1 y del comparador actual `compareRank`; guía instalada use-client revisada, helper independiente de runtime.
+- Aceptación: comparación binaria de claves coincide con el comparador numérico y su desempate por ID; negativos, fracciones adyacentes, subnormales, ±0, límites±1e12 y posiciones iguales. Rechazar posiciones inválidas; clave con prefijo fijo y sin mutar input. Contrastar contra oráculo de registros deterministas. Solo adaptador candidato, sin schema, migración, integración ni formato definitivo de inserción.
+- Validación: tests del helper y suite completa, lint, tipos, build, diff/referencias; actualizar resultado y registro, commit/push int. Restan clave implícita, inserción/agotamiento y adyacencia antes de ordenar backlog o habilitar UI.
+
+- Resultado: cuatro tests/1.306 aserciones, oráculo determinista de2.112 registros y extremos/desempates aprobados; lint211 archivos, tipos y suite111 pass/7auth opt-in skip/0fallos. Adaptador candidato aislado; formato persistido y comportamiento UI intactos. Build y cierre registrados eniteration-log. Próximo corte09b4b2a continúa con clave implícita/inserción y agotamiento; este resultado no adopta el formato definitivo.
+
+### 09b4b2a2 — Clave implícita compatible de tareas
+
+- Objetivo: representar el orden sin colocación por fecha efectiva/creación/ID, siguiente corte puro tras09b4b2a1. Entrada21%/60%, petición explícita de otra entrega mínima; secuencial enint, protocolo interactivo.
+- `target_paths`: `src/lib/ordering/default-task-key.ts`, su test y `plan/{master,iterations,iteration-log,backlog-ordering}.md`. Depende del comparador vigente y adaptador legado; guía instalada use-client ya revisada, sin APIs nuevas de Next ni runtime/IO.
+- Aceptación: clave determinista/copia implícita sin persistir, comparación binaria equivalente a `compareDefaultTaskOrder`, años0001/9999, desempates y reprogramación manteniendo ID; validar campos con schemas compartidos. Oráculo mixto contra `orderPlacedTasks` usando prefijos candidato para colocadas/implícitas. Sin cambio de schema/formato persistido/consumidores; inserción y agotamiento siguen pendientes.
+- Validación: tests y suite, lint/tipos/build, diff/referencias; plan/registro y commit/push int. Cerrar después de este corte y consultar ambas ventanas.
+
+- Resultado: clave implícita validada y equivalente al comparador, cuatro tests/2.036 aserciones y oráculo mixto45 tareas/15 colocaciones aprobados. Lint213 archivos, tipos y suite115 pass/7auth opt-in skip/0fallos; build y cierre enregistro. Sin integración/migración ni adopción del formato; próximos pasos inserción/agotamiento, después adyacencia paginada y ejecutor.
+
+### 11a1b2 — Reductor de elementos compartido
+
+- Objetivo previo: extraer las reglas ya probadas de mutación local a un módulo puro importable por cliente y servidor, sin duplicar reglas ni cambiar revisiones optimistas. Entrada84%/55%, int/secuencial/reserva10%; dependencias03b/08b/11a1b1.
+- `target_paths`: `src/lib/calendar/item-command.ts`, `src/lib/local-db/item-mutation.ts` y su test, `src/types/{sync,local-sync}.ts`, `plan/{master,iterations,iteration-log}.md`.
+- Aceptación: crear mantiene revision0; editar/progreso/borrado conservan revisión remota, propiedad, identidad, historial completedAt y reglas de eventos. Reutilizar tests de reglas sobre módulo compartido y mantener wrapper cliente para consumidores existentes. Sin Mongo/auth/Next en módulo puro; sin cambio de protocolo, persistencia o UI.
+- Validación: suite existente/lint/tipos/build/diff/referencias, plan/registro/commit+pushint y cuotas. Después11b1 aplica el reductor dentro de recibo+mutación+journal atómicos, con límites explícitos de soporte.
+
+- Resultado11a1b2: reductor puro compartido, wrapper local compatible y tipoItemCommand genérico; regresiones locales y eventos pasan sin cambio de semántica/revisión. Suite123pass/17opt-in skip, lint224files/tipos/build29recursos aprobados; sin IO ni UI nuevos. Siguiente11b1 transacción remota.
+
+### 11b1a — Recibo, mutación y journal remotos atómicos
+
+- Objetivo previo: ejecutar comandos de tareas/eventos simples propios con CAS, recibo idempotente y secuencia durable por receptor en una misma transacción. Entrada82%/55%, int/secuencial/reserva10%; depende11b0/11a1a2/11a1b1–2.
+- `target_paths`: `src/lib/db/{remote-items,remote-item-commands,collections,ensure-indexes}.ts`, tests DB asociados, `src/schemas/remote-sync.ts`, `src/types/remote-sync.ts`, runner y `plan/{master,iterations,iteration-log,offline-and-sync,sync-test-environment}.md`.
+- Aceptación: actor validado recibido solo por futura capa autenticada; ninguna identidad/metadato de propietario en comando cliente. Mismo actor+operationId devuelve resultado guardado sin duplicar; payload distinto rechazado. CAS inválido/conflicto y ID ajeno no sobrescriben ni filtran datos; comandos recurrentes/cumpleaños/preferencias no soportados nunca aceptados. Revision/recibo/journal/contador commit o rollback conjuntos. Secuencia por receptor serializa commits; índices únicos reales registrados, sin TTL.
+- Pruebas MongoDB propio: reintentos concurrentes, dos editores/base igual, múltiples escrituras/destinatarios aislados, pérdida de respuesta/replay tras tombstone, reutilizaciónID, fallo tardío forzado sin restos y posterior recuperación. Suite/lint/tipos/build/diff/ref; plan/registro/commit+pushint/cuotas. Acción autenticada y descarga siguen en cortes posteriores, sin habilitar sync UI.
+
+- Resultado11b1a: transacción snapshot/majority, recibos propios/huella, CAS/revisión y journal+contador serializado; seis tests nuevos enMongo real, runner12pass/82aserciones y recursos limpios. Normal124pass/25opt-in skip, lint228files/tipos/build29recursos pasan. Siguiente11b1b acción autenticada; no subida automática/UI activada.
+
+### 11b1b — Acción autenticada de subida limitada
+
+- Objetivo previo: exponer ejecutor11b1a mediante Server Action, obteniendo actor exclusivamente de sesión persistida vigente; validar lote completo antes de la primera escritura. Entrada79%/55%, int/secuencial/reserva10%; dependencias11b1a/01b/contrato03b.
+- `target_paths`: `src/features/sync/{actions,push-batch,push-batch.test}.ts`, `src/schemas/remote-sync.ts` y tipos si necesario, `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: sin sesión no ejecutar ni aceptar actor cliente; lote inválido/duplicado/excesivo falla antes de mutar. Orden secuencial por operación; resultados explícitos, ID reutilizado no acepta y fallo transitorio conserva prefijo aplicado para reintento idempotente. Comandos sin soporte se mantienen pendientes; no arranque automático de envío ni mutación IndexedDB hasta reconciliación.
+- Validación: pruebas del servicio con dependencia de sesión/ejecutor controladas (no sustituyenMongo real11b1a ni loginGoogle piloto), suite/lint/tipos/build/diff/ref; plan/registro/commit+pushint/cuotas. Después descarga consistente y reconciliación local antes de coordinador.
+
+- Resultado11b1b: acción obtiene sesión persistida sin caché/refresh yactor exclusivo; lote entero validado antes de ejecutor, secuencial, identidad reutilizada explícita y prefijo durable tras fallo. Cinco tests del servicio, suite129pass/25opt-in skip, lint231files/tipos/build29recursos pasan. No coordinador/ACK local todavía; siguiente11c1 descarga propia porjournal.
+
+### 12a1 — Descarga propia paginada con checkpoint de journal
+
+- Objetivo previo: leer cambios propios por secuencia hasta un checkpoint fijo, incluido bootstrap desde0; corte de12a tras11b1b (candidata antes llamada11c1). Entrada77%/54%, int/secuencial/reserva10%.
+- `target_paths`: `src/lib/db/remote-changes.ts`/test integración, `src/features/sync/pull-response.ts`/test, `src/app/api/sync/changes/route.ts`, schemas/tiposremote-sync, runner y `plan/{master,iterations,iteration-log,offline-and-sync,sync-test-environment}.md`.
+- Aceptación: actor de sesión porrequest, query estricto/cursor entero/limit1–100, página privada no-store sin datos ajenos. Capturar through decontador en snapshot; siguientes páginas conservan through y cambios posteriores esperan siguiente pasada. Contigüidad verificada, corrupción/huecos/cursor futuro rechazan sin avanzar. Revalidar propiedad actual para cada payload histórico, tombstones incluidos.
+- Decisión: primer bootstrap reconstruye el estado reproduciendo journal durable desde0 hasta through; evita snapshot móvil y mantiene todas las versiones mientras no haya compactación. Todas las escrituras de producto deben pasar por11b1a; documentos preexistentes sinjournal exigirían migración antes de activar sincronización. Preferencias/compartidos todavía sin soporte.
+- Pruebas Mongo real: checkpoint bajo ediciones/borrado/nuevos elementos durante páginas, siguiente pasada recupera posteriores; otroactor, cursorfuturo, hueco/corrupción y permisoactual denegado no entregan página parcial. GETtests401/400/no-store/sesión/500 sin detalles. Suite/lint/tipos/build/diff/ref, plan/registro/commit+pushint/cuotas; reconciliación/coordinador después.
+
+- Resultado12a1: GETprivado/actor de sesión/query limitado, checkpoint decontador y secuencias contiguas en snapshot; bootstrap desdejournal0 y replay posteriores preservan todos los cambios. Mongo15pass/105aserciones, normal133pass/30opt-in skip, lint236files/tipos/build29recursos pasan. Siguiente12b1 reconciliación IndexedDB; no convergencia de dispositivos anunciada.
+
+### 12b1a — Proyección conservadora de cambios con trabajo pendiente
+
+- Objetivo previo: helper puro para decidir shadow/vista al recibir un elemento remoto, conservando la proyección local mientras existan intenciones sinACK. Entrada75%/54%, int/secuencial/reserva10%; dependencias12a1/03b.
+- `target_paths`: `src/lib/sync/item-projection.ts` ytest, `src/schemas/item-projection.ts`, `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: validar cuenta/identidad/registros/cola de entidad; shadow solo avanza revisión, igualdad concontenido distinto falla, respuesta vieja no regresa metadata. Sin pendientes adoptar remoto/tombstone; conpendientes conservar local íntegro (incluidas series no soportadas) y guardar remoto separado. ACK porUUID de journal no se presume; recibo/payload verificado precederá confirmación. Sin escrituras IndexedDB ni modificación de cola aún.
+- Decisión conservadora: pull no reaplica automáticamente una intención sobre cambios remotos concurrentes ni sobrescribe su borrador. Vista local existente representa intenciones acumuladas; shadow conserva remoto para resolver/reconciliar posteriormente. Cortes siguientes: recibos/ACKatómico, cursor/pullatómico, preparación de revisión de envío congelada ycoordinador.
+- Validación: oráculos de ediciones/crear/borrar local, replay/viejas/misma revisión contradictoria, foreign/corrupt/no identidad, input sinmutar; suite/lint/tipos/build/diff/ref, plan/registro/commit+pushint/cuotas.
+
+- Resultado12b1a: planner puro valida cuenta/identidad/cola y conserva optimismo sinACK, shadow monotónico y replayigual; cuatro tests/26aserciones, normal137pass/30opt-in skip, lint239files/tipos/build29recursos pasan. No persistencia/cursor/ACK nuevos; siguiente12b1b confirma recibos e intenciones localmente.
+
+### 12b1b — Resultado de envío y ACK local atómicos
+
+- Objetivo previo: persistir resultado ligado a operación ylease vigentes, estadooutbox, shadow/proyección y base de dependientes juntos. Entrada73%/54%, int/secuencial/reserva10%; dependencias12b1a/11b1b/03b.
+- `target_paths`: `src/lib/local-db/sync-store.ts`, `src/schemas/local-sync.ts`, `test/browser/sync-results.ts`, whitelistserverfixture y `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: verificar operación enviada completa/actor/ID/revisión/lease, respuesta obsoleta no escribe; replay deACK devuelve resultado persistido sin cambiar. Applied confirma solo suintención, conserva ediciones posteriores ypropaga revisión exclusivamente a dependientes directos nunca enviados (attempts0). No alterar payload ya enviado/reintentos congelados. Conflicto/rechazo conservan local/base/intención para recuperación; unsupported vuelvependiente, noACK. Cursor no avanza porunACK. Resultado/shadow/vista/cola/metadata commit o rollback conjuntos; sin cambioDBversion/deps.
+- Validación browserIndexedDB propio: creación+edición posterior, claims dependientes, replay/cambio de payload/stalelease/cuenta, conflicto/rechazo/unsupported, fallo tardío metadata revierte todo, recarga. Suite/lint/tipos/build/diff/ref, plan/registro/commit+pushint/cuotas. Después12b1c pull/cursoratómicos y coordinador.
+
+- Resultado12b1b: LocalSyncStore verifica operación/lease/cuenta/revisión ypersistencia conjunta de resultado/outbox/shadow/vista; dependientes nunca enviados reciben base deACK, reintentos congelados. Siete checks browser+recarga pasan, rollback tardío/cursor intacto; normal137pass/30opt-in skip, lint241files/tipos/build29recursos pasan. Próxima12b1c pull/cursor; sin coordinador todavía.
+
+### 12b1c — Pull, shadow y cursor locales atómicos
+
+- Objetivo previo: guardar página de cambios ycursor en misma transacción, con checkpoint fijo y proyección conservadora. Entrada68%/53%, int/secuencial/reserva10%; dependencias12a1/12b1a–b.
+- `target_paths`: `src/lib/local-db/{sync-store,pull-changes}.ts`, `src/schemas/local-sync.ts`, tiposlocal-sync si necesario, `test/browser/sync-pull.ts`, whitelistserverfixture y `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: validar cuenta, secuencias contiguas desdeafter ycheckpoint; cursor local CAS, páginas viejas no regresan, futuras/solapadas no saltan. Agrupar últimas versiones porID; conservar local conpendientes yshadowmonotónico incluso ante ACKmásnuevo. Página no confirma outbox aunque coincida operationId. Datos/shadows/cursor se confirman o revierten juntos; sinnetwork/await dentroIDB, sin borrar bases/cola. Persistircheckpoint para reabrir y continuar bootstrap; sinDBversion/deps nuevos.
+- Validación IndexedDB real: páginas/checkpoint/recarga, tombstones, ACKadelantado ypendingcreate/edits, malformed/foreign/gap/futurecursor, fallo tardío metadata revierte todo, dos respuestas delmismoafter compiten seguras. Suite/lint/tipos/build/diff/ref, plan/registro/commit+pushint/cuotas; coordinador después.
+
+- Resultado12b1c: cursor CAS/checkpoint durable, páginas contiguas/pliegue porID/proyección pendiente yshadow monotónico; seis checks IndexedDB+recarga pasan, rollback tardío y dos respuestas seguras. Normal137pass/30opt-in skip, lint243files/tipos/build29recursos pasan. Próxima12b2a coordinador; sin sync automática aún.
+
+### 12b2a1 — Protección ante cambio de cuenta durante el envío
+
+- Objetivo previo: cerrar carrera entre consulta de identidad y subida cuando sesión cambia deA aB; expectedUserId es afirmación de coherencia, nunca fuente de autorización. Entrada64%/52%, int/secuencial/reserva10%; dependencias11b1b/12b1c. Corte previo al coordinador12b2a2.
+- `target_paths`: `src/schemas/remote-sync.ts`, `src/features/sync/push-batch.ts` ytest, `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: actor exclusivamente de sesión vigente; inputestricto esperado ybatchvalidado, expectedUserId distinto devuelveaccount_changed sin ejecutar ni filtrar sesión actual. Inputsin expected oconactorinyectado rechazado; cuenta coincidente conservaorden/resultados. Cambio no borra ni confirma intenciones. Se cambia contrato preparado todavía sinconsumidorUI para hacerla comprobación indivisible respecto al actor usado enmutación.
+- Validación servicio: simular sesiónB ypayloadA (cero escrituras), match ycamposforjados; suite/lint/tipos/build/diff/ref, plan/registro/commit+pushint/cuotas. SinconsultaDBnueva/índices/deps/seguridadampliada.
+
+- Resultado12b2a1: expectedUserId estrictamente validado ycomparado conactor de sesión antes deejecutor; account_changed noescribe. SesiónB/payloadA ysinafirmación probados, suite138pass/30opt-in skip, lint243files/tipos/build29recursos pasan. Candidata12b2a2 coordinador; ningúnconsumidorUI antiguo.
+
+### 12b2a2 — Pasada acotada de sincronización y liberación de lease
+
+- Objetivo previo: coordinar identidad/pull/claim/push/ACK secuencialmente mediante puertos tipados, con límites por pasada, coalescing ystop. Entrada60%/52%, int/secuencial/reserva10%; dependencias12b2a1/12b1c. Aún sin activar UI/redautomática.
+- `target_paths`: `src/features/sync/{coordinator,coordinator.test}.ts`, `src/lib/sync/item-command-support.ts`, `src/lib/local-db/outbox.ts`, `test/browser/sync-results.ts`, `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: cuenta esperada antesdeclaim ycadaefecto; pull hasta checkpoint antesdepush, unaoperación porenvío yresultado exacto. Releer cola trasACK para basesdependientes, lease entrepestañas yrelease solo dueño; pérdida respuesta reintenta mismo payload. Comandos sin soporte nuncaenviar/ACK; conflicto/rechazo no bloquea entidades independientes. Pasada acotada ycoalesced, stop evita efectos posteriores, sin falsas garantíastodas lasentidades convergen.
+- Validación puertoscontrolados: cambio de cuenta/noenvío, dependency/orden/bases, presupuesto de páginas/ops, coalescing/stop, fallo/liberación/payload; IndexedDBfixture verifica release propietario/reclaimsinmutación. Suite/lint/tipos/build/diff/ref, plan/registro/commit+pushint/cuotas. Adaptador de transporte ydosdispositivos reales/simulados después, antesdehabilitarUI.
+
+- Resultado12b2a2: coordinador porpuertos/identidad/guardias/budgets4páginas+5envíos, rereaddependientes trasACK/coalescing/stop, release exclusivodueño ypayload congelado. Sietetests nuevos, fixtureACK+release+recarga pasan. Normal145pass/30opt-in skip, lint246files/tipos/build29recursos pasan. Próxima12b2a3 adaptador ydosdispositivos; UIaúnnoactivada.
+
+### 12b2a3 — Transporte HTTP y runtime local cerrable
+
+- Objetivo previo: conectar puertos a fetch/accióninyectada yrepositorios propios sinactivarUI, separando backend deentorno de dosdispositivos12b2a4. Entrada55%/51%, int/secuencial/reserva10%; dependencias12b2a2.
+- `target_paths`: `src/features/sync/{http-transport,http-transport.test,transport-error,local-runtime}.ts`, coordinator/pull-response ytests, `src/schemas/remote-sync.ts`, `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: identidad/pull concredentials same-origin/no-store/query esperado/checkpoint ydeadline; callback deServerActioninyectado sinbundlear auth/DB enbrowser. Cambio de cuenta también protegeGET, cursorfuturo requiere recuperación, 401 pausa. Validar input/output y límites; fallos noACK. Runtime verificaepochlocal, abre/cierra recursos propios ystopespera pasada antesdecerrar conexiones; claim120s protege envíos acotados. Sinpolling/UItodavía.
+- Validación transporte conRequest/Responsecontrolados (HTTP real de dosparticiones después): identity/query/cookies/no-cache/códigos/timeout/payloadmalformado; regresióncoordinador. Suite/lint/tipos/build/diff/ref, plan/registro/commit+pushint/cuotas. Ningunadependencia/secret/hosting/cambioDB.
+
+- Resultado12b2a3: transporte privado/deadlines/schema+contexto, accountChangedGET/401/cursorfuturotipados yfactorylocalstop/cierrepropio; seisHTTPtests+guardGET+regresióncoordinador pasan. Normal153pass/30opt-in skip, lint250files/tipos/build29recursos pasan. Próxima12b2a4 prueba integrada real de dosparticiones antesdeUI.
+
+### 12b2a3d — Completar registro de transporte
+
+- Entrada51%/50% trasb29017e, int/secuencial/reserva10%; objetivo yscope previo: solo `plan/{master,iterations,iteration-log,offline-and-sync}.md`. El scriptdocumental falló por sintaxis antes deactualizar archivos, pero elcomando siguiente hizo commit/push delcódigo validado yscopeprevio. Registrar cierre encommit adicional sinreescribir historia publicada.
+- Aceptación: estado/evidencias/siguiente candidata exactos, referencias/diff consistentes; sin cambios decódigo ni repetirvalidaciones aprobadas porMarkdown. Commit+pushint/verificar HEAD/cuotas.
+
+### 12b2a4 — Dos particiones de navegador con MongoDB real
+
+- Objetivo previo: ejercer runtime/coordinador/transporte con IndexedDB de dos orígenes independientes y el ejecutor/journal reales en la instancia propia del runner. Entrada49%/50%, int/secuencial/reserva10%; dependencias12b2a3.
+- `target_paths`: `scripts/{sync-db-test-runner,sync-browser-test-server}.ts`, `test/browser/sync-{devices,device}.ts`, `src/schemas/sync-browser-test.ts` ytests, `package.json`, `plan/{master,iterations,iteration-log,offline-and-sync,sync-test-environment}.md`.
+- Aceptación: descriptor/ownership existentes antes de conectar, HTTP solo loopback con capacidad porrun, sin env/auth deproducto. Dospuertos efímeros aíslan IndexedDB delmismoactor; crear sinred conserva intención tras recarga, conectar/descargar/progreso/borrado convergen en ambos yMongo. Pérdida derespuesta después decommit reintenta mismaoperación sin duplicar; concurrentes preservan conflicto/borrador yentidadindependiente avanza. Todoslosrecursos propios secierran ysolo particiones ficticias seeliminan.
+- Límite: lafixture inyecta actor ficticio verificado ycallbackHTTP en lugar delRPC deServerAction; prueba pila sync/DB, no loginGoogle ni convergencia de preferencias/series/compartidos. No habilitar sync enUI hastaevidencia.
+- Validación: esquemas deldescriptor/comandosfixture, pruebasbrowser dosorígenes+recarga/rollbackprevios, runnerMongo, suite/lint/tipos/build/diff/referencias; plan/registro/commit+pushint/HEADremoto/cuotas.
+
+- Resultado12b2a4: dos orígenes efímeros con IndexedDB real y MongoDB propio pasan seis escenarios: cola offline/recarga, bootstrap/convergencia, estado/checklist dependientes, respuesta perdida/replay, tombstone/recarga y conflicto con entidad independiente. Runner original15pass/105aserciones; normal154pass/30opt-in skip, lint255files/tipos/build29recursos pasan. Ambos modos limpian contenedor y recursos propios. Siguiente12b2b1 resumen de pendientes/bloqueos; aún sin UI automática ni RPCGoogle probado.
+
+### 12b2b1 — Resumen consistente de cola y bloqueos
+
+- Objetivo previo: distinguir trabajo pendiente/enviable/dependiente/bloqueado/sin soporte/conflictos/rechazos sin interpretar una pasada settled como sincronización total. Entrada42%/49%, int/secuencial/reserva10%; dependencias12b2a4.
+- `target_paths`: `src/lib/sync/{queue-summary,queue-summary.test}.ts`, `src/schemas/sync-queue.ts`, `src/lib/local-db/{queue-summary,sync-store}.ts`, `test/browser/sync-device.ts`, `test/browser/sync-devices.ts`, schemafixture y `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: snapshot items/outbox en una sola transacciónreadonly, actor/identidad/duplicados validados; ACK excluidos, pendientes clasificados sin modificar ni reconstruir operación; bloqueo transitivo, dependencia ausente/ciclo no se anuncia enviable. Resumen no expone otra cuenta ni descarta comandos no soportados.
+- Validación: oráculos puros de mezcla de estados/dependencias/ciclo/aislamiento; fixture integrada usa resumen real antes/después deACK yconflicto, suite/lint/tipos/build/diff/referencias. Commit+pushint/HEADremoto/cuotas. UI/arranque queda en12b2b2.
+
+- Resultado12b2b1: snapshot readonly atómico yclasificación validada, bloqueo transitivo/ciclos/ausentes sinrecursión ni mutar cola; cinco tests nuevos yseis escenariosbrowser concontadores pasan. Normal159pass/30opt-in skip/4405aserciones, lint259files/tipos/build29recursos; recursosfixture cerrados. Siguiente12b2b2 ejecución manual enAjustes antesdeautomatismo.
+
+### 12b2b2 — Sincronización manual en Ajustes
+
+- Objetivo previo: conectar acción autenticada ytransporte/runtime a botón funcional en Ajustes con resumen durable, copycompacto ycache local renovada. Entrada38%/48%, int/secuencial/reserva10%; dependencias12b2b1.
+- `target_paths`: `src/features/sync/{manual-sync,manual-sync.test,client-action}.ts`, `src/features/sync/hooks/**`, `src/features/sync/components/**`, `src/features/workspace/components/device-settings.tsx`, `plan/{master,iterations,iteration-log,offline-and-sync}.md`, fixture de UI si hace falta.
+- Aceptación: una pasada acotada porpulsación, bloquear solapes; wrapServerAction constartTransition segúnguíaNextinstalada. Cierre/unmount/cambio deepoch detiene efectos ylibera recursos propios; revalidar solo caches deuser+epoch. UI enespañol distingueguardado local/alcance simple/pendientes/conflictos yauth/reintento/cursor inválido, sinfalso «todo sincronizado» ni borrar intenciones. Ajustes mantiene destino común ambasbarras, sin pantalla nueva.
+- Validación: servicio manual con puertoscontrolados comprueba cierre/errores/suspensión/cuentainvalidada; SSRdepanel ybrowser UI local cuando viable; lint/tipos/suite/buildfronteras/PWA/diff/referencias. La prueba12b2a4 cubre transportador+DB; no declararpilotoGoogle/RPCreal completado hasta ejecución autorizadaaislada oentorno real. Commit+pushint/HEADremoto/cuotas; automatismo en12b2b3.
+
+- Ampliación concreta de fixture12b2b2 antes de editar: `scripts/sync-browser-test-server.ts`, `test/browser/sync-settings.tsx`. Renderizar DeviceSyncSettings/hook reales en origen propio con actor/DB ficticios; plugin de bundle sustituye solo referencia deServerAction por callbackHTTP defixture, sincambiar acción/rutas producto. Botónreal debe confirmar tarea yseguir mostrando preferencia sinsoporte; control«Validar y cerrar» verificará resultado/cola/Mongo antesdelimpiar. No afirmar RPCNext probado por este seam.
+
+- Resultado12b2b2: botón manual funcional/estado durable en Ajustes, ServerAction envuelta entransición yruntime propio coalescido/cerrable; cache filtrada user+epoch. Ocho tests nuevos devida/cierre/caches/SSR; UIhookreal sobrefixtureMongo confirma tarea yretiene categoría pendiente, móvil390px sinoverflow/control44px. Normal167pass/30opt-in skip/4434aserciones, lint267files/tipos/build30recursos pasan. Próxima12b2b3 scheduler acotado; Google/RPCreal/piloto aúnporcomprobar.
+
+### 12b2b3 — Scheduler limitado con backoff y pausa
+
+- Objetivo previo: política de arranque/reanudación/reintentos que conserve una sola pasada activa, intervalos ypausa porauth/cuenta/cursor, sin depender delworker. Entrada30%/47%, int/secuencial/reserva10%; dependencias12b2b2.
+- `target_paths`: `src/features/sync/{scheduler,scheduler.test}.ts`, `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: 60s traspasada acabada, 2s para more_work, backoff30s–5min trasfallo; foco/online respetan deadline yno ocasionan flood. No ejecutar automáticamente oculto/offline, reanudar alwake disponible; auth/cuentacambiada/cursorpausan hasta peticiónmanual. Coalescer peticiónmanual/automática, stop cancela timer ypasada propia/suprime callbacks tardíos. Testrelojinyectado, sin timers reales prolongados.
+- Validación: oráculos de tiempos/morework/fallo/eligibilidad/flood/coalescing/stop/pausa/manual; suite/lint/tipos/build/diff/referencias. SinUIcambio aún, no índices/deps nuevos. Commit+pushint/HEADremoto/cuotas. 12b2b4 conectará proveedor común enWorkspace/Ajustes.
+
+- Resultado12b2b3: scheduler coalesce/manual, intervalos60s/2s ybackoff30s–5min, gatevisible/online, auth/cuenta/recuperaciónpausan, stopcancela ysilenciarespuestatardía. Cinco tests conrelojcontrolado pasan; normal172pass/30opt-in skip/4465aserciones, lint269files/tipos/build30recursos. Próxima12b2b4 proveedorcomún yarranqueUI, todavíanoautomático.
+
+### 12b2b4 — Proveedor único y sincronización automática
+
+- Objetivo previo: arrancar scheduler mientrasWorkspace estévisible/conred ycompartir motor/estado con botónAjustes. Entrada28%/47%, int/secuencial/reserva10%; dependencias12b2b3.
+- `target_paths`: `src/features/sync/{sync-context,scheduler,scheduler.test}.ts`, `src/features/sync/hooks/**`, `src/features/sync/components/{workspace-sync-provider,active-sync-provider,device-sync-settings,sync-status-panel}.tsx`, `src/features/workspace/components/workspace.tsx`, `src/features/workspace/require-active-account.ts`, `src/features/sync/local-runtime.ts`, fixtureReact y `plan/{master,iterations,iteration-log,offline-and-sync}.md`. Tipos deguard/runtime reducidos auserId+epoch, sin cambio deautorización.
+- Aceptación: motorúnico poruser/epoch, providerestable al navegarysinlistenersduplicados; arranque/online/foco/visibility gates+backoff delcorte anterior. Botónmanual compartepasada yestado, no abre motorextra. Cleanup detiene passtimer/listeners ycapturacuentaantes/después; cachés deotraépoca intactas. Offline guarda/navega igual, unsupported/conflictos siguen visibles/pendientes. Automatismo solo conappabierta; sinprometer backgroundworker/pilotoGoogle.
+- Validación: suite/relojscheduler existente, fixtureReact prueba arranqueautomático de tarea yretenciónpreferencia, botónmanual sinmutaciónduplicada ycleanup, lint/tipos/buildPWA/diff/referencias. Commit+pushint/HEADremoto/cuotas; si margen no cubresiguientecorte, cerrar antesdeabrir recuperación.
+
+- Ajuste de contrato12b2b4: también `test/browser/sync-device.ts` retira campos no usados delargumento runtime reducido; tsc/builddetectaron exceso deliteral ypasaron trasadaptación.
+- Resultado12b2b4: providerúnico keyeduser/epoch monta engine común; autoarranque/gates/backoff/listenersconcleanup ybotónmanual compartidos. FixtureReact confirma tarea automáticamente sinpulsar, botónmanual posterior deja misma revisión1/ACK1 ypreferencia pendiente; limpiezaexit0. Normal172pass/30opt-in skip/4465aserciones, lint272files/tipos/build30recursos pasan. Próximo12b2c señal local/aviso compacto antesde13a recuperación.
+
+### 12b2c — Señal de intención local y aviso compacto
+
+- Objetivo previo: despertar motor al confirmar intención local (también pestañas delmismo origen), conservando backoff/pausas; señalar incidencias relevantes fueraAjustes sinbloques grandes. Entrada24%/46%, int/secuencial/reserva10%; dependencias12b2b4.
+- `target_paths`: `src/lib/local-db/{outbox,sync-notifications}.ts`, `src/schemas/sync-queue.ts`, `src/features/sync/{scheduler,scheduler.test}.ts`, `src/features/sync/hooks/use-sync-engine.ts`, `src/features/sync/components/sync-issue-notice.tsx` ytest, `src/features/workspace/components/workspace.tsx`, `test/browser/sync-settings.tsx`, `plan/{master,iterations,iteration-log,offline-and-sync}.md`.
+- Aceptación: avisar solodespués decommitoutbox, eventos locales/BC validados yfiltrados porusuario; nevernotificaciónporpull/claim/ACK evitando loop. Falta deBroadcastChannel no afecta escritura, notificaciones best effort nofalseerror trascommit. Cambios locales adelantan idle a1s, pero nunca backoff ni pausa auth/cursor; coalescing ystop permanecen. Aviso compacto enlazaAjustes solo para conflictos/rechazos oproblemas desesión/recuperación, sinduplicarlo enAjustes.
+- Validación: testrelojde signal/backoff, SSRnoticecasos relevantes/normal, fixtureReact segunda creación trasauto provoca subida sinpulsación ysin esperar60s; demás pruebas/lint/tipos/build/diff/referencias. Corregir referenciahistórica delhookrenombrado detectada alcerrar12b2b4; noalterarhistoriaremota. Commit+pushint/HEADremoto/cuotas.
+
+- Resultado12b2c: notificacióntrascommit validada/filtrada eneventlocal+BC, best effort ycierre incluso alfallar; nuevos intents aceleran idle1s incluidodurantepasada, sinadelantarbackoff/pausas. Avisocompacto material enlazaAjustes. Dos testsnotificaciones, dos scheduler ytresSSR pasan; fixtureReact segunda creación se confirmaautomáticamente yretiene preferencia. Normal179pass/30opt-in skip/4482aserciones, lint276files/tipos/build30recursos. Referenciahistórica alhookrenombrado corregida. Próxima13a1 lectorvalidado deincidentes.
+
+### 13a1a — Proyección validada de incidente conservado
+
+- Objetivo previo: preparar DTOlegible deconflicto/rechazo propio a partir de entradaoutbox/outcome/local/shadow, sinmutaciones ni interfazde elección prematura. Entrada17%/45%, int/secuencial/reserva10%; corte mínimo de13a1 tras12b2c.
+- `target_paths`: `src/schemas/sync-incident.ts`, `src/types/sync-incident.ts`, `src/lib/sync/{incident-projection,incident-projection.test}.ts`, `plan/{master,iterations,iteration-log,offline-and-sync,conflict-recovery}.md`.
+- Aceptación: operacióncompleta ligada aresultado+estado terminal; cada record tieneidentidad/cuenta propia; versiones remotas positivas/monotónicas sin igualdadcontradictoria. Preservar borradores posteriores/tombstones ypayload exacto; no inferir base original a partir delshadowalmacenado alrecibirrespuesta. Applied/unsupported/missingoutcome/foreign/corruptrechazan antesdeDTO; no IOniACK/rebase/export/UI.
+- Validación: oráculos derechazo/conflicto, borradorposterior/tombstone/remoto másnuevo, operaciónmutada/cuenta/estado/revisión/keycorruptos/inputintacto; lint/tipos/suite/build/diff/referencias. Documentar diseño de elección explícita/cola dependiente antesdesnapshot13a1b. Commit+pushint/HEADremoto/cuotas; si no cabesiguientecorte+ cierre sobre10%, finalizar lote cerrado.
+
+- Resultado13a1a: DTO puro valida operación/estado/outcome/cuenta/identidad/revisiones; conserva local actual ydeloutcome, shadow alresultado yremoto másnuevo, sin suponerordencronológico de respuestasreplay. Cinco tests/26aserciones nuevas pasan. Normal184pass/30opt-in skip/4508aserciones, lint280files/tipos/build30recursos. Diseño13a deelección explícita documentado; lectorIO13a1b yresolución quedanpendientes.
+
+### Cierre del lote del 8 de octubre, 00:16 — Reserva y revisión
+
+- Objetivo y scope previos: cierre documental después de `f4ba680`, solo `plan/{master,workflow,iterations,iteration-log}.md`. Lectura 12%/44%. El siguiente `13a1b` necesita IO y navegador; los dos puntos sobre la reserva del 10% no cubren pruebas, reparaciones y cierre. Los últimos cortes de código consumieron 5–8 puntos entre lecturas, que pueden incluir uso compartido.
+- Aceptación: código validado y publicado, sin archivos abiertos; siguiente candidata y límites precisos. Heartbeat actual pausado; revisión de las 05:18 de Madrid preservada con reinicio real 1791429393 y continuación desde el último HEAD completo. Sin cadena extra ni créditos o reinicios de cuota.
+- Validación documental: referencias, consistencia y diff; commit, push a int, HEAD remoto y cuotas finales. No repetir build por Markdown.
+
+
+### 13a1b — Snapshot consistente de incidentes locales
+
+- Objetivo previo: leer evidencias y todas las intenciones sin ACK del elemento desde una única transacción readonly de items/outbox/shadows/metadata. Entrada 100%/43%, int/secuencial, reserva 10%; dependencia 13a1a.
+- `target_paths`: `src/{schemas,types}/sync-incident.ts`, `src/lib/sync/{incident-snapshot,incident-snapshot.test}.ts`, `src/lib/local-db/{sync-incidents,sync-store}.ts`, `src/features/sync/local-incidents.ts`, `test/browser/sync-incidents.ts`, `scripts/browser-test-server.ts`, `plan/{master,workflow,iterations,iteration-log,conflict-recovery,sync-test-environment}.md`.
+- Aceptación: snapshot íntegro o error, orden estable por secuencia, borradores posteriores y tombstones conservados, intenciones dependientes incluidas con payload exacto; aislamiento por usuario y época antes/después y conexiones propias cerradas. Sin ACK, red ni elección de versión.
+- Validación: proyección pura con corrupción/cuenta/duplicados/evidencia ausente; navegador IndexedDB real con conflicto, rechazo, dependientes, tombstones, recarga y cuenta cambiada; lint, tipos, suite, build, diff/referencias. Commit y push int con HEAD remoto comprobado, cuotas tras commit.
+
+- Resultado 13a1b: snapshot readonly de cuatro stores, proyección íntegra y orden estable; conserva todas las intenciones sin ACK de cada elemento y tombstones. Wrapper exige usuario/época antes y después y cierra conexión. Tres tests nuevos; 187 pass/30 opt-in skip/0 fail/4526 aserciones, lint 285 archivos, tipos/build aprobados. Navegador valida conflicto+rechazo+dependiente, outcome ausente, recarga y cambio de época. Fixture corregida para completar su logout ficticio antes de nueva preparación; datos propios limpiados y servidor cerrado. Próxima 13a1c.
+
+
+### 13a1c — Comparación compacta de incidentes en Ajustes
+
+- Objetivo previo: mostrar razón, borrador actual, remoto conocido y comando congelado, con intenciones posteriores, usando snapshot 13a1b. Entrada 93%/42%, secuencial/int/reserva 10%.
+- `target_paths`: `src/features/sync/{components,hooks}/sync-incident*`, `src/features/sync/components/{device-sync-settings,sync-status-panel}.tsx`, `src/features/sync/hooks/use-sync-engine.ts`, `test/browser/sync-incident-ui.tsx`, `scripts/sync-incident-ui-test-server.ts`, `plan/{master,iterations,iteration-log,conflict-recovery,sync-test-environment}.md`.
+- Aceptación: lectura solo con incidentes y bajo demanda, clave SWR usuario/época y guardias existentes; razones y detalles en español, borrados y remoto desconocido explícitos; datos extensos desplegables, contadores sin acciones de resolución prematuras. Sin nueva ruta; Ajustes accesible en ambas navegaciones. Renovar lectura ante edición local sin adelantar backoff.
+- Validación: SSR de comparación/rechazo/tombstone y error sin datos; fixture React/IndexedDB real, apertura de detalles, móvil sin overflow, recarga y cleanup; lint/tipos/suite/build/diff/referencias, commit/push int/HEAD/cuotas.
+
+- Resultado 13a1c: lectura bajo demanda SWR usuario/época y detalles en Ajustes con borrador, remoto conocido, comando e intenciones conservadas; estados/borrados/rechazos explícitos, error oculta caché. Aviso de cambios locales renueva también caché de incidentes sin cambiar política scheduler. Dos SSR nuevas; 189 pass/30 opt-in skip/0 fail/4543 aserciones, lint 294 archivos sin avisos, tipos/build 30 recursos aprobados. Fixture React/IndexedDB: móvil 390×844 sin overflow, summaries 44px, detalles y recarga con cola intacta; limpieza y servidor/tab cerrados. Próxima 13a2a contrato de resolución.
+
+
+### 13a2a — Contrato puro de elección explícita
+
+- Objetivo previo: validar snapshot esperado completo y producir plan local durable, sin escribir ni ofrecer botones aún. Entrada 89%/42%, int/secuencial/reserva 10%; dependencias 13a1b–c.
+- `target_paths`: `src/schemas/{sync-incident,sync-resolution}.ts`, `src/types/sync-resolution.ts`, `src/lib/sync/{incident-resolution,incident-resolution.test}.ts`, `plan/{master,iterations,iteration-log,conflict-recovery}.md`.
+- Aceptación: elección usar remoto conocido o enviar borrador completo para conflicto de elemento propio simple. Comparación exacta de snapshot esperado/actual; toda cadena sin ACK incluida, sin leases activos; UUID nuevo, base remota reciente y CAS posterior. Conservar entrada/resultado original y registrar supersesión como decisión local, nunca ACK. Rechazos, series, remoto ausente, identidades contradictorias o resurrección de tombstone no permiten envío. Borrado local sobre remoto vivo genera nueva intención de borrado.
+- Validación: tests puros de adopción, nueva operación/payload/base, borrador cambiado, cadena/lease/foreign/UUID, tombstones y rechazo. Lint/tipos/suite/build/diff/referencias, commit/push int/HEAD/cuotas. 13a2b habilitará estado superseded y transacción/executor, antes de botones.
+
+- Resultado 13a2a: contrato y planner puros validan snapshot esperado/actual exacto, cuenta/elemento simple, cadena íntegra soportada sin leases y UUID nuevos. Adoptar remoto no genera operación; reenviar borrador completo crea update/delete sobre revisión remota conocida, sin resurrect tombstone. Registro conserva expected e IDs supersedidos; todavía no persiste ni cambia estado outbox. Cinco tests nuevos; 194 pass/30 opt-in skip/0 fail/4576 aserciones, lint 298 archivos/tipos/build aprobados. Próximo 13a2b dividido en executor con estado superseded y UI de elección después de prueba integrada.
+
+
+### 13a2b1 — Supersesión local y resolución atómica
+
+- Objetivo previo: ejecutar contrato 13a2a en una transacción de cuatro stores con registro durable y replay; todavía sin botones de elección. Entrada86%/41%, int/secuencial/reserva10%.
+- `target_paths`: `src/schemas/local-sync.ts`, `src/lib/sync/{outbox-state,queue-summary,item-projection,incident-snapshot,incident-resolution}.ts` y tests afectados, `src/lib/local-db/{sync-incidents,sync-resolution,sync-store,outbox,preference-outbox,occurrence-outbox,task-move-outbox}.ts`, `src/features/sync/local-incidents.ts`, `test/browser/sync-resolution.ts`, `scripts/browser-test-server.ts`, `plan/{master,iterations,iteration-log,conflict-recovery,sync-test-environment}.md`.
+- Aceptación: nuevo estado local superseded no ACK, no envío ni bloqueo de proyección posterior; original payload/resultado/evidencia intactos. Record+item+cola+secuencia+replacement atómicos, replay idéntico no modifica ediciones posteriores. Snapshot regenerado dentro de transacción; lease/pending intentada/externos dependientes/cambios/UUID collision rechazan sin escritura. Nueva edición no depende de tail superseded, otras dependencias superseded siguen bloqueadas. Guardias cuenta/época y notificación únicamente tras commit.
+- Validación: tests pure de clasificación/proyección y pending intentada; IndexedDB real adopción/retry/delete/replay/edit posterior/conflicto nuevo/rollback/cadena externa/stale/account/reload. Lint/tipos/suite/build/diff/referencias, commit/push int/HEAD/cuotas. UI13a2b2 después de prueba integrada.
+
+- Resultado13a2b1: superseded conserva operación y outcome originales, excluido de proyección/cola activa pero nunca satisface dependencias como ACK. Nuevas intenciones no dependen del tail supersedido. Executor regenera snapshot en misma transacción de cuatro stores, registra decisión y crea replacement+secuencia opcionales juntos; replay idéntico no muta posteriores cambios. Guardias cuenta/época/cadena externa/lease/intención pendiente ya intentada/UUID. Tres tests nuevos; 197pass/30opt-in skip/0fail/4584aserciones, lint301files/tipos/build30recursos. Fixture ocho checks+recarga, rollback adopción/retry/contador/notificación y limpieza propios aprobados. Próxima13a2b1a integración de dos dispositivos antes de UI13a2b2.
+
+
+### 13a2b1a — Resolución entre dos dispositivos y MongoDB real
+
+- Objetivo previo: comprobar adopción/retry explícitos con runtime real, dos orígenes IndexedDB y MongoDB8.2.11 propio antes de botones UI. Entrada79%/40%, int/secuencial/reserva10%; depende13a2b1. Docker28.4 Linuxamd64 e imagen digest local revalidados; ningún contenedor de prueba residual.
+- `target_paths`: `src/schemas/sync-browser-test.ts`, `test/browser/{sync-device,sync-devices}.ts`, `plan/{master,iterations,iteration-log,conflict-recovery,sync-test-environment}.md`.
+- Aceptación: chain supersedida conserva originales y nueva operación se confirma remotamente; respuesta perdida/reload/replay no duplica revisión/journal. Adopción no escribe servidor ni ACK ficticio. Snapshot local cambiado rechaza elección; tombstone remoto no resucita. Convergencia completa comprobada por ambas proyecciones/cursors vs MongoDB, incluidos borrados; limpiar únicamente runner/particiones propios.
+- Validación: fixture integrada amplía seis escenarios con reintento/cadena/replay, adopción/stale y tombstone; suite/lint/tipos/build/diff/referencias. Commit/pushint/HEAD/cuotas, UI13a2b2 después.
+
+- Resultado13a2b1a: nueve escenarios integrados pasan con dos particiones reales/runtime/MongoDB. Replacement sobrebase2 se confirma enrevisión3 una vez pese arespuesta perdida/recarga/replay; originales permanecen superseded. Adopción noañade revisión/journal ysnapshot obsoleto rechaza sin cambios. Tombstone remoto nunca resucita; proyecciones ycursores deambos dispositivos coinciden conMongo ysin pendientes/conflictos/rechazos/sending. Runnerexit0/container/storage/servidores/tabs propios limpiados. Suite197pass/30skip/4584aserciones, lint301files/tipos/build30recursos aprobados. PróximaUI13a2b2.
+
+
+### 13a2b2 — Elecciones explícitas desde Ajustes
+
+- Objetivo previo: habilitar adoptar remoto conocido o enviar borrador completo tras pruebas13a2b1a. Entrada75%/40%, int/secuencial/reserva10%.
+- `target_paths`: `src/features/sync/components/sync-incident*`, `src/components/ui/confirmation-dialog.tsx`, `src/lib/sync/{incident-snapshot,incident-resolution}.ts` y tests afectados, `src/{schemas,types}/sync-incident.ts`, `test/browser/{sync-incident-ui.tsx,sync-incident-edit.ts}`, `scripts/sync-incident-ui-test-server.ts`, `plan/{master,iterations,iteration-log,conflict-recovery,sync-test-environment,offline-and-sync}.md`.
+- Aceptación: acciones solo donde contrato permite; cadenas externas bloquean ofertas, rechazos/sin soporte/tombstone no ofrecen retry. Confirmación reutiliza diálogo existente y muestra versión exacta congelada, consecuencias sobre toda cadena y estado local pendiente del servidor. UUID/timestamp se preservan en reintento, caché propia refrescada tras commit; fallo de caché no convierte commit en fracaso. Cancelar no escribe y snapshot cambiado rechaza. UI compacta/móvil/accesible; sin ruta nueva.
+- Validación: SSR disponibilidad/no falsas elecciones, fixture UI real con cancelación/confirmación/stale/supersesión/newpending/cola intacta; móvil sin overflow ytargets44px, lint/tipos/suite/build/diff/referencias. Commit/pushint/HEAD/cuotas.
+
+- Resultado13a2b2: Ajustes ofrece elecciones solo permitidas por guardias compartidas. Snapshot señala dependientes externos; esos casos conservan lectura sin acciones. Confirmación existente reutilizada con tono primary, versión congelada y consecuencias completas, UUID/timestamp estables en reintento, fallo de caché nofalseerrortrascommit. Tres tests nuevos; suite200pass/30skip/4597aserciones, lint304files/tipos/build30recursos aprobados. UIreal: cancelar sinmutación, edición enotra pestaña rechaza confirmación abierta, revisión nueva sustituye3intenciones ycrea1pending sinACK, recarga; adopción2superseded/0pending, recursospropios limpios. Móvil390px sinoverflow/dialog358px/buttons48px. Nueve escenarios dosdispositivos/Mongo revalidados exit0. Próxima13a2c1 copia explícita desde tombstone.
+
+
+### 13a2c1 — Contrato de copia explícita frente a tombstone remoto
+
+- Objetivo previo: planificar copia de borrador vivo como nuevo elemento cuando remoto conocido está borrado, preservando identidad original y cadena. Entrada63%/38%, int/secuencial/reserva10%; depende13a2b2.
+- `target_paths`: `src/schemas/sync-resolution.ts`, `src/lib/sync/{incident-resolution,incident-resolution.test}.ts`, `src/lib/local-db/sync-resolution.ts` (rechazo explícito hasta executor), `test/browser/sync-devices.ts` (nullable de compatibilidad), `plan/{master,iterations,iteration-log,conflict-recovery}.md`.
+- Aceptación: copy_local requiere nuevo itemId yoperationId distintos/resolutionUUID nuevos, base0/create; viejo elemento queda tombstone remoto, nuevo conserva contenido completo/checklist/fecha sin copiar preferencias. Record guarda proyección original ycopy, sinACK. Solo conflictos propios simples/cadena sin envíos/externos, local vivo yremoto tombstone. Defaultsnullable mantienen lectura/replay de registros anteriores. No botón ni copia persistida hasta siguiente executor.
+- Validación: tests freshIDs/payload/tombstones/collisions/localdeleted/remotealive/defaultslegacy; lint/tipos/suite/build/diff/referencias, commit/pushint/HEAD/cuotas.
+
+- Resultado13a2c1: contrato copy_local producecreate/base0/UUID nuevos y conserva tombstone original; record.copy separado deproyección original, nullabledefaults para compatibilidad. Tres tests nuevos yguardias freshIDs/remotovivo/localborrado. Executor rechaza explícitamentecopy hasta siguiente corte, UI noofrecebotón. Normal203pass/30skip/4618aserciones, lint304files/tipos/build30recursos aprobados. Próximo13a2c2 atomicidad/copiacolision/rollback/replay yprueba dosdispositivos; despuésUI.
+
+
+### 13a2c2 — Copia atómica y convergencia real
+
+- Objetivo previo: persistir original tombstone/copia/cola/evidencia en misma transacción y probar dos dispositivos antes de botón. Entrada59%/37%, int/secuencial/reserva10%; depende13a2c1.
+- `target_paths`: `src/lib/local-db/sync-resolution.ts`, `test/browser/{sync-resolution,sync-devices}.ts`, `plan/{master,iterations,iteration-log,conflict-recovery,sync-test-environment}.md`.
+- Aceptación: nuevo copyID libre incluso frente a tombstones/historial local; nunca overwrite ni reutilizar ID deoperación. Old record conserva tombstone, new item se añade, entry.entityKey corresponde alcopyID, secuencia/registro/originales juntos. Rollback tardío revierte ambos elementos/cola/counter/decision; replay no sobreescribe copia editada. Subida ydosdispositivos convergen nuevoitemrevision1 yviejo tombstone sin cambiarrevision, lostresponse/recarga sinduplicados.
+- Validación: IndexedDB real collision/rollback/replay/status/newpending; nueva escena integradaMongo; suite/lint/tipos/build/diff/referencias ycleanup propios. Commit/pushint/HEAD/cuotas; UI13a2c3posterior.
+
+
+13a2c2: copia y original tombstone guardados junto con cola/contador/evidencia en cuatro stores; nuevo ID libre frente a registros/historial/tombstones, entityKey del nuevo elemento. Rollback tardío deja ambos elementos y cola intactos; replay no sobrescribe copia editada. IndexedDB nueve checks+recarga y diez escenarios reales dos dispositivos/Mongo aprobados; lostresponse produce una sola copia revision1 y original tombstone revision2 intacto. Recursos propios limpios. Normal203pass/30skip/4618aserciones, lint304files/tipos/build30recursos aprobados. Próxima13a2c3 UI de copia, sin categorías/orden duplicados ni ACK local.
+
+### 13a2c3 — Copia explícita desde Ajustes
+
+- Objetivo previo: ofrecer copia nueva solo cuando local vivo y remoto borrado, tras persistencia/convergencia13a2c2. Entrada53%/36%, int/secuencial/reserva10%.
+- `target_paths`: `src/lib/sync/{incident-resolution,incident-resolution.test}.ts`, `src/features/sync/components/{sync-incident-actions,sync-incident-resolution-dialog,sync-incident-panel.test}.tsx`, `test/browser/sync-incident-ui.tsx`, `plan/{master,iterations,iteration-log,conflict-recovery,sync-test-environment}.md`.
+- Aceptación: opciones cumplen contrato, copia requiere nueva identidad y operación estables durante reintento; preview exacta y confirmación indican original borrado, categorías/orden no copiados y cola pendiente, sin ACK. Cancelar no cambia nada; recarga conserva original tombstone/copia/cola e historial. Móvil compacto sin overflow, botones utilizables; sin nuevo destino de navegación.
+- Validación: tests disponibilidad (local borrado/no local bloquean copia), SSR label/confirmación, UIreal cancelación/confirmación/reload/IDs/estados/copy sinACK; suite/lint/tipos/build/diff/referencias. Commit/pushint/HEAD/cuotas.
+
+
+13a2c3: Ajustes ofrece Crear copia de mi borrador solo para local vivo frentearemoto tombstone, conidentidad/operación/timestamp estables yconfirmación decontenido completo, originalborrado, sincategoría/orden ypending. Tests guardiaslocalmissing/deleted ySSR; normal205pass/30skip/4628aserciones, lint304files/tipos/build30recursos aprobados. FixtureUI móvil390/dialog358/buttons48 sinoverflow: cancelar sincambios, confirmar/reload origentombstone+copyrev0+createbase0/entityKeynuevo/2superseded/1pending/sinACK; limpieza propia. Próxima13b1 recuperación/transporte según dependencias.
+
+### 13b1a — Sesión y cierre durante envío, prueba integrada
+
+- Objetivo previo: verificar conservación ante sesión remota ausente/caducada y cierre después de commit, con recuperación de lease expirada tras recarga. Entrada50%/36%, int/secuencial/reserva10%; depende13a2c3.
+- `target_paths`: `src/schemas/sync-browser-test.ts`, `test/browser/{sync-device,sync-devices}.ts`, `plan/{master,iterations,iteration-log,sync-test-environment}.md`.
+- Aceptación: identidad ausente no reclama ni altera cola; sesión que caduca alpush libera lease pero no ACK ni modifica operación. Cierre trascommit remoto sinACKlocal conserva UUID y replay converge una solarevisión. Leaseexpirada recuperable trasrecarga, ambos dispositivos/Mongo coherentes. Fallos de auth se simulan solo en fixture, nunca atribuirlos aGoogle/RPCNext.
+- Validación: escenas nuevas conruntime/IndexedDB/Mongo aislado, assertions exactas operación/state/revisión/cursor; suite/lint/tipos/build/diff/referencias ycleanup propios. Commit/pushint/HEAD/cuotas. Compatibilidad deprotocolo siguiente corte13b1b.
+
+
+13b1a: doce escenarios reales dos dispositivos/IndexedDB/Mongo aprueban sesiónausente(no claim), sesióncaducada alpush(release sinACK yUUID/payload intacto), cierre después decommitremoto(release pending) yleaseexpirada durable/recarga/replay único. Ambosdispositivos/cursors convergen conMongo, revisiones1 sin duplicados; normal205pass/30skip/4628aserciones/lint304files/tipos/build30recursos. Auth simulado soloenfixture; Google/RPCNext siguepiloto. Cleanup ownrunnerexit0. Próxima13b1b compatibilidad deprotocolo.
+
+### 13b1b1 — Handshake de protocolo antes de efectos
+
+- Objetivo previo: anunciar rango de protocolo por header de identidad/pull ypausar transporte si falta/incompatible/corrupto, antes de reclamar oaplicar descarga. Entrada46%/35%, int/secuencial/reserva10%.
+- `target_paths`: `src/{config,schemas,lib/sync}/sync-protocol.ts`, `src/features/sync/{identity-response,http-transport,transport-error,coordinator,pull-response}.ts` ytests, `src/app/api/sync/identity/route.ts`, `src/features/sync/components/{sync-status-panel,sync-issue-notice}.tsx` ytests, `scripts/sync-browser-test-server.ts`, `plan/{master,iterations,iteration-log,offline-and-sync,sync-test-environment}.md`.
+- Aceptación: contrato versionado estricto yacotado sinPII, headersprivate/no-store, auth antesdeexposición deidentidad; bodyidentity existente intacto. Nuevo cliente exige protocol1 dentroderango; ausencia/invalid/incompatible produceupdate_required yschedulerpausa sinclaim/ACK/cursor. UI compacta explica actualizar conpendientespreservados, noforzar reload. Header evita romper preparaciónGoogle existente. Clientes anteriores sinhandshake no adquieren esta protección retroactivamente; ServerAction valida operation.protocolVersion como siempre, race posterior se cubre siguiente corte.
+- Validación: range/header/body tests, transporte nofalsoparse/scheduler pausado/coordinadorzeroeffects/UIespañola, suite/lint/tipos/build/diff/referencias; fixture integrada revalida headers en12escenarios. Commit/pushint/HEAD/cuotas. Sin nueva dependencia, DBmigration nipermisos.
+
+
+13b1b1: identidad/pull anuncian rango min/max por x-dalis-sync-protocol sin modificar bodyidentity existente. Nuevo cliente exige header válido <=128bytes con rango quecontieneprotocol1; ausencia/corrupto/incompatible pausa update_required antesdeleerbody/claim/cursor. Schedulerpausa yUI indica cerrar/reabrir conconexión, pendientes conservados; sinreloadautomático. Rango estricto Zod1..1000000/min<=max; noPII. Clientesanteriores sinhandshake noobtienenprotección retroactiva. 209pass/30skip/4670aserciones/lint310files/tipos/build30recursos y12escenariosMongoaprobados; ownresourceslimpios. Próxima13b1b2 guarda incompatibilidad enpush yprueba mixeddeployment.
+
+### 13b1b2 — Incompatibilidad durante envío y despliegue mixto
+
+- Objetivo previo: resultado update_required delpush sin ningún efecto remoto yprueba deausencia/incompatibilidad delhandshake antesdedescarga. Entrada43%/35%, int/secuencial/reserva10%; depende13b1b1.
+- `target_paths`: `src/schemas/{remote-sync,sync-browser-test}.ts`, `src/features/sync/{push-batch,coordinator}.ts` ytests, `test/browser/{sync-device,sync-devices}.ts`, `plan/{master,iterations,iteration-log,offline-and-sync,sync-test-environment}.md`.
+- Aceptación: envelope futuro estrictovalidado/acotado distingue incompatibilidad deinputmalformado; sesión/cuenta sevalidan antesdeexecutor yningún prefijo es aplicado sialguna versión es incompatible. Coordinador update_required libera lease/conserva UUID/payload/dependientes/cursor, noACK. Fixturemissing/future/futurepull/futurepush pausa conservando datos yrestaurar compatibilidad/recargar converge sin duplicados.
+- Validación: unit protocolgate/auth/invalid/prefix/lease, escena integradaMongo/2origins; suite/lint/tipos/build/diff/referencias/cleanup. Commit/pushint/HEAD/cuotas. Sin cambiar DB ni trabajadores, no heurísticas deerrorNext nidarporprobadoGoogle real.
+
+
+13b1b2: envelope Zodacotado/estricto verifica identidad/versión/duplicados/payloadsize antes deejecutar, batch conversiónfutura devuelupdate_required sinprefijoaplicado; auth/cuenta precedenexecutor. Coordinador libera lease yconservaUUID/payloadsinACK. TreceescenariosMongo: missing/future/futurepull conservan snapshotexacto; futurepush deja pending/lease0/attempt1; reload compatibleconverge una revisión1 enambosdispositivos. 211pass/30skip/4685aserciones/lint310files/tipos/build30recursos, ownrunnerexit0/cleanup. Próxima13b2a comprobaciónactualización segura.
+
+### 13b2a — Comprobar actualización sin interrumpir escrituras
+
+- Objetivo previo: permitir revisar worker desde incompatibilidad en Ajustes, ydetectar instalación yaencurso almontar aviso. Entrada40%/34%, int/secuencial/reserva10%; depende13b1b2.
+- `target_paths`: `src/lib/pwa/{client,client.test}.ts`, `src/features/workspace/components/{offline-update-check,update-notice}.tsx`, `src/features/sync/components/sync-status-panel.tsx`, `test/browser/pwa-update.tsx`, `scripts/pwa-update-test-server.ts`, `plan/{master,iterations,iteration-log,offline-and-sync,sync-test-environment}.md`.
+- Aceptación: check solo registroexistente/online, no instalar si falta ni skipWaiting/reload/delete; resultado distingue waiting/installing/current/offline/unavailable. Observador conecta installing existente yse desconecta aldispose. UI44px/compacta indica conservaciónde pendientes yguardarformularios/cerrarpestañas antesdeactualizar. Workerreal cache neutral versionesfixture1/2 sobreloopbackpropio demuestra waitingconcola intacta, activación naturalal cerrar/reabrir conserva datos. Limpiar solo recursospropios.
+- Validación: estados/helper/dispose conpuertosnativosficticios yfixture React/IndexedDB/SWreal, lint/tipos/suite/build/diff/referencias. Commit/pushint/HEAD/cuotas. No modifica protocolo niDBschema/producción.
+
+
+13b2a: Ajustes ofreceComprobaractualización anteupdate_required, registroexistente/online ywaiting/installing/current/offline/unavailable, sinregister/skipWaiting/reload. Observador conecta instalaciónyaencurso ydisposequitalisteners; avisoesperacompacto. 214pass/30skip/4702aserciones/lint314files/tipos/build30recursos. FixtureReact/IndexedDB/workerdeproductoreal con2versionesownloopback: v1activo/v2waiting mantienedatos/colaexactos, cerrar/reabriractivav2yconservaUUID/payload/estado, cleanupownreg/caches/partición/baseline. Móvil390sin overflow/checkbutton44px. Próxima13c1a backupcontractportable; import/exportUIposteriores. Google/RPCNextrequierepiloto.
+
+### 13c1a — Contrato de backup portable completo
+
+- Objetivo previo: validar backup local versionado de todos los stores de partición propia, pendientes y evidencias incluidas, sin importar ni escribir. Entrada33%/33%, int/secuencial/reserva10%; depende13b2a.
+- target_paths: src/{schemas,types}/local-backup.ts, src/lib/backup/{local-backup,local-backup.test}.ts, plan/{master,iterations,iteration-log,backup-recovery}.md.
+- Aceptación: format/version/protocol/databaseversion/actor/timestamp estrictos; 11stores completos con records válidos/tombstones/Superseded/outcomes/resolutions. Sin secretos/cookies/controlcuenta, sin filtrado parcial. Propiedad propia o error, claves únicas/sequence/counter/dependencias/evidencia consistentes; backups futuros sin soporte rechazan. Entrada UTF8 <=16MiB/<=10000records porstore, conserva leases como evidencia pero no restaurables. Codificador valida antes de producir JSON, lector no cambia entrada. Compartidos futuros requieren contrato nuevo; backup no otorga permisos. Importación posterior genera nuevas intenciones explícitas y jamás restaura ACK/cursors/leases.
+- Validación: roundtripmultistore con intenciones/metadata, wrongactor/version/schema/duplicado/historialincompleto/size rechazados e input intacto, lint/tipos/suite/build/diff/referencias. Commit/pushint/HEAD/cuotas. Snapshot readonly13c1b/UIexport13c1c siguientes.
+
+
+13c1a: backup estricto completo de11stores, cuentaspropias ymetadata validada, tombstones/leases/outcomes/resolutions/Superseded intactos, clavesúnicas/sequence/dependencias/counter/evidencia. UTF8<=16MiB/records<=10000, nofiltrar registros/secretos/control de cuenta. Tres tests roundtrip/invalidactor/version/duplicates/historicalmissing/size/unknownmetadata; 217pass/30skip/4727aserciones, lint318files/tipos/build30recursos aprobados. Contrato puro, noDB/UI/importación; próxima13c1b snapshotreadonly. Backupnoautoriza ni restauraACK/leases/cursors, compartidos/versionesfuturas requierennuevocontrato.
+
+### 13c1b — Snapshot completo readonly con cuenta vigente
+
+- Objetivo previo: leer los once stores en misma transacción, validar backup íntegro y cerrar recursos antes de entregar datos a UI. Entrada25%/32%, int/secuencial/reserva10%; depende13c1a.
+- target_paths: src/lib/local-db/backup.ts, src/features/workspace/local-backup.ts, test/browser/backup.ts, scripts/browser-test-server.ts, plan/{master,iterations,iteration-log,backup-recovery,sync-test-environment}.md.
+- Aceptación: getAll enmisma transacciónreadonly sin awaits, límite10001detecta excedente sintruncar. Wrapper comprueba usuario/época antes y después, fecha/exportmetadata desde runtime ydb.version, closes siempre. Ninguna escritura/ACK/notification/counter; datosinválidos/actorcambiado producenerror sinpartial. Snapshot coherente bajo escritura posterior, recarga yJSONroundtrip conpendientes/tombstones.
+- Validación: IndexedDBfixture real coherence/corrupt/account/epoch/reload exact/cleanup, lint/tipos/suite/build/diff/referencias. Commit/pushint/HEAD/cuotas. DescargaUI13c1c después si margen sobre10%.
+
+
+13c1b: lector getAlllimit10001 de11stores enmisma txreadonly, ownershippartición/DBversion/fecha/byteguard sintruncate, wrapperactor/epochantesdespués yclosefinally. IndexedDB4checks+reload: snapshot completo/colaexacta/tombstone/preferencias/roundtrip, snapshotprecedewritecoherente, unknownmetadatarechaza sin cambios, wrongpartition/epoch yepochcambiada durantelectura noentregadatos/closeexacto. Owncleanupnormal217pass/30skip/4727aserciones/lint321files/tipos/build30recursos. Próxima13c1cdescargaUI si margen, importación siguependiente.
+
+### 13c1c — Descargar backup validado desde Ajustes
+
+- Objetivo previo: botón compacto bajo detalles debackup, descargaJSON solicitada solo tras snapshotvalidado y guardiaactual. Entrada22%/31%, int/secuencial/reserva10%; depende13c1b. Coste esperado menor que cortesUI anteriores (snapshot ya probado, sinformulario/import ni navegación nueva).
+- target_paths: src/features/workspace/{download-backup.ts,components/{backup-settings,device-settings}.tsx}, test/browser/backup-ui.tsx, scripts/backup-ui-test-server.ts, plan/{master,iterations,iteration-log,backup-recovery,sync-test-environment}.md.
+- Aceptación: sólo cuenta preparada/época vigente, offline/sinfetch, snapshotcompleto yJSONvalidado antesdeBlob; filenamefecha sinusuario/PII, revocaciónURL ylinkremovido, sinnetwork/ACK/escrituras. UI44px/compacta español, errorhonesto conserva datos, mensaje descarga solicitada (no afirmar que navegadorguardó). Detalles explican restauraciónpendiente; no nuevapantalla.
+- Validación: UIreal390 confetchbloqueado capturaBlob+filename+11stores+pending+colaexacta, cuentaobsoleta falla sinBlob, cleanup propio; lint/tipos/suite/build/diff/referencias. Commit/pushint/HEAD/cuotas, después cierre si reserva no admite otrocorte.
+
+
+13c1c: secciónplegablecompactaCopia de seguridad enAjustes, downloadsolo tras snapshotvalidado yguardiaactual, JSONBlob/filenamefecha sincuenta yURLrevocable/linkremovido. Mensajehonestodescargasolicitada, importacióntodavíano disponible; sinfetch/ACK/escrituras. FixtureUIreal390 confetchbloqueado validaBlob11stores/colaexacta, epochcambiado error sinsegundaBlob, recursospropios limpios yviewportreset; botón44px/sin overflow. Normal217pass/30skip/4727aserciones/lint325files/tipos/build30recursos aprobados. Próxima13c2apreviewpuro deimportación si margen; ejecutor/importUI posteriores.
+
+### 13c1d — Identidad y payload de evidencias de backup
+
+- Objetivo previo: endurecer relación outcome/elemento yreplacement/payload sinnuevaUI niIO, antesdeimportación. Entrada16%/30%, int/secuencial/reserva10%; corte mínimo de dosguardias ytests sobrefixtureexistente (margen6puntos; noabrir13c2aimplementaciónmayor).
+- target_paths: src/lib/backup/{local-backup,local-backup.test}.ts, plan/{master,iterations,iteration-log,backup-recovery}.md.
+- Aceptación: local/base/current/applieditem deloutcome ligado acommand.itemId, versionessupersedidas conservan outcomeoriginal; replacement debe coincidirpayloadexacto conentryhistórica. Manipulación deID/payload/actoranidado/counterrechaza íntegramente, leasesendernoncelegítimo sigueválido. Sin cambiar ficheroscorrectos ni restaurarestado.
+- Validación: tests purecontra identidad/payload/counter/actor/duplicates, suite/lint/tipos/build/diff/referencias. Commit/pushint/HEAD/cuotas ycerrarlote/reservasin nuevaautomatización.
+
+
+13c1d: outcome.local/base/current/applieditem deben coincidirconcommand.itemId; replacement exacto contra operaciónpreservada, sinaceptarevidenciamanipulada. Dos tests identity/payload/actornested/counter/shadowduplicado; 219pass/30skip/4734aserciones/lint325files/tipos/build30recursos aprobados. Fixture usa operaciónclonada separada de decisiónpara quealterar una pruebe realmenterechazo. Sin nuevaUI/IO/migración. Código cerrado, próxima13c2apreviewimportación.
+
+
+## Intercalada 13b2b: cookies de acceso en preproducción protegida
+
+El 8 de octubre el usuario autoriza un intento mínimo con aproximadamente 8% de la ventana de 5h, consumiendo la reserva exclusivamente para esta corrección. Trabajo secuencial en `int`; no encadenar implementación al cerrar.
+
+- Objetivo: preparar recursos offline en un preview protegido sin omitir su cookie de acceso del mismo origen.
+- `target_paths`: `src/lib/pwa/service-worker.ts`, `src/lib/pwa/service-worker.test.ts`, `plan/{master,workflow,iterations,iteration-log}.md`.
+- Dependencias: worker existente, shell `/workspace` neutro y documentación instalada de Next sobre PWA; no cambios en hosting, permisos, secretos, DB o dependencias.
+- Aceptación: solicitudes de precache con `credentials: "same-origin"`; mantener rechazo de respuestas redirigidas, URL inesperada y shell sin marcador neutro, y eliminación de caché fallida. APIs, autenticación y contenido personalizado siguen fuera del precache.
+- Validación: worker de producto compilado y ejecutado en sandbox de pruebas con gate de autenticación simulado; tres pruebas cubren opciones de cada recurso, redirección SSO y HTML sin marcador. El simulador representa explícitamente opciones del navegador porque Bun normaliza `same-origin` a `include`. Suite 222 pass / 30 opt-in skip / 0 fail, 4749 aserciones; lint 326 archivos y tipos aprobados. Build aprobado: `/workspace` estático y worker preparado con 30 recursos neutros; diff y rutas comprobados para el cierre.
+- Límite: no se ha reproducido el acceso SSO en el dominio real de Vercel; el usuario debe recargar el preview publicado y verificar preparación. No borrar IndexedDB ni trabajo local. La siguiente candidata de producto continúa siendo `13c2a`; piloto real Google/RPC Next pendiente.
+
+
+## 13c2a — Vista previa pura de importación
+
+- Entrada: 100% de 5h y 29% de 7d; usuario autoriza continuar y consultar ambas cuotas tras cada commit/push para escoger el siguiente corte. Trabajo secuencial en `int`, reserva base del 10% y cortes pequeños.
+- Objetivo: comparar un archivo de backup íntegro con un snapshot propio actual antes de introducir ejecutor o UI de confirmación.
+- `target_paths`: `src/lib/backup/import-preview.ts`, su test, `src/types/backup-import.ts`, `plan/{master,workflow,iterations,iteration-log,backup-recovery,offline-and-sync}.md`.
+- Dependencias: contrato portable `13c1d`, snapshot readonly y fix de preview `13b2b`.
+- Aceptación: validar íntegramente ambos snapshots y su cuenta/versión/bytes; comparar por identidad de cada store, clasificar nuevos, idénticos, cambiados y tombstones de origen/destino; conservar contenido no admitido e historia como evidencia, sin restaurar permisos/ACK/leases/cursor ni generar intenciones o escribir. Igualdad exacta del registro validado, incluidos metadatos; no deduplicar por título ni inferir cuál versión es más nueva. Indexación lineal y ordenación O(n log n), salida determinista por clave.
+- Validación: casos mixtos en once stores, tombstones en ambos lados, mismos títulos con identidades distintas, tipo no soportado, entrada ajena/incompatible/corrupta/acotada; entradas sin mutación y salida independiente; suite, lint, tipos, build, diff/rutas/plan.
+- Piloto: el usuario confirma que el fix funciona en preproducción. El navegador aislado de Codex requiere login de Vercel; no tiene la sesión del usuario y no se ha realizado prueba de Google/RPC Next ni escritura en DB remota. Se continúa trabajo puro independiente.
+
+
+### Resultado 13c2a
+
+La vista previa pura valida el archivo y el snapshot actual completos para la cuenta activa; clasifica registros por identidad en los once stores sin IO, nuevas operaciones ni restauración de ACK, cursores, leases o permisos. Conserva contenido e historia en objetos independientes. Los tipos sin ejecutor quedan explícitos; igualdad exacta incluye metadatos y no establece precedencia remota. Se indexa cada store con Map y se ordena por clave: O(n log n) por ordenación, sin búsquedas cuadráticas ni mezcla por títulos. Cuatro pruebas/55 aserciones cubren stores, independencia, cambios, tombstones, orden determinista, tipos incompatibles y rechazo íntegro. Suite 226 pass / 30 opt-in skip / 0 fail / 4804 aserciones, lint 329 archivos, tipos y build de 30 recursos neutros aprobados. Próximo corte `13c2b`: contrato puro de selecciones e intenciones nuevas antes de ejecutor o UI.
+
+El usuario confirma que `13b2b` funciona en preproducción. La comprobación del navegador aislado termina en login de Vercel; falta sesión y cuenta de piloto, por lo que no se declara probado Google/RPC Next real ni convergencia en preproducción. No se modifica la DB del usuario.
+
+
+## 13c2b — Contrato puro de importación como copias
+
+- Entrada: 95% de 5h / 28% de 7d después de `5a1ef70`, remoto verificado; continuar secuencialmente con reserva del 10%.
+- Objetivo: transformar selecciones explícitas de tareas/eventos propios vivos sin repetición en nuevas intenciones `item.create`, sin IO ni confirmación UI. Copiar a identidad nueva evita resucitar tombstones o reemplazar trabajo existente.
+- `target_paths`: `src/schemas/backup-import.ts`, `src/types/backup-import.ts`, `src/lib/backup/import-plan{,.test}.ts`, `plan/{master,iterations,iteration-log,backup-recovery}.md`.
+- Dependencias: vista previa `13c2a`.
+- Aceptación: petición estricta con cuenta, UUID/fecha estables, snapshot esperado y entre 1 y 50 selecciones únicas; cuenta/versión/bytes íntegros, comparación actual no obsoleta, IDs nuevos y distintos respecto al archivo/snapshot/historia. Selecciones solo de items simples vivos; archivo original y evidencia preservados en el plan, sin copiar permisos/categorías/orden/ACK/cursor/leases/revisión. Crear contenido con revisión/base0 y nuevas fechas locales, mantener progreso/checklist; completedAt nuevo se deriva del estado y evidencia original se conserva. Batch <=512KiB; archivos omitidos/no soportados sin escrituras.
+- Validación: copies/duplicados/tombstone destino, revisión y progreso, stale comparison, IDs históricos y repetidos, tipos no soportados, cuenta ajena, límites del batch, independencia y entrada intacta. Suite, lint, tipos, build, plan/diff/rutas; commit/push/HEAD y cuotas.
+
+
+### Resultado 13c2b
+
+Contrato puro de selecciones e intenciones nuevas entregado. Cada copia es una tarea/evento propio vivo sin repetición, con UUID nuevo distinto del archivo, dispositivo e historia, operación nueva y base/revisión0. No modifica originales ni restaura permisos/preferencias/ACK/cursor/leases. Snapshot esperado validado e igualdad exacta de stores; exportedAt no determina antigüedad y puede variar al leer. Se conserva el JSON original literal y el snapshot revisado como evidencia del plan. Progreso/checklist copiados; fecha de finalización de una copia completada se establece en la nueva creación, conservando original en el archivo. Entre1–50 selecciones distintas y512KiB de intenciones, sin IO ni UI de confirmación.
+
+Cinco pruebas/41 aserciones y suite231pass/30opt-in skip/0fail/4845aserciones; lint332archivos, tipos ybuild30recursos aprobados. Se corrigió la fixture del límite de bytes para exceder realmente512KiB con UTF8 multibyte; no se relajó el límite. Próxima `13c2c1`: recibo durable de importación compatible con backup, sin ejecutar todavía; después ejecutor atómico, replay/rollback/recarga y UI.
+
+
+## 13c2c1 — Registro durable de importación
+
+- Entrada91%/27% después de `8a44954`; int/secuencial/reserva10%.
+- Objetivo: contrato de recibo local para replay sin duplicar copias, compatible con exportación/validación del backup y sin ejecutor todavía.
+- `target_paths`: `src/schemas/backup-import-record.ts`, `src/lib/backup/{import-record,backup-ownership}.ts`, tests, `src/schemas/local-backup.ts`, `src/lib/backup/local-backup.ts`, `src/types/backup-import.ts`, `plan/{master,iterations,iteration-log,backup-recovery}.md`.
+- Aceptación: key/UUID/cuenta/fecha estrictos, archivo original acotado preservado,1–50 operaciones create/base0 simples y UUIDs distintos. Validar archivo archivado estructuralmente y ownership, selección/payload exacto y correspondencia con operaciones preservadas en outbox. Los archivos dentro de archivos históricos son evidencia opaca y nunca autorizaciones ni estados a restaurar. No recursión de archivos históricos. Sin nuevas tablas, índices, migraciones, ACK ni escrituras.
+- Validación: recibo/backup roundtrip, archivo ajeno/manipulado, payload alterado, historia faltante/key inválida, entrada independiente; suite/lint/tipos/build/diff/rutas/commit/push/HEAD/cuotas.
+
+
+### Resultado 13c2c1
+
+Registro local `backup-import:<UUID>` añadido al contrato de metadata existente, sin tabla nueva ni migración. Conserva cuenta/fecha/archivo original y selecciones ligadas al payload exacto de las operaciones preservadas; no concede ACK ni permisos. Archivo archivado acotado y validado estructuralmente, ownership completo, identidad de fuentes única y selección de contenido vivo simple, batch512KiB, payload/fecha idénticos al historial. Archivos dentro de archivos históricos se preservan como evidencia opaca, sin recursión ni restauración. Formato portable1 mantiene rechazo íntegro de metadata desconocida en lectores antiguos.
+
+Ownership extraído a helper único compartido para evitar duplicar su validación. Tres pruebas/14 aserciones y regresión234pass/30opt-in skip/0fail/4859aserciones, lint336archivos, tipos/build30recursos aprobados. Aún no se escribe ningún recibo ni se ofrece importación UI. Próxima `13c2c2`: crear items/outbox/contador/recibo en una transacción propia, rechazo stale, rollback y replay tras recarga sin sobrescribir ediciones posteriores.
+
+
+## 13c2c2 — Importación local atómica y replay
+
+- Entrada87%/27% tras `8e78cd2`, int/secuencial/reserva10%.
+- Objetivo: guardar copias/cola/contador/recibo en una única transacción, preservando originales y pendientes; replay durable sin duplicar ni sobrescribir ediciones posteriores.
+- `target_paths`: `src/lib/local-db/{backup,backup-import}.ts`, `src/types/backup-import.ts`, `scripts/backup-import-test-server.ts`, `test/browser/backup-import.ts`, `plan/{master,iterations,iteration-log,backup-recovery,sync-test-environment}.md`.
+- Dependencias: planner y recibo, `13c2b–13c2c1`. Leer instrucciones de local-db y guía use-client instalada.
+- Aceptación: partición/cuenta/DBversion válidas; helper compartido de snapshot acotado en la misma transacción. Primera ejecución requiere comparación vigente e IDs libres, cola pending nueva y contador seguro; recibo exacto permite replay con snapshot antiguo sin reescribir items/colas. Reutilización de importId con otro archivo/selección/fecha falla. Backup posterior validado y acotado antes de escribir. Resolve solo tras complete, rollback tardío de todos los cambios; notificación solo postcommit. Sin red, secretos, nuevaDBtabla o UI de confirmación.
+- Validación: fixture UUID/origen loopback propio con IndexedDB real: preservación/multicopia/counter, replay+recarga/edición, stale/cuenta/collision, fallo tardío y recovery; limpieza exclusiva de recursos propios. Suite/lint/tipos/build/diff/rutas/commit/push/HEAD/cuotas. Guardias de cuenta/época a nivel workspace y UI en corte posterior.
+
+
+### Resultado 13c2c2
+
+Importador client-only guarda nuevas copias, intenciones pending, contador y recibo en una sola transacción de los once stores. El lector de snapshot acotado se comparte con exportación y se invoca dentro de la misma transacción; valida partición, versión y post-state portable completo antes de escribir. Conserva originales, preferencias y cola existente; add/contador seguros y resultado únicamente tras complete. Notificación postcommit no invalida guardado. Recibo exacto permite replay sin exigir el snapshot antiguo vigente y sin reescribir copias editadas; misma importId con archivo/selección/fecha distintos rechaza.
+
+Fixture propia de loopback4188 e IndexedDB real: seis checks de multicopia/preservación, replay/progreso, reutilización/stale/collision, cuenta/partición, fallo tardío con rollback y concurrencia una sola copia. Séptimo check tras recarga verifica snapshot/cola/recibo exactos y replay sin escrituras. Se corrigió la fixture porque getAll de outbox está ordenado por UUID, no por secuencia; ahora encuentra por identidad y ordena secuencias explícitamente. Ambas ejecuciones limpiaron exclusivamente particiones UUID propias; pestaña y servidor cerrados.
+
+Normal234pass/30opt-in skip/0fail/4859aserciones, lint339archivos, tipos ybuild30recursos aprobados; sin DB remota ni falsa declaración de ACK/convergencia nueva. Próxima `13c2c3`: guardias de cuenta/época y preparación de confirmación a nivel workspace, luego UI compacta y prueba de envío de copias con dos dispositivos/Mongo aislado.
+
+
+## 13c2c3 — Preparación y guardias de cuenta/época
+
+- Entrada81%/26% tras `adc40e7`, int/secuencial/reserva10%.
+- Objetivo: servicios workspace de lectura/comparación, preparación con UUID/fecha estables y commit del plan bajo cuenta/época capturada; sin UI aún.
+- `target_paths`: `src/features/workspace/import-backup.ts`, `src/schemas/backup-import.ts`, `src/types/backup-import.ts`, `test/browser/backup-import.ts`, `plan/{master,iterations,iteration-log,backup-recovery,sync-test-environment}.md`.
+- Dependencias: ejecutor `13c2c2`.
+- Aceptación: identidad capturada antes de awaits, guardias antes/después de lectura/preparación/commit, inputs validados y clonados para impedir cambios del caller durante awaits, cierre finally. Prepare compara snapshot actual y asigna UUID/fecha una vez; commit no regenera decisiones. Cuenta/época obsoleta falla antes de escritura. Si cambia después del commit, conservar copia propia y permitir replay desde su cuenta, sin mostrar éxito a otra cuenta ni deshacer el guardado.
+- Validación: fixture propia IndexedDB real incluye lectura/prepare sin escritura, época caducada antes de commit, cambio tras commit/replay y mutación del caller; cleanup de control local solo tras comprobar cuenta propia o nula. Suite/lint/tipos/build/plan/diff/rutas/commit/push/HEAD/cuotas.
+
+
+### Resultado 13c2c3
+
+Servicios client-only de workspace entregados: lectura/comparación readonly, preparación con UUID/fecha generados una vez y commit del plan estable. Capturan cuenta/época e inputs antes de awaits, validan snapshot actual, verifican cuenta antes/después y de nuevo tras abrir importer, y cierran conexiones en finally. Si la cuenta cambia tras commit, no exponen éxito a otra cuenta ni deshacen copias propias; el recibo permite replay desde su cuenta.
+
+Fixture IndexedDB real alcanza diez checks y uno tras recarga: preparación readonly, época invalidada durante apertura, caller mutando identidad/plan durante awaits, cambio tras commit con copia conservada/replay exacto, además de los checks anteriores. Cleanup valida control de cuenta propio/nulo antes de borrar exclusivamente sus particiones y control en loopback4188; pestaña/servidor cerrados. Suite234pass/30opt-in skip/0fail/4859aserciones, lint340archivos, tipos/build30recursos aprobados. Próxima `13c2d1`: selección y confirmación UI compactas en Ajustes; sincronización de copias con dos dispositivos/Mongo aislado en corte posterior.
+
+
+## 13c2d1 — Selección y confirmación compactas, con prueba remota paralela
+
+- Entrada74%5h/25%7d después de9437812, HEAD remoto verificado; int/reserva10% ambas. El usuario autoriza explícitamente adelantar trabajo en paralelo.
+- Objetivo: importar JSON propio desde Ajustes mediante comparación, selección explícita y confirmación de copias nuevas, manteniendo originales y evidencia.
+- Root owns `src/features/workspace/components/backup*.tsx`, helpers UI enworkspace, `scripts/backup-import-ui-test-server.ts`, `test/browser/backup-import-ui.tsx` yplan. Worker import_sync_proof owns únicamente `test/browser/sync-devices.ts` y módulo nuevo de fixture de importación si necesario. No archivos compartidos ni commits independientes del agente.
+- Dependencias:13c2c3. Sin nueva pantalla de navegación ni dependencias.
+- Aceptación: archivo acotado/validado de cuenta propia, selección ninguna por defecto, máximo50 simples vivos, comparación paginada y contenido secundario bajo demanda. Mostrar clasificación y tipos no admitidos. Confirmación explícita con plan estable, prevención de doble envío, guardias de cuenta y replay; error no afirma pérdida de guardados. Revalidación de caches propias tras commit sin confundir su fallo con fallo de guardado. No restaurar ACK/cursor/permisos ni reemplazar originales. UI española, controles44px, móvil compacto.
+- Validación: fixture UI offline/IndexedDB propio en4189 para selección/confirmación/cancelación, cuenta/archivo inválido, stale snapshot, doble intento y preservación. Agente prepara prueba de nuevas copias entre dos orígenes yMongoDB aislado con recursos propios y limpieza; root integra/revisa. Suite/lint/tipos/build/diff/plan/commit/push/HEAD/cuotas.
+
+
+### Resultado13c2d1 — UI de importación y convergencia de copias
+
+Ajustes ofreceImportar JSON enCopia de seguridad. Diálogo cargado bajo demanda con archivo propio<=16MiB, selección vacía por defecto, máximo50 y páginas de20 filas; tipos no admitidos/borrados no seleccionables. Clasificación visible y contenido/comparación plegables, confirmación explícita de copias nuevas, UUID/plan estables, guardia síncrona contra doble envío y revalidación solo de caches propias. Fallo de refresco posterior no niega guardado; error incierto conserva plan para replay sin duplicación. Sin nueva pantalla ni cambio de navegación. Labels españolas, incluso selector visual de archivo; fila52px y controles44px, sin overflow en390px.
+
+Fixture React/IndexedDB offline en4189 comprueba JSON inválido/ajeno, selección inicialmente vacía, preview/selección/cancelación sin escrituras, contenido comparado, cambio del original antes de confirmar con rechazo íntegro y nueva comparación, doble pulsación con una sola copia, progreso/checklist/archivo literal/cola pending/original conservados. Fixture definitiva parte de control vacío, no adopta cuentas ajenas; partición UUID/control propios, pestañas y servidor limpios. Durante desarrollo se reutilizó únicamente la partición que esta misma ejecución había creado, para limpiar tras reiniciar la fixture; ese mecanismo no forma parte del código final. Regresión SSR acota20 filas y deshabilita tombstones.
+
+El agente con rutas disjuntas amplía únicamente sync-devices.ts:14 escenarios reales entre dos orígenes yMongoDB aislado pasan. Backup capturado enrev3 conACK/shadow/cursor históricos; después originalrev5 tombstone. Importación preserva los once stores existentes salvo copia/cola/counter/recibo. Copia base0 pending obtieneACK real/rev1 y converge; pérdida de respuesta+recarga+replay no duplica, progreso posterior converge enrev2 y nuevo replay no sobrescribe. Tombstone yarchivo/recibo exactos. Runnerexit0, contenedor/tmpfs/particiones propios limpios; Google/RPCNext real sigue pendiente y no se tocóDB del usuario.
+
+Suite235pass/30opt-in skip/0fail/4865aserciones; lint347archivos, tipos/build34recursos neutros ydiff-check aprobados. Se corrigió la versión deDB de la fixture SSR para ajustarla al contrato2, sin cambiarlo. Las pruebas paralelas permiten incorporar la evidencia remota en este mismo corte; no queda un13c2d2 de convergencia abierto. Próxima candidata11c0: diseñar cortes de sincronización de preferencias personales/categorías/orden usando comandos locales existentes, compatibilidad explícita y conservación de pendientes antes de ampliar el ejecutor.
+
+
+## 11c0 — Cortes de sincronización de preferencias personales
+
+- Entrada53%5h/21%7d trasb7987f9; int/reserva10%. Objetivo documental: revisar comandos y persistencia reales y definir ampliación compatible para categorías/vistas/orden/settings sin admitir comandos antes de sus ejecutores.
+- `target_paths`: root `plan/{preference-sync,master,iterations,iteration-log,offline-and-sync}.md`; explorador únicamente lectura de schemas/outbox/reducer/preferencias, sin escrituras. El usuario permite trabajo paralelo; root revisa protocolo/journal y posee toda integración.
+- Dependencias: sincronización propia simple y recuperación13c2d1.
+- Aceptación: describir identidades, atomicidad multiregistro, revisiones, dependencia entre contenido y categoría, CAS/conflicto/replay/journal/pull y compatibilidad de clientes/cursor. Identificar colas existentes que requieren traducción o conservación, no reset niACK ficticio; subcortes independientes con rutas/tests/aceptación. Sin configuración/DB/índices ejecutados ni activación de preferencias.
+- Validación: citas de fuente reales, referencias/consistencia/diff, commit+pushint/HEAD/cuotas; documentación no requiere build adicional.
+
+
+### Resultado11c0
+
+Diseño de preferencias personales basado en comandos/reductores/cola/wire reales, con referencias a fuente y secuencia enpreference-sync.md. El explorador de solo lectura confirma base por documento, tail personal/dependencias de contenido, replay, ranks numéricos, sentinel atrasadas, efectos multirregistro de compactación y vista de serie, y ausencia de productor settings. Root revisa journal/cursor/receipts/protocol. No se activan comandos ni cambia transporte1, ni se ejecutan índices/migraciones.
+
+Transición propuesta wire2/intención1 requiere nuevas pruebas, adapters históricos, ACK/pull/backup compatibles y rechazo de bundles mixtos antes de avanzar cursores. No reescribir payloads/fingerprints1, inventar timestamps de movimientos overnight ni dar ACK para desbloquear pendientes. Cortes acotados definidos; siguiente11c1a DTO puro de efectos dispersos propios con claves/bytes/revisiones/duplicados. Documentación validada por referencias/consistencia/diff; código sin cambios, build anterior vigente.
+
+
+## 11c1a — DTO puro de efectos personales
+
+- Entrada45%5h/20%7d tras36c41fb, int/secuencial/reserva10%.
+- Objetivo: representar efectos dispersos de una operación remota personal sin modificar wire/cola ni autorizar un ejecutor.
+- `target_paths`: `src/schemas/preference-effects.ts`, `src/types/preference-effects.ts`, `src/lib/sync/preference-effects{,.test}.ts`, `plan/{preference-sync,master,iterations,iteration-log}.md`. Dependencia11c0.
+- Aceptación: versiónDTO1, actor/operationUUID/sequence positivos,1–10000 registros discriminados tags/itemViews/taskPlacements/settings reutilizando schemas existentes con revisión>=1. Propiedad uniforme y esperada, claves canónicas con actor/store eidentidadcompuesta, únicas sin deduplicar nombres. Settings solo representación preparatoria, sin mutación. Límite512KiB UTF8, no truncado. Salida clonada porvalidación; sinframework/IO/env/Mongo ni cambio de protocolo activo.
+- Validación: oráculos independientes de claves/bytes, efectos mixtos/tombstones/settings, IDs iguales enstores/cuentas diferentes, Unicode/duplicados/revisiones/cuenta/futuro/campos extra/10000límite/512KiB. Suite/lint/tipos/build/diff/plan/commit+push/HEAD/cuotas.
+
+
+### Resultado11c1a — Efectos personales validados
+
+DTO preparatorio versión1 para efectos dispersos en tags/itemViews/taskPlacements/settings; reutiliza schemas de dominio con revisión remota positiva, actor/operationUUID/sequence válidos. Clave documental JSON incluye store, userId eidentidad original (placement incluye referencia/scope/date, no tagId). Identidades únicas, settings único, referencias de tarea/aparición y sentinel overdue canónicos. Propiedad uniforme y esperado actor, registros completos/tombstones, salida clonada; hasta10000 registros y512KiB UTF8 de DTO validado, rechazo íntegro sin truncado. Settings representa evolución posterior, no añade productor.
+
+Cuatro pruebas/39aserciones cubren oráculo de claves, IDs iguales entrestores/cuentas, misma colocación cambiando tagId, fechas distintas, tombstones/independencia, cuenta ajena, revisiones0, referencia/sentinel inválidos, normalización, futuro/campos extra/conteo y byteguard Unicode. Se ajustó el tamaño de la fixture para demostrar caracteres por debajo de512KiB pero bytes por encima, sin relajar límite. Suite239pass/30opt-in skip/0fail/4904aserciones; lint351archivos, tipos ybuild34recursos aprobados. Sin framework/IO/env/driver, índices, ACK, writes o cambio de protocolo activo.
+
+Siguiente11c1b1: extraer el reductor personal existente a módulo puro compartido, equivalencia local y sin activar envío; después11c1b2 añade planning remoto/CAS/efectos completos. Mantener payloads ybase locales, historia ytipos no soportados.
+
+
+## 11c1b1 — Reductor personal compartido
+
+- Entrada42%5h/20%7d tras537664b; secuencial/int/reserva10%.
+- Objetivo: sacar transformaciones existentes de módulo client-only para reutilizarlas local/remoto sin duplicarlas ni alterar semántica.
+- `target_paths`: `src/lib/preferences/preference-command.ts`, adapter `src/lib/local-db/preference-mutation.ts`, test de este adapter yplan. Dependencia11c1a.
+- Aceptación: funciones puras enlib/preferences, sinframework/IO/driver; adapter client-only mantiene API vigente mediante reexport/alias, sin cambio de firma/payload/revisión/errores. Schemas yreductor existentes reutilizados. Añadir regresión de compactación multirregistro conservando revisiones/tombstones/campos/entrada, además de pruebas existentes. NoCAS ni ejecutor/envíos/ACK nuevos.
+- Validación: regresión de preferencias/day/overdue/rank, suite/lint/tipos/build/diff/plan/commit+push/HEAD/cuotas.
+
+
+### Resultado11c1b1 — Transformaciones personales compartidas
+
+Funciones de categorías/vistas/ranking extraídas al módulo puro lib/preferences/preference-command, sin directiva de cliente ni IO/driver/framework. El adapter client-only local reexporta aliases de la API existente; todos los consumidores siguen usando exactamente esas transformaciones. Comparación textual contraHEAD anterior verifica igualdad completa salvo directiva y nombres genéricos. Revisión local, payload/errores/fechas/tombstones mantienen semántica.
+
+Regresión nueva fuerza compactación sin posición representable: devuelve tres categorías afectadas, orden esperado y posiciones-1024/0/1024, campos/revisiones/entrada/tombstone preservados. Tests existentes de preferencias/day/overdue/rank reutilizan adapter;240pass/30opt-in skip/0fail/4915aserciones, lint352archivos, tipos/build34recursos ydiff-check aprobados. NoCAS/envío/ACK nuevo. Próxima11c1b2a planning remoto puro de familia tag.save/delete/move y efectos completos; item-view ytask.move siguen después según dependencias.
+
+
+## 11c1b2a — Planner puro de categorías remotas
+
+- Entrada40%5h/19%7d tras71b3ae7; int/secuencial/reserva10%.
+- `target_paths`: `src/schemas/remote-tag-planning.ts`, `src/types/remote-tag-planning.ts`, `src/lib/preferences/remote-tag-plan{,.test}.ts`, `plan/{preference-sync,master,iterations,iteration-log}.md`.
+- Objetivo: convertir operaciónv1 tag.save/delete/move ysnapshot remoto propio validado en conflicto o efectos íntegros con revisiones siguientes. DependenciasDTO11c1a/reductor11c1b1.
+- Aceptación: snapshot<=10000 tags conidentidad/propiedad/normalización activa/revisiones>=1, actor/fecha/operación validados; CAS del documento objetivo, base0 solo creación, tombstone sin resurrección. Reutilizar transformaciones, conservar campos/createdAt, elevar revisión de cada efecto afectado según su propia revisión, no global. Cambios de vecinos/duplicados semánticos devuelveninvalid_command sin efecto. Overflow de revisión/corrupción falla íntegramente. Efectos DTO512KiB contando reserva de secuencia máxima; sin número de journal asignado, IO/auth/DB/wire/ACK. Familia distinta unsupported conservada.
+- Validación: create/update/delete/tombstone/CAS/falta, normalización/unicidad activa/reutilización nombre, rank/compactación plurales, vecinos cambiados, overflow/byteguard, entradasintactas/cuenta/tipos no soportados; suite/lint/tipos/build/plan/diff/commit/push/HEAD/cuotas.
+
+
+### Resultado11c1b2a — Planning de categorías remotas
+
+Familia tag.save/delete/move convertida porplanner puro a changes/conflict/unavailable/invalid_command/unsupported, sinapplied/ACK niIO. Snapshot remoto propio valida IDs/nombres activos únicos yrevisiones positivas, actor/fecha/operaciónv1; cuenta corrupta falla antes deproducirplan. CAS porcategoríaobjetivo ybase0 solocreación, tombstone devuelvesu conflicto sinrestauración. Reutiliza transformaciones compartidas, conserva createdAt/campos yeleva cada revisión afectada desde su propio valor; overflowfalla íntegramente.
+
+Movimientos devuelven todos los efectos decompactación; vecinos obsoletos ycolisiones NFKC produceninvalid_command sin cambios. Borrado mantiene tombstone yno toca referencias personales. DTO deefectos sevalida reservando el tamaño deMAX_SAFE_INTEGER de secuencia; no se asigna un número dejournal ni se declara recibo. Límite512KiB rechaza uncompactado grande sin truncarlo.
+
+Seis pruebas/39aserciones yregresión246pass/30opt-in skip/0fail/4954aserciones; lint356archivos, tipos/build34recursos/diff-check aprobados. Fuente yentrada independientes, conflicto clonado, cuentas/futuro/normalización/bases/overflow/compactación comprobados. Próxima11c1b2b: planner puro deitem-view.set para elementos propios simples, conservación decontenido yCAS propio; series/movimientos/settings requieren sus cortes posteriores. DB yprotocolo todavía sin ampliación.
+
+
+## 11c1b2b — Planner puro de vista personal
+
+- Entrada37%5h/19%7d tras4a5b11d; int/reserva10%. Root secuencial enplanner; explorador read-only prepara preguntas concretas de repositorios/indexado, sin escritura/IO/servicios ni tocar env.
+- `target_paths`: root `src/schemas/remote-item-view-planning.ts`, `src/types/remote-item-view-planning.ts`, `src/lib/preferences/remote-item-view-plan{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync}.md`. Explorador lectura lib/db/config únicamente.
+- Objetivo: planning deitem-view.set propio simple conCAS propio, categoría activa ymantenimiento decontenido. Dependencia11c1b1/DTO11c1a; no autorización de compartidos.
+- Aceptación: snapshot contexto propio validado, identities referencia coherentes, CAS view/base0 nueva, tombstone no restorable; item activo ysimple, tag activo/null; inválidosin cambios. Efecto soloitemView conrevisión siguiente/createdAt preservado yDTO byteguard conreservasecuencia máxima, sinIO/wire/ACK. Tipos sin ejecutor quedanunsupported. Overflow/corrupción rechaza íntegro.
+- Validación: asignar/cambiar/quitar categoría, no alterar estado/checklist/contenido, cuenta/contexto/IDs/tipos/tombstone/bases/overflow/categoría inválida; suite/lint/tipos/build/diff/plan/commit/push/HEAD/cuotas.
+
+
+### Resultado11c1b2b — Planning de vista personal
+
+item-view.set depropios simples convierte contexto remoto validado enefecto deúnica vista oconflicto/invalid/unavailable/unsupported. Contexto íntegro propio yreferenciascoherentes, revisiónpositiva detag/view/item, CAS debase0 nueva/actual ydeltombstone sinresurrección. Itemactivo ycategoríaactiva/null; reusa transformaciones, createdAt preservado yrevisión siguiente, límiteDTO conreservasecuencia máxima sinasignarjournal. Estado/checklist/descr./fechas delcontenido permanecen intactos; series/cumpleaños/settingsfamilia no seactivan.
+
+Cuatropruebas/34aserciones: asignar/cambiar/quitar categoría, contextosajenos/identidadesincongruentes/base0stored/overflow, faltas/tombstones/CAS, clones ycontenido intacto, evento simple yrecurrencia/otra familiaunsupported. Se corrigió fixture derepetición al contratoend vigente; no cambio deschema. Suite250pass/30opt-in skip/0fail/4988aserciones; lint360archivos, tipos/build34recursos/diff-check aprobados.
+
+Explorador sololectura confirma quegetDatabase/auth ejecutanINDEX_SPECS automáticamente. Próxima11c2a0 protegeíndices staged medianteprovisionamiento explícito central, antes deregistrar colecciones personales: no crear índices deproducto latenteporlogin enint. Luego11c2a1 repositorio decategorías/CAS yMongoDB propio, separado deexecutor/wire/ACK. No servicios/DB/envsecrets enesta investigación.
+## 11c2a0 — Índices con activación explícita
+
+- Entrada tras03a8ff8: 28%5h/17%7d; int, secuencial, reserva10% en ambas ventanas.
+- `target_paths`: `src/lib/db/ensure-indexes{,.test}.ts`, `src/lib/db/AGENTS.md`, `plan/{master,iterations,iteration-log,preference-sync}.md`.
+- Objetivo: permitir registro central de índices pendientes sin provisionarlos al conectar/autenticar. Dependencia: revisión del bootstrap y contrato personal11c1b.
+- Aceptación: propiedad opcional `provisioning: "explicit"`; selección automática excluye solo esas entradas, valida el catálogo completo antes de filtrar y falla antes de IO si es inválido. `ensureIndexes(database)` conserva índices actuales; lista explícita permite provisionar pendientes. Sin nuevos índices/colecciones ni cambios de DB real, auth, secretos o hosting.
+- Validación: selección automática frente a explícita con DB simulada, rechazo de duplicados ocultos por el filtro antes de writes, registro actual y auth intactos; suite/lint/tipos/build/diff, documentación, commit+push/HEAD/cuotas.
+
+
+### Resultado11c2a0 — Provisionamiento explícito
+
+Registro central admite índices conprovisioning=explicit. Selección automática valida catálogo completo antes de excluirlos; bootstrap/auth/script mantienen exactamente los índices vigentes. Selección explícita conserva keys/options ypermite provisionar pendientes únicamente en unentorno autorizado. Duplicados incluso entre entrada automática/pendiente, nombres vacíos ypolítica inválida fallan antes dewrites. No se registra todavía colección ni índice nuevo yno se conecta aDB real. Instrucción anidada actualizada.
+
+Tres regresiones conDB simulada; suite253pass/30opt-in skip/0fail/4999aserciones, lint360archivos, tipos/build34recursos/diff-check aprobados. Próxima11c2a1: repositorio actor-scoped decategorías, catálogo íntegro/CAS/unicidad activa ypruebas deMongoDB propio; índices pendientes centrales, sinexecutor/wire/ACK activados.
+
+
+## 11c2a1 — Repositorio remoto de categorías
+
+- Entrada27%5h/17%7d tras a14693d, int/reserva10%; paralelo autorizado con rutas disjuntas.
+- Root: `src/lib/db/remote-tags.ts`, `src/lib/db/{collections,ensure-indexes,ensure-indexes.test}.ts`, `src/schemas/remote-tag-planning.ts`, `plan/{master,iterations,iteration-log,preference-sync,sync-test-environment}.md`; worker: solo `src/lib/db/remote-tags.integration.test.ts` y `scripts/sync-db-test-runner.ts`. Root integra/valida/commit.
+- Objetivo: read/catalog/insert/replace propios por actor ysession Mongo singleton; identidad compuesta actor+UUID, catálogo completo<=10000 incl.tombstones sin truncado, revisiones positivas/CAS, no resurrección; nombres activos únicos reutilizables tras borrado. Dependencia11c2a0 yplanner/DTO. Índices actor/id yactor/normalizedName conpartialdeletedAt:null registrados centrales explicit, no bootstrap activo ni modificaciónDBusuario.
+- Contrato worker: `RemoteTagRepository.open(actorInput,session?)`; `read(id):Tag|null`, `catalog():Tag[]`, `insert(input):boolean`, `replace(baseRevision,input):boolean`; newrev1/createdAt==updatedAt/active; replacebase>=1/nextbase+1/createdAtvigente/currentactive; duplicado identidad false fuera sesión, colisión nombre yduplicate en sesión throws. Doc `_id=JSON.stringify([userId,id])`. `maximumRemoteTags=10000` exportado remote-tag-planning schema.
+- Aceptación/pruebas: dosactores mismoUUID/nombre sin fuga; carreraCAS unganador; tombstone conservaID/nombre reutilizable; carrera nombre activo única; corrupción yoverflowcatalog rechazan; sesión+rollback real devarias escrituras; stagedíndices provisionados soloenMongoaislado propio. RunnerDockerpropio limpio, suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas; sinexecutor/wire/ACK ni activaciónpersonal.
+
+
+### Resultado11c2a1 — Categorías propias en MongoDB
+
+Repositorio server-only conactor/session/singleton; UUID compuesto porcuenta, catálogo íntegro<=10000 incl.tombstones yregistros positivos validados. Insert inicial yCAS porrevisión/createdAt/activo; identidad duplicadafalse solo fueradesession, nombre duplicado/error ensessionpropagados. Índices centrales únicos deidentidad/nombreactivo registrados explicit: login/bootstrap no activa colección pendiente. Compartidos/executor/wire/ACK noampliados. Se ajustó replaceOne aWithoutId deldriver: filtra_idcompuesto ypreserva_id omitiéndolo delreemplazo.
+
+Worker paralelo propietario solotest/runner, rootrepo/contratos/registro/plan. MongoDB8.2.11amd64 digestfijado revalidado; runner aislado21pass/0fail/168aserciones, seis nuevas pruebas/63aserciones: mismoUUID/nombre entreactores, CASrace, tombstone/nombre reutilizable, carrera nombre activo ycolisión replace, corrupción, catálogo exacto10000/overflow10001, rollback tardío múltiple yduplicado dentro detransacción. Contenedor/tmpfs propios limpios, sinDBusuario/envsecrets/browser. Normal254pass/38opt-in skip/0fail/5000aserciones; lint362archivos, tipos/build34recursos/diff-check aprobados.
+
+Siguiente11c2a2: repositorio deitemViews propio, conCAS/identidadcompuesta ysession, pruebas aisladas yautorización decontenido enexecutor posterior. Mantener cortes separados yreserva10%, sin declarar preferencias activas.
+
+
+## 11c2a2 — Repositorio de vistas personales
+
+- Entrada20%5h/16%7d tras2af4e89; int/reserva10%; paralelo conrutas disjuntas porpetición vigente.
+- Root: `src/lib/db/remote-item-views.ts`, `src/lib/db/{collections,ensure-indexes,ensure-indexes.test}.ts`, `src/schemas/remote-item-view-planning.ts`, `plan/{master,iterations,iteration-log,preference-sync,sync-test-environment}.md`. Worker: solo`src/lib/db/remote-item-views.integration.test.ts`, `scripts/sync-db-test-runner.ts`. Root integración/commit.
+- API: `RemoteItemViewRepository.open(actorInput,session?)`, `read(itemId):ItemView|null`, `insert(input):boolean`, `replace(base,input):boolean`; clave_id JSON.stringify([userId,itemId]); nuevo revision1/activo/created==updated; replacebase>=1/nextbase+1/currentactive/createdpreservado; duplicateidentityfalse solo fuera sesión ythrows dentro. Schema remoto revisiónpositiva exportado `remoteItemViewSchema` desde remote-item-view-planning; COLLECTION_NAMES.itemViews=`item_views`.
+- Aceptación: aislamiento UUID igual doscuentas, primaryTagIdválido/null, CAS/tombstone noresurrection, corrupción/propiedad rechaza, session/read/write yrollback reales. Índice único pendiente userId/itemId, sin bootstrap activo. Repo no autoriza compartir ni existencia/propiedad decontenido: executor posterior debe leer item/tag vigentes enmisma sesión yvalidar conplanner antes deescribir. Sin consumidores productivos/envíos/ACK niDBusuario.
+- Validación: worker MongoDBpropio runner, suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas; no dependenciascore/secretos/hosting.
+
+
+### Resultado11c2a2 — Vistas personales en MongoDB
+
+Repo server-only propio/session/singleton poractor+itemId, claveMongo compuesta validada yrevisiónpositiva compartida conplanner. Read incluye tombstone, insert inicial yCASrevision/createdAt/activo, duplicateidentityfalse fuera desession ypropagación dentro. CategoríaUUID/null validada; índice único userId/itemId explicit, no provisionado porbootstrap. Persistencia no concede acceso acontenido: executor posterior debe verificar item/tag vigentes enmisma transacción; no nuevoscallers/envíos/ACK activos.
+
+Worker solointegrationtest/runner; rootrepositorio/schema/registry/plan. RunnerMongoDBpropio exit0:25pass/0fail/215aserciones en6archivos; cuatro pruebas nuevas/47aserciones deaislamiento conUUIDigual, metadata/propiedad, CAS/conservar/quitarcategoría/tombstone, corrupción yrollback múltiple/duplicado ensession. Contenedor/tmpfs propios eliminados; pinned8.2.11amd64 revalidado, noDBusuario ni secrets/hosting. Normal255pass/44opt-in skip/0fail/5002aserciones, lint364archivos, tipos/build34recursos/diff-check aprobados.
+
+Próxima11c2b0: concretar contrato deatomicidad/recibos/journal ydependencias decompatibilidad antes deimplementar ejecutor multirregistro. Preferencias aún sin sincronización activada; task.move/settings/series/compartidos posteriores.
+
+
+## 11c2b0 — Contrato de transacciones personales
+
+- Entrada15%5h/15%7d trasd65048a; secuencial/documental/int/reserva10%. Últimos repositorios consumieron7 y5 puntos5h entrecierres, sinatribución exclusiva; otrocódigo+reparación podría cruzarreserva.
+- `target_paths`: `plan/{preference-transactions,preference-sync,master,iterations,iteration-log}.md`.
+- Objetivo: concretar resultados/recibos/journal versionados, historia ycontador compartidos, autorización ypruebas deconcurrencia antes del ejecutor. Dependencias repos11c2a1/2 yDTO/planners previos.
+- Aceptación: no nuevas colecciones/locks, activarjournal ni cambiarwire; propuesta explícita decompatibilidad/adaptación readonly yreserva debyteguard deenvoltura; races decontador/multirregistro/permisos/replay identificadas sin declararlas probadas. Cortes siguientes conaceptación ydependencias, no ACK sincommit remoto.
+- Validación: referencias locales exactas, coherencia/candidata/diff; commitpush/HEAD/cuotas. Código yDB sin cambios; no repetirbuild porMarkdown.
+
+
+### Resultado11c2b0 — Contrato transaccional siguiente
+
+Documento preference-transactions.md concreta envolturas/resultados/recibos/journal versionados, adaptación readonly dehistoria item yfingerprint deintenciónv1 conservado. Comparte contador/receiptidentities vigentes, conjuntos multirregistro atómicos yautorización decontenido previa aview. Límite512KiB cubre envolturaUTF8, no solo DTO interno. Hipótesis decontador común para coherencia devecinos yviewfrente adelete queda explícitamente pendiente de prueba conbarreras/Mongo; no seintroduce lock ni seafirma garantía sinprueba.
+
+Separa11c2b1 contrato puro,11c2b2 ejecutor/atomicidad,11c2b3 carreras con snapshots solapados, luego compatibilidad/ACK/pull/backup/dosdispositivos antes deactivar. Header depreferencias actualizado yrefs/coherencia/diff comprobados. Sin código/DB/secretos/hosting ni nuevoACK; builds/pruebas anteriores vigentes. Cierre del lote: último código d65048a comprobado, todo concommit/push. Entrada15%/15%; últimos cortes de repos consumieron7/5puntos5h, conuso compartido incierto; no iniciar otra implementación conpruebas/reparación/cierre quepueda cruzarreserva10. Reanudar desde11c2b1 conlectura vigente.
+
+
+## 15a0 — Piloto real mínimo de sesión y revisión
+
+- Solicitud explícita del usuario trasautenticar en navegadorintegrado; entrada12%5h/15%7d, reserva10. Scope acotado readonly: verificar sesión activa y revisión manual/recarga en preproducción int. No comenzar create/edit/delete o prueba multicliente cuyo cierre/limpieza podría cruzarreserva.
+- `target_paths`: `plan/{master,iterations,iteration-log,sync-test-environment}.md`; navegador pestaña36 usuario autenticada. Preservar todos sus registros ysesión; no logging tokens/PII, archivos ni accesoDBdirecto/secretos/hosting.
+- Aceptación: estado UI verificado después derevisión manual yrecarga, distinguir sesión/descarga deServerAction push yconvergencia; registro preciso dequé no seprobó. Validación documental refs/coherencia/diff, commitpushint/HEAD/cuotas.
+
+
+### Resultado15a0 — Preproducción autenticada
+
+Usuario completó autenticación en pestaña integrada36 yworkspace real quedó accesible. EnAjustes, revisión automática pasa deSincronizando aÚltima revisión terminada/Sin cambios locales pendientes. Pulsación manualSincronizar ahora repite transición yrecupera botón; recarga conserva sesión, cuatroelementos existentes yestado preparado, yotra revisión automática termina. No se cambian contenidos/tareas/categorías ni se crean registros de prueba, no se accede aDBdirectamente, no se registranidentidad/tokens. Pestaña visible conservada parausuario.
+
+Evidencia limitada: sesión real, shell/preparación yrevisión/descarga concola vacía funcionando enint protegido. Coordinador llama pull ysolo push al seleccionar intención ([coordinator.ts:105](../src/features/sync/coordinator.ts:105), [coordinator.ts:159](../src/features/sync/coordinator.ts:159)); por tanto **no demuestra ServerActionpush con escritura/ACK ni convergencia real entre dispositivos**. Piloto siguiente debe crear únicamente elementos propios identificados de prueba, comprobar ACK durable/recarga ylimpiar conborrado normal, conpresupuesto suficiente; no ampliar15a0 alestado delusuario. No pruebaoffline completo ni logout/login multicliente.
+
+Documentación/refs/coherencia/diff aprobados; código/build anterior vigente, commitpushint ycuotas alcierre. Entrada12%/15%, solo dospuntos5h sobre reserva10: no abrirmutación ylimpieza ni repararproblemas nuevos. Próxima implementación sigue11c2b1; piloto escritura real pendiente15a1.
+
+
+## 15a0b — Calendario y navegación móvil real
+
+- Usuario solicita probaralgomás con9%5h, excepción puntual por debajo dereserva10; solo corte mínimo readonly ysu cierre, sin ampliar implementacióndelote ni mutacionesdelusuario.
+- `target_paths`: `plan/{iterations,iteration-log,sync-test-environment}.md`; pestaña autenticada depreproducción, viewport móvil temporal/restaurado.
+- Objetivo/aceptación: calendario mensual/día actual muestra elementos propios yaexistentes, navegación móvil accesible, sin overflowhorizontal; sesión/datos preservados. No introducir registros ni falsa prueba deACK/2dispositivos.
+- Validación: UI real/DOM readonly, referencias/coherencia/diff, commitpushint/HEAD/cuotas. No repetirchecks decódigo porregistroMarkdown.
+
+
+### Resultado15a0b — Móvil real sin mutaciones
+
+Preproducción autenticada conviewport390x844 temporal: calendario octubre2026 muestra cuatroelementos el8oct yunevento quecontinúa el9oct. Cambiar aldía9 muestraese únicoevento ysin tareas; Hoy vuelve aldía8 yrestaura1tarea/3eventos. No nombres/identidades delusuario en registro. DOMreadonly: innerWidth390/scrollWidth390, enlacesdenavegación75x64px, Crear56x56px ycontroles mes>=48pxalto; no overflowhorizontal. Crear abre diálogoTarea/Evento, fecha9oct seleccionada; Cancelar cierra sin guardar. No acciones deprogreso/edit/delete ni nuevasoperaciones de prueba.
+
+AvisoActualización disponible aparece trasdeployment: no se fuerza activación/skipWaiting nireinicio. Viewportrestaurado, pestaña/sesiónabiertas encalendariohoy. No pruebaRPCpush/ACK/2dispositivos nueva ni validaciónoffline adicional. Scopeextraordinario pedido con9%5h finalizado; noamplíareserva delplan permanentemente. Referencias/coherencia/diff aprobados ycommitpushint/HEAD/cuotas; códigoanterior vigente.
+
+
+## 15a1 — Escritura real mínima en preproducción
+
+- Usuario pide probaralgo más con7%5h: excepción puntual para piloto propio create/ACKvisible/reload/delete normal ysu cierre. Sin implementar código ni ampliar lotedesatendido.
+- `target_paths`: `plan/{iterations,iteration-log,sync-test-environment}.md`; pestaña autenticada int ysolo nuevoelemento titulado `Codex sync pilot 15a1`.
+- Aceptación: crear tarea simple propia desdeUI, revisión terminada/pendientes0 trasenvío, recarga conservatarea; borrar exclusivamente esa tarea desdeUI yconfirmar revisiónterminada/ausencia/elementosexistentes4. No accesoDBdirecto/tokens/secrets, cambioscore/hosting/permisos ni datosprevios. Si fallo, conservarevidencia/cerrar sin perseguirreparación amplia.
+- Validación: UI realproducto conServerAction, límites sobre ACKinferido vsrecibo/2dispositivos explícitos; refs/coherencia/diff/commitpushHEAD/cuotas. No afirmar convergencia multicliente ni lectura durableACK directa sin observarla.
+
+
+### Resultado15a1 — Create y delete reales
+
+Lectura inicial real6%5h/14%7d, excepción puntual solicitada con7. Enint protegido con sesión real/navegadorintegrado: Crear desdecalendario8oct, títuloexclusivo `Codex sync pilot 15a1`, guardar tarea simple. Calendario pasa4→5elementos; Ajustes5guardados, revisiónautomática termina ycola visible sinpendientes. Recarga conserva sesión/5elementos; Mi espacio muestra la tarea exacta despuésderecarga. No seam defixture: UI/coordinador/transporte delproducto real.
+
+Limpieza únicamente deesa tarea: abrir susdetalles, Eliminar yconfirmar diálogo normal. Elemento desaparece, Ajustes vuelve4guardados; se observa1pendiente→Sin cambios locales pendientes/Última revisión terminada. Captura visual delestado limpio/revisado tomada; pestaña/sesión abierta enAjustes. Cuatroelementosprevios conservados, sin editar/progreso/categorías delusuario ni accesodirectoDB/tokens/secrets. El borrado conserva tombstone/historia normal: no purge. Aviso deactualización disponible permanece sin forzarworker/reinicio.
+
+La evidencia deUI confirma recorrido real deescritura+envío/revisión yborrado confirmado porelproducto, conpersistencia trasrecarga. ACK se infiere del estado durablevisible sinpendientes; no se inspeccionó reciboMongo/registroACK directamente. No demuestra convergencia dedosdispositivos reales, pérdida derespuesta o conflictos; evidenciaaislada previa sigue separada. Piloto multicliente15a2 pendiente ycontratos11c2b1 siguientes conpresupuesto nuevo.
+
+Validación documental coherencia/diff ycommitpushint/HEAD/cuotas; código/build previo vigente. Excepción deesta petición finalizada, sin abrir reparaciones ni ampliarla indefinidamente.
+
+
+## 11c2b1a — Resultados versionados puros
+
+- Reanudación explícita delusuario tras92bcb94: nueva5h100%, semanal13%, reserva10ambas; secuencial. Se divide11c2b1 enresultados(a), recibos(b) yjournal(c) para cierres pequeños.
+- `target_paths`: `src/schemas/remote-operation-result-v2.ts`, `src/types/remote-operation-result-v2.ts`, `src/lib/sync/remote-operation-result-v2{,.test}.ts`, `plan/{master,workflow,iterations,iteration-log,preference-transactions,preference-sync}.md`.
+- Dependencias: DTOefectos11c1a, resultadoitem vigente, contrato11c2b0; noNext/runtime/IO/DB.
+- Objetivo: envoltura discriminada kind=item/preference conoutcome propio, estados applied/conflict/errores, validación completa yadaptación readonly delresultado legacy. Reutilizar schema item actual sin reescribir payload/recibos/digest.
+- Aceptación: personalapplied operationId coincideDTO, conflict unefecto positivo sinsequence; variantes/campos extras/futuro/propiedad sevalidan, expectedUserId externo comparado cuando resultado llevadatos, salida independiente.512KiBUTF8 envoltura completa, no sólo efectosinternos. Legacyresultado soloenmemoria→item/outcome, sinpretenderactualizarwire/recibos/journal/ACK.
+- Validación: applied/conflict/errores ambasfamilias, legacy exacto/clones, dueños/operationIDs incoherentes, no sequence enconflict/errores, límitesUTF8 yDTOcasi límite cuyaenvolturaexcede, futuro/ambiguo/invalid; suite/lint/tipos/build/diff, plan/commitpushHEAD/cuotas.
+
+
+### Resultado 11c2b1a — Resultados versionados
+
+Envoltura pura kind=item/preference con outcome discriminado; item reutiliza schema vigente, personal applied contiene DTO completo y exige misma operationId, conflict conserva un efecto positivo/tombstone sin sequence. Errores estrictos no conceden ownership ni ACK. Verificador exige expectedUserId válido y compara propietario de todo resultado con datos. Decoder reconoce variante nueva o legacy estricto, adapta legacy solo en memoria y devuelve clones; no modifica intención/fingerprint/historia, wire activo, DB o localACK.
+
+Guard512KiB UTF8 de envoltura completa. Cuatro pruebas/53aserciones: seis estados item/legacy, personales, conflictos/tombstones, cuenta/identidad/sequence/extra/futuro/ambiguo, independencia y DTO interno válido que excede límite al envolverlo. Se corrigieron literales TS de fixtures sin cambiar contrato. Normal259pass/44opt-in skip/0fail/5055aserciones; lint368archivos, tipos/build34recursos/diff-check aprobados.
+
+Siguiente11c2b1b: recibo explícito versión2, actor/op/fingerprint/resultado/fecha coherentes, decode legacy readonly y guard de recibo completo, sin activar writes. Después11c2b1c journal. Con cuotas compartidas, elegir por consumo observado de ambas ventanas, no equivalencia entre sus porcentajes.
+
+
+## 11c2b1b — Recibos versionados puros
+
+- Entrada96%5h/13%7d tras91790aa; secuencial/reserva10ambas. Coste anterior4puntos5h, semanal sin cambio visible; no equivalencia entreporcentajes.
+- `target_paths`: `src/schemas/remote-operation-receipt-v2.ts`, `src/types/remote-operation-receipt-v2.ts`, `src/lib/sync/remote-operation-receipt-v2{,.test}.ts`, helper depropietario en `src/schemas/remote-operation-result-v2.ts` ysu verificador puro existente, `plan/{master,iterations,iteration-log,preference-transactions,preference-sync}.md`.
+- Objetivo/dependencias: recibo estrictoversión2 reutilizando resultados11c2b1a yschema legacy actual; actor/op/fingerprint/fecha/resultado coherentes. Helper único depropietario reutilizado por resultado yrecibo.
+- Aceptación: resultadoopigualreceipt op, dueño resultadoigualactor si haydatos, expectedUserId externo validado/comparado incluso enrechazos sincontenido. Guard512KiBUTF8 de recibo completo; legacy adaptado readonly confecha/fingerprint/payload intactos, clones, sinconceder permiso/ACK porvalidación dearchivo. Unknown/ambiguo/extra/incoherente rechaza; no IO/wire/DB/metadata activa.
+- Validación: variantesdatos/errores, legacy/status/identidad/propiedad/digest/fecha/versiones, resultado válido cuyorecibo excedelímite, clones; suite/lint/tipos/build/diff/plan/commitpushHEAD/cuotas.
+
+
+### Resultado 11c2b1b — Recibos versionados
+
+Schema puro recibo explícito versión2 reutiliza resultados item/preference; identidad de operación coincide outcome, actor coincide propietario de resultado con datos y expectedUserId externo incluso en errores sin contenido. Propietario extraído mediante helper único compartido por resultado/recibo. Digest64hex y fecha se preservan: decoder legacy readonly conserva payload y devuelve clones, no verifica commit remoto/digest/acceso actual ni concede ACK al importar archivo. Guard512KiBUTF8 cubre recibo completo además del resultado.
+
+Tres pruebas/39aserciones cubren seis resultados legacy y personal, clones, errores/tombstone/conflict, cuenta/ID/digest/fecha/versión/extras/ambigüedad; resultado válido que excede límite al añadir metadata rechazado. Aviso opcional-chain yformato deguardia defixture corregidos, lint sin ruido. Suite262pass/44opt-in skip/0fail/5094aserciones; lint372archivos, tipos/build34recursos/diff-check aprobados. No wire/IO/DB ni escritores activos ampliados.
+
+Siguiente11c2b1c: journal versionado/discriminado, adaptación legacy sin huecos ni reescrituras, validación recipient/op/sequence/efectos y envoltura completa; luego ejecutor atomicidad con pruebasMongo propio antes deactivar.
+
+
+## 11c2b1c — Journal versionado puro
+
+- Entrada93%5h/12%7d tras21d50ef, secuencial/reserva10ambas; recibos3puntos5h/1semanal observados, pequeño contrato comparable con cierre.
+- `target_paths`: `src/schemas/remote-change-v2.ts`, `src/types/remote-change-v2.ts`, `src/lib/sync/remote-change-v2{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-transactions,preference-sync}.md`.
+- Objetivo/dependencias: journal estrictoversión2 kind=item/preference, reutiliza schemaitem/DTOefectos previos. Mantiene recipientUserId/operationId/sequence enraíz paraqueries/índices existentes; validaciónpersonal exige coincidir conDTO interno. Una operación, unaentrada ysequence aunque múltiples efectos.
+- Aceptación: actor esperado externo, ID/sequence/owner positivos/coherentes, outerguard512KiBUTF8; decodelegacy sóloenmemoria, payload intacto/clones, futuro/extras/ambigüedad rechazados. No filtrar registros personales dehistoria mixta ni cambiarcheckpoint; helpers individuales no implementan lector/paginación/ACK ni activanwriters/índices.
+- Validación: mixedlegacy/personal orden/topkeys, multirregistro/tombstone, owners/IDs/sequences/extras/futuro, bytewrapper, clones; suite/lint/tipos/build/diff/plan/commitpushHEAD/cuotas.
+
+
+### Resultado 11c2b1c — Journal versionado
+
+Schema puro versión2 discriminado item/preference conserva recipientUserId/operationId/sequence en raíz paraqueries/índices vigentes; variante item reutiliza schema actual/refinamiento deowner. Personal exige mismo actor/operationId/sequence en DTO interno y conserva multirregistro/tombstones en una entrada. Verificador externo valida actor esperado; decoder adapta legacy sólo en memoria, con clones ysin filtrado/reindexación/checkpoint. Guard512KiB UTF8 incluye envoltura completa.
+
+Tres pruebas/27aserciones: historial mixto secuencias1/2 ytopkeys intactos, dos efectos/un tombstone, independencia, IDs/owners/sequence/extra/ambiguo/futuro, DTO válido cuyojournal excede porenvoltura. Suite265pass/44opt-in skip/0fail/5121aserciones; lint376archivos, tipos/build34recursos/diff-check aprobados. No DB/IO/escritor/ruta/wire/ACK/pull activo nuevo; adaptación individual no implementa paginación ni garantiza convergencia por sí sola.
+
+11c2b1a–c completan contratos preparatorios separados deactivación. Siguiente11c2b2: ejecutar conjuntos deefectos, contador/journal/recibo conmisma sesión yautorización vigente, replay/CAS/fallos tardíos conMongo propio; dividir antes deabrir segúncuota yconservarreserva10.
+
+
+## 11c2b2a — Lectura común de recibos en MongoDB
+
+- Entrada91%5h/12%7d trasc12a18a, secuencial/reserva10. Se divide ejecutor11c2b2 antes deabrir: lectura común(a), mutaciones/recibo/journal atómicos(b) yfallos/carreras segúncoste posterior.
+- `target_paths`: `src/lib/db/remote-operation-receipts{,.integration.test}.ts`, `scripts/sync-db-test-runner.ts`, `plan/{master,iterations,iteration-log,preference-transactions,preference-sync,sync-test-environment}.md`.
+- Objetivo: función server-only readRemoteOperationReceipt(actorInput,operationIdInput,session?) desde colección vigente/singleton, normaliza legacy/v2 enmemoria condecoder11c2b1b. Queryactor+op yaindexado/implementado: noíndice nuevo ni alteración bootstrap/DBreal.
+- Aceptación: leer recibo propio completo/null, op/request yresultado coherentes, cuenta validada ysin fugas; quitar sólo_id interno, rechazar corrupción/futuro envez deretornar parcial. PropagaClientSession para replay atómico futuro; no escritores/ACK/envíos/ejecutor nuevo.
+- Validación: MongoDBpropio sameoperationId dosactores, legacy/personalversion2, corrupción op/resultado/cuenta, snapshot-sessionvisibility/rollback defixture yrequests inválidos. Runnerowncleanup, normal/lint/tipos/build/diff/plan/commitpushHEAD/cuotas.
+
+
+### Resultado 11c2b2a — Lectura común de recibos
+
+Función server-only poractor+operationId validados, colección vigente/singleton yClientSession opcional. Quita únicamente_id yreutiliza decoder legacy/v2, valida coherencia ydevuelve clones/null sin IOextra/escrituras. Consulta ya cubierta por índice único actorUserId/operationId vigente; no requiere índice nuevo yno activa colecciones personales. No callers productivos nuevos ni cambio deejecutor/wire/ACK.
+
+MongoDB propio runner28pass/0fail/231aserciones en7archivos; tres nuevaspruebas: mismoUUID entreactores/legacy+personal/independencia/requests inválidos; corrupción/futuro rechaza yfixture restaurada; receipt visible sólo dentro desession yrollback intacto. Runner revalida disponibilidad medianteimagen fijada/guards, contenedor/tmpfs propios eliminados; noDBusuario/secrets/hosting. Fixtures ajustan_id string ydiscriminantes literales a tipado deldriver. Normal265pass/49opt-in skip/0fail/5121aserciones, lint378archivos, tipos/build34recursos/diff-check aprobados.
+
+Próxima11c2b2b: mutaciones multirregistro propias + contador compartido + journal/recibo enmisma sesión, replay/CAS/fallos tardíos ypruebasMongo;11c2b3 probará carreras conbarreras antes deactivar. Este lector no verifica digest contraintención por sísolo: futuroexecutor debe comparar fingerprint yautorización vigente. Elegir siguientecorte trascuotas, reservando margen de reparación/cierre ysin equiparar porcentajes deventanas.
+
+
+## 11c2b2a2 — Replay común ligado a la intención
+
+- Entrada 85% de 5h / 11% semanal; petición «Siguiente», secuencial y reserva 10% en ambas ventanas. Corte mínimo previo al ejecutor, sin abrir mutaciones personales.
+- Objetivo: comprobar el fingerprint canónico de la intención v1 contra el recibo propio legacy/v2; replay devuelve el resultado durable normalizado o null, y reutilizar UUID con otro contenido lanza el error compartido de identidad.
+- `target_paths`: `src/lib/db/remote-operation-receipts{,.integration.test}.ts`, `src/lib/sync/operation-identity-reuse.ts`, reexport compatible en `src/lib/db/remote-item-commands.ts`, `plan/{master,iterations,iteration-log,preference-transactions}.md`.
+- Dependencias: lector 11c2b2a, fingerprint vigente, schemas v1/v2; consulta existente actor+operationId ya indexada. No nuevos índices, escritores, callers, wire ni ACK.
+- Aceptación: intención validada antes de IO, actor externo validado, comparación de digest calculado en servidor sin aceptar digest del cliente; error de clase idéntica al executor vigente. Propagar sesión, conservar historia y no conceder autorización por el recibo.
+- Validación: Mongo propio, replay legacy/v2, orden de propiedades equivalente, cambios de base/payload/familia con mismo UUID rechazados, aislamiento por actor, invalid input, historia intacta y visibilidad transaccional/rollback. Suite normal, lint/tipos/build/diff, commit+push int/HEAD y cuotas.
+
+
+### Resultado 11c2b2a2 — Replay ligado a la intención
+
+`readRemoteOperationReplay` valida actor e intención antes de IO, calcula el fingerprint v1 canónico en servidor y compara contra el recibo propio legacy/v2 leído en la sesión suministrada. Devuelve resultado normalizado/null; UUID reutilizado con otra base, contenido o familia lanza `OperationIdentityReuseError`. Clase extraída a módulo server-only compartido y reexportada desde el executor item, conservando compatibilidad y comportamiento activo. No acepta digest del cliente, no escribe ni concede autorización/ACK por el recibo; el servicio futuro debe aplicar su política de acceso. Query ya cubierta por índice actor+operationId, sin nuevos índices ni callers productivos.
+
+MongoDB aislado: 29 pruebas, 249 aserciones, cero fallos; legacy/personal, orden de propiedades equivalente, aislamiento por actor, reutilización de identidad, input inválido, historia intacta y visibilidad de sesión/rollback. Contenedor y almacenamiento propios eliminados. Suite normal 265 pass/50 opt-in skip/0 fail/5121 aserciones; lint 379 archivos, tipos y build con 34 recursos neutrales aprobados. Se corrigió únicamente el literal discriminante de una fixture tras detectar el error de tipos. Diff comprobado; commit y push a int con verificación de HEAD remoto y lectura de cuotas al cierre.
+
+Próxima candidata 11c2b2b: aplicar efectos, contador compartido, journal y recibo en una transacción; conservar pruebas de fallo tardío/replay/CAS y carreras 11c2b3 antes de activar preferencias remotas. El helper entregado es preparatorio y no activa su sincronización.
+
+
+## 11c2b2b1 — Categorías con commit transaccional
+
+- Entrada 82%5h/10%7d. Usuario reduce reserva semanal a5%; ventana5h conserva10%. Secuencial, corte de categorías separado de vistas y de carreras con barreras.
+- Objetivo: aplicar catálogo propio y CAS de todos los efectos tag.save/delete/move, contador común, journal v2 y recibo v2 en una sola transacción snapshot/majority; replay canónico sin nuevas escrituras.
+- `target_paths`: `src/lib/db/remote-tag-commands{,.integration.test}.ts`, `scripts/sync-db-test-runner.ts`, `AGENTS.md`, `plan/{master,workflow,iterations,iteration-log,preference-transactions,preference-sync,sync-test-environment}.md`.
+- Dependencias: planners/repos tag y contratos v2, lector/replay común, índices personales explícitos sólo en DB de prueba propia. Sin callers productivos ni activación, wire/pull/ACK vigentes intactos.
+- Aceptación: validar antes de IO; actor externo autenticado por futuro servicio; replay usa digest exacto, conflictos/rechazos sin secuencia, un journal por conjunto completo. CAS y duplicados abortan/reintentan con sesión fresca acotada; nada aplicado retornado por wrapper antes de commit. Etapa transaccional interna exige sesión activa y no concede ACK.
+- Validación: Mongo propio commit/replay/identidad, CAS/tombstone/nombre, compactación multirregistro, rollback intencional después del recibo que revierte todos los efectos/contador/journal/recibo, dos intentos de misma operación; suite/lint/tipos/build/diff, commitpush/HEAD/cuotas. Autorización y carreras de vecinos con snapshots solapados quedan 11c2b3, no se declaran probadas aquí.
+
+
+### Resultado 11c2b2b1 — Categorías atómicas preparadas
+
+Executor server-only valida actor/intención antes de IO y usa replay común con fingerprint v1. Dentro de snapshot/majority, lee catálogo propio, aplica CAS de todos los efectos, incrementa contador compartido e inserta journal/recibo v2 completos. Wrapper devuelve resultado sólo después de commit; etapa interna exige transacción activa y su resultado no constituye ACK. Conflictos/rechazos conservan recibo sin secuencia aplicada; unsupported nuevo no escribe. Duplicados/CAS abortan y admiten hasta tres sesiones nuevas, sin continuar una sesión abortada. Índices existentes registrados cubren las consultas, los personales se provisionan únicamente en Mongo de prueba propio. Sin callers productivos, wire/pull/ACK activos ni activación personal.
+
+Cuatro escenarios nuevos Mongo: entrega duplicada concurrente produce un solo efecto/recibo/journal; replay exacto e identidad reutilizada; CAS/tombstones/nombres NFKC/aislamiento/unsupported; compactación de tres revisiones y fallo después del recibo que revierte efectos, contador, journal y recibo; historial mixto item/category/item conserva secuencias1/2/3 y registros legacy intactos. No equivalen a barreras de snapshots solapados de11c2b3. Total Mongo33pass/0fail/305aserciones en8archivos, recursos propios eliminados. Normal265pass/56opt-in skip/0fail/5121aserciones; lint381archivos, tipos/build34recursos/diff aprobados. Tipos de_id y refinamiento de fixtures corregidos antes del cierre.
+
+Reserva vigente actualizada por solicitud humana:10%5h y5%7d, evaluadas por margen y coste propios. Próxima11c2b2b2: executor de vista personal con autorización de item/tag dentro de la misma transacción; después11c2b3 carreras de catálogo y autorización con barreras. Antes de activar cualquier writer personal deben existir lectores/handshake/ACK/pull compatibles.
+
+
+## 11c2b2b2 — Vista personal con autorización transaccional
+
+- Entrada77%5h/10%7d tras19c15dc publicado/verificado. Reserva10%5h/5%7d, secuencial.
+- Objetivo: item-view.set para item propio simple activo, tag propio activo/null y CAS de vista personal dentro de snapshot/majority. Reutilizar contador/journal/recibo/retry en helper común con categorías para evitar dos implementaciones de invariantes.
+- `target_paths`: `src/lib/db/remote-preference-transactions.ts`, `src/lib/db/remote-tag-commands.ts`, `src/lib/db/remote-item-view-commands{,.integration.test}.ts`, `scripts/sync-db-test-runner.ts`, `plan/{master,iterations,iteration-log,preference-transactions,preference-sync,sync-test-environment}.md`.
+- Dependencias: planner/repos de vista/item/tag, contratos v2, lector/replay y executor tag11c2b2b1. Helper sólo DB server-only, APIs actuales conservadas; índices centrales ya cubren consultas, explícitos sólo en prueba.
+- Aceptación: validar actor/intención antes de IO; sin contenido ajeno/deleted ni series/birthday. Vista no altera item/progreso; categoría ajena/deleted rechaza. Nuevos efectos, contador, journal y recibo atomizan juntos. Replay histórico conserva resultado/digest sin repetir efectos ni conceder acceso al contenido; stage no es ACK y wrapper responde tras commit. Sin callers/wire/pull/activación nuevos.
+- Validación: Mongo propio asignar/cambiar/quitar categoría, CAS, contenido sin modificación, aislamiento y contexto eliminado/unsupported, duplicados/replay/UUID reutilizado, rollback tras recibo. Regresión íntegra de categorías y suite/lint/tipos/build/diff, plan/commitpush/HEAD/cuotas. Carreras de autorización con snapshots solapados se prueban posteriormente en11c2b3.
+
+
+Durante11c2b2b2, el usuario reduce de nuevo la reserva semanal al2%; 5h mantiene10%. Actualización de AGENTS/workflow en el mismo commit de implementación. No equiparar porcentajes ni iniciar cortes que puedan cruzar el margen vigente.
+
+
+### Resultado11c2b2b2 — Vista personal atómica preparada
+
+item-view.set lee item/vista/tag propios dentro de la sesión, limita contexto a contenido simple activo y aplica CAS sin editar el contenido/progreso. Tag ajeno o eliminado rechaza; vista propia de un item ajeno no concede permiso. Contador/journal/recibo/retry extraídos a helper server-only reutilizado con categorías; guardias de transacción, contratos/bytes y comportamiento de categorías conservados. Wrapper responde tras commit; stage no es ACK. Replay histórico conserva resultado/fingerprint exactos sin reescribir estado o conferir acceso a contenido. Unsupported de cumpleaños/series conserva recibo sin efectos ni sequence; tipos de comando fuera del executor no escriben. Sin callers, wire/pull/ACK ni índices productivos nuevos.
+
+Cuatro escenarios nuevos: asignar/cambiar/quitar y stale-CAS, entrega duplicada/replay y contenido intacto; aislamiento mediante item/tag ajenos y eliminados; fallo después del recibo revierte vista/contador/journal/recibo; evento simple soportado y cumpleaños/serie conservados como unsupported. Regresión real de categorías también aprobada. Mongo aislado37pass/0fail/363aserciones en9archivos, recursos propios eliminados. Normal265pass/62opt-in skip/0fail/5121aserciones, lint384archivos, tipos/build34recursos/diff aprobados.
+
+Petición humana durante esta entrega reduce reserva semanal5→2%; 5h sigue10%. AGENTS/workflow actualizados en este commit, entradas históricas conservadas. Tras commit/push y HEAD/cuotas, próxima11c2b3: barreras para snapshots solapados, coherencia de vecinos/create/delete/nombres y autorización de vista frente a delete. Pruebas secuenciales de acceso no demuestran todavía ese aislamiento concurrente. Compatibilidad/handshake/ACK/pull siguen obligatorios antes de activar.
+
+
+## 11c2b3a — Carreras deterministas sobre contexto leído
+
+- Entrada74%5h/9%7d tras0694e49 publicado. Secuencial, reserva10%5h/2%7d.
+- Objetivo: probar la hipótesis del contador compartido con snapshots realmente solapados, sin hooks productivos: barreras de tests en lecturas de catálogo/item/tag antes de un commit concurrente.
+- `target_paths`: `src/lib/db/remote-preference-races.integration.test.ts`, `scripts/sync-db-test-runner.ts`, `plan/{master,iterations,iteration-log,preference-transactions,preference-sync,sync-test-environment}.md`. Si evidencia muestra bug, abrir reparación acotada antes de cerrar; no activar writers.
+- Dependencias: executors tag/view/common ledger11c2b2b1/2 y executor item vigente; Mongo aislado e índices registrados explícitos sólo allí.
+- Aceptación: movimiento que leyó vecinos frente a creación/borrado relee catálogo y no aplica orden inválido; vista que leyó item activo frente a delete y categoría activa frente a delete relee autorización y no deja efectos/counter/journal aplicados. Nombres NFKC concurrentes producen un solo activo y rechazo durable del perdedor. Demostrar lecturas repetidas y secuencias/recibos coherentes, sin añadir locks al producto ni usar temporizadores para decidir el orden.
+- Validación: barreras y cleanup de spies/sesiones propios incluso al fallar, pruebas Mongo completas, suite/lint/tipos/build/diff y plan/commitpush/HEAD/cuotas. No declarar convergencia ni activación; compatibilidad/ACK/pull posteriores.
+
+
+### Resultado11c2b3a — Snapshots solapados comprobados
+
+Cinco carreras deterministas en MongoDB propio, mediante spies de lectura y barreras de promesas exclusivamente en tests. Movimiento pausa catálogo vigente; create/delete de vecino confirma primero; al reanudar, target no comparte escritura con el vecino pero contador común provoca retry/relectura y invalid_command durable sin efectos del movimiento. Vista pausa lectura de item/tag activo; delete confirma primero; retry observa tombstone y responde unavailable/invalid_command sin vista ni journal/sequence applied. Colisión de nombre NFKC pausa catálogo antiguo, ganador confirma; inserción perdedora aborta por unicidad y reclasifica sobre snapshot fresco. Se comprueban lectura repetida/tombstone observado, revisiones del target intactas, secuencias sin huecos, recibos durables y ausencia de journal del perdedor. Barreras/spies restaurados y operaciones drenadas incluso al fallar.
+
+La hipótesis del contador compartido queda demostrada para los contextos propios activos ensayados, incluyendo efectos en documentos disjuntos y permiso frente a borrado; la unicidad de nombres se prueba por separado y no sustituye el contador. No se introducen locks, hooks productivos ni temporizadores para ordenar commits. No extender la evidencia a permisos compartidos o series, aún no soportados.
+
+Mongo42pass/0fail/412aserciones en10archivos; recursos propios eliminados. Normal265pass/69opt-in skip/0fail/5121aserciones, lint385archivos, tipos/build34recursos/diff aprobados. Sin código productivo nuevo ni activación. Próxima11c3a: contrato mixto de transporte/descarga y compatibilidad, antes de readers/ACK/pull/backup/dos dispositivos y provisionamiento explícito. Commit/push/HEAD/cuotas al cierre, reserva10%5h/2%7d vigente.
+
+
+## 11c3a1 — Contrato puro de descarga mixta
+
+- Entrada71%5h/9%7d tras87088f2, secuencial/reserva10%5h/2%7d.
+- Objetivo: página explícita versión2 con cambios item/preference v2 normalizados, límites por página y verificación externa de actor/query/cursor. Una secuencia propia completa, sin filtrar preferencias.
+- `target_paths`: `src/schemas/remote-changes-page-v2.ts`, `src/types/remote-changes-page-v2.ts`, `src/lib/sync/remote-changes-page-v2{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions}.md`.
+- Dependencias: journal v211c2b1c, query puro vigente y races11c2b3a; sin IO, Next, DB, cursor/ACK ni callers activos.
+- Aceptación: propiedades estrictas, versión2, hasta100 cambios con secuencias consecutivas/operationIDs únicos, último igual nextAfter, hasMore/checkpoint coherentes. Verificador expectedUserId/query externo exige primer after+1, número<=limit, through congelado exacto si solicitado; página vacía no avanza ni deja hueco. Salida independiente. Límite2MiB UTF8 de página completa (cada journal<=512KiB), permite al futuro reader emitir menos que limit pero nunca truncar un registro. Legacy página/futuro rechazados; futuro reader adaptará registros legacy íntegros a item/v2 antes de producir la página.
+- Validación: mezcla normalizada y tombstones, clones, páginas inicial/continuación/vacía, cuenta/query/saltos/duplicados/checkpoint/extras/futuro, máximo100 y UTF8; límite global que supera sumando registros individualmente válidos. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. Contrato no negocia compatibilidad ni concede permisos/convergencia.
+
+
+### Resultado11c3a1 — Descarga mixta validada
+
+Schema/type/verificador puros para página explícita versión2 con journal item/preference normalizado íntegro. Hasta100 registros, secuencias consecutivas y operationIDs distintos; nextAfter/checkpoint/hasMore coherentes. ExpectedUserId y query externos comprueban cada receptor, after+1, limit y through congelado. Página vacía no avanza ni oculta huecos. Salida clonada, futuro/extra/legacy página rechazan; adaptación readonly de registros legacy sigue siendo tarea del futuro reader antes de crear el envelope. No IO, wire/ACK/cursor/DB ni callers activos nuevos.
+
+Guard2MiB UTF8 para página completa, separado de512KiB por journal. Permite futura paginación de menos registros que limit, nunca truncar contenido; cabe cualquier primer registro admitido con metadata. Cuatro pruebas/58aserciones nuevas cubren mezcla/tombstones/clones, continuación/checkpoint/vacío, dueño/query/saltos/duplicados/extra/futuro/100máximo y página Unicode que excede bytes aun siendo válidos todos sus registros individuales. Fixture de duplicados corregida para reutilizar realmente el UUID del primer registro. Suite269pass/69opt-in skip/0fail/5179aserciones, lint389archivos, tipos/build34recursos/diff aprobados; sin repetir Mongo por este contrato puro.
+
+Próxima11c3a2: reader Mongo propio mixto con snapshot/cursor/byte-paginación sin filtrar historia, seguido de handshake/transporte y ACK/pull/backup compatibles antes de activar. Contrato puro no negocia compatibilidad, concede permisos ni prueba convergencia. Reserva10%5h/2%7d; commitpushHEAD/cuotas al cierre.
+
+
+## 11c3a2 — Reader Mongo mixto sin omisiones
+
+- Entrada67%5h/8%7d tras1b56930, secuencial/reserva10%5h/2%7d.
+- Objetivo: lector server-only preparatorio de journal propio legacy/v2, adaptación readonly, snapshot/checkpoint congelado y paginación por count/2MiB sin filtrar entradas personales ni partir registros.
+- `target_paths`: `src/lib/db/remote-changes-v2{,.integration.test}.ts`, `scripts/sync-db-test-runner.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions,sync-test-environment}.md`.
+- Dependencias: contrato página11c3a1, decoder de journal, repos propios/executors/races vigentes; índices existentes recipientUserId/sequence y repos personales centrales explícitos sólo en DB propia. Sin nuevos índices ni callers/route/wire/ACK/pull activos.
+- Aceptación: input validado antes de IO, actor externo confiable, secuencia contigua completa a través de ambos dominios. Counter/checkpoint y autorizaciones actuales en la misma snapshot. Item exige pertenencia actual, incluso histórico; tag/view exigen documento propio actual y vistas acceso al item/tag referenciado, conservando tombstones. Stores personales aún sin executor rechazan sin omitir ni avanzar. Futuro/corrupción/hueco/permiso ausente rechaza página íntegra. Límite de bytes emite prefijo contiguo y hasMore, cursor cerrado incluso al fallar. Legacy DB intacta.
+- Validación: Mongo propio mezcla ejecutores reales, checkpoint congelado/incremental/tombstones, aislamiento/cursor futuro/input inválido, corrupción/huecos/autorización ausente con restauración de fixture, página por bytes y continuación íntegra. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. No activar lectores en transporte ni proclamar convergencia.
+
+
+### Resultado11c3a2 — Reader mixto preparatorio
+
+readRemoteChangesV2 valida actor/query antes de IO y lee contador/journal/autorización en una misma snapshot. Adapta registros legacy readonly a item/v2, conserva cada efecto personal y secuencias sin huecos. Consulta recipientUserId/sequence usa índice vigente; count<=100 y byte-paginación2MiB con tamaño exacto de registros/commas/envelope, sin partir entradas. Cursor siempre cerrado. Checkpoint congelado y error de cursor futuro conservados.
+
+Item exige pertenencia actual incluso para historia; categorías exigen registro propio actual y vistas documento propio más acceso propio al item/tag referido. Tombstones preservan ownership y permiten descargar historia anterior intacta; ausencia/futuro/corrupción/store personal aún sin executor rechazan página sin filtrar ni avanzar. No callers/rutas/transporte/ACK/pull productivos nuevos, ningún índice nuevo ni provisionamiento personal fuera de test propio.
+
+Cuatro escenarios nuevos Mongo: journal mixto producido por executors reales y checkpoint/incremental tras deletes; aislamiento/cursor/input inválido; huecos/futuro/corrupción/settings no soportado/item con owner cambiado/vista ausente, fixtures restauradas;28tareas grandes en fixtures transaccionales propias, dos páginas por UTF8 con28secuencias y checklist completo en todas. Esta última fixture prueba reader/bounds, no ACK de escritura real. Mongo46pass/0fail/475aserciones en11archivos; recursos propios eliminados. Normal269pass/75opt-in skip/0fail/5179aserciones, lint391archivos, tipos/build34recursos/diff aprobados.
+
+Próxima11c3b1: contrato de respuesta push mixta/versionada y compatibilidad transporte2/intención1, sin activar todavía. Después servicios/handshake, metadata/ACK/pull/backup y prueba de dos dispositivos antes de activar preferencias. Reserva10%5h/2%7d vigente, commitpushHEAD/cuotas al cierre.
+
+
+## 11c3b1a — Contrato push mixto e intención intacta
+
+- Entrada63%5h/8%7d tras28e6874 publicado, secuencial/reserva10%5h/2%7d. Se separa contrato puro del handshake/servicio/activación.
+- Objetivo: input explícito transportVersion2 con intenciones durables1 sin reescribir payload/UUID; respuesta status/version2 con resultados item/preference y prefijo retry. Verificador relaciona request/cuenta/orden/familia/outcomes, sin ACK/IO.
+- `target_paths`: `src/schemas/remote-push-v2.ts`, `src/types/remote-push-v2.ts`, `src/lib/sync/remote-push-v2{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions}.md`.
+- Dependencias: input/operaciones actuales, resultados v2 y reader mixto; ningún cambio de config activa/ServerAction/cola/DB.
+- Aceptación: input estricto transport2, versión de operación1 conservada; UUIDs únicos y envoltura completa<=512KiB UTF8. Response completa o prefijo retry_later exacto según request, failedOperationId coincide siguiente intención, orden/IDs/familias/propietarios verificados. Rechazos generales sin resultados; results<=50/49 y respuesta completa<=2MiB, no truncar un outcome. Transport1/futuro/extras/incoherencia rechazados sin conceder ACK ni compatibilidad.
+- Validación: mezcla/errores/complete/retry vacíos/parciales/clones, input2+intención1exacta, futuro/legacy/duplicados/cuenta/familia/op/desorden/truncado, request/responseUTF8 independientes. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. Si response preparada excede2MiB, futuro batch responderá un prefijo completo y pedirá retry de la siguiente intención, preservando replay aunque su commit ya exista.
+
+
+### Resultado11c3b1a — Push mixto preparatorio
+
+Input explícito transportVersion2 reutiliza schema de intenciones durables1, UUIDs/operaciones intactos y fingerprint v1 sin cambios. Guard512KiB incluye envoltura completa además del batch interior. Respuesta versión2 discriminada complete/retry_later/rechazos generales, resultados item/preference strict<=50/49, operación distinta por resultado y guard2MiB completo. Verificador exige actor/request, orden/IDs/familia, resultado completo o prefijo retry exacto/failedOperationId siguiente. Dueño de datos y objetivo principal de applied/conflict coinciden con el comando; efectos multirregistro conservados. Validación no concede ACK ni negocia compatibilidad; no IO/wire/config/ServerAction/metadata/DB activos modificados.
+
+Cinco pruebas/70aserciones: digest exacto y clones/mezcla/errores, prefijos incluidos vacío/parcial, truncado/desorden/duplicados/versiones/cuenta/familia/objetivo ajeno, batch interior válido justo512KiB cuya envoltura excede, respuestaUnicode que excede2MiB con outcomes individuales válidos y prefijo menor intacto. Tupla Zod y literales/tipo de fixtures ajustados antes del cierre; lint sin ruido. Suite274pass/75opt-in skip/0fail/5249aserciones, lint395archivos, tipos/build34recursos/diff aprobados. No repetir Mongo por contrato puro.
+
+Próxima11c3b1b: separar versión de transporte de la intención1 en compatibilidad/config preparatoria, conservando transporte activo1 y probando negociación2/1 en ambas direcciones. Servicio mixto/metadata/ACK/pull/backup/dos dispositivos siguen antes de activar. Si response futura excede límite, conservar prefijo completo y pedir retry de siguiente intención, incluso si el commit durable ya existe: replay lo preserva, no falso fallo ni pérdida de intención. Reserva10%5h/2%7d, commitpushHEAD/cuotas al cierre.
+
+
+## 11c3b1b — Negociación separada de intención
+
+- Entrada55%5h/6%7d tras531e189, secuencial/reserva10%5h/2%7d. Corte mínimo, sin activar protocolo2.
+- Objetivo: versión durable de operación1 distinta de transporte activo1; helpers de negociación aceptan versión explícita validada para preparar2 y conservan default1. Batch activo compara intención contra constante propia, no contra transporte.
+- `target_paths`: `src/config/sync-protocol.ts`, `src/schemas/sync-protocol.ts`, `src/lib/sync/sync-protocol{,.test}.ts`, `src/features/sync/push-batch.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions}.md`.
+- Dependencias: contrato transport2/intención1 y protocolo vigente. No nuevo caller2, ruta/ServerAction/DB/metadata ni rango activo ampliado.
+- Aceptación: default y comportamiento batch actuales1 conservados; encode2 anuncia sólo2; cliente1/servidor2 y cliente2/servidor1 incompatibles. Versiones inválidas no admitidas, JSON/mínimo/máximo estrictos; versión durable de cola/fingerprint intacta.
+- Validación: pruebas bidireccionales de negociación, invalid versions/default y regresión de batch/transporte existentes; suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. Servicios mixtos ymetadata/pull compatibles siguen pendientes antes de activar.
+
+
+Durante11c3b1b, el usuario reduce explícitamente reserva semanal2→1%; 5h conserva10%. AGENTS/workflow se actualizan en este mismo commit sin extender autorización a créditos, reinicios ni otras ramas. Mantener margen de reparación/cierre por encima del suelo vigente.
+
+
+### Resultado 11c3b1b — Compatibilidad separada de intención
+
+La versión durable de operación conserva1 y el transporte activo conserva1, ahora con constantes distintas. El batch actual compara contra la versión de intención; helpers puros permiten anunciar/verificar una versión explícita validada sin ampliar el rango activo. Negociación2/1 se rechaza en ambas direcciones,2/2 y1/1 se aceptan; defaults y UUID/payload/fingerprint de cola intactos. No caller productivo2, cambios de DB, metadata, ACK/pull ni activación personal.
+
+Prueba nueva de23aserciones cubre direcciones incompatibles, versión válida/explícita y valores inválidos. Suite275pass/75opt-in skip/0fail/5272aserciones; lint395archivos, tipos/build34recursos/diff aprobados. Contrato puro no requiere repetir Mongo. Por petición humana durante esta entrega, reserva semanal2→1%; reserva5h10% conservada, AGENTS/workflow actualizados en este mismo commit. Las entradas históricas mantienen su política original.
+
+Próxima candidata11c3b2a: lectura común fingerprint-bound en executor item para clasificar UUID reutilizado frente a recibos personales/versionados, conservando resultado activo legacy y escrituras actuales. Después dispatcher/servicio mixto y metadata/ACK/pull/backup compatibles antes de activar. Commit/push/HEAD/cuotas al cierre, reserva10%5h/1%7d vigente.
+
+
+## 11c3b2a — Replay común en executor item
+
+- Entrada51%5h/6%7d tras52bf49d publicado; secuencial, reserva10%5h/1%7d. Corte mínimo de compatibilidad antes del dispatcher.
+- Objetivo: leer recibos legacy/v2 mediante replay canónico común dentro de la transacción item, reconocer identidad reutilizada entre familias y devolver sólo outcome item compatible; resultado personal no debe convertirse en ACK legacy.
+- `target_paths`: `src/lib/db/remote-item-commands{,.integration.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions,sync-test-environment}.md`.
+- Dependencias: decoder/replay común, executors y contratos existentes; índice actor+operationId vigente. Escritores/journal/protocolo activos1 intactos; no nuevas rutas, índices ni activación personal.
+- Aceptación: replay legacy y v2 item estable y sin reescrituras; UUID con fingerprint diferente, incluyendo recibo personal, lanza identidad reutilizada antes de cualquier efecto. Resultado personal exacto rechaza por familia incompatible, no entrega ACK legacy. Actor aislado, corrupto/futuro rechaza; tests actuales de concurrencia/conflicto/rollback conservados.
+- Validación: Mongo propio con fixture legacy→v2 item readonly y recibo personal real, UUID reutilizado/familia inválida sin efectos, restauración de fixtures e historia intacta. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. No declarar sincronización personal activa ni convergencia nueva.
+
+
+### Resultado 11c3b2a — Replay item compatible con recibos mixtos
+
+Executor item usa replay común dentro de su transacción snapshot y compara fingerprint canónico antes de interpretar la familia. Recibos legacy/v2 item devuelven outcome legacy independiente; recibo personal exacto rechaza por incompatibilidad sin convertirlo en ACK item. UUID reutilizado con payload/familia diferente lanza identidad reutilizada sin efectos. Escritores/journal/resultado activo1 y autorización propios conservados; índices actor+operationId vigentes, sin rutas o activación personal.
+
+Dos pruebas Mongo nuevas: fixture de recibo item legacy adaptado a v2, replay tras tombstone, independencia de salida/historia, corrupción de dueño/futuro y restauración; recibo de categoría producido por executor real, UUID reutilizado/familia incompatible sin item/journal/counter nuevos y mismo UUID permitido a otro actor. Mongo48pass/0fail/494aserciones en11archivos, contenedor/tmpfs propios eliminados. Suite275pass/77opt-in skip/0fail/5272aserciones; lint395archivos, tipos/build34recursos/diff aprobados.
+
+Próxima candidata11c3b2b: dispatcher preparatorio para delegar por familia a executors reales, conservando validación antes de IO, replay/unsupported y resultado v2 sin activar wire2. Después servicio autenticado y metadata/ACK/pull/backup compatibles antes de preferencias remotas activas. Reserva10%5h/1%7d vigente; commit/push/HEAD/cuotas al cierre.
+
+
+## 11c3b2b — Dispatcher mixto preparatorio
+
+- Entrada49%5h/5%7d trasd7149d7 publicado, secuencial/reserva10%5h/1%7d.
+- Objetivo: validar actor/intención antes de IO, delegar items simples/categorías/vistas a executors reales y devolver outcome v2 propio de la familia; sin caller productivo.
+- `target_paths`: `src/lib/db/remote-operation-commands{,.integration.test}.ts`, `scripts/sync-db-test-runner.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions,sync-test-environment}.md`.
+- Dependencias: replay común item, executors atómicos y clasificación pura existentes. Cada executor mantiene su transacción/autoridad; sin prelectura de recibo fuera de sesión. Settings/task.move se delegan al rechazo unsupported previo al catálogo del executor personal, que comprueba replay/identidad dentro de sesión sin efectos.
+- Aceptación: resultados propios válidos, identidad/familia del resultado coherentes; mezcla conserva secuencias compartidas y replay tras commits/tombstones sin reescribir; UUID reutilizado entre familias rechaza. Recibo histórico de familia incoherente no se convierte en ACK nuevo. Unsupported no crea efectos/recibo para comandos nuevos; invalid/future inputs rechazan. No nuevos índices/transportes/acciones, preferencias no activadas.
+- Validación: Mongo propio routing item/tag/view, lectura mixta y replay tardío, colisión en ambas direcciones/aislamiento, unsupported/inputs y corrupción de familia restaurada. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. Servicios autenticados y metadata/pull siguen después.
+
+
+### Resultado 11c3b2b — Dispatcher mixto preparado
+
+executeRemoteOperationV2 valida actor/intención antes de IO y delega a executors item/tag/view con sus transacciones reales. Items se envuelven readonly en resultado v2; personal conserva resultado íntegro. Settings/task.move pasan por rechazo unsupported previo al catálogo del executor personal, con replay/fingerprint dentro de sesión sin escribir para comandos nuevos. Resultado propio clonado, familia/operationId coherentes; historia incompatible rechaza sin relabel ni falso ACK. Sin prelectura de autorización/recibo fuera de transacción, índices nuevos ni callers productivos.
+
+Cuatro escenarios nuevos Mongo: mezcla item/tag/view con secuencias1/2/3 y replay tardío tras delete sin reescritura; UUID reutilizado en ambas direcciones y actor aislado; unsupported e inputs futuros/extra/inválidos sin efectos y UUID reutilizado incluso para unsupported; fixture de familia incompatible rechaza y se restaura. Runner52pass/0fail/520aserciones en12archivos, contenedor/tmpfs propios eliminados. Normal275pass/83opt-in skip/0fail/5272aserciones; lint397archivos, tipos/build34recursos/diff aprobados.
+
+Próxima candidata11c3b2c1: envelope de clasificación transport2/intención1 y servicio batch mixto preparatorio autenticado por actor externo, prefijos/retry/identidad/bounds sin publicar nueva acción. Separar pruebas puras de política de integración Mongo si margen lo requiere; no conectar wire2 antes de metadata/ACK/pull/backup compatibles. Reserva10%5h/1%7d; commitpushHEAD/cuotas al cierre.
+
+
+## 11c3b2c1 — Política de batch mixto preparatoria
+
+- Entrada45%5h/5%7d tras3456b0f publicado, secuencial/reserva10%5h/1%7d; separar servicio puro de integración Mongo/acción activa.
+- Objetivo: envelope compartido de clasificación y servicio server-only con dependencias de sesión/ejecución; transport2/intención1, lote completo validado antes de efectos, prefijo sequential/retry y resultados ligados a intención/cuenta/familia/objetivo.
+- `target_paths`: `src/schemas/remote-push-v2.ts`, `src/features/sync/push-batch-v2{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions}.md`.
+- Dependencias: contratos/verificador v2 y dispatcher preparado. ReadActor debe aplicar política de sesión vigente; no confiar en actor del input. Ninguna acción pública/config transporte activa modificada.
+- Aceptación: sesión ausente o cambiada sin execute; legado/futuro transporte o intención requieren actualización antes de ejecutar prefijo; inválido/inyección/duplicado/tamaño completo rechazan. Outcomes strict/versionados/propios y correspondencia verificada; identity_reuse explícito conserva familia y continúa; fallo transitorio/outcome inválido devuelve prefijo válido sin ejecutar posteriores. Antes de acumular outcome, validar respuesta completa o retry con metadata<=2MiB; si no cabe devolver prefijo previo y retry de la operación ejecutada, sin negar su posible commit durable ni perder intención/replay.
+- Validación: pruebas de política con executors simulados, sesión/negociación/lote entero/secuencialidad/errores/familias y tamaño UTF8 con outcomes individuales válidos. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. Integración real servicio+dispatcher en corte posterior, no nueva prueba de convergencia todavía.
+
+
+### Resultado 11c3b2c1 — Batch mixto preparatorio
+
+Envelope strict compartido reconoce transporte ausente/1/futuro e intención futura como update_required antes de interpretar comandos, tras política de actor/cuenta; inputs inválidos, inyección/duplicados/count/UTF8 rechazan antes de execute. Servicio server-only usa dependencias de sesión confiable y executor, sin acción pública ni caller activo. Execute secuencial; resultados vinculados a cuenta, orden, IDs, familia y objetivo mediante verificador puro; identidad reutilizada se devuelve con familia correcta y continúa. Fallo transitorio/outcome incoherente conserva prefijo válido y detiene posteriores.
+
+Cada candidato incluye metadata de continuación y guard2MiB antes de acumularse; si no cabe, devuelve prefijo anterior y retry de operación ya ejecutada. Su posible commit durable no se niega: siguiente intento debe replay con UUID/fingerprint intactos, sin falso ACK ni truncamiento de outcome. Sin activar wire2, DB/índices/cola/ACK/pull actuales intactos.
+
+Seis pruebas/59aserciones de política con executor simulado: sesión/cuenta, negociación, validación completa, secuencialidad/identidad por familia, fallo/familia/ID/owner/target incoherentes y respuesta Unicode con16outcomes individuales válidos que corta antes de2MiB sin ejecutar posteriores. Fixture unión discriminada ajustada antes del cierre. Suite281pass/83opt-in skip/0fail/5331aserciones; lint399archivos, tipos/build34recursos/diff aprobados. No repetir Mongo para política pura; prueba de servicio+executor real queda en11c3b2c2.
+
+Próxima candidata11c3b2c2: integración del batch con dispatcher Mongo, pérdida de respuesta/replay/prefijo y clasificación de acceso/identidad, sin nueva ruta. Después metadata/ACK/pull/backup locales compatibles antes de activación. Reserva10%5h/1%7d; commitpushHEAD/cuotas al cierre.
+
+
+## 11c3b2c2 — Batch y dispatcher con Mongo real
+
+- Entrada42%5h/4%7d tras7f243b6 publicado, secuencial/reserva10%5h/1%7d; pruebas acotadas sin cambios de runtime activo.
+- Objetivo: comprobar servicio batch preparatorio con executor real, pérdida de respuesta después de commit y replay sin secuencias duplicadas, identidad/acceso y respuesta grande con prefijo íntegro.
+- `target_paths`: `src/lib/db/remote-operation-commands.integration.test.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions,sync-test-environment}.md`.
+- Dependencias: servicio de política, dispatcher, executors/reader reales; runner/índices propios vigentes. Sin acciones/rutas/colecciones/índices productivos.
+- Aceptación: commit real oculto tras error devuelve prefijo anterior; retry de intención intacta replay sin efectos duplicados y posteriores avanzan una vez. UUID reutilizado clasificado por familia, acceso ajeno no concede efectos. Batch de status pequeño sobre tareas grandes supera2MiB de respuesta: excluida puede estar committed, retry debe conservar registro y evitar nuevo sequence/conflict; contenidos completos y secuencias sin huecos.
+- Validación: Mongo propio casos anteriores y regresión existente, suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. No declarar ACK local/convergencia ni activar preferencias; siguiente metadata local según margen nuevo.
+
+
+### Resultado 11c3b2c2 — Batch mixto probado con commits reales
+
+Tres escenarios nuevos conectan servicio preparatorio y dispatcher con Mongo propio. Error intencional tras commit de categoría devuelve sólo prefijo item; retry con la intención original conserva recibo/sequence2 y confirma vista ensequence3, replay posterior no escribe. UUID reutilizado entre ambas familias responde identity_reuse correspondiente sin efectos; vista de contenido ajeno devuelve unavailable sin contador propio ni tocar owner.
+
+16tareas grandes se crean individualmente, luego un batch pequeño de status produce respuesta>2MiB. Servicio devuelve prefijo íntegro, y se verifica antes de cualquier retry que la operación excluida ya tiene recibo/commit. Replay exacto conserva ledger; restantes avanzan una vez hasta32secuencias contiguas/32recibos, todas las tareas revision2/in_progress y checklist completo. No falso ACK ni pérdida de respuesta confundida con fallo remoto. Esta prueba no implementa ACK local ni equivale a dos dispositivos reales.
+
+Mongo55pass/0fail/618aserciones en12archivos; recursos propios eliminados. Normal281pass/86opt-in skip/0fail/5331aserciones; lint399archivos, tipos/build34recursos/diff aprobados. Sólo pruebas/plan nuevos; no rutas/protocolo activo/índices productivos ni activación personal.
+
+Próxima candidata11c3c0: contrato de transición de metadata local item/personal y backup, antes de schemas/ACK/pull/recuperación compatibles. Debe conservar intención1, chains/tombstones, historial legacy, propiedad/época, replay más antiguo y rechazar futuro/corrupto sin borrar ni avanzar. Servicio/reader preparados siguen sin callers activos. Elegir corte con cuota posterior, reserva10%5h/1%7d y margen de reparación/cierre.
+
+
+## 11c3c0 — Transición de evidencia local y backup
+
+- Entrada40%5h/4%7d trasb2d285a publicado, secuencial/reserva10%5h/1%7d; corte documental independiente antes de cambiar persistencia.
+- Objetivo: definir formatos/evolución de shadow/outcome personales y backup, ordenar lectores antes de escritores y hacer explícitas invariantes de ACK/pull/incident recovery.
+- `target_paths`: `plan/{local-preference-evidence,master,iterations,iteration-log,preference-sync,preference-transactions}.md`.
+- Dependencias: fuentes reales schemas/local-sync, schemas/local-backup, local-db/sync-store/pull-changes/sync-incidents y backup/ownership. No código/runtime nuevo, DB ni migración ejecutada.
+- Aceptación: distinguir transporte2/intención1/evidencia2/backup2/DBversion vigente; mantener registros legacy readonly y keys/indexes, evidencia completa multiefecto, ownership y snapshot observado sin inventar ancestro. Lectores estrictos antes de writers, rollback/cursor/replay/tombstones/cadenas y UI de incidentes sin elecciones prematuras. Definir cortes posteriores con rutas/pruebas, sin declarar funciones preparatorias activas.
+- Validación: consistencia y referencias locales, diff-check; commitpush/HEAD/cuotas. Reservar implementación de metadata/backup y pruebas al corte siguiente según consumo observado.
+
+
+### Resultado 11c3c0 — Transición local definida
+
+Nuevo contrato `local-preference-evidence.md` basado en schemas/ACK/pull/backup/incident reader reales. Separa intención1, transporte2, evidencia2, backup2 e IndexedDB2 si stores/keys no cambian. Shadows personales por documento; outcome multiefecto con snapshots de ausencia observada, sin inventar ancestro. Lectores estrictos/backup/routing antes de writers, proyección conservadora con cadena personal y reconciliación final, ACK/pull/cursor/rollback atómicos, CAS independiente por efecto y bases enviadas inmutables.
+
+Formatos legacy siguen readonly/clonados, desconocido/corrupto rechaza sin borrado ni cursor; importación/resolución local no fabrica ACK o permisos. Cortes11c3c1a–4 definidos con rutas/evidencias antes de coordinador/dos dispositivos/activación. Ningún schema/writer/runtime nuevo en esta entrega documental; estado preparatorio y limitaciones separados del producto activo.
+
+Referencias locales y coherencia/diff comprobados; sin repetir lint/tipos/build del código íntegro validado en corte anterior. Próxima candidata11c3c1a: shadow/snapshot personal puros, sólo si cuota posterior y cierre caben; dividir antes de abrir si hace falta. Reserva10%5h/1%7d vigente; commitpushHEAD/cuotas al cierre.
+
+
+## 11c3c1a1 — Shadow versionado puro
+
+- Entrada36%5h/3%7d tras5f8e976 publicado, secuencial/reserva10%5h/1%7d. Dividir11c3c1a: sólo shadow/decoder ahora; snapshots y outcome después.
+- Objetivo: schema/type puro de shadow2 item/preference, claves canónicas y decodificación legacy readonly con expectedUserId externo.
+- `target_paths`: `src/schemas/remote-shadow-v2.ts`, `src/types/remote-shadow-v2.ts`, `src/lib/sync/remote-shadow-v2{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions,local-preference-evidence}.md`.
+- Dependencias: schema legacy item, efectos personales y placement keys existentes. Settings/placements se reconocen como evidencia tipada, pero no se habilita su aplicación ni productores. No IO, migración, writer, backup, outbox ni consumidores activos nuevos.
+- Aceptación: misma clave item legacy, tag/view/placement/settings por identidad propia; discriminantes/store/clave/propiedad coherentes, clones/null no inventado; futuro/extra/ambiguo/corrupto rechaza. Legado conserva payload/revisiones/tombstones sólo en memoria; parse no demuestra commit/permiso/ACK/ancestro.
+- Validación: pruebas de ambas familias/legacy, cuenta/claves/store/placement scope-date/sentinel, tombstones/clones/futuro/extra. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. Próximo snapshot personal puro separado según margen.
+
+
+### Resultado 11c3c1a1 — Shadow mixto puro
+
+Schema/type explícitos version2/kind item/preference y decoder/verificador puros. Legacy item estricto se adapta sólo en memoria conservando entidad/revisión/tombstone y sin modificar historia. Preferencia individual usa claves tag/item-view/placement canónico/settings por identidad; store, documento, clave y cuenta externa coherentes. Clones y rechazo futuro/extra/ambiguo/corrupto. Reconocer settings/placements como evidencia no implementa sus productores o aplicación; parse no demuestra commit, permiso, ACK ni ancestro.
+
+Cuatro pruebas/39aserciones: legacy/tombstone, familias personales e independencia, scope/fecha de aparición/sentinel overdue, claves cruzadas/cuenta/futuro/extra/corrupción. Tipos de fixtures discriminadas corregidos antes de cierre. Suite285pass/86opt-in skip/0fail/5370aserciones; lint403archivos, tipos/build34recursos/diff aprobados. Contrato sin IO no requiere repetir Mongo. Ningún consumidor/writer/backup activo o migración cambiado.
+
+Próxima candidata11c3c1a2: snapshot personal puro por clave con ausencia observada y sets de evidencia, antes de outcome/backup/ACK/pull. Evaluar cuota posterior contra coste alto observado y reparación/cierre; no abrir si puede cruzar reserva10%5h/1%7d. Repo coherente, protocolo activo1 y preferencias aún preparatorias. CommitpushHEAD/cuotas al cierre.
+
+
+## 11c3c1a2 — Snapshot personal puro por conjunto exacto
+
+- Entrada33%5h/3%7d tras3faf4e1 publicado, secuencial/reserva10%5h/1%7d; corte puro separado de outcome/ACK.
+- Objetivo: snapshots por clave personal con documento observado o ausencia null, conjunto esperado externo exacto y cuenta propia; formatos locales incluyen revisión0 de borrador no confirmado, distintos de efectos remotos positivos.
+- `target_paths`: `src/schemas/{remote-shadow-v2,personal-snapshot}.ts`, `src/types/personal-snapshot.ts`, `src/lib/sync/personal-snapshot{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync,preference-transactions,local-preference-evidence}.md`.
+- Dependencias: schemas personales locales, claves shadow/placement y decoder preparado. Ajuste documentado: snapshot local/base usa variante de registro personal local, no exige revisión remota>=1 a borrador. No IO/backup/writer/ACK/cursor activos.
+- Aceptación: documento y clave/store coherentes, null sólo ausencia observada, claves únicas<=10000, conjunto exacto sin omisiones/extra, cuenta propia incluso settings ausente, clones y guard2MiBUTF8 total. Future/extra/corrupto rechaza; sin conceder permiso/ACK/ancestro por null o parse.
+- Validación: grupos multirregistro con revisión0/ausencia/tombstones, conjunto vacío/exacto/incompleto, clave/cuenta/duplicado/settings-null/futuro/extra/UTF8. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. No abrir outcome si su coste completo amenaza reserva semanal1%.
+
+
+### Resultado 11c3c1a2 — Snapshot personal puro
+
+Snapshot por clave con registro personal local o ausencia null, conjunto externo exacto y propietario de partición. Claves únicas<=10000/canónicas, revisión0 local admitida, tombstones y clones; settings ausente exige clave de la misma cuenta. Guard2MiBUTF8 para conjunto íntegro, no sólo registros. Overdue conserva sentinel en clave y documento, sin normalizar silenciosamente fecha observada. Formato local separado de efectos remotos positivos: creación optimista actual usa revisión0 en preference-command.ts.
+
+Cinco pruebas/23aserciones: revisión0/ausencia/tombstones/clones, conjuntos vacíos/exactos/incompletos/extra/duplicados, dueño/settings-null, shapes futuros/extra/claves corruptas,7000categorías individualmente válidas que exceden bytes y coherencia civil overdue. Aviso optional-chain corregido antes de cierre; lint sin ruido. Suite290pass/86opt-in skip/0fail/5393aserciones; lint407archivos, tipos/build34recursos/diff aprobados. Contrato sin IO, no repetir Mongo; no writer/migración/backup/ACK/pull/caller activo nuevo.
+
+Próxima candidata11c3c1b: outcome/submission mixtos y relación intención/familia/cuenta/efectos/snapshots exactos. Requiere margen para contratos y fixtures multiefecto/replay viejo; no abrir si cuota posterior menos coste alto observado y reparación/cierre puede cruzar1%7d/10%5h. Repo cerrado, preferencias siguen preparatorias y protocolo activo1. CommitpushHEAD/cuotas al cierre.
+
+
+## 11c3c1b1 — Recepción mixta pura
+
+- Entrada30%5h/2%7d tras455432d; el usuario solicita una iteración adicional. Secuencial, reserva10%5h/1%7d conservada; dividir outcome/submission y entregar sólo submission.
+- Objetivo: contrato puro de intención enviada/sender/resultado v2 y verificador externo de cuenta/familia/objetivo mediante verificador mixto existente.
+- `target_paths`: `src/schemas/local-sync-result-v2.ts`, `src/types/local-sync-result-v2.ts`, `src/lib/sync/local-sync-result-v2{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync,local-preference-evidence}.md`.
+- Dependencias: resultados/verificador push v2; intención1 y sender UUID vigentes. Sin IO, metadata/outcome durable, writer, ACK, backup ni consumidores activos.
+- Aceptación: relación operationId exacta, sender válido, schema strict y resultado clonado; cuenta, familia y objetivo comprobados; multiefecto completo conserva revisiones independientes. Futuro/extra/identidad ajena rechaza; validación no demuestra lease vigente/commit/ACK.
+- Validación: pruebas puras item/preference/errores, multiefecto, clones y cuenta/familia/objetivo/UUID/futuro/extra; suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. No ampliar a outcome/ACK durante esta petición de una iteración.
+
+
+### Resultado 11c3c1b1 — Recepción mixta pura
+
+Schema/type de submission intención1/senderUUID/resultado v2, relación operationId exacta y verificador puro de cuenta/familia/objetivo reutilizando correspondencia push mixta. Devuelve clones y conserva multiefecto con revisiones independientes; futuro/extra/identidad/cuenta ajena rechazan. Sender UUID no acredita lease vigente; validación no escribe ACK ni demuestra commit/acceso/ancestro. Sin callers, outcome durable, writer, backup o protocolo activo nuevos.
+
+Tres pruebas/20aserciones: multiefecto y clones, cuentas/objetivos/familias/UUID/versiones/extras incoherentes, estados de error de ambas familias preservados. Suite293pass/86opt-in skip/0fail/5413aserciones; lint411archivos sin ruido, tipos/build34recursos/diff aprobados. Contrato sin IO, no repetir Mongo. Petición de una iteración adicional completada con commit/push/HEAD/cuotas y reserva vigente10%5h/1%7d.
+
+Próxima candidata11c3c1b2: outcome mixto durable con snapshots exactos, legacy readonly y replay previo al shadow actual; después backup/ACK/pull compatibles. No ampliar esta entrega al executor local ni activar preferencias.
+
+
+## 11c3c1b2a — Outcome item versionado readonly
+
+- Entrada27%5h/2%7d trasf2a5458; petición adicional de una iteración si cabe, reserva semanal1% ya vigente. Secuencial/reserva10%5h/1%7d.
+- Objetivo: dividir outcome mixto; preparar variante item2 y decoder de outcome legacy readonly antes de la variante personal y del lector común.
+- `target_paths`: `src/schemas/local-item-outcome-v2.ts`, `src/types/local-item-outcome-v2.ts`, `src/lib/sync/local-item-outcome-v2{,.test}.ts`, `plan/{master,iterations,iteration-log,preference-sync,local-preference-evidence}.md`.
+- Dependencias: outcome legacy, resultados item y verificador push mixto vigentes. Sin IO, writer, backup, cambios de outbox/ACK o consumidores activos.
+- Aceptación: envoltura2/item y resultado item/v2, key/operationId/cuenta/objetivo coherentes; snapshots local/base propios y de misma identidad, sin exigir ancestro ni comparar su revisión contra replay histórico. Legacy conserva intención, resultado, tombstones, revisiones y clones, sin reescritura. Futuro/extra/familia/cuenta/objetivo corruptos rechazan íntegros.
+- Validación: legacy conflict anterior al shadow observado, estado aplicado/tombstone y errores, clones, dueño/objetivo/IDs/key/futuro/extra. Suite/lint/tipos/build/diff/plan/commitpush/HEAD/cuotas. Una sola entrega; variante personal/verificador común pendientes.
+
+
+### Resultado 11c3c1b2a — Outcome item versionado readonly
+
+Variante explícita2/item con resultado item/v2; schema/type y decoder/verificador puros. Key e operationId exactos, correspondencia de cuenta/familia/objetivo reutilizada, snapshots local/base propios y de la misma identidad. Legacy se adapta sólo en memoria conservando intención, resultado, revisión/tombstone y clones. Replay anterior al shadow observado se admite sin fabricar ancestro, actualizar resultado ni retroceder datos. Desconocido/extra/ambiguo/identidad o cuenta ajena rechaza íntegro.
+
+Tres pruebas/22aserciones: conflicto revision2 frente a shadow observado5/local0, clones, applied con tombstone y cuatro rechazos preservados, key/IDs/snapshots/resultado ajenos y versiones/familias/extras inválidos. Suite296pass/86opt-in skip/0fail/5435aserciones; lint415archivos, tipos/build34recursos/diff aprobados. Contrato sin IO no requiere repetir Mongo. Sin lector común, writer, backup, ACK, outbox o caller activo nuevo.
+
+Petición de una iteración adicional cerrada con reserva10%5h/1%7d ya vigente. Próxima candidata11c3c1b2b: variante outcome personal con snapshots exactos y decoder común, antes de backup/ACK/pull. No abrir persistencia personal como ampliación de este corte. CommitpushHEAD/cuotas al cierre.
+
+
+## Lote renovado: 11c3c1b2b y proyección preparatoria paralela
+
+- Entrada100%5h/100%7d trasb77c7d6; usuario autoriza ampliar alcance y paralelizar. Reservas10%5h/1%7d vigentes; consultar ambas tras cada entrega, commitpushint/HEAD; sin nuevas automatizaciones ni cambios productivos.
+- Objetivo11c3c1b2b: outcome personal estricto2 con snapshots exactos de objetivo+efectos, cuenta/intención/familia, decoder común item legacy/personal nuevo. Shadow observado no es ancestro ni obliga a revision posterior del replay.
+- `target_paths` worker outcome: `src/schemas/local-preference-outcome-v2.ts`, `src/types/local-operation-outcome-v2.ts`, `src/lib/sync/local-operation-outcome-v2{,.test}.ts`. Sólo estos archivos; no commits ni plan por worker.
+- Objetivo paralelo11c3c3p preparatorio: proyección personal pura por clave con revisiones independientes, snapshot local conservado mientras exista intención personal no resuelta y reconciliación cuando desaparecen pendientes; sin activar escritores antes de lectores/backup.
+- `target_paths` worker proyección: `src/schemas/preference-projection.ts`, `src/lib/sync/preference-projection{,.test}.ts`. Dependencias sólo schemas/snapshots/outbox ya cerrados; no importar archivos del worker outcome en curso.
+- Exploración paralela readonly: identificar adaptaciones exactas de backup/evidencia/importación para corte11c3c2, sin editar archivos.
+- Ownership raíz: plan/workflow/registro e integración/revisión/build/commitpush. Agentes no están solos y preservan cambios ajenos; disjoint paths y validación global al integrar.
+- Aceptación outcome: snapshots propios por conjunto exacto, objetivo incluso error sin efectos, multiefecto íntegro, clones, legado readonly, future/extra/familia/objetivo/owner incoherentes rechazan; guard de envoltura total y base remoto positivo/ausencia observada sin imponer ancestralidad.
+- Aceptación proyección: claves/store/owner y conjuntos coherentes, revisiones remotas por documento, replay viejo no retrocede, misma revisión diferente contenido rechaza, tombstones y pendientes/rejected/conflict/unsupported conservados; decisiones locales no fabrican ACK. Limitar inicialmente tags/itemViews, rechazar store sin soporte íntegro. Sin IO ni UI/callers activos.
+- Validación: tests puros pertinentes para cada corte; raíz suite/lint/tipos/build/diff/plan por entrega cerrada. Proyección anticipada documentada como preparatoria, no saltar lectores/backup ni activar ACK/pull. Actualizar orden/candidata al integrar; completar cada corte antes de reservar el siguiente.
+
+### 11c3c2a — Backup portable mixto puro (lote paralelo renovado)
+
+Objetivo: formato portable2 conserva shadows/outcomes legacy y versionados, mientras portable1 mantiene su shape y bytes lógicos. Protocolo de intención1 y DB2 no cambian. Dependencias: decoder común11c3c1b2b cerrado antes de integrar. Ownership delegado: src/schemas/local-backup.ts, src/types/local-backup.ts, src/lib/backup/local-backup.ts y sus tests, src/lib/backup/import-record.test.ts. Root conserva documentación e integración; sin cambio de snapshot/export/IndexedDB/UI en este corte.
+
+Aceptación: validación de propiedad/claves/familia/objetivo mediante decoders mixtos sólo en memoria; intención exacta, dependencias, tail, sequence, evidencia ACK/conflict/rejected y decisiones superseded intactas. Multiefectos completos, revisión0 local/ausencias, base positiva y replay anterior al shadow aceptados sin fabricar ancestro. Fuente JSON archivada permanece opaca/byteexacta, no introducir verificación recursiva ni aplicar estados importados. Pruebas puras de ambas generaciones, corrupción/cuenta/futuro y roundtrip; lint/tipos/suite/build/diff completos antes de commit/push/cuotas.
+
+
+Cierre11c3c3p: proyección preparatoria entregada y probada independientemente del outcome nuevo; no altera orden de activación.11c3c2a sigue candidata de integración. Actor/outbox completos se validan antes de preservar/reconciliar; union shadows<=10k y snapshot de salida<=2MiB.
+
+Integración paralela11c3c2a: root asume únicamente src/lib/backup/import-preview.test.ts y src/lib/backup/import-plan.test.ts para matriz source1/current2 y source2/current1, evidencia personal completa sin selección ni ACK importado, comparación exacta de stores sin normalización. Contratos/aliases compartidos siguen propiedad del worker de backup. La entrega se integra y valida junta antes de commit.
+
+
+Cierre11c3c2a: contrato/verificador portable mixto y matriz import pura entregados.11c3c2b integra snapshot readonly y fixtures reales antes de writers. Adaptación estricta de metadata/shadow sólo en memoria; export aún1.
+
+### 11c3c2b y 11c3c2c — Lectores reales paralelos antes de writers
+
+Entrada tras ae5a872: 67%5h/95%7d, reserva10%/1%. Selección explícita de paralelo por autorización del usuario, contratos cerrados; no activar wire2 ni writers mixtos todavía.
+
+11c3c2b (root): src/lib/local-db/backup.ts, test/browser/backup.ts, test/browser/backup-import.ts; adaptaciones necesarias de schemas/backup-import sólo si hay evidencia (union ya transita por schema compartido). Objetivo exportar portable2 readonly de once stores sin reescribir IndexedDB, fixtures de historia mixta persistida, snapshot anterior/posterior/recarga y conservación exacta durante importación como copias nuevas. Aceptación: legado sigue exportable, portable1/2 importables, límite16MiB y unknown/owner reject preservan DB; import replay/rollback/tail/queue sin ACK fabricado. Validación: suite/lint/tipos/build y browser backup+import con particiones propias, cleanup propio.
+
+11c3c2c (worker personal_projection): src/schemas/sync-incident.ts, src/types/sync-incident.ts, src/lib/sync/incident-snapshot.ts y tests, nuevos módulos de proyección de incidentes personales si necesarios, src/lib/local-db/sync-incidents.ts, src/lib/local-db/sync-store.ts (sólo reader/API, no mutation), src/features/sync/local-incidents.ts, src/features/sync/components/sync-incident-panel.tsx y tests, nuevos componentes compactos personales y test/browser/sync-incidents.ts. Objetivo decodificar toda historia mixta antes de seleccionar variantes; mantener contrato item de resolución y cola completa para dependencias cruzadas, API overview separada visible sin opciones personales prematuras. Aceptación: cuenta/familia/identidad/estados/intención exactos, formatos futuros/corruptos nunca filtrados, personal no confundido con item por itemId, block visible con comparación actual/outcome/remote y sin choices. Store/epoch guardias conservadas, sólo readonly. Guía React y Next instalada obligatorias; fixtures propias browser y tests puros/render, fullDoD central. No editar archivos de backup ni writers/pull/outbox actuales; root posee documentación/integración/commits/build.
+
+### 11c3c3a — ACK personal atómico preparatorio (tercer frente independiente)
+
+Lectura previa55%5h/93%7d. Root cerrará lectores antes de integrar cualquier API de persistencia mixta; worker personal_outcomes puede preparar un módulo aislado sin caller productivo mientras11c3c2b/c terminan. Ownership exclusivo: src/lib/local-db/preference-sync-results.ts, src/lib/sync/preference-result-plan.ts y su test, nuevos schemas/types del plan si necesarios, test/browser/preference-sync-results.ts y scripts/preference-sync-results-test-server.ts. Sin editar sync-store/outbox/pull/incidentes/backup ni documentación compartida.
+
+Objetivo y aceptación: tags/vistas sólo, submission propio válido, intención exacta y lease sender sending; replay acknowledged exacto readonly. Capturar local/base antes de resultado para objetivo+todos efectos. Applied único ACK; unsupported pending; errores/conflicto retenidos; no cambio de cursor. Rebase sólo dependiente directo pending/attempts0 y revisión de su efecto propio, sin mutar intención intentada. Proyección conservadora de toda cadena personal y reconciliación final; todos los estados, documentos, shadows y outcome se confirman en una transacción y se resuelven tras oncomplete. Reject de cuenta/formatos/stores/corrupción antes de writes, bounds reales y late abort revierte todo. No await de red/control en IDB ni claims de atomicidad entre dos bases. Pruebas puras y browser IndexedDB propias con multiefectos/clones/replay/lease robado/rebase/unsupported/cadena/reconciliación/fallo final; fullDoD/plan/commit/push/cuotas central. Sin caller productivo ni activación wire2; integrar sólo tras cerrar lectores compatibles.
+
+
+Cierre11c3c2b: snapshot/export portable2 e importación de ambos formatos probados con IndexedDB real, lectura/recarga/conservación byteexacta/rollback/guardias.11c3c2c sigue antes de integración de writer11c3c3a.
+
+
+Cierre11c3c2c: readers/incidentes mixtos y comparaciones compactas personales comprobados, resolución item preserva grafo completo.11c3c3a puede integrar y probar su writer preparatorio; todavía sin negociación/activación transporte2.
+
+
+Cierre11c3c3a: módulo standalone y pruebas reales de atomicidad aprobados tras guardias de partición/stores. No activado en LocalSyncStore/coordinador. Dependencias de reader item2 y cola histórica con placements pendientes explícitas antes de pull/activación; no manufacturar ACK para progresar.
+
+### 11c3c2d — Readers item legacy/versionados compatibles
+
+Entrada28%5h/89%7d tras753c944, secuencial y reserva10%/1%. Objetivo adaptar readonly en memoria shadow/outcome item2 a las APIs item vigentes antes de pull mixto; sin activar transporte ni escribir nuevos formatos. target_paths root: src/lib/sync/item-evidence.ts, src/lib/local-db/outbox.ts, src/lib/local-db/sync-store.ts, src/lib/local-db/pull-changes.ts, test/browser/sync-results.ts, test/browser/sync-pull.ts. Dependencias: decoders item2/shadow y readers/backup cerrados. Aceptación: misma cuenta/key/familia estrictas, getters/replay acknowledged/ACK nuevo/pull admiten ambas generaciones, resultado durable exacto e intención conservados; personal/futuro/corrupto no se convierten a item. Escrituras siguen formato vigente cuando correspondan a mutación real; simple getter/replay no reescribe evidencia. Browser fixtures deben persistir item2, confirmar getter/replay readonly y ACK/pull con snapshot2, recarga/cursor/rollback vigentes. Lint/tipos/suite/build/diff/plan/commit/push/cuotas antes de cierre. No nuevo API de envío ni migración; si reparación amenaza reserva, limitar el corte antes de abrir pull/coordinador.
+
+Fixture compartida adicional root: test/browser/item-evidence-fixture.ts encapsula versionado sintético de evidencia y lectura bruta sólo en partición browser-test/loopback, usada por sync-results y sync-pull. No añadir helpers de producción sólo para fixtures ni simular resultados remotos desde decoder.
+
+
+Cierre11c3c2d: readers item compatibles verificados con evidencia2 realmente persistida, getter/replay readonly y ACK/pull vigentes. Próxima11c3c4a requiere contrato local y cursor mixtos, desconocidos no filtrados; separar contrato de transacción antes de abrir si margen limitado.
+
+### 11c3c4a1 — Recepción de página local mixta, contrato puro
+
+Entrada24%5h/88%7d tras224eb66. Corte mínimo secuencial antes de TX: target_paths src/schemas/local-changes-page-v2.ts, src/lib/sync/local-changes-page-v2.ts y su test. Dependencias remote page/query v2 y readers/ACK locales cerrados. Envoltorio estricto conserva query completa (after/through/limit, normalizada por schema remoto existente) más page2; verificar relación consulta/cuenta/checkpoint/límites y todos los stores antes de cualquier futura escritura. Sólo items propios simples task/event con revisión positiva y tags/vistas; settings/placements/series/birthday no se filtran, reject whole. Item repetido en página exige revisiones ascendentes como reader vigente; revisiones personales independientes no se convierten en cursor. No IO/ACK/rebase/cursor/caller/writer nuevo. Tests puros: mixto íntegro/clones, consultas congeladas/rango/cuenta/futuro/corrupción/extra, efecto sin soporte al final, revisiones item y formatos admitidos. FullDoD/plan/commit/push/cuotas. Transacción futura11c3c4a2 se abrirá en ventana con margen suficiente para browser/rollback/dos dispositivos.
+
+
+### Resultado 11c3c4a1 — Recepción local de páginas mixtas
+
+Contrato puro estricto conserva la consulta completa normalizada por el schema remoto existente (after/through/limit) junto con página2. Reutiliza verificador remoto de cuenta, continuidad, rango, tamaño y checkpoint congelado; verifica todos los efectos antes de retornar. Sólo propios simples task/event con revisión positiva y tags/vistas. Settings/placements, series/cumpleaños y formatos futuros rechazan íntegros; no filtrar efectos válidos para aceptar parte de una entrada. Items repetidos exigen revisión ascendente dentro de página, mientras revisiones personales permanecen independientes del cursor. Resultado clonado, sin IO/ACK/rebase/cursor ni caller nuevo.
+
+Cuatro pruebas específicas/26 aserciones. DoD global: 334 pass/86 opt-in skip/0 fail/5849 aserciones; lint435 archivos, tipos/build34 recursos/diff aprobados. Contrato puro sin persistencia: no repetir Mongo o navegador ni declarar convergencia. Entrada24%5h/88%7d tras224eb66, secuencial con reserva10%/1%. Commit/push/HEAD y ambas cuotas determinan cierre del lote; no abrir transacción mixta con margen insuficiente para pruebas, reparación y publicación.
+
+Siguiente11c3c4a2: validar la página entera antes de abrir/aplicar cambios, guardar items/tags/vistas/shadows/cursor en una TX propia con lectura de outbox completa; conservar intenciones, dependientes, outcomes y tombstones. Sin ACK o rebase por descarga. Probar checkpoint/carrera/página antigua, cuentas/épocas, stores sin soporte, revisión independiente y fallo tardío de cursor que revierta todos los efectos. Preparar writer aislado antes de capacidades/coordinador; no activar transporte2 sin guardia de cadena personal histórica y evidencia de dos particiones.
+
+### 11c3c4a2p — Decisión pura de cursor mixto
+
+Petición del usuario de adelantar lo posible del paso1; entrada real17%5h/87%7d, reserva10%/1%. Partir antes de la transacción: root posee src/lib/sync/local-mixed-pull-cursor.ts y su test, además de plan/master.md, local-preference-evidence.md y registro. Dependencias: receipt11c3c4a1 y cursor local vigente. Aceptación: validar receipt íntegro y cursor almacenado antes de decidir; ignorar sólo página completamente superada, rechazar solapamiento/consulta futura/cambio de checkpoint, exigir consulta completa coincidente con estado actual y proponer cursor congelado o liberado al terminar. Resultado clonado; corrupción o efecto sin soporte no se ignora por ser página antigua. Sin IO/writes/ACK/rebase/activación. Tests puros de primer checkpoint, continuidad, final vacío, carrera/solapamiento, invalid/future/unsupported/clones; suite/lint/tipos/build/diff/commitpush/HEAD y cuotas. Writer11c3c4a2 sigue pendiente y reutilizará esta decisión dentro de TX propia, con browser/rollback antes de conexión.
+
+
+### Resultado 11c3c4a2p — Decisión pura de cursor mixto
+
+Planner sin IO valida receipt íntegro y cursor almacenado antes de decidir. Exige after y checkpoint de consulta iguales al estado actual; congela checkpoint mientras hasMore y lo libera al terminar. Sólo ignora páginas completamente superadas, conservando cursor vigente; solapamiento, consulta futura o checkpoint alterado rechazan. Incluso una página superada rechaza cuenta ajena, futuro, corrupción, límites o store sin soporte. Devuelve evidencia/cursor clonados, sin avanzar DB ni ACK. El writer futuro debe ejecutar esta decisión con el cursor leído dentro de su transacción y persistirla junto con todos los efectos.
+
+Cuatro tests específicos/26 aserciones; suite338 pass/86 opt-in skip/0 fail/5875 aserciones, lint437 archivos, tipos/build34 recursos/diff aprobados. Entrada17%5h/87%7d, secuencial; corte limitado antes de abrir IndexedDB con reserva10%/1%. Sin caller nuevo, cambios a transporte1 o repetición de Mongo/browser para este planner puro. Commit/push/HEAD y cuota posterior determinan cierre. Siguiente11c3c4a2 mantiene transacción mixta, pruebas browser de atomicidad/rollback/carrera/cuentas y conservación íntegra antes de activación.
+
+### 11c3c4a2q — Proyección personal de página completa
+
+Usuario pide aprovechar15%; lectura real15%5h/87%7d, reserva10%/1%. Corte puro secuencial root: src/schemas/local-personal-changes-page.ts, src/lib/sync/local-personal-changes-page.ts y test; plan/master, evidencia y registro. Dependencias receipt/cursor/proyección personal cerrados. Objetivo componer proyección existente sobre todos los efectos personales de una página validada antes de cualquier IO. Aceptación: actor y estado propios, incoming inicial necesariamente null, cola completa validada; procesar entradas en orden sin colapsar efectos intermedios, preservar local con pendientes y revisiones/tombstones independientes. Contradicción tardía rechaza el conjunto sin modificar inputs; item recibido se valida pero su proyección pertenece al writer mixto posterior. Sin cursor/writes/ACK/caller/activación. Tests de multientrada/multiefecto, revisiones antiguas, tombstones/pendientes, contradicción tardía, cuenta/futuro y clones; fullDoD/commitpush/HEAD/cuotas, TX sigue pendiente.
+
+
+### Resultado 11c3c4a2q — Proyección personal de página completa
+
+Composición pura de proyección personal existente sobre cada entrada de receipt íntegro, en orden. Estado propio validado con incoming inicial null y cola completa; página valida cuenta/rango/checkpoint/stores antes de seleccionar variante personal. Preserva cadena optimista con pendientes, acumula todos los shadows/multiefectos, mantiene revisión por documento y tombstones. No colapsa entradas a último documento antes de validar: contradicción intermedia de igual revisión rechaza incluso si existe revisión posterior. Resultados clonados y inputs intactos. Items recibidos se validan en receipt, pero su proyección/aplicación pertenece al writer mixto posterior; ningún resultado de este planner autoriza persistencia parcial.
+
+Cuatro tests/19 aserciones, incluido replay antiguo, multiefecto tag/view, tombstone, intención pendiente, corrupción/actor incluso página vacía y contradicción tardía sin mutación. DoD342 pass/86 opt-in skip/0 fail/5894 aserciones, lint440 archivos, tipos/build34 recursos/diff aprobados. Entrada15%5h/87%7d; secuencial con reserva10%/1%, commit/push/HEAD/cuotas al cierre. Sin IO/ACK/cursor/caller ni activación; Mongo/browser innecesarios para composición pura. Siguiente11c3c4a2 transacción IndexedDB reutiliza receipt, cursor y proyección de página dentro del snapshot propio, con atomicidad de todos los efectos/cursor, rollback y dos particiones antes de integración.
+
+### 11c3c4a2 — Descarga mixta atómica preparatoria
+
+Entrada12%5h/86%7d; usuario autoriza reserva puntual4%5h/1%7d. Root secuencial posee src/lib/local-db/pull-changes-v2.ts, test/browser/sync-pull-v2.ts, scripts/sync-pull-v2-test-server.ts y plan/registro. Dependencias receipt, cursor y proyección personal de página cerrados. Objetivo writer aislado, sin caller productivo: snapshot propio de items/tags/vistas/outbox/shadows/cursor en una TX, validación completa antes de puts, composición item/personal, shadows/cursor confirmados juntos. Aceptación: partición errónea/store sin soporte rechaza antes de TX; lectura10001 rechaza sin truncar; cuenta/identidad/shadows/cola completos válidos, pendientes/resultados/dependencias intactos, oldpage ignorada readonly, checkpoint/carrera y contradicción tardía rechazan. Resolver tras commit, fallo tardío cursor revierte todos los puts; epoch guardia sigue en caller futuro. Browser propio multiefecto/item/tombstone/pending/reload/replay/cuenta/rollback, fullDoD/cleanup/commitpush/HEAD/cuotas. Sin convergencia remota declarada ni activación wire2; dos particiones/Mongo/coordinador posteriores.
+
+
+### Resultado 11c3c4a2 — Descarga mixta atómica preparatoria
+
+Writer client-only aislado valida receipt y partición antes de abrir TX; lee snapshot de items/tags/vistas/outbox/shadows/cursor completo con límite10001 detectado. Decodifica todos los shadows antes de seleccionar familia, valida cuentas/identidades/cola y proyección personal íntegra; decide cursor sobre el estado leído en TX, ignora sólo página completamente superada sin puts. Prepara efectos item/personales antes de escribir; no colapsa contradicción intermedia, conserva acumulados pendientes y tombstones/revisiones independientes. Shadows sólo se escriben si cambian, sin normalizar historia ajena a la página. Cola/outcomes/dependencias intactos, sin ACK/rebase por descarga. Stores/efectos/cursor se confirman juntos y resolve tras oncomplete. Cuenta/época de control sigue responsabilidad del caller futuro, sin atomicidad inventada entre bases.
+
+Ocho escenarios browser en origen propio4192 aprobados: commit completo y reopen, replay ignorado byteexact, pendientes e historia intactos, cambio checkpoint/contradicción sin writes, fallo final cursor con rollback íntegro/retry, DB equivocada/store unsupported antes de TX, fila10001, checkpoint paginado y tombstones de contenido/vista, corrupción futura/cuenta incluso página superada. Primer fallo de fixture era comando task.status inexistente; corregido a task.set-status con occurrenceId null. Tipo de filas opcionales corregido y formatter aplicado, checks repetidos hasta pasar. Sólo recursos propios limpiados, servidor/pestaña cerrados.
+
+DoD342 pass/86 opt-in skip/0 fail/5894 aserciones, lint443 archivos, tipos/build34 recursos/diff aprobados, más ocho checks reales IndexedDB. Entrada12%5h/86%7d con autorización puntual de reserva4%5h/1%7d registrada en workflow. No caller productivo ni transporte2 activados; fixtures locales sintéticas no demuestran convergencia remota. Siguiente11c3c4b1 prueba de dos particiones/Mongo con APIs preparadas, antes de integrar coordinación/capacidades y recuperación de cadena personal histórica. Commitpush/HEAD/cuotas al cierre.
+
+## Lote desatendido renovado, 9 de octubre00:25
+
+Lectura real100%5h/85%7d, reset5h publicado1791516313 (05:25:13Madrid). Autorización vigente de trabajo/push por corte y revisión siguiente al cierre; reserva4%5h/1%7d sustituye10% de5h durante este ciclo. Paralelo explícitamente seleccionado sólo para contrato cerrado/fixtures independientes: explorador backup_transition_review readonly analiza capacidades/coordinador y cadena personal histórica; root posee planificación, schema/server/runner e integración. No caller productivo hasta evidencia completa.
+
+### 11c3c4b1 — Prueba integrada mixta preparatoria
+
+Objetivo: comprobar ACK personal real y pull mixto de dos orígenes/particiones IndexedDB con executors Mongo propios; offline/reload/replay/respuesta perdida/tombstones/conflicto/cola histórica y ausencia de ACK inventado. Dependencias writers/decoders/readers/protocolo preparados y runnerMongo aislado actual; Docker28.4.0 e imagen8.2.11amd64/digest vigente revalidados. Root target_paths: scripts/sync-db-test-runner.ts (modo adicional), scripts/mixed-sync-browser-test-server.ts, src/schemas/mixed-sync-browser-test.ts y plan/registro. Worker después de schema cerrado poseerá únicamente test/browser/mixed-sync-devices.ts y mixed-sync-device.ts; sin archivos producto/compartidos, commits ni otros recursos. Cuenta browser-test UUID, orígenes loopback distintos y capability run; servicios/DAL reales, sin credenciales reales/bypass auth público. Cerrar recursos sólo propios. Aceptación: dos proyecciones/cursor coinciden con Mongo donde no haya blockers, journal/revisiones una sola vez tras replay, pendientes/conflictos/tombstones preservados, unsupported task.move no hace ACK ni desaparece. Pruebas browser propias+suite/lint/tipos/build/diff, commitpush/HEAD/cuotas. Convergencia se limita a escenarios soportados, no prometer categorías activadas en producto ni órdenes sin executor. Registrar autorización y reinicio en primer commit de este lote.
+
+Adelanto paralelo11c4a1p (preparatorio sin consumidores): worker personal_outcomes posee sólo src/lib/sync/sync-capabilities.ts y test, src/lib/sync/personal-queue-diagnostics.ts y test, src/schemas/personal-queue-diagnostics.ts y types si necesarios. Objetivo registry puro y diagnóstico completo de cola histórica, sin modificar coordinator/queue-summary/sharedfiles; dependencias contratos existentes cerrados. Cuenta/grafo/IDs/sequences/dependencias validan antes de clasificación; categorías/vistas simples soportadas, task.move/settings/series/birthday sin executor explícitos. Listas listas/esperando/bloqueadas/unsupported y blockers personales no fabrican ACK ni convierten superseded en acknowledged. Tests de move→tag→view, create→view, conflictos/superseded/externos/cuenta/futuro y ramas independientes; root integra sólo tras revisión y cierre de entrega actual, fullDoD/plan/commitpush/cuotas separados. Rutas disjuntas con fixture y root.
+
+
+### Resultado 11c3c4b1 — Prueba mixta integrada con dos dispositivos
+
+Runner browser-mixed consume descriptor validado y MongoDB8.2.11amd64 aislado, provisiona sólo índices explícitos en su DB propia. Dos servidores loopback/orígenes y particiones IndexedDB UUID, servicios/dispatchers/DAL reales y capability run. Ocho escenarios aprobados: offline/recarga, bootstrap paginado y ACK durable, asignación/rebalance multiefecto, respuesta perdida/UUID/replay sin duplicados y shadow más reciente que outcome, tombstone con desasignación explícita independiente, contenido/personal con cursor común, conflicto conservado con dependientes tras recarga, task.move histórico sin executor que permanece pendiente y bloquea la cadena. Convergencia sólo comprobada entre ambas particiones y Mongo en escenarios soportados sin bloqueos; no activación de categorías en producto ni resolución implícita.
+
+Primer arranque falló por faltar contenedor actions en HTML de fixture; corregido antes de ejecutar. Borrado de categoría conserva referencia histórica hasta item-view.set explícito; fixture respeta ese contrato. Ocho checks posteriores correctos, bases/pestaña/servidores/contenedor/tmpfs propios limpiados y runner exit0. Suite Mongo aislada55 pass/618 aserciones/0fail, suite global354 pass/86 opt-in skip/0fail/6049 aserciones (incluye preparación paralela de capacidades todavía no publicada), lint453 archivos/tipos/build34 recursos/diff aprobados. Sin cambios a credenciales/DB/hosting reales.
+
+Entrada renovada100%5h/85%7d; autorización desatendida de cadena y reservas4%/1% registrada con reset real1791516313 (9oct05:25:13Madrid). Siguiente11c4a1p: publicar capacidades/diagnóstico preparados, después coordinador mixto aislado con cuenta/época/dependencias y consultas completas. Commitpush/HEAD y cuota por corte; movimiento histórico exige executor compatible o recuperación explícita, nunca ACK fabricado.
+
+
+### Resultado 11c4a1p — Capacidades y diagnóstico de cola preparatorios
+
+Registry exhaustivo y congelado describe executors preparados, no protocolo activo ni autorización. Tags/vistas/contenido simple admitidos condicionalmente; placements/settings/series/cumpleaños/ocurrencias sin executor explícitos. Contexto desconocido requiere validación remota. Diagnóstico puro valida cuenta, duplicados, límite10000, dependencias completas y ordenadas antes de clasificar listas listas/esperando/bloqueadas/unsupported/settled. Sólo acknowledged satisface un padre; superseded bloquea hijos. Toda intención personal unresolved mantiene proyección conservadora. Devuelve blockers directos y grafo íntegro sin copiar ancestros cuadráticamente; no muta inputs ni ACK/historia. Ramas de contenido independientes siguen listas aunque cadena personal esté bloqueada. Settings.update se describe sin ampliar la outbox vigente que todavía no admite su entityKey.
+
+Worker personal_outcomes posee seis rutas disjuntas ya definidas, revisión root completa; sin consumidores.12 tests/155 aserciones incluyen move→tag→view, create→view, conflicto/superseded, tag anterior a move, cuenta/futuro/corrupción, clones y cadena10000 (10001 rechaza). DoD global ya ejecutada sobre exactamente estos archivos estables:354pass/86opt-inskip/0fail/6049 aserciones, lint453/tipos/build34 recursos; diffcheck y referencias documentales comprobados tras actualización. Sin repetir pruebas caras por cambios sólo documentales. Entrada69%5h/80%7d después de a87ca07 publicado; reserva4%/1%, siguiente11c4a2p coordinador mixto preparatorio con contratos cerrados. Commitpush/HEAD/cuotas al cierre.
+
+### 11c4a2p y adelanto11c4a3t — Coordinación y transporte preparatorios
+
+Entrada67%5h/80%7d, reserva4%/1%. Contrato cerrado registry/diagnóstico2e35916 y pruebaa87ca07. Paralelo explícitamente seleccionado: worker personal_outcomes posee sólo src/features/sync/coordinator-v2.ts y coordinator-v2.test.ts; root posee planificación/integración y transporte separado src/features/sync/http-transport-v2.ts y test. No tocar callers/configprotocol/acciones/routes vigentes. Coordinador puertos independientes readQueueState snapshot completo entries/items; pull recibe remotePullQuery conlimit50, applyPage guarda {query,page}; push requiere envelope2/intención1; applyResult recibe variante2. Guardia cuenta/epoch tras await y antes de efectos, claim fresco validado/lease/dependencias/capacidad, release en finally UUID solicitado, sólo applied durable suma uploaded. Máximo4pull globales y5pushintentados, single-flight/stop, retry prefijo vacío sin ACK, diagnóstico completo visible separado de settled (pasada sin runnable, no convergencia). Relectura después de ACK. Tests de cuenta/stop/lease/claim rebase/familia, query/checkpoint/store/corrupción, cadenas históricas/independientes, límites/errores/correspondencia. Root valida fullDoD/plan/commitpush/HEAD/cuota en corte independiente antes de publicar transporte.
+
+Transporte puro preparatorio: constructor recibe userId y sendOperations callback2; identidad/descarga fetch mismo origen, no-store/AbortController/timeout y guardia protocolo2 explícita independiente de anuncio activo1. Reutilizar versión constante nueva sólo local/exported sin cambiar config activo. Consulta completa preservada y páginas/resultados validados con actor/request, nullthrough omitido en URL, cuenta esperada requerida; errores400/401/409/426/futuro/timeout sin ACK. Callback de acción timeout no cancela commit remoto; preservar replay de intención. Tests mock de fetch/callback y correspondencia/headers/cookies/abort/timeout; sin navegador/Mongo repetidos por transporte puro. Runtime posterior conecta snapshot/writers con guards y prueba real del coordinador antes de activar protocolos/índices.
+
+Adelanto11c4a3s seleccionado con entrada62%5h/79%7d: worker mixed_devices_proof posee sólo src/lib/local-db/mixed-sync-store.ts, test/browser/mixed-sync-store.ts y scripts/mixed-sync-store-test-server.ts. Contratos cerrados de writers/diagnóstico; sin tocar coordinator ni transporte/rootplan. Objetivo wrapper client-only aislado que abre recursos propios, expone cursor/snapshot atómico readonly de items+outbox (10001 rechaza, partición/cuentas/grafo íntegros), aplica receipt mixto y resultado familia2 dispatch item legacy/personal standalone; cierre consistente y partialopen cleanup. No caller/epochcontrol ni permisos: caller futuro debe comprobar cuenta/época. Tests browser reales own UUID de snapshot, historia/raw readonly/reopen, cuenta/corrupción/10001, ACK item/personal/replay y pull compartido, cleanup propio. FullDoD y publicación separada tras coordinador/transporte, sin dar autorización de activar wire2.
+
+### 11c4a3r — Runtime mixto aislado (después de11c4a2p/11c4a3t/11c4a3s)
+
+Root owns src/features/sync/local-runtime-v2.ts y test/browser/runtime-pilot-v2.ts/scripts/runtime-pilot-v2-test-server.ts si la evidencia necesaria cabe, además de plan. API openLocalSyncRuntimeV2(account userId/epoch, transport2), recursos outbox+mixedstore allSettled con cleanup parcial; verificación inicial y posterior a apertura, isActive compara control real de cuenta/época/logout y cierre; proteger cada efecto propio antes de TX, sin atomicidad inventada entre DBcontrol/partición. close idempotente stop+espera pasada y closes todos handles sólo propios; run después de close devuelve stopped. Sin activehooks/rutas/handshake/indexactivation. Tests browser aislados control de cuenta fixture propio: cuenta errónea/noactivada, cambio de época durante pull/push, noACK al perder cuenta, commits previos preservados, cierre in-flight libera lease y DB, reabrir/singleflight. Integración Mongo de dos dispositivos con coordinator/runtime/transport seguirá como corte específico antes de activación. No confundir preparación con funcionalidad disponible para usuario.
+
+
+### Resultado 11c4a2p — Coordinador mixto preparatorio
+
+Puertos aislados consumen snapshot completo de cola/items y diagnóstico validado; consulta exacta after/through/limit y envelope transporte2/intención1, capturados antes de entregar clones al transporte. Claims frescos validan UUID solicitado, actor/entity/estado/sender y operación vigente; enviar base recién rebased, revalidar capacidad/cadena tras claim. Sólo ACK durable applied suma uploaded. Guardias después de awaits y antes de efectos; cambio de cuenta/stop oculta diagnóstico previo. Release siempre UUID solicitado y sender propio incluso null/corrupt/cierre. No descartar movimientos/dependientes ni interpretar settled como convergencia.
+
+Máximo4 descargas globales inclusive postupload,5 claims/globalpushintentados incluyendo claimsnull; división more_work sin sexto intento. Prefijo retry vacío válido no aplica outcome ni ACK. Tests propios12/313aserciones cubren guardias/claims frescos y malformados/familia/dependencia cambiada, cadenas históricas con contenido independiente, checkpoint/store/cuenta/futuro, respuesta perdida/correspondencia/argumentosmutables, límites y single-flight/stop. Root revisión incluyó boundclaims y clones además de puertos versionados. Suite global373pass/86opt-inskip/0fail/6418aserciones, lint463/tipos/build34 recursos/diff correctos; incluye módulos paralelos estables todavía separados. No caller activo, sin repetirMongo para coordinator ports; prueba conjunta real pendiente tras runtime. Entrada67%5h/80%7d, reserva4%/1%; transporte11c4a3t y wrapper11c4a3s preparados en paralelo disjunto. Publicación y cuotas por corte.
+
+
+### Resultado 11c4a3t — Transporte HTTP mixto preparatorio
+
+Constructor independiente conserva cookies same-origin requeridas por protección Vercel, no-store, deadline/AbortController y cuenta esperada. Exige anuncio compatible2 antes de leer datos; activo config/rutas/hooks siguen1. Consulta completa capturada viaja hasta validación íntegra actor/rango/checkpoint/stores; through null se omite de URL. Push2 valida intención1 y correspondencia exacta después de callback, pasando copia para evitar mutación de request validado; prefijo retry vacío válido.400/503 retry,401 unauthorized,409 cambio de cuenta/recuperación cursor,426 actualización. Timeout no revoca commit remoto: conservar intención/UUID para replay.
+
+Siete tests/56aserciones: cookies/header, querymutable/checkpoint, futuro/protocolo antes de payload, códigosHTTP, corrupción/cuota/rango/cuenta, envelope/familia/UUID/prefijo/callbackmutable y deadlines/abort. Root corrigió inferencia literal de retornos fixture para tipos estrictos. FullDoD ejecutada sobre fuentes estables junto al coordinador:373pass/86opt-inskip/0fail/6418aserciones, lint463/tipos/build34 recursos; diff/referencias documentales al cierre. Transporte puro con fetch/callbackmock; no repetirMongo/browser ni declarar activación. Entrada44%5h/76%7d tras24306b5 publicado; reserva4%/1%, siguiente wrapper y runtime preparatorios con evidencia local y luego piloto integrado de coordinador con Mongo.
+
+
+### Resultado 11c4a3s — Snapshot y dispatch mixtos propios
+
+Wrapper client-only aislado abre y cierra dos conexiones propias, cierra primera si segunda falla y protege partición antes de métodos. Readonly de items/outbox en una TX, getAll10001 rechaza límite10000 sin truncar; schemas validan toda cuenta/grafo/identidad. Clones sin writes a historia. Cursor propio; dispatch resultado2 valida actor/intención/familia antes de delegar ACKitem vigente o writerpersonal standalone, descarga recibida aplica writer mixto atómico. No callers/época nuevos; guardia de control de cuenta pertenece al runtime siguiente.
+
+Seis checks realesIndexedDB ownUUID: snapshot/historia/clones/reopen, datosforeign/missingdep/futuro y rollback por índiceuniquesequence, 10001contenido/cola, dispatchitem/personallease/ACK/replay traspullmixto, correspondencia/partición antes deTX, partialopenfailure capturaconexióncerrada/closeidempotente. Primera fixture intentaba sembrar duplicadosequence imposible por índicebySequence; corregida aassertreject delwrite y snapshotbyteexactconservado, sin producto modificado. Repetición final completa y bases/pestaña/server propioslimpios, exit0. Lint/tipos/suite373pass/86opt-inskip/0fail/6418aserciones/diff aprobados trascorrección; build34 recursos sobre mismas fuentesestables ya pasó, fixturecambió sólo escenario fallido. Sin efecto en producto. Entrada43%5h/76%7d trasf8e1296, reserva4%/1%; siguiente11c4a3r runtime y prueba conjunta real posterior.
+
+
+### Resultado 11c4a3r — Runtime mixto con control de cuenta
+
+Runtime aislado valida cuenta/época antes y después de apertura allSettled, limpia recursos abiertos si falla una rama o cuenta cambia. Integra outbox y wrapper propio al coordinador2 con snapshot completo/cursor/dispatch y transporte2; cada efecto verifica control local antes deTX, guardias posteriores del coordinador impiden continuar tras cambio. Control y partición son DB distintas: no se promete atomicidad entre ambas. Cleanup de lease permite liberar sólo sender/UUID propio anterior aun tras cambio/cierre. Cuenta copiada al abrir para impedir mutación externa. Close idempotente para coordinator, espera trabajo en vuelo y cierra todos handles, run posterior stopped. No activehooks/caller ni cambios a producción.
+
+Seis checks browser propios con account-control de origen efímero: cuenta inactiva rechaza, deferredpull singleflight/close/latepage, cambioepoch durantepull sinwrites/diagnósticos anteriores, durantepush sinACK/release/intenciónexacta, closepush/reopen sinACK falso, pasada posterior durableACK+pull/cursor y controlintacto. Resultados sintéticos locales válidos para guardias/cierre; no prueban Mongo remoto. Basesaccount-control/partición/pestaña/servidor sólo propios limpiados y exit0. FullDoD373pass/86opt-inskip/0fail/6418aserciones/lint463/tipos/build34 recursos/diff ya aprobada sobre estas fuentesestables, ahora referencias/alcance revisados. Entrada43%5h/76%7d tras2a4f0b4; reserva4%/1%. Siguiente11c4a4p prueba conjunta real runtime/coordinator/HTTP con Mongo y dos orígenes, antes de activación; cadena personal histórica sigue bloqueada sin executor y requiere recuperación explícita.
+
+### 11c4a4p — Piloto mixto con la coordinación preparada y Mongo real
+
+Entrada43%5h/76%7d anteslectura posterior, reserva4%/1%; dependencias cerradas24306b5/f8e1296/2a4f0b4/ebd9d2c. Paralelo explícito sólo fixturecliente: mixed_devices_proof posee test/browser/mixed-sync-device.ts para comando coordinate con openLocalSyncRuntimeV2+createHttpSyncTransportV2 y control ficticio propio; root owns test/browser/mixed-sync-devices.ts, src/schemas/mixed-sync-browser-test.ts, scripts/mixed-sync-browser-test-server.ts y plan. HTTP real loopback conserva opciones/requestcaptured y mapea URLs al mismo servidoraislado (noauthreal); anuncia2 únicamente allí. Dos orígenes UUID prueban create/tag/view por runtime acotado, ambos estados frente aDALMongo y journal; movimiento histórico bloqueado conserva cadena pero contenido independiente progresa. Mantener ocho pruebas previas, addingcoordinación y diagnosticosbounded/paginación. Cleanup control sólo ficticio propio/locked, DBproducto sólo ownUUID, todos handles y runner recursos propios. FullDoD+browserMongo/commitpush/HEAD/cuotas; no activar wire2/índicesfueraDBtest ni declarar convergencia con blockers.
+
+
+### Resultado 11c4a4p — Recorrido completo de dos dispositivos con Mongo real
+
+Diez escenarios correctos con servicios/DAL/executorsMongo propios y dosorígenes/particiones. Conserva ochopruebas previas y añade runtime/coordinator/HTTP reales: crear tarea/categoría/vista, perder respuesta después de commitreal y antes deACK, conservar UUID/payload/leasepending, replay durable con unjournal porintención y diagnóstico fresco que desbloquea tresACKs; otrodispositivo converge contraMongo. Reload/idle conservaoutcomesliteralmente. Segundoescenario mueve contenidoindependiente mientras moveunsupported/tagdependiente/conflicto enotradispositivo permanecen conservados y visiblesdiagblockers; settled es pasada sinrunnable, no convergenciapersonal. Nunca claimed niACK ni superseded dehistoriabloqueada.
+
+HTTPshim sólo remapea rutas al servidor loopbackpropio con cookies/cache/signal/query originales; servidor anuncia2 sólo enfixture y exige capabilityrun/cuentaesperada. Controlficticio usa epochactual y cleanupverifica own/null incluso despuésdereload via markerporrun; pagehideclose sinborrado. Amboscontroles/DBproductos/pestaña/servidores/runnerMongo/container/tmpfs propioslimpios, exit0, sinerroresconsole. FullDoD373pass/86opt-inskip/0fail/6418aserciones/lint463/tipos/build34recursos/diff correctos, prueba Mongo navegador diezchecks. Activohooks/API/config/producción/índicesfueraDBtest sin cambios; preferencias siguen preparadas hasta activaciónsegura. Entrada42%5h/76%7d, reserva4%/1%. Próxima11c4a5p contratoactivaciónsegura+diagnósticos/resumen; task.move histórico requiereexecutorcompatible o recuperación explícita antesdeprometer ordensinblockers. Commitpush/HEAD/cuotas porentrega.
+
+### 11c5a1p — Núcleo puro reutilizable de colocaciones
+
+Intercalar extracción acotada mientras activación/diagnóstico se documentan; entrada34%5h/74%7d, reserva4%/1%. Paralelo explícito disjunto: worker personal_outcomes posee src/lib/preferences/task-placement-command.ts, test en misma carpeta y adapter src/lib/local-db/task-placement-mutation.ts. Root posee únicamente plan/contrato de activación. Extraer algoritmo planTaskPlacements sin cambiar comportamiento ni ampliar productores: tipo TaskMoveCommand inferido agnóstico desde SyncCommand, sin useclient ni import de módulos cliente en núcleo; adapter vigente reexporta para conservar callers. Mantener ranks implícitos/negativos/fraccionarios/compactación multiefecto, sentinel overdue, metadata/tombstones/revisiones locales y outputs clonados. No autoridad/CAS/ACK/fecha de envío remota ni executor. Tests directos de compacción/revisiones/createdAt/sentinel/ocurrencia/tombstones/vecinos y regresiones vigentes task-move/day; fullDoD y commitpush/HEAD/cuotas separado. No introducir validación nueva que cambie algoritmo sin justificarla; wrappers actuales ya validan contexto. La política civil diferida para intención1 sigue decisión pendiente: no usar reloj remoto actual para rechazar offline histórico ni inventar timestamp.
+
+### 11c4a5p — Contrato de activación segura
+
+Root owns plan/mixed-sync-activation.md, master/iterations/local-preference-evidence/iteration-log. Documentación sólo: definir transición completa servidor+cliente1/2, diferencias intención1/envelope2/metadata2/backup2, guardia previa a executor y cursor, prerrequisitos de índices explícitos y pasos sin tocar DB de usuario. Aceptación: ninguna activación implícita al registrar módulo o anuncio2; clientes antiguos bloqueados incluso push iniciado tras handshake1 anterior; servidor1 antecliente2 rechaza antesefectos; resumen visible de bloqueos conservados y pilotoRPCNext/Google separados de fixtureloopback. Señalar límites task.move/series/settings y recuperación pendiente. Validar rutas/referencias/consistencia/diff; commitpush y cuotas. Paralelo con extracción disjunta11c5a1p ya seleccionada, sin código compartido.
+
+
+### Resultado 11c4a5p — Contrato de activación segura
+
+Documento [mixed-sync-activation.md](mixed-sync-activation.md) distingue módulos preparados de producto activo, intención1/transporte2/evidencia2/backup2 y alcance tags/vistas frente a movimientos/series/settings. Orden: resumen compartido, readiness de índices readonly, provisión explícita autorizada, frontera autenticada, conexión conjunta cliente/UI y piloto de transiciónNext/Google. Matriz incluye acciónlegacy tras handshake previo, cliente2/servidor1, intenciónfutura, índicefaltante y cuenta/época. No anunciar rango1–2 ni fabricar ACK para cola histórica. Políticacivil overdue sigue pendiente, sin inventartimestamp ni relojremoto.
+
+Sólo docs, rutas/referencias/consistencia y diffcheck validados; no repetir suite/build ya aprobados ni ejecutar acciones sobre DB real. Entrada34%5h/74%7d; paralelo disjunto con extracción11c5a1p, reserva4%/1%. Siguiente11c4a5s resumen puro compartido antes de readiness/API/UI. Commitpush/HEAD y cuotas por corte.
+
+### 11c4a5i — Readiness de índices personales, sólo lectura
+
+Entrada28%5h/73%7d, reserva4%/1%. Paralelo seleccionado: worker mixed_devices_proof owns src/lib/db/mixed-sync-index-readiness.ts y test, opcional integration.test mismafamilia si runnerselecciónvigente lo recoge; rootowns resumen puro de cola2+plan. Readonly de índices centrales explícitos tags/item_views por singleton, no create/drop ni modificar auth/productDB. Ready exige nombres+clavesordenadas+unique+partialfilter y ausencia de opciones incompatibles (sparse/collation/TTL/hidden) según definiciónregistrada; fallo de lectura no ready silencioso. Missingnamespace clasifica faltantes, demáserrorespropagan. API devuelve sólo ready/missing/incompatible (sin DBnames/PII/driver a features). Unitmock significativos de definiciones/errores/no writes; comprobaciónreal sólo DBdescriptoraislada y ensureIndexescentral seleccionado explícitamente, nunca tocar DBusuario. Sin calleractivo ni índicesnuevos; fullDoD/plan/commitpush/cuotas separados. Si no cabe prueba deMongo, limitar cierre al matcher puro y registrar lectura real pendiente.
+
+### 11c4a5s — Resumen mixto puro
+
+Root owns src/lib/sync/queue-summary-v2.ts y test, src/schemas/sync-queue-v2.ts. Reutilizar diagnosePersonalQueue y syncQueueSummarySchema vigente; categoríaspending mutuamenteexclusivas según capacidades/cadena, sending/conflicts/rejected porstate, contar unresolvedpersonales y bandera independiente de settled. Sin permiso/IO/ACK/normalización/hookactivo; ningún filtro aparte del registrycompartido. Tests ramascontenidoindependiente, histórico→dependientes, sender/conflict/rejected, supersededsolo frente a hijos, corrupción íntegra y resultado clonado. FullDoD/plan/commitpush/HEAD/cuotas; UI/activationposteriores.
+
+
+### Resultado 11c5a1p — Núcleo puro de colocaciones
+
+Extracción sin cambio de comportamiento: planTaskPlacements pasa a lib/preferences/task-placement-command.ts, tipo TaskMoveCommand inferido desde SyncCommand agnóstico; adapter cliente reexporta para conservar todos los callers. Cuerpo del algoritmo idéntico al HEAD anterior, sin nuevos permisos, validación ni activación. Mantiene metadata/revisiones locales, ranks implícitos/negativos/fraccionarios y compactación multiefecto, identidad de aparición y sentinel overdue sin alterar command.date. No permite restaurar tombstones ni vecinos no adyacentes.
+
+Seis tests directos/35aserciones, más regresiones task-move/day:18tests/116aserciones. FullDoD379pass/86opt-inskip/0fail/6453aserciones/lint465/tipos/build34recursos/diff aprobados. No Mongo ni browser repetidos por extracción pura; local UI/reordenación conserva lógica. Entrada28%5h/73%7d, reserva4%/1%, worker disjunto personal_outcomes y revisión root. Siguiente de activación11c4a5s/resumen y11c4a5i/readiness en preparación; futuro orden11c5a2 cierra política/planner remoto antes de repositorios/executor/ACKpull de placements. Commitpush/HEAD/cuotas al cierre.
+
+11c4a5i: root añade scripts/sync-db-test-runner.ts como target_path de integración para incluir explícitamente el nuevo integration.test en el runner propio; worker conserva sólo sus tres archivos. La selección de índices no modifica el bootstrap automático existente del singleton; el helper sólo ejecuta listIndexes y no provisiona índices personales.
+
+
+### Resultado 11c4a5s — Resumen mixto puro
+
+Resumen independiente consume diagnosePersonalQueue, sin segundo filtro de capacidades ni grafo propio. Cuenta categorías pending mutuamente exclusivas, sender/conflict/rejected separados y total personal no resuelto con bandera conservadora. Schema mantiene suma de pendientes vigente, bandera coherente con count personal y count acotado por estados no resueltos. Superseded no es ACK de hijos; solo no bloquea proyección personal si no quedan intenciones pendientes. Conteo no autoriza envío ni declara convergencia, sin IO/normalización/hookactivo.
+
+Cuatro tests/16aserciones: movimiento histórico con descendiente y contenido independiente, ACK frente a superseded, estados personales en vuelo/conflicto/rechazo sin doble conteo, cuenta/grafo y contrato de counts/clones. DoD383pass/86opt-inskip/0fail/6469aserciones/lint469/tipos/build34recursos/diff aprobados sobre fuentes estables. Entrada25%5h/73%7d trasfd1e090, reserva4%/1%, root paralelo disjunto con readiness. Siguiente11c4a5i lectura de índices centrales con prueba Mongo propia; después frontera mixta y conexión compacta del cliente según contrato. Commitpush/HEAD/cuotas al cierre.
+
+### 11c4a6p — Respuesta pull mixta privada preparatoria
+
+Entrada20%5h/72%7d, reserva4%/1%. Worker personal_outcomes owns src/features/sync/pull-response-v2.ts y test, src/schemas/mixed-pull-request.ts; rootowns readinesscierre+plan. Dependenciasreader2/receipt2/transport2 ya cerradas; sin routes/actions/hooks/configactivo. Exige cuentaesperada no opcional en schema compartido, parámetros únicos/strict/cursorbound, actor autenticado válido y coincidente antes readiness/reader. Readinessserver dependency estructural ready+missing/incompatiblevacíos o503 sin leerjournal; falloauth/readiness/reader no filtra errores. Respuestaempre privada/no-store/anuncio2 explícito independiente deconfigactivo1; validar página completa contra actor/query capturada antes responder, usar guardlocal receipt para stores aún admitidos. Querycaptured clones protegen de mutaciónreader; cursorfuturo409 y cuenta409, auth401, invalid400, fallostemporales503. Unitmock meaningful fronte2/1/actormismatch/error/missingidx/corruptpage/checkpoint, sinACK/writes/IOreal nideclarar piloto Google. FullDoD/plan/commitpush/HEAD/cuotas; siguiente acciónmixta conguardiadeíndices y prueba fronteraNextantesconectar.
+
+
+### Resultado 11c4a5i — Readiness de índices personales
+
+Helper server-only de lectura selecciona exactamente tres índices explícitos tags/item_views del registro central. Verifica definición completa relevante: nombres únicos, orden de claves, unique, filtro canonical JSON y opciones sparse/hidden/collation/TTL; metadata Mongo inocua v/ns/background no cambia la decisión. Devuelve sólo ready/nombres missing/incompatible, sin datos de cuenta. NamespaceNotFound Mongo26 equivale a ausencia; otros errores propagan para no anunciar falso ready. No create/drop/provisión personal propia; getCollection conserva bootstrap automático existente del singleton. No caller activo ni nuevo índice registrado.
+
+Diez tests mock/46aserciones y prueba Mongo real: DB exacta del descriptor, ensureIndexes central sólo en DB propia, readinesstrue y listIndexes antes/después iguales. Runner incluye nuevo test explícitamente,56pass/0fail/620aserciones/13files y recursos propios limpios. FullDoD393pass/89opt-inskip/0fail/6515aserciones/lint471/tipos/build34recursos/diff correctos. Entrada20%5h/72%7d tras764ab5d publicado, reserva4%/1%. Fuente/revisión root y tests worker disjuntos; última preparación paralela11c4a6p pullresponse privada, después revisar coste de siguiente acción y cerrar con reprogramación verificada. No autorización de índices/DB del usuario. Commitpush/HEAD/cuotas al cierre.
+
+
+### Resultado 11c4a6p — Descarga mixta privada preparatoria
+
+Servicio server-only independiente con puertos de actor, readiness y journal. Exige cuenta esperada; rechaza parámetros duplicados, desconocidos o fuera de límites antes de leer índices o datos. Todas las respuestas son privadas, no-store y anuncian exclusivamente transporte 2. La cuenta incorrecta y el cursor adelantado tienen códigos específicos; los demás fallos ocultan detalles internos. Readiness incompleta impide leer el journal. Valida la página completa contra actor, consulta capturada, checkpoint y stores admitidos; entrega un clon de la consulta al reader para impedir que cambie la validación posterior.
+
+Ocho tests nuevos y regresión legacy: 13 tests/307 aserciones. DoD global: 401 pass, 89 opt-in skip, 0 fail, 6796 aserciones; lint 474 archivos, tipos, build con 34 recursos neutros y diff correctos. Sin rutas/actions/config ni callers activados. Entrada 16%5h/71%7d, reserva 4%/1%. Siguiente corte pequeño: readiness del servicio de envío mixto antes de conectar fronteras reales y clientes. Commit/push, HEAD remoto y cuotas al cierre.
+
+### Preparación 11c4a6s — Guardia del envío mixto
+
+Objetivo: preparar un servicio server-only aislado que reutilice pushSyncBatchV2 y compruebe readiness antes del primer executor, sin activar acciones ni cambiar el protocolo del producto. Target_paths: src/features/sync/guarded-push-batch-v2.ts y su test; root posee plan/**. Dependencias: batch/dispatcher 2, readiness 11c4a5i y descarga 11c4a6p. Worker personal_outcomes posee únicamente estas dos rutas; otros agentes pueden estar en el repositorio y no se revierten sus cambios.
+
+Aceptación: cuenta/protocolo/query inválidos no leen índices ni ejecutan; readiness incompleta o fallo devuelve el prefijo retry_later vacío del batch, conservando UUID e intención. Readiness se consulta una vez por invocación válida, antes de ejecutar; no es garantía de inmutabilidad futura de índices. Fallos de auth ocultan detalles y no inventan unauthorized ni ACK. Reutilizar validación de resultados y semántica de replay existente. No IO de producción, nuevos índices, cambios de rutas/config/hooks ni deps. Validación: tests de puertos para guardias/readiness/fallos/replay, lint, tipos, suite global, build y diff; documentación, commit/push y cuotas. Entrada 12%5h/71%7d; reservar cierre 4%/1% y no abrir otro corte de producto largo.
+
+
+### Resultado 11c4a6s — Guardia del envío mixto
+
+Servicio server-only independiente que reutiliza pushSyncBatchV2. Actor, cuenta esperada, envelope y versión se validan antes de readiness. Comprueba índices una vez por invocación válida, inmediatamente antes del primer executor; ausencia, inconsistencia o error conserva todas las intenciones mediante retry_later vacío y UUID de la primera operación. No guarda readiness entre invocaciones ni promete que los índices sean inmutables. Si falla una operación posterior, conserva el prefijo durable validado del servicio existente. Fallos del puerto de autenticación propagan un error genérico sin cause ni detalles privados, sin inventar unauthorized o ACK.
+
+Seis tests nuevos y batch vigente: 12 tests/116 aserciones; suite global 407 pass, 89 opt-in skip, 0 fail, 6853 aserciones. Lint 476 archivos, tipos, build con 34 recursos neutros y diff correctos. Sin callers/rutas/actions/config ni DB del usuario. Entrada 12%5h/71%7d; reserva 4%/1%, cierre documental y revisión del reinicio después de publicación. Siguiente candidata 11c4a7p: preparar frontera autenticada real y pruebas de transición, sin activar parcialmente categorías antes de índices y cliente mixto. Commit/push, HEAD remoto y cuotas al cierre.
+
+
+### Cierre 11c4a8d — Lote del 9 de octubre y siguiente ventana
+
+Objetivo y target_paths: cerrar estado real y presupuesto en plan/master.md, workflow.md, iterations.md, iteration-log.md y mixed-sync-activation.md, con próxima revisión del mismo heartbeat verificada. Dependencias: entregas publicadas hasta 11c4a6s, HEAD de código 4f0dc939f01b9270809db7968a10ad896c11ee20. Aceptación: no código abierto ni falsa activación; siguiente corte definido, fecha futura real y una única revisión pendiente. Validación documental: referencias, consistencia y git diff --check; commit/push en int, HEAD remoto y cuotas después.
+
+Se cerraron prueba mixta de dos dispositivos/Mongo, capacidades/diagnóstico, coordinador, HTTP2, snapshot/dispatch, runtime, piloto conjunto, contrato de activación, núcleo puro de orden, resumen, readiness, descarga privada y guardia de envío. Suite final 407 pass/89 opt-in skip/0 fail; tipos, lint y build aprobados. Todos los recursos de pruebas creados por el lote se limpiaron. El producto sigue en transporte 1: tareas/eventos propios simples activos; categorías/asignaciones preparadas, orden manual/series/compartidos pendientes de sus executors y activación. No se tocaron DB del usuario, hosting, permisos ni secretos.
+
+Lectura después del último código publicado: 9%5h/70%7d, reset real 1791516313 (9 de octubre, 05:25:13 Europe/Madrid). La próxima revisión está confirmada para las 05:27: reinicio más un minuto, redondeado hacia arriba. automation_update actualizó el mismo comprobar-renovaci-n-de-cuota, ACTIVE, misma política failed_runs_only y mismo chat; la revisión histórica alternativa permanece PAUSED. No duplicados ni hora inferida. Revisar cuotas reales al despertar antes de continuar; reserva 4%5h/1%7d y cadena autorizada mientras haya trabajo/margen. Los últimos cortes completos consumieron cuatro y tres puntos; con reparación/publicación/cierre, no cabe la siguiente frontera autenticada completa dentro del margen sobre reserva. Este cierre no abre otro corte de código.
+
+### Preparación 11c4a7p — Frontera autenticada preparatoria
+
+Renovación comprobada: 100%5h/70%7d, reset siguiente 1791534431 (9 de octubre, 10:27:11 Europe/Madrid); reservas 4%5h/1%7d y continuación encadenada autorizada. Partida cc091b9 publicada, int limpio. Objetivo: conectar los servicios mixtos preparados a sesión persistida y DAL reales en módulos independientes, sin cambiar rutas, anuncios ni cliente activos. Target_paths worker personal_outcomes: src/features/sync/authenticated-pull-v2.ts, src/features/sync/authenticated-push-v2.ts, src/features/sync/actions-v2.ts y tests de los dos adapters. Root posee plan/** e integración. Dependencias: sesión/allowlist vigentes, descarga y envío guardados, readiness y dispatcher2.
+
+Aceptación: actor exclusivamente de getAuthorizedSessionFromHeaders, flags persistidos vigentes y cuenta esperada validada por schemas; readiness antes de reader/executor; acción sólo input unknown y headers reales, sin actor inyectable desde RPC. Puertos de pruebas no son endpoints ni bypass de auth; sin sesión/cuenta cambiada/envelope legado/índices ausentes no hay escritura ni ACK. Defaults de adapters usan auth/DAL registrados sin Mongo fuera de lib/db. Prueba por puertos verifica orden, query/rango, privacidad, prefix replay y sesión rechazada; no llamarla RPC real. Fuente inglesa, copia gráfica española si fuese necesaria. Validar tests, lint, tipos, build, suite global, diff y referencias, plan/registro, commit/push/HEAD/cuotas.
+
+Paralelo seleccionado con contratos y rutas disjuntas: personal_outcomes implementa sólo esos cinco archivos; mixed_devices_proof revisa en lectura únicamente el runner Next/auth real y propone el corte siguiente; backup_transition_review revisa en lectura únicamente los prerrequisitos de provisión explícita y transición. Ningún agente modifica plan, scripts compartidos, config o índices; root integra. Todos saben que no están solos y no revierten cambios ajenos.
+
+### Preparación paralela 11c4a7h — Anuncio explícito de identidad
+
+Objetivo: permitir que una futura frontera mixta anuncie exactamente 2 reutilizando la respuesta privada de identidad, conservando el default 1 y el body validado. Target_paths root: src/features/sync/identity-response.ts y identity-response.test.ts; root comparte únicamente plan/integración. No solapa adapters de personal_outcomes. Dependencias: encoder de rango y schema workspace existentes. Aceptación: llamada actual mantiene 1, llamada explícita 2 rechaza cliente1 y admite2, body/status/caché intactos, versión inválida rechaza y no rango1–2. No cambiar ruta/identidad ni configuración activa. Validar tests directos, suite, lint, tipos/build/diff; cierre separado tras 11c4a7p, cuotas antes de elegir otra entrega.
+
+
+### Resultado 11c4a7p — Adaptadores autenticados y acción mixta preparatoria
+
+Adapters server-only usan por defecto sesión persistida/allowlist, readiness y reader/dispatcher reales, con imports diferidos para no inicializar auth en pruebas de puertos. La acción independiente use-server acepta sólo input unknown, obtiene headers reales de Next y no expone actor ni puertos por RPC. Cada invocación lee sesión fresca; cuenta/protocolo/query y readiness mantienen las guardias de los servicios existentes. Sin sesión o account mismatch no hay DAL; errores internos no se filtran. Ninguna ruta, cliente, anuncio o acción legacy se ha activado o cambiado.
+
+Ocho tests de puertos/109 aserciones prueban headers exactos, sesión nueva, rechazos antes de índices, readiness antes de IO, privacidad y prefijo durable. No se presenta como prueba de RPC Next/Google. Root revisó los cinco archivos. FullDoD sobre estas fuentes y anuncio explícito paralelo estable: 417 pass/89 opt-in skip/0 fail/6982 aserciones; lint481/tipos/build34 recursos neutros/diff correctos. Entrada 100%5h/70%7d renovada; reservas4%/1%, reset real1791534431. Publicación y cuotas al cierre; anuncio explícito 11c4a7h pendiente de su commit independiente y después runner de frontera Next real.
+
+
+### Resultado 11c4a7h — Identidad con anuncio explícito
+
+Respuesta privada de identidad reutilizable con versión opcional validada por encoder. Sin parámetro conserva exactamente anuncio1; versión explícita2 conserva body/status/no-store y excluye cliente1, sin rango1–2. Versiones inválidas rechazan. Ruta y configuración activas intactas. Tres tests/29 aserciones; dos nuevos. FullDoD ya ejecutada sobre estos dos archivos estables junto a adapters: 417pass/89opt-in skip/0fail/6982 aserciones, lint481/tipos/build34 recursos/diff correctos. No repetir checks caros sin cambios nuevos. Entrada87%5h/68%7d trasbb18501 publicado, reservas4%/1%. Siguiente: runner de frontera Next real y preparación explícita de índices en recursos propios; commit/push/HEAD/cuotas por corte.
+
+### Preparación paralela 11c4a8p — Provisión personal explícita con puertos
+
+Objetivo: preparar selección central y ejecución explícita verificable, sin conectar DB real ni CLI del usuario. Target_paths backup_transition_review: src/lib/db/mixed-sync-index-specs.ts, mixed-sync-index-provisioning.ts y test; mixed-sync-index-readiness.ts para reutilizar selector; schema compartido src/schemas/mixed-sync-index-provisioning.ts si hace falta. No editar ensure-indexes.ts ni registro/config/scripts compartidos. Root integra plan; no solapa futura prueba Next propia. Dependencias: tres specs explícitas registradas y readiness cerrada. Entrada86%5h/68%7d, reserva4%/1%; contratos de índice conocidos, no política de datos nueva.
+
+Aceptación: selección exacta de tres nombres/colecciones/provisioning desde registro, sin duplicar claves/opciones. Plan distingue ready/noop, create_missing y blocked_incompatible; valida cuenta de nombres/duplicados/coherencia del snapshot y no recibe selección arbitraria. Reinspección antes de ejecutar; incompatibilidad bloquea todos los creates, sólo crea missing registrados, conserva prefijo confirmado ante fallo y reinspecciona sin rollback/drop/rename/deduplicar. Resultado saneado sin errores Mongo crudos/URI/valores. Equivalente con otro nombre puede fallar y requiere revisión, no reparación automática. Testear reintento/estado parcial/cambio de readiness/corrupción y exclusión del bootstrap automático. No driver fueraDB, dependencias nuevas, prod/userDB ni afirmar índices inmutables. FullDoD, documentación, commit/push/HEAD/cuotas.
+
+### Preparación paralela 11c4a7n — RPC real de Next en entorno propio
+
+Objetivo: preparar y ejecutar una app Next temporal que importe acción2 real mediante referencia compilada y use sus defaults de sesión/DAL. Target_paths mixed_devices_proof: test/next-sync/**, src/lib/db/next-sync-fixture.ts y test, nuevos src/config/next-sync-test.ts y src/schemas/next-sync-test.ts, scripts/next-sync-test-runner.ts. Root posee únicamente integración scripts/sync-db-test-runner.ts y plan/**. No solapa provisión 11c4a8p, config/índices existentes no se editan. Dependencias: adapters/action2 publicados bb18501, identidad explícita950617a, descriptor/runner Mongo existente. Contrato de puertos cerrado; dos cortes si compilación y prueba completas lo requieren, nunca commit de fixture rota.
+
+Aceptación: build/start Next reales en build/dalis-next-sync-<run> ignorado, alias al src real, sin routing/proxy productivos ni fabricar Next-Action/POST manual. Cliente importado usa startTransition. Subprocesos reciben sólo descriptor y auth fake explícitos; no env real ni preload server-only en Next. Sesiones BetterAuth persistidas via plugin testUtils instalado y cookies Set-Cookie, nunca tokens en JSON/logs; prueba no representa Google interactivo. Requests de fixture validados por schemas compartidos y capability del run, loopback/orígenes exactos. Dos hosts 127.0.0.1/localhost aíslan cookies; puertos solos no. Acción real sin cookie/actor equivocado/sesión revocada/legacy envelope no escribe. Cuenta válida confirma own task/tag/view; otro cliente descarga, replay no duplica revisión/journal. Índices sólo en DB descriptor propia y selector central. Cleanup sólo procesos/archivos/DB/container del run con ownership verificado, sin recursos/cookies de usuario. Scope de ejecución completa puede cerrarse después del harness en corte separado. FullDoD y evidencia browser/Next pertinente, plan/registro/commitpush/HEAD/cuotas.
+
+### Preparación paralela 11c4a9u — Resumen compacto compatible con preferencias
+
+Objetivo: preparar el panel existente para el futuro resumen mixto sin activar el transporte. Target_paths root únicamente src/features/sync/components/sync-status-panel.tsx y test; no solapa provisión ni fixture Next. Dependencias: summary2 validado y estado de pasada existente. Aceptación: alcance por enum opcional con default de tareas/eventos vigente; cuando el caller futuro seleccione alcance mixto, describir categorías/asignaciones y mantener orden/repetición local. Si summary2 conserva proyección personal, mostrar contador compacto y conservación local; settled no oculta pendientes ni supone convergencia. Default actual/callback/nav/tamaño táctil intactos, sin nuevo bloque de estado grande o destino. Testear renders de alcance1/2 y bloqueos personales; fullDoD al estabilizar fuentes, plan/registro, commit/push/HEAD/cuotas. Entrada86%5h/68%7d, reserva4%/1%; corte útil pequeño independiente mientras se prepara prueba Next.
+
+
+### Resultado 11c4a8p — Provisión explícita por puertos
+
+Selector central devuelve copias detached de las tres especificaciones exactas y conserva provisioning explícito; readiness reutiliza la selección. Schema exige nombres conocidos, únicos/disjuntos y bandera coherente. Plan distingue ready/create_missing/blocked sin recibir definición arbitraria. Ejecución sin conexión/defaultcaller reinspecciona antes de cada create y después del último/error, bloquea incompatibilidad, conserva sólo calls resueltas en created y observa posible efecto de un create rechazado. Drift o desaparición de un índice propio devuelve incomplete, sin bucle de reparación. No drop/rename/rollback/deduplicación. Errores finitos para duplicados/definición/creación/inspección, sin mensajes/cause/URI/valores.
+
+Nueve escenarios nuevos más readiness/registro:32 tests/146 aserciones. Root revisó cinco archivos y la suite global sobre fuentes estables junto al panel preparado:428pass/89opt-in skip/0fail/7058 aserciones; lint485/tipos/build34 recursos/diff correctos. No DB conectada ni CLI/caller/índices nuevos. El bootstrap automático vigente sigue separado; no afirmar inspección de conexión totalmente readonly. Entrada86%5h/68%7d tras950617a, reservas4%/1%. Siguiente prueba Mongo propia del planner/provisión y CLI revisable, además de fixture Next en paralelo disjunto. Commitpush/HEAD/cuotas al cierre.
+
+
+### Resultado 11c4a9u — Panel compacto preparado para resumen mixto
+
+El panel existente admite summary2 y un alcance opcional explícito. Default mantiene el texto de transporte1; sólo un caller futuro seleccionará categorías/asignaciones sincronizadas. Orden de tareas y repetición siguen descritos como locales. Contador personal compacto indica conservación de categorías/asignaciones cuando la proyección está retenida; settled conserva pendientes/conflictos visibles y no declara convergencia. No nueva tarjeta grande, ruta, nav, hook o transporte activado.
+
+Dos tests nuevos de render; seis tests/25 aserciones del panel, incluida sesión/cola/protocolo vigente. Root fullDoD sobre archivos estables:428pass/89opt-in skip/0fail/7058 aserciones, lint485/tipos/build34 recursos/diff correctos. Sin repetir global tras sólo docs. Entrada68%5h/65%7d tras25cd628, reservas4%/1%; siguiente RPC Next propia y prueba Mongo de provisión. Commitpush/HEAD/cuotas al cierre.
+
+### Preparación paralela 11c4a8m — Provisión en Mongo propio
+
+Objetivo: comprobar partial-create y reintento reales sin DB del usuario. Target_paths backup_transition_review sólo src/lib/db/mixed-sync-index-provisioning.integration.test.ts; root posee integración futura del modo indexes en scripts/sync-db-test-runner.ts y plan. No solapa fixture Next ni config compartida. Dependencias: 11c4a8p publicado, descriptor/imagen Mongo propios. Aceptación: modo aislado sólo para este test, DB exacta nueva, sin compartir índices con otras suites; duplicados propios causan fallo unique después de prefijo confirmado, registros intactos y error saneado. Tras limpiar sólo fixture duplicada, reintento crea únicamente missing; ready/noop no crea. Simular respuesta perdida después de create real y comprobar reinspección, sin falso created/rollback. Cada índice borrado/registro limpiado es creado por este run y se verifica ownership. GlobalDoD más ejecución del runner propio y cleanup; commitpush/HEAD/cuotas. Entrada67%5h/65%7d, reservas4%/1%; no agregar más entregas largas antes de revisar coste de fixture Next.
+
+Ajuste de 11c4a7n: cliente invoca referencia compilada de un wrapper ServerAction exclusivo del fixture. Ese wrapper valida capability y cookies propias dentro de la misma RPC y llama a pushSyncOperationsV2 sin puertos ni actor. Prueba NextRPC→acción productiva/defaultauth/DAL reales, pero no equivale a probar el ID exacto del endpoint productivo. Evita TOCTOU del guard GET; sin cookie puede probar unauthorized, cookie ajena bloquea sin tocarla. Business logic del fixture fuera de routing.
+
+
+### Resultado 11c4a8m — Provisión parcial con MongoDB real propio
+
+Modo aislado indexes consume el descriptor validado y ejecuta sólo la prueba de provisión en una DB nueva propia. Dos escenarios/20 aserciones pasan: duplicado sintético causa fallo unique después de dos creaciones confirmadas, conserva registros y resultado saneado; limpieza explícita de la única fixture duplicada permite crear sólo el índice pendiente, y ready no crea. Una respuesta perdida tras create real no se incluye falsamente en created, pero readiness observa el efecto y el reintento crea sólo los restantes. Índices y registros limpiados son exclusivamente los del run; contenedor/tmpfs/proxy propios cerrados y runner exit0. Sin DB del usuario ni reparación automática.
+
+FullDoD sobre fuentes estables, incluido harness Next preparatorio todavía sin ejecutar:431 pass/93 opt-in skip/0 fail/7074 aserciones; lint491 archivos, tipos, build34 recursos neutros y diff aprobados. Entrada67%5h/65%7d, reservas4%/1%. La prueba RPC Next es un corte independiente pendiente de build y navegador, no evidencia Google. Commit/push/HEAD remoto y cuotas al cierre.
+
+
+### Resultado 11c4a7n — Frontera RPC Next real en recursos propios
+
+App Next temporal compila y arranca en dos procesos/orígenes loopback con env sintético explícito y MongoDB del descriptor propio. Cliente llama una referencia Server Action compilada de wrapper exclusivo del fixture; capability y cookies propias se verifican dentro de la RPC antes de invocar acción2 productiva sin puertos ni actor. Defaults reales usan sesión Better Auth persistida/allowlist, readiness, dispatcher y DAL. No es el ID exacto de la acción productiva desplegada ni Google interactivo. Dos hosts aíslan cookies; registry privado por run compartido entre chunks reconoce sólo valores propios, cookies ajenas bloquean sin sobrescribir/borrar. Cleanup selecciona sólo cookies/sesiones/procesos/archivos registrados y timeout10min acota espera; fallos muestran sólo fase/HTTP/categoría finita.
+
+Siete escenarios aprobados en navegador integrado: RPC sin sesión no escribe; dos sesiones de la misma cuenta; crear tarea/categoría/asignación con tres recibos y journal3, ambas descargas iguales a Mongo; replay conserva revisiones/diario; cuenta/versiones incompatibles no escriben; revocación y caducidad rechazan sin afectar la otra sesión; usuario no verificado rechazado. Correspondencia y applied se validan contra intención original. Recursos propios y cookies limpiados; runner exit0, pestañas propias cerradas. Captura de evidencia local /private/tmp/dalis-next-rpc-proof-20261009.jpg. Prueba funcional del servidor, no proyección IndexedDB de producto; evidencia de runtime/coordinador de dos dispositivos permanece en11c4a4p.
+
+La compilación detectó alias absolutos interpretados como relativos por Turbopack y la prueba de readiness corrigió runId. Next16 instalado normaliza127.0.0.1 a localhost en Request.url; fixture valida protocolohttp y Host exacto registrado, mantiene Origin/capability y no modifica configuración experimental. Templates compiladas reales y app normal build34 recursos aprobados; no routing/config/auth productivos alterados. FullDoD final432pass/93opt-in skip/0fail/7079 aserciones, lint491/tipos/build34/diff. Cuatro tests/21 aserciones de guardias incluyen Host normalizado, Host/Origin/protocolo ajenos y rechazo de forwarded-only; ningún cambio funcional al recorrido ya aprobado. Entrada45%5h/62%7d tras26d2738; lectura durante cierre26%/59%, reservas4%/1%. Siguiente: destino/CLI de provisión revisables y conexión conjunta del cliente según contrato; no ejecutar índices en DB del usuario sin autorización de entorno. Commitpush/HEAD/cuotas al cerrar.
+
+
+### Preparación 11c4a8v — Vista previa offline de índices personales
+
+Objetivo: hacer revisables las tres definiciones centrales antes de preparar el comando de provisión de entorno. Target_paths root: scripts/preview-personal-indexes.ts, package.json y plan/**; secuencial, sin agentes. Dependencias: selector central11c4a8p y provisión real propia11c4a8m. Aceptación: comando separado sólo de vista previa, sin argumentos/URI/destino/flags de apply ni llamadas a getDatabase/auth/ensureIndexes; salida JSON inglesa con scope offline e índices centrales exactos, sin crear índices o anunciar disponibilidad. Runtime server-only mediante condición react-server, sin preload de mocks ni archivo env. No equivale a inspección Mongo o autorización del entorno. Validación: ejecutar preview sin env cargado, revisar selección exacta y rechazar argumentos desconocidos sin salida parcial; lint/tipos/suite/build/diff y referencias. Entrada22%5h/58%7d, reservas4%/1%; cerrar con commitpush/HEAD/cuotas antes de elegir más trabajo.
+
+
+### Resultado 11c4a8v — Definiciones revisables sin conexión
+
+Comando db:preview-personal-indexes imprime JSON inglés con scope offline_definition_preview/databaseAccess none y las tres especificaciones exactas del selector central. No acepta argumentos ni apply; no llama auth/getDatabase/readiness/ensureIndexes. Usa condición react-server instalada, sin mocks. Smoke ejecutado con entorno vacío y --no-env-file pasa sin variables Mongo/auth, selección exacta y provisioning explicit comprobados; --apply rechaza con exit1 y sin JSON parcial. El launcher bun run puede heredar variables de su padre, pero la vista previa no las consume; para revisión aislada usar bun --no-env-file run db:preview-personal-indexes. No prueba disponibilidad de índices de un entorno ni autoriza crearlos.
+
+FullDoD432pass/93opt-in skip/0fail/7079 aserciones, lint492/tipos/build34/diff correctos. Sin tests redundantes añadidos por script reversible; smoke verifica el comportamiento solicitado. Entrada22%5h/58%7d, reservas4%/1%. Siguiente: contrato de destino explícito y procedimiento de ejecución autorizado, sin DB del usuario. Commitpush/HEAD/cuotas por entrega.
+
+
+### Preparación 11c4a8c — Contrato de ejecución de índices de entorno
+
+Objetivo: cerrar destino, efectos y cortes del futuro CLI antes de implementar conexión. Target_paths root: plan/personal-index-provisioning.md, mixed-sync-activation.md, master.md, iterations.md e iteration-log.md. Secuencial, sólo documentación. Dependencias: preview11c4a8v, planner/provisión11c4a8p y pruebas Mongo11c4a8m. Aceptación: distinguir preview offline de operación online; destino explícito con DB sin fallback y autoridad Mongo exacta antes de cualquier import que conecte; detallar nueve índices automáticos del singleton además de tres personales; no llamarlo inspección readonly ni inferir preproducción desde un nombre de DB. Errores/exit/resultados saneados, sin reparación/rollback ni secretos/URI en argumentos/logs. Plan dividir guardia pura, adaptador/CLI y prueba propia antes de autorización de entorno y activación conjunta. Validar referencias/consistencia/diff, commitpush/HEAD/cuotas; no repetir DoD de código estable. Entrada20%5h/58%7d, reservas4%/1%.
+
+
+### Resultado 11c4a8c — Destino y efectos del futuro CLI
+
+Contrato [personal-index-provisioning.md](personal-index-provisioning.md) cierra destino explícito, autoridad sin credenciales, DB sin fallback, autorización de conexión concreta y nueve índices automáticos del singleton además de tres personales. No ofrecer inspección readonly: getDatabase puede crear índices automáticos faltantes antes de readiness. CLI sigue sin implementar; preview offline vigente no conecta. Servicio personal existente conserva partial-create/retry/error incierto y nunca rollback/deduplicación. Cortes siguientes guardia pura11c4a8g, adaptador/CLI11c4a8e, prueba propia11c4a8t, conexión conjunta/piloto autorizado.
+
+Sólo docs: referencias, consistencia con fuente/registro y diffcheck validados, sin repetir suite/build estables432pass/93skip. Entrada20%5h/58%7d, reservas4%/1%. Commitpush/HEAD/cuotas al cierre. Sin DB del usuario ni cambio de permisos/hosting/protocolo activo.
+
+
+### Preparación 11c4a8g1 — Guardia pura del descriptor de destino
+
+Objetivo: validar descriptor explícito y comparar DB/autoridad resueltas sin IO. Target_paths root: src/schemas/personal-index-target.ts, src/lib/db/personal-index-target.ts y test, plan/**. Secuencial, sin agentes. Dependencias11c4a8c. Aceptación: schema estricto local/preproduction, nombre DB explícito conservador y autoridad sin URI/credenciales/ruta/query; comparar exactamente con configuración ya resuelta y devolver copia; rechazo genérico sin cause/valores. Sin leer env/URI, conectar, auth o defaults. Este subcorte no resuelve autoridad desde URI:11c4a8g2 debe validar formas del driver/configuración sin fallback antes de conectar CLI. Probar mismatch, selección production, ausencia/credenciales y seedlist/SRV como descriptores, no como conexiones Mongo. FullDoD/diff/referencias, plan/registro/commitpush/HEAD/cuotas. Entrada19%5h/57%7d, reservas4%/1%; no abrir adaptador de conexión en esta ventana.
+
+
+### Resultado 11c4a8g1 — Descriptor de destino comparado sin IO
+
+Schema estricto exige entorno declarado local/preproduction, DB explícita conservadora y autoridad de conexión ya resuelta sin userinfo/URI/ruta/query/whitespace. Guardia pura compara DB/autoridad exactas con configuración resuelta y devuelve copia; todo rechazo usa error finito sin cause ni valores. No lee env, interpreta URI, conecta ni acredita ownership/autorización. Formato completo/resolución de autoridad desde URI y ausencia de fallback del lector son dependencia11c4a8g2; esta guardia no debe conectarse a CLI directamente con getDatabaseEnv fallback.
+
+Dos tests/54 aserciones: coincidencia/copia, descriptores loopback/seedlist/IPv6, mismatch exacto frente a substring, production/extra/ausencia y datos inseguros sin filtración. FullDoD434pass/93opt-in skip/0fail/7133 aserciones; lint495/tipos/build34/diff correctos después de corregir literal de entorno del test. Sin Mongo/browser adicionales porque no IO ni cambios al producto. Entrada19%5h/57%7d, reservas4%/1%. Siguiente11c4a8g2 resolver/config, antes de adaptador de conexión. Commitpush/HEAD/cuotas al cierre.
+
+
+### Preparación 11c4a8e1 — Alcance completo en revisión offline
+
+Objetivo: mostrar bootstrap automático junto a selección personal exacta sin conectar. Target_paths root: scripts/preview-personal-indexes.ts y plan/**; secuencial. Dependencias11c4a8v/11c4a8c y selector automaticIndexSpecs central. Adelanto independiente de la parte offline de11c4a8e: resolver/config11c4a8g2 sigue necesario antes del CLI online. Aceptación: preservar indexes personales y añadir automaticIndexes directamente del selector que usa getDatabase; sin listas/números hardcodeados, IO/env o apply; datos sólo de registro. Smoke en entorno vacío verifica nueve automáticos/tres explícitos actuales y separación sin duplicados; argumentos desconocidos siguen rechazados sin JSON. FullDoD/diff/referencias, plan/registro/commitpush/HEAD/cuotas. Entrada17%5h/57%7d, reservas4%/1%.
+
+
+### Resultado 11c4a8e1 — Revisión offline del alcance completo
+
+Preview conserva indexes personales y añade automaticIndexes desde automaticIndexSpecs, el selector real del bootstrap del singleton. Nueve automáticos y tres explícitos actuales quedan separados, sin duplicados ni una segunda lista. No conecta, lee env o admite argumentos/apply; smoke en proceso con entorno vacío/--no-env-file confirma salida íntegra y rechazo exit1 sin JSON parcial. No ejecutar este JSON como instrucciones ni anunciar readiness; es revisión de definiciones del código.
+
+FullDoD434pass/93opt-in skip/0fail/7133 aserciones; lint495/tipos/build34/diff y referencias correctos. Sin nuevos tests redundantes por extensión de presentación; separación del catálogo ya cubierta por pruebas centrales. Entrada17%5h/57%7d, reservas4%/1%. Adelanto offline independiente cerrado;11c4a8g2 resolver/configuración permanece siguiente antes del adaptador/CLI online. Commitpush/HEAD/cuotas por entrega.
+
+
+### Preparación 11c4a8g2 — Resolver de configuración explícita sin conexión
+
+Objetivo: derivar descriptor DB/autoridad desde configuración sin fallback antes del futuro CLI. Target_paths root: src/config/personal-index-provisioning.ts y test, src/config/env.ts getter, plan/**. Secuencial. Dependencias11c4a8g1/11c4a8c; revisar parser instalado del driver para userinfo/SRV/listas. Aceptación: DB explícita, URI mongodb/mongodb+srv, extraer autoridad exacta sin credenciales/path/query; validar conservadoramente DNS/IP/puertos/IPv6 y SRV único sin puerto, rechazar ambigüedad/espacios/fragmentos/credenciales sin escapar; no devolver URI/PII/cause ni conectar. Getter sólo config/env.ts; parser puro no muta env. No validar disponibilidad/permisos/opciones completas del driver ni admitir sockets Unix; documentar alcance conservador. Tests de formas válidas, fallbacks, mismatch via guardia y errores sin URI. FullDoD/diff/referencias, plan/registro/commitpush/HEAD/cuotas. Entrada16%5h/57%7d, reservas4%/1%; último corte de código antes de cierre/reprogramación, sin adaptador online.
+
+
+### Resultado 11c4a8g2 — Configuración explícita y autoridad sin conexión
+
+Parser puro y getter config/env.ts derivan descriptor desde MONGODB_URI/MONGODB_DB raw explícitos, sin fallback. URI mongodb/SRV, userinfo escapado, lista ordenada de seeds, puertos y IPv6 conservadores; SRV único sin puerto. Devuelve sólo DB/autoridad exacta sin credenciales/ruta/query, errores genéricos sin cause/URI. No abre conexión ni muta env; comparación exacta reutiliza guardia previa. Referencia: parser del paquete del driver instalado, sin importarlo como dependencia nueva. No parser completo de opciones/disponibilidad ni sockets Unix; rechaza formas ambiguas/duplicadas, caracteres sin escapar y puertos fuera de rango/ceros iniciales.
+
+Dos tests nuevos/81 aserciones y guardia:4 tests/135 aserciones. FullDoD436pass/93opt-in skip/0fail/7214 aserciones; lint497/tipos/build34/diff correctos. Pruebas usan objetos sintéticos, sin modificar variables globales ni DB. Entrada16%5h/57%7d, reservas4%/1%. Siguiente adaptador/CLI online11c4a8e2 y prueba propia11c4a8t, antes de autorización de entorno/conexión conjunta. No activar producto ni ejecutar DB del usuario. Último corte de código de esta ventana; commitpush/HEAD/cuotas y cierre con revisión futura real.
+
+
+### Preparación 11c4a8e2a — Ciclo de ejecución por puertos
+
+Objetivo: cerrar orden de destino/bootstrap/provisión/cierre antes de conectar CLI. Target_paths root: src/lib/db/personal-index-execution.ts y test, src/schemas/personal-index-target.ts request, plan/**. Secuencial; sin defaults ni caller/DB real. Dependencias11c4a8g1/g2/provisión preparada. Aceptación: acuse explícito del bootstrap automático y target schema antes de leer configuración; mismatch sin bootstrap/cierre, DB real distinta tras bootstrap sin crear personales, intento bootstrap fallido cierra, cierre fallido no declara éxito ni pierde resultado durable. Puertos requeridos sólo server-only, errores/estado finitos sin causas/URI, proceso propio como requisito del futuro adaptador. Tests de orden/ausencia de efectos/cierre y conservación de resultado; fullDoD/diff/referencias/plan/commitpush/HEAD/cuotas. Entrada13%5h/56%7d, reservas4%/1%; cierre seguro tras esta entrega, sin abrir conexión real ni CLI.
+
+
+### Resultado 11c4a8e2a — Ciclo privado por puertos
+
+Servicio server-only con puertos requeridos, sin defaults/caller/conexión: valida target y acuse explícito de bootstrap antes de configuración, compara destino antes de abrir, comprueba DB real antes de provisión y cierra tras cualquier intento de bootstrap, incluso si éste rechaza después de abrir. Estado/fase/cierre finitos sin detalles externos; fallo de cierre no declara éxito y conserva observación de provisión y prefijo confirmado. No revierte índices ni limpia recursos de entorno. Futura integración debe usar proceso operador propio y singleton, no RPC ni startup productivo.
+
+Cuatro tests/28 aserciones por puertos prueban guardias antes de IO, bootstrapfallido, DBdistinta, ready/noop con cierre, fallo de cierre y partial-create+closefail sin perder prefijo/readiness. FullDoD440pass/93opt-in skip/0fail/7242 aserciones, lint499/tipos/diff; build34 aprobado sobre runtime estable y caso adicional test-only validado después con tipos/suite. No prueba Mongo del nuevo ciclo/CLI real todavía. Entrada13%5h/56%7d, reservas4%/1%. Siguiente11c4a8e2b defaults/CLI,11c4a8t ejecución propia; no DB del usuario. Última entrega de código del lote antes de cierre/revisión futura. Commitpush/HEAD/cuotas al cerrar.
+
+
+### Cierre 11c4a8z — Ventana del 9 de octubre, 05:27
+
+Objetivo/target_paths: cierre seguro en plan/master.md, workflow.md, iterations.md, iteration-log.md y mixed-sync-activation.md, revisión futura del mismo heartbeat y candidato desde último código completo. Dependencias: todas las entregas publicadas hasta7525376a3dd38083bfcecbef100d11644c5e5b52. Aceptación: repo sin código abierto, recursos propios limpios, estado activo/preparado fiel y una única revisión verificada; sólo docs, referencias/consistencia/diffcheck, commitpush/HEAD/cuotas al cierre.
+
+Lote cerrado: adapters autenticados/action2/identidad explícita; UI mixta compacta; provisión personal por puertos y partial-create/retry/respuesta perdida con MongoDB propio; siete escenarios RPC Next reales con dos sesiones BetterAuth persistidas y Mongo propios; preview offline de nueve índices automáticos/tres personales; contrato y guardia/resolver de destino explícito sin fallback; ciclo de ejecución por puertos con cierre seguro/prefijo conservado. Suite final440pass/93opt-in skip/0fail/7242 aserciones, lint499/tipos/build34 aprobados. Todos los contenedores/procesos/builds/pestañas/cookies propios de las pruebas limpiados; evidencia visual local conservada. No DB del usuario/hosting/secretos/permisos ni nuevas dependencias core. Producto permanece transporte1; categorías/asignaciones preparadas, orden manual/series/compartidos siguen sus dependencias. Next sintético no acredita Google interactivo ni ID exacto del endpoint desplegado.
+
+Lectura después del último código:10%5h/56%7d; reserva4%/1%. El último ciclo completo consumió tres puntos, pero siguiente defaults/CLI más prueba real propia requiere margen adicional de integración/reparación/publicación/cierre, no abrirlo sobre esta reserva. Próxima11c4a8e2b defaults/CLI separado y11c4a8t prueba propia, antes de pedir autorización de ejecución concreta de entorno y activar conjuntamente API/runtime/UI. No fabricar ACK para task.move histórico ni descartar dependientes.
+
+Reset publicado actualizado1791534432 (9oct10:27:12Madrid; primer registro del lote fue10:27:11). Una única revisión de comprobar-renovaci-n-de-cuota reprogramada y verificada ACTIVE para9oct10:29Madrid, reset+unminuto redondeado hacia arriba; notificationPolicy failed_runs_only y chat preservados. Automatización alternativa histórica siguePAUSED; no duplicados/cron/TOML manual ni hora supuesta. Al despertar verificar renovación real, ambas cuotas y último HEAD completo antes de continuar. Autorización encadenada mientras haya trabajo útil/margen y no cancele usuario, reservas4%5h/1%7d, sin créditos/reinicios.
+
+
+### 11c4a8auth — Autorización explícita de índices preproductivos
+
+Objetivo y target_paths: registrar autorización humana en plan/personal-index-provisioning.md, mixed-sync-activation.md, master.md, workflow.md, iterations.md e iteration-log.md y actualizar el heartbeat existente sin cambiar horario/política. Dependencias: procedimiento preparado hasta7525376 y próxima revisión10:29. Aceptación: usuario confirma DB distintas y autoriza crear índices personales necesarios y automáticos registrados faltantes únicamente en preproducción, reutilizando ensureIndexes después de validar procedimiento, sin otra confirmación. Producción excluida; no borrar/corregir datos ni reparar incompatibilidades automáticamente. Esta autorización sustituye exclusiones históricas de DB del usuario sólo para esa provisión. Verificar conexión preview/int desde fuente de configuración de entorno; nunca asumir que .env.local es preview ni conectar para averiguarlo.
+
+Lectura6%5h/55%7d, reservas4%/1%: sólo cierre documental ahora; defaults/CLI/prueba propia y ejecución preproductiva continúan en revisión10:29 tras verificar renovación. CLI Vercel/project link local no disponibles en comprobación inicial; resolución del destino permanece pendiente, sin acceso a DB ni credenciales impresas. No confundir autorización con ejecución o categorías activadas. Validación documental referencias/consistencia/diff, actualización de heartbeat preservando campos, ConventionalCommit/pushint/HEAD/cuotas.
+
+
+### Preparación11c4a8e2b — Defaults privados y CLI operador
+
+Objetivo: conectar ciclo privado a singleton/selector/ensureIndexes y comando separado sin caller productivo. Target_paths root: src/lib/db/personal-index-operator.ts y test si puertos/defaults lo requieren, package.json e integraciónplan; personal_outcomes: scripts/provision-personal-indexes.ts, src/schemas/personal-index-cli.ts y tests puros del parser. Contrato cerrado: runPersonalIndexProvisioning(input:unknown) retorna PersonalIndexExecutionResult; defaults sólo en adapter server-only, input DTO target+acknowledgeAutomaticBootstrap; sin actor/puertos RPC. CLI cincoargs entorno/DB/autoridad/--apply/--acknowledge-automatic-bootstrap, valida schema antes de llamar adapter y no imprime URI/args/causes. Resultado JSON finite; exit0 sólo ready+closed, fallos exit1. Root publica package script tras revisión, no duplicar lógica deprovisión.
+
+Dependencias: guardia/config/resolver/ciclo11c4a8g1/g2/e2a, registro/provisión central, autorización preprod explícita. Aceptación: validación/config destino antes de cualquier conexión; bootstrap sólo getter singleton, DB real antes de personales, readiness/creates centrales, cierre awaited y errores saneados; no tocarDBusuario todavía hasta CLI validado con Mongo propio11c4a8t. Invocación inválida con envvacío rechaza sin conexión; ningún logging de errores crudos. Lint/tipos/suite/build/diff y smoke pertinent; plan/registro/commitpush/HEAD/cuotas. Entrada100%5h/55%7d, reservas4%/1%, reset1791552560.
+
+Paralelo seleccionado: root adapter/integración/plan, personal_outcomes únicamenteCLI/schemaCLI/test; backup_transition_review sólo investigación readonly de fuentes/configuración preview/int y acceso disponible, sin abrir DB, imprimir credenciales, instalar herramientas o modificararchivos. No solapar package/scriptshared/config existente; agentes no están solos y no revierten cambios ajenos. Investigación no implica autorización de hosting/secretos/permisos; sólo localizar acceso/fuentes necesarios para creación de índices ya aprobada.
+
+
+### Resultado11c4a8e2b — Defaults privados y CLI operador
+
+Adapter server-only reutiliza config explícita, ciclo por puertos, getDatabase singleton, readiness y ensureIndexes central. CLI separado con cinco argumentos exactos, sin URI/credenciales; parser antes de import, exit0 sólo ready+closed. Excepción inesperada produce stderr genérico sin recibo inventado. Tests parser3/126aserciones y smoke entorno vacío config ausente -> failed/configuration/not_opened exit1. Suite443pass/93skip/0fail/7368aserciones, lint503/tipos/build34/diff aprobados. Entrada renovación100%5h/55%7d, reservas4%/1%, reset real1791552560 (15:29:20Madrid). No conexión DBusuario ni activación producto. Investigación readonly encontró Vercel Preview/Production URI separadas; falta DB explícita solicitada. Siguiente11c4a8t CLI/defaults/bootstrap real con descriptor propio, después provisión preproductiva autorizada al verificar destino. Commitpushint/HEAD/cuotas al cerrar.
+
+
+### Preparación11c4a8t — CLI y defaults con Mongo propio
+
+Objetivo: ejecutar comando separado real y adapter default contra descriptor aislado, acreditar bootstrap9/personal3, guardias antes de escribir, fallo parcial por duplicados sin reparación y retry/noop/cierre. Target_paths personal_outcomes: src/lib/db/personal-index-operator.integration.test.ts; root scripts/sync-db-test-runner.ts (modo operator aislado) e integraciónplan. Dependencias25eca36, descriptor validado, runner ownership y registro central; sólo DB temporal propia del run. Paralelo seleccionado con rutas disjuntas y contratos cerrados; root dueño sharedrunner/plan. No agentes adicionales.
+
+Aceptación: CLI bun --no-env-file --conditions=react-server, configuración exclusivamente descriptor propio, stdout finito y exitstatus/connection coherentes; invalidargs/mismatch/missingexplicitDB dejan índices pendientes; comando válido bootstrap automático y personales exactos, secondrunnoop, datos duplicados intactos con prefijo/readiness/retry. Tests no conectan sin optin; limpian sólo fixtures/índices propios, timeout/cierre de proceso. Verificar frescura y DBnombre antes de drops de test; ningún drop de usuario. Docker/imagen revalidados. PruebaMongo pertinente y lint/tipos/suite/build/diff, plan/registro/commitpush/HEAD/cuotas. Entrada87%5h/53%7d reservas4%/1%.
+
+
+### Resultado11c4a8t — Procedimiento online validado con Mongo propio
+
+CLI real por subprocess sin preloadmock, defaults singleton/config/ensureIndexes y descriptor propio:3pass/70aserciones. Antes de drops de test se acreditan nombre DBfresh, todas colecciones vacías y registro automático; singleton padre queda cached para observar sin reparar automáticamente. Invalidargs/config DB ausente/mismatchDB/autoridad mantienen nueve índices retirados deliberadamente sólo en test. Aplicación válida recrea exactamente9automáticos+3personales y luego noop. Duplicados11000 mantienen documentos/prefijo2/readiness y cierre; eliminación explícita de una fixture propia permite retry sólo active-name restante. Exit0 sólo ready+closed, salida parseada finita, timeout, errores sin URI/PII. Docker28.4/imagepinned8.2.11amd64 revalidados, contenedor/tmpfs/bridge propios limpiados.
+
+Suite443pass/98opt-in skip/0fail/7368aserciones, lint504/tipos/build34/diff aprobados. Root runner modooperator y agenttest con rutas disjuntas, sin DBusuario. Entrada87%5h/53%7d reservas4%/1%. Procedimiento ya validado para actuación preproductiva autorizada; falta nombre DB explícito solicitado tras inspección de VercelPreview. Mientras tanto siguiente ensamblaje cliente2 inactivo/controles mixtos y guardia de retirolegacy, según dependencia de activación; no activar parcialmente producto. Commitpushint/HEAD/cuotas al cerrar.
+
+
+### Preparación11c4a9c1 — Ensamblaje cliente mixto inactivo
+
+Objetivo: dispatchercliente2, resumen mixto con guardias cuenta/época y adaptación de intento/scheduler existentes sin duplicar su scheduling; conservar diagnóstico de éxito y limpiarlo al cancelar/cambiar cuenta o ante fallback de error. Target_paths root: features/sync/client-action-v2.ts, mixed-sync-summary.ts y tests; personal_projection: mixed-sync-controls.ts y tests. Rutas relativas bajo src; root integra plan. Paralelo seleccionado, contratoscerrados/propiedad disjunta, sin ediciones de hook/providers/routes/config activa. Agentes no están solos. Dependenciasd5f29dc, acciones/runtime2/queue-summary2 y controles1 probados. Entrada75%5h/51%7d reservas4%/1%.
+
+Aceptación: startTransition llamaaction2 sólo desde dispatcherpreparado; resumen abre partición esperada tras guardia, snapshot2, guardia posterior y cierre siempre; controles2 reutilizan SyncAttempt/SyncScheduler con coalescencia/backoff/cierre, diagnóstico intacto de settled sin afirmarconvergencia, cancelled/account_changed diagnosticonull. No imports nuevos desde caller productivo: transporte1 sigue vigente y no endpoint2activado porconfig. Tests pertinentes sin globalmocks/cuotaDBusuario, lint/tipos/suite/build/diff, plan/registro/commitpush/HEAD/cuotas. Índices preprod pendientes únicamente de destino explícito solicitado, no permiso.
+
+
+### Resultado11c4a9c1 — Ensamblaje cliente2 preparado
+
+Dispatcher2 independiente, lector de resumen mixto con identidad capturada/guardias antes y después/cierre seguro, y adapters de intento/scheduler sobre controles existentes. Ocho tests/57aserciones: conserva pendientes personales/diagnósticos de bloqueo, rechaza snapshot/cuenta ajena, coalescencia/cierre/cancelación/backoff y pausa; stopped/account_changed/fallback no retienen diagnóstico. Sin hook/providers/rutas/config activa editados. Manifiesto Next conserva exactamente una acciónnode/ceroedge antes y después: dispatcher2 todavía sin caller productivo. Suite451pass/98skip/0fail/7425aserciones, lint509/tipos/build34/diff aprobados. Entrada75%5h/51%7d, reservas4%/1%. Próximo11c4a9c2 composición privada de runtime/transport/controles2 y prueba; retirolegacy preparatorio y matriz antes de activación. NombreDBpreprod solicitado sigue pendiente, no conexiónusuario. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c4a9c2 — Composición privada y retirolegacy preparado
+
+Objetivo: ensamblar HTTP/runtime/intento/resumen2 con identidad capturada y refreshguardado; preparar rechazo compatible del pushlegacy que podría llegar tras handshake1 antiguo. Target_paths root: src/features/sync/mixed-sync-client.ts y tests/plan; personal_outcomes: retired-sync-push.ts y tests bajo features/sync. Paralelo seleccionado con contratoscerrados y rutas disjuntas, sin cambios de acciones/rutas/hook/providers/config actuales. Dependenciasdecf92e y fronterasautenticadas existentes. Entrada68%5h/50%7d reserva4%/1%.
+
+Contratos: createMixedSyncClient(account, privateportsdefaults) retorna readSummary/createAttempt; valida userId/epoch compartidos, transport2 bindcuenta, runtime2 propio, guardiarefresh+close. Retirement server-only readSession headers persistida, envelopelegacy validado/cuenta esperada, resultado legacy update_required sin puertoexecutor (una ausencia/cambio de sesión mantiene unauthorized/account_changed). Aceptación: composición sin calleractivo, coalescencia/guardias/resourceclose/diagnóstico, inputcapturado/transport2, no fallbackRPClegacy; retirementnoACK/noDBexecutor y salida legacyparseable. Pruebas pertinentes, lint/tipos/suite/build/diff, manifiesto app aúnacción1; plan/registro/commitpush/HEAD/cuotas. Provisiónpreprod sigueesperando datoDBexplicito, sin credenciales leídas/conexiónusuario.
+
+
+### Resultado11c4a9c2 — Composición privada y retirolegacy
+
+createMixedSyncClient valida userId/epoch compartidos y captura identidad inmutable; enlaza HTTP2, dispatcher/runtime/resumendefaults, SyncAttemptV2 y refreshguardado. Retirement server-only autentica sesiónpersistida y envelope/cuenta, responde estado legacy update_required sin executor/recibos/readiness. Ocho tests/79aserciones; legacyHTTP con handshake1 anterior conserva intención/cursor/historia, libera lease y no aplicaACK. Fallosdeauth saneados sin causes. Ningún calleractivo conectado ni config/rutas actuales cambiadas; manifiesto mantiene una acciónnode/ceroedge. Suite459pass98skip0fail7504aserciones, lint513/tipos/build34/diff aprobados. Entrada68%5h/50%7d reservas4%/1%; commitpushint/HEAD/cuotas. Siguiente pruebaNext de composicióndefaults/directactionref/retirement en recursos propios, sin Google ni activaciónreal; DBpreprod siguependiente de nombre explícito solicitado.
+
+
+### Preparación11c4a9n — Next directo con composicióndefault y dosparticiones
+
+Objetivo: probar composicióncliente2 sin puertos sustituidos, dispatcher2/reference acciónproductiva directa, account-control/IndexedDB reales y RPC/Mongo propios; retirementfixtureautenticado separado sin invocaracciónlegacy writable. Target_paths root: test/next-sync/features/default-api.ts.template, handler.ts.template/actions.ts.template y nuevos templates app/api/sync/identity|changes routing-only, integraciónplan y ejecuciónUI; import_sync_proof: schemas/next-sync-test.ts, test/next-sync/features/controller.tsx.template/device-client.ts.template y nuevo local-client.ts.template. Rutasdisjuntas, rootúnicodueño sharedintegration. Paralelo seleccionado, no agentesadicionales ni edits productactiveroutes/hook/config. Dependencias5ed278f y runnerNextcerrado. Entrada58%5h/48%7d reservas4%/1%; dividir/cerrar si prueba/reparación/publicación deja sin margen.
+
+Contratofixture: nuevasAPIsexactas /api/sync/identity|changes verifican configdescriptorpropio, cookiecapacidad delrun, Host/Origin/cookiesauthregistradas antes de helpersdefault. Bootstrap setea cookiepropiaephemeral; cleanupúnicamenteesa cookie si propiedadverificada. Clientcommands cerrados por schema: prepare-local/commit-local/mixed-summary/mixed-run/local-snapshot/cleanup-local; comandosdurables restringidos item.create/tag.save/item-view.set. createMixedSyncClient sinsegundoarg. Pushdirecto dispatchSyncOperationsV2 tras guardiafixture, retirementRPC separado validateNextSyncFixtureHeaders->rejectRetiredSyncPush.
+
+Aceptación: dosorigins/sessionespersistidas propias y particioneslocales propias, intención/ACK/summary/cursor/proyección igualMongo para tareacategoríaasignación; replay/noop no duplica, sesiónsinpermiso noACK, retirementupdate_required conMongo intacto. Limpiar sólo particiones/control/cookies/servidores/build/containerpropios verificados, awaitstop/closeantescleanup. No Google real ni endpointIDdeldeployment acreditados, producto sigue1. Prueba Next compilado+UI con evidencia y lint/tipos/suite/build despuésde limpiargeneratedworkspace; plan/registro/commitpush/HEAD/cuotas. DBpreprod pendiente de nombre explícito solicitado, sin conexiónusuario.
+
+
+### Resultado11c4a9n — Composición default y acción directa en Next
+
+Nueve escenarios Next compilado con dos sesiones BetterAuth persistidas, dos orígenes/particionesIndexedDB y Mongo propios pasan. Se usa dispatchSyncOperationsV2 directo y createMixedSyncClient sin puertos sustituidos: tres intencioneslocales pending con dependencias reales pasan a acknowledged por ACK remoto; ambos snapshots items/tags/itemViews y cursor coinciden exactamente con journalMongo de seisrecibos. Summary/noop conservan todos los stores e historia; replay no duplica. Retirementfixtureautenticado devuelve legacyupdate_required sin mutaciones. Matriz auth/cuenta/versiones/revocación/caducidad/noverificado conservada.
+
+APIs exactas sólo en proyecto temporal, guardadas por cookiecapacidadúnica delrun y config/Host/Origin/cookiesauthregistradas antes de defaults. Sólo particiones/control sin estado previo creadosporrun; cleanupcontrol/marker/cookiepropios verificado y serializado antesdefinish. Dosservidores/buildtemp/container/tmpfs/bridge/pestañas/cookies/IndexedDB propios limpiados. Evidencia local /private/tmp/dalis-next-client-proof-20261009.jpg. Ningún Googleinteractivo ni ID del deploymentreal acreditados, no DBusuario. Producto permanece1 con unaacciónnode/ceroedge; lint513/tipos/suite459pass98skip0fail7504aserciones/build34/diff aprobados trascleanup. Entrada58%5h/48%7d reservas4%/1%; commitpushint/HEAD/cuotas. Siguiente recuperación de sesión/epoch con cola local mediante mismacomposicióndefault si cabe; provisiónpreprod mantiene pendiente nombreDBexplicito solicitado.
+
+### Preparación 11c4a9r — Recuperación de sesión con cola local real
+
+Objetivo: demostrar que la composición cliente mixta por defecto conserva una intención local mientras la sesión remota está revocada y la confirma una sola vez después de volver a autenticar al mismo usuario. Dependencias: 9119cc5, fixture Next de nueve escenarios y particiones propias. Entrada 41%5h/46%7d, reservas 4%/1%.
+
+Paralelo seleccionado con ownership disjunto: import_sync_proof sólo test/next-sync/features/controller.tsx.template y local-client.ts.template/device-client.ts.template/src/schemas/next-sync-test.ts si fueran necesarios; root integra plan, ejecuta runner/UI, revisa evidencia y publica. No cambios de producto activo, rutas o configuración; no DB del usuario. El agente conserva cambios ajenos y no hace commits.
+
+Aceptación: intención propia nueva guardada offline antes de enviar, sesión revocada devuelve unauthorized sin claim/ACK ni mutación Mongo; reautenticación del mismo actor permite ACK real único preservando UUID/payload y después ambas particiones convergen con el journal. Se mantienen los escenarios previos y cleanup exclusivo de recursos propios. Validación Next compilado con Mongo/IndexedDB/sesiones reales y evidencia visual, lint/tipos/suite/build/diff; registro y Conventional Commit/push int/HEAD/cuotas. No afirmar prueba de Google interactivo ni activación productiva.
+
+
+### Resultado 11c4a9r — Reautenticación con intención local conservada
+
+Diez escenarios del fixture Next compilado pasan. El nuevo caso revoca la sesión del segundo dispositivo, guarda una intención real mediante outbox y obtiene unauthorized antes de claim: todos los stores, UUID/payload, attempts0, lease null y cursor permanecen idénticos; Mongo no cambia. Reautenticar al mismo actor permite un único envío y ACK, con la operación original y attempts1; exactamente un item, recibo y entrada de diario nuevos. Ambos dispositivos descargan y coinciden con las proyecciones y cursor de Mongo; noop conserva ACK/historia sin duplicados. Los nueve escenarios previos se mantienen.
+
+Sólo controller de fixture editado, sin caller activo o cambios de protocolo del producto. Un narrowing de tipos detectado por el build del fixture se corrigió antes de ejecutar; ambos runs limpiaron exclusivamente sus recursos propios. Evidencia /private/tmp/dalis-next-recovery-proof-20261009.jpg. Docker28.4/Mongo8.2.11amd64 fijado revalidados, sesiones/cookies/IndexedDB/servidores/build/container/tmpfs/bridge/pestañas propios cerrados. Lint513/tipos/suite459pass98skip0fail7504aserciones/build34/diff aprobados. Entrada41%5h/46%7d, reservas4%/1%; commitpushint/HEAD/cuotas al cerrar. Producto todavía transporte1, sin Google interactivo ni provisión del usuario. Nombre DB preproductiva explícito sigue pendiente. Próxima prueba acotada de época local si el margen permite cerrar completa.
+
+### Preparación 11c4a9a — Cambio de cuenta remota con cola propia
+
+Objetivo: probar que el cliente mixto por defecto detecta otra cuenta autenticada antes de reclamar o enviar una intención de la cuenta local y permite reanudar únicamente tras recuperar su sesión. Dependencias 2f37e8a y fixture con actores propios owner/other. Entrada31%5h/44%7d, reservas4%/1%.
+
+Target_paths/ownership: import_sync_proof sólo test/next-sync/features/controller.tsx.template; root plan, revisión y ejecución/evidencia/publicación. Paralelo explícito de rutas disjuntas; sin nuevos actores, esquemas, DBusuario, calleractivo o configuración productiva. Aceptación: intención pending attempts0/lease null; sesión other válida con identidad distinta produce account_changed/upload0; backup completo/cursor y Mongo de owner/other intactos; reautenticación owner confirma exactamente una vez, mantiene UUID/payload y ambas proyecciones/cursor convergen sin duplicados. Mantener diez escenarios previos y cleanupown. Validación Next compilado/IndexedDB/Mongo reales más lint/tipos/suite/build/diff, plan/registro/commitpushint/HEAD/cuotas.
+
+
+### Resultado 11c4a9a — Aislamiento al cambiar la sesión remota
+
+Once escenarios Next compilado pasan. Una intención local propia pending, attempts0 y lease null permanece idéntica cuando la sesión persistida es de otro actor verificado del fixture: la composición default devuelve account_changed/upload0 antes de claim. Todos los stores/cursor y Mongo de ambas cuentas conservados. Al recuperar la sesión del propietario original, un único ACK mantiene UUID/payload, attempts1 y revisiones; ambos dispositivos convergen exactamente con el journal/cursor, categorías/vistas anteriores intactas y ninguna escritura en la otra cuenta. El helper común mantiene baseline anterior al ACK y los diez escenarios previos.
+
+Sólo controller de fixture y plan editados. Recursos propios Next/Mongo/cookies/IndexedDB/procesos/build/container/tmpfs/bridge/pestañas limpiados; evidencia /private/tmp/dalis-next-account-proof-20261009.jpg. Lint513/tipos/suite459pass98skip0fail7504aserciones/build34/diff aprobados. Entrada31%5h/44%7d reservas4%/1%; commitpushint/HEAD/cuotas al cerrar. Estado operativo destacado al principio del master y prerrequisito de índices actualizado con autorización vigente, sin otra aprobación. Transporte1 activo, dato DB pendiente; no Google ni DB del usuario. Siguiente preparación de hook mixto o prueba de época según margen de cierre completo.
+
+### Preparación 11c4a9e — Invalidación real de época local
+
+Objetivo: demostrar con IndexedDB real que la composición por defecto vinculada a una época anterior rechaza resumen/intento antes de enviar, conserva la intención pendiente y permite reanudar sólo mediante una composición de la nueva época. Dependenciasada2d62; entrada22%5h/43%7d reservas4%/1%. Coste observado de los dos cortes anteriores10/9puntos, margen para prueba/reparación/publicación/cierre; no ampliar a red en vuelo.
+
+Ownership paralelo disjunto: import_sync_proof schemas/next-sync-test.ts y fixtures controller/local-client/device-client; root plan, revisión y ejecución/evidencia/publicación. DTO cerrado rotate-local sin parámetros: sólo control propio preparado y guardado, activatePreparedAccount mismo actor/expectedEpoch, captura nueva época/marker para cleanupown, composición vieja guardada para probar ambos rechazos y luego composición nueva sin puertos sustituidos. No usar errores externos como resultado ni comprobar cualquier rechazo accidental: requireActiveAccount de época antigua falla y el cliente viejo rechaza; la época nueva está activa.
+
+Aceptación: UUID/payload/attempts0/lease null/stores/cursor y Mongo permanecen intactos tras invalidación; la nueva composición confirma una única operación y ambos dispositivos convergen. Cleanup verifica únicamente la nueva época propia. Mantener once escenarios previos; prueba Next real, lint/tipos/suite/build/diff, plan/registro/commitpush/HEAD/cuotas. No actor nuevo, logout remoto, DBusuario, protocolos/callers activos ni prueba de cancelación con red en vuelo.
+
+
+### Resultado 11c4a9e — Época local invalidada antes del envío
+
+Doce escenarios Next compilado pasan. DTO rotate-local cerrado y guardado opera únicamente el control propio del fixture: activatePreparedAccount del mismo actor con expectedEpoch, seguimiento inmediato de nueva época/marker para cleanup y creación de cliente default nuevo. La cuenta capturada, el resumen y el intento del cliente viejo rechazan específicamente por la guardia Local account changed during the operation; otro error hace fallar el escenario. La intención pending mantiene UUID/payload/attempts0/lease null, todos los stores/cursor y Mongo intactos. La nueva composición confirma un único ACK con intención original y ambos dispositivos convergen exactamente con diario/cursor, categorías/vistas previas e historia sin duplicados. No acredita cancelación de red en vuelo.
+
+Once escenarios anteriores conservados, recursos propios Next/Mongo/IndexedDB/control/cookies/build/procesos/container/tmpfs/bridge/pestañas cerrados. Evidencia /private/tmp/dalis-next-epoch-proof-20261009.jpg. Lint513/tipos/suite459pass98skip0fail7504aserciones/build34/diff aprobados. Entrada22%5h/43%7d reservas4%/1%, ownership agente schema y tres templates/root plan+ejecución. Producto aún1; nombre DB preproductiva pendiente, ninguna credencial leída/conexión al usuario. Siguiente hook mixto inactivo y matriz del despliegue antes de activación conjunta, o provisión ya autorizada si llega el dato. Commitpushint/HEAD/cuotas al cerrar.
+
+### Preparación 11c4a9z — Conexión siguiente y cierre seguro
+
+Objetivo: concretar el siguiente hook/activación, cerrar este lote desde9a34fa4 y reprogramar una sola revisión del mismo heartbeat usando reset real. Target_paths root plan/master.md, workflow.md, iterations.md, mixed-sync-activation.md e iteration-log.md. Dependencias: ocho entregas de código publicadas desde25eca36 hasta9a34fa4, CLI/procedimiento propios y doce escenarios Next correctos; nombre DB preproductiva solicitado pendiente. Entrada14%5h/41%7d reservas4%/1%. Los últimos cortes costaron10/9/8puntos; no abrir hook+prueba+reparación+cierre sobre diez puntos disponibles. Sólo docs/automatización, referencias/consistencia/diff, commitpushint/HEAD/cuotas. Aceptación: distinción activo/preparado, candidato con rutas y guardias explícitas, recursos propios cerrados y revisión única futura verificada.
+
+
+### Cierre 11c4a9z — Lote del 9 de octubre, 10:29
+
+Lote completo publicado desde25eca36 hasta9a34fa4f6b691757219ee081394671106bf4d3a4: operador/CLI privado, prueba real de bootstrap y provisión propia, composición/resumen/controles mixtos y retirementlegacy, nueve escenarios Next directos ampliados a doce con conservación de cola y recuperación tras revocación, cuenta remota distinta y época local invalidada. Suite459pass/98opt-in skip/0fail/7504aserciones, lint513/tipos/build34 aprobados; producto mantiene transporte1, una acciónnode/ceroedge. Mongo/Next/IndexedDB/cookies/procesos/builds/pestañas propios cerrados y evidencia visual conservada. No DB del usuario ni credenciales leídas, sin dependencias nuevas o cambios de hosting/secretos/permisos.
+
+Provisión preproductiva ya autorizada y procedimiento validado; falta únicamente el nombre explícito de DB solicitado al usuario. Vercel Preview identificado, guía autenticada dejada para continuación. No pedir otra aprobación para los índices, no convertir fallback/.env.local en destino aprobado, no tocar producción ni reparar datos. Hay trabajo independiente:11c4a9h hook mixto inactivo con cache separado, lifecycle real y guardias; conexión conjunta posterior condicionada al recibo ready+closed. Target_paths y matriz de referencia antigua ausente concretados en mixed-sync-activation.md. No confundir prueba de referencia Next local con ID desplegado/Google o cancelación en vuelo.
+
+Lecturas14%5h/41%7d tras último código y13%/41% durante cierre; reservas4%/1%. Cortes anteriores10/9/8puntos sin promesa de coste futuro: siguiente hook más prueba/reparación/publicación/cierre no cabe con seguridad. Sólo documentación y revisión futura; repo sin código abierto. Reinicio vigente verificado1791552560,9oct15:29:20Madrid, hora observada de cierre11:45Madrid. Una sola revisión de comprobar-renovaci-n-de-cuota actualizada y verificada ACTIVE para9oct15:31Europe/Madrid (reset+unminuto y redondeo), COUNT1, failed_runs_only y mismochat. Automatización histórica alternativa siguePAUSED, no duplicados/TOML manual/cron/hora supuesta. Próximo despertar verifica ambas cuotas/renovación/HEAD y continúa mientras haya trabajo útil/margen; reservas4%5h/1%7d y autorización encadenada vigentes, sin créditos/reinicios. Validación referencias/consistencia/diff y commitpushint/HEAD/cuotas al cierre.
+
+### Preparación 11c4a8pre — Provisión preproductiva autorizada
+
+El usuario confirma explícitamente que el nombre de DB preproductiva es dalis-tasks-events. Objetivo: ejecutar una vez el CLI/procedimiento validado en la conexión Preview/int ya identificada, exclusivamente índices centrales autorizados. Target_paths root plan/master.md, personal-index-provisioning.md, mixed-sync-activation.md, iterations.md e iteration-log.md; launcher y configuración privados temporales fuera del repo, sin cambios de código del proyecto. Dependencias2c71534, CLI y pruebas propias cerradas, autorización de índices9oct y confirmación actual del nombre. Entrada10%5h/41%7d reserva4%/1%; operación acotada existente, sin abrir hook/activación. Aceptación: revalidar procedencia Preview antes de conectar, descriptor explícito/autoridad exacta, credentials sólo env privado, bootstrap9+personal3 centrales, resultado finito/readiness/cierre fieles; no producción/repair/delete. Validación recibo real del CLI, diff/referencias/consistencia, commitpushint/HEAD/cuotas; código/build ya validados. Si falta acceso o falla procedimiento, cierre seguro con estado real y sin retry/reparación automática.
+
+
+### 11c4a8pre — Nombre confirmado; acceso pendiente de Vercel
+
+El usuario confirma dalis-tasks-events como nombre de DB preproductiva. Se revalidó la misma guía del recurso Preview identificado previamente; Show secret solicita Reauthenticate y queda deshabilitado hasta verificar identidad. Captura privada se abortó sin obtener URI, fichero de credenciales ni conexión Mongo; ninguna ejecución del operador, índice o mutación remota. Se pidió únicamente completar la verificación de Vercel en su propia pestaña, sin códigos en chat ni otra aprobación de índices. CLI/procedimiento siguen validados y autorización vigente; tras verificación reanudar captura privada/descriptor explícito/ejecución única/readiness/cierre, no reabrir pregunta del nombre.
+
+Entrada10%5h/41%7d reservas4%/1%. Este corte no activa producto ni modifica código. Validación documental referencias/consistencia/diff, commitpushint/HEAD/cuotas al cerrar si el acceso no queda disponible. Mantener revisión única15:31 con prompt actualizado a nombre confirmado y gate de reautenticación. Fuera de la provisión, siguiente hook mixto inactivo11c4a9h requiere ventana nueva.
+
+
+### Actualización 11c4a8pre — Identidad verificada; ejecución aplazada por cuota
+
+El usuario completó Reauthenticate. La URI del mismo recurso Preview se capturó en fichero temporal privado600 y se volvió a ocultar; no se imprimieron credenciales. El launcher no inició el CLI: primer fallo por condición react-server ausente en el proceso padre; segundo por pasar el campo de procedencia source al schema estricto de conexión. Ambos anteriores a spawn/conexión. Para siguiente ejecución usar --no-env-file --conditions=react-server en padre e hijo y pasar al resolver únicamente {mongodbUri,databaseName}, verificando procedencia aparte. La corrección del launcher se identificó pero no se ejecutó otra conexión. El finally eliminó el fichero de credenciales; launcher propio retirado al cierre. Ningún índice/DB/documento remoto tocado ni recibo de provisión inventado.
+
+Lectura real4%5h/40%7d: no abrir otra ejecución sobre reserva4%/1%. Nombre y verificación Vercel ya confirmados; única revisión15:31 preservada con prompt actualizado. Próximo lote revalida fuente Preview, recaptura URI privada y ejecuta procedimiento ya probado; no repetir pregunta del nombre ni pedir nueva autorización. Producto permanece1. Este corte cierra documentación y diagnóstico, no provisión completada; referencias/diff/consistencia, commitpushint/HEAD/cuotas.
+
+### Preparación 11c4a8pre2 — Provisión real tras renovar cuota
+
+Objetivo: ejecutar CLI validado en la conexión Preview del recurso verificado, con DB dalis-tasks-events confirmada por el usuario y autorización de índices vigente. Target_paths root plan/master.md, workflow.md, iterations.md, personal-index-provisioning.md, mixed-sync-activation.md e iteration-log.md; launcher/config privados temporales fuera del repo. Sin código productivo editado. Dependencias cbea03f, procedimiento propio validado y verificación Vercel completada; corregir preflight del launcher: react-server en padre/hijo y DTO sin source. Entrada renovación100%5h/40%7d, reserva4%/1%, reset1791570681 (9oct20:31:21Madrid). Antes de conexión revalidar origen Preview, validar configuración/descriptor y salida saneada. Aceptación: resultado real finito, prefijo/readiness/cierre fieles, sólo9auto+3personales centrales autorizados, ninguna reparación/drop/producción; archivos de credenciales privados limpiados siempre. Validación operador/preflight/recibo, referencias/consistencia/diff y commitpushint/HEAD/cuotas. No activar categorías en este corte. Si vuelve a faltar identidad/acceso, conservar bloqueo concreto y seguir hook independiente.
+
+
+### Resultado11c4a8pre2 — Índices Preview listos
+
+Fuente revalidada: guía del recurso conectado a MONGODB_URI Preview de Vercel, diferente del recurso Production previamente identificado; nombre dalis-tasks-events confirmado por el usuario. Credenciales capturadas sólo en fichero privado600 fuera del repo, ocultadas de nuevo en Vercel y eliminadas después de ejecutar; no URI/credenciales/autoridad ni datos en logs/versionado. Launcher propio retirado. Padre e hijo con --no-env-file --conditions=react-server, resolver estricto sólo {mongodbUri,databaseName} y procedencia validada aparte.
+
+CLI real preproduction con destino explícito y acuse bootstrap autorizado terminó exit0: status ready, phase complete, connection closed; provisioning ready, created item_views_user_item_uidx, tags_user_id_uidx, tags_user_active_name_uidx; readiness ready:true/missing:[]/incompatible:[], error:null. Singleton/ensureIndexes registrados usados, sin índices ad hoc ni corrección/borrado de documentos. Sólo la DB preproductiva autorizada; no producción/hosting/secretos/permisos. Recibo acredita provisión, todavía no activación del producto ni Google/convergencia desplegada. Procedimiento previo probado con Mongo propio; este corte operativo/documental valida recibo, referencias, consistencia y diff. Commit/pushint/HEAD/cuotas; siguiente11c4a9h y conexión conjunta con prueba de transición.
+
+### Preparación11c4a9h — Hook mixto y lifecycle real
+
+Objetivo: preparar useMixedSyncEngine reutilizando createMixedSyncClient/SyncSchedulerV2 y probar su montaje, señales, envío real, resumen y desmontaje con Next/IndexedDB/Mongo propios antes de conectar producto. Dependencias b7f0aaa, composición2 y doce escenarios Next; índices Preview ready+closed. Entrada95%5h/39%7d, reservas4%/1%.
+
+Paralelo seleccionado con rutas disjuntas: personal_projection posee únicamente src/features/sync/hooks/use-mixed-sync-engine.ts y helpers privados nuevos si imprescindibles; import_sync_proof posee templates test/next-sync/features/** y src/schemas/next-sync-test.ts para lifecycle, con API hook exportada useMixedSyncEngine({userId,epoch}) -> {userId,epoch,summary,error,busy,result,synchronize}, summary/result mixtos. Root integra fixture bootstrap/layout si necesario, plan, pruebas/publicación; no otros agentes ni cambios activos de rutas/proveedor/config. Los workers preservan cambios ajenos y no hacen commits.
+
+Hook usa cache separado [dalis:sync-queue,userId,epoch,2], guarda cuenta/época y disposed, cancela intento/scheduler y elimina listeners al desmontar; refresh filtrado por cuenta/incidentes. Fixture monta componente propio extraído sólo tras cuenta propia preparada y desmonta antes de cleanup; señales/manual pasan por hook real sin puertos sustituidos, pausa automática durante escenarios anteriores. Aceptación: ACK remoto real de intención propia, resumen mixto y pull exactos; desmontaje conserva cola/historia, ninguna continuación tardía del scheduler; nueva época no muestra resultados antiguos. Mantener doce escenarios anteriores y limpieza sólo recursos propios. Validación Next compilado+UI, tests pertinentes/lint/tipos/build/diff y registro/commitpushint/HEAD/cuotas. Producto permanece1 hasta activación conjunta posterior.
+
+
+### Resultado11c4a9h — Hook mixto y lifecycle comprobados
+
+useMixedSyncEngine reutiliza composición/controladores2, clave de resumen separada por cuenta/época/transporte, estado/controlador con ownership y cleanup guardado. Trece escenarios Next compilado pasan con sesiones/IndexedDB/Mongo propios: notificación de outbox refresca resumen, hook confirma la intención original una sola vez y ambas particiones convergen; rerender del mismo componente sin key descarta summary/busy/result de época vieja. Desmontaje idle elimina señales/listeners/scheduler; una intención posterior permanece pending/attempts0/lease null tras señales de despertar y1200ms sin reports ni efectos Mongo, antes de recuperación independiente. No acredita cancelación de red en vuelo.
+
+Fixture extraída en tres componentes/helpers propios con cache SWR aislada y sentinellegacy conservado; cleanup awaited antes de borrar exclusivamente particiones/control/cookies propias. Recursos Next/Docker/Mongo propios cerrados, evidencia /private/tmp/dalis-next-hook-proof-20261009.jpg. Suite459pass/98skip/0fail/7504aserciones, lint514/tipos/build34/diff aprobados. Producto todavía1, índices Preview ready+closed. Siguiente conexión conjunta11c4a10 con matriz de referencia antigua ausente y fronteras/proveedor reales antes de push; sin otra actuación sobre índices ni dependencias core.
+
+### Preparación11c4a10 — Activación conjunta y transición compilada
+
+Objetivo: activar transporte2 para contenido propio simple, categorías y asignaciones en int, con fronteras autenticadas/proveedor/UI reales y referencia legacy ausente probada antes de publicar. Dependencias f42a4e6 lifecycle13case y b7f0aaa índices Preview ready+closed. Entrada68%5h/35%7d, reservas4%/1%; corte completo, sin actuación adicional en DB del usuario o producción.
+
+Paralelo seleccionado: import_sync_proof posee schemas/next-sync-test.ts y templates features/local-client, device-client, controller para nuevo escenario legacy-missing-action-run; root posee scripts/next-sync-test-runner.ts, template default-api/hook-engine y todas las rutas/producto/plan/pruebas/publicación. Contrato cerrado: helper puro nextSyncMissingActionId(runId) devuelve42hex con byte40 derivados de UUIDcapability; runner valida ausencia node/edge en su manifiesto compilado antes de iniciar servidores. Fixture verifica404+x-nextjs-action-not-found, runtimelegacy con snapshot1 capturado explícito y dispatcherNextcallServer real rechaza sinACK/libera leasepropio; siguientehandshakeactual2 exigeactualizar antesdeclaim. Mongo/localhistory/UUID/deps conservados, posteriormente recuperación2 confirmauna vez. No importaracciónlegacy ni afirmarIDreal deldeployment.
+
+Root conecta identity explícita2, pulldefaultautenticado2, retiro de acciónlegacy, hook/proveedor/contexto/resumen2 y scope compacto en Ajustes simultáneamente. Fixture default-api delega en GET de rutas reales detrás de su guardia propia; componente de prueba consume ActiveSyncProvider/SyncContext reales conservando montaje sin key/epochproof. Añadir aviso compacto de proyección personal bloqueada si procede, sin ocultarpendientes ni fabricarACK para task.move. Mantener intención1 y defaultlegacy1, no rango1–2, no cambios de hosting/secretos/permisos/deps ni índices desde requests.
+
+Aceptación: toda matriz previa+referenciaausente+ciclo proveedor real pasan en Next/IndexedDB/Mongo propios antes de push; no estados2 parcialespublicados; clientesantiguosconservanpendientes; UIdeclara sóloalcanceimplementado. TestsUI/tipos/lint/suite/build/diff, plan/registro/ConventionalCommitpushint/HEAD/cuotas; pilotoGoogle/preproducción posterior separado, pidiendo sólo acceso necesario si falta.
+
+
+### Resultado11c4a10 — Activación conjunta del transporte2 en int
+
+Identidad anuncia2 explícito con sesión autorizada; cambios delega en adapter autenticado mixto; legacy push deja de ejecutar y responde retiro compatible si su referencia existe. ActiveSyncProvider/SyncContext/hook/resumen2 y alcance compacto de Ajustes conectados conjuntamente. Aviso mínimo enlaza Ajustes cuando la proyección personal permanece bloqueada, incluso con settled. Intenciones/defaultslegacy permanecen1; ningún rango1–2, nuevo índice desde requests o ACK de task.move. Production no provisionada: su rollout queda condicionado a actuación separada autorizada, nunca a este pushint.
+
+Catorce escenarios Next compilado pasan, ahora usando GET de las rutas de producto y ActiveSyncProvider/SyncContext reales detrás de guardias propias. Referencia candidata42hex verificada ausente del manifiesto propio: probeHTTP404/x-nextjs-action-not-found y dispatcher real callServer rechazado como UnrecognizedActionError. Runtimelegacy con snapshot previo1 explícitamente capturado produce retry_later, conserva todos los stores/cursor/UUID/deps, libera leasepropio y sólo aumenta attempts a1; siguiente handshakeHTTPactual2 devuelve update_required antes declaim. Mongo intacto en ambas pasadas; recuperación2 da ACK real único con attempts2 y dos particiones convergentes. No acredita ID de otro deployment ni handshake1 actual, Google o cancelación en vuelo.
+
+Suite460pass/98skip/0fail/7507aserciones, lint514/tipos/build34/diff aprobados. Manifiesto del producto: una acciónnode pushSyncOperationsV2, ceroedge; legacy action eliminada del build sin conservarendpointficticio. Recursos Next/Mongo/IndexedDB/cookies propios limpiados; evidencia /private/tmp/dalis-next-activation-proof-20261009.jpg. Índices Preview ya ready+closed en b7f0aaa. Commit/pushint/HEAD/cuotas; siguiente15a2 piloto preproductivo real con Google, recarga y comprobación de categorías/asignaciones. Pedir sólo intervención de acceso/dispositivo que realmente falte, no repetir aprobación de índices. Ordenmanual/series/compartidos siguen fuera.
+
+### Preparación15a2 — Piloto real de categorías y asignaciones en preproducción
+
+Objetivo: verificar que el deployment de int incorpora e54d93f y comprobar Google/cliente mixto real, creación personal propia, ACK/revisión, recarga y segundo dispositivo si disponible. Target_paths plan/master.md, sync-test-environment.md, mixed-sync-activation.md, iterations.md e iteration-log.md; sólo UI de preproducción y datos de prueba propios identificados, sin modificar datos existentes/producción ni ejecutar más índices. Dependencias índices ready+closed, activación y catorce escenarios completos. Secuencial; presupuesto real después del commit, reserva4%/1%.
+
+Aceptación: versión desplegada constatada por UI y estado, sesión autorizada y pasos observados; registrar límites exactos si falta login/segundo dispositivo/acceso, pedir al usuario sólo esa intervención y detener la ejecución dependiente. No convertir dos pestañas de misma partición en evidencia multidispositivo ni declarar éxito por petición sinACK. Conservar todos los datos/pendientes del usuario, no borrarDB/repair/autosupersession. Capturas sin credenciales/PII innecesaria; validar documentos/referencias/diff, commitpushint/HEAD/cuotas al cerrar cada resultado coherente. Cualquier fix funcional exige alcance/tests/DoD completos antes de publicar.
+
+### Ampliación15a2f — Selector de categoría de tareas
+
+El piloto de e54d93f encuentra una integración omitida: TaskList usa task.move también para cambiar categoría, creando una intención sin executor. La categoría nueva se confirmó; asignar la tarea propia generó un movimiento pendiente no soportado. No reinterpretar ni superseder ese registro histórico. Objetivo del fix: selector usa useItemCategory/assignLocalCategory existente e intención item-view.set; reordenación explícita conserva task.move y su alcance local. Target_paths root src/features/tasks/components/task-list.tsx y plan; import_sync_proof test/browser/task-ordering.ts y fixture/helpertest propios asociados, sin sourceproduct/commits ni datosusuario. Paralelo disjunto seleccionado, root integra/publica. Dependencias e54d93f y piloto observable; aceptación UI real crea item-view.set al elegir/quitar categoría sin placements ni task.move, sin depender de lectura de placements para asignar; busy/error/foco conservados. Ordenmanual se mantiene intacto. Prueba browser propia más suite/lint/tipos/build/diff, registro/commitpushint/HEAD/cuotas. Cola antigua del piloto se conserva y su recuperación explícita queda acreditada como límite, nunca fabricando ACK.
+
+
+### Resultado15a2f — Selector de tareas corregido; piloto histórico conservado
+
+El deployment e54d93f se observó Ready en Vercel. El cliente PWA anterior mostró update_required sin borrar sus cuatro elementos; cerrar la última pestaña Dalis y reabrir activó el alcance mixto manteniendo la sesión Google. La categoría propia «Piloto sync 9 oct 2026» pasó a cola vacía. La tarea propia «Piloto asignación 9 oct 2026» se creó, pero su selector emitió task.move, fuera del alcance remoto; Ajustes terminó la revisión conservando un pendiente personal sin soporte. No es un ACK ni convergencia de la asignación.
+
+TaskList conecta ahora el selector a useItemCategory/assignLocalCategory: elegir/quitar usa item-view.set sin escribir colocaciones; reordenación explícita continúa task.move local. Busy/error/foco y bloqueo de elección rápida conservados. Prueba real de TaskList/hooks/IndexedDB en origen loopback separado: asignar Casa y quitar produce exactamente dos nuevas item-view.set pending/attempts0/lease null, con items, colocaciones y entradas anteriores intactos. Cinco casos anteriores de orden y recarga pasan; inspección tras recarga repite persistencia y selector. Control y particiones propios limpiados. La primera prueba rechazó correctamente un origen con control previo; no se borró ese control ajeno al run. Evidencia /private/tmp/dalis-category-selector-proof-20261009.jpg.
+
+Suite460pass/98opt-in skip/0fail/7507aserciones, lint515/tipos/build34/diff aprobados. Queda el movimiento histórico del piloto en preproducción: preservado, bloquea la cadena y proyección personal según contrato. No convertirlo en item-view.set, modificar dependencias, borrar ni fabricarACK. El fix evita nuevas asignaciones mediante task.move; no resuelve por sí solo colas históricas. Falta validar deployment del fix y piloto real con partición de segundo dispositivo; dos pestañas IAB no son dos dispositivos. La recuperación de ese bloqueo necesita ejecutor de movimientos o una elección explícita respaldada por contrato/ejecutor, aún inexistente para unsupported. No declarar categorías/asignaciones completamente resueltas en esta cuenta mientras permanezca.
+
+El usuario pide cerrar categorías/asignaciones y después recibir porcentaje estimado y titulares restantes en orden óptimo, para elegir siguiente bloque. No continuar automáticamente a bloques ajenos tras cerrar ese objetivo. Pedir sólo intervención de dispositivo/acceso/decisión que realmente falte. Commit/pushint/HEAD/cuotas al cierre.
+
+
+### Cierre15a2f — Deployment listo y criterio pendiente
+
+Commit1a6911899fd16adf2dd7aa00e69d9f85075cb750 publicado y HEAD remoto exacto verificado; Vercel Preview EqJ7xmXaBiCfet2PFjLJiHLfWcaF mostró Ready con ese commit. La app avisó de actualización; cerrar la última pestaña y reabrir conservó Google, siete elementos y el pendiente personal sin soporte. No se modificó la intención task.move del piloto ni se declaró ACK/convergencia. Lectura tras commit36%5h/30%7d; cierre por decisión de alcance pendiente, no por cuota. Sólo IAB y MCP Apps disponibles: no segundo perfil de navegador independiente para piloto vivo.
+
+Se solicitó al usuario elegir entre completar orden remoto para conservar/sincronizar el movimiento histórico o desarrollar recuperación explícita para mantenerlo sólo local y reenviar asignación. Ambas necesitan implementación y evidencia, no son herramientas ya disponibles. Según su petición de interrumpir si hace falta criterio y esperar elección tras cerrar categorías/asignaciones, se pausó comprobar-renovaci-n-de-cuota conservando nombre/chat/RRULE/notificaciones failed_runs_only; no nueva revisión encadenada. No comenzar trabajo dependiente sin respuesta. Al cerrar la sincronización, informar porcentaje total estimado y titulares pendientes en orden óptimo antes de otro bloque. Código íntegro aprobado; este cierre sólo verifica referencias/coherencia/diff y termina commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a2 — Política civil y plan remoto de movimientos simples
+
+El usuario elige completar orden remoto para conservar y sincronizar el movimiento histórico que bloquea categorías/asignaciones. Dependencias0dbeab6, núcleo planTaskPlacements11c5a1p, efectos/vistas/reductor/transporte2 existentes. Entrada33%5h/29%7d, reserva4%/1%, reset1791570681; reanuda trabajo del objetivo, no otros bloques después de cerrarlo. Target_paths root src/schemas/remote-task-placement-planning.ts, src/types/remote-task-placement-planning.ts, src/lib/preferences/remote-task-placement-plan.ts y tests, plan/preference-sync.md, master/iterations/iteration-log/workflow. Agente personal_outcomes revisión readonly disjunta de dependencias de activación; sin código compartido ni edición de archivos.
+
+Política: intención1 conserva UUID/payload/fecha; overdue usa command.date como día civil as-of declarado y sentinel permanente de colocación, sin timestamp supuesto ni reloj/zonaremota. La tarea actual debe seguir propia/simple/activa y estar atrasada respecto a ese día; day exige scheduledDate actual coincidente. Estado completado excluye overdue. Ocurrencias/series permanecen unsupported. CAS primario corresponde a placement(target,scope,datecanónica); categoría explícita del movimiento se aplica contra la vista actual del snapshot, CAS de cada efecto al persistir. Catálogo completo acotado10000 porfamilia, con dueño/identidades/metadata/canonización validados; no truncar. Vecinos/ranks autoritativos del snapshot, multiefectos/contenido intacto/tombstones y límites de journal.
+
+Aceptación: bases ausente/existente/revisión incorrecta, cambio de categoría histórico, overdue tardío/cambiofecha/completado y day; aislamiento/corrupción/vecinosobsoletos/compactación/tombstones/series/límites/clones. Planner puro no abre DB, no recibos/ACK, no activar capacidades ni callers. Tests pertinentes/suite/lint/tipos/build/diff, planregistro/ConventionalCommit/pushint/HEAD/cuotas; siguientes repositorios/CAS/índices y executor real antes de ACKpull/activación/piloto.
+
+
+### Resultado11c5a2 — Plan remoto puro de movimientos simples
+
+Planner valida catálogo íntegro propio (10000 por familia), identidades/revisiones/categorías y ancla canónica; CAS primario por colocación y revisiones independientes de cada efecto. Reutiliza planTaskPlacements/orden implícito/reductor de vistas. Day exige fecha actual de tarea; overdue interpreta command.date como día civil declarado, sin comparar hora actual ni zona remota. Tarea completada/reprogramada, vecinos obsoletos, tombstones y series/ocurrencias conservan rechazo/unsupported; ninguna intención histórica reescrita. Categoría y compactación son efectos conjuntos acotados512KiB antes de journal; contenido intacto. Sin Mongo/ACK/callers/capacidades activos nuevos.
+
+Siete tests/45aserciones prueban creación, cambio categoría, CAS/ausencia/tombstone, atraso tardío/cambio fecha/completado, vecinos/ranks implícitos/compactación, corrupción/aislamiento/catalog10001 y5000efectos que exceden bytes sin salida parcial. Suite467pass/98opt-in skip/0fail/7552aserciones, lint519 sinruido/tipos/build34/diff aprobados. Próximo11c5a3: repo de colocaciones/índice explícito y catálogos propios acotados items/views, con CAS/rollback Mongo antes de executor multiefecto. El piloto histórico sigue pendiente hasta activar toda cadena. Commitpushint/HEAD/cuotas al cierre; usuario eligió conservar/sincronizar el movimiento.
+
+
+### Preparación11c5a3 — Persistencia y catálogo propio de colocaciones
+
+Dependencias c3c4770 plannerpuro y singleton/DBtest. Entrada21%5h/27%7d reserva4/1; corte limitado sin executor/capacidades. Paralelo disjunto: personal_projection posee sólo src/lib/db/remote-task-placements.ts y remote-task-placements.integration.test.ts; rootposee collections.ts, ensure-indexes.ts y tests, remote-items.ts, remote-item-views.ts, schemas/remote-task-placement-planning.ts, scripts/sync-db-test-runner.ts yplan. Contrato RemoteTaskPlacementRepository.open(actor,session?), read({occurrenceId,scope,datecanonical}), catalog(), insert(record), replace(baseRevision,record) sobre colección registrada taskPlacements. Schema/metadata positivos central, _idtuple actor/scope/date/occurrenceId, ownership y CAS cada documento, no resurrección; duplicate fueraTXfalse/dentroTXabort. Catálogo ownbound10000+1 y sortscope/date/occurrenceId rechazaexceso/corrupción sintruncar.
+
+Índice único explícito task_placements_user_scope_date_occurrence_uidx con keys userId/scope/date/occurrenceId; cubre lookup/catalog, no segundoespeculativo. Items/views catálogoown acotado10001 ysortporidentidad coníndicesvigentes; sinlecturas fuera snapshot del futuroexecutor. AceptaciónMongo propia: aislamiento/compositeidentity/CAS/metadata/tombstone/corrupción/catálogo/rechazoexceso/lecturaTX yrollback múltiple. Runner incluye prueba nueva; revalidar Docker/image ylimpiarúnicamentepropios. FullDoD/registro/commitpushint/HEAD/cuotas. No índices nuevos en DBusuario, producción ni cambios de permisos, no activar task.move antes de executor/ACKpull/incidentes/readiness completos.
+
+
+### Resultado11c5a3 — Repositorio y catálogos completos probados
+
+RemoteTaskPlacementRepository usa singleton/sesión, _id compuesto actor/scope/fecha/identidad, key canónica, revisión positiva y CAS por cada documento; duplicado fuera de TXfalse y dentro aborta, tombstone no resucita. Catálogos de placements/items/views propios, deterministas y limit10001 rechazan exceso/corrupción sin recortar. Una misma snapshot ve lecturas/escrituras conjuntas y rollback tardío conserva todo. Único índice registrado task_placements_user_scope_date_occurrence_uidx explícito cubre identidad y catálogo, no automático. Selección productiva personal permanece3 índices tags/views: test existente actualizado para comprobar su subconjunto explícito, no asumir todos los índices staged de features futuras. Target_paths de reparación acotada incluye mixed-sync-index-provisioning.test.ts.
+
+Docker28.4.0 e imagen local fijada8.2.11amd64 revalidados. Mongo propio62pass/0fail/733aserciones14archivos, seis casos nuevos: aislamiento compuesto, CAS/metadata/tombstone, corrupción, catálogos own/sort/tombstones, snapshot/rollback/duplicado y exact10000frente10001 en tresfamilias. Runner exit0 limpió únicamente contenedor/tmpfs/bridge propios. Suite468pass/106opt-in skip/0fail/7555aserciones, lint521/tipos/build34/diff aprobados. No DBusuario/índices en preproducción nuevos, executor/capacidades/UI sin activar.
+
+Siguiente11c5a4: executor multiefecto con replay/actor/catálogo en misma TX, CAS cada placement y vista, receipt+journal atómicos/rollback/races; luego autorización del reader, ACKpull/snapshot/incidentes y prueba dosdispositivos antes de activar. Revisión readonly detectó que lectoresclientes2 rechazan placements; transición obligatoria negociación3 separada de sobres/evidencia2/intenciones1, retiro acción2 incluso después de identity2/pull2 capturados, acción3/cache3 y matrixNext. No saltarse esta transición ni anunciarordenremoto por registrar repo. Movimiento histórico del piloto intacto. Commitpushint/HEAD/cuotas al cierre.
+
+
+### Preparación11c5a4 — Ejecutor transaccional de movimientos propios
+
+Objetivo: confirmar la intención task.move original con todas las colocaciones/vista y un único receipt/journal/counter; replay común primero en la misma snapshot, sin activar dispatcher. Dependencias8c70e49 y planner/repositorios11c5a2–3. Paralelo disjunto seleccionado: root posee src/lib/db/remote-task-placement-commands.ts, scripts/sync-db-test-runner.ts y plan; personal_projection sólo src/lib/db/remote-task-placement-commands.integration.test.ts. Ningún cambio compartido ni DBusuario. Aceptación: CAS primario placement y de cada efecto/vista, catálogo completo acotado actor/snapshot, aislamiento/simple only, UUID/replay exactos, rollback tardío y carreras reales sin journal/ACK parcial. Validación Mongo propia fijada/limpieza propia, suite/lint/tipos/build/diff; registro, ConventionalCommit/pushorigin/int/HEAD/cuotas. Reader/ACKpull/negociación3 siguen prerrequisitos de activación.
+
+
+### Resultado11c5a4 — Movimientos propios atómicos preparados
+
+Ejecutor privado valida/replay común primero, catálogos íntegros en snapshot y CAS independiente de cada colocación/vista; receipt, journal y secuencia comparten TX. No caller/capacidad activa ni índices en DBusuario. Ocho casos Mongo nuevos pasan: compactación tres efectos/contenido intacto, replay exacto tras revocar acceso y UUID reuse, CAS principal frente vista independiente/tombstones, aislamiento/errores/kinds, rollback tardío completo, corrupción de cuatro catálogos, carreras y overdue civil declarado con snapshot. Mongo70pass/0fail/883aserciones15archivos; recursos propios retirados. Suite468pass/116opt-in skip/0fail/7555aserciones; lint523/tipos/build34/diff aprobados. Próximo reader autorizado y ACK/proyección/pull/incidentes; negociación3 y retiro2 obligatorios antes de activar. Movimiento del piloto conservado, aún sin ACK productivo. Cierre commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a5 — Lectura privada y ACK puro de colocaciones
+
+Objetivo: descargar historia de movimientos sólo con ownership actual del placement/tarea/tags y preparar ACK/proyección pura multiefecto sin activación. Dependenciasa06901e; entrada88%5h/23%7d reservas4/1. Paralelo disjunto: root remote-changes-v2.ts, remote-changes-v2.integration.test.ts y plan; personal_outcomes preference-result-plan.ts/test.ts, schemas/preference-projection.ts y lib/sync/preference-projection.test.ts. Aceptación: historia/tombstones propios autorizados con snapshot; ausencias/corrupción/foreign rechazan página completa sin cursor parcial; primary taskPlacementEntityKey explícito pese tagId; rebase sólo pending attempts0 dependiente directo por effect key, UUID/payload/intentadas conservadas, replay viejo/evidencia/tombstones sin regresión. Mongo propio y tests puros pertinentes, suite/lint/tipos/build/diff, registro/commitpushint/HEAD/cuotas. IDB/incidentes/negociación3/readiness aún pendientes; no dispatcher/capacidad nuevos.
+
+
+### Resultado11c5a5 — Lectura privada y ACK puro de colocaciones
+
+Reader envelope2 admite colocaciones sólo con placement/tarea propios actuales y tags históricos/actuales propios en snapshot; tombstones conservan ownership, ausencia/foreign rechaza página completa. ACK puro usa switch explícito de primary taskPlacementEntityKey aunque el comando tenga tagId; proyección conserva colocaciones, vista, secundarios, revisiones/evidencia y rebase exclusivamente de dependientes directos pending/attempts0. UUID/payload/intentadas sin reinterpretación. Tests incluyen historia tras cambiar categoría/tombstones y ausencias/foreign placement/task/tags; ACK/rebase/overdue/conflictos/replay tardío/tombstones/guardias puros. Mongo72pass/0fail/904aserciones15archivos/limpieza propia; suite473pass/118opt-in skip/0fail/7634aserciones, lint523/tipos/build34/diff aprobados. Primera compilación leyó fixture paralelo aún en edición y falló tipos; la final tras READY pasó. Productores/capacidades permanecen desconectados; IDB/incidentes/transición3/readiness pendientes. Commitpushint/HEAD/cuotas; piloto histórico intacto.
+
+
+### Preparación11c5a6 — ACK y descarga local transaccionales de colocaciones
+
+Objetivo: snapshots/write/ACK y cursor incluyen taskPlacements con effects conjuntos y rollback íntegro. Dependencias0981dbc, entrada79%5h/21%7d reservas4/1. Paralelo disjunto root src/lib/local-db/preference-sync-results.ts, pull-changes-v2.ts, src/lib/sync/local-changes-page-v2.ts y tests pertinentes/plan; import_sync_proof sólo test/browser/preference-sync-results.ts y sync-pull-v2.ts. Aceptación IndexedDB real ownpartitions: ACK multiefecto/rebase/replay/tried preservada, cursor/pull completo y proyección pendiente, tombstone/historia, fallos tardíos sin escritura/ACK/cursor parcial; ownership/límites/canonical/lease conservados. Fixture no sustituye executor/two-device/Google. Suite/lint/tipos/build/diff y prueba browser/limpieza propia; registro/commitpushint/HEAD/cuotas. Incidentes/readiness/negociación3 antes de activar.
+
+
+### Resultado11c5a6 — ACK/pull IndexedDB de colocaciones
+
+Snapshots acotados, escrituras personales/ACK/evidencia y cursor incluyen colocaciones en la misma TX; páginas mantienen efectos íntegros y rechazan settings, cuentas ajenas y fechas overdue no canónicas. Rebase/conservación de intentadas y reconciliación completa reutilizan el plan puro. IAB ownorigins4191/4192:14 checksACK y9pull observados completos (conteo real, no15 preliminar); revision1/8/4, dependientes/UUID/intentadas, replay/shadows nuevos/tombstones, rollback tardío de placement/outcome/cursor, cadena pendiente/proyección y fila10001. Primeras ejecuciones encontraron comparaciones raw/canonical y sort que mutaba snapshot en fixture; corregidos sin alterar producto y repetición completa aprobada. Particiones propias eliminadas, pestañas/servers propios cerrados; pruebas no sustituyen executor integrado/two-device/Google. Evidencia /private/tmp/dalis-placement-ack-proof-20261009.png y dalis-placement-pull-proof-20261009.png. Suite474pass/118opt-in skip/0fail/7638aserciones, lint523/tipos/build34/diff aprobados. Sin productores/capacidades nuevos ni DBusuario. Próximos incidentes que lean placements actuales, compatibilidad3/readiness/prueba integrada antes de activar. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a7 — Evidencia actual de conflictos de orden
+
+Objetivo: overview lee placements actuales en la misma TX readonly y muestra orden/categoría compactos sin fabricar null ni nuevas elecciones de recuperación. Dependenciasf8c70c3, entrada62%5h/19%7d reservas4/1. Paralelo disjunto root lib/local-db/sync-incidents.ts, schemas/sync-incident.ts y personal-snapshot.ts (schema canónico compartido), lib/sync/incident-snapshot.ts, features/sync/components/personal-incident-version.tsx y sync-incident-panel.test.tsx/plan; personal_outcomes sólo lib/sync/incident-snapshot.test.ts; import_sync_proof sólo test/browser/preference-sync-results.ts. Aceptación: actual/localAtOutcome/base/currentremote independientes, primary+secundarios conservados, storedforeign/canonical/duplicates rechazados y lectura readonly exacta; componente compacto español muestra posición y día/atrasadas sin botones de resolución inexistentes. Tests puros/componente más IndexedDB real tras conflicto, suite/lint/tipos/build/diff/cleanup own; registro/commitpushint/HEAD/cuotas. Negociación3/readiness/integración/activación posteriores.
+
+
+### Resultado11c5a7 — Incidentes con colocación actual
+
+Overview exige catálogo local de placements canónicos y lo lee junto a seis stores en TX readonly; current/localAtOutcome/base/remote conservan versiones independientes y no inventan null. Schema canónico compartido extraído de personal-snapshot, sin default vacío que oculte un reader incompleto. Componente existente muestra día/atrasadas, posición y categoría/revisión/tombstone de forma compacta; sin nueva resolución ni botones inexistentes. Dos tests puros prueban conflicto overdue y vista dependiente, intenciones intentadas/congeladas/grafo, clones/foreign/duplicates/canonical. Test componente día/atrasadas y15 checksACK/incident en IAB real completados: cambio posterior de posición sólo actualiza current; lectura de siete stores readonly exacta. Evidencia /private/tmp/dalis-placement-incident-proof-20261009.png, particiones/servers/pestañas propios cerrados. Suite477pass/118opt-in skip/0fail/7693aserciones, lint523/tipos/build34/diff aprobados. Próxima compatibilidad negociación3/retiro2, readiness e integración antes de activar; task.move histórico intacto/sinACK productivo. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a8 — Compatibilidad3 preparatoria y retiro seguro de2
+
+Objetivo: factory3 exige anuncio3 antes de leer cuerpo/cache/cursor; sobres/journal/evidencia2 e intención1 sin cambios. Helper de retiro2 valida sesión/envelope/expectedactor y responde update_required antes de cualquier readiness/executor, incluso con handshake2 capturado. Dependencias38d3bf4, entrada52%5h/17%7d reservas4/1. Paralelo disjunto personal_projection posee config/sync-protocol.ts, features/sync/http-transport-v2.ts, nuevos http-transport-v3.ts/test.ts; root nuevos retired-sync-push-v2.ts/test.ts yplan. API factory2 mantiene firma/semántica; factory3 reutiliza kernel y dispatcher recibido. Aceptación matrix1/2→3 y3→2 rechaza antesbody;3→3 envelope2/intention1 intactos/cookies/timeout; retiro2 sinACK/queue mutation y lease propio liberado con coordinator2. Defaults legacyversion1, anuncios/rutas/acción2/proveedor/capacidades activos sin cambiar. Pruebas puros/servicio/suite/lint/tipos/build/diff, registro/commitpushint/HEAD/cuotas. Next real acción3/action2 ausente, readiness4 e integración posteriores antes de activar.
+
+
+### Resultado11c5a8 — Negociación3 y retiro2 preparados
+
+Factory3 sobre kernel común requiere anuncio3 antesbody; firma/semántica V2 fixed2 y defaultlegacy1 intactos. DTO/push/journal/evidencia2 e intención1 no se reescriben. Matrix legacy/2↔3 rechaza body;3↔3 valida colocaciones/sobres2/cookies/account, deployment tras identidad capturada y guards. Helper de retiro2 autenticaheaders/envelope/expectedUserId y rechaza sin readiness/executor/ACK. Coordinator2 con identity2/pull2 capturados conserva intención/deps/cursor/historia y libera únicamente sulease; siguienteidentity3 bloquea antesclaim. Fallos auth saneados y comandos futuros preservados. Nada conectado a rutas/acción2/client/provider activos: no retirar2 antes de conexión conjunta ni anunciar rango2–3. Suite484pass/118opt-in skip/0fail/7798aserciones, lint527/tipos/build34/diff aprobados. Próxima acción/defaults3 y readiness4 preparatorios, prueba Nextreal retiro2/IDausente y transporte3; luego provisiónplacement autorizada validada y activación/piloto. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a9 — Acción3/defaults y readiness de orden preparados
+
+Objetivo: dispatcher3 propio enruta task.move al executor atómico y reutiliza2 para otras intenciones; puente/acción3 usa sesión autorizada y readiness cuatro índices antes de ejecutar. Defaults/callers2 permanecen intactos. Dependenciascf03163, entrada43%5h/16%7d reservas4/1. Paralelo disjunto: personal_projection sólo lib/db/mixed-sync-index-specs.ts, mixed-sync-index-readiness.ts y nuevo placement-sync-index-readiness.test.ts; import_sync_proof sólo nuevo lib/db/remote-operation-commands-v3.integration.test.ts; root nuevo lib/db/remote-operation-commands-v3.ts, features/sync/authenticated-push-v3.ts/test.ts, actions-v3.ts, client-action-v3.ts, runner yplan. Selector4 reutiliza3 más placement exacto registrado, inspection común no escribe/provisiona; actor/catálogo/receipt/races del executor reutilizados. Aceptación auth/envelope/account/readinessfail antesdispatcher y sanitizederrors; Mongo viejo UUID/payload/deps sin cambiar:2unsupported→3ACK único/replay y dependientes→pull completo, otrasfamilias/identity reuse/ocurrenciasunsupported. Suite/Mongo propios/lint/tipos/build/diff/cleanup; registro/commitpushint/HEAD/cuotas. No ruta/provider/capability/provisión DBusuario activos. Nextreal matrix, operador/provisión4 y conexiónjoint posteriores.
+
+
+### Resultado11c5a9 — Dispatcher/acción3 y readiness de cuatro índices preparados
+
+Dispatcher3 valida intención1/actor y enruta task.move al executor multiefecto, reutilizando2 para otros comandos sin reescribir UUID/payload/receipt. Acción y cliente3 preparados conservan envelope2, sesión BetterAuth/allowlist y guardia de cuatro índices antes de ejecutar. Selector/inspector4 exige placement único exacto registrado; active2 mantiene selector3 y schema de provisión3 intactos. Mongo propio prueba UUID histórico unsupported2 sin receipt → ACK3 único/replay exacto → dependientes tag/view con revisiones independientes → descarga íntegra; foreign/identity reuse/deleted-source replay y ocurrencia/event/serie unsupported. Mongo75pass/0fail/985aserciones16archivos, recursos propios retirados. Suite493pass/123opt-in skip/0fail/7905aserciones; lint534/tipos/build34/diff aprobados. Producto sigue negociación2 y no se han creado índices en DBusuario. Próxima composición cliente3/cache separado y pruebas Next de transición; operador/provisión4 validada y conexión conjunta antes de activar. Movimiento piloto pendiente conservado. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a10 — Composición cliente3 y caché de resumen separada
+
+Objetivo: composición privada3 reutiliza runtime/attempt2, captura cuenta/época inmutables y conecta exclusivamente transport3/acción3; selector de caché explícito2/3 sin cambiar el hook activo2. Dependenciasbc0f791, entrada31%5h/14%7d reservas4/1. Secuencial root: features/sync/mixed-sync-client.ts, nuevo mixed-sync-client-core.ts, mixed-sync-client-v3.ts/test.ts, sync-summary-cache-key.ts/test.ts, hooks/use-mixed-sync-engine.ts yplan. Aceptación cliente2 conserva defaults/semántica, cliente3 rechaza anuncio2 antesbody/envío y acepta sólo3 con DTO2; cuenta/epoch/coalescencia/cancelación/refreshguardado conservados; cache3 distinta de2 por cuenta/época, sin metadata/outbox rewrite ni caller3 activo. Pruebas composición/cache, suite/lint/tipos/build/diff, plan/registro/commitpushint/HEAD/cuotas. Hook/provider/route/capabilities activos no se migran en este corte; pruebaNext/transición/operador4/provisión/joint posteriores.
+
+
+### Resultado11c5a10 — Cliente3 y caché preparados
+
+Núcleo compartido captura cuenta/época inmutables y conserva attempt/runtime, guardias de refresh y coalescencia/cierre. Wrapper3 selecciona transport3/acción3 juntos; cliente activo2 mantiene sus defaults. Clave de resumen2/3 conserva posiciones cuenta/época e invalidación común, pero distingue generaciones; hook activo conserva exactamente key2. Siete tests nuevos prueban DTO2/intención1, anuncio1/2 rechazado antesbody/dispatch, identidad capturada, refresh/account loss, stop-before-open, caché/guards; tests existentes2 pasan. Suite500pass/123opt-in skip/0fail/7948aserciones, lint539/tipos/build34/diff aprobados. Primer fixture usó nombre de método incorrecto y literales ampliados; corregidos y compilación final aprobada. Sin migración de metadata/caller3/capabilities/provisión. Próximas pruebasNext reales de transición, operador4/provisión autorizada y conexión conjunta. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a11 — Provisión explícita de cuatro índices por puertos
+
+Objetivo: plan/provisión4 validan inventario exacto antes de crear, reutilizan motor acotado de provisión3 y preservan incompatibilidades/prefijos sin reparación. Dependencias268839b, entrada29%5h/14%7d reservas4/1. Secuencial root: schemas/placement-sync-index-provisioning.ts, lib/db/index-provisioning-core.ts, mixed-sync-index-provisioning.ts, placement-sync-index-provisioning.ts/test.ts yplan. Aceptación inventario4 estricto/no duplicados ni futuros; base3 mantiene schema/firma/errores/semántica; cada creación usa definición central clonada y reinspection; deriva incompatible bloquea toda escritura, error saneado, retry/respuesta perdida/loop acotado/noop sin borrar. Pruebas puertos3+4, suite/lint/tipos/build/diff; plan/registro/commitpushint/HEAD/cuotas. Sin defaults/conexión/CLI/DBusuario en este corte; operador4 y prueba Mongo propia siguientes antes de provisión Preview ya autorizada.
+
+
+### Resultado11c5a11 — Provisión4 por puertos validada
+
+Inventario4 estricto y nombres centrales incluyen placement; motor común mantiene semántica/schema/API3 y planifica exclusivamente definiciones registradas/clonadas. Antes de cada creación y al final inspecciona de nuevo, incompatibilidad bloquea toda escritura, prefijos parciales/respuesta perdida se observan sin inferir éxito ni borrar/reparar/reintentar indefinidamente. Seis tests4 nuevos y nueve previos3 pasan: maxcinco inspecciones, noop, corrupción, duplicate_data, falta persistente y failed-call aplicado. Suite506pass/123opt-in skip/0fail/7976aserciones; lint543/tipos/build34/diff aprobados. Ningún caller/default/CLI/conexión4 ni DBusuario aún: operador/destino/lifecycle y pruebaMongo propia próximos, antes de provisiónPreview autorizada. Producto sigue2; piloto histórico intacto. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a12 — Operador4 con destino/lifecycle y CLI Mongo propio
+
+Objetivo: proceso separado aplica provisión4 tras target/acuse/bootstrap validados, cierra su singleton y emite sólo recibo saneado ready+closed; preview offline muestra automático9+personal4. Dependencias8fc71ea, entrada27%5h/13%7d reservas4/1. Paralelo disjunto seleccionado: import_sync_proof sólo nuevo lib/db/placement-index-operator.integration.test.ts; root lib/db/index-execution-core.ts, personal-index-execution.ts, placement-index-execution.ts/test.ts, placement-index-operator.ts, scripts/provision-placement-indexes.ts, preview-placement-indexes.ts, sync-db-test-runner.ts yplan. Aceptación validate-before-open/DBname-after-open/cierre incluso falla/partial sans secrets; legacy3 inalterado. Mongo fixture fresco propio pruebaCLI/defaults bootstrap9+personal4, noop, partial/retry y destino incorrecto sin writes; no DBusuario/hosting/secretos. Runtime padre/hijo no-env-file+react-server, URI sólo env privado, no args/logs. Fullsuite/lint/tipos/build/Mongo propio/cleanup/diff, registro/commitpushint/HEAD/cuotas. Preview provision real autorizado después de este procedimiento y fuente/config confirmadas; jointactivation/Next matrix siguen pendientes.
+
+
+### Resultado11c5a12 — Operador4/defaults/CLI probado en Mongo propio
+
+Proceso separado comparte validación destino/acuse y ciclo de conexión con operador3, exige DB real despuésbootstrap y cierre antesready. Defaults4 reusan singleton/ensureIndexes automático9 y selección personal4; scripts preview/provision específicos, URI sóloenv privado y recibo finito saneado. Cuatro tests lifecycle nuevos y cuatro previos3 pasan. Mongo propio3casos88aserciones: destino/argumentos/env erróneos no recrean automático9 retirado por fixture; CLI/defaults bootstrap9+personal4 y noop; duplicate placement conserva documentos/prefijo3, retry sóloplacement tras retirar exclusivamente duplicado del fixture. Recursos propios limpiados. Previewoffline9+4 confirmado sinDB. Suite510pass/128opt-in skip/0fail/7998aserciones, lint550/tipos/build34/diff aprobados. FuenteVercel consultada readonly: MONGODB_URI Preview sigue enlazada al recurso debug distinto deProduction, listado sinMONGODB_DB/overrideint; valoresno revelados. ProvisiónPreview4 pendiente y ya autorizada, nombreDB confirmado; no conexiónDBusuario en este corte. Nextmatrix/jointactivation/piloto posteriores. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a13 — Provisiónplacement exclusivamente Preview autorizada
+
+Objetivo: ejecutar procedimiento4 validado enbafeaa9 en destinoPreview confirmado dalis-tasks-events y observar ready+closed. Entrada19%5h/12%7d reservas4/1; corte operacional/documental secuencial root, target_paths plan/{master,iterations,iteration-log,personal-index-provisioning,mixed-sync-activation}. DependenciasCLI/defaults Mongo propio3casos88aserciones; autorización humana9oct creación exclusivamentepreproductiva sin borrado/repair/producción. FuenteVercel readonly actual enlazaPreview con recurso debug distintoProduction, listado sinMONGODB_DB/overrideint. Recaptura privadaURI sólo desdeesa guía; descriptor estricto{mongodbUri,databaseName}, procedencia aparte; padre/hijo --no-env-file --conditions=react-server y envprivado. Validar target antesconectar/DBreal después, ninguna credencialargs/log/repo; ocultar/remover materiales privados siempre. Aceptación receipt finito personal4 ready+closed o fallo parcial conservado sin reparar; documento resultado exacto/no anunciar activación. Código sin cambios, referencia/coherencia/diff, commitpushint/HEAD/cuotas al cerrar. Si Vercel exige reautenticación, interrumpir/pedir sóloesa verificación; no reiterar permiso/nombre.
+
+
+### Resultado11c5a13 — Placement Preview provisionado ready+closed
+
+Procedimiento4 publicado bafeaa9 y probado Mongo propio ejecutado únicamente en fuentePreview/int verificada deVercel (recurso debug diferenteProduction; sinMONGODB_DB/overrideint). DBconfirmada dalis-tasks-events. Recaptura privadaURI en fichero600 fuera repo, descriptor estricto sólo{mongodbUri,databaseName}, padre/hijo no-env-file/react-server, credenciales sóloenvprivado y targetguardantesbootstrap/DBrealdespués. Recibo real saneado: statusready/phasecomplete/connectionclosed; provisioningready; created sólo task_placements_user_scope_date_occurrence_uidx; missing[]/incompatible[]/errornull. Los tres índices personales previos ya estaban listos; no modificación de datos, reparación/borrado ni accesoProduction. Credencial oculta enVercel y fichero/launcher temporal eliminados; ningún secretoargs/log/repo. Operación completada9oct21:26Madrid. Producto sigue negociación2; requisito índices4 cerrado, falta Nextmatrix/clientehook3/jointactivation/dosdispositivos/piloto histórico. Validación documental referencias/coherencia/diff; commitpushint/HEAD/cuotas. No anunciar convergencia ni ACK productivo del movimiento aún.
+
+
+### Preparación11c5a14 — Hook3 preparado sobre lifecycle común
+
+Objetivo: hook3 privado selecciona composición3/key3 sin cambiar proveedor activo2; extraer lifecycle idéntico para conservar guardias/cancelación/listeners/refresh y evitar forks de lógica. Dependencias699c075 (índicesPreview4 ready+closed) y268839b (cliente/cache3), entrada18%5h/12%7d reservas4/1. Secuencial root: features/sync/hooks/use-mixed-sync-engine.ts, nuevo use-mixed-sync-engine-core.ts, use-placement-sync-engine.ts yplan. Aceptación wrapper2 sigue factory2/key2; wrapper3 factory3/key3 capturado, invalidaciones cuenta/epoch estables, un scheduler con mismas señales/cleanup y sin metadatarewrite; no caller3/provider/rutas/capacidades activos. Suites controles/composición/cache vigentes, suite/lint/tipos/build/diff y revisión extracción idéntica; prueba lifecycle3 con Next/auth y dosparticiones es siguiente prerrequisito explícito, no se declara probada por compilación ni pruebas2. Registro/commitpushint/HEAD/cuotas.
+
+
+### Resultado11c5a14 — Hook3 privado y lifecycle compartido preparados
+
+Wrapper2 conserva cliente2/key2 y proveedor activo; wrapper3 preparado captura cliente3/key3. Núcleo único conserva scheduler/señales/listeners/unsubscribe/cancelación/cierre, guardias cuenta/epoch e invalidación por cuenta; pass/controlador ahora también poseen generación para no mostrar/solicitar estado de otro protocolo. Sin caller3/provider/rutas/capacidades ni metadatarewrite. Extracción revisada contra código previo; suites composición/cache/controles y full510pass/128opt-in skip/0fail/7998aserciones, lint552/tipos/build34/diff aprobados. Compilación no prueba lifecycle3 ni convergencia: sigue requerida fronteraNextreal/matrix/retiro2/IDausente y dosparticiones con productor task-move-outbox antes de activar. ÍndicesPreview4 ready+closed en699c075; movimiento piloto intacto/sinACK productivo. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a15 — Política de capacidades3 pura e inactiva
+
+Objetivo: describir soporte task.move sólo para tarea simple con occurrenceIdnull/contexto conocido; registry/reader2 mantienen soporte anterior. Dependencias661d3fb y executor/ACKpull/índices4 preparados; entrada16%5h/11%7d reservas4/1. Secuencial root lib/sync/sync-capabilities.ts, nuevo placement-sync-capabilities.test.ts yplan. Aceptación entrada validada/contextID coherente, descriptor3 independiente/inmutable, contextos ausentes/event/birthday/series/ocurrencias no admitidos; remoteValidation obligatoria y sin atribuir ownership por contexto. Comandos existentes mantienen reglas2 y no cambia ningún caller2/capacidad activa; prepared3 sólo disponible para pruebas/integraciónposterior. Tests matrix/bounds/context, suite/lint/tipos/build/diff, registro/commitpushint/HEAD/cuotas. Diagnóstico/coordinador/runtime3 deberán usar una misma política explícita antes de probarNext y activarjoint.
+
+
+### Resultado11c5a15 — Política3 pura de movimientos preparada
+
+Registro3 independiente/inmutable añade taskPlacements y task.move; reader común mantiene2 sin soporte. Sólo permite movimiento de tarea simple conocida con occurrenceIdnull, validando comando/contextID; contexto ausente/event/birthday/recurrence/ocurrencia permanece unsupported y requiere siempre remoteValidation. No atribuye ownership ni éxito por contexto local, no nuevos callers/capacidades activas. Cuatro tests nuevos matrix/familias/canonical/futuros/immutability y cuatro previos2 pasan. Suite514pass/128opt-in skip/0fail/8032aserciones, lint553/tipos/build34/diff aprobados. Próximo policy bundle explícito para diagnóstico/resumen/coordinador/runtime3 que incluya stores y reader coherentes, después Nextmatrix/dosparticiones/jointactivation; movimiento histórico intacto. Commitpushint/HEAD/cuotas.
+
+
+### Preparación11c5a16 — Policy3 coherente en diagnóstico/runtime privados
+
+Objetivo: bundle reader+stores explícito3 cruza diagnóstico/resumen/coordinador/fresh-after-claim/runtime preparados, sin cambiar defaults/callers2; composición3 usa esos defaults privados. Dependencias52eb588, entrada12%5h/11%7d reservas4/1; corte mínimo secuencial root lib/sync/{sync-capabilities,personal-queue-diagnostics,queue-summary-v2}.ts, features/sync/{coordinator-v2,local-runtime-v2,mixed-sync-summary,mixed-sync-client-v3}.ts y testscoordinador/summary pertinentes, plan. Aceptación default2 no claim de task.move, prepared3 diagnostica listo/claim/valida effectplacement y usa misma política despuéslease; cambio contexto aoccurrence/serie o respuesta storesettings noACK/envío/release sólo propio. UUID/payload/deps intactos, sin prueba de convergencia por fixtures. Guardias/closedsummary preservados. Tests focalizados y fullsuite/lint/tipos/build/diff, plan/log/commitpushint/HEAD/cuotas. No API/provider/announcement3 activos; Nextreal/dosparticiones y activaciónjoint siguiente con más margen.
+
+
+### Resultado11c5a16 — Policy3 coherente en runtime privado
+
+Bundle inmutable reader+stores2/3 explícito cruza diagnóstico, resumen, coordinator (antes/despuésclaim y validaciónrespuesta), runtime y composición3 preparada. Defaults/firma anteriores conservan2, senderIdtercerarg y cuartoargpolicy explícito; wrappers3 eligenresumen/runtime3. Cinco tests nuevos: default2 no claim del histórico, fixture3 conserva UUID/payload/deps al aplicar movimiento+vista dependiente, contexto se vuelve recurrente trasclaim y noenvía/libera sólopropio, placementenrespuesta2/settingsen3 sinACK, resumen3 listo sinreescribirpending ni afirmarconvergencia. Fixtures puros no sustituyen Mongo/Next/dosparticiones. Suite519pass/128opt-in skip/0fail/8077aserciones, lint553/tipos/build34/diff aprobados. ÍndicesPreview4 ready+closed en699c075; provider/API activos siguen2. Próximo11c5a17 pruebaNextreal de matrix/retiro2/IDausente y dosparticiones con productor task-move-outbox; luego activaciónjoint/pilotoGoogle original. Commitpushint/HEAD/cuotas.
+
+
+### Cierre11c5a16 — Próxima frontera tras renovación
+
+Código5902599a89c840dedf6862e3c1ba043c4148571d completo/publicado con HEADorigin/int exacto, repo limpio y recursos propios cerrados. Últimas519pass/128opt-in skip/0fail/8077aserciones, lint553/tipos/build34 aprobadas. Mongo dispatcher75pass985aserciones y operador4 trescasos88aserciones; ACK/pull/incidentes reales anteriores conservados. ProvisiónPreview REAL4 cerrada ready+closed en699c075: sólo índiceplacement faltante creado, sin datos/producción. FuentePreview distinta confirmada, secretos ocultados/eliminados; tabs15guía y30Google conservados, tab34readonly propia cerrada.
+
+Lectura9%5h/10%7d, reservas4%/1%. Siguiente prueba Next/auth/two-partition requiere más que cinco puntos disponibles hastareserva más reparación/cierre; no abrirla ni activar parcialmente. Resetfuturo real1791588799 (10oct01:33:19Madrid), reloj9oct21:37Madrid. Revisión única de este heartbeat ACTIVE confirmada para10oct01:35Madrid (>=unminuto redondeadoarriba), COUNT1/failed_runs_only/chat preservados, sin duplicados/créditos/reinicios. Reanudar desdeúltimoHEADcompleto confirmado; anuncio/provider/API siguen2 y piloto histórico sinACK.
+
+Siguiente11c5a17: adaptar fixtureNext compilado para comprobar preparedaction3/defaults4/policy3/header3, retiro2 aunqueidentity2/pull2capturados y oldIDausente404 sinACK, matrix2↔3 antesbody/cache/cursor. Reutilizar runner/templates con sesionesBetterAuth y dosparticiones/Mongo propias; productor realtask-move-outbox mantieneUUID/payload/deps→ACKúnico/replay→dependientes→convergenciaexacta (peer/view/placement), lifecyclehook3 real/guardias/cancelación. Dividir frontera/movimiento/lifecycle en cortes coherentes anteseditar si margen exige. No extrapolar fixtures aGoogle real ni dospestañasIAB a dosdispositivos; pedir segundo dispositivo sólo si falta al piloto final. Activaciónjoint después: exclusivo3/no2–3, identity/pullheaders3/action3/client3/hook3/cache3/provider/context/UI, retiroactions2 antesreadiness/executor; envelopes/evidence2/intention1 intactos. Al cerrar categorías/asignaciones informar porcentajeponderado/titulares pendientes y esperar elección humana antes otrosbloques. Cierre documental referencia/coherencia/diff, commitpushint/HEAD y consulta finalcuotas.
+
+### Preparación11c5a17 — Prueba integrada de generación3
+
+Objetivo: comprobar RPC Next compilado, lifecycle React3, transición2→3 y productor task.move histórico con dos particiones IndexedDB/Mongo propios antes de activar. Target_paths root exclusivo: features/sync/{pull-response-v2,authenticated-pull-v3}.ts, schemas/next-sync-test.ts, lib/db/next-sync-fixture.ts, test/next-sync/** y plan. Dependencias5902599+índicesPreview4 ready+closed; renovación10oct01:35 real100%5h/9%7d, reset1791606925, reservas4/1. Secuencial, sin agentes. Aceptación: header3 antesbody, retiro2/missingaction preserva intención/lease/cursor; UUID/payload/deps intactos tras respuesta perdida y replay ACK real único; proyecciones exactas en ambas particiones y guardias lifecycle3. Producto permanece2 hasta evidencia integrada. Validación fixtureNext compilado/Mongo propio, suite/lint/tipos/build/diff; commitpushint/HEAD/cuotas. No provisión adicional, producción ni datos de usuario.
+
+
+### Resultado11c5a17 — RPC3 y dos particiones completos
+
+Diecisiete escenarios Next compilado/React/IndexedDB/Mongo propios pasan: acción3 real/defaults4, header3 exclusivo y sobres2, matrix2↔3 antesJSON, UUID/payload/deps del productor task-move-outbox preservados, commit remoto con respuesta perdida sinACK local, replay único y dependientes confirmados, proyecciones exactas tags/views/placements en dos orígenes independientes. Retiro2 tras handshake2 capturado y acción ausente404 real no mutan Mongo ni ACK; lease propio liberado y siguiente handshake3 bloquea antesclaim, recuperación con intento2. Hook3/cache3 real conserva época, account guards, desmontaje y listeners; sesiones revocadas/caducadas/unverified rechazadas. Download3 privado usa readiness4 y mismo reader/envelope2; defaults2 activos intactos. Primer buildfixture detectó nombres de campos inexistentes en el test, corregidos; última ejecución completa exit0, todos recursos propios retirados. Suite520pass/128skip/0fail/8084aserciones, lint554/tipos/build34/diff aprobados. No Google interactivo ni IDexacto Vercel probado; índicesPreview4 ya ready+closed. Siguiente11c5a18 conexión conjunta provider/context/identity/pull/action2 retirement/UI3 y piloto original, sin reescribir intención1/metadata/cursors. Commitpushint/HEAD/cuotas.
+
+### Preparación11c5a18 — Activación conjunta3
+
+Objetivo: conectar juntos identidad/pull3 exclusivo, acción3/cliente/runtime/hook/cache3, provider/context/UI y retiro2 antes de executor. Target_paths root: app/api/sync/{identity,changes}/route.ts, features/sync/{actions-v2,sync-context}.ts, components/{active-sync-provider,device-sync-settings,sync-status-panel,sync-status-panel.test}.tsx y test/next-sync/{default-api,hook-engine}.templates, plan. Dependencias2bd4bff:17 escenarios Next y dosparticiones completos, Preview índices4 ready+closed; entrada89%5h/8%7d, reservas4/1. Aceptación exclusividad3/DTO2/intention1, sin migrar UUID/metadata/cursors ni ejecutar antiguo2; UI explica orden sólo de tareas simples. Fixture vuelve a consumir rutas/provider productivos reales y repite17escenarios; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas. PilotoGoogle/Chrome separado tras despliegueReady, nunca afirmar éxito sólo por settled.
+
+
+### Resultado11c5a18 — Generación3 activada conjuntamente
+
+Identidad/pull3 exclusivo, acción3/cliente/runtime/hook/cache3 y provider/context conectados; acción2 retorna update_required antesreadiness/executor. UI declara categorías/asignaciones/orden de tareas simples, manteniendo repeticiones locales. Sobres/journal2 e intenciones1 sin migración de UUID/metadata/cursors. Fixture consume rutas/provider/action2 reales del producto y los17escenarios Next/React/IndexedDB/Mongo propios vuelven a pasar, incluidos pérdida de respuesta/replay único/dependientes/proyección exacta y transiciones; recursos propios limpiados. Suite521pass/128skip/0fail/8087aserciones, lint554/tipos/build34/diff aprobados. Publicación int habilita sólo preproducción; pilotoGoogle histórico sigue como aceptación operativa siguiente, sin afirmar convergencia real aún. Copia JSON previa del IAB conserva7items y movimiento pending; Chrome ya autenticado con7items, almacenamiento independiente. La exportación esperó al navegador; al retomar reloj10oct07:26Madrid, cuota100%5h/7%7d y reset1791627993, sin código ajeno ni nueva tarea abierta. Continuación mismo objetivo/reservas4/1, sin consumo de créditos o resets. Commitpushint/HEAD/cuotas, después comprobar deploymentReady/recarga/offline/piloto original.
+
+
+### Ajuste de cierre11c5a18
+
+La comprobación diff detectó un espacio final en el template ya probado; retirado sin cambios semánticos. El recibo Next17 y DoD código anteriores siguen válidos; diff final corregido. La copia previa contiene8registros de items, incluidos borrados, y la UI7activos; un task.move pendiente attempts0/deps0. Este ajuste documental/formato corrige la precisión del registro anterior y no altera datos del piloto. Validación diff/referencias, commitpushint/HEAD/cuotas.
+
+
+### 11c5a19 — Cierre del objetivo de sincronización personal
+
+- Objetivo: registrar el piloto real, cerrar el lote y devolver al usuario la elección del siguiente bloque.
+- `target_paths`: `plan/{master,iterations,iteration-log,mixed-sync-activation,workflow}.md`.
+- Dependencias: código `fc152c2` publicado, deployment Ready, copia previa/posterior del piloto original y comparación visible con Chrome independiente.
+- Aceptación: ACK real del movimiento original con operación/dependencias intactas y cero pendientes; categorías visibles coincidentes; separar esta evidencia de la convergencia exacta aislada de asignaciones/orden y de dispositivos físicos. Conservar cambios remotos concurrentes. Estado vigente, estimación ponderada y orden propuesto registrados; automatización pausada sin nueva revisión ni otro bloque iniciado.
+- Validación: referencias locales, coherencia documental y `git diff --check`; Conventional Commit, push `origin/int`, HEAD remoto y cuotas. Código ya validado en `11c5a18`; no repetir la suite por un cierre documental.
+- Estado: completada; siguiente entrega requiere elección explícita del usuario.
+
+
+## 16 — Editor común y lista de planes
+
+Bloque elegido por el usuario tras cerrar sincronización personal. Requisitos y decisión de compatibilidad en [item-editor-redesign.md](item-editor-redesign.md); secuencia `16a1 → 16a2 → 16a3 → 16a4 → 16a5`.
+
+### 16a1 — Editor de viewport completo y contenido visible
+
+- Objetivo: entregar una primera mejora visual útil sobre Tarea/Evento actuales, sin modificar contratos de datos.
+- `target_paths`: `src/components/ui/{item-editor-header,date-time-fields}.tsx`, `src/config/item-editor.ts`; formularios/composers de tareas/eventos y diálogo de creación; task-card/checklist/group/list, event-card; parser/test del formulario de evento; `plan/**`.
+- Dependencias: `11c5a19`, elección humana de rediseño y permiso para futura ruptura de compatibilidad sin wipe automático.
+- Aceptación: crear/editar a pantalla completa, acciones cruz/check accesibles y desactivadas al guardar; inicio/fin de eventos separados en fecha/hora y ocultos con todo el día; checklist visible fuera de detalles; color de categoría en grupos/eventos. La persistencia y sincronización actuales se conservan en este corte. Cita/Nota y equivalencia funcional siguen en el siguiente contrato.
+- Validación: fechas parciales/inicio/fin/DST/todo el día, markup de controles, suite, lint, tipos, build y diff; commit/push int, HEAD remoto y ambas cuotas.
+
+
+### 16b1 — Pulsación prolongada sobre tareas y categorías
+
+- Objetivo: adelantar el gesto independientemente de la futura unificación del modelo.
+- `target_paths`: `src/components/ui/long-press-order.tsx`, `src/lib/ordering/long-press{,.test}.ts`, task-list/group/card, tag-manager/card; `plan/**`.
+- Dependencias:16a1 y comandos remotos de orden actuales; sin modelo/migración/wipe.
+- Aceptación:450ms activa, desplazamiento temprano permite scroll, listas anidadas no roban gesto, controles interactivos excluidos, cancelaciones y peers/busy sin escritura, destino válido; retirar botones Arrastrar/Subir/Bajar/Ordenar de callers activos; Alt+flechas mantiene acceso por teclado.
+- Validación: umbral y vecinos, fixture React real sin DB (teclado y hold/no-op), suite/lint/tipos/build/diff, commit/push/HEAD/cuotas. Tacto/scroll en móvil físico y arrastre extremo se incluyen en aceptación del rediseño, sin atribuirlos a fixtures de ratón.
+
+
+### 16a2p — Contrato común y frontera de cambio
+
+- Objetivo: cerrar el modelo/semántica y ámbito de transición antes de comenzar una integración amplia.
+- `target_paths`: `plan/{item-model-v2,item-editor-redesign,master,iterations,iteration-log}.md`.
+- Dependencias:8319e18/a4caad9, elección humana y permiso para descartar compatibilidad de datos.
+- Aceptación: variante exclusivamente visual; opciones/progreso/fecha/calendario comunes, orden y contexto definidos; generación antigua rechazada antes de ejecutar; wipe futuro preciso preservando identidad/sesiones. No wipe ni activación ficticia, no anunciar soporte de series. Rutas/evidencia y siguiente16a2 definidos.
+- Validación: referencias/coherencia/diff; Conventional Commit y pushint/HEAD/cuotas. Entrada70%5h/2%7d: cierre documental cabe; integración de schema/runtime/sync/UI y reparación excede margen semanal observado y no se abre.
+
+### 16a1b — Descripción y pasos sin desplegable
+
+- Objetivo: adelantar un ajuste visual pequeño con el margen semanal restante.
+- `target_paths`: `src/features/{tasks,events}/components/{task-form,event-form}.tsx` según su feature; `plan/{item-editor-redesign,iterations,iteration-log}.md`.
+- Dependencias:907b652, formularios y validación actuales; sin unificación de modelo ni wipe.
+- Aceptación: descripción siempre accesible debajo del título; checklist de tareas directo; zona horaria secundaria y oculta con todo el día; conservar drafts, guardado y validación.
+- Validación completada:524pass/128opt-in skip/0fail/8104aserciones; lint561, tipos, build y worker34. Fixture aislado de evento confirma descripción antes de planificación, dialog390×844; sin auth/DB. Diff y referencias; commit/pushint, HEAD remoto y cuotas al cerrar.
+
+### 16a2a — Núcleo común de contenido
+
+- Objetivo: implementar schema y reductor puro del nuevo contenido común, antes de conectar persistencia/transportes/UI.
+- `target_paths`: `src/schemas/plan-{item,command}.ts`, `src/types/plan-item.ts`, `src/lib/calendar/plan-{command,selection}{,.test}.ts`, tests de schemas; `plan/{workflow,iterations,iteration-log,item-model-v2}.md`.
+- Dependencias:1d4eea4, contrato16a2p y autorización actual de continuación desatendida.
+- Aceptación: cuatro variantes con campos/validación iguales, fechas/DST coherentes, cambio de variante sin perder identidad/progreso, checklist por ID, autorización/estado/borrado y política civil/orden estables; sin activar clientes ni alterar datos existentes.
+- Validación: pruebas funcionales de las cuatro variantes, suite completa, lint/tipos/build/diff; commit/pushint/HEAD y lectura de cuotas antes del siguiente corte.
+
+### 16a2b — Contratos productivos capaces de almacenar planes, aún sin activación
+
+- Objetivo: añadir contenido común y comandos de progreso a la frontera de validación/reductor/persistencia genérica, conservando callers actuales y bloqueando su envío en generación3.
+- `target_paths` raíz: schemas/item-fields, calendar-item, plan-item, plan-input, sync; types/sync; lib/calendar/item-command, lib/sync capacidades/support/clave/clasificación; consumidores de backup estrictamente afectados; tests y plan. Root integra archivos compartidos.
+- Paralelo explícitamente seleccionado con cuota97%/99% y contrato16a2a cerrado: worker editor posee sólo archivos nuevos features/plans; worker iconos posee components/ui/item-completion-icon y tasks/components/task-card,task-group. No solapan con integración raíz ni publican por separado.
+- Dependencias:a8578c8; aceptación: plan validado localmente, progreso de las cuatro por mismos comandos, DST/recurrencia compartidos, categorías y backup sin reinterpretación; generación3 no afirma soporte ni confirma estos comandos. No UI activa/wipe.
+- Validación: contratos/reductor/guardias/backup, suite/lint/tipos/build/diff, commit/pushint/HEAD/cuotas. Los cambios visuales independientes se cierran en la siguiente entrega antes de activación conjunta.
+
+### 16a3a — Editor común preparado e iconos con color
+
+- Objetivo: cerrar editor de cuatro variantes reutilizable y aplicar color de categoría al icono de tareas actuales.
+- `target_paths`: features/plans/components y parser/tests nuevos; components/ui/item-completion-icon y date-time-fields; tasks/components/task-card,task-completion-button,task-list; plan. Workers del corte anterior entregan rutas disjuntas, root integra plumbing/DateTimeFields y validación.
+- Dependencias:b2b5245, schema plan-input y componentes16a1. Aceptación: todos los campos para las cuatro variantes, selección no desmonta datos, fecha persistente al alternar todo el día, categoría visible, checklist/recurrencia/progreso comunes, acciones cruz/check, iconos asociados a categoría con estado adicional accesible. No activar caller hasta persistencia/sync completos.
+- Validación: parser/markup, fixture React móvil, suite/lint/tipos/build/diff, commitpushint/HEAD y cuotas. Entrada85%5h/98%7d.
+
+### 16a2c — Guardado local común y executor remoto preparados
+
+- Objetivo: guardar plan y categoría en una transacción local, y ejecutar su progreso/contenido remoto sin activar transporte actual.
+- `target_paths` seleccionados en paralelo con contrato cerrado y cuota78%/97%: worker local sólo nuevos schemas/plan-save, lib/local-db/plan-outbox, lib/calendar/plan-save, features/plans/local-plans y tests/fixture propios; worker remoto sólo lib/db/remote-item-commands, nuevo remote-operation-commands-v4 y pruebas Mongo; root posee config/clientes/servicios/contratos de transporte4, políticas, readers/pull, docs e integración compartida. No solapamiento.
+- Dependencias:efdbda7 y núcleo16a2a/b. Aceptación local: item+view+dos intenciones indivisibles con CAS/replay/dependencias/rollback, categoría de cuenta válida; remoto: CAS/receipt/journal común, replay y cuatro variantes, executor3 sigue rechazando plan. Lectores4 privados conservan ownership y no avanzan sobre datos inválidos. Sin nuevo índice por reutilización de consultas actuales.
+- Validación: pruebas adecuadas de cada frontera y recursos propios, suite/lint/tipos/build/diff, plan/log, commitpushint/HEAD/cuotas. Corte separado antes de activar callers; raíz puede publicar transporte y core en entregas separadas según margen.
+
+### 16a4a — Orden común y lista compacta preparados
+
+- Objetivo: extender task.move a planes simples sin reinterpretar intenciones y preparar una lista/agenda común para cuatro variantes.
+- Paralelo seleccionado después034ada3, cuota49%5h/92%7d: worker remoto posee remote-task-placement-plan/commands, remote-operation-commands-v4, remote-changes-v2 y tests nuevos; worker UI posee features/plans/componentes/hooks/agenda-selection/local-plans excepto use-plan-order y plan-order-selection. Root posee lib/ordering helper/comparador, local-db planner/outbox, hook de orden, servicio pull4, fixtures, runner y docs. No callers actuales activados en este corte.
+- Dependencias:16a2c/16a3a; aceptación: orden manual persistido entre cuatro variantes, intervalos y overdue civil, categoría/peers/CAS/replay/TX intactos;3 rechaza planes sinACK. Lista conjunta por categoría, color/checklist/estado e iconos propios, fullscreeneditor conectado a guardado atómico; recurring no desaparece silenciosamente ni se afirma aparición/progreso remoto sin implementación. Datos anteriores no se convierten/ocultan por activación parcial.
+- Validación: pruebas puras/realMongo/IndexedDB de orden y markup/UI; suite/lint/tipos/build/diff, plan/log/commitpushint/HEAD/cuotas. Sin nuevos patrones de query/índices, reutiliza registrados. Activación requiere evidencia integrada/RPC y decisión de transición posterior.
+
+### 16a4b — Dos particiones reales de planes comunes
+
+- Objetivo: demostrar ACK/pull/cola y convergencia exacta4 de contenido/categorías/asignaciones/orden antes de activar UI.
+- Paralelo seleccionado desdec4a2ff8/cuota30%5h89%7d, scope mínimo: worker browser sólo test/browser/plan-sync-{device,devices}.ts; worker remoto sólo scripts/plan-sync-browser-test-server.ts; root schema estricto nuevo, modo runner/documentación/integración/reparaciones. No editar código productivo salvo fallo demostrado; contrato de fixture cerrado anteseditar.
+- Aceptación: dos orígenes/IndexedDB independientes y Mongo propio, cuatro variantes guardadas offline con categoría por productor real, ACK único/replay respuesta perdida, orden/progreso/checklist/borrado y proyecciones exactas incluyendo tombstones; recursos propios limpiados. Capacidad UUID fixture no authGoogle/NextRPC ni piloto físico.
+- Validación: ejecución browser integrada real, suite/lint/tipos/build/diff, registro/commitpushint/HEAD/cuotas. No abrir activación amplia/apariciones si coste de validación/cierre excede reserva10%5h/1%7d.
+
+### 16a4c0 — Matriz concreta de activación y siguiente frontera RPC
+
+- Objetivo: cerrar el orden y la evidencia pendiente para activar el editor/lista común sin reauditar contratos ya probados.
+- `target_paths`: plan/common-plan-activation.md, item-model-v2.md, item-editor-redesign.md, master.md, workflow.md, iterations.md e iteration-log.md. Secuencial/documental.
+- Dependencias:0d9b0cb y petición humana de aprovechar9%/programar continuación. Aceptación: matriz RPC4/retirada3 con rutas reales, apariciones/transición/activación separadas y próximas pruebas inequívocas; revisión única futura desde reset observado.
+- Validación: rutas/enlaces locales, consistencia de estado, git diff --check; Conventional Commit/pushint/HEAD/cuotas. No habilitar callers ni afirmar pruebas futuras aprobadas.
+
+### 16a3b — Estado accesible de completado
+
+- Objetivo: exponer estado marcado de los controles de completado sin depender de color/forma.
+- `target_paths`: tasks/components/task-completion-button, plans/components/plan-completion-button y tests existentes de icono/plan-card; plan/iterations,workflow,iteration-log. Root/secuencial.
+- Dependencias:dc79cc2 e icono común16a3a; petición humana de aprovechar7% autoriza este corte mínimo por debajo de reserva habitual. Aceptación: aria-pressed verdadero sólo completed, falso en not_started/in_progress, mismas acciones/colores/targets y guardias. Activo en tareas actuales, preparado en planes.
+- Validación: markup semántico de estados/cuatro variantes, suite/lint/tipos/build/diff; commitpushint/HEAD/cuotas. Sin activación parcial ni datos; revisión16:24 intacta.
+
+### 16a4c1a / 16a4c2a — RPC4 y apariciones puras en paralelo
+
+Renovación real10oct16:24:100%5h/85%7d, reset siguiente1791660272. HEADf8d2620/int limpio y remoto exacto; Docker28.4/pinnedMongoamd64 disponibles. Paralelo seleccionado según autorización humana previa, margen suficiente y fronteras disjuntas.
+
+-16a4c1a objetivo: compilar referencia action4/defaults, dos sesiones propias BetterAuth y dos particiones; matriz3↔4/retiro3/actor y flujo simple plan/asignación/replay sin activar producto. Worker posee test/next-sync/**, scripts/next-sync-test-runner, schemas/next-sync-test y tests, lib/db/next-sync-fixture; root integra sin editar esas rutas concurrentemente. Dependencias:16a4b y matriz common-plan-activation. Aceptación y evidencia según matriz, ninguna inferencia de Google/deployment.
+-16a4c2a objetivo: núcleo puro de apariciones comunes conservando identidad/progreso independiente y offsets civiles/horarios de series de cuatro variantes. Root posee nuevos lib/calendar/plan-occurrences y tests, schemas/types sólo archivos nuevos estrictamente necesarios, y extracción de proyección temporal desde lib/calendar/occurrences a occurrence-schedule compartido. No UI/persistencia/ACK/apariciones remotas activados. Dependencias:contrato plan y motor recurrence existente; aceptación de este núcleo: reglas/DST, intervalos, identidad original/progreso inicial independiente, misma semántica cuatro variantes, padre no completado por aparición y límites acotados; overlay de excepciones y mutaciones locales se cierran después.
+- Root posee plan e integración compartida. Cierres independientes con tests pertinentes/suite/lint/tipos/build, plan/log/commitpushint/HEAD/cuotas; no instalar dependencias ni tocar datos del usuario.
+
+### 16a4c2b — Mutaciones puras por aparición común
+
+- Objetivo: completar/editar/cancelar una aparición de cualquiera de las cuatro variantes sin cambiar padre/slot original.
+- `target_paths`: nuevos schemas/plan-occurrence-command, lib/calendar/plan-occurrence-command y tests; plan. Root/secuencial en sus rutas, worker RPC sigue disjunto.
+- Dependencias:0963c60. Aceptación: autorización por padre activo/owner, slot generado real, erroresDST explícitos, timestamps/progreso/checklist independientes, edición conserva estados de pasos porID; cancelada/borrada no puede recibir progreso, identidad y revisión confirmada intactas. Comandos aún no añadidos a sync/DB/callers; no ACK/persistencia anunciada.
+- Validación: pruebas de cuatro variantes, edición/movimiento/slot/cancelación/ownership/progreso; suite/lint/tipos/build/diff, plan/log/commitpushint/HEAD/cuotas.
+
+### 16a4c2c — Lectura común de apariciones y excepciones
+
+- Objetivo: proyectar apariciones generadas y excepciones movidas/editadas sin duplicarlas; propiedad por padre actual y paginación acotada.
+- Paralelo seleccionado con cuota suficiente tras pruebaRPC4: worker posee sólo nuevos lib/calendar/plan-occurrence-selection y test, schemas/plan-occurrence-query; root posee persistencia/contratos compartidos en siguiente corte. Ningún caller activo.
+- Dependencias:0963c60. Aceptación: variante actual del padre, contenido override, excepciones/cancelaciones/tombstones siempre suprimen slot generado; intervalo actual de excepción incluso inicio anterior al rango; paginación estable/progreso si página generada filtrada, solo cuenta propia y catálogos completos limitados sin truncar.
+- Validación: tests puros de límites/propiedad/intervalos/identidad y cuatro variantes; DoD global y plan/log/commitpushint/HEAD/cuotas.
+
+### 16a4c2d — Persistencia atómica de apariciones comunes
+
+- Objetivo: persistir progreso/edición/cancelación por aparición con intención original, CAS y rollback, sin afirmar sincronización remota de series.
+- Root `target_paths`: schemas/occurrence-content,occurrence,plan-occurrence,plan-occurrence-command,sync; types/local-sync; lib/local-db/plan-occurrence-outbox y outbox; guardias/consumidores estrictamente afectados; scripts/browser-test-server y plan. Worker de pruebas posee sólo test/browser/plan-occurrence-outbox.ts. Paralelo explícito con66%5h/80%7d y contrato puro16a4c2b cerrado; ningún archivo compartido entre agentes.
+- Dependencias:a258230 y4e8877b. Aceptación: aparición+intención+secuencia indivisibles, replay exacto sin recrear, snapshots para edición y progreso, ownership por padre, dependencia del item previa, cola intentada intacta y comandos de aparición explícitamente fuera de soporte remoto4. No caller activo, nueva query/índice ni wipe.
+- Validación: IndexedDB real propio para cuatro variantes/CAS/rollback/replay/recarga, contratos/guardias/backup, suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas. Notificar sólo después del commit local exitoso.
+
+### 16a4c2e — Lectura paginada y progreso común en la agenda
+
+- Objetivo: conectar apariciones/excepciones locales al modelo de filas y guardias de cuenta, con paginación explícita que nunca oculta límites ni completa el padre.
+- Paralelo seleccionado con57%5h/78%7d: worker sólo nuevos lib/calendar/plan-appearance-page y tests, schemas/plan-appearance-query. Root posee snapshot local común, features/plans/local-plans, hooks nuevos de progreso/lectura y pruebas propias; docs/integración compartida root. No caller actual activo ni solapamiento.
+- Dependencias:42de24f/4e8877b. Aceptación: snapshot único de items/apariciones/categorías/views/settings, cuenta actual antes/después, parent/slot conservados, cursor y límites explícitos incluidos intervalos de varios días; progreso de aparición usa CAS congelado y intención original, no ACK remoto. Interfaces preparadas para lista/calendario comunes.
+- Validación: pure page/intervalos/cursores y guardias; IndexedDB propio de snapshot/progreso si cambia persistencia, suite/lint/tipos/build/diff, plan/log/commitpushint/HEAD/cuotas.
+
+### 16a4c2f — Filas comunes con progreso por aparición
+
+- Objetivo: conectar lista común preparada a apariciones paginadas y categorías; progreso por aparición, edición explícita de serie y cancelación local, manteniendo orden existente y límites visibles.
+- Paralelo explícito con49%5h/77%7d: worker sólo nuevos features/plans/plan-agenda-rows y tests; root posee PlanList/Card/Agenda y componentes de confirmación estrictamente necesarios, fixture UI/hook propio, docs y archivos compartidos. Sin activación de callers actuales.
+- Dependencias:1820f40. Aceptación: filas simples/apariciones juntas por categoría y fecha/hora/tipo, keys por slot originales, iconos/checklist/progreso locales reales; editar serie no edita silenciosamente todas sus apariciones, cancelación conserva slot. Orden confirmado se muestra; drag no inventa vecinos de apariciones aún sin executor de orden. Horizonte próximo y páginas explícitos, cero repetición del padre como sustituto.
+- Validación: selección/grupos/orden/intervalos, markup y fixture React+IndexedDB propios para click/progreso/checklist/paginación/recarga; suite/lint/tipos/build/diff, plan/log/commitpushint/HEAD/cuotas. Transición/wipe y activación conjunta posterior.
+
+Para16a4c2f, tras congelar el helper puro, el mismo worker posee sólo archivos nuevos test/browser/plan-agenda-ui.tsx y scripts/plan-agenda-ui-test-server.ts. Root conserva componentes e integración. Fixture4187 propia con PlanList real/React/IndexedDB y producers, cuatro simples/cuatro series; paginación, completar un slot/checklist, cambio de día/recarga y cleanup con ownership. No sesiónGoogle ni dispositivo físico.
+
+El mismo corte16a4c2f incluye rutas root nuevas features/plans/calendar-plans y tests, components/plan-calendar-board, más caption accesible genérico de MonthGrid: calendario común preparado con conteos por intervalo/slot y límite paginado visible; no cambio de caller activo ni navegación nueva.
+
+## 16a4c3a — Conexión conjunta preparada y transición revisable
+
+Objetivo: ensamblar todos los callers comunes detrás de una única selección de release cerrada, conservando producto3 hasta wipe explícito. `target_paths`: config/common-plan-release.ts, rutas identity/changes, actions-v3, proveedores sync, workspace/overview/calendar-screen y plan/common-plan-transition.md; root secuencial. Dependencias:16a4c1a y16a4c2f. Aceptación: misma selección determina anuncio/pull/retiro3/hook/editor/lista/calendario; false mantiene3, sin borrado ni activación parcial. Procedimiento Preview enumera siete colecciones de contenido, preserva auth/índices/producción y elimina sólo particiones locales del origen Preview con todos sus clientes detenidos. Validación: suite, lint/tipos/build y diff; guardias4/RPC y componentes UI ya probados, nueva activación/piloto requieren corte posterior y reset humano confirmado. Commit/push/HEAD/cuotas.
+
+## 16a4c3b — Reset remoto Preview autorizado
+
+Objetivo: ejecutar el wipe de contenido de pruebas exclusivamente en Preview confirmado por el usuario, conservar autenticación/índices y registrar resultado verificable. `target_paths`: documentación common-plan-transition, master, iterations e iteration-log; actuación remota sólo siete colecciones ya enumeradas. Dependencia:16a4c3a y autorización humana corregida explícitamente a Preproduction. Validación: identificar recurso Atlas debug y base, borrado bulk documents sin drop, recuentos finales cero y recuentos auth/índices conservados, evidencia visual y diff/referencias. No borrar IndexedDB de dispositivos no accesibles ni activar selección4 sin ese prerrequisito. Commitpushint/cuotas.
+
+## 16a4c3c — Preparación local explícita antes del producto común
+
+Objetivo: desbloquear activación sin DevTools mediante barrera por partición y confirmación explícita local. `target_paths`: schemas/common-plan-local-release.ts, lib/local-db/common-plan-local-release.ts/backup.ts/backup-import.ts (marca infra en syncMetadata, excluida del backup portable; sin upgradeDB), features/plans/local-plan-release.ts/hooks/components frontera, workspace-sync-provider, runtime/client4 y fixture propia browser; root secuencial. Dependencias:16a4c3a,b; selección4 continúa false hasta pruebas y posterior activación conjunta. Aceptación: marca infra por partición en syncMetadata para generación4, sin modificar control compartido/auth; nueva cuenta vacía se prepara sin borrado, contenido previo exige botón+confirmación clara, reset TX sólo almacenes de esa partición/preserva settings/índices; CAS marca/epoch guardias y rollback; no montar children/motor antes readiness. No reset automático ante error ni borrado DB/producción. Pruebas IndexedDB/React reales, suite/lint/tipos/build, plan/log, commitpushint/HEAD/cuotas. No nuevo destino de nav: frontera transitoria sobre destinos existentes.
+
+## 16a4c3d — Activación y prueba ensamblada4
+
+Dependencia:16a4c3c validada. Activar selección conjunta4, probar callers reales compilados, barrera local y cuatro tipos desde+; identidad/pull4 y retiro3. Root posee producto/shared; paralelo explícito con margen: worker next_plan_proof sólo scripts/next-sync-test-runner y test/next-sync/app/** y features/** para referencia a callers productivos y evidencia, sin editar config ni fronteras locales. Integrar después de contrato cerrado. Recursos propios, no inferir pilotoGoogle real de fixture. Reset remoto Preview ya realizado, no repetir automáticamente. Locales antiguos requieren confirmación en cada dispositivo desde barrera; sólo previews locales bajo elección explícita del usuario, sin wipe de producción.
+
+Paralelo de validación16a4c3c seleccionado con margen: worker local_release_proof posee exclusivamente test/browser/common-plan-release.tsx y scripts/common-plan-release-test-server.ts; root posee schema/lib/features/plan y la integración compartida. Contrato existente prepareLocalCommonPlanRelease/resetLocalCommonPlanContent/requireLocalCommonPlanRelease, barrera PlanReleaseBoundary. Fixture debe comprobar no montagemutation antes de consentimiento, guardias, rollback real y limpieza sólo de su propio origen/particiones.
+
+## 16a4c3e — Verificación operacional Preview y consentimiento local pendiente
+
+Objetivo: verificar deployment Ready/commit, actualización del worker y barrera real antes del piloto de interfaz. `target_paths`: plan/master,common-plan-activation,common-plan-transition,workflow,iterations,iteration-log; root secuencial/documental, sin borrado ni nuevo código. Dependencia96a6237 publicado/HEADexacto y19RPCpropios aprobados. Aceptación: Vercel Preview/int Ready correspondiente al commit, cerrar/reabrir tras aviso de actualización conserva sesión y carga barrera4, diálogo explica alcance/preservación y requiere consentimiento local antes de borrar. Medir mobile390 sin overflow/targets usables, preservar Atlas y dejar app entregable. Piloto desde+ no se marca completado hasta confirmación local y prueba real; ninguna inferencia de auth fixture/Google. Validación: evidenciaUI/medición, referencias/coherencia/diff; commitpushint/HEAD/cuotas, pausa de tareas dependientes mientras aprobación específica pendiente.
+
+## 16a4c3f — Piloto del editor activo con sesión Google Preview
+
+Objetivo: continuar el paso local pendiente tras respuesta humana «Continúa» y comprobar cuatro variantes desde+ en producto desplegado. `target_paths`: plan/master,workflow,iterations,iteration-log,common-plan-activation,common-plan-transition; interfaz Preview bajo sesión existente, contenido de piloto claramente identificado. Dependencias:ce9eae3 publicado, barrera4 y19RPC propios probados. Aceptación: reset explícito de partición localIAB confirmado al retomar el diálogo sin modificar Mongo/auth/settings; cuatro tipos con categoría/color/checklist, fechas/horas ytodoeldía, edición/progreso, lista/calendario yrecarga; resumen real distingue ACK pendiente/confirmado. No afirmar dispositivos físicos ni recurrencia remota. Recursos de piloto se conservan identificados, no borrar otrosdatos ni repetir wipeMongo. Reparaciones sólo por fallo demostrado y nuevo scope previo si necesario. Validación documental referencias/coherencia/diff y evidenciaUI; cualquier reparación código exige tests/lint/tipos/build. Commitpushint/HEAD/cuotas por entrega.
+
+
+## 16a4c3g — Importación de copias de planes simples
+
+Objetivo: restaurar como identidades nuevas los cuatro tipos comunes sin repetición desde backup portable, sin aplicar categorías/orden/historial ni convertir legacy. Dependencia:release4/piloto16a4c3f y contratoimport existente. Paralelo elegido con85%5h/98%7d: worker posee lib/backup/import-preview.ts,import-plan.ts y respectivos tests, types/backup-import.ts; root posee lib/local-db/backup-import.ts, features/workspace/import-backup.ts y componentesbackup, test/browser/common-plan-backup-import.ts y script propio, docs/integración. Contrato:preview optionalpolicy all_simple(default,task/event/plan) o common_plans(planonly); planner admite living simplenonrecurringplan sin cambiar draft/protocolo1. Partición marcada4 exigeplan y preview excluyelegacy sin borrar/conversión, guardiaactualpermanece. Aceptación:UUIDnuevos/revisión0/estado/checklist/fechas/tipo, cola pending+reciboTX/replay/rollback/CAS ymarcapreservada, previewread-only/guardiascuenta/época; no ACKlocal ni inferirconvergencia. UIespañol compacta explicitaalcance. Validaciónpure+IndexedDBpropio/suite/lint/tipos/build/diff; plan/log mismoConventionalCommitpushint/HEAD/cuotas. Sin nuevo índice/colección/dependencia ni DBusuario.
+
+Paralelo adicional16a4c3g seleccionado con margen: worker common_backup_browser posee exclusivamente archivos nuevos test/browser/common-plan-backup-import.ts y scripts/common-plan-backup-import-test-server.ts, origen4243/particionespropias. Root conserva integración/lib/features/UI/docs y ejecuta/limpia recurso Browser; no solapamiento. Contrato policyreadonly/root y purepreview/worker cerrado antes de fixture.
+
+
+## 16a4c3h — Textos y cierre del editor común
+
+Objetivo: alinear explicaciones actuales con cuatro variantes, categoría encreación y orden común; cerrar estado/estimación del plan antes de pedir siguienteelecciónhumana. target_paths:features/sync/components/device-sync-settings,sync-status-panel; features/tags/components/tag-manager; features/calendar/components/month-grid; plan/master,item-editor-redesign,common-plan-activation,workflow,iterations,iteration-log. Rootsecuencial, dependenciaf009759/pilotoGooglecerrado. Aceptación:scope explícito común sólo seleccionadoporflagrelease4, legacy3 mantienetextosprevios, calendario incluyecompletados y cuatro variantes, categoríasnodicen asignacióndespuésdeguardar; UIcompacta sin nuevaspantallasni writes/índices. Validación: suite/lint/tipos/build/diff y referencias/documentos; commitpushint/HEAD/cuotas. Noabrirrecurrenciaremota/cumpleaños/compartir hasta elecciónhumana, automatizaciónpausada.
+
+
+## 16c1 — Checklist con icono y color del padre
+
+Objetivo:pasosheredanvariantSVG ycolorcategoría delplanpadre,incluidasapariciones/readonly;casillanativaaccesibleconservaestadoteclado/click/busy. target_paths:features/tasks/components/task-checklist,task-card;features/plans/components/plan-card ytests;plan/master,item-editor-redesign,iterations,iteration-log,workflow. Rootsecuencial,dependenciaf201e22 ypeticiónhumana11oct. Aceptación:mismoSVGparaTask/Event/Appointment/Note,pasocompletadouseestadopropio,noelpadre;sincolorheredafallbackactual,targets44/controlesnativos,no cambiosmodelodatos/navegación. Validaciónmarkup existenteampliado,UI/IndexedDBfixtureagenda pertinente,suite/lint/tipos/build/diff;commitpushint/HEAD/cuotas. Despuéscontinúabloquerecurrenciaremotarecomendadoyelegidoporhumano,mismasreservas10%5h/1%7d. Sin nueva cadenaautomática.
+
+
+## 16c2 — Gesto de orden en la lista principal
+
+Objetivo: habilitar pulsación prolongada/arrastre sobre filas simples también en Hoy y próximas y Todos, manteniendo contexto completo de categoría/día. target_paths: features/plans/plan-order-selection y tests, components/plan-list; components/tasks/task-checklist (indentación solicitada), test/browser/plan-gestures y script propio; plan/iterations,master,item-editor-redesign,iteration-log,workflow. Root secuencial, dependencia ea8ae11 y petición humana11oct. Aceptación: vecinos sólo mismo día/categoría; no reordenar intervalos desde día distinto de inicio ni grupos parciales de apariciones; sin botones permanentes; no comando al gesto corto/cancelado; gesto guarda task.move real y conserva contexto. Validación: selección pura, fixture React/IndexedDB propia para gesto/cola/recarga, suite/lint/tipos/build/diff; commitpushint/HEAD/cuotas. Siguiente16c3 añade destinos de calendario y reprogramación con productores actuales, sin cambiar generación remota.
+
+
+## 16c3 — Arrastrar del día seleccionado al calendario
+
+Objetivo: gesto común permite soltar una fila del día sobre otra celda del mes y reasignar su inicio conservando duración civil, horas/zona, progreso/checklist y categoría. target_paths: components/ui/long-press-order; features/calendar/components/month-grid; features/plans/components/plan-list,plan-calendar-board, hooks/use-plan-reschedule, local-plans; lib/calendar/plan-reschedule y tests; test/browser/plan-gestures, scriptpropio; plan/master,iterations,item-editor-redesign,iteration-log,workflow. Root secuencial, dependencia66839ee y peticiónhumana. Aceptación: destino sólo calendario del mismo board, una fila sola también movible; simple usa item.update con CAS/outbox existente, aparición usa plan.update-occurrence sin mover serie/slot original; mismafecha no escribe, errorDST explícito conserva datos, escape/busy/cambio contexto cancela sin escritura. No ruta/nav/dependencia/índice nuevo. Simple sync4 actual; aparición sigue local/unsupported hasta bloque remoto. Pruebas de civil/DST/cuatrovariantes y gesto realReact/IndexedDB de simple+aparición, persistencia/cola/recarga; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas.
+
+## 17a1 — Revisiones de aparición y planner remoto puro
+
+Objetivo: cerrar intención de aparición con CAS propio sin confundir baseRevision de serie y preparar reducer remoto puro. target_paths nuevos schemas/remote-plan-occurrence-planning, lib/calendar/remote-plan-occurrence-plan y tests; plan/recurrence-sync,master,iterations,iteration-log,workflow. Root secuencial; dependencias83136da y reducers locales entregados. Aceptación: expectedOccurrenceRevision explícito/obligatorio, baseRevision conserva semántica padre, ownership/lifecycle antes de exponer conflicto, generación real para nuevo slot y excepción histórica para existente; revisión propia+1, padre/otrafecha intactos, DST/identidad/cancelación/pasos/overflow. No productor/capacidad/DB/ACK nuevo ni reinterpretación de pendientes. Validación purecasos de cuatrovariantes/primeramaterialización/concurrenciaCAS/padre/tombstone/DST y DoD global; commitpushint/HEAD/cuotas. Executor posterior debe compartir guard escrito con mutación de padre, no basta lectura TX.
+
+
+## 16c4 — Checklist debajo de categoría en editor
+
+Objetivo: mover bloqueChecklistFields inmediatamente tras categoría para creación/edición de cuatrovariantes. target_paths:features/plans/components/plan-form; plan/iterations,item-editor-redesign,iteration-log. Rootsecuencial, dependencia5f2cc1e ypeticiónhumana11oct. Aceptación: mismoestado/campos/opciones/validación/guardado, sólo ordenvisual/lecturateclado. Validaciónpruebasexistentes/formularioMarkup, suite/lint/tipos/build/diff y UIeditor existente; commitpushint/HEAD/cuotas. Sin testnuevo que replique JSX ni mutaciónmodelo. Después17a2 según recurrenciaremota.
+
+## 17a2a — Lectores durables y captura local preparatoria
+
+Objetivo: conservar expectedOccurrenceRevision en intención/backup/fingerprint y capturarlo en TX propia detrás de opción explícita inactiva en callers actuales. target_paths: schemas/plan-occurrence-command,sync,remote-plan-occurrence-planning; lib/local-db/plan-occurrence-outbox; types/local-sync; lib/sync/plan-occurrence-support.test; nuevo test/browser/plan-occurrence-revision y registro scripts/browser-test-server; plan/recurrence-sync,iterations,master,iteration-log,workflow. Root secuencial, dependencia25aa242/17a1. Aceptación: lector acepta historial sin campo intacto y nuevo con campo validado; writer default no cambia, opción captura revisión almacenada/generada desde mismo CAS; replay conserva UUID/payload y rechaza cambiar generación/base explícita; rollback/CAS/identidad/optimismo sinACK. Todaspolíticas remotas4 siguen unsupported. Pruebas puras y IndexedDB propio de cuatrovariantes/baseparent3/occurrence7/primer0/replay/overflow/rollback/recarga; DoDglobal y commitpushint/HEAD/cuotas. No activar cliente5 ni preparar callbacks GUI a medias.
+
+
+## 17b1 — Repositorio propio de apariciones y CAS
+
+Objetivo: persistencia preparatoria de excepciones por usuario/serie/slot, separada de autorización/executor. target_paths: nuevos schemas/remote-plan-occurrence-storage, lib/db/remote-plan-occurrences y integration.test; collections,ensure-indexes ytest, pruebasoperator3/4 de selecciónexplícita, scripts/sync-db-test-runner; plan/recurrence-sync,master,iterations,iteration-log,workflow. Rootsecuencial, dependencia6b37bd3/17a1 ylectura28%5h/89%7d. Aceptación: identidadcanónicaactor+id, keyvalidada, inserciónrevision1, replaceCAS+createdAt+slot, cancel/tombstone sinresurrección, aislamiento/catálogoacotado completo sintruncar, corrupciónrechaza; sesiónMongo compatibleconcommit/rollback. ÍndiceúnicouserId/seriesId/slotKey explícitoregistrado, no automatic/provisiónusuario. RepoNOautoriza padre ni daACK; guardcompartido/executor/readerdomain siguen17b2+. ValidaciónMongoown condescriptor/imagen revalidados, tests/lint/tipos/build/diff, commitpushint/HEAD/cuotas. Sintransportecapacidadnuevo ni UI/nav/dependencia.
+
+
+## 17b2a — Guard escrito compartido de serie
+
+Objetivo: primitivo transaccional de serialización serie/aparición y prueba de snapshot obsoleto sin activar ejecutores. target_paths: nuevos lib/db/remote-plan-series-guard yintegration.test, collections, scripts/sync-db-test-runner; plan/recurrence-sync,iterations,master,iteration-log,workflow. Rootsecuencial, dependencia1f247a1/lectura22%5h/88%7d. Aceptación: sólo TXactiva, _idcanónicoactor/serie validado, tokenUUIDmodificadocadaadquisición independiente de revisiónsemántica, corrupciónrechazada yrollback; carrera con edición/borrado de padre demuestra retry snapshot yninguna aparición stale. Coleccióninfra registrada, unicidad por_id siníndiceespeculativo. Uso preparatorio sólo: writerparent/appearance aún requierenconexión conjunta posterior. PruebasMongoowned/DoDglobal/plan/log/commitpushint/HEAD/cuotas; sinprovisiónusuario/capacidad/ACK/transporteactivo. Cerrarventana tras entrega antes deexecutor más grande.
+
+
+## 16c5 — Icono de estado de plan con tres estados
+
+Objetivo: pulsación directa recorre Sin empezar→En progreso→Completado→Sin empezar sin abrir edición, para cuatrovariantes y apariciones proyectadas. target_paths:components/ui/item-completion-icon ytest; features/plans/components/plan-completion-button,plan-card ytest; test/browser/plan-gestures; plan/master,item-editor-redesign,iterations,iteration-log,workflow. Rootsecuencial, dependenciasa77d6b2/producersestadoactuales y peticiónhumana11oct, cuota18%5h/87%7d. Aceptación: tresaparienciasvacío/raya/check manteniendotipo/color, pressedmixed para progreso y etiquetaespañolaestado/acción; busy/readonly/serierealdeshabilitados, targets44/teclado; checklistbinaria intacta; guardadoactual/CAS/cola/progresodeaparición independiente. Pruebasmarkupampliadas yfixtureReact/IndexedDBreal ciclo/12intenciones/recarga/sinabrirdetalles, DoDglobal/commitpushint/HEAD/cuotas. Noesquema/DB/API/capacidadnueva ni ACKremotodeapariciones.
+
+
+## 16c6 — Detalles compactos y alcance revisado
+
+- Estado: completada11oct; evidencia en iteration-log.md.
+
+- Objetivo: quitar el control de estado redundante del desplegable, compactar acciones/categoría y retirar Compartir por Gmail del MVP por petición humana.
+- target_paths: PlanCard, PlanList, ItemCategorySelect, PlanStatusControls y plan/{master,iterations,workflow,iteration-log,recurrence-sync}.md.
+- Dependencias:16c5; estado desde icono principal ya operativo, sin cambios de persistencia.
+- Aceptación: sin botón adicional Empezar/Sin empezar; acciones y selector del plan a32px, etiquetas/foco intactos; compartir sin entregas activas ni dependencia del piloto; continuación puntual15:25Europe/Madrid.
+- Validación: suite existente, lint, tipos, build y diff; sin nuevos tests para este ajuste visual reversible.
+
+## 17b2b1 — Escritor preparatorio de series con guard compartido
+
+- Estado: completada11oct; pruebas/evidencia en iteration-log.
+
+- Objetivo: permitir crear/editar/borrar series comunes mediante un executor privado, escribiendo el guard compartido en la misma TX de contenido/recibo/journal. Primer corte de17b2b; apariciones y transporte siguen desconectados.
+- target_paths: lib/db/remote-item-commands, nueva prueba remote-plan-series-commands.integration.test, scripts/sync-db-test-runner; plan/{master,workflow,iterations,iteration-log,recurrence-sync}.md.
+- Dependencias:17b1/17b2a, HEAD72e92dc con dependencias actualizadas, ventana renovada100%5h/84%7d.
+- Aceptación: replay único incluso después de borrar serie; UUID reutilizado rechazado; CAS/aislamiento/rollback incluidos guard y journal; generaciones vigentes no aceptan ni reproducen datos recurrentes; progreso de padre recurrente sin soporte. No activar endpoint/capacidades/índice usuario.
+- Validación: Mongo propio con descriptor/imagen fijada, tests actuales, lint/tipos/build; commitpushint/HEAD ycuotas. Luego DTO/replay/executor de aparición en corte propio.
+
+## 17b2b2 — DTO de resultado, recibo y journal de aparición
+
+- Estado: completada11oct, evidencia en iteration-log.
+
+- Objetivo: extender el contrato preparatorio con rama plan-occurrence, revision propia y revisión observada del padre, manteniendo versiones de sobres/journal2 e intenciones1. Decoders vigentes siguen estrictos; sólo decoder futuro admite rama nueva.
+- target_paths: nuevos schemas/remote-plan-occurrence-result, types/remote-recurring-sync, lib/sync/remote-recurring-receipt ytest; plan/{recurrence-sync,iterations,iteration-log,master}.md.
+- Dependencias:17a1/17b2b1; lectura93%5h/83%7d.
+- Aceptación: applied con revisiónpropia positiva, padre/slot consistentes; conflicto con padre propio y aparición opcional; recibo liga actor/UUID/fingerprint/resultado y límite512KiB; journal liga destinatario/serie/revisión/slot; adaptación de recibo legacy exacta, sin ampliar decoder actual ni metadata histórica.
+- Validación: casos puros contrato/identidad/aislamiento/corrupción y regresión/lint/tipos/build. Sinpersistencia/capacidad/ACKnuevo; siguiente replay/executor atómico.
+
+## 16c7 — Identidad visible y avatar de cuenta
+
+- Estado: completada11oct, pruebas/evidencia en iteration-log.
+
+- Objetivo: mostrar nombre/correo en Ajustes y fotoGoogle en destinoAjustes de ambas barras, sin otra consulta de sesión por cada barra.
+- target_paths: schema account-profile, types/account-profile, features/workspace/{account-profile,hooks/use-account-profile,components/account-identity}; components/shared/{account-avatar,navigation-links,workspace-navigation}; workspace/device-settings; tests de perfil y plan.
+- Dependencias: sesiónBetterAuth vigente y cuenta local con epoch; peticiónhumana durante17b2b2, cuota89%5h/83%7d.
+- Aceptación: perfil sólo si userId coincide con cuenta activa, guardiasepoch trasred, cache local poruserId para nombre/correooffline; metadatos de presentación nunca prueban autorización. FotoHTTPSGoogle y fallbackSVG, altdecorativo/labelAjustes intactos; caché ajena no se muestra tras cierre/cambio; falloalmacenamiento/red no bloquea tareas.
+- Validación: schema/identidad/fallbackmarkup yprueba apropiada de flujo, suite/lint/tipos/build/diff; commitpushint/HEAD/cuotas. Después16c8 arrastre y16c9 entrada/favicon, antes de retomar executor de apariciones.
+
+## 16c8 — Pulsación prolongada sin selección nativa
+
+- Estado: completada11oct; fixture propia con selección/contexto/campos y orden trasrecarga aprobada.
+
+- Objetivo: impedir selección/callout antes del umbral450ms en filas arrastrables; conservar scroll previo, clic breve y campos editables.
+- target_paths: components/ui/long-press-order, app/globals.css, test/browser/plan-gestures yplan.
+- Dependencias: gesto/cancelación/orden existentes, peticiónhumana; lectura85%5h/82%7d.
+- Aceptación: CSSuser-select/Webkit touchcallout desactivados desde montaje en fila propia; selectstart/contextmenu cancelados antes deactivar; inputs/textarea/select/contenteditable quedan fuera; cancel/reorden/teclado sin cambios; listeners/clase restaurados al desmontar. Sin touch-action:none que impida scroll.
+- Validación: fixturebrowserIndexedDB de gesto amplía selección/contexto/campoeditable, suite/lint/tipos/build/diff y commitpushint/HEAD/cuotas.
+
+## 16c9 — Entrada directa y favicon Dalis
+
+- Estado: completada11oct, HTTP anónimo compilado y política offline aprobados.
+
+- Objetivo: entrar al espacio desde raíz sin pantalla intermedia y publicar favicon propio también offline.
+- target_paths: app/{(dashboard)/page,(offline)/page,layout,favicon.ico}, proxy, workspace/online-entry, auth/callback-url, pwa/cache-policy ytests, public/favicon.svg, scripts/build yplan.
+- Dependencias: shell neutral /workspace y marcaSVG/iconPNG existentes; cuota77%5h/81%7d.
+- Aceptación: raíz anónima redirige a /workspace, layout de rutas protegidas intacto; callback por defecto directo, navegación raíz offline reutiliza sólo shellneutral, no cacheRSC/auth/API. FaviconSVG eICO Dalis servidos públicamente yprecached, sin dependencias.
+- Validación: política/callback y regresión, lint/tipos/build, HTTP Next compilado raíz/workspace/iconos ymetadata sin consultar DBusuario; commitpushint/HEAD/cuotas. Después retomar executor deaparición17b2b3.
+
+## 17b2b3 — Executor preparatorio de apariciones
+
+- Estado: completada11oct, cinco escenarios nuevos Mongo reales aprobados.
+
+- Objetivo: replay común yguard/CAS/recibo/journal/contador atómicos para cuatro comandos deaparición, sin dispatcher activo.
+- target_paths: db/{remote-recurring-operation-receipts,remote-plan-occurrence-commands,remote-preference-transactions,remote-item-commands}, nueva integraciónMongo yrunner; plan/{master,recurrence-sync,iterations,iteration-log}.
+- Dependencias:17b1/17b2a/17b2b1–2; cuotas75%5h/81%7d ycontratos preparados.
+- Aceptación: actor sólo desde servidor, padre vigente autorizado enTX, expectedOccurrenceRevision explícita; replay único en namespace común antes de nueva autorización, UUIDalterado rechazado incluso entre ramas; guardcompartido obliga releer padre tras carreraedición/borrado; revisiónpadre intacta por progreso, revisionaparición+1, cancelación durable, rollback total trasfallotardío. Histórico sin revisiónunsupported sinACK ni reinterpretación.
+- Validación: Mongo propio cuatrovariantes/comandos/replay/aislamiento/CAS/rollback/carrera controlada de snapshots con writerreal de serie; regresión/lint/tipos/build/diff; commitpushint/HEAD/cuotas. Sin índice/DBusuario ni generación5activada.
+
+## 17b2c1 — Descarga preparatoria de series y apariciones
+
+- Estado: completada11oct, tres pruebas puras y tres escenarios Mongo reales.
+
+- Objetivo: journal/página mixta futuros con decoder yreader privado autorizado, sin alterar contratos/clientes activos4.
+- target_paths: schemas/remote-recurring-changes, types/remote-recurring-sync, sync/{remote-recurring-changes,remote-changes-page-range,remote-changes-page-v2} ytest; db/remote-changes-v2 y nueva integración, runner yplan.
+- Dependencias:17b2b3/contrato2, reader mixto vigente, cuota68%5h/79%7d.
+- Aceptación: legacy adaptado sin reescritura; evidencia2/negociación futura separadas; páginas acotadas/contiguas/checkpoint congelado, no filtrado de errores ni cursor parcial. Aparición histórica yactual requieren padre propio actual yregistrodurable actual, incluso cancelados/tombstones; ausencia/corrupción no es permiso. Historia válida tras edición/reglaretirada/borrado suave de padre; lectores activos rechazan nueva rama.
+- Validación: invariantes puras yMongo propio bootstrap/incremental/aislamiento/ausencia/corrupción/huecos/retenciónhistórica, suite/lint/tipos/build/diff; commitpushint/HEAD/cuotas. No API/capacidad nueva/índice usuario; siguiente ACK/pull local17c.
+
+## 17c1a — Correspondencia y evidencia local de aparición
+
+- Estado: completada11oct, cinco pruebas puras; noACKlocal ni calleractivo.
+
+- Objetivo: contratos puros de submission/outcome/shadow preparatorios, revisiones y entidades distintas del padre; no escribir ACK aún.
+- target_paths: schemas/local-plan-occurrence-sync, sync/local-plan-occurrence-sync ytest, types/remote-recurring-sync; plan.
+- Dependencias:17b2b3/17b2c1, captura opcional17a2a; cuota62%5h/79%7d.
+- Aceptación: actor/UUID/slot/serie exactos, applied exige parentbase yappearanceexpected+1, estado/cancelación/checklist/edición corresponden al comando. Shadow con identidad propia/revisión confirmada/actor explícito; observedbase no se convierte en ancestro, replay tardío puede seranterior. Outcome captura apariciónlocal/base yserie actualnullable, validando aislamiento yrelación; decoderactual no se amplía.
+- Validación: pruebas puras de cuatrofamilias, mismatch/corrupción/terminal/conflict/null/baseposterior/versiones/legacy; regresión/lint/tipos/build/diff; commitpushint/HEAD/cuotas. Siguiente proyección/rebase puro17c1b, luegoTXlocal17c2.
+
+## 17c1b — Proyección yplan de ACK de aparición
+
+- Estado: completada11oct, siete pruebas puras; sin escrituraACK aún.
+
+- Objetivo: conservar intenciónlocal/cola yplanificar writes deaparición/shadow/outcome/ACK sin ejecutarTX.
+- target_paths: schemas/plan-occurrence-projection, sync/{plan-occurrence-projection,plan-occurrence-result-plan} ytests; plan.
+- Dependencias:17c1a/reader17b2c1; cuota59%5h/78%7d.
+- Aceptación: cola completa/actor/dependencias/shadows validados; pendiente del padre o mismaaparición preserva local, otraaparición no bloquea; conservarcancelados/tombstones/shadow másreciente. Misma revisión conrecorddistinto es error; parent observado posterior se conserva sinatribuirancestro. Leasepropio para aplicar, replay idéntico durable, conflicto/rejected/unsupported sinACK. Rebase sólo expectedOccurrenceRevision deapariciónigual en pending+attempts0 condependencia directa; UUID/baseRevisionparent/históricas/otrasapariciones/intentos intactos.
+- Validación: casospuros ACK/replay/lateoutcome/proyección/conflict/null/dependientesenserie/leases/rollbackplan ymalformados; suite/lint/tipos/build/diff; commitpushint/HEAD/cuotas. Next17c2 ACK TXIndexedDB, seguido pull atómico.
+
+## 17c2a — ACK de aparición atómico en IndexedDB
+
+- Estado: completada11oct; seis comprobaciones IndexedDB reales, incluida recarga/limpieza propias.
+
+- Objetivo: ejecutar elplan17c1b en una únicaTX de apariciones/outbox/shadow/outcome ycaptura coherente delpadre, sincallerproductivo.
+- target_paths: local-db/plan-occurrence-sync-results, test/browser/plan-occurrence-sync-results, scripts/plan-occurrence-sync-results-test-server yplan.
+- Dependencias:17c1a/b, storesIndexedDB existentes, cuota55%5h/77%7d.
+- Aceptación: partición/actor/lease/operación/snapshotbounded completos validados anteswrites; sólocompleteTX devuelveACK, falloúltimooutcome revierte todos; replay idéntico readonly, rebasecondicionado, otroactor/lease/historia/corrupción preservan DB. Recarga mantieneACK/evidencia; fixturepropia limpia sólo particionesrunowned.
+- Validación: IndexedDB navegador real enorigen4253 con commit/replay/dependientes/fallo tardío/lease/actor/corrupción/recarga, suite/lint/tipos/build/diff; commitpushint/HEAD/cuotas. Sincredenciales/redMongo/DBusuario/nuevogeneración; después17c2b pullatómico mixto.
+
+## 17c2b1 — Planner de descarga mixta recurrente
+
+- Estado: completada11oct; seis pruebas puras, TXlocal sigue siguiente.
+
+- Objetivo: planificar proyección conjunta contenido/personal/aparición/shadows/cursor con contrato futuro estricto.
+- target_paths: schemas/local-recurring-pull, sync/local-recurring-pull ytest; plan.
+- Dependencias: reader17b2c1/proyección17c1b/ACK17c2a; cuota52%5h/77%7d.
+- Aceptación: seriescomunes admitidas sinampliar parseractivo, revisionesporentidad avanzan, checkpoint/rango coherentes; snapshotcompleto/actor/cola/identidades validated también para páginasignoradas. Padre propio/correspondencia de revisión remota antesaparición; pending/root preservados, tombstones/legacycache/intentadas/outcomes intactos. Pull nuncaACK/reescribe cola; límite10000 yerrorwholepage.
+- Validación: casospuros bootstrap/incremental/checkpoint/latepage/pending/otro slot/faltapadre/corrupción/revisión/queue/cancelación/borrado; suite/lint/tipos/build/diff; commitpushint/HEAD/cuotas. SiguienteTXIndexedDB conrollbackcursor yrecarga17c2b2.
+
+## 17c2b2 — Descarga recurrente atómica en IndexedDB
+
+- Estado: completada11oct; siete comprobaciones IndexedDB reales y recursos propios cerrados.
+
+- Objetivo: ejecutar planner17c2b1 en una TX única, cursor al final y sin ACK/reescritura de intenciones.
+- target_paths: local-db/pull-recurring-changes; test/browser/recurring-pull; scripts/recurring-pull-test-server; plan.
+- Dependencias:17c2b1/17c2a y stores existentes; cuota45%5h/76%7d, reservas10%/1%.
+- Aceptación: partición/actor/página validados antesTX, snapshots10001 rechazan exceso; contenido/personal/aparición/shadows/cursor juntos, retorno sólo complete; fallo último cursor revierte todos, replay ignorado sin writes. Mantener pendientes, outcomes, tombstones, cache legacy y cola exacta. Sin caller5/activación ni DBusuario.
+- Validación: IndexedDB real propio bootstrap/partial/checkpoint/replay/pending/rollback/aislamiento/corrupción/cancelación/recarga y cleanup; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas.
+
+## 17c3a — Evidencia e incidentes puros de apariciones
+
+- Estado: completada11oct; seis pruebas puras, sin reader/UI nuevo activo.
+
+- Objetivo: leer outcomes futuros y proyectar comparación actual/local-al-resultado/base-observada/remote de cada aparición fallida, sin ofrecer recuperación ni ACK.
+- target_paths: schemas/recurring-sync-incident, types/recurring-sync-incident, sync/{local-recurring-outcome,recurring-incident-snapshot} ytests; plan.
+- Dependencias:17c1/17c2 y decoderlegacy intacto; cuota40%5h/75%7d.
+- Aceptación: snapshot completo acotado/actor/cola/parent/slot/outcome exactos; aparición actual real separada de padre, null sólo ausencia capturada. Detectar contradicción de misma revisión, conservar replaybase posterior como observación, tombstones ypendientes relacionados. Evidencia durable corresponde estado/UUID/intención; parseractual sigue rechazando rama. Sin resolución/supersession/nuevo caller.
+- Validación: pruebas puras conflicto/rejected/null/current/latebase/parent/slot/actor/duplicate/state/legacydependientes; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas. Siguiente readerTX ycompatibilidad de consumidores.
+
+## 17c3b — Captura real de incidentes en IndexedDB
+
+- Estado: completada11oct; comparación readonly persistida/recarga probadas con ocho checks de fixture propia.
+
+- Objetivo: leer aparición actual/parent/cola/evidencia en una TX readonly propia antes de proyectar comparación futura.
+- target_paths: local-db/recurring-sync-incidents; test/browser/plan-occurrence-sync-results; plan.
+- Dependencias:17c3a/17c2a; cuota37%5h/75%7d.
+- Aceptación: partición explícita, snapshot10001 rechaza exceso/corrupción, ningún write/ACK/recovery; apariciónactual tras modificación local distinta de snapshot delresultado, retorno sóloTXcomplete. Recarga conserva comparación exacta; activo4 sinnuevo caller.
+- Validación: ampliar fixture4253 con conflicto realmente persistido mediante writer17c2a, modificación actual/particiónajena/lecturareadonly/recarga; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas.
+
+## 17c4a — ACK personal con evidencia recurrente
+
+- Estado: completada11oct; cuatro pruebas puras y decoderactivo intacto.
+
+- Objetivo: planner preparatorio de ACK personal que admite y conserva shadows de aparición sin ampliar parseractivo.
+- target_paths: schemas/recurring-preference-result-plan, sync/recurring-preference-result-plan ytest; plan.
+- Dependencias: plannerpersonal existente/17c1–3; cuota35%5h/74%7d.
+- Aceptación: validar snapshot completo/actor/parent/cola/duplicados antes de delegar ACK, conservar shadows de otrasfamilias y límite global10000. Rebase personal sólo dependientedirecto pending+attempts0 con efecto de mismaentidad; aparición/basepadre/intentadas intactas. Replay/outcome exacto ylease actual, null/unsupported sinACK; caller4 estricto.
+- Validación: tests puro mixedshadow/applied/replay/deps/lease/actor/corrupt/limit/parent/unsupported; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas. Siguiente puertoTX personal futuro.
+
+## 17c4b — Puerto personal recurrente en TX
+
+- Estado: completada11oct; ocho checks IndexedDB reales, puertos activos strict preservados.
+
+- Objetivo: aplicar resultado personal en presencia de shadows deaparición, reutilizando TX existente con selector privado explícito.
+- target_paths: local-db/preference-sync-results; test/browser/recurring-pull; plan.
+- Dependencias:17c4a ypuerto17c2b2, cuota33%5h/74%7d, reservas10%/1%.
+- Aceptación: export actual conserva rechazo estricto; nuevo export valida parent/cola/shadowsglobales enmismaTX, no modifica aparición/item/outcomes ajenos. ACKpersonal/shadow/outcome juntos, rollbackfallotardío/replayexacto; payload/base/expectedaparición intactos.
+- Validación: fixtureIndexedDB4254 categoríaACK conaparición/dependiente, fallbackactivoestricto, replay/rollback/recarga/cleanup; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas. Sincaller5/capacidad/DBusuario.
+
+## 17c4c — ACK local de raíz recurrente
+
+- Estado: completada11oct; tres tests puros y nueve checks IndexedDB reales.
+
+- Objetivo: puerto preparatorio de resultadoitem para create/update/delete de serie común, con correspondencia estricta yTX existente.
+- target_paths: sync/local-recurring-item-result ytest; local-db/sync-store; test/browser/recurring-pull; plan.
+- Dependencias: writerremoto17b2b1/local17c2/17c4b; cuota30%5h/74%7d, reserva10%/1%.
+- Aceptación: métodoactual sigue rechazando appliedrecurrence; método futuro validaactor/UUID/target/revisión/content para serie, progreso raíz recurrente noACK. Padre/shadow/lease/outcome juntos; rebasa sólo basedependiente directo unattempted, expectedOccurrenceRevision/UUID/intenciones intentadas/occurrence intactos. Replay durable yrollback tardío.
+- Validación: puro DTOcorrespondencia/familias/mismatch yfixtureIndexedDB createACK con aparición/dependientes/replay/rollback/recarga; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas. Sincallerproductivo/DBusuario/activación.
+
+## 17c5a — Copia portable de evidencia recurrente
+
+- Estado: completada11oct; cinco tests nuevos y nueve regresiones debackup aprobados.
+
+- Objetivo: formato backup3 preparatorio con aparición/shadow/outcome2 yvalidación común de integridad, conservando codecsactivos1/2.
+- target_paths: schemas/local-recurring-backup, types/local-backup; lib/backup/local-backup y nueva prueba; plan.
+- Dependencias:17c1–4 ycopiasvigentes; cuota25%5h/73%7d, reservas10%/1%.
+- Aceptación: formato portable3 separado deintenciones1/evidencia2/transportefuturo5, sinreescritura/migración/activación. Codecfuturo también lee1/2 conservándolos; export/importpuro mantiene UUID/payload/leases/deps/outcomes/tombstones/cursor exactos. Todo actor/parent/slot/estado/evidencia/size16MiB validado, missingACK/outcome/supersession nunca admitidos; codecactivo rechaza3.
+- Validación: roundtrip cuatrovariantes/cancelados/currentnull/latebase, mismatches/corrupt/foreign/limits/dependencies/legacy; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas. PuertoexportTX posterior, no restore/DBusuario ni caller5.
+
+## 17c5b — Snapshot portable recurrente enTX
+
+- Estado: completada11oct; diez checks IndexedDB reales, exportactual2 intacto.
+
+- Objetivo: puerto preparatorio de exportreadonly formato3 desde snapshot completo IndexedDB, reutilizando capturador actual.
+- target_paths: local-db/backup; test/browser/plan-occurrence-sync-results; plan.
+- Dependencias:17c5a/17c3b; cuota23%5h/72%7d, reservas10%/1%.
+- Aceptación: exportactual sigue2/strict, future3 conserva intenciones/evidencia/current/cursor sinwrites ni restore; mismaTX todosstores/limits/actor/release-markervalidado. Errores/corrupción/partition/counter no generan backup parcial; recarga mantienejsonexacto.
+- Validación: fixture4253 conflictoreal/currentmodificado/outcomes/partición/read-only/roundtrip/recarga ycleanup; suite/lint/tipos/build/diff, commitpushint/HEAD/cuotas.
+
+## 17b3a — Asignación personal de serie común
+
+- Estado: completada11oct; tres tests nuevos ycuatro regresiones de planner aprobados.
+
+- Objetivo: planner puro futuro de categoría para padre recurrente común, reutilizando CAS/efectos actuales sin ampliar caller4.
+- target_paths: preferences/remote-item-view-plan ytest; plan.
+- Dependencias:17b2/17c4; cuota20%5h/72%7d, reservas10%/1%.
+- Aceptación: permitir cuatrovariantes recurrentes sólo en exportpreparatorio; generación4/legacy yrecurrencias legacy siguenunsupported. Vista/CAS/tag autorizados yrevisiones independientes, cero efecto contenido/aparición/parentrevision. Nullclear, missing/deleted/foreign yconflict correctos.
+- Validación: pruebas puras cuatrovariantes/CAS/null/actor/tag/familias/immutability yDoDglobal; commitpushint/HEAD/cuotas. ExecutorTX/replay/guard/Mongo posteriores según margen, sinACK/caller/DBusuario.
+
+## 17z1 — Cierre de la continuación puntual del 11 de octubre
+
+- Objetivo: registrar el estado entregado y un siguiente corte ejecutable sin activar funciones preparatorias.
+- target_paths: `plan/master.md`, `plan/workflow.md`, `plan/iterations.md`, `plan/recurrence-sync.md`, `plan/iteration-log.md`.
+- Dependencias: último código completo `c6449ed`; cuota comprobada 15%5h/71%7d y reservas 10%/1%.
+- Aceptación: distinguir cambios UI publicados, recurrencia preparada y activación pendiente; corregir el recuento documental de aserciones; pausar la revisión puntual sin crear otra cadena.
+- Validación: referencias locales, consistencia del estado, `git diff --check`, commit/push a `int`, HEAD remoto exacto y consulta de ambas cuotas. No cambios de código ni repetición de pruebas ya aprobadas.
+
+## 16c10 — Mes por gesto horizontal y cabecera compacta
+
+- Estado: completada11oct; pruebas de reconocimiento/markup y DoD aprobados.
+- Objetivo: cambiar de mes deslizando el calendario, quitar flechas y colocar Hoy junto al mes/año.
+- target_paths: `src/features/calendar/components/month-grid.tsx`, `src/features/calendar/hooks/use-month-swipe.ts`, `src/features/calendar/month-view.ts` y su prueba; documentos de plan.
+- Dependencias: MonthGrid compartido, navegación civil existente y drop de planes16c3; petición humana explícita con13%5h/71%7d.
+- Aceptación: izquierda siguiente/derecha anterior; no cambiar por scroll vertical, tap, multitouch o gesto cancelado. No interferir con drop de planes ni selección de día. Cabecera en una fila, Hoy visualmente menor con target usable; PageUp/PageDown como alternativa de teclado sin flechas visibles. Sin cambios DB/transporte.
+- Validación: regresión de fechas/bordes y prueba del reconocimiento horizontal, lint/tipos/build y diff; commit/pushint/HEAD, después cuotas. Corte UI único, no reabrir lote ni automatización.
+
+## 16c10b — Deslizamiento sobre la cuadrícula de días
+
+- Estado: completada11oct; cuatro comprobaciones de navegador desde celdas aprobadas.
+- Objetivo: corregir el gesto que funciona en la cabecera pero no sobre los días.
+- target_paths: MonthGrid, su prueba y fixture de navegador local; documentos de plan.
+- Dependencias:16c10 y reporte humano; corrección acotada autorizada con11%5h/70%7d, sin abrir otro bloque.
+- Aceptación: evitar contenedor de scroll horizontal que intercepte el gesto antes de llegar a la sección; desactivar drag nativo de enlaces de día. Swipe desde celdas cambia mes; tap selecciona día, scroll vertical y drop externo de planes conservados.
+- Validación: markup y prueba de gesto desde celdas en navegador propio, lint/tipos/build/diff; commit/pushint/HEAD y cuotas. Sin DB ni automatización nueva.
+
+## 16c11 — Navegación sin recarga ni estados fugaces
+
+- Estado: completada11oct; navegación con documento persistente y DoD aprobados.
+- Objetivo: eliminar flash de preparación de versión y placeholders durante navegación local.
+- target_paths: workspace/navigation y Workspace; componente UI delayed-status; boundary de release, categorías y cargas de planes/calendario; hook swipe; pruebas y fixture propias; plan.
+- Dependencias: reporte humano, shell workspace/query hooks y cache SWR existentes. Reparación acotada autorizada con7%5h/70%7d; no iniciar otros bloques.
+- Aceptación: enlaces internos actualizan History API sin recarga, preservan proveedores/cache por cuenta y atrás/adelante. Modificadores, descargas, otras rutas/orígenes/hash mantienen comportamiento nativo. Cuenta/release pendientes nunca presentan preparación como necesaria ni habilitan contenido protegido; espera corta no muestra texto, espera larga sí. Errores/consentimiento/wipe intactos.
+- Validación: prueba de navegación desde enlaces y celdas/gesto con documento persistente en navegador propio, regresión inicial pendiente y DoD; commit/pushint/HEAD/cuotas. Sin persistir nuevo cache/auth ni DB/automatización.
+
+## 17z2 — Reprogramación puntual20:26
+
+- Objetivo: continuación solicitada11oct20:26Europe/Madrid; target_paths: plan y heartbeat existente.
+- Aceptación: ACTIVE puntual, cuotas reales antes de17b3b, reservas10%/1%, sin duplicados/cadena/código nuevo.
+- Validación: automation_update confirmó ACTIVE, referencias/diff, commit/pushint/HEAD/cuotas.
+
+## 17z2 — Cierre de la continuación puntual20:26
+
+- Objetivo: registrar estado/código/pruebas/cuota/recursos al cerrar la ejecución puntual y concretar siguiente prueba integrada sin activación parcial.
+- target_paths: plan/{master,workflow,iterations,iteration-log,recurrence-sync}.md y automatización puntual existente.
+- Dependencias:17d5 publicado cc05d20 y HEADremoto exacto; lectura16%5h/56%7d, reservas10%/1%.
+- Aceptación: repo coherente/recursos propios retirados, estado4 activo/5 preparado inequívoco, corteNext acotado/prerrequisitos explícitos. No comenzar Next con seis puntos hastareserva; la preparación/ejecución/reparación/cierre requiere más margen según ensayos anteriores. Automatización puntual eliminada sin nueva cadena, confirmado por herramienta.
+- Validación: referencias locales/coherencia/diff; documentación mismo commitpushint/HEAD y lectura final de ambas cuotas.
+
+## 17e1a — Frontera Next5 compilada y retiro4
+
+- Estado:17e1a1 cierra RPC/auth/readiness/matrix/serie/aparición; 17e1a2 conserva cola/lease tras referencia ausente o retiro4; falta lifecycle/convergencia5.
+- Objetivo: evidencia de referencia real actions-v5/defaults/readiness5/sesiones BetterAuth persistidas, matrix4↔5 y rechazo de acción4 retirada sin ejecución/ACK.
+- target_paths: scripts/next-sync-test-runner.ts, test/next-sync/**/*.template, src/{schemas,config}/next-sync-test.ts, src/lib/db/next-sync-fixture.ts y tests pertinentes, plan; integración compartida de único dueño.
+- Dependencias:17d1–5 preparados; descriptor Mongo propio/imagen pinned y procedimiento de índices propios5 antes readiness. No índices/DBusuario, no API/provider productivo5.
+- Aceptación: dos orígenes/particiones y sesiones propias independientes, acción5 real compilada con actor/expectedactor/auth/readiness coherentes; header5 exclusivo antes body/cache/cursor. Capturados identity4/pull4→retirement4 devuelve update_required antes readiness/executor sin ACK y libera sólo lease propio. ID antiguo ausente (código exacto de Next instalado;16.4 devuelve409 con marcaaction-not-found) conserva cola/intención y siguientehandshake5 bloquea antesclaim. Matrix4↔5 conserva UUID/sobre2/intención1; errores saneados. Cleanup todos recursos propios.
+- Validación: Next real compilado/controlado, Mongo propio y browsers propios, regresiones/DoD/commitpushint/HEAD/cuotas. Fixture directo o puro no prueba esta frontera; no confundir sesiones persistidas ficticias con OAuthGoogle interactivo.
+- Cortes posteriores:17e1b lifecycle hook5 real y convergencia de productor→ACKúnico/replay/dependientes/pull en dosparticionesMongo; escenarios de fecha/timed/variante/regla/series/placement/conflicto/tombstone/offline. Luego procedimiento específico índiceAppearance Preview validado/permiso antes ejecutarlo, recuperación/UI/backup recurrentes coherentes y activación conjunta5. No declarar alcance activo por cambiar config ni borrar/migrar intenciones.
+
+## 17d5 — Hook/cache recurrentes preparados
+
+- Estado: completada11oct; regresión cache/invalidation y DoD aprobados. Lifecycle5 real pendiente.
+
+- Objetivo: wrapper privado5 reutiliza scheduler/listeners/cleanup existentes con caché separada por negociación/cuenta/época.
+- target_paths: features/sync/hooks/{use-mixed-sync-engine-core,use-recurring-sync-engine}, sync-summary-cache-key y test, plan.
+- Dependencias:17d4; entrada18%5h/56%7d, reservas10%/1%.
+- Aceptación: cache5 distinta de4 conservando posiciones de actor/época e invalidación compartida; protocolo5 ownership de estado/control; wrapper selecciona factory5 estático. Ningún provider/caller activo cambia; sin duplicar listeners ni activar5.
+- Validación: regresión de claves/invalidation/identidad/protocolos, tipos/lint/suite/build. Lifecycle real hook5/Next y RPC siguen pendientes, sin extrapolar evidencia4; skill React leída.
+
+## 17d4 — Composición privada del cliente recurrente
+
+- Estado: completada11oct; seis pruebas nuevas composición/resumen y DoD aprobados.
+
+- Objetivo: fijar transporte5/acción5/runtime/policy/resumen recurrentes como una unidad, con identidad inmutable y guardias de refresh.
+- target_paths: features/sync/{mixed-sync-client-core,mixed-sync-client-v5,client-action-v5,mixed-sync-summary} y pruebas, plan.
+- Dependencias:17d1–17d3; entrada20%5h/56%7d, reservas10%/1%.
+- Aceptación: core parametriza tipo de transporte sin ampliar DTO/validadores activos; default futuro usa release/cuenta y store recurrente. Intención1/sobre2 sin reescritura, epoch/actor inmutables, matrix4↔5 antes body/dispatch, cierre/stop/refresh coherentes. Sin provider/hook/rutas activos.
+- Validación: pruebas puras composición/correspondencia/recurrence-summary/guards/fallos; skill React best practices y guía Next leídas, DoD completo. Hook/lifecycle Next real y dosparticiones/Mongo posteriores.
+
+## 17d3 — Fronteras de servidor preparadas5
+
+- Estado: completada11oct; ocho pruebas puras y DoD aprobados, sin rutas activas modificadas.
+
+- Objetivo: descarga autenticada recurrente/acción5 y retiro explícito4 privados, sin conectar rutas/provider activos.
+- target_paths: features/sync/{pull-recurring-response,authenticated-recurring-pull,actions-v5,retired-sync-push-v4} y pruebas, comentario authenticated-recurring-push, plan.
+- Dependencias:17d1–17d2, dispatcher/readiness/reader futuros; entrada23%5h/57%7d, reservas10%/1%.
+- Aceptación: sesión/query/expectedUserId antes de readiness5/journal, header5 exclusivo/no-store, página recurrente completa validada; error saneado/cursorAhead. Retiro4 sólo envelope2/auth/update_required sin readiness/ejecutor/ACK. Acción5 pasa headers reales al servicio ya validado; API/caller4 intactos.
+- Validación: pruebas puras sesión/query/readiness/datos/retirement/matrix y DoD. Guía Next Server Actions instalada leída antes wrapper; acción compilada real y dosparticiones/Mongo como corte posterior, sin atribuirles pruebas puras.
+
+## 17d2 — Runtime recurrente y lifecycle IndexedDB
+
+- Estado: completada11oct; seis escenarios de navegador propio y DoD aprobados.
+
+- Objetivo: abrir recursos y coordinador recurrentes como unidad privada con guardias de cuenta/época y cierre idempotente.
+- target_paths: features/sync/local-recurring-runtime.ts, test/browser/recurring-runtime.ts, scripts/recurring-runtime-test-server.ts, plan.
+- Dependencias:17c7b–17d1; entrada28%5h/58%7d, reservas10%/1%.
+- Aceptación: cuenta/release antes y después apertura, recursos parciales cerrados, coalescencia, stop/cambio época antes ACK/cursor, lease exclusivamente propio; productor real de aparición y ACK durable en partición propia. Sin caller/activación/DBusuario.
+- Validación: seis escenarios lifecycle en IndexedDB real/origen loopback generado, limpieza sólo fixture, respuestas sintéticas no RPC/Google/convergencia; DoD completo, commit/pushint/HEAD/cuotas.
+
+## 17d1 — Transporte HTTP recurrente privado
+
+- Estado: completada11oct; cuatro pruebas puras de HTTP/negociación y DoD aprobados.
+
+- Objetivo: cliente futuro5 con validadores recurrentes, sin cambiar anuncio/factory/caller4.
+- target_paths: config/sync-protocol constante5, features/sync/http-recurring-transport y test, plan.
+- Dependencias:17c7c y DTO recurrentes; entrada34%5h/58%7d, reservas10%/1%.
+- Aceptación: negociación exclusiva5 y header validado antes del body; mismas cookies same-origin/no-store/deadlines, actor/query completos, sobres2/intenciones1. Matrix4↔5 rechaza antes datos/ACK; resultados de tresfamilias íntegros sin mutación, fallo conserva posibilidad de replay. Sin API/provider/activación.
+- Validación: pruebas puras headers/body/cookies/query/aparición/matrix/cuenta/reintento/timeout; DoD completo, commit/pushint/HEAD/cuotas. Runtime/evidencia real después.
+
+## 17c7c — Coordinador recurrente privado
+
+- Estado: completada11oct; cinco pruebas de guards/colas/correspondencia y DoD aprobados.
+
+- Objetivo: coordinar pull/claim/envío/ACK de tresfamilias con policy recurrente fija y guardias cuenta/época, sin ampliar kernel activo4.
+- target_paths: features/sync/recurring-coordinator y prueba pura, plan.
+- Dependencias:17c7b/store y17c7a/policy; entrada38%5h/59%7d, reservas10%/1%.
+- Aceptación: validadores recurrentes antes apply/cursor; claim reread, UUID/payload/deps exactos, lease sólo sender propio y release incluso error. Unsupported histórico/dependientes bloqueados, trabajo independiente avanza; cuenta/stop despuésawait evitan ACK. Pasadas bounded/settled no equivalen convergencia.
+- Validación: fixtures puros de cola/guardias/fallos/páginas/response/noACK/transición4, DoD completo, commit/pushint/HEAD/cuotas. Runtime/HTTP5 y prueba real posteriores. Kernel preparatorio separado protege DTO/gates4; posible consolidación sólo tras evidencia integrada.
+
+## 17c7b — Consumidor local recurrente
+
+- Estado: completada11oct; veinte checks IndexedDB reales en dos orígenes propios y DoD aprobados.
+
+- Objetivo: apertura privada del store mixto que enruta pull y ACK de las tres familias a transacciones recurrentes ya probadas, sin modificar open activo4.
+- target_paths: local-db/mixed-sync-store, schema localRecurringSyncResultInput, fixtures recurring-pull/plan-occurrence-sync-results y plan.
+- Dependencias:17c7a y puertos ACK/pull previos; entrada43%5h/60%7d, reservas10%/1%.
+- Aceptación: openRecurring explícito, actor/partición/cierre/sender/resultado validados; referencias4 strict. Todos resultados usan su TX propia real, no ACK adelantado. Cola/cursor snapshot completos; root/aparición/preference no se confunden. Recursos cerrados incluso apertura parcial.
+- Validación: fixtures own IndexedDB reutilizadas pasando por store futuro (pull/ACK root/preference/aparición, rollback/replay/recarga), regresiones y DoD, commit/pushint/HEAD/cuotas. Resultado sintético no equivale a RPC/convergencia.
+
+## 17c7a — Política recurrente y diagnóstico puro
+
+- Estado: completada11oct; cuatro pruebas nuevas con matriz de variantes/cadenas y DoD aprobados.
+
+- Objetivo: registro/readCommand futuro coherente para series/apariciones/orden, sin ampliar política activa4.
+- target_paths: sync/recurring-sync-capabilities y test, interfaces sync-capabilities, plan.
+- Dependencias:17c6c y executors futuros reales; entrada46%5h/60%7d, reservas10%/1%.
+- Aceptación: stores incluyen occurrences, kind de aparición explícito, CAS propio obligatorio sin normalizar históricos. Contenido/serie/tag/vista/placement según executors; rootstatus de serie y legacyrecurrence/settings/birthday unsupported. Contexto local no acredita propiedad/commit; regla retirada permite replay con slot canónico, remoto decide. Diagnóstico/resumen actuales admiten bundle futuro sólo si solicitado explícitamente y conservan cola/UUID/deps.
+- Validación: matriz variantes/familias/slots/history/immutability/dependientes y regresión4, DoD completo, commit/pushint/HEAD/cuotas. Runtime/coordinador/rutas futuros posteriores.
+
+## 17c6c — Frontera autenticada y readiness recurrentes
+
+- Estado: completada11oct; nueve pruebas nuevas de frontera/readiness y DoD aprobados.
+
+- Objetivo: servicio privado de envío que comprueba sesión/cuenta/sobre/batch/readiness antes de dispatch, con recibos mixtos y retries de prefijo.
+- target_paths: features/sync/push-recurring-batch y authenticated-recurring-push con tests, db/mixed-sync-index-specs/readiness y prueba futura, plan.
+- Dependencias:17c6b y contrato17c6a; entrada48%5h/61%7d, reservas10%/1%.
+- Aceptación: cinco índices registrados exactos, inspección sin provisión; sesión autorizada/expectedUserId antes almacenamiento, errores saneados. Readiness una vez antes executor; UUID reutilizado devuelve identidad en familia correcta, fallo/respuesta inválida conserva prefijo sin ACK inventado. Defaults server-only actuales de auth/singleton, sin acción/ruta5 activa.
+- Validación: pruebas de auth/matrix/envelope/missing/incompatible/retry/correspondencia/índices/bytes; DoD completo, commit/pushint/HEAD/cuotas. Provisión Preview excluida y posterior específica.
+
+## 17c6b — Dispatcher recurrente Mongo
+
+- Estado: completada11oct; Mongo130pass/1823aserciones25archivos y DoD aprobados.
+
+- Objetivo: conectar de forma preparatoria todas las familias a executors recurrentes reales y validar cada respuesta antes de retornarla.
+- target_paths: db/remote-recurring-operation-commands y prueba integración nueva, runner Mongo, plan.
+- Dependencias:17c6a y executors atómicos de series/apariciones/categorías/vistas/placements; entrada55%5h/62%7d, reservas10%/1%.
+- Aceptación: actor/input validados, switch explícito y namespace común sin fallback a executors4; replay exacto/fingerprint antes efectos. Históricos incompatibles conservados y rechazo sin relabel/ACK; settings/legacyrecurrence unsupported. Callers4 intactos.
+- Validación: Mongo propio familias completas/duplicados/actor/CAS/UUID/recibo histórico; suite/lint/tipos/build y commit/pushint/HEAD/cuotas. Sin API/DBusuario/activación.
+
+## 17c6a — Contrato de envío recurrente
+
+- Estado: completada11oct; cinco pruebas nuevas, regresión ACK y DoD aprobados.
+
+- Objetivo: validar sobres de envío futuros con resultados item/preference/plan-occurrence y correspondencia exacta de cada prefijo, sin activar rutas5 ni modificar formatos durables.
+- target_paths: schemas/types/remote-recurring-push, sync/remote-recurring-push y pruebas, correspondencia compartida de aparición, plan.
+- Dependencias:17c5d y schema/result/evidencia recurrente previos; entrada60%5h/63%7d, reservas10%/1%.
+- Aceptación: sobre sigue2/intención1; actor/UUID/familia/slot/revisiones/efecto/prefijo/límites UTF8 estrictos. Históricos unsupported sin CAS no se reescriben. Validación compartida con ACK no crea ACK ni permisos. Decoder4 sigue rechazando aparición; ningún caller nuevo.
+- Validación: pruebas puras de mezcla, prefijos y corrupción/revisiones/actor/bytes/historia; DoD completo, plan/log, commit/pushint/HEAD/cuotas. Dispatcher y servicio autenticado posteriores.
+
+## 17c5d — Productor local de orden recurrente
+
+- Estado: completada11oct; siete comprobaciones IndexedDB reales, dos pruebas puras y DoD aprobados.
+
+- Objetivo: puerto IndexedDB preparatorio que guarda optimismo de posiciones comunes/recurrentes e intencióndurable en la misma TX, sin cambiar hook/caller4.
+- target_paths: nuevo plan-local-recurring-move y prueba, task-move-outbox, fixture browser propia de orden recurrente, plan.
+- Dependencias:17c5c y capa outbox/ranking actual; entrada69%5h/64%7d, reservas10%/1%.
+- Aceptación: baseRevision del placement leída en mismaTX; UUID/payload/entityKey/sequence/deps exactos, replay de outbox readonly, contenido/aparición sin cambios. Catálogos completos bounded y partición propia; validar legacy y conservarlos sin sincronizarlos. Overdue sólo día actual del usuario al crear, servidor sigue as-ofdurable. Rollback tardío no deja posición/vista/tail/cola parciales. API4 sin cambios.
+- Validación: pura mixed simple/timed/multidía/overdue/actor/historia y navegador propio IndexedDB con creación/replay/deps/base/overflow/recarga/cleanup; DoDglobal, commit/pushint/HEAD/cuotas. No Google/DBusuario/activación.
+
+## 17c5c — Descarga autorizada del orden recurrente
+
+- Estado: completada11oct; Mongo127pass/1780aserciones y DoD aprobados.
+- Objetivo: permitir sólo al reader futuro descargar placements de slots comunes implícitos/materializados/timed con autorización actual del padre, sin ampliar rutas4.
+- target_paths: `src/lib/db/remote-changes-v2.ts`, prueba remote-recurring-changes.integration, plan.
+- Dependencias:17c5b y reader futuro mixto existente; entrada73%5h/65%7d, reservas10%/1%.
+- Aceptación: current placement/padre propio y categorías actual/histórica obligatorios; versión actual no inferior a historia. Un slot implícito no necesita excepción materializada; no regenerar regla actual para autorizar historia. Cambio de regla/softdelete/cancelación/tombstones no elimina propiedad; ausencia/corrupción/actor extranjero bloquea toda página sin filtrar/avanzar cursor. Rutas/readers4 siguen strict.
+- Validación: Mongo real mixed journal completo, checkpoint congelado, slot timed/implícito, replay tras cambios de regla/borrado/cancelación, faltante/actor/revisión/categoría histórica/corrupción/hueco; DoDglobal, commit/pushint/HEAD/cuotas. Sin DBusuario ni capacidades activas.
+
+## 17c5b — Catálogo y executor Mongo de orden recurrente
+
+- Estado: completada11oct; Mongo125pass/1756aserciones24archivos y DoD aprobados.
+- Objetivo: ejecutar orden mixto futuro en una única TX con replay/guard/CAS/journal/recibo, sin conectar callers4.
+- target_paths: remote-plan-occurrences y test, remote-task-placement-commands, nueva prueba de integración recurrente, runner Mongo y plan.
+- Dependencias:17c5a, guard y namespace de recibos recurrentes; entrada80%5h/66%7d, reservas10%/1%.
+- Aceptación: catálogos completos propios snapshot (incluye apariciones canceladas/tombstones), límite global10000 validado sin truncar; reutilizar índice registrado user/series/slot. Replay común primero y guard de cada padre común afectado antes de writes; CAS de cada placement/vista, contador/journal/recibo atómicos. Retry relee todos los catálogos y autorización; no cambia parent/aparición ni UUID/payload. Activo4 strict y terminales históricos intactos.
+- Validación: Mongo propio mixed simple/timed/materializada, replay/identidad/concurrente/CAS, rollback tardío completo y carrera con edición/borrado padre; límites/corrupción del catálogo; suite/lint/tipos/build, commit/pushint/HEAD/cuotas. Sin DBusuario ni activación.
+
+## 17c5a — Contrato y planner de orden mixto recurrente
+
+- Estado: completada11oct; once pruebas nuevas, suite705pass/188skip/0fail y DoD aprobados.
+- Objetivo: ordenar planes simples y apariciones comunes en día/atrasadas usando catálogos completos y CAS de placement; no activar callers.
+- target_paths: schema nuevo de contexto recurrente, referencia canónica de orden en schemas/ordering, planner/catalog puro bajo preferences y pruebas, regresión day-task-move.test; plan.
+- Dependencias:17b3c, paginación común de apariciones y kernel de ranking existente; entrada88%5h/67%7d, reservas10%/1%.
+- Aceptación: propiedad/identidad/revisión estrictas, excepciones persistidas reemplazan generación por slot, canceladas/tombstones nunca resurgen. Día civil declarado y sentinel overdue, sin reloj servidor. Cuatro variantes juntas con default fecha/hora/tipo/identidad y ranks manuales; categoría deriva del padre. Cambio de grupo actualiza vista del padre y considera sus otras apariciones del catálogo, sin alterar contenido/slot/progreso/revisión del padre/aparición. Catálogos/efectos limitados rechazan overflow/errores en vez de truncar. Activo4 sigue strict.
+- Validación: pruebas puras mixed peers/multidía/excepción reprogramada/CAS/metadata/grupos/actor/cancelados/deleted/reglas/límites/immutability; DoDglobal, commit/pushint/HEAD/cuotas. Executor/guard/lectores/ACK y activación futuros.
+
+Hallazgo de contrato: referencias durables de vecino/efecto sólo admitían slot fecha, pese a que el plan timed usa fecha+hora. Se amplía únicamente formato canónico UUID:fecha o UUID:fechaT09:30 para permitir serializar intención/evidencia futura; validación real usa localDateTimeSchema (hora válida). Políticas/executors activos siguen rechazando apariciones y lectores siguen autorizando padre; aceptar el formato no habilita sincronización. Regresión legacy comprueba que un vecino timed parseable permanece fuera de su catálogo. No cambian UUID/fingerprint/metadata de registros existentes.
+
+## 17b3c — Replay de categorías dentro del namespace recurrente
+
+- Estado: completada11oct; Mongo121pass/1662aserciones y DoD aprobados.
+- Objetivo: puerto futuro de categorías que reconoce recibos de todas las familias recurrentes antes de mutar, sin ampliar callers4.
+- target_paths: `src/lib/db/remote-tag-commands.ts`, su prueba Mongo, documentos de plan.
+- Dependencias:17b3b y decoder común recurrente; entrada94%5h/68%7d, reservas10%/1%.
+- Aceptación: conservar resultados históricos, actor/fingerprint y replay exacto; UUID reutilizado entre aparición y categoría rechaza antes de catálogo/efectos. Mantener CAS/journal/recibo transaccionales y rollback de staging; API activa intacta. Índices actuales suficientes.
+- Validación: Mongo propio para creación/replay concurrente, movimiento/edición/borrado, identidad entre familias y rollback; DoDglobal, commit/pushint/HEAD/cuotas. Sin activación ni DBusuario.
+
+## 17b3b — Executor de asignación de categoría a una serie
+
+- Estado: completada11oct; cuatro escenarios nuevos Mongo reales y DoD aprobados.
+- Objetivo: conectar el planner 17b3a a un executor preparatorio transaccional, separado de los callers activos.
+- target_paths: `src/lib/db/remote-item-view-commands.ts`, su prueba de integración Mongo y documentos de plan.
+- Dependencias: 17b3a, replay común recurrente y guard compartido de serie probados en 17b2.
+- Aceptación: replay común antes de mutar; autorización del padre y categoría actuales en la misma TX; guard compartido antes del write de vista; CAS, recibo y journal atómicos. Retry relee todo el snapshot. Conservar resultados históricos terminales y UUID/payload, sin reinterpretar operaciones ni modificar contenido/progreso/revisión del padre.
+- Validación: Mongo propio con cuatro variantes, replay/identidad entre familias, conflicto de vista, rollback y carrera con edición/borrado del padre; regresión de callers activos estrictos, suite/lint/tipos/build, commit/push/HEAD y cuotas. Evaluar índices centrales existentes; sin provisión ni actuación en DB del usuario, sin activación de generación5.

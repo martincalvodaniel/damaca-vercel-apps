@@ -1,0 +1,9 @@
+"use client"
+
+import { dispatchSyncOperationsV3 } from "@/features/sync/client-action-v3"
+
+export function dispatchFixtureRetiredOperations(
+  input: unknown
+): Promise<unknown> {
+  return dispatchSyncOperationsV3(input)
+}

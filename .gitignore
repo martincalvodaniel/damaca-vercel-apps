@@ -1,0 +1,16 @@
+node_modules
+.turbo
+.vercel
+.next
+**/public/dalis-sw.js
+out
+coverage
+build
+*.tsbuildinfo
+**/next-env.d.ts
+.env
+.env.*
+!.env.example
+!.env.local.example
+.DS_Store
+*.pem

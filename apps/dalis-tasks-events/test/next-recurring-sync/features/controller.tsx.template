@@ -1,0 +1,1994 @@
+"use client"
+
+import type { RecurringSyncIncidentOverview } from "@/types/recurring-sync-incident"
+
+import { useEffect, useState } from "react"
+import type { z } from "zod"
+import {
+  nextSyncPublicConfigSchema,
+  nextSyncDeviceCommandSchema,
+  nextRecurringSyncStateSchema,
+} from "@/schemas/next-sync-test"
+import { canonical, ordered, foldRecurringChanges } from "@fixture/projection"
+import { editablePlanOccurrence } from "@/lib/calendar/plan-occurrence-command"
+import { planSchema } from "@/schemas/plan-item"
+import { remoteRecurringPushResultSchema } from "@/schemas/remote-recurring-push"
+import { encodeSyncProtocolRange } from "@/lib/sync/sync-protocol"
+import { validateLocalRecurringBackup } from "@/lib/backup/local-backup"
+import { localPullCursorSchema } from "@/schemas/local-sync"
+import { syncOperationSchema } from "@/schemas/sync"
+import { workspaceIdentitySchema } from "@/schemas/workspace"
+import { executeFixtureCommand, fixtureFetch } from "@fixture/device-client"
+
+function assert(value: unknown, message: string): asserts value {
+  if (!value) throw new Error(message)
+}
+type Reply = { status: number; value: unknown; protocol: string | null }
+
+export function FixtureController() {
+  const [config, setConfig] = useState<z.infer<
+    typeof nextSyncPublicConfigSchema
+  > | null>(null)
+  const [status, setStatus] = useState("Preparando la prueba aislada de Next")
+  const [rows, setRows] = useState<string[]>([])
+  const [running, setRunning] = useState(false)
+  useEffect(() => {
+    void (async () => {
+      const run = new URLSearchParams(location.search).get("run")
+      const parsed = nextSyncPublicConfigSchema.parse(
+        await (
+          await fetch(`/fixture/config?runId=${run}`, { cache: "no-store" })
+        ).json()
+      )
+      assert(
+        location.origin === parsed.origins[0],
+        "Fixture controller host is invalid"
+      )
+      setConfig(parsed)
+      setStatus("Listo. La prueba abre un segundo dispositivo en otra pestaña")
+    })().catch(() => setStatus("No se ha podido preparar la prueba aislada"))
+  }, [])
+
+  const run = () => {
+    if (!config || running) return
+    const fixture = config
+    setRunning(true)
+    let secondary: Window | null = null
+    let removeReady = () => {}
+    let readyTimer: ReturnType<typeof setTimeout> | undefined
+    const ready = new Promise<void>((resolveReady, reject) => {
+      readyTimer = setTimeout(() => {
+        removeReady()
+        reject(new Error("Fixture second device did not become ready"))
+      }, 45000)
+      const listener = (event: MessageEvent) => {
+        if (
+          event.source !== secondary ||
+          event.origin !== fixture.origins[1] ||
+          event.data?.runId !== fixture.runId ||
+          event.data?.ready !== true
+        )
+          return
+        clearTimeout(readyTimer)
+        removeReady()
+        resolveReady()
+      }
+      window.addEventListener("message", listener)
+      removeReady = () => window.removeEventListener("message", listener)
+    })
+    void ready.catch(() => {})
+    // Open synchronously from the user gesture; both devices must be top-level first-party sites.
+    secondary = window.open(
+      `${fixture.origins[1]}/device?run=${fixture.runId}`,
+      `dalis-next-sync-${fixture.runId}`
+    )
+    const call = async (
+      index: number,
+      command: z.infer<typeof nextSyncDeviceCommandSchema>
+    ): Promise<unknown> => {
+      const parsed = nextSyncDeviceCommandSchema.parse(command)
+      if (index === 0) return executeFixtureCommand(fixture.runId, parsed)
+      assert(
+        secondary && !secondary.closed,
+        "Fixture second device is unavailable"
+      )
+      const channel = new MessageChannel()
+      try {
+        return await new Promise((resolveReply, reject) => {
+          const timer = setTimeout(
+            () => reject(new Error("Fixture command timed out")),
+            45000
+          )
+          channel.port1.onmessage = (event) => {
+            clearTimeout(timer)
+            if (event.data?.ok === true) resolveReply(event.data.value)
+            else reject(new Error("Fixture second device command failed"))
+          }
+          secondary!.postMessage(
+            { runId: fixture.runId, command: parsed },
+            fixture.origins[1],
+            [channel.port2]
+          )
+        })
+      } finally {
+        channel.port1.close()
+      }
+    }
+    const check = async (label: string, work: () => Promise<void>) => {
+      setStatus(label)
+      await work()
+      setRows((values) => [...values, `Correcto: ${label}`])
+    }
+    const state = async (userId: string) => {
+      const response = await fixtureFetch(
+        fixture.runId,
+        `/fixture/state?runId=${fixture.runId}&userId=${encodeURIComponent(userId)}`
+      )
+      assert(response.status === 200, "Fixture state reader failed")
+      return nextRecurringSyncStateSchema.parse(response.value)
+    }
+    const creation = syncOperationSchema.parse({
+      operationId: crypto.randomUUID(),
+      protocolVersion: 1,
+      baseRevision: 0,
+      command: {
+        type: "item.create",
+        itemId: crypto.randomUUID(),
+        input: {
+          kind: "plan",
+          variant: "task",
+          title: "Plan RPC recurrente aislado",
+          description: "",
+          status: "not_started",
+          checklist: [],
+          recurrence: {
+            frequency: "daily",
+            interval: 1,
+            anchorDate: "2026-10-12",
+            timeZone: "Europe/Madrid",
+            end: { type: "never" },
+          },
+          schedule: {
+            mode: "all_day",
+            startDate: "2026-10-12",
+            endDateExclusive: "2026-10-13",
+          },
+        },
+      },
+    })
+    let owner = "",
+      passed = false
+    const push = async (
+      index: number,
+      input: unknown,
+      status: string,
+      retired = false
+    ) => {
+      const result = remoteRecurringPushResultSchema.parse(
+        await call(index, { type: retired ? "retired-push" : "push", input })
+      )
+      assert(result.status === status, `Unexpected RPC status ${result.status}`)
+      return result
+    }
+    void (async () => {
+      assert(secondary, "Fixture popup was blocked")
+      await ready
+      await check("Acción5 real rechaza sesiones ausentes", async () => {
+        for (let index = 0; index < 2; index++) {
+          const identity = (await call(index, { type: "identity" })) as Reply
+          assert(
+            identity.status === 401,
+            "Unauthenticated identity was exposed"
+          )
+          await push(
+            index,
+            {
+              transportVersion: 2,
+              expectedUserId: "fixture-unauthenticated",
+              operations: [creation],
+            },
+            "unauthorized"
+          )
+        }
+      })
+      await check(
+        "Dos sesiones persistidas anuncian exclusivamente5",
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            const boot = (await call(index, {
+              type: "bootstrap",
+              identity: "owner",
+            })) as Reply
+            assert(boot.status === 200, "Session bootstrap failed")
+            const identity = (await call(index, { type: "identity" })) as Reply
+            assert(
+              identity.status === 200 &&
+                identity.protocol === encodeSyncProtocolRange(5),
+              "Identity protocol is not exclusive five"
+            )
+            const userId = workspaceIdentitySchema.parse(identity.value).userId
+            if (!index) owner = userId
+            else
+              assert(
+                userId === owner,
+                "Persisted sessions do not share their actor"
+              )
+          }
+          const initial = await state(owner)
+          assert(
+            initial.page.through === 0 &&
+              Object.values(initial.counts).every((n) => n === 0),
+            "Unauthenticated action wrote data"
+          )
+        }
+      )
+      const batch = () => ({
+        transportVersion: 2,
+        expectedUserId: owner,
+        operations: [creation],
+      })
+      await check(
+        "Handshake4 capturado conserva cola ante referencia ausente y retiro",
+        async () => {
+          const remoteBefore = await state(owner)
+          for (let index = 0; index < 2; index++) {
+            await call(index, { type: "prepare-local", userId: owner })
+            const now = new Date().toISOString()
+            const request = {
+              mode: "create" as const,
+              itemId: crypto.randomUUID(),
+              contentOperationId: crypto.randomUUID(),
+              viewOperationId: crypto.randomUUID(),
+              primaryTagId: null,
+              now,
+              input: {
+                kind: "plan" as const,
+                variant: "note" as const,
+                title: "Cola conservada ante retiro",
+                description: "",
+                status: "not_started" as const,
+                checklist: [],
+                recurrence: null,
+                schedule: {
+                  mode: "all_day" as const,
+                  startDate: "2026-10-12",
+                  endDateExclusive: "2026-10-13",
+                },
+              },
+            }
+            await call(index, { type: "save-plan", request })
+            const snapshot = async () =>
+              (await call(index, { type: "local-snapshot" })) as {
+                backup: unknown
+                cursor: unknown
+              }
+            for (const type of [
+              "legacy-missing-action-run",
+              "retired-mixed-action-run",
+            ] as const) {
+              const before = await snapshot()
+              const baseline = validateLocalRecurringBackup(
+                before.backup,
+                owner
+              )
+              const root = baseline.stores.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === request.contentOperationId
+              )
+              const dependent = baseline.stores.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === request.viewOperationId
+              )
+              assert(
+                root &&
+                  dependent &&
+                  root.state === "pending" &&
+                  root.lease === null &&
+                  dependent.dependencies.includes(root.operation.operationId),
+                "Atomic producer lacks root and exact dependent"
+              )
+              const proof = (await call(index, { type })) as {
+                handshake: string
+                dispatches: number
+                unrecognized: number
+                identityReads: number
+                pageReads: number
+                probeStatus: number
+                actionNotFound: string | null
+                first: { status: string; uploaded: number; downloaded: number }
+                second: { status: string; uploaded: number; downloaded: number }
+                afterFirst: { backup: unknown; cursor: unknown }
+                afterSecond: { backup: unknown; cursor: unknown }
+              }
+              assert(
+                proof.handshake === "captured-prior-v4" &&
+                  proof.dispatches === 1 &&
+                  proof.identityReads === 1 &&
+                  proof.pageReads === 1,
+                "Captured old handshake was not bounded"
+              )
+              if (type === "legacy-missing-action-run")
+                assert(
+                  proof.probeStatus === 409 &&
+                    proof.actionNotFound === "1" &&
+                    proof.unrecognized === 1,
+                  "Missing action was not rejected by compiled Next"
+                )
+              assert(
+                proof.first.status ===
+                  (type === "legacy-missing-action-run"
+                    ? "retry_later"
+                    : "update_required") &&
+                  proof.first.uploaded === 0 &&
+                  proof.first.downloaded === 0,
+                "Old action acknowledged queued work"
+              )
+              assert(
+                proof.second.status === "update_required" &&
+                  proof.second.uploaded === 0 &&
+                  proof.second.downloaded === 0,
+                "New handshake did not block before another claim"
+              )
+              const expected = structuredClone(baseline.stores)
+              const attempted = expected.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === root.operation.operationId
+              )
+              assert(attempted, "Snapshot lacks attempted root")
+              attempted.attempts++
+              for (const retained of [
+                proof.afterFirst,
+                proof.afterSecond,
+                await snapshot(),
+              ]) {
+                assert(
+                  JSON.stringify(
+                    validateLocalRecurringBackup(retained.backup, owner).stores
+                  ) === JSON.stringify(expected) &&
+                    JSON.stringify(
+                      localPullCursorSchema.parse(retained.cursor)
+                    ) ===
+                      JSON.stringify(
+                        localPullCursorSchema.parse(before.cursor)
+                      ),
+                  `Retirement changed stores ${JSON.stringify(Object.keys(expected).filter((key) => JSON.stringify(validateLocalRecurringBackup(retained.backup, owner).stores[key as keyof typeof expected]) !== JSON.stringify(expected[key as keyof typeof expected])))} or cursor`
+                )
+              }
+            }
+          }
+          assert(
+            JSON.stringify(await state(owner)) === JSON.stringify(remoteBefore),
+            "Rejected old clients changed Mongo"
+          )
+        }
+      )
+      await check(
+        "Matriz4↔5 rechaza antes del cuerpo; ID ausente devuelve409 marcado",
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            const proof = (await call(index, { type: "protocol-matrix" })) as {
+              cases: number
+              bodies: number
+              missing: boolean
+            }
+            assert(
+              proof.cases === 4 && proof.bodies === 0 && proof.missing,
+              `Protocol or missing-reference proof failed: ${JSON.stringify(proof)}`
+            )
+          }
+          assert(
+            (await state(owner)).counts.receipts === 0,
+            "Matrix produced a receipt"
+          )
+        }
+      )
+      await check(
+        "Cuenta esperada se valida antes de ejecutar o descargar",
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            await push(
+              index,
+              { ...batch(), expectedUserId: "fixture-foreign" },
+              "account_changed"
+            )
+            const pull = (await call(index, {
+              type: "pull",
+              userId: "fixture-foreign",
+            })) as Reply
+            assert(pull.status === 409, "Foreign actor pull was accepted")
+          }
+          assert(
+            (await state(owner)).counts.receipts === 0,
+            "Actor rejection produced a receipt"
+          )
+        }
+      )
+      await check(
+        "Readiness5 bloquea; retiro preparatorio4 no ejecuta ni confirma",
+        async () => {
+          const blocked = await fixtureFetch(
+            fixture.runId,
+            "/fixture/readiness",
+            { runId: fixture.runId, command: "block" }
+          )
+          assert(blocked.status === 200, "Readiness fault injection failed")
+          try {
+            await push(0, batch(), "retry_later")
+            await push(0, batch(), "update_required", true)
+            const pull = (await call(0, {
+              type: "pull",
+              userId: owner,
+            })) as Reply
+            assert(
+              pull.status === 503 &&
+                pull.protocol === encodeSyncProtocolRange(5),
+              "Missing occurrence index did not block pull"
+            )
+            assert(
+              (await state(owner)).counts.receipts === 0,
+              "Readiness or retirement wrote a receipt"
+            )
+          } finally {
+            const restored = await fixtureFetch(
+              fixture.runId,
+              "/fixture/readiness",
+              { runId: fixture.runId, command: "restore" }
+            )
+            assert(
+              restored.status === 200,
+              "Owned readiness restoration failed"
+            )
+          }
+        }
+      )
+      await check(
+        "Defaults5 confirman una vez y replay conserva journal exacto",
+        async () => {
+          const result = await push(0, batch(), "complete")
+          assert(
+            result.status === "complete" &&
+              result.results.length === 1 &&
+              result.results[0].outcome.status === "applied",
+            "Real action lacks applied outcome"
+          )
+          const committed = await state(owner)
+          assert(
+            committed.counts.items === 1 &&
+              committed.counts.receipts === 1 &&
+              committed.page.through === 1,
+            "Atomic action did not commit one item and receipt"
+          )
+          const replay = await push(1, batch(), "complete")
+          assert(
+            JSON.stringify(replay) === JSON.stringify(result),
+            "Replay outcome changed"
+          )
+          assert(
+            JSON.stringify(await state(owner)) === JSON.stringify(committed),
+            "Replay changed authoritative history"
+          )
+          for (let index = 0; index < 2; index++) {
+            const pull = (await call(index, {
+              type: "pull",
+              userId: owner,
+            })) as Reply
+            assert(
+              pull.status === 200 &&
+                pull.protocol === encodeSyncProtocolRange(5) &&
+                JSON.stringify(pull.value) === JSON.stringify(committed.page),
+              "Authenticated download differs from Mongo"
+            )
+          }
+        }
+      )
+      await check(
+        "Aparición propia confirma una vez y se descarga en ambos clientes",
+        async () => {
+          assert(
+            creation.command.type === "item.create",
+            "Fixture series creation changed"
+          )
+          const appearance = syncOperationSchema.parse({
+            operationId: crypto.randomUUID(),
+            protocolVersion: 1,
+            baseRevision: 1,
+            command: {
+              type: "plan.set-occurrence-status",
+              itemId: creation.command.itemId,
+              occurrenceId: `${creation.command.itemId}:2026-10-12`,
+              expectedOccurrenceRevision: 0,
+              status: "in_progress",
+            },
+          })
+          const request = {
+            transportVersion: 2,
+            expectedUserId: owner,
+            operations: [appearance],
+          }
+          const result = await push(1, request, "complete")
+          assert(
+            result.status === "complete" &&
+              result.results[0].kind === "plan-occurrence" &&
+              result.results[0].outcome.status === "applied",
+            "Appearance did not execute its real dispatcher"
+          )
+          const committed = await state(owner)
+          assert(
+            committed.counts.occurrences === 1 &&
+              committed.counts.receipts === 2 &&
+              committed.page.through === 2 &&
+              committed.page.changes[1].kind === "plan-occurrence",
+            "Appearance journal or count is incomplete"
+          )
+          assert(
+            JSON.stringify(await push(0, request, "complete")) ===
+              JSON.stringify(result),
+            "Appearance replay changed outcome"
+          )
+          assert(
+            JSON.stringify(await state(owner)) === JSON.stringify(committed),
+            "Appearance replay wrote duplicate history"
+          )
+          for (let index = 0; index < 2; index++) {
+            const pull = (await call(index, {
+              type: "pull",
+              userId: owner,
+            })) as Reply
+            assert(
+              pull.status === 200 &&
+                JSON.stringify(pull.value) === JSON.stringify(committed.page),
+              "Appearance download differs between authenticated clients"
+            )
+          }
+        }
+      )
+      await check(
+        "Cliente5 recupera las intenciones originales y converge con Mongo",
+        async () => {
+          const remoteBefore = await state(owner)
+          const snapshots = async (index: number) => {
+            const value = (await call(index, { type: "local-snapshot" })) as {
+              backup: unknown
+              cursor: unknown
+            }
+            return {
+              backup: validateLocalRecurringBackup(value.backup, owner),
+              cursor: localPullCursorSchema.parse(value.cursor),
+            }
+          }
+          const queued = [await snapshots(0), await snapshots(1)]
+          for (let index = 0; index < 2; index++) {
+            assert(
+              queued[index].backup.stores.outbox.length === 2 &&
+                queued[index].backup.stores.outbox.every(
+                  (entry) => entry.state === "pending" && entry.lease === null
+                ),
+              "Recovery starts with both original pending intentions"
+            )
+            const recovered = (await call(index, { type: "mixed-run" })) as {
+              status: string
+              uploaded: number
+            }
+            assert(
+              recovered.status === "settled" && recovered.uploaded === 2,
+              "Default generation-five client did not ACK both intentions"
+            )
+          }
+          const authoritative = await state(owner)
+          assert(
+            authoritative.counts.receipts ===
+              remoteBefore.counts.receipts + 4 &&
+              authoritative.counts.items === remoteBefore.counts.items + 2 &&
+              authoritative.counts.views === remoteBefore.counts.views + 2 &&
+              authoritative.page.through === remoteBefore.page.through + 4,
+            "Recovery did not commit exactly four original operations"
+          )
+          const projection = foldRecurringChanges(authoritative.page)
+          for (let index = 0; index < 2; index++) {
+            const idle = (await call(index, { type: "mixed-run" })) as {
+              status: string
+              uploaded: number
+            }
+            assert(
+              idle.status === "settled" && idle.uploaded === 0,
+              "Converging pass repeated an upload"
+            )
+            const complete = await snapshots(index)
+            assert(
+              complete.cursor.after === authoritative.page.through &&
+                complete.cursor.through === null,
+              "Local cursor does not reach authoritative checkpoint"
+            )
+            for (const store of [
+              "items",
+              "occurrences",
+              "tags",
+              "itemViews",
+              "taskPlacements",
+            ] as const)
+              assert(
+                ordered(complete.backup.stores[store]) ===
+                  ordered([...projection[store].values()]),
+                `Local ${store} projection differs from Mongo journal`
+              )
+            for (const original of queued[index].backup.stores.outbox) {
+              const acknowledged = complete.backup.stores.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === original.operation.operationId
+              )
+              assert(
+                acknowledged?.state === "acknowledged" &&
+                  acknowledged.lease === null &&
+                  canonical(acknowledged.operation) ===
+                    canonical(original.operation) &&
+                  canonical(acknowledged.dependencies) ===
+                    canonical(original.dependencies),
+                "ACK rewrote or lost an original intention or dependent"
+              )
+              assert(
+                authoritative.page.changes.filter(
+                  (change) =>
+                    change.operationId === original.operation.operationId
+                ).length === 1,
+                "Original UUID lacks a single real remote journal commit"
+              )
+              const outcome = complete.backup.stores.syncMetadata.find(
+                (record) =>
+                  record.key ===
+                  `operation-outcome:${original.operation.operationId}`
+              )
+              assert(
+                outcome &&
+                  "operation" in outcome &&
+                  canonical(outcome.operation) ===
+                    canonical(original.operation),
+                "ACK lacks exact durable remote outcome evidence"
+              )
+            }
+            const stable = canonical(complete.backup.stores)
+            const again = (await call(index, { type: "mixed-run" })) as {
+              status: string
+              uploaded: number
+            }
+            assert(
+              again.status === "settled" &&
+                again.uploaded === 0 &&
+                canonical((await snapshots(index)).backup.stores) === stable,
+              "Closed and reopened idle runtime changed durable history"
+            )
+          }
+          assert(
+            JSON.stringify(await state(owner)) ===
+              JSON.stringify(authoritative),
+            "Idle recovery created extra receipts or journal versions"
+          )
+        }
+      )
+      await check(
+        "Hook5 real separa caché4 y conserva época, cola y listeners",
+        async () => {
+          const snapshot = async () => {
+            const value = (await call(1, { type: "local-snapshot" })) as {
+              backup: unknown
+            }
+            return validateLocalRecurringBackup(value.backup, owner)
+          }
+          const mounted = (await call(1, { type: "hook-mount" })) as {
+            mounted: boolean
+            epoch: string
+            mixedCachePresent: boolean
+            legacyCacheIntact: boolean
+          }
+          assert(
+            mounted.mounted &&
+              mounted.mixedCachePresent &&
+              mounted.legacyCacheIntact,
+            "Real hook lacks isolated generation-five cache"
+          )
+          const before = await state(owner)
+          const request = () => ({
+            mode: "create" as const,
+            itemId: crypto.randomUUID(),
+            contentOperationId: crypto.randomUUID(),
+            viewOperationId: crypto.randomUUID(),
+            primaryTagId: null,
+            now: new Date().toISOString(),
+            input: {
+              kind: "plan" as const,
+              variant: "event" as const,
+              title: "Hook recurrente real",
+              description: "",
+              status: "not_started" as const,
+              checklist: [],
+              recurrence: null,
+              schedule: {
+                mode: "all_day" as const,
+                startDate: "2026-10-12",
+                endDateExclusive: "2026-10-13",
+              },
+            },
+          })
+          const first = request()
+          await call(1, { type: "save-plan", request: first })
+          const pending = await snapshot()
+          assert(
+            pending.stores.outbox.find(
+              (entry) =>
+                entry.operation.operationId === first.contentOperationId
+            )?.state === "pending",
+            "Hook receives no fresh durable root"
+          )
+          const notified = (await call(1, {
+            type: "hook-observe",
+            state: "pending",
+          })) as { pendingSeen: boolean }
+          assert(
+            notified.pendingSeen,
+            "Outbox notification did not update the actual hook"
+          )
+          await call(1, { type: "hook-sync" })
+          const settled = (await call(1, {
+            type: "hook-observe",
+            state: "settled",
+          })) as {
+            epoch: string
+            mixedCachePresent: boolean
+            legacyCacheIntact: boolean
+            result: unknown
+          }
+          assert(
+            settled.epoch === mounted.epoch &&
+              settled.result !== null &&
+              settled.mixedCachePresent &&
+              settled.legacyCacheIntact,
+            "Settled hook lost its result or legacy cache"
+          )
+          const committed = await state(owner)
+          assert(
+            committed.counts.receipts === before.counts.receipts + 2 &&
+              committed.page.through === before.page.through + 2,
+            "Hook did not commit two unique original intentions"
+          )
+          const storesBefore = (await snapshot()).stores
+          const rotated = (await call(1, { type: "rotate-local" })) as {
+            currentEpoch: string
+            oldAccountRejected: boolean
+            oldSummaryRejected: boolean
+            oldAttemptRejected: boolean
+          }
+          assert(
+            rotated.oldAccountRejected &&
+              rotated.oldSummaryRejected &&
+              rotated.oldAttemptRejected,
+            "Old client remained usable after account epoch changed"
+          )
+          const rerender = (await call(1, { type: "hook-rerender" })) as {
+            epoch: string
+            epochResetObserved: boolean
+            mixedCachePresent: boolean
+            legacyCacheIntact: boolean
+            staleReports: number
+          }
+          assert(
+            rerender.epoch === rotated.currentEpoch &&
+              rerender.epoch !== settled.epoch &&
+              rerender.epochResetObserved &&
+              rerender.mixedCachePresent &&
+              rerender.legacyCacheIntact &&
+              rerender.staleReports === 0,
+            "Unkeyed generation-five hook rendered stale pass state"
+          )
+          assert(
+            JSON.stringify((await snapshot()).stores) ===
+              JSON.stringify(storesBefore) &&
+              JSON.stringify(await state(owner)) === JSON.stringify(committed),
+            "Epoch rerender changed local or remote history"
+          )
+          const unmounted = (await call(1, { type: "hook-unmount" })) as {
+            mounted: boolean
+            reports: number
+          }
+          assert(!unmounted.mounted, "Hook stayed mounted")
+          const second = request()
+          await call(1, { type: "save-plan", request: second })
+          const afterUnmount = await snapshot()
+          assert(
+            afterUnmount.stores.outbox
+              .filter((entry) =>
+                [second.contentOperationId, second.viewOperationId].includes(
+                  entry.operation.operationId
+                )
+              )
+              .every(
+                (entry) =>
+                  entry.state === "pending" &&
+                  entry.attempts === 0 &&
+                  entry.lease === null
+              ),
+            "Unmounted hook claimed newly queued work"
+          )
+          const quiet = (await call(1, { type: "hook-quiet" })) as {
+            mounted: boolean
+            reports: number
+          }
+          assert(
+            !quiet.mounted &&
+              quiet.reports === unmounted.reports &&
+              JSON.stringify((await snapshot()).stores) ===
+                JSON.stringify(afterUnmount.stores) &&
+              JSON.stringify(await state(owner)) === JSON.stringify(committed),
+            "Unmounted hook reacted to wake or outbox events"
+          )
+          const recovered = (await call(1, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            recovered.status === "settled" && recovered.uploaded === 2,
+            "Fresh epoch client did not recover post-unmount intentions"
+          )
+          await call(0, { type: "mixed-run" })
+          const final = await state(owner)
+          assert(
+            final.counts.receipts === committed.counts.receipts + 2 &&
+              (await snapshot()).stores.outbox.every(
+                (entry) =>
+                  entry.state === "acknowledged" && entry.lease === null
+              ),
+            "Lifecycle recovery lacks real durable ACKs"
+          )
+        }
+      )
+      await check(
+        "Aparición local conserva UUID tras respuesta perdida y rebasa sólo dependiente",
+        async () => {
+          const snapshot = async (index: number) => {
+            const value = (await call(index, { type: "local-snapshot" })) as {
+              backup: unknown
+              cursor: unknown
+            }
+            return {
+              backup: validateLocalRecurringBackup(value.backup, owner),
+              cursor: localPullCursorSchema.parse(value.cursor),
+            }
+          }
+          assert(
+            creation.command.type === "item.create",
+            "Fixture series creation changed"
+          )
+          const before = await state(owner)
+          const seriesId = creation.command.itemId
+          const parent = planSchema.parse(
+            (await snapshot(0)).backup.stores.items.find(
+              (item) => item.id === seriesId
+            )
+          )
+          const command = {
+            type: "plan.set-occurrence-status" as const,
+            itemId: parent.id,
+            occurrenceId: `${parent.id}:2026-10-13`,
+            status: "completed" as const,
+          }
+          const firstId = crypto.randomUUID(),
+            secondId = crypto.randomUUID()
+          const initial = editablePlanOccurrence(
+            parent,
+            null,
+            command,
+            owner
+          ).current
+          await call(0, {
+            type: "commit-occurrence",
+            command,
+            operationId: firstId,
+            now: new Date().toISOString(),
+            expectedItem: parent,
+            expectedOccurrence: initial,
+          })
+          const firstSnapshot = await snapshot(0)
+          const current = firstSnapshot.backup.stores.occurrences.find(
+            (occurrence) => occurrence.id === command.occurrenceId
+          )
+          assert(
+            current?.kind === "plan" && current.revision === 0,
+            "Local appearance did not retain confirmed CAS zero"
+          )
+          await call(0, {
+            type: "commit-occurrence",
+            command: { ...command, status: "in_progress" },
+            operationId: secondId,
+            now: new Date().toISOString(),
+            expectedItem: parent,
+            expectedOccurrence: current,
+          })
+          const pending = await snapshot(0)
+          const first = pending.backup.stores.outbox.find(
+            (entry) => entry.operation.operationId === firstId
+          )
+          const second = pending.backup.stores.outbox.find(
+            (entry) => entry.operation.operationId === secondId
+          )
+          assert(
+            first &&
+              second &&
+              first.operation.command.type === "plan.set-occurrence-status" &&
+              second.operation.command.type === "plan.set-occurrence-status" &&
+              first.operation.baseRevision === 1 &&
+              first.operation.command.expectedOccurrenceRevision === 0 &&
+              second.operation.command.expectedOccurrenceRevision === 0 &&
+              second.dependencies.includes(firstId),
+            "Real producer did not capture separate appearance CAS and exact dependency"
+          )
+          const lost = (await call(0, {
+            type: "lost-recurring-response-run",
+          })) as { status: string; uploaded: number }
+          assert(
+            lost.status === "retry_later" && lost.uploaded === 0,
+            "Lost response manufactured local ACK"
+          )
+          const committed = await state(owner)
+          assert(
+            committed.counts.receipts === before.counts.receipts + 1 &&
+              committed.page.through === before.page.through + 1 &&
+              committed.counts.occurrences === before.counts.occurrences + 1,
+            "Lost response lacks one real remote commit"
+          )
+          const retained = await snapshot(0)
+          const attempted = retained.backup.stores.outbox.find(
+            (entry) => entry.operation.operationId === firstId
+          )
+          const dependent = retained.backup.stores.outbox.find(
+            (entry) => entry.operation.operationId === secondId
+          )
+          assert(
+            attempted?.state === "pending" &&
+              attempted.attempts === 1 &&
+              attempted.lease === null &&
+              canonical(attempted.operation) === canonical(first.operation) &&
+              dependent?.state === "pending" &&
+              dependent.attempts === 0 &&
+              dependent.lease === null &&
+              canonical(dependent.operation) === canonical(second.operation),
+            "Lost response rewrote attempted intention or acknowledged dependent"
+          )
+          const replay = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            replay.status === "settled" && replay.uploaded === 2,
+            "Replay failed to ACK original and its dependent"
+          )
+          const final = await state(owner)
+          assert(
+            final.counts.receipts === before.counts.receipts + 2 &&
+              final.page.through === before.page.through + 2 &&
+              final.counts.items === before.counts.items,
+            "Replay duplicated journal or changed root semantics"
+          )
+          const projection = foldRecurringChanges(final.page)
+          const occurrence = projection.occurrences.get(
+            command.occurrenceId
+          ) as { revision: number; status: string; completedAt: string | null }
+          assert(
+            occurrence.revision === 2 &&
+              occurrence.status === "in_progress" &&
+              occurrence.completedAt === null &&
+              canonical(projection.items.get(parent.id)) === canonical(parent),
+            "Dependent appearance did not commit revision two with unchanged parent"
+          )
+          for (const id of [firstId, secondId])
+            assert(
+              final.page.changes.filter((change) => change.operationId === id)
+                .length === 1,
+              "Appearance UUID committed more than once"
+            )
+          for (let index = 0; index < 2; index++) {
+            const idle = (await call(index, { type: "mixed-run" })) as {
+              status: string
+              uploaded: number
+            }
+            assert(
+              idle.status === "settled" && idle.uploaded === 0,
+              "Appearance convergence repeated a write"
+            )
+            const complete = await snapshot(index)
+            assert(
+              complete.cursor.after === final.page.through &&
+                complete.cursor.through === null,
+              "Appearance pull did not converge cursor"
+            )
+            for (const store of [
+              "items",
+              "occurrences",
+              "tags",
+              "itemViews",
+              "taskPlacements",
+            ] as const)
+              assert(
+                ordered(complete.backup.stores[store]) ===
+                  ordered([...projection[store].values()]),
+                `Appearance ${store} differs from Mongo`
+              )
+            if (index === 0) {
+              const ack = complete.backup.stores.outbox.find(
+                (entry) => entry.operation.operationId === firstId
+              )
+              const child = complete.backup.stores.outbox.find(
+                (entry) => entry.operation.operationId === secondId
+              )
+              assert(
+                ack?.state === "acknowledged" &&
+                  ack.attempts === 2 &&
+                  canonical(ack.operation) === canonical(first.operation) &&
+                  child?.state === "acknowledged" &&
+                  child.attempts === 1 &&
+                  child.operation.command.type ===
+                    "plan.set-occurrence-status" &&
+                  child.operation.command.expectedOccurrenceRevision === 1 &&
+                  canonical(child.dependencies) ===
+                    canonical(second.dependencies),
+                "ACK/rebase changed attempted payload or lost direct dependent"
+              )
+            }
+          }
+          assert(
+            canonical(await state(owner)) === canonical(final),
+            "Final idle changed remote history"
+          )
+        }
+      )
+      await check(
+        "Categoría de serie y orden de aparición convergen con CAS independientes",
+        async () => {
+          assert(
+            creation.command.type === "item.create",
+            "Series creation changed"
+          )
+          const seriesId = creation.command.itemId
+          const tagId = crypto.randomUUID(),
+            moveId = crypto.randomUUID()
+          const before = await state(owner)
+          const tag = (await call(0, {
+            type: "commit-local",
+            command: {
+              type: "tag.save",
+              tagId,
+              input: { name: "Serie azul", color: "#336699", position: 1024 },
+            },
+          })) as { operation: { operationId: string } }
+          const view = (await call(0, {
+            type: "commit-local",
+            command: {
+              type: "item-view.set",
+              itemId: seriesId,
+              primaryTagId: tagId,
+            },
+          })) as { operation: { operationId: string } }
+          const assigned = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            assigned.status === "settled" && assigned.uploaded === 2,
+            "Series tag or assignment did not ACK"
+          )
+          await call(1, { type: "mixed-run" })
+          await call(0, {
+            type: "commit-recurring-move",
+            operationId: moveId,
+            now: new Date().toISOString(),
+            command: {
+              type: "task.move",
+              itemId: seriesId,
+              occurrenceId: `${seriesId}:2026-10-13`,
+              scope: "day",
+              date: "2026-10-13",
+              tagId,
+              beforeId: null,
+              afterId: null,
+            },
+          })
+          const moved = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            moved.status === "settled" && moved.uploaded === 1,
+            "Real recurring move did not ACK its placement primary"
+          )
+          const committed = await state(owner),
+            projection = foldRecurringChanges(committed.page)
+          assert(
+            committed.counts.receipts === before.counts.receipts + 3 &&
+              committed.page.through === before.page.through + 3 &&
+              projection.tags.size === 1 &&
+              projection.taskPlacements.size === 1,
+            "Mixed recurring writes did not create three unique outcomes"
+          )
+          const parent = planSchema.parse(projection.items.get(seriesId))
+          const assignedView = projection.itemViews.get(seriesId) as {
+            primaryTagId: string
+          }
+          const placement = [...projection.taskPlacements.values()][0] as {
+            revision: number
+            occurrenceId: string
+            tagId: string
+          }
+          assert(
+            parent.revision === 1 &&
+              assignedView.primaryTagId === tagId &&
+              placement.revision === 1 &&
+              placement.occurrenceId === `${seriesId}:2026-10-13` &&
+              placement.tagId === tagId,
+            "Content/view/placement identities or CAS were conflated"
+          )
+          for (const id of [
+            tag.operation.operationId,
+            view.operation.operationId,
+            moveId,
+          ])
+            assert(
+              committed.page.changes.filter(
+                (change) => change.operationId === id
+              ).length === 1,
+              "Mixed UUID lacks one committed journal entry"
+            )
+          for (let index = 0; index < 2; index++) {
+            const pass = (await call(index, { type: "mixed-run" })) as {
+              status: string
+              uploaded: number
+            }
+            assert(
+              pass.status === "settled" && pass.uploaded === 0,
+              "Mixed download repeated a write"
+            )
+            const value = (await call(index, { type: "local-snapshot" })) as {
+              backup: unknown
+              cursor: unknown
+            }
+            const backup = validateLocalRecurringBackup(value.backup, owner),
+              cursor = localPullCursorSchema.parse(value.cursor)
+            assert(
+              cursor.after === committed.page.through &&
+                cursor.through === null,
+              "Mixed cursor does not converge"
+            )
+            for (const store of [
+              "items",
+              "occurrences",
+              "tags",
+              "itemViews",
+              "taskPlacements",
+            ] as const)
+              assert(
+                ordered(backup.stores[store]) ===
+                  ordered([...projection[store].values()]),
+                `Mixed ${store} differs from Mongo`
+              )
+          }
+        }
+      )
+      await check(
+        "Conflicto de aparición conserva intención y dependiente sin ACK falso",
+        async () => {
+          assert(
+            creation.command.type === "item.create",
+            "Series creation changed"
+          )
+          const seriesId = creation.command.itemId,
+            occurrenceId = `${seriesId}:2026-10-13`
+          const snapshot = async (index: number) => {
+            const value = (await call(index, { type: "local-snapshot" })) as {
+              backup: unknown
+            }
+            return validateLocalRecurringBackup(value.backup, owner)
+          }
+          const baseline = await state(owner),
+            a = await snapshot(0),
+            b = await snapshot(1)
+          const parent = planSchema.parse(
+            a.stores.items.find((item) => item.id === seriesId)
+          )
+          const current = b.stores.occurrences.find(
+            (record) => record.id === occurrenceId
+          )
+          assert(
+            current?.kind === "plan" && current.revision === 2,
+            "Conflict requires shared confirmed appearance revision two"
+          )
+          const staleId = crypto.randomUUID(),
+            childId = crypto.randomUUID(),
+            winnerId = crypto.randomUUID()
+          await call(1, {
+            type: "commit-occurrence",
+            operationId: staleId,
+            now: new Date().toISOString(),
+            command: {
+              type: "plan.set-occurrence-status",
+              itemId: seriesId,
+              occurrenceId,
+              status: "not_started",
+            },
+            expectedItem: parent,
+            expectedOccurrence: current,
+          })
+          const optimistic = (await snapshot(1)).stores.occurrences.find(
+            (record) => record.id === occurrenceId
+          )
+          assert(
+            optimistic?.kind === "plan",
+            "Stale local appearance is missing"
+          )
+          await call(1, {
+            type: "commit-occurrence",
+            operationId: childId,
+            now: new Date().toISOString(),
+            command: {
+              type: "plan.set-occurrence-status",
+              itemId: seriesId,
+              occurrenceId,
+              status: "completed",
+            },
+            expectedItem: parent,
+            expectedOccurrence: optimistic,
+          })
+          const queued = await snapshot(1)
+          const original = queued.stores.outbox.find(
+              (entry) => entry.operation.operationId === staleId
+            ),
+            dependent = queued.stores.outbox.find(
+              (entry) => entry.operation.operationId === childId
+            )
+          assert(
+            original && dependent && dependent.dependencies.includes(staleId),
+            "Conflict dependency was not produced locally"
+          )
+          const currentA = a.stores.occurrences.find(
+            (record) => record.id === occurrenceId
+          )
+          assert(
+            currentA?.kind === "plan",
+            "Winning local appearance is missing"
+          )
+          await call(0, {
+            type: "commit-occurrence",
+            operationId: winnerId,
+            now: new Date().toISOString(),
+            command: {
+              type: "plan.set-occurrence-status",
+              itemId: seriesId,
+              occurrenceId,
+              status: "completed",
+            },
+            expectedItem: parent,
+            expectedOccurrence: currentA,
+          })
+          const won = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            won.status === "settled" && won.uploaded === 1,
+            "Winning appearance did not commit"
+          )
+          const conflicted = (await call(1, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+            diagnostics: {
+              blocked: {
+                entry: { operation: { operationId: string } }
+                blockingOperationIds: string[]
+              }[]
+            } | null
+          }
+          assert(
+            conflicted.status === "settled" &&
+              conflicted.uploaded === 0 &&
+              conflicted.diagnostics?.blocked.some(
+                (row) =>
+                  row.entry.operation.operationId === childId &&
+                  row.blockingOperationIds.includes(staleId)
+              ),
+            "Stale appearance did not become an explicit conflict"
+          )
+          const retained = await snapshot(1),
+            entry = retained.stores.outbox.find(
+              (row) => row.operation.operationId === staleId
+            ),
+            child = retained.stores.outbox.find(
+              (row) => row.operation.operationId === childId
+            )
+          assert(
+            entry?.state === "conflict" &&
+              entry.attempts === 1 &&
+              entry.lease === null &&
+              canonical(entry.operation) === canonical(original.operation) &&
+              child?.state === "pending" &&
+              child.attempts === 0 &&
+              child.lease === null &&
+              canonical(child.operation) === canonical(dependent.operation) &&
+              canonical(child.dependencies) ===
+                canonical(dependent.dependencies),
+            "Conflict rewrote attempted payload or discarded/ACKed its dependent"
+          )
+          const evidence = retained.stores.syncMetadata.find(
+            (record) => record.key === `operation-outcome:${staleId}`
+          )
+          assert(
+            evidence &&
+              "result" in evidence &&
+              "kind" in evidence.result &&
+              evidence.result.kind === "plan-occurrence" &&
+              evidence.result.outcome.status === "conflict" &&
+              evidence.result.outcome.current?.revision === 3,
+            "Conflict lacks exact remote occurrence evidence"
+          )
+          const after = await state(owner)
+          assert(
+            after.counts.receipts === baseline.counts.receipts + 2 &&
+              after.page.through === baseline.page.through + 1 &&
+              after.page.changes.filter(
+                (change) => change.operationId === staleId
+              ).length === 0,
+            "Conflict fabricated a journal commit"
+          )
+        }
+      )
+      await check(
+        "Cancelación y tombstone conservan historia; replay viejo no resucita serie",
+        async () => {
+          assert(
+            creation.command.type === "item.create",
+            "Series creation changed"
+          )
+          const seriesId = creation.command.itemId,
+            occurrenceId = `${seriesId}:2026-10-13`
+          const snapshot = async (index: number) => {
+            const value = (await call(index, { type: "local-snapshot" })) as {
+              backup: unknown
+              cursor: unknown
+            }
+            return {
+              backup: validateLocalRecurringBackup(value.backup, owner),
+              cursor: localPullCursorSchema.parse(value.cursor),
+            }
+          }
+          const baseline = await state(owner),
+            before = await snapshot(0),
+            blockedBefore = await snapshot(1)
+          const parent = planSchema.parse(
+            before.backup.stores.items.find((item) => item.id === seriesId)
+          )
+          const current = before.backup.stores.occurrences.find(
+            (record) => record.id === occurrenceId
+          )
+          assert(
+            current?.kind === "plan" && current.revision === 3,
+            "Cancellation requires the winning occurrence"
+          )
+          await call(0, {
+            type: "commit-occurrence",
+            operationId: crypto.randomUUID(),
+            now: new Date().toISOString(),
+            command: {
+              type: "plan.cancel-occurrence",
+              itemId: seriesId,
+              occurrenceId,
+            },
+            expectedItem: parent,
+            expectedOccurrence: current,
+          })
+          const cancel = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            cancel.status === "settled" && cancel.uploaded === 1,
+            "Cancellation did not ACK"
+          )
+          await call(0, {
+            type: "delete-plan",
+            operationId: crypto.randomUUID(),
+            expectedItem: parent,
+          })
+          const deleted = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            deleted.status === "settled" && deleted.uploaded === 1,
+            "Series tombstone did not ACK"
+          )
+          const committed = await state(owner),
+            projection = foldRecurringChanges(committed.page)
+          assert(
+            committed.counts.receipts === baseline.counts.receipts + 2 &&
+              committed.page.through === baseline.page.through + 2,
+            "Cancellation or deletion duplicated history"
+          )
+          const tombstone = planSchema.parse(projection.items.get(seriesId)),
+            cancelled = projection.occurrences.get(occurrenceId) as {
+              revision: number
+              cancelled: boolean
+            }
+          assert(
+            tombstone.revision === 2 &&
+              tombstone.deletedAt !== null &&
+              cancelled.revision === 4 &&
+              cancelled.cancelled &&
+              projection.taskPlacements.size === 1,
+            "History lost its tombstone, occurrence or placement"
+          )
+          const old = await push(0, batch(), "complete")
+          assert(
+            old.status === "complete" &&
+              old.results[0].kind === "item" &&
+              old.results[0].outcome.status === "applied" &&
+              old.results[0].outcome.item.revision === 1 &&
+              old.results[0].outcome.item.deletedAt === null,
+            "Old UUID did not retain its original outcome"
+          )
+          assert(
+            canonical(await state(owner)) === canonical(committed),
+            "Old replay resurrected deleted data"
+          )
+          for (let index = 0; index < 2; index++) {
+            const pass = (await call(index, { type: "mixed-run" })) as {
+              status: string
+              uploaded: number
+            }
+            assert(
+              pass.uploaded === 0 && pass.status === "settled",
+              "History pull fabricated an ACK for the blocked peer"
+            )
+            const complete = await snapshot(index)
+            assert(
+              complete.cursor.after === committed.page.through &&
+                complete.cursor.through === null,
+              "History reader filtered data or skipped its cursor"
+            )
+            if (index === 0)
+              for (const store of [
+                "items",
+                "occurrences",
+                "tags",
+                "itemViews",
+                "taskPlacements",
+              ] as const)
+                assert(
+                  ordered(complete.backup.stores[store]) ===
+                    ordered([...projection[store].values()]),
+                  `Tombstone ${store} differs from Mongo`
+                )
+            else
+              for (const original of blockedBefore.backup.stores.outbox.filter(
+                (entry) =>
+                  entry.state === "conflict" || entry.state === "pending"
+              )) {
+                const retained = complete.backup.stores.outbox.find(
+                  (entry) =>
+                    entry.operation.operationId ===
+                    original.operation.operationId
+                )
+                assert(
+                  retained?.state === original.state &&
+                    retained.attempts === original.attempts &&
+                    retained.lease === null &&
+                    canonical(retained.operation) ===
+                      canonical(original.operation) &&
+                    canonical(retained.dependencies) ===
+                      canonical(original.dependencies),
+                  "Newer tombstone changed blocked intentions or dependents"
+                )
+                const key = `operation-outcome:${original.operation.operationId}`
+                const previousEvidence =
+                  blockedBefore.backup.stores.syncMetadata.find(
+                    (record) => record.key === key
+                  )
+                const currentEvidence =
+                  complete.backup.stores.syncMetadata.find(
+                    (record) => record.key === key
+                  )
+                assert(
+                  previousEvidence === undefined
+                    ? currentEvidence === undefined
+                    : canonical(currentEvidence) ===
+                        canonical(previousEvidence),
+                  "Newer remote shadow rewrote original conflict evidence or fabricated dependent outcome"
+                )
+              }
+          }
+          assert(
+            canonical(await state(owner)) === canonical(committed),
+            "Final history pull changed Mongo"
+          )
+        }
+      )
+      await check(
+        "Otra sesión remota conserva cola propia y reautenticar confirma una vez",
+        async () => {
+          const snapshot = async () => {
+            const value = (await call(0, { type: "local-snapshot" })) as {
+              backup: unknown
+            }
+            return validateLocalRecurringBackup(value.backup, owner)
+          }
+          const request = {
+            mode: "create" as const,
+            itemId: crypto.randomUUID(),
+            contentOperationId: crypto.randomUUID(),
+            viewOperationId: crypto.randomUUID(),
+            primaryTagId: null,
+            now: new Date().toISOString(),
+            input: {
+              kind: "plan" as const,
+              variant: "appointment" as const,
+              title: "Cambio de cuenta remoto",
+              description: "",
+              status: "not_started" as const,
+              checklist: [],
+              recurrence: null,
+              schedule: {
+                mode: "all_day" as const,
+                startDate: "2026-10-12",
+                endDateExclusive: "2026-10-13",
+              },
+            },
+          }
+          const before = await state(owner)
+          await call(0, { type: "save-plan", request })
+          const queued = await snapshot()
+          const original = queued.stores.outbox.filter((entry) =>
+            [request.contentOperationId, request.viewOperationId].includes(
+              entry.operation.operationId
+            )
+          )
+          assert(
+            original.length === 2 &&
+              original.every(
+                (entry) =>
+                  entry.state === "pending" &&
+                  entry.attempts === 0 &&
+                  entry.lease === null
+              ),
+            "Account switch requires unclaimed original intentions"
+          )
+          const other = (await call(0, {
+            type: "bootstrap",
+            identity: "other",
+          })) as Reply
+          assert(other.status === 200, "Owned alternate session failed")
+          const otherId = workspaceIdentitySchema.parse(other.value).userId
+          assert(otherId !== owner, "Alternate actor was not distinct")
+          const rejected = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+            downloaded: number
+          }
+          assert(
+            rejected.status === "account_changed" &&
+              rejected.uploaded === 0 &&
+              rejected.downloaded === 0,
+            "Foreign session reached an owned claim or ACK"
+          )
+          assert(
+            canonical((await snapshot()).stores) === canonical(queued.stores) &&
+              canonical(await state(owner)) === canonical(before),
+            "Account change mutated owned local or remote data"
+          )
+          const foreign = await state(otherId)
+          assert(
+            foreign.page.through === 0 &&
+              Object.values(foreign.counts).every((value) => value === 0),
+            "Wrong actor received owned writes"
+          )
+          const restored = (await call(0, {
+            type: "bootstrap",
+            identity: "owner",
+          })) as Reply
+          assert(
+            restored.status === 200 &&
+              workspaceIdentitySchema.parse(restored.value).userId === owner,
+            "Reauthentication changed original actor identity"
+          )
+          const recovered = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            recovered.status === "settled" && recovered.uploaded === 2,
+            "Same owner did not recover original pair"
+          )
+          const committed = await state(owner),
+            complete = await snapshot()
+          assert(
+            committed.counts.receipts === before.counts.receipts + 2 &&
+              committed.page.through === before.page.through + 2 &&
+              canonical(await state(otherId)) === canonical(foreign),
+            "Recovery duplicated history or changed foreign account"
+          )
+          for (const intent of original) {
+            const acknowledged = complete.stores.outbox.find(
+              (entry) =>
+                entry.operation.operationId === intent.operation.operationId
+            )
+            assert(
+              acknowledged?.state === "acknowledged" &&
+                acknowledged.attempts === 1 &&
+                acknowledged.lease === null &&
+                canonical(acknowledged.operation) ===
+                  canonical(intent.operation) &&
+                canonical(acknowledged.dependencies) ===
+                  canonical(intent.dependencies),
+              "Recovery rewrote original account-switch intention"
+            )
+          }
+          const stable = canonical(complete.stores)
+          const idle = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            idle.status === "settled" &&
+              idle.uploaded === 0 &&
+              canonical((await snapshot()).stores) === stable &&
+              canonical(await state(owner)) === canonical(committed),
+            "Recovered account created duplicate ACKs"
+          )
+        }
+      )
+      await check(
+        "Cambiar época tras commit en vuelo conserva intención y recupera sin duplicados",
+        async () => {
+          const snapshot = async (index = 0) => {
+            const value = (await call(index, { type: "local-snapshot" })) as {
+              backup: unknown
+            }
+            return validateLocalRecurringBackup(value.backup, owner)
+          }
+          const request = {
+            mode: "create" as const,
+            itemId: crypto.randomUUID(),
+            contentOperationId: crypto.randomUUID(),
+            viewOperationId: crypto.randomUUID(),
+            primaryTagId: null,
+            now: new Date().toISOString(),
+            input: {
+              kind: "plan" as const,
+              variant: "note" as const,
+              title: "Época durante respuesta",
+              description: "",
+              status: "not_started" as const,
+              checklist: [],
+              recurrence: null,
+              schedule: {
+                mode: "all_day" as const,
+                startDate: "2026-10-12",
+                endDateExclusive: "2026-10-13",
+              },
+            },
+          }
+          const before = await state(owner),
+            peerBefore = await snapshot(1)
+          await call(0, { type: "save-plan", request })
+          const queued = await snapshot()
+          const originals = queued.stores.outbox.filter((entry) =>
+            [request.contentOperationId, request.viewOperationId].includes(
+              entry.operation.operationId
+            )
+          )
+          assert(
+            originals.length === 2 &&
+              originals.every(
+                (entry) =>
+                  entry.state === "pending" &&
+                  entry.attempts === 0 &&
+                  entry.lease === null
+              ),
+            "Epoch probe requires two unclaimed intentions"
+          )
+          const interrupted = (await call(0, {
+            type: "epoch-after-commit-run",
+          })) as { status: string; uploaded: number; downloaded: number }
+          assert(
+            interrupted.status === "account_changed" &&
+              interrupted.uploaded === 0,
+            "Old epoch acknowledged a committed response"
+          )
+          const committed = await state(owner),
+            retained = await snapshot()
+          assert(
+            committed.counts.receipts === before.counts.receipts + 1 &&
+              committed.page.through === before.page.through + 1,
+            "Epoch rotation did not follow exactly one remote commit"
+          )
+          for (const original of originals) {
+            const entry = retained.stores.outbox.find(
+              (value) =>
+                value.operation.operationId === original.operation.operationId
+            )
+            assert(
+              entry?.state === "pending" &&
+                entry.attempts ===
+                  (original.operation.operationId === request.contentOperationId
+                    ? 1
+                    : 0) &&
+                entry.lease === null &&
+                canonical(entry.operation) === canonical(original.operation) &&
+                canonical(entry.dependencies) ===
+                  canonical(original.dependencies),
+              "Epoch rotation changed or acknowledged an original intention"
+            )
+            assert(
+              !retained.stores.syncMetadata.some(
+                (value) =>
+                  value.key ===
+                  `operation-outcome:${original.operation.operationId}`
+              ),
+              "Old epoch fabricated an outcome"
+            )
+          }
+          assert(
+            canonical((await snapshot(1)).stores) ===
+              canonical(peerBefore.stores),
+            "Epoch interruption changed the other partition"
+          )
+          const recovered = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            recovered.status === "settled" && recovered.uploaded === 2,
+            "Fresh epoch failed to recover original pair"
+          )
+          const final = await state(owner),
+            complete = await snapshot()
+          assert(
+            final.counts.receipts === before.counts.receipts + 2 &&
+              final.page.through === before.page.through + 2,
+            "Fresh epoch duplicated receipts or journal"
+          )
+          for (const original of originals) {
+            const entry = complete.stores.outbox.find(
+              (value) =>
+                value.operation.operationId === original.operation.operationId
+            )
+            assert(
+              entry?.state === "acknowledged" &&
+                entry.attempts ===
+                  (original.operation.operationId === request.contentOperationId
+                    ? 2
+                    : 1) &&
+                entry.lease === null &&
+                canonical(entry.operation) === canonical(original.operation) &&
+                canonical(entry.dependencies) ===
+                  canonical(original.dependencies),
+              "Fresh epoch rewrote an intention or failed to ACK"
+            )
+          }
+          const projection = foldRecurringChanges(final.page)
+          for (const key of [
+            "items",
+            "occurrences",
+            "tags",
+            "itemViews",
+            "taskPlacements",
+          ] as const) {
+            assert(
+              ordered(complete.stores[key]) ===
+                ordered([...projection[key].values()]),
+              "Fresh epoch projection differs from Mongo"
+            )
+          }
+          const current = (await call(0, { type: "local-snapshot" })) as {
+            cursor: unknown
+          }
+          const cursor = localPullCursorSchema.parse(current.cursor)
+          assert(
+            cursor.after === final.page.through && cursor.through === null,
+            "Fresh epoch cursor did not reach authoritative checkpoint"
+          )
+          const stable = canonical(complete.stores)
+          const idle = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            idle.status === "settled" &&
+              idle.uploaded === 0 &&
+              canonical((await snapshot()).stores) === stable &&
+              canonical(await state(owner)) === canonical(final) &&
+              canonical((await snapshot(1)).stores) ===
+                canonical(peerBefore.stores),
+            "Idle recovery changed history or peer partition"
+          )
+        }
+      )
+      await check(
+        "Copia portable recurrente revierte fallo, conserva evidencia y sincroniza identidad nueva",
+        async () => {
+          const before = await state(owner)
+          const proof = (await call(0, { type: "recurring-import-proof" })) as {
+            operationId: string
+            itemId: string
+            legacyRejected: boolean
+            rollbackRejected: boolean
+            replayed: boolean
+          }
+          assert(
+            proof.legacyRejected && proof.rollbackRejected && proof.replayed,
+            "Import proof did not preserve rollback and replay"
+          )
+          assert(
+            canonical(await state(owner)) === canonical(before),
+            "Local import wrote Mongo before dispatch"
+          )
+          const result = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          const after = await state(owner)
+          assert(
+            result.status === "settled" &&
+              result.uploaded === 1 &&
+              after.counts.receipts === before.counts.receipts + 1 &&
+              after.page.through === before.page.through + 1 &&
+              after.page.changes.filter(
+                (change) => change.operationId === proof.operationId
+              ).length === 1,
+            "Imported copy did not obtain one real unique ACK"
+          )
+          const value = (await call(0, { type: "local-snapshot" })) as {
+            backup: unknown
+          }
+          const backup = validateLocalRecurringBackup(value.backup, owner)
+          assert(
+            backup.stores.outbox.find(
+              (entry) => entry.operation.operationId === proof.operationId
+            )?.state === "acknowledged" &&
+              backup.stores.items.some((item) => item.id === proof.itemId),
+            "Imported copy lacks durable content or ACK"
+          )
+        }
+      )
+      await check(
+        "Comparación actual de aparición conserva conflicto, historia y dependiente en una TX",
+        async () => {
+          const snapshots = async () => {
+            const value = (await call(1, { type: "local-snapshot" })) as {
+              backup: unknown
+            }
+            return validateLocalRecurringBackup(value.backup, owner)
+          }
+          const before = await snapshots(),
+            remoteBefore = await state(owner)
+          const rows = (await call(1, {
+            type: "recurring-incidents",
+          })) as RecurringSyncIncidentOverview[]
+          assert(
+            rows.length === 1 && rows[0]?.kind === "plan-occurrence",
+            "Recurring overview lost or misclassified its preserved conflict"
+          )
+          const incident = rows[0].incident
+          assert(
+            incident.entry.state === "conflict" &&
+              incident.intentions.length === 2 &&
+              incident.local?.kind === "plan" &&
+              incident.localAtOutcome?.kind === "plan" &&
+              incident.remote?.revision === 4 &&
+              canonical(incident.series) ===
+                canonical(
+                  before.stores.items.find(
+                    (item) => item.id === incident.series.id
+                  )
+                ),
+            "Recurring overview fabricated current appearance or erased retained history"
+          )
+          assert(
+            canonical((await snapshots()).stores) ===
+              canonical(before.stores) &&
+              canonical(await state(owner)) === canonical(remoteBefore),
+            "Readonly recurring incident comparison mutated stores or Mongo"
+          )
+          assert(
+            (
+              (await call(0, {
+                type: "recurring-incidents",
+              })) as RecurringSyncIncidentOverview[]
+            ).length === 0,
+            "Acknowledged partition invented an incident"
+          )
+        }
+      )
+      await check(
+        "Revocar sesión bloquea RPC sin alterar datos confirmados",
+        async () => {
+          const before = await state(owner)
+          const changed = (await call(1, {
+            type: "session",
+            command: "revoke",
+          })) as Reply
+          assert(changed.status === 200, "Owned session revocation failed")
+          await push(1, batch(), "unauthorized")
+          const pull = (await call(1, { type: "pull", userId: owner })) as Reply
+          assert(pull.status === 401, "Revoked session downloaded data")
+          assert(
+            JSON.stringify(await state(owner)) === JSON.stringify(before),
+            "Revocation changed committed data"
+          )
+        }
+      )
+      passed = true
+    })()
+      .catch((error) => {
+        console.error(
+          error instanceof Error
+            ? error.message
+            : "Recurring fixture assertion failed"
+        )
+        setStatus(
+          "La prueba se ha bloqueado o ha fallado; revisa los escenarios completados"
+        )
+      })
+      .finally(async () => {
+        removeReady()
+        clearTimeout(readyTimer)
+        for (let index = 0; index < 2; index++) {
+          try {
+            assert(
+              (await call(index, { type: "cleanup-local" })) === true,
+              "Owned local cleanup failed"
+            )
+          } catch {
+            passed = false
+          }
+
+          try {
+            assert(
+              (
+                (await call(index, {
+                  type: "session",
+                  command: "cleanup",
+                })) as Reply
+              ).status === 200,
+              "Owned session cleanup failed"
+            )
+          } catch {
+            passed = false
+          }
+        }
+        secondary?.close()
+        if (passed)
+          setStatus(
+            "Diecinueve escenarios de frontera Next5 correctos; sesiones propias cerradas"
+          )
+        await fetch("/fixture/finish", {
+          method: "POST",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: {
+            "Content-Type": "application/json",
+            "x-sync-test-run": fixture.runId,
+          },
+          body: JSON.stringify({ runId: fixture.runId, passed }),
+        })
+      })
+  }
+  return (
+    <main>
+      <h1>Frontera recurrente Next5</h1>
+      <p id="status" role="status">
+        {status}
+      </p>
+      <button disabled={!config || running} onClick={run}>
+        Ejecutar prueba RPC recurrente
+      </button>
+      <ol id="results">
+        {rows.map((row) => (
+          <li key={row}>{row}</li>
+        ))}
+      </ol>
+    </main>
+  )
+}

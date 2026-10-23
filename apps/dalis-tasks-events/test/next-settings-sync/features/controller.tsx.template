@@ -1,0 +1,1688 @@
+"use client"
+import {proveRemoteCategoryPlacementRecovery} from "@fixture/category-placement-recovery"
+import {proveRemoteRecurringPlacementRecovery} from "@fixture/recurring-placement-recovery"
+import {proveRemoteMixedPlacementRecovery} from "@fixture/mixed-placement-recovery"
+import { proveRemoteAppearanceCopy } from "@fixture/appearance-copy-recovery"
+import {proveRemoteAppearanceCohortRecovery} from "@fixture/appearance-cohort-recovery"
+import {proveRemotePlacementRecovery} from "@fixture/placement-recovery"
+import { proveRemoteTagDeletionRecovery } from "@fixture/tag-delete-recovery"
+import { proveRemoteTagOrderRecovery } from "@fixture/tag-order-recovery"
+import { proveRemoteItemViewRecovery } from "@fixture/item-view-recovery"
+import { proveRemotePlanCategoryRecovery } from "@fixture/plan-category-recovery"
+import { proveRemoteTagRecovery } from "@fixture/tag-recovery"
+import { proveRemoteAppearanceRetry } from "@fixture/appearance-retry"
+import { proveRemoteAppearanceRecovery } from "@fixture/appearance-recovery"
+import { proveRemoteSettingsRecovery } from "@fixture/settings-recovery"
+import { proveRemoteCommonPlanRecovery } from "@fixture/common-plan-recovery"
+import type { RecurringSyncIncidentOverview } from "@/types/recurring-sync-incident"
+import { useEffect, useState } from "react"
+import type { z } from "zod"
+import {
+  nextSyncPublicConfigSchema,
+  nextSettingsProofScopeSchema,
+  nextSyncDeviceCommandSchema,
+  nextSettingsSyncStateSchema,
+} from "@/schemas/next-sync-test"
+import { canonical, ordered, foldRecurringChanges } from "@fixture/projection"
+import { remoteRecurringPushResultSchema } from "@/schemas/remote-recurring-push"
+import { encodeSyncProtocolRange } from "@/lib/sync/sync-protocol"
+import { validateLocalRecurringBackup } from "@/lib/backup/local-backup"
+import { localPullCursorSchema } from "@/schemas/local-sync"
+import { editablePlanOccurrence } from "@/lib/calendar/plan-occurrence-command"
+import { planOccurrenceSchema } from "@/schemas/plan-occurrence"
+import { planSchema } from "@/schemas/plan-item"
+import { userSettingsSchema } from "@/schemas/preferences"
+import { outboxEntrySchema } from "@/schemas/local-sync"
+import { syncOperationSchema } from "@/schemas/sync"
+import { workspaceIdentitySchema } from "@/schemas/workspace"
+import { executeFixtureCommand, fixtureFetch } from "@fixture/device-client"
+
+function assert(value: unknown, message: string): asserts value {
+  if (!value) throw new Error(message)
+}
+type Reply = { status: number; value: unknown; protocol: string | null }
+
+export function FixtureController() {
+  const [config, setConfig] = useState<z.infer<
+    typeof nextSyncPublicConfigSchema
+  > | null>(null)
+  const [status, setStatus] = useState("Preparando la prueba aislada de Next")
+  const [rows, setRows] = useState<string[]>([])
+  const [running, setRunning] = useState(false)
+  const [proofScope, setProofScope] = useState<z.infer<typeof nextSettingsProofScopeSchema>>("full")
+  const fullProof = proofScope === "full" || proofScope === "full-auto"
+  const interactive = proofScope !== "full-auto"
+  useEffect(() => {
+    void (async () => {
+      const query = new URLSearchParams(location.search)
+      const scope = nextSettingsProofScopeSchema.parse(query.get("scope") ?? undefined)
+      const run = query.get("run")
+      const parsed = nextSyncPublicConfigSchema.parse(
+        await (
+          await fetch(`/fixture/config?runId=${run}`, { cache: "no-store" })
+        ).json()
+      )
+      assert(
+        location.origin === parsed.origins[0],
+        "Fixture controller host is invalid"
+      )
+      setProofScope(scope)
+      setConfig(parsed)
+      setStatus("Listo. La prueba abre un segundo dispositivo en otra pestaña")
+    })().catch(() => setStatus("No se ha podido preparar la prueba aislada"))
+  }, [])
+
+  const run = () => {
+    if (!config || running) return
+    const fixture = config
+    setRunning(true)
+    let secondary: Window | null = null
+    let removeReady = () => {}
+    let readyTimer: ReturnType<typeof setTimeout> | undefined
+    const ready = new Promise<void>((resolveReady, reject) => {
+      readyTimer = setTimeout(() => {
+        removeReady()
+        reject(new Error("Fixture second device did not become ready"))
+      }, 45000)
+      const listener = (event: MessageEvent) => {
+        if (
+          event.source !== secondary ||
+          event.origin !== fixture.origins[1] ||
+          event.data?.runId !== fixture.runId ||
+          event.data?.ready !== true
+        )
+          return
+        clearTimeout(readyTimer)
+        removeReady()
+        resolveReady()
+      }
+      window.addEventListener("message", listener)
+      removeReady = () => window.removeEventListener("message", listener)
+    })
+    void ready.catch(() => {})
+    // Open synchronously from the user gesture; both devices must be top-level first-party sites.
+    secondary = window.open(
+      `${fixture.origins[1]}/device?run=${fixture.runId}`,
+      `dalis-next-sync-${fixture.runId}`
+    )
+    const call = async (
+      index: number,
+      command: z.infer<typeof nextSyncDeviceCommandSchema>
+    ): Promise<unknown> => {
+      const parsed = nextSyncDeviceCommandSchema.parse(command)
+      assert(interactive || !parsed.type.endsWith("-ui"), "Automatic proof cannot dispatch a manual review")
+      if (index === 0) return executeFixtureCommand(fixture.runId, parsed)
+      assert(
+        secondary && !secondary.closed,
+        "Fixture second device is unavailable"
+      )
+      const channel = new MessageChannel()
+      try {
+        return await new Promise((resolveReply, reject) => {
+          const timer = setTimeout(
+            () => reject(new Error("Fixture command timed out")),
+            ["resolve-appearance-copy-ui","resolve-category-placement-ui","resolve-recurring-placement-ui","resolve-mixed-placement-ui","resolve-appearance-cohort-ui","resolve-assignment-ui","resolve-tag-order-ui","resolve-tag-delete-ui","resolve-placement-ui"].includes(parsed.type) ? 120000 : 45000
+          )
+          channel.port1.onmessage = (event) => {
+            clearTimeout(timer)
+            if (event.data?.ok === true) resolveReply(event.data.value)
+            else reject(new Error("Fixture second device command failed"))
+          }
+          secondary!.postMessage(
+            { runId: fixture.runId, command: parsed },
+            fixture.origins[1],
+            [channel.port2]
+          )
+        })
+      } finally {
+        channel.port1.close()
+      }
+    }
+    let completedChecks = 0
+    const check = async (label: string, work: () => Promise<void>) => {
+      setStatus(label)
+      await work()
+      completedChecks++
+      setRows((values) => [...values, `Correcto: ${label}`])
+    }
+    const state = async (userId: string) => {
+      const response = await fixtureFetch(
+        fixture.runId,
+        `/fixture/state?runId=${fixture.runId}&userId=${encodeURIComponent(userId)}`
+      )
+      assert(response.status === 200, "Fixture state reader failed")
+      return nextSettingsSyncStateSchema.parse(response.value)
+    }
+    const creation = syncOperationSchema.parse({
+      operationId: crypto.randomUUID(),
+      protocolVersion: 1,
+      baseRevision: 0,
+      command: {
+        type: "settings.update",
+        input: { timeZone: "Europe/Madrid", weekStartsOn: 1, locale: "es-ES" },
+      },
+    })
+    let owner = "",
+      passed = false
+    const batch = (operation = creation) => ({
+      transportVersion: 2,
+      expectedUserId: owner,
+      operations: [operation],
+    })
+    const push = async (
+      index: number,
+      input: unknown,
+      status: string,
+      retired = false
+    ) => {
+      const result = remoteRecurringPushResultSchema.parse(
+        await call(index, { type: retired ? "retired-push" : "push", input })
+      )
+      assert(
+        result.status === status,
+        `Unexpected settings RPC status ${result.status}`
+      )
+      return result
+    }
+    const snapshot = async (index: number) => {
+      const value = (await call(index, { type: "local-snapshot" })) as {
+        backup: unknown
+        cursor: unknown
+      }
+      return {
+        backup: validateLocalRecurringBackup(value.backup, owner),
+        cursor: localPullCursorSchema.parse(value.cursor),
+      }
+    }
+    void (async () => {
+      assert(secondary, "Fixture popup was blocked")
+      await ready
+      await check(
+        "Acción6 rechaza sesiones ausentes sin escribir",
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            assert(
+              ((await call(index, { type: "identity" })) as Reply).status ===
+                401,
+              "Unauthenticated identity was exposed"
+            )
+            await push(
+              index,
+              { ...batch(), expectedUserId: "owned-unauthenticated" },
+              "unauthorized"
+            )
+          }
+        }
+      )
+      await check(
+        "Dos sesiones persistidas anuncian exclusivamente6",
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            const boot = (await call(index, {
+              type: "bootstrap",
+              identity: "owner",
+            })) as Reply
+            const failure = boot.value && typeof boot.value === "object" ? boot.value as Record<string,unknown> : {}
+            const phase = ["request","prepare","auth_context","find_user","save_user","login","cookie"].includes(String(failure.phase)) ? String(failure.phase) : "unavailable"
+            const kind = ["Error","MongoServerError","MongoServerSelectionError","MongoNetworkError","MongoNetworkTimeoutError","ZodError","APIError","BetterAuthError"].includes(String(failure.kind)) ? String(failure.kind) : "unavailable"
+            const code = typeof failure.code === "number" ? failure.code : "none"
+            assert(boot.status === 200, `Settings session bootstrap failed: HTTP${boot.status}/${phase}/${kind}/${code}`)
+            const identity = (await call(index, { type: "identity" })) as Reply
+            assert(
+              identity.status === 200 &&
+                identity.protocol === encodeSyncProtocolRange(6),
+              "Settings identity did not announce exclusive six"
+            )
+            const actor = workspaceIdentitySchema.parse(identity.value).userId
+            if (index === 0) owner = actor
+            else
+              assert(
+                owner === actor,
+                "Persisted settings sessions have different actors"
+              )
+          }
+          const initial = await state(owner)
+          assert(
+            initial.page.through === 0 &&
+              Object.values(initial.counts).every((n) => n === 0),
+            "Unauthenticated settings action wrote data"
+          )
+        }
+      )
+      await check(
+        "Matriz5↔6 bloquea antes del body e IDausente está verificado",
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            const proof = (await call(index, { type: "protocol-matrix" })) as {
+              cases: number
+              bodies: number
+              missing: boolean
+              missingStatus: number
+              missingHeader: string | null
+            }
+            assert(
+              proof.cases === 4 &&
+                proof.bodies === 0 &&
+                proof.missing &&
+                proof.missingStatus === 409 &&
+                proof.missingHeader === "1",
+              "Settings matrix consumed a body or did not prove its absent action"
+            )
+          }
+          assert(
+            (await state(owner)).counts.receipts === 0,
+            "Protocol mismatch wrote a receipt"
+          )
+        }
+      )
+      await check(
+        "Actor esperado y sobre inválido no llegan al ejecutor",
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            await push(
+              index,
+              { ...batch(), expectedUserId: "owned-other" },
+              "account_changed"
+            )
+            await push(
+              index,
+              { ...batch(), transportVersion: 1 },
+              "update_required"
+            )
+            const pull = (await call(index, {
+              type: "pull",
+              userId: "owned-other",
+            })) as Reply
+            assert(
+              pull.status === 409,
+              "Foreign expected actor pull was accepted"
+            )
+          }
+          assert(
+            (await state(owner)).counts.receipts === 0,
+            "Rejected settings actor wrote a receipt"
+          )
+        }
+      )
+      await check(
+        "Readiness6 bloquea; acción5 capturada se retira sin ejecutar",
+        async () => {
+          const blocked = await fixtureFetch(
+            fixture.runId,
+            "/fixture/readiness",
+            { runId: fixture.runId, command: "block" }
+          )
+          assert(
+            blocked.status === 200,
+            "Owned settings readiness injection failed"
+          )
+          try {
+            await push(0, batch(), "retry_later")
+            await push(1, batch(), "update_required", true)
+            const pull = (await call(0, {
+              type: "pull",
+              userId: owner,
+            })) as Reply
+            assert(
+              pull.status === 503 &&
+                pull.protocol === encodeSyncProtocolRange(6),
+              "Missing settings index did not block pull"
+            )
+            assert(
+              (await state(owner)).counts.receipts === 0,
+              "Readiness or captured action5 acknowledged a settings operation"
+            )
+          } finally {
+            assert(
+              (
+                await fixtureFetch(fixture.runId, "/fixture/readiness", {
+                  runId: fixture.runId,
+                  command: "restore",
+                })
+              ).status === 200,
+              "Owned settings index restoration failed"
+            )
+          }
+        }
+      )
+      await check(
+        "Defaults reales6 confirman una vez y replay no duplica historia",
+        async () => {
+          const result = await push(0, batch(), "complete")
+          assert(
+            result.status === "complete" &&
+              result.results.length === 1 &&
+              result.results[0].outcome.status === "applied",
+            "Settings action did not apply"
+          )
+          const committed = await state(owner)
+          assert(
+            committed.counts.settings === 1 &&
+              committed.counts.receipts === 1 &&
+              committed.page.through === 1,
+            "Settings commit lacks its exact record, receipt or journal"
+          )
+          await push(1, batch(), "complete")
+          assert(
+            canonical(await state(owner)) === canonical(committed),
+            "Settings replay changed committed state"
+          )
+        }
+      )
+      await check(
+        "CAS obsoleto conserva conflicto explícito sin cambiar la zona",
+        async () => {
+          const stale = syncOperationSchema.parse({
+            ...creation,
+            operationId: crypto.randomUUID(),
+          })
+          const result = await push(1, batch(stale), "complete")
+          assert(
+            result.status === "complete" &&
+              result.results[0].outcome.status === "conflict",
+            "Stale settings CAS was acknowledged as applied"
+          )
+          const current = await state(owner)
+          assert(
+            current.counts.settings === 1 &&
+              current.counts.receipts === 2 &&
+              current.page.through === 1,
+            "Stale CAS mutated settings or appended applied history"
+          )
+        }
+      )
+      await check(
+        "Nueva revisión y descarga conservan replay antiguo sin regresión",
+        async () => {
+          const next = syncOperationSchema.parse({
+            ...creation,
+            operationId: crypto.randomUUID(),
+            baseRevision: 1,
+            command: {
+              type: "settings.update",
+              input: {
+                timeZone: "Pacific/Kiritimati",
+                weekStartsOn: 1,
+                locale: "es-ES",
+              },
+            },
+          })
+          const result = await push(0, batch(next), "complete")
+          assert(
+            result.status === "complete" &&
+              result.results[0].outcome.status === "applied",
+            "Next settings revision was not applied"
+          )
+          const committed = await state(owner)
+          assert(
+            committed.counts.settings === 1 &&
+              committed.counts.receipts === 3 &&
+              committed.page.through === 2,
+            "Next settings revision has inconsistent history"
+          )
+          await push(1, batch(), "complete")
+          assert(
+            canonical(await state(owner)) === canonical(committed),
+            "Late original replay replaced newer settings"
+          )
+          for (let index = 0; index < 2; index++) {
+            const reply = (await call(index, {
+              type: "pull",
+              userId: owner,
+            })) as Reply
+            assert(
+              reply.status === 200 &&
+                reply.protocol === encodeSyncProtocolRange(6) &&
+                canonical(reply.value) === canonical(committed.page),
+              "Settings pull did not return the exact authenticated journal"
+            )
+          }
+        }
+      )
+      const planRequest = {
+        mode: "create" as const,
+        itemId: crypto.randomUUID(),
+        contentOperationId: crypto.randomUUID(),
+        viewOperationId: crypto.randomUUID(),
+        primaryTagId: null,
+        now: new Date().toISOString(),
+        input: {
+          kind: "plan" as const,
+          variant: "note" as const,
+          title: "Serie para comprobar zona personal",
+          description: "",
+          status: "not_started" as const,
+          checklist: [],
+          recurrence: {
+            frequency: "daily" as const,
+            interval: 1,
+            anchorDate: "2026-10-17",
+            timeZone: "Europe/Madrid",
+            end: { type: "count" as const, count: 3 },
+          },
+          schedule: {
+            mode: "all_day" as const,
+            startDate: "2026-10-17",
+            endDateExclusive: "2026-10-18",
+          },
+        },
+      }
+      await check(
+        "Handshake5 capturado conserva cola ante referencia ausente y retiro",
+        async () => {
+          const remoteBefore = await state(owner)
+          for (let index = 0; index < 2; index++) {
+            await call(index, { type: "prepare-legacy-local", userId: owner })
+            const now = new Date().toISOString()
+            const request = {
+              mode: "create" as const,
+              itemId: crypto.randomUUID(),
+              contentOperationId: crypto.randomUUID(),
+              viewOperationId: crypto.randomUUID(),
+              primaryTagId: null,
+              now,
+              input: {
+                kind: "plan" as const,
+                variant: "note" as const,
+                title: "Cola conservada ante retiro",
+                description: "",
+                status: "not_started" as const,
+                checklist: [],
+                recurrence: null,
+                schedule: {
+                  mode: "all_day" as const,
+                  startDate: "2026-10-12",
+                  endDateExclusive: "2026-10-13",
+                },
+              },
+            }
+            await call(index, { type: "save-plan", request })
+            const snapshot = async () =>
+              (await call(index, { type: "local-snapshot" })) as {
+                backup: unknown
+                cursor: unknown
+              }
+            for (const type of [
+              "legacy-missing-action-run",
+              "retired-mixed-action-run",
+            ] as const) {
+              const before = await snapshot()
+              const baseline = validateLocalRecurringBackup(
+                before.backup,
+                owner
+              )
+              const root = baseline.stores.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === request.contentOperationId
+              )
+              const dependent = baseline.stores.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === request.viewOperationId
+              )
+              assert(
+                root &&
+                  dependent &&
+                  root.state === "pending" &&
+                  root.lease === null &&
+                  dependent.dependencies.includes(root.operation.operationId),
+                "Atomic producer lacks root and exact dependent"
+              )
+              const proof = (await call(index, { type })) as {
+                handshake: string
+                dispatches: number
+                unrecognized: number
+                identityReads: number
+                pageReads: number
+                probeStatus: number
+                actionNotFound: string | null
+                first: { status: string; uploaded: number; downloaded: number }
+                second: { status: string; uploaded: number; downloaded: number }
+                afterFirst: { backup: unknown; cursor: unknown }
+                afterSecond: { backup: unknown; cursor: unknown }
+              }
+              assert(
+                proof.handshake === "captured-prior-v5" &&
+                  proof.dispatches === 1 &&
+                  proof.identityReads === 1 &&
+                  proof.pageReads === 1,
+                "Captured old handshake was not bounded"
+              )
+              if (type === "legacy-missing-action-run")
+                assert(
+                  proof.probeStatus === 409 &&
+                    proof.actionNotFound === "1" &&
+                    proof.unrecognized === 1,
+                  "Missing action was not rejected by compiled Next"
+                )
+              assert(
+                proof.first.status ===
+                  (type === "legacy-missing-action-run"
+                    ? "retry_later"
+                    : "update_required") &&
+                  proof.first.uploaded === 0 &&
+                  proof.first.downloaded === 0,
+                "Old action acknowledged queued work"
+              )
+              assert(
+                proof.second.status === "update_required" &&
+                  proof.second.uploaded === 0 &&
+                  proof.second.downloaded === 0,
+                "New handshake did not block before another claim"
+              )
+              const expected = structuredClone(baseline.stores)
+              const attempted = expected.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === root.operation.operationId
+              )
+              assert(attempted, "Snapshot lacks attempted root")
+              attempted.attempts++
+              for (const retained of [
+                proof.afterFirst,
+                proof.afterSecond,
+                await snapshot(),
+              ]) {
+                assert(
+                  JSON.stringify(
+                    validateLocalRecurringBackup(retained.backup, owner).stores
+                  ) === JSON.stringify(expected) &&
+                    JSON.stringify(
+                      localPullCursorSchema.parse(retained.cursor)
+                    ) ===
+                      JSON.stringify(
+                        localPullCursorSchema.parse(before.cursor)
+                      ),
+                  `Retirement changed stores ${JSON.stringify(Object.keys(expected).filter((key) => JSON.stringify(validateLocalRecurringBackup(retained.backup, owner).stores[key as keyof typeof expected]) !== JSON.stringify(expected[key as keyof typeof expected])))} or cursor`
+                )
+              }
+            }
+          }
+          assert(
+            JSON.stringify(await state(owner)) === JSON.stringify(remoteBefore),
+            "Rejected old clients changed Mongo"
+          )
+        }
+      )
+      await check(
+        "Cliente6 prepara dos particiones y descarga la zona existente",
+        async () => {
+          for (let index = 0; index < 2; index++) {
+            const result = (await call(index, { type: "mixed-run" })) as {
+              status: string
+              uploaded: number
+              downloaded: number
+            }
+            assert(
+              result.status === "settled" &&
+                result.uploaded === 2 &&
+                result.downloaded >= 4,
+              "Settings client failed its initial exact pull"
+            )
+            const current = userSettingsSchema.parse(
+              await call(index, { type: "read-settings" })
+            )
+            assert(
+              current.timeZone === "Pacific/Kiritimati" &&
+                current.revision === 2,
+              "Initial settings pull is not the latest revision"
+            )
+          }
+          await call(0, { type: "mixed-run" })
+          await call(0, { type: "save-plan", request: planRequest })
+          const result = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            result.status === "settled" && result.uploaded === 2,
+            "Real series producer failed its atomic root and view ACK"
+          )
+          await call(1, { type: "mixed-run" })
+        }
+      )
+      if(fullProof || proofScope === "appearance-copy" || proofScope === "appearance-copy-ui") await check("Aparición cancelada recupera una sola copia independiente tras recarga",async()=>{
+        const proof=await proveRemoteAppearanceCopy({owner,call,snapshot,interactive:interactive && proofScope!=="appearance-copy",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned copy reload timed out"))},45000);window.addEventListener("message",listener)
+          });await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.copied===4&&proof.lostReplies===4,"Appearance copy proof incomplete")
+      })
+      if(proofScope === "appearance-copy" || proofScope === "appearance-copy-ui"){passed=true;return}
+      if(fullProof || proofScope === "appearance-cohort" || proofScope === "appearance-cohort-ui") await check("Varias apariciones recuperan cadena intercalada con ACK únicos tras recarga",async()=>{
+        const proof=await proveRemoteAppearanceCohortRecovery({owner,call,snapshot,interactive:interactive && proofScope!=="appearance-cohort",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned appearance cohort reload timed out"))},45000);window.addEventListener("message",listener)
+          })
+          await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.adopted===1&&proof.retried===1,"Appearance cohort proof incomplete")
+      })
+      if(proofScope === "appearance-cohort" || proofScope === "appearance-cohort-ui"){passed=true;return}
+      if(fullProof || proofScope === "category-placement" || proofScope === "category-placement-ui") await check("Movimiento entre categorías recupera vista y orden con ACK único",async()=>{
+        const proof=await proveRemoteCategoryPlacementRecovery({owner,call,snapshot,interactive:interactive && proofScope!=="category-placement",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned placement reload timed out"))},45000);window.addEventListener("message",listener)
+          })
+          await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.adopted===3&&proof.retried===3&&proof.lostReplies===3,"Placement proof incomplete")
+      })
+      if(proofScope === "category-placement" || proofScope === "category-placement-ui"){passed=true;return}
+      if(fullProof || proofScope === "recurring-placement" || proofScope === "recurring-placement-ui") await check("Aparición primaria recupera orden con ACK único tras recarga",async()=>{
+        const proof=await proveRemoteRecurringPlacementRecovery({owner,call,snapshot,interactive:interactive && proofScope!=="recurring-placement",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned placement reload timed out"))},45000);window.addEventListener("message",listener)
+          })
+          await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.adopted===2&&proof.retried===2&&proof.lostReplies===2,"Placement proof incomplete")
+      })
+      if(proofScope === "recurring-placement" || proofScope === "recurring-placement-ui"){passed=true;return}
+      if(fullProof || proofScope === "mixed-placement" || proofScope === "mixed-placement-ui") await check("Grupo mixto recupera orden y fechas con ACK único tras recarga",async()=>{
+        const proof=await proveRemoteMixedPlacementRecovery({owner,call,snapshot,interactive:interactive && proofScope!=="mixed-placement",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned placement reload timed out"))},45000);window.addEventListener("message",listener)
+          })
+          await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.adopted===1&&proof.retried===1&&proof.lostReplies===1,"Placement proof incomplete")
+      })
+      if(proofScope === "mixed-placement" || proofScope === "mixed-placement-ui"){passed=true;return}
+      if(fullProof || proofScope === "placement" || proofScope === "placement-ui") await check("Orden de planes recupera cadena exacta y ACK único tras recarga",async()=>{
+        const proof=await proveRemotePlacementRecovery({owner,call,snapshot,interactive:interactive && proofScope!=="placement",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned placement reload timed out"))},45000);window.addEventListener("message",listener)
+          })
+          await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.adopted===1&&proof.retried===3&&proof.lostReplies===3,"Placement proof incomplete")
+      })
+      if(proofScope === "placement" || proofScope === "placement-ui"){passed=true;return}
+      if(fullProof || proofScope === "tag-delete" || proofScope === "tag-delete-ui") await check("Borrado de categoría recupera adopción, tombstone y ACK único tras recarga",async()=>{
+        const proof=await proveRemoteTagDeletionRecovery({owner,call,snapshot,interactive:interactive && proofScope!=="tag-delete",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned deletion reload timed out"))},45000);window.addEventListener("message",listener)
+          })
+          await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.adopted===2&&proof.retried===1&&proof.lostReplies===1,"Deletion proof incomplete")
+      })
+      if(proofScope === "tag-delete" || proofScope === "tag-delete-ui"){passed=true;return}
+      if(fullProof || proofScope === "tag-order" || proofScope === "tag-order-ui") await check("Orden de categorías recupera multiefectos, tombstones y ACK único tras recarga",async()=>{
+        const proof=await proveRemoteTagOrderRecovery({owner,call,snapshot,interactive:interactive && proofScope!=="tag-order",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned order reload timed out"))},45000);window.addEventListener("message",listener)
+          })
+          await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.adopted===2 && proof.retried===2 && proof.lostReplies===2,"Order proof incomplete")
+      })
+      if(proofScope === "tag-order" || proofScope === "tag-order-ui"){passed=true;return}
+      if(proofScope !== "assignment" && proofScope !== "assignment-series") await check("Contenido y categoría recuperados juntos con dos CAS y ACK únicos tras recarga", async () => {
+        const proof = await proveRemotePlanCategoryRecovery({ interactive, owner, call, snapshot, state: () => state(owner), reloadSecondary: async () => {
+          const reloaded = new Promise<void>((resolve, reject) => {
+            const listener = (event: MessageEvent) => {
+              if (event.source !== secondary || event.origin !== fixture.origins[1] || event.data?.runId !== fixture.runId || event.data?.ready !== true) return
+              clearTimeout(timer); window.removeEventListener("message", listener); resolve()
+            }
+            const timer = setTimeout(() => { window.removeEventListener("message", listener); reject(new Error("Owned joint reload timed out")) }, 45000)
+            window.addEventListener("message", listener)
+          })
+          await call(1, { type: "reload-local" }); await reloaded
+        } })
+        assert(proof.adopted === 1 && proof.retried === 3 && proof.lostReplies === 2, "Joint remote evidence incomplete")
+      })
+      if (proofScope === "joint-ui") { passed = true; return }
+      await check("Asignaciones aisladas recuperan conflicto y ACK único tras recarga",async()=>{
+        const proof=await proveRemoteItemViewRecovery({owner,call,snapshot,interactive:interactive && proofScope!=="assignment-series",state:()=>state(owner),reloadSecondary:async()=>{
+          const reloaded=new Promise<void>((resolve,reject)=>{
+            const listener=(event:MessageEvent)=>{if(event.source!==secondary||event.origin!==fixture.origins[1]||event.data?.runId!==fixture.runId||event.data?.ready!==true)return;clearTimeout(timer);window.removeEventListener("message",listener);resolve()}
+            const timer=setTimeout(()=>{window.removeEventListener("message",listener);reject(new Error("Owned assignment reload timed out"))},45000);window.addEventListener("message",listener)
+          })
+          await call(1,{type:"reload-local"});await reloaded
+        }})
+        assert(proof.adopted===1 && proof.retried===3 && proof.lostReplies===2,"Assignment proof incomplete")
+      })
+      if(proofScope === "assignment" || proofScope === "assignment-series"){passed=true;return}
+      await check(
+        "Cuatro variantes recuperan conflictos reales y convergen sin ACK local",
+        async () => {
+          const proof = await proveRemoteCommonPlanRecovery({
+            interactive,
+            call,
+            snapshot,
+            state: () => state(owner),
+            owner,
+          })
+          assert(
+            proof.variants === 4 && proof.replayed === 1,
+            "Remote common recovery proof is incomplete"
+          )
+        }
+      )
+      const offlineBefore = await state(owner)
+      let firstSettingsId = "",
+        secondSettingsId = "",
+        occurrenceId = ""
+      const originalEntries = new Map<
+        string,
+        { command: unknown; dependencies: string[] }
+      >()
+      await check(
+        "Productores offline conservan UUID y dependencias de zona y aparición",
+        async () => {
+          const parent = planSchema.parse(
+            (await snapshot(0)).backup.stores.items.find(
+              (item) => item.id === planRequest.itemId
+            )
+          )
+          const occurrenceCommand = {
+            type: "plan.set-occurrence-status" as const,
+            itemId: parent.id,
+            occurrenceId: `${parent.id}:2026-10-18`,
+            status: "completed" as const,
+          }
+          occurrenceId = occurrenceCommand.occurrenceId
+          await call(0, {
+            type: "commit-occurrence",
+            command: occurrenceCommand,
+            operationId: crypto.randomUUID(),
+            now: new Date().toISOString(),
+            expectedItem: parent,
+            expectedOccurrence: editablePlanOccurrence(
+              parent,
+              null,
+              occurrenceCommand,
+              owner
+            ).current,
+          })
+          const input = (timeZone: string) => ({
+            timeZone,
+            weekStartsOn: 1 as const,
+            locale: "es-ES" as const,
+          })
+          const expected = userSettingsSchema.parse(
+            await call(0, { type: "read-settings" })
+          )
+          const first = outboxEntrySchema.parse(
+            await call(0, {
+              type: "save-settings",
+              input: input("America/New_York"),
+              expected,
+            })
+          )
+          firstSettingsId = first.operation.operationId
+          const second = outboxEntrySchema.parse(
+            await call(0, {
+              type: "save-settings",
+              input: input("Asia/Tokyo"),
+              expected: userSettingsSchema.parse(
+                await call(0, { type: "read-settings" })
+              ),
+            })
+          )
+          secondSettingsId = second.operation.operationId
+          assert(
+            first.state === "pending" &&
+              second.state === "pending" &&
+              first.attempts === 0 &&
+              second.attempts === 0 &&
+              second.dependencies.includes(firstSettingsId),
+            "Offline settings producer lost its exact parent dependency"
+          )
+          const queued = (await snapshot(0)).backup.stores.outbox.filter(
+            (entry) => entry.state === "pending"
+          )
+          assert(
+            queued.length === 3,
+            "Offline producer fabricated an ACK or lost an occurrence"
+          )
+          for (const entry of queued)
+            originalEntries.set(entry.operation.operationId, {
+              command: entry.operation.command,
+              dependencies: entry.dependencies,
+            })
+          assert(
+            canonical(await state(owner)) === canonical(offlineBefore),
+            "Offline producers performed a remote write"
+          )
+          await call(1, {
+            type: "commit-local",
+            command: {
+              type: "tag.save",
+              tagId: crypto.randomUUID(),
+              input: {
+                name: "Categoría junto a ajustes",
+                color: "#2563eb",
+                position: 0,
+              },
+            },
+          })
+        }
+      )
+      await check(
+        "ACK real6 rebasa sólo hijo no intentado y progreso independiente",
+        async () => {
+          const peer = (await call(1, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            peer.status === "settled" && peer.uploaded === 1,
+            "Independent category failed while settings were pending elsewhere"
+          )
+          const result = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            result.status === "settled" && result.uploaded === 3,
+            "Settings client did not ACK the original occurrence and two zone intentions"
+          )
+          const complete = (await snapshot(0)).backup.stores.outbox
+          for (const [id, original] of originalEntries) {
+            const entry = complete.find(
+              (value) => value.operation.operationId === id
+            )
+            assert(
+              entry?.state === "acknowledged" &&
+                entry.attempts === 1 &&
+                canonical(entry.operation.command) ===
+                  canonical(original.command) &&
+                canonical(entry.dependencies) ===
+                  canonical(original.dependencies),
+              "ACK rewrote an intention, dependency or attempt count"
+            )
+          }
+          assert(
+            complete.find(
+              (entry) => entry.operation.operationId === firstSettingsId
+            )?.operation.baseRevision === 2 &&
+              complete.find(
+                (entry) => entry.operation.operationId === secondSettingsId
+              )?.operation.baseRevision === 3,
+            "Direct pending child was not rebased to its real parent ACK"
+          )
+          const remote = await state(owner)
+          assert(
+            remote.counts.receipts === offlineBefore.counts.receipts + 4 &&
+              remote.page.through === offlineBefore.page.through + 4,
+            "Settings ACK fabricated or duplicated remote history"
+          )
+        }
+      )
+      await check(
+        "Dos particiones convergen exactamente sin reprogramar la serie",
+        async () => {
+          for (let index = 0; index < 2; index++)
+            await call(index, { type: "mixed-run" })
+          const authoritative = await state(owner),
+            projection = foldRecurringChanges(authoritative.page)
+          const copies = await Promise.all([snapshot(0), snapshot(1)])
+          for (const copy of copies) {
+            assert(
+              copy.cursor.after === authoritative.page.through &&
+                copy.cursor.through === null,
+              "Settings cursor missed the authoritative checkpoint"
+            )
+            for (const store of [
+              "items",
+              "occurrences",
+              "tags",
+              "itemViews",
+              "taskPlacements",
+              "settings",
+            ] as const)
+              assert(
+                ordered(copy.backup.stores[store]) ===
+                  ordered([...projection[store].values()]),
+                `Settings client ${store} projection differs from Mongo`
+              )
+            const current = copy.backup.stores.settings[0]
+            assert(
+              current.timeZone === "Asia/Tokyo" && current.revision === 4,
+              "Final personal zone differs between clients"
+            )
+            const parent = planSchema.parse(
+              copy.backup.stores.items.find(
+                (item) => item.id === planRequest.itemId
+              )
+            )
+            assert(
+              canonical(parent.recurrence) ===
+                canonical(planRequest.input.recurrence) &&
+                canonical(parent.schedule) ===
+                  canonical(planRequest.input.schedule),
+              "Personal zone changed a stored series anchor, zone or date"
+            )
+            assert(
+              planOccurrenceSchema.parse(
+                copy.backup.stores.occurrences.find(
+                  (value) => value.id === occurrenceId
+                )
+              ).status === "completed",
+              "Personal zone lost appearance progress"
+            )
+          }
+          assert(
+            ordered(copies[0].backup.stores.remoteShadows) ===
+              ordered(copies[1].backup.stores.remoteShadows),
+            "Clients do not share exact latest remote shadows"
+          )
+        }
+      )
+      await check(
+        "Recarga del segundo origen conserva zona, cola y checkpoint",
+        async () => {
+          const before = await snapshot(1)
+          const reloaded = new Promise<void>((resolve, reject) => {
+            const timer = setTimeout(() => {
+              window.removeEventListener("message", listener)
+              reject(new Error("Owned settings reload timed out"))
+            }, 45000)
+            const listener = (event: MessageEvent) => {
+              if (
+                event.source !== secondary ||
+                event.origin !== fixture.origins[1] ||
+                event.data?.runId !== fixture.runId ||
+                event.data?.ready !== true
+              )
+                return
+              clearTimeout(timer)
+              window.removeEventListener("message", listener)
+              resolve()
+            }
+            window.addEventListener("message", listener)
+          })
+          await call(1, { type: "reload-local" })
+          await reloaded
+          const after = await snapshot(1)
+          assert(
+            canonical(after.backup.stores) ===
+              canonical(before.backup.stores) &&
+              canonical(after.cursor) === canonical(before.cursor),
+            "Owned reload changed durable settings, queue or cursor"
+          )
+          const idle = (await call(1, { type: "mixed-run" })) as {
+            uploaded: number
+            downloaded: number
+          }
+          assert(
+            idle.uploaded === 0 && idle.downloaded === 0,
+            "Reload re-sent or re-downloaded acknowledged work"
+          )
+        }
+      )
+      const queueZone = async (index: number, timeZone: string) =>
+        outboxEntrySchema.parse(
+          await call(index, {
+            type: "save-settings",
+            input: { timeZone, weekStartsOn: 1, locale: "es-ES" },
+            expected: userSettingsSchema.parse(
+              await call(index, { type: "read-settings" })
+            ),
+          })
+        )
+      const converge = async () => {
+        for (let index = 0; index < 2; index++)
+          await call(index, { type: "mixed-run" })
+        const remote = await state(owner),
+          projected = foldRecurringChanges(remote.page)
+        for (let index = 0; index < 2; index++) {
+          const current = await snapshot(index)
+          assert(
+            current.cursor.after === remote.page.through &&
+              current.cursor.through === null,
+            "Resilient settings cursor did not converge"
+          )
+          for (const store of [
+            "items",
+            "occurrences",
+            "tags",
+            "itemViews",
+            "taskPlacements",
+            "settings",
+          ] as const)
+            assert(
+              ordered(current.backup.stores[store]) ===
+                ordered([...projected[store].values()]),
+              `Resilient ${store} projection differs from Mongo`
+            )
+        }
+      }
+      await check(
+        "Respuesta perdida conserva intento e hijo; replay confirma exactamente una vez",
+        async () => {
+          const before = await state(owner)
+          const first = await queueZone(0, "America/New_York"),
+            child = await queueZone(0, "Europe/Amsterdam")
+          assert(
+            child.dependencies.includes(first.operation.operationId),
+            "Lost settings response requires its direct dependent"
+          )
+          const lost = (await call(0, {
+            type: "lost-settings-response-run",
+          })) as { status: string; uploaded: number }
+          assert(
+            lost.status === "retry_later" && lost.uploaded === 0,
+            "Lost settings response fabricated a local ACK"
+          )
+          const remote = await state(owner),
+            retained = (await snapshot(0)).backup.stores.outbox
+          assert(
+            remote.counts.receipts === before.counts.receipts + 1 &&
+              remote.page.through === before.page.through + 1,
+            "Lost settings response did not follow one real remote commit"
+          )
+          for (const original of [first, child]) {
+            const entry = retained.find(
+              (value) =>
+                value.operation.operationId === original.operation.operationId
+            )
+            assert(
+              entry?.state === "pending" &&
+                entry.lease === null &&
+                entry.attempts === (original === first ? 1 : 0) &&
+                canonical(entry.operation) === canonical(original.operation) &&
+                canonical(entry.dependencies) ===
+                  canonical(original.dependencies),
+              "Lost response rewrote an attempted settings intention or ACKed its dependent"
+            )
+          }
+          const replay = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            replay.status === "settled" && replay.uploaded === 2,
+            "Replay did not ACK the original settings UUID and its child"
+          )
+          const complete = await state(owner)
+          assert(
+            complete.counts.receipts === before.counts.receipts + 2 &&
+              complete.page.through === before.page.through + 2,
+            "Lost settings response duplicated receipt or history"
+          )
+          for (const entry of [first, child])
+            assert(
+              complete.page.changes.filter(
+                (change) => change.operationId === entry.operation.operationId
+              ).length === 1,
+              "Settings UUID committed twice"
+            )
+          await converge()
+        }
+      )
+      await check(
+        "Época cambiada trascommit conserva intención sin ACK; cliente nuevo recupera",
+        async () => {
+          const original = await queueZone(0, "UTC"),
+            before = await state(owner)
+          const interrupted = (await call(0, {
+            type: "epoch-after-settings-commit-run",
+          })) as { status: string; uploaded: number }
+          assert(
+            interrupted.status === "account_changed" &&
+              interrupted.uploaded === 0,
+            "Old settings epoch acknowledged an in-flight response"
+          )
+          const retained = (await snapshot(0)).backup.stores
+          const entry = retained.outbox.find(
+            (value) =>
+              value.operation.operationId === original.operation.operationId
+          )
+          assert(
+            entry?.state === "pending" &&
+              entry.attempts === 1 &&
+              entry.lease === null &&
+              canonical(entry.operation) === canonical(original.operation),
+            "Epoch change rewrote or acknowledged the settings intention"
+          )
+          assert(
+            !retained.syncMetadata.some(
+              (value) =>
+                value.key ===
+                `operation-outcome:${original.operation.operationId}`
+            ),
+            "Old settings epoch fabricated an outcome"
+          )
+          const committed = await state(owner)
+          assert(
+            committed.counts.receipts === before.counts.receipts + 1 &&
+              committed.page.through === before.page.through + 1,
+            "Epoch probe did not commit exactly once remotely"
+          )
+          const recovered = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            recovered.status === "settled" &&
+              recovered.uploaded === 1 &&
+              canonical(await state(owner)) === canonical(committed),
+            "Fresh settings epoch did not replay the original receipt without duplicating it"
+          )
+          await converge()
+        }
+      )
+      await check(
+        "Proveedor6 real aísla caché5, reinicia época y retira listeners",
+        async () => {
+          const mounted = (await call(1, { type: "hook-mount" })) as {
+            mounted: boolean
+            epoch: string
+            mixedCachePresent: boolean
+            legacyCacheIntact: boolean
+          }
+          assert(
+            mounted.mounted &&
+              mounted.mixedCachePresent &&
+              mounted.legacyCacheIntact,
+            "Settings provider did not mount its generation-six cache independently"
+          )
+          const before = await state(owner),
+            first = await queueZone(1, "Europe/Madrid")
+          const notified = (await call(1, {
+            type: "hook-observe",
+            state: "pending",
+          })) as { pendingSeen: boolean }
+          assert(
+            notified.pendingSeen,
+            "Settings outbox notification did not update the real provider"
+          )
+          await call(1, { type: "hook-sync" })
+          const settled = (await call(1, {
+            type: "hook-observe",
+            state: "settled",
+          })) as {
+            epoch: string
+            result: unknown
+            mixedCachePresent: boolean
+            legacyCacheIntact: boolean
+          }
+          assert(
+            settled.epoch === mounted.epoch &&
+              settled.result !== null &&
+              settled.mixedCachePresent &&
+              settled.legacyCacheIntact,
+            "Settings provider lost its result or prior-generation cache"
+          )
+          const committed = await state(owner),
+            storesBefore = (await snapshot(1)).backup.stores
+          assert(
+            committed.counts.receipts === before.counts.receipts + 1 &&
+              storesBefore.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === first.operation.operationId
+              )?.state === "acknowledged",
+            "Real settings provider lacks durable ACK"
+          )
+          const rotated = (await call(1, { type: "rotate-local" })) as {
+            oldAccountRejected: boolean
+            oldSummaryRejected: boolean
+            oldAttemptRejected: boolean
+            currentEpoch: string
+          }
+          assert(
+            rotated.oldAccountRejected &&
+              rotated.oldSummaryRejected &&
+              rotated.oldAttemptRejected,
+            "Old settings client remained usable after account epoch change"
+          )
+          const rerender = (await call(1, { type: "hook-rerender" })) as {
+            epoch: string
+            epochResetObserved: boolean
+            mixedCachePresent: boolean
+            legacyCacheIntact: boolean
+            staleReports: number
+          }
+          assert(
+            rerender.epoch === rotated.currentEpoch &&
+              rerender.epoch !== settled.epoch &&
+              rerender.epochResetObserved &&
+              rerender.mixedCachePresent &&
+              rerender.legacyCacheIntact &&
+              rerender.staleReports === 0,
+            "Unkeyed settings provider retained stale pass state"
+          )
+          assert(
+            canonical((await snapshot(1)).backup.stores) ===
+              canonical(storesBefore) &&
+              canonical(await state(owner)) === canonical(committed),
+            "Settings provider epoch rerender mutated durable history"
+          )
+          const unmounted = (await call(1, { type: "hook-unmount" })) as {
+            mounted: boolean
+            reports: number
+          }
+          assert(!unmounted.mounted, "Settings provider stayed mounted")
+          const second = await queueZone(1, "Asia/Tokyo"),
+            pending = (await snapshot(1)).backup.stores
+          assert(
+            pending.outbox.find(
+              (entry) =>
+                entry.operation.operationId === second.operation.operationId
+            )?.attempts === 0,
+            "Unmounted settings provider claimed fresh work"
+          )
+          const quiet = (await call(1, { type: "hook-quiet" })) as {
+            mounted: boolean
+            reports: number
+          }
+          assert(
+            !quiet.mounted &&
+              quiet.reports === unmounted.reports &&
+              canonical((await snapshot(1)).backup.stores) ===
+                canonical(pending) &&
+              canonical(await state(owner)) === canonical(committed),
+            "Unmounted settings provider reacted to wake events or wrote history"
+          )
+          const recovered = (await call(1, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            recovered.status === "settled" && recovered.uploaded === 1,
+            "Fresh client did not recover post-unmount settings"
+          )
+          await converge()
+        }
+      )
+      await check(
+        "Otra cuenta remota bloquea antesclaim y volver a la propia recupera",
+        async () => {
+          const original = await queueZone(1, "Europe/Paris"),
+            before = (await snapshot(1)).backup.stores,
+            remoteBefore = await state(owner)
+          const other = (await call(1, {
+            type: "bootstrap",
+            identity: "other",
+          })) as Reply
+          assert(
+            other.status === 200 &&
+              workspaceIdentitySchema.parse(other.value).userId !== owner,
+            "Owned account-switch fixture did not switch actor"
+          )
+          const blocked = (await call(1, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            blocked.status === "account_changed" &&
+              blocked.uploaded === 0 &&
+              canonical((await snapshot(1)).backup.stores) ===
+                canonical(before) &&
+              canonical(await state(owner)) === canonical(remoteBefore),
+            "Other remote account claimed, ACKed or rewrote local settings"
+          )
+          assert(
+            ((await call(1, { type: "bootstrap", identity: "owner" })) as Reply)
+              .status === 200,
+            "Owned settings reauthentication failed"
+          )
+          const recovered = (await call(1, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            recovered.status === "settled" &&
+              recovered.uploaded === 1 &&
+              (await snapshot(1)).backup.stores.outbox.find(
+                (entry) =>
+                  entry.operation.operationId === original.operation.operationId
+              )?.state === "acknowledged",
+            "Reauthentication did not ACK the original settings intention"
+          )
+          await converge()
+        }
+      )
+      await check(
+        "Conflicto de zona conserva hijo y comparación; categoría independiente avanza",
+        async () => {
+          const winner = await queueZone(0, "America/New_York"),
+            conflicting = await queueZone(1, "Europe/Madrid"),
+            child = await queueZone(1, "Asia/Tokyo")
+          await call(0, { type: "mixed-run" })
+          const before = await state(owner)
+          await call(1, {
+            type: "commit-local",
+            command: {
+              type: "tag.save",
+              tagId: crypto.randomUUID(),
+              input: {
+                name: "Categoría independiente de conflicto",
+                color: "#e85d04",
+                position: 1,
+              },
+            },
+          })
+          const result = (await call(1, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            result.status === "settled" && result.uploaded === 1,
+            "Settings conflict blocked independent category progress"
+          )
+          const retained = (await snapshot(1)).backup.stores.outbox
+          const failed = retained.find(
+              (entry) =>
+                entry.operation.operationId ===
+                conflicting.operation.operationId
+            ),
+            dependent = retained.find(
+              (entry) =>
+                entry.operation.operationId === child.operation.operationId
+            )
+          assert(
+            failed?.state === "conflict" &&
+              failed.attempts === 1 &&
+              failed.lease === null &&
+              canonical(failed.operation) ===
+                canonical(conflicting.operation) &&
+              dependent?.state === "pending" &&
+              dependent.attempts === 0 &&
+              dependent.dependencies.includes(
+                conflicting.operation.operationId
+              ) &&
+              canonical(dependent.operation) === canonical(child.operation),
+            "Settings conflict discarded or rewrote its original and dependent intentions"
+          )
+          const incidents = (await call(1, {
+            type: "settings-incidents",
+          })) as RecurringSyncIncidentOverview[]
+          const preserved = incidents.find(
+            (value) =>
+              value.kind === "preference" &&
+              value.incident.entry.operation.operationId ===
+                conflicting.operation.operationId
+          )
+          assert(
+            preserved?.kind === "preference" &&
+              preserved.incident.reason === "conflict" &&
+              preserved.incident.entry.state === "conflict" &&
+              preserved.incident.intentions.some(
+                (entry) =>
+                  entry.operation.operationId === child.operation.operationId
+              ),
+            "Settings conflict lacks its frozen evidence and dependent comparison"
+          )
+          const remote = await state(owner)
+          assert(
+            remote.counts.receipts === before.counts.receipts + 2 &&
+              remote.page.through === before.page.through + 1 &&
+              remote.page.changes.some(
+                (change) => change.operationId === winner.operation.operationId
+              ),
+            "Settings conflict appended applied history or lost independent receipt"
+          )
+        }
+      )
+      await check(
+        "Resolución antigua conserva ajustes y evidencia sin fabricar ACK",
+        async () => {
+          const before = await state(owner)
+          const proof = (await call(1, {
+            type: "legacy-root-resolution-proof",
+          })) as {
+            preserved: boolean
+            replayed: boolean
+            superseded: boolean
+            settingsIncidents: number
+          }
+          assert(
+            proof.preserved &&
+              proof.replayed &&
+              proof.superseded &&
+              proof.settingsIncidents >= 1,
+            "Legacy resolution lost unrelated settings evidence"
+          )
+          assert(
+            canonical(await state(owner)) === canonical(before),
+            "Local root adoption changed Mongo"
+          )
+        }
+      )
+      await check(
+        "Zona personal se recupera explícitamente con rollback, replay y ACK real",
+        async () => {
+          const proof = await proveRemoteSettingsRecovery({
+            interactive,
+            call,
+            snapshot,
+            state: () => state(owner),
+            owner,
+          })
+          assert(
+            proof.adopted && proof.retried && proof.replayed,
+            "Settings recovery evidence is incomplete"
+          )
+        }
+      )
+      await check(
+        "Editor real guarda zona offline y confirma una vez sin reprogramar planes",
+        async () => {
+          const before = await state(owner)
+          const proof = (await call(0, { type: "settings-editor-proof", interactive })) as {
+            settings: unknown
+            networkCalls: number
+            interactive: boolean
+          }
+          assert(
+            proof.interactive === interactive && proof.networkCalls === 0 &&
+              userSettingsSchema.parse(proof.settings).timeZone ===
+                "America/Los_Angeles",
+            "Offline editor did not save the chosen personal zone"
+          )
+          assert(
+            canonical(await state(owner)) === canonical(before),
+            "Offline editor changed remote data"
+          )
+          const result = (await call(0, { type: "mixed-run" })) as {
+            status: string
+            uploaded: number
+          }
+          assert(
+            result.status === "settled" && result.uploaded === 1,
+            "UI settings intention did not receive one real ACK"
+          )
+          const remote = await state(owner)
+          assert(
+            remote.counts.receipts === before.counts.receipts + 1 &&
+              remote.page.through === before.page.through + 1,
+            "Editor save duplicated remote history"
+          )
+          assert(
+            canonical(
+              remote.page.changes.filter(
+                (change) =>
+                  change.operationId !== remote.page.changes.at(-1)?.operationId
+              )
+            ) === canonical(before.page.changes),
+            "Personal zone edit rewrote earlier plan history"
+          )
+        }
+      )
+      await check(
+        "Apariciones adoptan conflictos reales sin ACK y preservan otros slots con rollback y replay",
+        async () => {
+          const proof = await proveRemoteAppearanceRecovery({
+            interactive,
+            call,
+            snapshot,
+            state: () => state(owner),
+            owner,
+          })
+          assert(
+            proof.adopted === 2 && proof.guarded,
+            "Appearance recovery evidence incomplete"
+          )
+        }
+      )
+      await check(
+        "Retry completo de aparición conserva todos los UUID con respuesta perdida, recarga y ACK únicos",
+        async () => {
+          const proof = await proveRemoteAppearanceRetry({
+            interactive,
+            call,
+            snapshot,
+            state: () => state(owner),
+            owner,
+            reloadSecondary: async () => {
+              const reloaded = new Promise<void>((resolve, reject) => {
+                const timer = setTimeout(() => {
+                  window.removeEventListener("message", listener)
+                  reject(new Error("Owned retry reload timed out"))
+                }, 45000)
+                const listener = (event: MessageEvent) => {
+                  if (
+                    event.source !== secondary ||
+                    event.origin !== fixture.origins[1] ||
+                    event.data?.runId !== fixture.runId ||
+                    event.data?.ready !== true
+                  )
+                    return
+                  clearTimeout(timer)
+                  window.removeEventListener("message", listener)
+                  resolve()
+                }
+                window.addEventListener("message", listener)
+              })
+              await call(1, { type: "reload-local" })
+              await reloaded
+            },
+          })
+          assert(
+            proof.retried === 2 && proof.responseLost && proof.reloaded,
+            "Complete appearance retry evidence missing"
+          )
+        }
+      )
+      await check("Categorías recuperadas con CAS, respuesta perdida, recarga y ACK real único", async () => {
+        const proof = await proveRemoteTagRecovery({ interactive, call, snapshot, state: () => state(owner), owner,
+          reloadSecondary: async () => {
+            const reloaded = new Promise<void>((resolve, reject) => {
+              const listener = (event: MessageEvent) => {
+                if (event.source !== secondary || event.origin !== fixture.origins[1] || event.data?.runId !== fixture.runId || event.data?.ready !== true) return
+                clearTimeout(timer); window.removeEventListener("message", listener); resolve()
+              }
+              const timer = setTimeout(() => { window.removeEventListener("message", listener); reject(new Error("Owned category reload timed out")) }, 45000)
+              window.addEventListener("message", listener)
+            })
+            await call(1, { type: "reload-local" }); await reloaded
+          },
+        })
+        assert(proof.adopted && proof.retried && proof.replayed, "Category recovery proof is incomplete")
+      })
+      await check(
+        "Executor común privado conserva backup y revierte decisiones fallidas sin ACK",
+        async () => {
+          const before = await state(owner)
+          const proof = (await call(1, { type: "plan-resolution-proof" })) as {
+            checks: number
+            variants: number
+          }
+          assert(
+            proof.checks >= 16 && proof.variants === 4,
+            "Common plan resolution checks are incomplete"
+          )
+          assert(
+            canonical(await state(owner)) === canonical(before),
+            "Seeded local proof changed Mongo or manufactured a remote ACK"
+          )
+        }
+      )
+      await check(
+        "Sesión revocada no confirma ni modifica ajustes",
+        async () => {
+          assert(
+            ((await call(1, { type: "session", command: "revoke" })) as Reply)
+              .status === 200,
+            "Owned session revoke failed"
+          )
+          const before = await state(owner)
+          await push(1, batch(), "unauthorized")
+          assert(
+            canonical(await state(owner)) === canonical(before),
+            "Revoked session mutated settings state"
+          )
+        }
+      )
+      if (fullProof) assert(completedChecks === 38, "Complete Next matrix must execute all 38 scenarios")
+      passed = true
+    })()
+      .catch((failure) => {
+        console.error(
+          "Settings Next scenario failed",
+          failure instanceof Error ? failure.message : "Unknown failure"
+        )
+        setStatus("Ha fallado un escenario de la prueba aislada")
+      })
+      .finally(async () => {
+        removeReady()
+        clearTimeout(readyTimer)
+        for (let index = 0; index < 2; index++) {
+          try {
+            assert(
+              (await call(index, { type: "cleanup-local" })) === true,
+              "Owned settings partition cleanup failed"
+            )
+          } catch {
+            passed = false
+          }
+          try {
+            assert(
+              (
+                (await call(index, {
+                  type: "session",
+                  command: "cleanup",
+                })) as Reply
+              ).status === 200,
+              "Owned session cleanup failed"
+            )
+          } catch {
+            passed = false
+          }
+        }
+        secondary?.close()
+        if (passed)
+          setStatus(
+            proofScope === "full-auto" ? "Treinta y ocho escenarios Next6 automáticos correctos; sesiones propias cerradas" : !fullProof ? "Once escenarios Next6 focalizados correctos; sesiones propias cerradas" : "Treinta y ocho escenarios Next6 correctos; sesiones propias cerradas"
+          )
+        await fetch("/fixture/finish", {
+          method: "POST",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: {
+            "Content-Type": "application/json",
+            "x-sync-test-run": fixture.runId,
+          },
+          body: JSON.stringify({ runId: fixture.runId, passed }),
+        })
+      })
+  }
+  return (
+    <main>
+      <h1>Frontera de ajustes Next6</h1>
+      <p id="status" role="status">
+        {status}
+      </p>
+      <button disabled={!config || running} onClick={run}>
+        Ejecutar prueba RPC de ajustes
+      </button>
+      <ol id="results">
+        {rows.map((row) => (
+          <li key={row}>{row}</li>
+        ))}
+      </ol>
+    </main>
+  )
+}

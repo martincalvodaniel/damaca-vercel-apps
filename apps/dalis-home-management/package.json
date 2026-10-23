@@ -1,0 +1,54 @@
+{
+  "name": "@damaca/dalis-home-management",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "db:ensure-indexes": "bun --conditions=react-server run scripts/ensure-indexes.ts",
+    "db:migrate-product-catalog": "bun --conditions=react-server run scripts/migrate-product-catalog.ts",
+    "dev": "next dev --port 3001",
+    "format": "bun ../../scripts/biome-changed.ts check --write",
+    "knip": "knip",
+    "lint": "bun ../../scripts/biome-changed.ts check",
+    "lint:fix": "bun ../../scripts/biome-changed.ts check --write",
+    "start": "next start",
+    "test": "bun test --preload ./test/setup.ts",
+    "test:watch": "bun test --watch --preload ./test/setup.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "better-auth": "catalog:",
+    "mongodb": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "server-only": "catalog:",
+    "swr": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vercel/config": "catalog:",
+    "knip": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  },
+  "knip": {
+    "ignoreDependencies": [
+      "swr"
+    ],
+    "ignoreIssues": {
+      "src/schemas/**/*.ts": [
+        "exports"
+      ]
+    }
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

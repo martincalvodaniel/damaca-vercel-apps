@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(html:not([data-theme="light"]), html:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
+
+:root {
+  color-scheme: light;
+  --background: #fafafa;
+  --foreground: #18181b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #09090b;
+  --foreground: #fafafa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --background: #09090b;
+    --foreground: #fafafa;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dalis-compact-controls :is(button, a[href]) {
+  position: relative;
+  min-height: 2.25rem;
+  height: auto;
+  padding-block: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Extend compact button targets to 44px without adding layout height. */
+.dalis-compact-controls :is(button, a[href])::after {
+  content: "";
+  position: absolute;
+  inset: -0.25rem 0;
+}
+
+.dalis-compact-controls
+  :is(input:not([type="checkbox"]):not([type="color"]), select) {
+  min-height: 2.25rem;
+  height: auto;
+  font-size: 0.875rem;
+}
+
+.dalis-compact-controls summary {
+  min-height: 2.25rem;
+  padding-block: 0.5rem;
+}
+
+.dalis-orderable {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.dalis-orderable :is(input, textarea, select, [contenteditable]) {
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+
+:where(
+  a[href],
+  button,
+  input,
+  select,
+  textarea,
+  summary,
+  [tabindex]
+):focus-visible {
+  outline: 2px solid var(--focus-ring, #047857);
+  outline-offset: 2px;
+}
+
+:root[data-theme="dark"] {
+  --focus-ring: #6ee7b7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --focus-ring: #6ee7b7;
+  }
+}
+
+:where(a[href], button, input, select, textarea, summary, [tabindex]) {
+  scroll-margin-block: 5rem calc(8rem + env(safe-area-inset-bottom));
+}
+
+dialog {
+  overscroll-behavior: contain;
+}
+
+.dalis-plan-form,
+.dalis-date-time-container {
+  container-type: inline-size;
+}
+
+.dalis-compact-controls fieldset {
+  min-inline-size: 0;
+}
+
+@container (width < 16rem) {
+  .dalis-date-time-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dalis-date-time-fields > div {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .dalis-date-time-fields input[type="date"] {
+    order: -1;
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  .dalis-date-time-fields input[type="time"]:not([hidden]) {
+    grid-column: 1;
+  }
+
+  .dalis-plan-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dalis-plan-variants button {
+    flex-wrap: wrap;
+  }
+
+  .dalis-plan-field-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dalis-plan-field-row select {
+    width: 100%;
+    max-width: 100%;
+  }
+}

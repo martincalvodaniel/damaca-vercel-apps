@@ -1,0 +1,28 @@
+# MongoDB Data-Layer Rules
+
+## Boundaries
+
+- Only modules under `src/lib/db/**` may import the MongoDB driver.
+- Features, Server Actions, and route handlers must use repository or data-layer functions instead of calling `db.collection(...)` directly.
+- Register every collection name in `COLLECTION_NAMES` in `collections.ts` and access it through `getCollection()`.
+- Keep MongoDB persistence types inside `src/lib/db/**`; do not expose `ObjectId`, `Db`, `Collection`, or MongoDB filters to feature or UI code.
+- All modules in this directory must begin with `import "server-only"`.
+- The third-party Better Auth adapter may execute its own queries through the guarded database view in `auth-adapter.ts`. This integration is limited to registered auth collections; automatic index requests must match indexes already provisioned by `ensure-indexes.ts` and must never create indexes themselves.
+
+## Connection Lifecycle
+
+- Use `getDatabase()` from `client.ts`; never create a `MongoClient` in feature code or per request.
+- The shared connection promise is cached globally during development so hot reload does not create connection storms.
+- Environment variables must be read through `src/config/env.ts`.
+
+## Index Registration
+
+- Every feature that introduces a collection or a new query/sort/uniqueness pattern must evaluate its index needs in the same change.
+- Add required indexes to `INDEX_SPECS` in `ensure-indexes.ts`; never call `createIndex` from a repository, route handler, Server Action, or component.
+- Every index must have an explicit, stable name that is unique within its collection.
+- Add `unique: true` only when uniqueness is a domain invariant, not merely a performance optimization.
+- Do not add speculative indexes. Each index should correspond to an implemented query, sort, lookup, or uniqueness constraint.
+- Update the index tests whenever index registration rules or concrete specifications change.
+- `getDatabase()` and `bun run db:ensure-indexes` apply ALL registered indexes through `ensureIndexes()` once per process, independently of branch, `NODE_ENV` or Vercel metadata. New required indexes must participate automatically on every deployment, including production.
+- `provisioning: "explicit"` is retained only as a classification for existing scoped operator/readiness services. It MUST NOT exclude an index from automatic startup. Never introduce a branch/environment allowlist for registered indexes.
+- The user explicitly requested identical index bootstrap across local, Preview and Production on 19 October 2026. This supersedes the former Preview/int-only bootstrap rule. Index creation must fail on duplicates or incompatible definitions; never delete, deduplicate, repair data or drop/replace indexes automatically. This code authorization does not authorize agents to run destructive commands or push production.

@@ -1,0 +1,16 @@
+"use client"
+
+import { usePlanSyncEngine } from "@/features/sync/hooks/use-plan-sync-engine"
+import { FixtureHookReporter } from "@fixture/hook-reporter"
+
+export type FixtureHookEngine = ReturnType<typeof usePlanSyncEngine>
+export function FixtureHookEngine({
+  account,
+  report,
+}: {
+  account: { userId: string; epoch: string }
+  report(engine: FixtureHookEngine): void
+}) {
+  const engine = usePlanSyncEngine(account)
+  return <FixtureHookReporter engine={engine} report={report} />
+}

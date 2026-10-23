@@ -1,0 +1,506 @@
+"use client"
+
+import type { z } from "zod"
+import { callServer } from "next/dist/client/app-call-server"
+import { unstable_isUnrecognizedActionError } from "next/navigation"
+import { startTransition } from "react"
+import { OFFLINE_ACCOUNT_KEY } from "@/config/pwa"
+import { syncProtocolHeader } from "@/config/sync-protocol"
+import { createHttpSyncTransportV3 } from "@/features/sync/http-transport-v3"
+import { createHttpSyncTransportV4 } from "@/features/sync/http-transport-v4"
+import { dispatchFixtureRetiredOperations } from "@fixture/retired-client"
+import { dispatchSyncOperationsV4 } from "@/features/sync/client-action-v4"
+import { SyncTransportError } from "@/features/sync/transport-error"
+
+import { openLocalPlanSyncRuntime } from "@/features/sync/local-runtime-v2"
+import { createMixedSyncClientV4 } from "@/features/sync/mixed-sync-client-v4"
+import { readAccountBackup } from "@/features/workspace/local-backup"
+import { requireActiveAccount } from "@/features/workspace/require-active-account"
+import {
+  ACCOUNT_CONTROL_DATABASE,
+  activatePreparedAccount,
+  readAccountControl,
+} from "@/lib/local-db/account-control"
+import { localDatabaseName, openLocalDatabase } from "@/lib/local-db/client"
+import { prepareLocalCommonPlanRelease } from "@/lib/local-db/common-plan-local-release"
+import { LocalMixedSyncStore } from "@/lib/local-db/mixed-sync-store"
+import { LocalOutbox } from "@/lib/local-db/outbox"
+import { encodeSyncProtocolRange } from "@/lib/sync/sync-protocol"
+import {
+  nextSyncDeviceCommandSchema,
+  nextSyncMissingActionId,
+} from "@/schemas/next-sync-test"
+import { workspaceIdentitySchema } from "@/schemas/workspace"
+import {
+  hookState,
+  mountHook,
+  observeHook,
+  quietHook,
+  synchronizeHook,
+  unmountHook,
+} from "@fixture/hook-host"
+
+import { saveLocalPlan } from "@/features/plans/local-plans"
+
+const markerKey = "dalis:account-change"
+let owned: {
+  runId: string
+  userId: string
+  epoch: string | null
+  markerBefore: string | null
+  markerAfter: string | null
+} | null = null
+let client: ReturnType<typeof createMixedSyncClientV4> | null = null
+
+function account() {
+  if (!owned?.epoch || !client)
+    throw new Error("Fixture local account is not prepared")
+  return { userId: owned.userId, epoch: owned.epoch }
+}
+async function removeDatabase(name: string) {
+  await new Promise<void>((resolve, reject) => {
+    const request = indexedDB.deleteDatabase(name)
+    request.onsuccess = () => resolve()
+    request.onerror = () => reject(request.error)
+    request.onblocked = () =>
+      reject(new Error("Fixture local cleanup is blocked"))
+  })
+}
+
+export async function executeLocalFixtureCommand(
+  runId: string,
+  input: z.infer<typeof nextSyncDeviceCommandSchema>
+) {
+  const command = nextSyncDeviceCommandSchema.parse(input)
+  if (owned && owned.runId !== runId)
+    throw new Error("Fixture local run changed")
+  if (command.type === "prepare-local") {
+    const identity = await fetch("/fixture/identity", {
+      headers: { "x-sync-test-run": runId },
+      cache: "no-store",
+    })
+    if (
+      !identity.ok ||
+      workspaceIdentitySchema.parse(await identity.json()).userId !==
+        command.userId
+    )
+      throw new Error("Fixture local identity is not authenticated")
+    if (owned) {
+      if (owned.userId !== command.userId)
+        throw new Error("Fixture local account changed")
+      await requireActiveAccount(account())
+      return account()
+    }
+    // Reject existing partitions before account-control can create or activate any state.
+    if (
+      (await indexedDB.databases()).length ||
+      localStorage.getItem(OFFLINE_ACCOUNT_KEY) !== null
+    )
+      throw new Error("Foreign local state blocks the fixture")
+    owned = {
+      runId,
+      userId: command.userId,
+      epoch: null,
+      markerBefore: localStorage.getItem(markerKey),
+      markerAfter: null,
+    }
+    const initial = await readAccountControl()
+    if (initial.userId !== null || initial.logoutPending)
+      throw new Error("Foreign local account blocks the fixture")
+    const active = await activatePreparedAccount(
+      command.userId,
+      new Date().toISOString(),
+      initial.epoch
+    )
+    owned.epoch = active.epoch
+    owned.markerAfter = localStorage.getItem(markerKey)
+    const database = await openLocalDatabase(command.userId)
+    try {
+      const release = await prepareLocalCommonPlanRelease(
+        database,
+        command.userId,
+        new Date().toISOString()
+      )
+      if (release.status !== "ready")
+        throw new Error(
+          "Empty fixture partition could not prepare the plan release"
+        )
+    } finally {
+      database.close()
+    }
+    client = createMixedSyncClientV4({
+      userId: command.userId,
+      epoch: active.epoch,
+    })
+    return account()
+  }
+  if (command.type === "cleanup-local") {
+    await unmountHook()
+    if (!owned) return true
+    const current = await readAccountControl()
+    if (
+      owned.epoch
+        ? current.userId !== owned.userId ||
+          current.epoch !== owned.epoch ||
+          current.logoutPending
+        : current.userId !== null || current.logoutPending
+    )
+      throw new Error("Fixture local cleanup account changed")
+    await removeDatabase(localDatabaseName(owned.userId))
+    await removeDatabase(ACCOUNT_CONTROL_DATABASE)
+    if (localStorage.getItem(markerKey) === owned.markerAfter) {
+      if (owned.markerBefore === null) localStorage.removeItem(markerKey)
+      else localStorage.setItem(markerKey, owned.markerBefore)
+    }
+    client = null
+    owned = null
+    return true
+  }
+  const active = account()
+  await requireActiveAccount(active)
+  switch (command.type) {
+    case "legacy-missing-action-run":
+    case "retired-mixed-action-run": {
+      const missing = command.type === "legacy-missing-action-run"
+      const identity = await fetch("/api/sync/identity", {
+        credentials: "same-origin",
+        cache: "no-store",
+      })
+      if (
+        !identity.ok ||
+        identity.headers.get(syncProtocolHeader) !==
+          encodeSyncProtocolRange(4) ||
+        workspaceIdentitySchema.parse(await identity.json()).userId !==
+          active.userId
+      )
+        throw new Error(
+          "Missing-action proof requires the owned current identity"
+        )
+      const actionId = nextSyncMissingActionId(runId)
+      const probe = missing
+        ? await fetch(location.pathname + location.search, {
+            method: "POST",
+            credentials: "same-origin",
+            cache: "no-store",
+            headers: {
+              "Next-Action": actionId,
+              "Content-Type": "text/plain;charset=UTF-8",
+            },
+            body: "[]",
+            signal: AbortSignal.timeout(15000),
+          })
+        : new Response(null, { status: 200 })
+      const actionNotFound = probe.headers.get("x-nextjs-action-not-found")
+      await probe.body?.cancel()
+      if (missing && (probe.status !== 409 || actionNotFound !== "1"))
+        throw new Error(
+          "Missing-action candidate is not absent from this fixture"
+        )
+      let dispatches = 0,
+        unrecognized = 0,
+        identityReads = 0,
+        pageReads = 0
+      const sendMissing = (input: unknown) =>
+        new Promise<never>((_resolve, reject) => {
+          dispatches++
+          startTransition(async () => {
+            try {
+              await callServer(actionId, [input])
+              reject(new Error("Absent action unexpectedly returned a result"))
+            } catch (error) {
+              if (unstable_isUnrecognizedActionError(error)) unrecognized++
+              reject(error)
+            }
+          })
+        })
+      const store = await LocalMixedSyncStore.open(active.userId)
+      try {
+        const cursor = await store.readPullCursor()
+        if (cursor.through !== null)
+          throw new Error("Prior handshake requires a completed cursor")
+        // A read-only captured v1 handshake lets the old client reach its missing action reference.
+        const capturedIdentity = Object.freeze({ userId: active.userId })
+        const capturedPage = Object.freeze({
+          version: 2,
+          changes: Object.freeze([]),
+          nextAfter: cursor.after,
+          through: cursor.after,
+          hasMore: false,
+        })
+        const priorHandshakeFetch: typeof fetch = async (input) => {
+          const url = new URL(String(input), location.origin)
+          if (url.origin !== location.origin)
+            throw new Error("Prior handshake origin changed")
+          if (
+            url.pathname === "/api/sync/identity" &&
+            !url.search &&
+            ++identityReads === 1
+          )
+            return Response.json(capturedIdentity, {
+              headers: { [syncProtocolHeader]: encodeSyncProtocolRange(3) },
+            })
+          if (
+            url.pathname === "/api/sync/changes" &&
+            ++pageReads === 1 &&
+            url.searchParams.get("expectedUserId") === active.userId &&
+            url.searchParams.get("after") === String(cursor.after) &&
+            url.searchParams.get("limit") === "50" &&
+            [...url.searchParams].length === 3
+          )
+            return Response.json(capturedPage, {
+              headers: { [syncProtocolHeader]: encodeSyncProtocolRange(3) },
+            })
+          throw new Error(
+            "Prior handshake exceeded its captured identity and page"
+          )
+        }
+        const runLegacy = async (fetchRequest: typeof fetch) => {
+          const runtime = await openLocalPlanSyncRuntime(
+            active,
+            createHttpSyncTransportV3(
+              active.userId,
+              missing
+                ? sendMissing
+                : async (input) => {
+                    dispatches++
+                    return dispatchFixtureRetiredOperations(input)
+                  },
+              fetchRequest
+            )
+          )
+          try {
+            return await runtime.run()
+          } finally {
+            await runtime.close()
+          }
+        }
+        const first = await runLegacy(priorHandshakeFetch)
+        const afterFirst = {
+          backup: await readAccountBackup(active),
+          cursor: await store.readPullCursor(),
+        }
+        const second = await runLegacy(fetch)
+        const afterSecond = {
+          backup: await readAccountBackup(active),
+          cursor: await store.readPullCursor(),
+        }
+        await requireActiveAccount(active)
+        return {
+          probeStatus: probe.status,
+          actionNotFound,
+          handshake: "captured-prior-v3",
+          dispatches,
+          unrecognized,
+          identityReads,
+          pageReads,
+          first,
+          second,
+          afterFirst,
+          afterSecond,
+        }
+      } finally {
+        store.close()
+      }
+    }
+    case "protocol-matrix": {
+      const rejectsBeforeBody = async (
+        protocol: 3 | 4,
+        path: "identity" | "pull"
+      ) => {
+        let bodies = 0
+        const request: typeof fetch = async (input, init) => {
+          const response = await fetch(input, init)
+          if (!response.ok)
+            throw new Error("Fixture matrix requires an authenticated response")
+          const candidate = new Response("invalid-body", {
+            headers: {
+              [syncProtocolHeader]: encodeSyncProtocolRange(
+                protocol === 4 ? 3 : 4
+              ),
+            },
+          })
+          candidate.json = async () => {
+            bodies++
+            throw new Error("Incompatible body was consumed")
+          }
+          return candidate
+        }
+        const transport =
+          protocol === 4
+            ? createHttpSyncTransportV4(
+                active.userId,
+                dispatchSyncOperationsV4,
+                request
+              )
+            : createHttpSyncTransportV3(
+                active.userId,
+                dispatchSyncOperationsV4,
+                request
+              )
+        let rejected = false
+        try {
+          if (path === "identity") await transport.readIdentity()
+          else await transport.pull({ after: 0, through: null, limit: 50 })
+        } catch (error) {
+          rejected =
+            error instanceof SyncTransportError &&
+            error.reason === "update_required"
+        }
+        if (!rejected || bodies !== 0)
+          throw new Error("Fixture matrix consumed an incompatible response")
+      }
+      for (const protocol of [3, 4] as const)
+        for (const path of ["identity", "pull"] as const)
+          await rejectsBeforeBody(protocol, path)
+      return { cases: 4, bodies: 0 }
+    }
+    case "lost-move-response-run": {
+      let lost = false
+      const runtime = await openLocalPlanSyncRuntime(
+        active,
+        createHttpSyncTransportV4(active.userId, async (input) => {
+          const reply = await dispatchSyncOperationsV4(input)
+          if (!lost) {
+            lost = true
+            throw new Error("Fixture dropped a committed action response")
+          }
+          return reply
+        })
+      )
+      try {
+        return await runtime.run()
+      } finally {
+        await runtime.close()
+      }
+    }
+    case "hook-mount":
+      return mountHook(active)
+    case "hook-rerender":
+      return mountHook(active, true)
+    case "hook-state":
+      return hookState()
+    case "hook-observe":
+      return observeHook(command.state)
+    case "hook-sync":
+      return synchronizeHook()
+    case "hook-unmount":
+      return unmountHook()
+    case "hook-quiet":
+      return quietHook()
+    case "rotate-local": {
+      const oldClient = client!
+      const previous = await readAccountControl()
+      if (
+        !owned ||
+        previous.userId !== active.userId ||
+        previous.epoch !== active.epoch ||
+        previous.logoutPending
+      )
+        throw new Error("Fixture epoch rotation account changed")
+      const rotated = await activatePreparedAccount(
+        active.userId,
+        new Date().toISOString(),
+        active.epoch
+      )
+      // Track the durable epoch immediately so cleanup follows the committed account control.
+      owned.epoch = rotated.epoch
+      owned.markerAfter = localStorage.getItem(markerKey)
+      client = createMixedSyncClientV4({
+        userId: active.userId,
+        epoch: rotated.epoch,
+      })
+      const current = await readAccountControl()
+      if (
+        current.userId !== owned.userId ||
+        current.epoch !== owned.epoch ||
+        current.logoutPending ||
+        current.epoch === active.epoch
+      )
+        throw new Error("Fixture rotated account control is inconsistent")
+      await requireActiveAccount(account())
+      const rejected = async (work: () => Promise<unknown>) => {
+        try {
+          await work()
+          return false
+        } catch (error) {
+          if (
+            !(error instanceof Error) ||
+            error.message !== "Local account changed during the operation"
+          )
+            throw new Error(
+              "Fixture observed an unrelated old-client rejection"
+            )
+          return true
+        }
+      }
+      const oldAccountRejected = await rejected(() =>
+        requireActiveAccount(active)
+      )
+      const oldSummaryRejected = await rejected(() => oldClient.readSummary())
+      const oldAttempt = oldClient.createAttempt(async () =>
+        oldClient.readSummary()
+      )
+      let oldAttemptRejected = false
+      try {
+        oldAttemptRejected = await rejected(() => oldAttempt.run())
+      } finally {
+        oldAttempt.stop()
+      }
+      await requireActiveAccount(account())
+      return {
+        previousEpoch: active.epoch,
+        currentEpoch: rotated.epoch,
+        controlActive: true,
+        oldAccountRejected,
+        oldSummaryRejected,
+        oldAttemptRejected,
+      }
+    }
+    case "save-plan":
+      return saveLocalPlan(
+        { ...active, itemCount: 0, offlineReady: false },
+        command.request
+      )
+    case "commit-local": {
+      const outbox = await LocalOutbox.open(active.userId)
+      try {
+        await requireActiveAccount(active)
+        if (command.command.type === "item.create")
+          return await outbox.commitItemCommand(command.command)
+        if (
+          command.command.type === "tag.save" ||
+          command.command.type === "item-view.set" ||
+          command.command.type === "task.move"
+        )
+          return await outbox.commitPreferenceCommand(command.command)
+        throw new Error("Fixture local command is unsupported")
+      } finally {
+        outbox.close()
+      }
+    }
+    case "mixed-summary":
+      return client!.readSummary()
+    case "mixed-run": {
+      const attempt = client!.createAttempt(async () => client!.readSummary())
+      try {
+        return await attempt.run()
+      } finally {
+        attempt.stop()
+      }
+    }
+    case "local-snapshot": {
+      const backup = await readAccountBackup(active)
+      const store = await LocalMixedSyncStore.open(active.userId)
+      try {
+        const cursor = await store.readPullCursor()
+        const summary = await client!.readSummary()
+        await requireActiveAccount(active)
+        return { backup, cursor, summary }
+      } finally {
+        store.close()
+      }
+    }
+    default:
+      throw new Error("Fixture command is not local")
+  }
+}

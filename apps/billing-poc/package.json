@@ -1,0 +1,50 @@
+{
+  "name": "@damaca/billing-poc",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "db:ensure-indexes": "bun run scripts/ensureIndexes.ts",
+    "dev": "next dev --port 3000",
+    "format": "bun ../../scripts/biome-changed.ts check --write",
+    "knip": "knip",
+    "lint": "bun ../../scripts/biome-changed.ts check",
+    "lint:fix": "bun ../../scripts/biome-changed.ts check --write",
+    "load-data:absences": "bun run scripts/absences/loadSampleAbsences.ts",
+    "load-data:clients": "bun run scripts/clients/loadSampleClients.ts",
+    "load-data:month": "bun run scripts/payments/loadRandomDataForMonth.ts",
+    "load-data:year": "bun run scripts/payments/loadRandomDataForYear.ts",
+    "migrate:absences:partOfDay": "bun run scripts/absences/migrateBackfillPartOfDay.ts",
+    "start": "next start",
+    "test": "bun test --preload ./test/setup.ts",
+    "test:watch": "bun test --watch --preload ./test/setup.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "better-auth": "catalog:",
+    "mongodb": "catalog:",
+    "next": "catalog:",
+    "pdf-lib": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "server-only": "catalog:",
+    "swr": "catalog:",
+    "xlsx": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vercel/config": "catalog:",
+    "knip": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

@@ -1,0 +1,20 @@
+"use client"
+
+import { useEffect } from "react"
+import type { FixtureHookEngine } from "@fixture/hook-engine"
+
+export function FixtureHookReporter({
+  report,
+  engine,
+}: {
+  engine: FixtureHookEngine
+  report(engine: FixtureHookEngine): void
+}) {
+  useEffect(() => report(engine), [engine, report])
+  return (
+    <p role="status">
+      Motor mixto de prueba:{" "}
+      {engine.busy ? "sincronizando" : engine.error ? "error" : "preparado"}
+    </p>
+  )
+}

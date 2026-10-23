@@ -1,0 +1,104 @@
+"use client"
+
+import { useEffect, useId, useState } from "react"
+import { CreateItemButton } from "@/components/shared/create-item-button"
+import { WorkspaceNavigation } from "@/components/shared/workspace-navigation"
+import { DelayedStatus } from "@/components/ui/delayed-status"
+import { commonPlanReleaseEnabled } from "@/config/common-plan-release"
+import { workspaceDestinations } from "@/config/navigation"
+import { CalendarScreen } from "@/features/calendar/components/calendar-screen"
+import { useCalendarDate } from "@/features/calendar/hooks/use-calendar-date"
+import { PlanComposer } from "@/features/plans/components/plan-composer"
+import { SyncIssueNotice } from "@/features/sync/components/sync-issue-notice"
+import { WorkspaceSyncProvider } from "@/features/sync/components/workspace-sync-provider"
+import { TagsScreen } from "@/features/tags/components/tags-screen"
+import { CreateItemDialog } from "@/features/workspace/components/create-item-dialog"
+import { DeviceSettings } from "@/features/workspace/components/device-settings"
+import { UpdateNotice } from "@/features/workspace/components/update-notice"
+import { WorkspaceHeading } from "@/features/workspace/components/workspace-heading"
+import { WorkspaceOverview } from "@/features/workspace/components/workspace-overview"
+import { useAccountProfile } from "@/features/workspace/hooks/use-account-profile"
+import { useLocalAccount } from "@/features/workspace/hooks/use-local-account"
+import { useWorkspaceView } from "@/features/workspace/hooks/use-workspace-view"
+import { handleWorkspaceNavigation } from "@/features/workspace/navigation"
+
+export function Workspace() {
+  const Composer = commonPlanReleaseEnabled ? PlanComposer : CreateItemDialog
+  const contentId = useId()
+  const view = useWorkspaceView()
+  const calendarDate = useCalendarDate()
+  const destination =
+    workspaceDestinations.find((entry) => entry.id === view) ??
+    workspaceDestinations[0]
+  const { account, refresh, isLoading } = useLocalAccount()
+  const profile = useAccountProfile(account)
+  const [composerEpoch, setComposerEpoch] = useState<string | null>(null)
+  useEffect(() => {
+    document.addEventListener("click", handleWorkspaceNavigation)
+    return () =>
+      document.removeEventListener("click", handleWorkspaceNavigation)
+  }, [])
+  if (!account && isLoading)
+    return (
+      <div data-offline-shell="dalis" className="min-h-dvh">
+        <DelayedStatus>Abriendo tu espacio…</DelayedStatus>
+      </div>
+    )
+  return (
+    <WorkspaceSyncProvider account={account}>
+      <div data-offline-shell="dalis" className="min-h-dvh">
+        <a
+          href={`#${contentId}`}
+          className="sr-only z-50 rounded-xl bg-white p-4 text-emerald-800 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          Saltar al contenido
+        </a>
+        <WorkspaceNavigation
+          profile={profile}
+          activeView={view}
+          createAction={
+            account ? (
+              <CreateItemButton
+                onClick={() => setComposerEpoch(account.epoch)}
+              />
+            ) : undefined
+          }
+        />
+        {account && composerEpoch === account.epoch ? (
+          <Composer
+            key={account.epoch}
+            account={account}
+            initialDate={
+              view === "calendar" ? (calendarDate ?? undefined) : undefined
+            }
+            onClose={() => setComposerEpoch(null)}
+            onSaved={() => {
+              void refresh()
+            }}
+          />
+        ) : null}
+        <main
+          id={contentId}
+          tabIndex={-1}
+          className="mx-auto w-full min-w-0 max-w-3xl wrap-anywhere px-3 pt-4 pb-[calc(18rem+env(safe-area-inset-bottom))] sm:px-8 md:py-12"
+        >
+          <WorkspaceHeading view={view} />
+          <p className="hidden md:block mt-3 mb-6 max-w-xl text-zinc-600 dark:text-zinc-400">
+            {destination.description}
+          </p>
+          {view === "settings" ? (
+            <DeviceSettings profile={profile} />
+          ) : view === "tags" ? (
+            <TagsScreen />
+          ) : view === "calendar" ? (
+            <CalendarScreen />
+          ) : (
+            <WorkspaceOverview />
+          )}
+          <UpdateNotice />
+          {view !== "settings" ? <SyncIssueNotice /> : null}
+        </main>
+      </div>
+    </WorkspaceSyncProvider>
+  )
+}

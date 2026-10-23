@@ -1,0 +1,105 @@
+"use client"
+
+import { dispatchSyncOperationsV5 } from "@/features/sync/client-action-v5"
+import { dispatchFixtureRetiredOperations } from "@fixture/retired-client"
+import { dispatchSyncOperationsV4 } from "@/features/sync/client-action-v4"
+import type { z } from "zod"
+import { nextSyncDeviceCommandSchema } from "@/schemas/next-sync-test"
+
+import { executeLocalFixtureCommand } from "@fixture/local-client"
+
+export async function fixtureFetch(
+  runId: string,
+  path: string,
+  input?: unknown
+) {
+  const response = await fetch(path, {
+    method: input === undefined ? "GET" : "POST",
+    headers: {
+      "x-sync-test-run": runId,
+      ...(input === undefined ? {} : { "Content-Type": "application/json" }),
+    },
+    body: input === undefined ? undefined : JSON.stringify(input),
+    credentials: "same-origin",
+    cache: "no-store",
+  })
+  const value = await response.json()
+  return {
+    status: response.status,
+    value,
+    protocol: response.headers.get("x-dalis-sync-protocol"),
+  }
+}
+async function executeCommand(
+  runId: string,
+  input: z.infer<typeof nextSyncDeviceCommandSchema>
+) {
+  const command = nextSyncDeviceCommandSchema.parse(input)
+  if (command.type === "cleanup-local")
+    return executeLocalFixtureCommand(runId, command)
+  if (command.type === "session" && command.command === "cleanup")
+    return fixtureFetch(runId, "/fixture/session", {
+      runId,
+      command: command.command,
+    })
+  const guarded = await fixtureFetch(runId, "/fixture/guard")
+  if (guarded.status !== 200)
+    throw new Error("Fixture blocked before touching foreign auth cookies")
+  if (
+    [
+      "prepare-local",
+      "commit-local",
+      "save-plan",
+      "mixed-summary",
+      "mixed-run",
+      "legacy-missing-action-run",
+      "retired-mixed-action-run",
+      "lost-move-response-run",
+      "protocol-matrix",
+      "rotate-local",
+      "hook-mount",
+      "hook-rerender",
+      "hook-state",
+      "hook-observe",
+      "hook-sync",
+      "hook-unmount",
+      "hook-quiet",
+      "local-snapshot",
+    ].includes(command.type)
+  )
+    return executeLocalFixtureCommand(runId, command)
+  if (command.type === "bootstrap")
+    return fixtureFetch(runId, "/fixture/bootstrap", {
+      runId,
+      identity: command.identity,
+    })
+  if (command.type === "session")
+    return fixtureFetch(runId, "/fixture/session", {
+      runId,
+      command: command.command,
+    })
+  if (command.type === "identity")
+    return fixtureFetch(runId, "/fixture/identity")
+  if (command.type === "pull")
+    return fixtureFetch(
+      runId,
+      `/fixture/changes?expectedUserId=${encodeURIComponent(command.userId)}&after=0&limit=100`
+    )
+  if (command.type === "push") return dispatchSyncOperationsV4(command.input)
+  if (command.type === "inactive-recurring-push")
+    return dispatchSyncOperationsV5(command.input)
+  if (command.type !== "retired-push")
+    throw new Error("Fixture command is unsupported")
+  return dispatchFixtureRetiredOperations(command.input)
+}
+
+let previous: Promise<unknown> = Promise.resolve()
+export function executeFixtureCommand(
+  runId: string,
+  input: z.infer<typeof nextSyncDeviceCommandSchema>
+): Promise<unknown> {
+  const command = nextSyncDeviceCommandSchema.parse(input)
+  const result = previous.then(() => executeCommand(runId, command))
+  previous = result.catch(() => undefined)
+  return result
+}

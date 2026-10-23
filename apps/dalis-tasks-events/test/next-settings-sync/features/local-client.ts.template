@@ -1,0 +1,996 @@
+"use client"
+import {proveCategoryPlacementResolutionUi} from "@fixture/category-placement-resolution-ui"
+import {readCategoryPlacementIncidentComparison,resolveCategoryPlacementIncident} from "@/features/sync/local-category-placement-resolution"
+import {proveRecurringPlacementResolutionUi} from "@fixture/recurring-placement-resolution-ui"
+import {readRecurringPlacementIncidentComparison,resolveRecurringPlacementIncident} from "@/features/sync/local-recurring-placement-resolution"
+import {proveMixedPlacementResolutionUi} from "@fixture/mixed-placement-resolution-ui"
+import {readMixedPlacementIncidentComparison,resolveMixedPlacementIncident} from "@/features/sync/local-mixed-placement-resolution"
+import { proveAppearanceCohortResolutionUi } from "@fixture/appearance-cohort-resolution-ui"
+import { readPlanOccurrenceCohortComparison, resolvePlanOccurrenceCohort } from "@/features/sync/local-plan-occurrence-cohort-resolution"
+import {provePlacementResolutionUi} from "@fixture/placement-resolution-ui"
+import {moveLocalPlan} from "@/features/plans/local-plans"
+import {readPlacementIncidentComparison,resolvePlacementIncident} from "@/features/sync/local-placement-resolution"
+import { proveTagDeletionResolutionUi } from "@fixture/tag-delete-resolution-ui"
+import { readTagDeletionIncidentComparison,resolveTagDeletionIncident } from "@/features/sync/local-tag-delete-resolution"
+import { proveTagOrderResolutionUi } from "@fixture/tag-order-resolution-ui"
+import { readTagOrderIncidentComparison,resolveTagOrderIncident } from "@/features/sync/local-tag-order-resolution"
+import { proveItemViewResolutionUi } from "@fixture/item-view-resolution-ui"
+import { readItemViewIncidentComparison, resolveItemViewIncident } from "@/features/sync/local-item-view-resolution"
+import { provePlanCategoryResolutionUi } from "@fixture/plan-category-resolution-ui"
+import { remotePushInputV2Schema } from "@/schemas/remote-push-v2"
+import { readPlanCategoryIncidentComparison, resolvePlanCategoryIncident } from "@/features/sync/local-plan-category-resolution"
+import { proveLocalAppearanceRetry } from "@fixture/appearance-retry-local-proof"
+import { proveAppearanceCopyResolutionUi } from "@fixture/appearance-copy-resolution-ui"
+import { resolvePlanOccurrenceCopy } from "@/features/sync/local-plan-occurrence-copy"
+import { resolvePlanOccurrenceIncident } from "@/features/sync/local-plan-occurrence-resolution"
+import { proveLocalAppearanceResolution } from "@fixture/appearance-resolution-local-proof"
+import { proveSettingsResolutionUi } from "@fixture/settings-resolution-ui"
+import { proveTagResolutionUi } from "@fixture/tag-resolution-ui"
+import { resolveTagIncident } from "@/features/sync/local-tag-resolution"
+import { resolveSettingsIncident } from "@/features/sync/local-settings-resolution"
+import { proveLocalSettingsResolution } from "@fixture/settings-resolution-local-proof"
+import { proveCommonPlanResolutionUi } from "@fixture/common-plan-resolution-ui"
+import { provePlanRecovery } from "@fixture/plan-recovery-proof"
+import { proveSettingsEditor } from "@fixture/settings-editor-host"
+import { callServer } from "next/dist/client/app-call-server"
+import { unstable_isUnrecognizedActionError } from "next/navigation"
+import { startTransition } from "react"
+import { syncProtocolHeader } from "@/config/sync-protocol"
+import { encodeSyncProtocolRange } from "@/lib/sync/sync-protocol"
+import { dispatchFixtureRetiredOperations } from "@fixture/retired-client"
+import { createHttpRecurringSyncTransport } from "@/features/sync/http-recurring-transport"
+import { openLocalRecurringSyncRuntime } from "@/features/sync/local-recurring-runtime"
+import { LocalSyncStore } from "@/lib/local-db/sync-store"
+import {
+  readSyncIncidents,
+  resolveSyncIncident,
+} from "@/features/sync/local-incidents"
+import type { z } from "zod"
+import { dispatchSyncOperationsV6 } from "@/features/sync/client-action-v6"
+import { createHttpSettingsSyncTransport } from "@/features/sync/http-recurring-transport"
+import { openLocalSettingsSyncRuntime } from "@/features/sync/local-recurring-runtime"
+import {
+  hookState,
+  mountHook,
+  observeHook,
+  quietHook,
+  synchronizeHook,
+  unmountHook,
+} from "@fixture/hook-host"
+import { createMixedSyncClientV6 } from "@/features/sync/mixed-sync-client-v6"
+import { prepareLocalCommonPlanRelease } from "@/lib/local-db/common-plan-local-release"
+import {
+  saveLocalPlan,
+  changeLocalPlanProgress,
+  deleteLocalPlan,
+  changeLocalPlanOccurrence,
+} from "@/features/plans/local-plans"
+import {
+  readLocalPersonalSettings,
+  saveLocalPersonalSettings,
+} from "@/features/workspace/local-personal-settings"
+import { requireActiveAccount } from "@/features/workspace/require-active-account"
+import {
+  ACCOUNT_CONTROL_DATABASE,
+  activatePreparedAccount,
+  readAccountControl,
+} from "@/lib/local-db/account-control"
+import { readLocalRecurringBackup } from "@/lib/local-db/backup"
+import { localDatabaseName, openLocalDatabase } from "@/lib/local-db/client"
+import { LocalMixedSyncStore } from "@/lib/local-db/mixed-sync-store"
+import { LocalOutbox } from "@/lib/local-db/outbox"
+import {
+  nextSyncDeviceCommandSchema,
+  nextSyncMissingActionId,
+  nextSyncLocalOwnershipSchema,
+} from "@/schemas/next-sync-test"
+import { workspaceIdentitySchema } from "@/schemas/workspace"
+
+const markerKey = "dalis:account-change"
+const ownershipKey = "dalis:next-settings-owned"
+let owned: {
+  runId: string
+  userId: string
+  epoch: string | null
+  markerBefore: string | null
+  markerAfter: string | null
+} | null = null
+let client: ReturnType<typeof createMixedSyncClientV6> | null = null
+function account() {
+  if (!owned?.epoch || !client)
+    throw new Error("Settings fixture local account is not prepared")
+  return { userId: owned.userId, epoch: owned.epoch }
+}
+async function removeDatabase(name: string) {
+  await new Promise<void>((resolve, reject) => {
+    const request = indexedDB.deleteDatabase(name)
+    request.onsuccess = () => resolve()
+    request.onerror = () => reject(request.error)
+    request.onblocked = () =>
+      reject(new Error("Settings fixture cleanup is blocked"))
+  })
+}
+async function readFixtureBackup(active: { userId: string; epoch: string }) {
+  await requireActiveAccount(active)
+  const database = await openLocalDatabase(active.userId)
+  try {
+    return await readLocalRecurringBackup(
+      database,
+      active.userId,
+      new Date().toISOString()
+    )
+  } finally {
+    database.close()
+  }
+}
+
+export async function executeLocalFixtureCommand(
+  runId: string,
+  input: z.infer<typeof nextSyncDeviceCommandSchema>
+) {
+  const command = nextSyncDeviceCommandSchema.parse(input)
+  if (!owned && sessionStorage.getItem(ownershipKey)) {
+    owned = nextSyncLocalOwnershipSchema.parse(
+      JSON.parse(sessionStorage.getItem(ownershipKey)!)
+    )
+    if (owned.epoch)
+      client = createMixedSyncClientV6({
+        userId: owned.userId,
+        epoch: owned.epoch,
+      })
+  }
+  if (owned && owned.runId !== runId)
+    throw new Error("Settings fixture local run changed")
+  if (
+    command.type === "prepare-local" ||
+    command.type === "prepare-legacy-local"
+  ) {
+    const identity = await fetch("/fixture/identity", {
+      headers: { "x-sync-test-run": runId },
+      cache: "no-store",
+    })
+    if (
+      !identity.ok ||
+      workspaceIdentitySchema.parse(await identity.json()).userId !==
+        command.userId
+    )
+      throw new Error("Settings fixture local identity mismatch")
+    const databases = await indexedDB.databases()
+    if (
+      databases.some(
+        (value) =>
+          value.name === ACCOUNT_CONTROL_DATABASE ||
+          value.name === localDatabaseName(command.userId)
+      )
+    )
+      throw new Error("Foreign partition blocks settings fixture")
+    owned = {
+      runId,
+      userId: command.userId,
+      epoch: null,
+      markerBefore: localStorage.getItem(markerKey),
+      markerAfter: null,
+    }
+    const initial = await readAccountControl()
+    if (initial.userId !== null || initial.logoutPending)
+      throw new Error("Foreign account control blocks settings fixture")
+    const active = await activatePreparedAccount(
+      command.userId,
+      new Date().toISOString(),
+      initial.epoch
+    )
+    owned.epoch = active.epoch
+    owned.markerAfter = localStorage.getItem(markerKey)
+    const database = await openLocalDatabase(command.userId)
+    try {
+      const release = await prepareLocalCommonPlanRelease(
+        database,
+        command.userId,
+        new Date().toISOString()
+      )
+      if (release.status !== "ready")
+        throw new Error(
+          "Empty settings partition could not prepare plan release"
+        )
+    } finally {
+      database.close()
+    }
+    client = createMixedSyncClientV6({
+      userId: command.userId,
+      epoch: active.epoch,
+    })
+    if (command.type === "prepare-legacy-local") {
+      const historicalFetch: typeof fetch = (input, init) => {
+        const path = String(input)
+          .replace("/api/sync/identity", "/fixture/legacy-identity")
+          .replace("/api/sync/changes", "/fixture/legacy-changes")
+        const url = new URL(path, location.origin)
+        if (url.pathname === "/fixture/legacy-changes")
+          url.searchParams.set("through", "0")
+        return fetch(url, {
+          ...init,
+          headers: { ...init?.headers, "x-sync-test-run": runId },
+        })
+      }
+      const bootstrap = await openLocalRecurringSyncRuntime(
+        account(),
+        createHttpRecurringSyncTransport(
+          command.userId,
+          async () => {
+            throw new Error("Empty obsolete checkpoint cannot send")
+          },
+          historicalFetch
+        )
+      )
+      try {
+        const result = await bootstrap.run()
+        if (
+          result.status !== "settled" ||
+          result.uploaded !== 0 ||
+          result.downloaded !== 0
+        )
+          throw new Error("Historical generation-five checkpoint failed")
+      } finally {
+        await bootstrap.close()
+      }
+    }
+    sessionStorage.setItem(ownershipKey, JSON.stringify(owned))
+    return account()
+  }
+  if (command.type === "cleanup-local") {
+    await unmountHook()
+    if (!owned) return true
+    const control = await readAccountControl()
+    if (
+      owned.epoch
+        ? control.userId !== owned.userId ||
+          control.epoch !== owned.epoch ||
+          control.logoutPending
+        : control.userId !== null || control.logoutPending
+    )
+      throw new Error("Settings cleanup account changed")
+    await removeDatabase(localDatabaseName(owned.userId))
+    await removeDatabase(ACCOUNT_CONTROL_DATABASE)
+    if (localStorage.getItem(markerKey) === owned.markerAfter) {
+      if (owned.markerBefore === null) localStorage.removeItem(markerKey)
+      else localStorage.setItem(markerKey, owned.markerBefore)
+    }
+    sessionStorage.removeItem(ownershipKey)
+    owned = null
+    client = null
+    return true
+  }
+  const active = account()
+  await requireActiveAccount(active)
+  switch (command.type) {
+    case "legacy-missing-action-run":
+    case "retired-mixed-action-run": {
+      const missing = command.type === "legacy-missing-action-run"
+      const identity = await fetch("/api/sync/identity", {
+        credentials: "same-origin",
+        cache: "no-store",
+      })
+      if (
+        !identity.ok ||
+        identity.headers.get(syncProtocolHeader) !==
+          encodeSyncProtocolRange(6) ||
+        workspaceIdentitySchema.parse(await identity.json()).userId !==
+          active.userId
+      )
+        throw new Error(
+          "Missing-action proof requires the owned current identity"
+        )
+      const actionId = nextSyncMissingActionId(runId)
+      const probe = missing
+        ? await fetch(location.pathname + location.search, {
+            method: "POST",
+            credentials: "same-origin",
+            cache: "no-store",
+            headers: {
+              "Next-Action": actionId,
+              "Content-Type": "text/plain;charset=UTF-8",
+            },
+            body: "[]",
+            signal: AbortSignal.timeout(15000),
+          })
+        : new Response(null, { status: 200 })
+      const actionNotFound = probe.headers.get("x-nextjs-action-not-found")
+      await probe.body?.cancel()
+      if (missing && (probe.status !== 409 || actionNotFound !== "1"))
+        throw new Error(
+          "Missing-action candidate is not absent from this fixture"
+        )
+      let dispatches = 0,
+        unrecognized = 0,
+        identityReads = 0,
+        pageReads = 0
+      const sendMissing = (input: unknown) =>
+        new Promise<never>((_resolve, reject) => {
+          dispatches++
+          startTransition(async () => {
+            try {
+              await callServer(actionId, [input])
+              reject(new Error("Absent action unexpectedly returned a result"))
+            } catch (error) {
+              if (unstable_isUnrecognizedActionError(error)) unrecognized++
+              reject(error)
+            }
+          })
+        })
+      const store = await LocalMixedSyncStore.openSettings(active.userId)
+      try {
+        const cursor = await store.readPullCursor()
+        if (cursor.through !== null)
+          throw new Error("Prior handshake requires a completed cursor")
+        const capturedHeaders = { "x-sync-test-run": runId }
+        const identityReply = await fetch("/fixture/legacy-identity", {
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: capturedHeaders,
+        })
+        const pageReply = await fetch(
+          `/fixture/legacy-changes?expectedUserId=${encodeURIComponent(active.userId)}&after=${cursor.after}&through=${cursor.after}&limit=50`,
+          {
+            credentials: "same-origin",
+            cache: "no-store",
+            headers: capturedHeaders,
+          }
+        )
+        if (
+          !identityReply.ok ||
+          !pageReply.ok ||
+          identityReply.headers.get(syncProtocolHeader) !==
+            encodeSyncProtocolRange(5) ||
+          pageReply.headers.get(syncProtocolHeader) !==
+            encodeSyncProtocolRange(5)
+        )
+          throw new Error(
+            "Prior handshake capture is not authenticated generation five"
+          )
+        const capturedIdentity = Object.freeze(await identityReply.json())
+        const capturedPage = Object.freeze(await pageReply.json())
+        if (
+          workspaceIdentitySchema.parse(capturedIdentity).userId !==
+            active.userId ||
+          capturedPage.changes.length !== 0 ||
+          capturedPage.nextAfter !== cursor.after ||
+          capturedPage.through !== cursor.after ||
+          capturedPage.hasMore
+        )
+          throw new Error(
+            "Prior handshake does not match this empty owned cursor"
+          )
+        const priorHandshakeFetch: typeof fetch = async (input) => {
+          const url = new URL(String(input), location.origin)
+          if (url.origin !== location.origin)
+            throw new Error("Prior handshake origin changed")
+          if (
+            url.pathname === "/api/sync/identity" &&
+            !url.search &&
+            ++identityReads === 1
+          )
+            return Response.json(capturedIdentity, {
+              headers: { [syncProtocolHeader]: encodeSyncProtocolRange(5) },
+            })
+          if (
+            url.pathname === "/api/sync/changes" &&
+            ++pageReads === 1 &&
+            url.searchParams.get("expectedUserId") === active.userId &&
+            url.searchParams.get("after") === String(cursor.after) &&
+            url.searchParams.get("limit") === "50" &&
+            [...url.searchParams].length === 3
+          )
+            return Response.json(capturedPage, {
+              headers: { [syncProtocolHeader]: encodeSyncProtocolRange(5) },
+            })
+          throw new Error(
+            "Prior handshake exceeded its captured identity and page"
+          )
+        }
+        const runLegacy = async (fetchRequest: typeof fetch) => {
+          const runtime = await openLocalRecurringSyncRuntime(
+            active,
+            createHttpRecurringSyncTransport(
+              active.userId,
+              missing
+                ? sendMissing
+                : async (input) => {
+                    dispatches++
+                    return dispatchFixtureRetiredOperations(input)
+                  },
+              fetchRequest
+            )
+          )
+          try {
+            return await runtime.run()
+          } finally {
+            await runtime.close()
+          }
+        }
+        const first = await runLegacy(priorHandshakeFetch)
+        const afterFirst = {
+          backup: await readFixtureBackup(active),
+          cursor: await store.readPullCursor(),
+        }
+        const second = await runLegacy(fetch)
+        const afterSecond = {
+          backup: await readFixtureBackup(active),
+          cursor: await store.readPullCursor(),
+        }
+        await requireActiveAccount(active)
+        return {
+          probeStatus: probe.status,
+          actionNotFound,
+          handshake: "captured-prior-v5",
+          dispatches,
+          unrecognized,
+          identityReads,
+          pageReads,
+          first,
+          second,
+          afterFirst,
+          afterSecond,
+        }
+      } finally {
+        store.close()
+      }
+    }
+
+    case "reload-local":
+      setTimeout(() => location.reload(), 100)
+      return { scheduled: true }
+    case "commit-occurrence":
+      return changeLocalPlanOccurrence(
+        { ...active, itemCount: 0, offlineReady: false },
+        command.command,
+        {
+          operationId: command.operationId,
+          now: new Date(command.now),
+          expectedItem: command.expectedItem,
+          expectedOccurrence: command.expectedOccurrence,
+        }
+      )
+    case "hook-mount":
+      return mountHook(active)
+    case "hook-rerender":
+      return mountHook(active, true)
+    case "hook-state":
+      return hookState()
+    case "hook-observe":
+      return observeHook(command.state)
+    case "hook-sync":
+      return synchronizeHook()
+    case "hook-unmount":
+      return unmountHook()
+    case "hook-quiet":
+      return quietHook()
+    case "rotate-local": {
+      const oldClient = client!
+      const previous = await readAccountControl()
+      if (
+        !owned ||
+        previous.userId !== active.userId ||
+        previous.epoch !== active.epoch ||
+        previous.logoutPending
+      )
+        throw new Error("Fixture epoch rotation account changed")
+      const rotated = await activatePreparedAccount(
+        active.userId,
+        new Date().toISOString(),
+        active.epoch
+      )
+      // Track the durable epoch immediately so cleanup follows the committed account control.
+      owned.epoch = rotated.epoch
+      owned.markerAfter = localStorage.getItem(markerKey)
+      sessionStorage.setItem(ownershipKey, JSON.stringify(owned))
+      client = createMixedSyncClientV6({
+        userId: active.userId,
+        epoch: rotated.epoch,
+      })
+      const current = await readAccountControl()
+      if (
+        current.userId !== owned.userId ||
+        current.epoch !== owned.epoch ||
+        current.logoutPending ||
+        current.epoch === active.epoch
+      )
+        throw new Error("Fixture rotated account control is inconsistent")
+      await requireActiveAccount(account())
+      const rejected = async (work: () => Promise<unknown>) => {
+        try {
+          await work()
+          return false
+        } catch (error) {
+          if (
+            !(error instanceof Error) ||
+            error.message !== "Local account changed during the operation"
+          )
+            throw new Error(
+              "Fixture observed an unrelated old-client rejection"
+            )
+          return true
+        }
+      }
+      const oldAccountRejected = await rejected(() =>
+        requireActiveAccount(active)
+      )
+      const oldSummaryRejected = await rejected(() => oldClient.readSummary())
+      const oldAttempt = oldClient.createAttempt(async () =>
+        oldClient.readSummary()
+      )
+      let oldAttemptRejected = false
+      try {
+        oldAttemptRejected = await rejected(() => oldAttempt.run())
+      } finally {
+        oldAttempt.stop()
+      }
+      await requireActiveAccount(account())
+      return {
+        previousEpoch: active.epoch,
+        currentEpoch: rotated.epoch,
+        controlActive: true,
+        oldAccountRejected,
+        oldSummaryRejected,
+        oldAttemptRejected,
+      }
+    }
+    case "lost-joint-view-response-run":
+    case "lost-plan-response-run":
+    case "lost-settings-response-run":
+    case "epoch-after-settings-commit-run": {
+      let intercepted = false
+      const runtime = await openLocalSettingsSyncRuntime(
+        active,
+        createHttpSettingsSyncTransport(active.userId, async (input) => {
+          const result = await dispatchSyncOperationsV6(input)
+          if (!intercepted && (command.type !== "lost-joint-view-response-run" || remotePushInputV2Schema.parse(input).operations.some((operation) => operation.command.type === "item-view.set"))) {
+            intercepted = true
+            if (
+              command.type === "lost-settings-response-run" ||
+              command.type === "lost-plan-response-run" ||
+              command.type === "lost-joint-view-response-run"
+            )
+              throw new Error(
+                "Fixture lost a committed settings action response"
+              )
+            await executeLocalFixtureCommand(runId, { type: "rotate-local" })
+          }
+          return result
+        })
+      )
+      try {
+        return await runtime.run()
+      } finally {
+        await runtime.close()
+      }
+    }
+    case "settings-editor-proof":
+      return proveSettingsEditor(active, command.interactive)
+    case "plan-resolution-proof":
+      return provePlanRecovery(active)
+    case "delete-plan":
+      return deleteLocalPlan(
+        { ...active, itemCount: 0, offlineReady: false },
+        command.expectedItem,
+        command.operationId
+      )
+    case "change-plan-progress":
+      if (
+        command.command.type !== "plan.set-status" &&
+        command.command.type !== "plan.set-checklist-entry"
+      )
+        throw new Error("Fixture progress command changed kind")
+      return changeLocalPlanProgress(
+        { ...active, itemCount: 0, offlineReady: false },
+        command.command,
+        command.operationId
+      )
+    case "resolve-common-plan":
+      return resolveSyncIncident(active, command.request)
+    case "resolve-common-plan-ui":
+      return proveCommonPlanResolutionUi(active, command.request)
+    case "resolve-settings-ui":
+      return proveSettingsResolutionUi(active, command.request)
+    case "resolve-assignment-ui":
+      return proveItemViewResolutionUi(active,command.request)
+    case "resolve-tag-delete-ui":return proveTagDeletionResolutionUi(active,command.request)
+    case "commit-recurring-move-entry": {
+      if(command.command.type!=="task.move"||command.command.occurrenceId===null)throw new Error("Recurring movement fixture command changed")
+      await moveLocalPlan({...active,itemCount:0,offlineReady:false},command.command,command.operationId)
+      const entry=(await readFixtureBackup(active)).stores.outbox.find(entry=>entry.operation.operationId===command.operationId)
+      if(!entry)throw new Error("Real recurring movement producer lost its intention")
+      return entry
+    }
+    case "commit-simple-move": {
+      if(command.command.type!=="task.move"||command.command.occurrenceId!==null)throw new Error("Simple movement fixture command changed")
+      await moveLocalPlan({...active,itemCount:0,offlineReady:false},command.command,command.operationId)
+      const entry=(await readFixtureBackup(active)).stores.outbox.find(entry=>entry.operation.operationId===command.operationId)
+      if(!entry)throw new Error("Real simple movement producer lost its intention")
+      return entry
+    }
+    case "resolve-recurring-placement-ui":return proveRecurringPlacementResolutionUi(active,command.request)
+    case "resolve-mixed-placement-ui":return proveMixedPlacementResolutionUi(active,command.request)
+    case "resolve-category-placement-ui":return proveCategoryPlacementResolutionUi(active,command.request)
+    case "category-placement-comparison":return readCategoryPlacementIncidentComparison(active,command.operationId)
+    case "resolve-category-placement":return resolveCategoryPlacementIncident(active,command.request)
+    case "category-placement-guard-proof": {
+      const before=JSON.stringify((await readFixtureBackup(active)).stores),expected=structuredClone(command.request.expected);expected.local.views[0].revision++
+      let checks=0
+      for(const work of [()=>resolveCategoryPlacementIncident({...active,epoch:crypto.randomUUID()},command.request),()=>resolveCategoryPlacementIncident(active,{...command.request,userId:"owned-foreign-category-placement"}),()=>resolveCategoryPlacementIncident(active,{...command.request,expected})]){
+        let failed=false;try{await work()}catch{failed=true}
+        if(!failed||before!==JSON.stringify((await readFixtureBackup(active)).stores))throw new Error("Category placement guard changed durable state")
+        checks++
+      }
+      return {checks}
+    }
+    case "recurring-placement-comparison":return readRecurringPlacementIncidentComparison(active,command.operationId)
+    case "resolve-recurring-placement":return resolveRecurringPlacementIncident(active,command.request)
+    case "recurring-placement-guard-proof": {
+      const before=JSON.stringify((await readFixtureBackup(active)).stores),expected=structuredClone(command.request.expected);expected.local.placements[0].position++
+      let checks=0
+      for(const work of [()=>resolveRecurringPlacementIncident({...active,epoch:crypto.randomUUID()},command.request),()=>resolveRecurringPlacementIncident(active,{...command.request,userId:"owned-foreign-recurring-placement"}),()=>resolveRecurringPlacementIncident(active,{...command.request,expected})]){
+        let failed=false;try{await work()}catch{failed=true}
+        if(!failed||before!==JSON.stringify((await readFixtureBackup(active)).stores))throw new Error("Recurring placement feature guard changed durable state")
+        checks++
+      }
+      return {checks}
+    }
+    case "mixed-placement-comparison":return readMixedPlacementIncidentComparison(active,command.operationId)
+    case "resolve-mixed-placement":return resolveMixedPlacementIncident(active,command.request)
+    case "mixed-placement-guard-proof": {
+      const before=JSON.stringify((await readFixtureBackup(active)).stores),expected=structuredClone(command.request.expected);expected.local.placements[0].position++
+      let checks=0
+      for(const work of [()=>resolveMixedPlacementIncident({...active,epoch:crypto.randomUUID()},command.request),()=>resolveMixedPlacementIncident(active,{...command.request,userId:"owned-foreign-mixed-placement"}),()=>resolveMixedPlacementIncident(active,{...command.request,expected})]){
+        let failed=false;try{await work()}catch{failed=true}
+        if(!failed||before!==JSON.stringify((await readFixtureBackup(active)).stores))throw new Error("Mixed placement feature guard changed durable state")
+        checks++
+      }
+      return {checks}
+    }
+    case "resolve-placement-ui":return provePlacementResolutionUi(active,command.request)
+    case "placement-comparison":return readPlacementIncidentComparison(active,command.operationId)
+    case "resolve-placement":return resolvePlacementIncident(active,command.request)
+    case "placement-guard-proof": {
+      const before=JSON.stringify((await readFixtureBackup(active)).stores),expected=structuredClone(command.request.expected);expected.local.placements[0].position++
+      let checks=0
+      for(const work of [()=>resolvePlacementIncident({...active,epoch:crypto.randomUUID()},command.request),()=>resolvePlacementIncident(active,{...command.request,userId:"owned-foreign-placement"}),()=>resolvePlacementIncident(active,{...command.request,expected})]){
+        let failed=false;try{await work()}catch{failed=true}
+        if(!failed||before!==JSON.stringify((await readFixtureBackup(active)).stores))throw new Error("Placement feature guard changed durable state")
+        checks++
+      }
+      return {checks}
+    }
+    case "tag-delete-comparison":return readTagDeletionIncidentComparison(active,command.operationId)
+    case "resolve-tag-delete":return resolveTagDeletionIncident(active,command.request)
+    case "tag-delete-guard-proof": {
+      const before=JSON.stringify((await readFixtureBackup(active)).stores)
+      const expected=structuredClone(command.request.expected);expected.observedTags[0].position+=1
+      let checks=0
+      for(const work of [()=>resolveTagDeletionIncident({...active,epoch:crypto.randomUUID()},command.request),()=>resolveTagDeletionIncident(active,{...command.request,userId:"owned-foreign-deletion"}),()=>resolveTagDeletionIncident(active,{...command.request,expected})]){
+        let failed=false;try{await work()}catch{failed=true}
+        if(!failed || before!==JSON.stringify((await readFixtureBackup(active)).stores))throw new Error("Deletion feature guard changed durable state")
+        checks++
+      }
+      return {checks}
+    }
+    case "resolve-tag-order-ui":return proveTagOrderResolutionUi(active,command.request)
+    case "tag-order-comparison":return readTagOrderIncidentComparison(active,command.operationId)
+    case "resolve-tag-order":return resolveTagOrderIncident(active,command.request)
+    case "tag-order-guard-proof": {
+      const before=JSON.stringify((await readFixtureBackup(active)).stores)
+      const expected=structuredClone(command.request.expected);expected.observedTags[0].position+=1
+      let checks=0
+      for(const work of [()=>resolveTagOrderIncident({...active,epoch:crypto.randomUUID()},command.request),()=>resolveTagOrderIncident(active,{...command.request,userId:"owned-foreign-order"}),()=>resolveTagOrderIncident(active,{...command.request,expected})]){
+        let failed=false;try{await work()}catch{failed=true}
+        if(!failed || before!==JSON.stringify((await readFixtureBackup(active)).stores))throw new Error("Order feature guard changed durable state")
+        checks++
+      }
+      return {checks}
+    }
+    case "assignment-comparison":
+      return readItemViewIncidentComparison(active,command.operationId)
+    case "resolve-assignment":
+      return resolveItemViewIncident(active,command.request)
+    case "assignment-guard-proof": {
+      const before=JSON.stringify((await readFixtureBackup(active)).stores)
+      let checks=0
+      for(const work of [
+        ()=>resolveItemViewIncident({...active,epoch:crypto.randomUUID()},command.request),
+        ()=>resolveItemViewIncident(active,{...command.request,userId:"owned-foreign-assignment"}),
+        ()=>resolveItemViewIncident(active,{...command.request,expected:{...command.request.expected,parent:{...command.request.expected.parent,title:"Changed after review"}}}),
+      ]) {
+        let failed=false;try{await work()}catch{failed=true}
+        if(!failed || before!==JSON.stringify((await readFixtureBackup(active)).stores))throw new Error("Assignment feature guard changed durable state")
+        checks++
+      }
+      return {checks}
+    }
+    case "joint-comparison":
+      return readPlanCategoryIncidentComparison(active, command.operationId)
+    case "resolve-joint-ui":
+      return provePlanCategoryResolutionUi(active, command.request)
+    case "resolve-joint":
+      return resolvePlanCategoryIncident(active, command.request)
+    case "joint-guard-proof": {
+      const before = JSON.stringify((await readFixtureBackup(active)).stores)
+      let checks = 0
+      for (const work of [
+        () => resolvePlanCategoryIncident({ ...active, epoch: crypto.randomUUID() }, command.request),
+        () => resolvePlanCategoryIncident(active, { ...command.request, userId: "owned-foreign-joint" }),
+        () => resolvePlanCategoryIncident(active, { ...command.request, expected: { ...command.request.expected,
+          remoteView: { ...command.request.expected.remoteView, revision: command.request.expected.remoteView.revision + 1 } } }),
+      ]) {
+        let failed = false
+        try { await work() } catch { failed = true }
+        if (!failed || before !== JSON.stringify((await readFixtureBackup(active)).stores)) throw new Error("Joint feature guard changed durable state")
+        checks++
+      }
+      return { checks }
+    }
+    case "resolve-tag-ui":
+      return proveTagResolutionUi(active, command.request)
+    case "resolve-tag":
+      return resolveTagIncident(active, command.request)
+    case "tag-resolution-guard-proof": {
+      const before = JSON.stringify((await readFixtureBackup(active)).stores)
+      let checks = 0
+      for (const work of [
+        () => resolveTagIncident({ ...active, epoch: crypto.randomUUID() }, command.request),
+        () => resolveTagIncident(active, { ...command.request, userId: "owned-foreign-category" }),
+        () => resolveTagIncident(active, { ...command.request, expected: { ...command.request.expected, tagNames: { ...command.request.expected.tagNames, [crypto.randomUUID()]: "Changed after review" } } }),
+      ]) {
+        let failed = false
+        try { await work() } catch { failed = true }
+        if (!failed || before !== JSON.stringify((await readFixtureBackup(active)).stores)) throw new Error("Category feature guard changed durable state")
+        checks++
+      }
+      return { checks }
+    }
+    case "resolve-settings":
+      return resolveSettingsIncident(active, command.request)
+    case "settings-resolution-local-proof":
+      return proveLocalSettingsResolution(active, command.request)
+    case "appearance-retry-local-proof":
+      return proveLocalAppearanceRetry(active, command.request, command.interactive)
+    case "appearance-cohort-comparison":
+      return readPlanOccurrenceCohortComparison(active, command.operationId)
+    case "resolve-appearance-cohort-ui":
+      return proveAppearanceCohortResolutionUi(active,command.request)
+    case "resolve-appearance-cohort":
+      return resolvePlanOccurrenceCohort(active, command.request)
+    case "resolve-appearance-copy-ui":
+      return proveAppearanceCopyResolutionUi(active,command.request)
+    case "resolve-appearance-copy":
+      return resolvePlanOccurrenceCopy(active,command.request)
+    case "appearance-copy-guard-proof": {
+      const before=JSON.stringify((await readFixtureBackup(active)).stores)
+      let checks=0
+      for(const work of [
+        ()=>resolvePlanOccurrenceCopy({...active,epoch:crypto.randomUUID()},command.request),
+        ()=>resolvePlanOccurrenceCopy(active,{...command.request,userId:"foreign-appearance-copy"}),
+        ()=>resolvePlanOccurrenceCopy(active,{...command.request,expected:{...command.request.expected,local:null}}),
+      ]) {
+        let failed=false
+        try {await work()} catch {failed=true}
+        if(!failed||before!==JSON.stringify((await readFixtureBackup(active)).stores)) throw new Error("Appearance copy guard changed durable state")
+        checks++
+      }
+      return {checks}
+    }
+    case "resolve-appearance":
+      return resolvePlanOccurrenceIncident(active, command.request)
+    case "appearance-resolution-local-proof":
+      return proveLocalAppearanceResolution(active, command.request, command.interactive)
+    case "settings-incidents":
+      return readSyncIncidents(active)
+    case "legacy-root-resolution-proof": {
+      const before = (await readFixtureBackup(active)).stores
+      const outbox = await LocalOutbox.open(active.userId),
+        sync = await LocalSyncStore.open(active.userId)
+      const now = new Date().toISOString(),
+        itemId = crypto.randomUUID()
+      const draft = {
+        kind: "task" as const,
+        title: "Comparación antigua de prueba",
+        description: "Evidencia local",
+        scheduledDate: "2026-10-17",
+        status: "not_started" as const,
+        checklist: [],
+        recurrence: null,
+      }
+      try {
+        const original = await outbox.commitItemCommand({
+          type: "item.create",
+          itemId,
+          input: draft,
+        })
+        const senderId = crypto.randomUUID(),
+          claimed = await outbox.claim(original.operation.operationId, senderId)
+        if (!claimed) throw new Error("Owned legacy comparison was not claimed")
+        const child = await outbox.commitItemCommand({
+          type: "task.set-status",
+          itemId,
+          occurrenceId: null,
+          status: "in_progress",
+        })
+        // This is an explicitly seeded legacy conflict, never a simulated remote ACK.
+        await sync.applyOperationResult({
+          operation: claimed.operation,
+          senderId,
+          result: {
+            operationId: claimed.operation.operationId,
+            status: "conflict",
+            current: {
+              ...draft,
+              title: "Versión remota de prueba",
+              id: itemId,
+              ownerId: active.userId,
+              revision: 1,
+              createdAt: now,
+              updatedAt: now,
+              deletedAt: null,
+              completedAt: null,
+            },
+          },
+        })
+        const incidents = await readSyncIncidents(active)
+        const root = incidents.find(
+          (value) =>
+            value.kind === "item" &&
+            value.incident.entry.operation.operationId ===
+              original.operation.operationId
+        )
+        if (root?.kind !== "item")
+          throw new Error("Future comparison lost the owned legacy root")
+        const baseline = (await readFixtureBackup(active)).stores
+        const request = {
+          userId: active.userId,
+          resolutionId: crypto.randomUUID(),
+          operationId: null,
+          copyItemId: null,
+          choice: "adopt_remote" as const,
+          createdAt: now,
+          expected: root.incident,
+        }
+        const result = await resolveSyncIncident(active, request)
+        const after = (await readFixtureBackup(active)).stores
+        if (result.status !== "applied")
+          throw new Error("Existing root resolution did not complete")
+        const rootIds = [
+          original.operation.operationId,
+          child.operation.operationId,
+        ]
+        for (const entry of after.outbox.filter((value) =>
+          rootIds.includes(value.operation.operationId)
+        ))
+          if (entry.state !== "superseded")
+            throw new Error(
+              "Local adoption manufactured an ACK or discarded root evidence"
+            )
+        const same = (a: unknown, b: unknown) =>
+          JSON.stringify(a) === JSON.stringify(b)
+        if (!same(before.settings, after.settings))
+          throw new Error("Root resolution changed personal settings")
+        for (const store of [
+          "tags",
+          "itemViews",
+          "taskPlacements",
+          "occurrences",
+        ] as const)
+          if (!same(baseline[store], after[store]))
+            throw new Error("Root resolution changed an unrelated store")
+        if (
+          !same(
+            baseline.items.filter((value) => value.id !== itemId),
+            after.items.filter((value) => value.id !== itemId)
+          ) ||
+          !same(
+            baseline.outbox.filter(
+              (value) => !rootIds.includes(value.operation.operationId)
+            ),
+            after.outbox.filter(
+              (value) => !rootIds.includes(value.operation.operationId)
+            )
+          ) ||
+          !same(baseline.remoteShadows, after.remoteShadows) ||
+          !same(
+            baseline.syncMetadata,
+            after.syncMetadata.filter(
+              (value) =>
+                value.key !== `incident-resolution:${request.resolutionId}`
+            )
+          )
+        )
+          throw new Error(
+            "Root resolution rewrote unrelated intentions, shadows or frozen outcomes"
+          )
+        const replay = await resolveSyncIncident(active, request)
+        if (
+          replay.status !== "replayed" ||
+          !same(after, (await readFixtureBackup(active)).stores)
+        )
+          throw new Error("Root resolution replay changed durable evidence")
+        return {
+          preserved: true,
+          replayed: true,
+          superseded: true,
+          settingsIncidents: incidents.filter(
+            (value) => value.kind === "preference"
+          ).length,
+        }
+      } finally {
+        outbox.close()
+        sync.close()
+      }
+    }
+    case "read-settings":
+      return readLocalPersonalSettings(active)
+    case "save-settings": {
+      const request = globalThis.fetch
+      globalThis.fetch = async () => {
+        throw new Error("Offline settings producer attempted a network request")
+      }
+      try {
+        return await saveLocalPersonalSettings(
+          active,
+          command.input,
+          command.expected
+        )
+      } finally {
+        globalThis.fetch = request
+      }
+    }
+    case "save-plan":
+      return saveLocalPlan(
+        { ...active, itemCount: 0, offlineReady: false },
+        command.request
+      )
+    case "commit-local": {
+      const outbox = await LocalOutbox.open(active.userId)
+      try {
+        if (
+          command.command.type === "tag.save" ||
+          command.command.type === "tag.move" ||
+          command.command.type === "tag.delete" ||
+          command.command.type === "item-view.set" ||
+          command.command.type === "task.move"
+        )
+          return await outbox.commitPreferenceCommand(command.command)
+        if (command.command.type === "item.create")
+          return await outbox.commitItemCommand(command.command)
+        throw new Error("Unsupported settings fixture local command")
+      } finally {
+        outbox.close()
+      }
+    }
+    case "mixed-summary":
+      return client!.readSummary()
+    case "mixed-run": {
+      const attempt = client!.createAttempt(async () => client!.readSummary())
+      try {
+        return await attempt.run()
+      } finally {
+        attempt.stop()
+      }
+    }
+    case "local-snapshot": {
+      const database = await openLocalDatabase(active.userId)
+      const store = await LocalMixedSyncStore.openSettings(active.userId)
+      try {
+        const backup = await readLocalRecurringBackup(
+          database,
+          active.userId,
+          new Date().toISOString()
+        )
+        const cursor = await store.readPullCursor()
+        await requireActiveAccount(active)
+        return { backup, cursor, summary: await client!.readSummary() }
+      } finally {
+        database.close()
+        store.close()
+      }
+    }
+    default:
+      throw new Error("Unsupported settings fixture command")
+  }
+}

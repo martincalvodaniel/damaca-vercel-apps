@@ -1,0 +1,48 @@
+{
+  "name": "@damaca/dalis-tasks-events",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "bun run scripts/build.ts",
+    "db:ensure-indexes": "bun --conditions=react-server run scripts/ensure-indexes.ts",
+    "db:preview-personal-indexes": "bun --no-env-file --conditions=react-server scripts/preview-personal-indexes.ts",
+    "db:provision-personal-indexes": "bun --no-env-file --conditions=react-server scripts/provision-personal-indexes.ts",
+    "dev": "next dev --port 3002",
+    "format": "bun ../../scripts/biome-changed.ts check --write",
+    "knip": "knip",
+    "lint": "bun ../../scripts/biome-changed.ts check",
+    "lint:fix": "bun ../../scripts/biome-changed.ts check --write",
+    "start": "next start",
+    "test": "bun test --preload ./test/setup.ts",
+    "test:sync-db": "bun run scripts/sync-db-test-runner.ts",
+    "test:sync-browser": "bun run scripts/sync-db-test-runner.ts browser",
+    "test:watch": "bun test --watch --preload ./test/setup.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "better-auth": "catalog:",
+    "mongodb": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "server-only": "catalog:",
+    "swr": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vercel/config": "catalog:",
+    "knip": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "sharp": "catalog:"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

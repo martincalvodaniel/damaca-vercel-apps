@@ -1,0 +1,89 @@
+# Activación del editor y lista comunes
+
+## Punto de partida comprobado
+
+**Estado vigente16a4c3d:** selección conjunta4 activada y validada con19escenarios Next compilado/defaults/BetterAuth persistido/dos particiones/Mongo propio usando rutas productivas y retirada3 real. Editor/lista/calendario comunes conectados, guardia local por dispositivo16a4c3c y wipe remoto Preview16a4c3b completados. Series/apariciones funcionan localmente pero todavía no tienen ACK remoto. Publicación int y comprobación Preview cierran este corte; piloto Google/UI de perfiles reales se registra aparte.
+
+Contenido simple, categoría/asignación, orden/progreso/checklist y tombstones también convergen en dos orígenes/IndexedDB con Mongo propio16a4b. Incluye respuesta perdida con la misma intención y ACK único. No confundir fixture con Google/dispositivos físicos. Las secciones inferiores conservan la matriz y evolución histórica.
+
+## 16a4c1 — Frontera RPC4 compilada
+
+Estado16a4c1a:19escenarios completos aprobados con recursos propios, acción4 real/defaults/sesiones persistidas y hook4 directo. Producto todavía usa3; esta evidencia no equivale a activar proveedor/callers ni Google interactivo.
+
+Objetivo: demostrar que Next compila y referencia la acción4 real, y que sus defaults ejecutan contenido común con sesión persistida. Sin activar producto.
+
+`target_paths`: [runner Next](../scripts/next-sync-test-runner.ts), [templates](../test/next-sync), schemas/next-sync-test sólo para comandos necesarios y fixtures DB propios. Root posee templates/runner/integración; secuencial inicialmente. Dependencias:16a4b, [acción4](../src/features/sync/actions-v4.ts), [push autenticado4](../src/features/sync/authenticated-push-v4.ts), [pull autenticado4](../src/features/sync/authenticated-pull-v4.ts) y [cliente4](../src/features/sync/mixed-sync-client-v4.ts).
+
+Reutilizar el aislamiento y sesiones BetterAuth existentes. Nueva referencia directa action4 en compilación; el wrapper debe conservar actor/headers/defaults. Prueba de ID ausente debe pasar por RPC real compilado, no llamar al método directamente. Guardar métricas de recibos/journal/proyecciones antes y después de cada rechazo. No extrapolar resultados de templates3.
+
+| Caso | Evidencia exigida |
+| --- | --- |
+| Cliente4/servidor3 y cliente3/servidor4 | Rechazo por header antes body, caché, cursor o claim; proyección/cola conservadas. |
+| Sesión válida y actor esperado | Productor real guarda plan+asignación; action4 emite ACK real y pull4 converge en la segunda partición. |
+| Sesión revocada/cambio de cuenta | Sin efecto remoto ni ACK; intención y lease propios quedan recuperables. |
+| Readiness no válida | Rechazo antes executor; sin recibo de éxito ni avance de cursor. |
+| Identity3/pull3 capturados, luego retirada3 | Respuesta update_required anterior a readiness/executor y sin ACK. |
+| ID antiguo ausente en build Next | Error RPC real sin ACK; siguiente handshake exige4 antes claim. |
+| Respuesta action4 perdida | Replay de UUID/payload/dependencias exactos y un recibo; dependientes llegan después. |
+| Hook4: montar/desmontar, listener, cuenta/época | Sin callbacks antiguos ni doble ejecución; ninguna inferencia de cancelación de red ya enviada. |
+
+Dividir en frontera/negociación y productor/lifecycle si no cabe una entrega completa. Cada corte ejecuta prueba propia real, suite/lint/tipos/build y limpieza antes de commit/push/HEAD/cuotas. Fixture autenticada BetterAuth no prueba login interactivo Google ni ID del deployment Preview.
+
+## 16a4c2 — Apariciones comunes locales
+
+Estado16a4c2a–f: núcleo, comandos, IndexedDB real, snapshot/hooks y lista/calendario preparados. Prueba UI390px de progreso/checklist por slot, cancelación y recarga aprobada. Faltan transición/callers conjuntos; series/apariciones y su orden siguen fuera de sincronización remota.
+
+Cuatro variantes tienen la misma repetición y progreso por aparición; no completar padre recurrente como sustituto ni ocultarlo del calendario. Reutilizar motor civil/reglas/excepciones existentes; fechas/zona/DST y checklist por aparición. Contrato y rutas concretos se cierran antes de editar. La sincronización remota de series permanece bloque aparte: no anunciarla al activar simples. Si un límite funcional impide cumplir equivalencia, exponerlo claramente y resolverlo antes de ofrecer el control.
+
+## 16a4c3 — Transición y conexión conjunta
+
+Usuario acepta incompatibilidad, por tanto no construir adaptadores históricos costosos. Preparar alcance real del eventual wipe de contenido/checkpoints/recibos y bases locales; preservar auth, excluir producción y pedir al usuario que lo realice sólo cuando el procedimiento esté validado y revisable. No borrar automáticamente ni pedir wipe prematuro.
+
+Conectar juntos: anuncio4 exclusivo, identity/pull4, acción/client4, hook/cache4, proveedores/context/UI y editor/lista/calendario comunes; retirar acción3 con [guardia preparada](../src/features/sync/retired-sync-push-v3.ts). No cambiar intenciones1 ni sobres/journal2 por cambiar negociación. Navegación comparte destinos actuales; botón+ abre editor único, sin destinos vacíos.
+
+Aceptación móvil: cuatro tipos juntos por categoría, iconos coloreados, checklist visible, inicio/fin separados y horas ocultas todo el día, cruz/check, densidad sin targets táctiles diminutos. Drag sólo con contexto completo; all/upcoming no inventan vecinos de un intervalo. Prueba de recarga/offline y piloto Google Preview final separados de fixtures. No afirmar dos dispositivos físicos a partir de dos pestañas.
+
+## Continuación programada
+
+10oct lectura9%5h/86%7d; reset publicado1791642149 (16:22:29 Europe/Madrid). Una revisión puntual del heartbeat existente a16:24 confirma cuotas/renovación reales antes de continuar16a4c1. Reservas de próxima ventana10%5h/1%7d; commit/push/HEAD/cuotas cada corte. No cadena adicional, créditos, reset manual ni tareas ajenas al rediseño.
+
+### 16a4c3a — Ensamblado listo, selección de release cerrada
+
+Todos los callers comparten `config/common-plan-release.ts`: identity, pull, retiro action3 antes readiness, proveedor/hook4 y pantallas editor/agenda/calendario. La selección permanece false: continúa producto3, no borrar ni ocultar contenido antiguo. Los hooks viven en proveedores separados; cambiar selección no altera el orden de hooks ni monta dos motores. La transición precisa confirmación del reset humano descrito en [common-plan-transition.md](common-plan-transition.md), luego un único corte cambia la selección, valida el producto ensamblado y publica. No modificar sólo anuncio ni variables de hosting. FixtureNext19 y UI preparada no sustituyen piloto de callers activos.
+
+### 16a4c3c — Preparación local explícita validada
+
+Barrera del proveedor deja editor y motor desmontados hasta marca4 propia. Cuenta vacía se prepara sin borrar; contenido anterior exige confirmación por dispositivo sólo Preview/local. Reset TX de diez stores conserva settings, sesión/control/época e índices; replay/race preservan planes nuevos. Guardias runtime antes de claim/ACK/pull, backup portable excluye marca y rechaza import antiguo en partición preparada. Caches de cuenta/época invalidados antes de montar children; ningún borrado automático ante error. Fixture React/IndexedDB propia prueba cancelación/confirmación/rollback/guardias/concurrencia/recarga, sin actuar en perfiles del usuario. Producto sigue3/selección false hasta16a4c3d. Wipe remoto ya completo; no volver a pedir su autorización ni nombre de DB.
+
+### 16a4c3d — Producto4 ensamblado y validado
+
+Única selección true conecta todos los callers/pantallas4; no despliegue de producción ni nuevo wipe. Runner exige selección4, referencia action4 y acción3 retirada reales; wrappers identity/pull delegan a rutas productivas conservando capability/sesión/Host. Particiones propias vacías preparan marca4 antes de productores. Los19escenarios pasan: dos sesiones BetterAuth persistidas, cuatro variantes/asignación tras perder respuesta/replay único/ACK real, proyecciones exactas, orden/dependientes, epochs/lifecycle, versiones/IDausente/acción3retirada/readiness/cuentas rechazadas sin mutación. Recursos propios cerrados y eliminados, evidencia `/private/tmp/common-plan-next-active-proof.png`. No Google ni IDexactoPreview inferido. Suite621/153skip/0fail, lint665/tipos/build34/diff aprobados. Verificación operacional Preview se registra después de publicar; cada dispositivo anterior necesita su consentimiento local en la barrera, no un borrado automático.
+
+### 16a4c3e — Preview Ready y barrera4 comprobados
+
+Vercel deployment `dalis-tasks-events-e1x29ue70-martincalvodaniels-projects.vercel.app` muestra Ready, Preview/int y96a6237db631b32cbb2f14702e68637bec2248e5, creado11oct04:22:56CEST. Alias int mantiene Google; worker anterior muestra actualización, al cerrar única pestañaDalis/reabrir carga barrera4. Se abre diálogo revisable sin confirmar borrado. Mobile390: diálogo358px, scrollWidth=clientWidth356 (sin overflow), targets50px; viewport restaurado. Captura normal `/private/tmp/common-plan-preview-confirmation.png` y deployment `/private/tmp/common-plan-preview-deployment-ready.png`; screenshotmobile proveedor reescala superficie, no usar como prueba de layout en lugar de geometríaDOM. Pestaña app entregable, Atlas del usuario conservada y Vercel temporal cerrada.
+
+Se pide únicamente consentimiento para borrar contenido anterior **local** de la cuenta del navegador integradoPreview; la autorización del wipeMongo no se reinterpreta como permiso para otros dispositivos. Cancelar/no respuesta no autorizan borrar. Sesión/ajustes preservados por contrato probado, no nueva eliminación remota. PilotoGoogle de cuatro tipos desde+ sigue pendiente de este paso; fixture19 prueba RPC/convergencia, no la interfaz completa conGoogle.
+
+
+### 16a4c3f — Piloto Google del editor activo cerrado
+
+Respuesta humana «Nuevas ventanas. Continúa» retoma confirmación específica pendiente: se confirma borrar únicamente contenido local anterior de la cuenta IAB Preview, preservando sesión/ajustes. No repetir wipeMongo ni actuar sobre otros perfiles. Actualización del worker seguida de reapertura mantiene sesiónGoogle y generación4.
+
+Cuatro elementos «Piloto · Tarea/Evento/Cita/Nota» creados desde+ con categoría «Piloto editor11oct» azul#2563eb y un paso checklist cada uno. AllDay oculta horas; Evento/Cita tienen11:00–12:00 con fechas separadas. Cita editada, Nota completada y checklistEvento marcado; recarga conserva estado. Orden natural verificado Tarea/Nota/Evento/Cita; movimiento con fallbackAlt+ArrowUp cambia aTarea/Nota/Cita/Evento y persiste. No prueba táctil física adicional: fallback comparte productor task.move. Calendario11oct cuenta4.
+
+Exportación del producto real validada por decodeLocalBackup sin mostrar identificadores/credenciales:4items/1tag/4views/4placements,14outbox acknowledged attempts1 y14operation-outcome. Comandos:4item.create/1item.update/1plan.set-status/1plan.set-checklist-entry/1task.move/5item-view.set/1tag.save; resumen sin pendientes. Marca infra4 excluida del backupportable. Evidencia `/private/tmp/dalis-common-editor-preview-pilot.jpg`; copia JSON conservada en Downloads por el usuario, datos piloto identificados conservados. SesiónGoogle real y RPCPreview comprobados; no afirmar convergencia de dispositivos físicos ni nueva reapertura sin red. CapturaAX parcial hizo parecer orden incorrecto; DOM completo descartó defecto, no reparación innecesaria.
+
+Validación documental referencias/coherencia/diff, producto sin cambios respecto aDoD621pass/153skip/lint/tipos/build34 anterior. Commitpushint/HEAD/cuotas. Automatización pausada. Queda revisar importación de planes simples en backup: exportación común válida, selector antiguo todavía sólo task/event.
+
+
+### 16a4c3g — Copias nuevas de los cuatro tipos comunes
+
+Backup portable admite planes simples vivos de cuatro variantes como nuevas identidades/revisión0, protocolo1/base0 y checklist/progreso/fechas/tipo originales; completedAt reconstruido al crear copia. No restaurar categorías/orden/historial como estado autoritativo ni convertir legacy. Preview puro all_simple incluye legacytask/event+plan; policycommon_plans se obtiene leyendo marca4 estricta readonly por cuenta y deshabilita legacy en UI preparada. TX conserva guardia kindplan, valida owner/marca antes incluso de replay, CAS/recibo/contador/outboxpending atómicos; ningún ACK fabricado. Copia portable sin marca infra, archivo original preservado. Interfaz explicita cuatro tipos sin repetición/categoríasnoaplicadas.
+
+Paralelo disjunto pure+fixture/root integración.15tests puros/248aserciones aprobados; fixture IndexedDB4243 propio8checks yrecarga/replay aprobados: cuatrofreshcopies, pendingattempts0/recibo/snapshot/marker/settings/control conservados, CASlegacy/fallotardío rollback, marcadorajeno/corrupto rechaza sin reparar, épocayparticiónajenas protegidas. Recursos propios limpiados/servidor/tab cerrados; evidencia `/private/tmp/dalis-common-backup-import-proof.jpg`. No MongoGoogle ni convergenciadispositivos nueva inferida; operaciones importadas usan executor item.create4 ya validado. Suite625pass/153skip/0fail/9127aserciones, lint667/tipos/build34/diff aprobados. Commitpushint/HEAD/cuotas.
+
+
+### 16a4c3h — Cierre de textos del producto común
+
+Ajustes usa scope explícito own_plans_preferences_and_order sólo cuando selección4 activa: tareas/eventos/citas/notas simples, categorías/asignaciones/orden y repeticiónlocal. Scope3 previo conserva su explicación. Categorías dejan de exigir asignación después de guardar; calendario usa elementos/completados sin excluir Cita/Nota. Sin nueva pantalla/nav, mutación/índice/dependencia ni actuación de datos. Estado master/decisiones y rediseño actualizados para no confundir registros históricos con producto vigente; estimación original30–35% pendiente ponderada, siguientes bloques bajo elección humana. Suite625pass/153skip/0fail/9127aserciones, lint667/tipos/build34/diff aprobados. Commitpushint/HEAD/cuotas y comprobar textos Preview; automatización pausada.

@@ -1,0 +1,11 @@
+import "server-only"
+
+import { GET as getProductSyncIdentity } from "@/app/api/sync/identity/route"
+import { GET as getProductSyncChanges } from "@/app/api/sync/changes/route"
+
+export function getFixtureSyncIdentity() {
+  return getProductSyncIdentity()
+}
+export function getFixtureSyncChanges(request: Request) {
+  return getProductSyncChanges(request)
+}

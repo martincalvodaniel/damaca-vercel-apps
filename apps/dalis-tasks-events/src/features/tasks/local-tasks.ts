@@ -1,0 +1,112 @@
+"use client"
+
+import type { LocalAccount } from "@/features/workspace/local-account"
+import { requireActiveAccount } from "@/features/workspace/require-active-account"
+import { LocalOutbox } from "@/lib/local-db/outbox"
+import { LocalRepository } from "@/lib/local-db/repository"
+import { taskDraftSchema } from "@/schemas/calendar-item"
+import type { CalendarItemDraft, Task } from "@/types/calendar-item"
+import type { LocalItemCommand } from "@/types/local-sync"
+
+export type TaskDraft = Extract<CalendarItemDraft, { kind: "task" }>
+
+export async function readLocalTasks(account: LocalAccount) {
+  await requireActiveAccount(account)
+  const repository = await LocalRepository.open(account.userId)
+  try {
+    const [items, settings] = await Promise.all([
+      repository.list("items"),
+      repository.get("settings", account.userId),
+    ])
+    if (!settings || settings.deletedAt)
+      throw new Error("Local settings are unavailable")
+    await requireActiveAccount(account)
+    return {
+      tasks: items
+        .filter((item): item is Task => item.kind === "task")
+        .sort(
+          (a, b) =>
+            a.scheduledDate.localeCompare(b.scheduledDate) ||
+            a.createdAt.localeCompare(b.createdAt) ||
+            a.id.localeCompare(b.id)
+        ),
+      timeZone: settings.timeZone,
+    }
+  } finally {
+    repository.close()
+  }
+}
+
+export async function createLocalTask(
+  account: LocalAccount,
+  input: TaskDraft,
+  itemId: string,
+  operationId: string
+) {
+  const draft = taskDraftSchema.parse(input)
+  await requireActiveAccount(account)
+  const outbox = await LocalOutbox.open(account.userId)
+  try {
+    await outbox.commitItemCommand(
+      { type: "item.create", itemId, input: draft },
+      { operationId }
+    )
+  } finally {
+    outbox.close()
+  }
+}
+
+export async function updateLocalTask(
+  account: LocalAccount,
+  expected: Task,
+  input: TaskDraft,
+  operationId: string
+) {
+  const draft = taskDraftSchema.parse(input)
+  await requireActiveAccount(account)
+  const outbox = await LocalOutbox.open(account.userId)
+  try {
+    await outbox.commitItemCommand(
+      { type: "item.update", itemId: expected.id, input: draft },
+      { operationId, expectedItem: expected }
+    )
+  } finally {
+    outbox.close()
+  }
+}
+
+export async function deleteLocalTask(
+  account: LocalAccount,
+  expected: Task,
+  operationId: string
+) {
+  await requireActiveAccount(account)
+  const outbox = await LocalOutbox.open(account.userId)
+  try {
+    await outbox.commitItemCommand(
+      { type: "item.delete", itemId: expected.id },
+      { operationId, expectedItem: expected }
+    )
+  } finally {
+    outbox.close()
+  }
+}
+
+export type TaskProgressCommand = Extract<
+  LocalItemCommand,
+  { type: "task.set-status" | "task.set-checklist-entry" }
+>
+
+export async function changeLocalTaskProgress(
+  account: LocalAccount,
+  command: TaskProgressCommand,
+  operationId: string
+) {
+  await requireActiveAccount(account)
+  const outbox = await LocalOutbox.open(account.userId)
+  try {
+    await outbox.commitItemCommand(command, { operationId })
+  } finally {
+    outbox.close()
+  }
+}

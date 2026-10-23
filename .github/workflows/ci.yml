@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [ int, main ]
+  pull_request:
+    branches: [ int, main ]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      ALLOWED_EMAILS: test@example.com
+      BETTER_AUTH_SECRET: monorepo-local-build-secret-000000000000
+      BETTER_AUTH_URL: http://localhost:3000
+      GOOGLE_CLIENT_ID: local-build-client
+      GOOGLE_CLIENT_SECRET: local-build-secret
+      MONGODB_DB: local_build
+      MONGODB_URI: mongodb://127.0.0.1:27017/local_build
+      VERCEL_BRANCH_URL: localhost
+      VERCEL_ENV: preview
+      VERCEL_GIT_COMMIT_REF: int
+      VERCEL_PROJECT_PRODUCTION_URL: localhost
+      VERCEL_URL: localhost
+      WORDPRESS_ENDPOINT: https://example.com
+      WORDPRESS_PASSWORD: local-build-password
+      WORDPRESS_USER: local-build-user
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: bun install --frozen-lockfile
+      - name: Select Biome comparison base
+        id: base
+        env:
+          BASE_SHA: ${{ github.event.before }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_BRANCH: ${{ github.base_ref }}
+          PUSH_SHA: ${{ github.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            echo "sha=$(git merge-base "$PUSH_SHA" "$PR_BASE")" >> "$GITHUB_OUTPUT"
+          elif [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            echo "sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=$(git rev-list --max-parents=0 "$PUSH_SHA")" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Biome changed files
+        run: bun run lint --base "${{ steps.base.outputs.sha }}"
+      - run: bun run type-check
+      - run: bun run test
+      - run: bun run build

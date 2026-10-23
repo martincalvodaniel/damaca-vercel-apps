@@ -1,0 +1,131 @@
+"use client"
+
+import { useRef, useState } from "react"
+import { useSWRConfig } from "swr"
+import {
+  commonPlanReleaseEnabled,
+  recurringSyncReleaseEnabled,
+} from "@/config/common-plan-release"
+import { PlanCategoryIncidentActions } from "@/features/sync/components/plan-category-incident-actions"
+import { SyncIncidentResolutionDialog } from "@/features/sync/components/sync-incident-resolution-dialog"
+import { resolveSyncIncident } from "@/features/sync/local-incidents"
+import { isAccountSyncCacheKey } from "@/features/sync/manual-sync"
+import type { LocalAccount } from "@/features/workspace/local-account"
+import { requireActiveAccount } from "@/features/workspace/require-active-account"
+import { availableSyncIncidentResolutionChoices } from "@/lib/sync/incident-resolution"
+import { syncResolutionRequestSchema } from "@/schemas/sync-resolution"
+import type { SyncIncidentSnapshot } from "@/types/sync-incident"
+import type { SyncResolutionRequest } from "@/types/sync-resolution"
+
+type Selection = {
+  choice: SyncResolutionRequest["choice"]
+  incident: SyncIncidentSnapshot
+}
+export function SyncIncidentActions({
+  account,
+  incident,
+}: {
+  account: Pick<LocalAccount, "userId" | "epoch">
+  incident: SyncIncidentSnapshot
+}) {
+  const { mutate } = useSWRConfig()
+  const [selection, setSelection] = useState<Selection | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [notice, setNotice] = useState("")
+  const intent = useRef<SyncResolutionRequest | null>(null)
+  const choices = availableSyncIncidentResolutionChoices(
+    incident,
+    commonPlanReleaseEnabled && recurringSyncReleaseEnabled
+  )
+  function choose(choice: SyncResolutionRequest["choice"]) {
+    intent.current = null
+    setNotice("")
+    setSelection({ choice, incident })
+  }
+  async function confirm(resolutionId: string) {
+    if (!selection) throw new Error("Resolution choice is missing")
+    intent.current ??= syncResolutionRequestSchema.parse({
+      userId: account.userId,
+      expected: selection.incident,
+      choice: selection.choice,
+      resolutionId,
+      operationId:
+        selection.choice === "adopt_remote" ? null : crypto.randomUUID(),
+      copyItemId:
+        selection.choice === "copy_local" ? crypto.randomUUID() : null,
+      createdAt: new Date().toISOString(),
+    })
+    setBusy(true)
+    try {
+      await resolveSyncIncident(account, intent.current)
+      setSelection(null)
+      try {
+        await requireActiveAccount(account)
+        await mutate((key) =>
+          isAccountSyncCacheKey(key, account.userId, account.epoch)
+        )
+      } catch {
+        setNotice("Elección guardada. Recarga para actualizar la vista.")
+      }
+    } finally {
+      setBusy(false)
+    }
+  }
+  return (
+    <div>
+      {choices.length === 0 ? (
+        <PlanCategoryIncidentActions
+          key={`${account.userId}:${account.epoch}:${incident.entry.operation.operationId}`}
+          account={account}
+          incident={incident}
+        />
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="min-h-11 rounded-lg border border-zinc-300 px-3 dark:border-zinc-700"
+            onClick={() => choose("adopt_remote")}
+          >
+            Usar remoto conocido
+          </button>
+          {choices.includes("copy_local") ? (
+            <button
+              type="button"
+              className="min-h-11 rounded-lg bg-emerald-700 px-3 font-medium text-white"
+              onClick={() => choose("copy_local")}
+            >
+              Crear copia de mi borrador
+            </button>
+          ) : null}
+          {choices.includes("retry_local") ? (
+            <button
+              type="button"
+              className="min-h-11 rounded-lg bg-emerald-700 px-3 font-medium text-white"
+              onClick={() => choose("retry_local")}
+            >
+              {incident.local?.deletedAt
+                ? "Enviar borrado local"
+                : "Enviar mi borrador"}
+            </button>
+          ) : null}
+        </div>
+      )}
+      {notice ? (
+        <p role="status" className="mt-2 text-xs">
+          {notice}
+        </p>
+      ) : null}
+      {selection ? (
+        <SyncIncidentResolutionDialog
+          incident={selection.incident}
+          choice={selection.choice}
+          busy={busy}
+          onConfirm={confirm}
+          onClose={() => {
+            if (!busy) setSelection(null)
+          }}
+        />
+      ) : null}
+    </div>
+  )
+}
