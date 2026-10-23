@@ -32,6 +32,7 @@
     "@types/react-dom": "catalog:",
     "knip": "catalog:",
     "tailwindcss": "catalog:",
+    "turbo": "2.11.10",
     "typescript": "catalog:"
   }
 }
