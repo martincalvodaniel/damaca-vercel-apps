@@ -12,24 +12,6 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-      ALLOWED_EMAILS: test@example.com
-      BETTER_AUTH_SECRET: monorepo-local-build-secret-000000000000
-      BETTER_AUTH_URL: http://localhost:3000
-      GOOGLE_CLIENT_ID: local-build-client
-      GOOGLE_CLIENT_SECRET: local-build-secret
-      MONGODB_DB: local_build
-      MONGODB_URI: mongodb://127.0.0.1:27017/local_build
-      VERCEL_BRANCH_URL: localhost
-      VERCEL_ENV: preview
-      VERCEL_GIT_COMMIT_REF: int
-      VERCEL_PROJECT_PRODUCTION_URL: localhost
-      VERCEL_URL: localhost
-      WORDPRESS_ENDPOINT: https://example.com
-      WORDPRESS_PASSWORD: local-build-password
-      WORDPRESS_USER: local-build-user
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,6 +40,8 @@ jobs:
             echo "sha=$(git rev-list --max-parents=0 "$PUSH_SHA")" >> "$GITHUB_OUTPUT"
           fi
       - name: Biome changed files
-        run: bunx biome check --changed --since="${{ steps.base.outputs.sha }}"
-      - run: bun run type-check
-      - run: bun run test
+        run: bun run lint --changed --since="${{ steps.base.outputs.sha }}"
+      - name: Type Check
+        run: bun run type-check
+      - name: Test
+        run: bun run test
