@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "bun run --bun next build",
     "db:ensure-indexes": "bun --conditions=react-server run scripts/ensure-indexes.ts",
-    "dev": "next dev --port 3004",
+    "dev": "bun run --bun next dev --port 3004",
     "knip": "knip",
-    "start": "next start",
+    "start": "bun run --bun next start",
     "test": "bun test --preload ./test/setup.ts",
     "test:watch": "bun test --watch --preload ./test/setup.ts",
     "type-check": "tsc --noEmit"

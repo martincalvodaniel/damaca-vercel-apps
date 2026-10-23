@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build && bun run scripts/build-service-worker.ts",
-    "dev": "next dev --port 3003",
+    "build": "bun run --bun next build && bun run scripts/build-service-worker.ts",
+    "dev": "bun run --bun next dev --port 3003",
     "knip": "knip",
     "start": "bun run scripts/preview.ts",
     "test": "bun test",
