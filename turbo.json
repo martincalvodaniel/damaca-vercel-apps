@@ -5,6 +5,15 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": [
+        "!test/setup.ts",
+        "!**/*.test.ts*",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.css",
+        "**/*.png",
+        "**/*.svg"
+      ],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
