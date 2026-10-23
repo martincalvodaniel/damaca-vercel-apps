@@ -1,5 +1,6 @@
 # My Next Template
 
+
 Base reutilizable para webapps con Next.js 16, React 19 y TypeScript. Incluye acceso con Google mediante Better Auth, administradores definidos por entorno y usuarios autorizados en MongoDB, rutas protegidas, una capa MongoDB con conexión compartida y un flujo de desarrollo agéntico por iteraciones.
 
 ## Qué incluye realmente
