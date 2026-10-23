@@ -3,7 +3,8 @@ import type { VercelConfig } from "@vercel/config/v1"
 export const config: VercelConfig = {
   buildCommand: "turbo run build --filter @damaca/billing-poc",
   bunVersion: "1.x",
-  installCommand: "bunx bun@1.4.4 install --frozen-lockfile",
+  installCommand:
+    '[ "$VERCEL_INSTALL_COMPLETED" = "1" ] || bun install --frozen-lockfile --filter @damaca/billing-poc',
   regions: ["cdg1"],
   routes: [
     {
