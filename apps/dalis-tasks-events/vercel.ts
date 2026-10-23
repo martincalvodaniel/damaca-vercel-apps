@@ -4,7 +4,7 @@ export const config: VercelConfig = {
   buildCommand: "turbo run build --filter @damaca/dalis-tasks-events",
   bunVersion: "1.4.x",
   installCommand:
-    '[ "$VERCEL_INSTALL_COMPLETED" = "1" ] || bun install --frozen-lockfile --filter @damaca/dalis-tasks-events',
+    '[ "$VERCEL_INSTALL_COMPLETED" = "1" ] || bunx bun@1.4.4 install --frozen-lockfile --filter @damaca/dalis-tasks-events',
   regions: ["cdg1"],
   routes: [
     {
