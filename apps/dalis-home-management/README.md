@@ -1,5 +1,6 @@
 # Dali Home Management
 
+
 Dali is a private home-management application for Dani and Pali. It connects
 the household inventory, shopping list, reusable dishes, and weekly meal plan
 in one responsive interface.
