@@ -1,3 +1,5 @@
+> Guía técnica auxiliar: sus notas de estado y porcentajes conservan el contexto de cuando se escribieron; no autorizan nuevas entregas ni definen cuotas actuales. El estado vigente está en [master.md](master.md) y [iterations.md](iterations.md); el protocolo único está en el [workflow raíz](../../../plan/workflow.md).
+
 # Zona horaria personal y sincronización de ajustes
 
 ## 18e1c1 — Transición durable y consumidores de incidentes6

@@ -1,18 +1,21 @@
 # Plan agéntico del monorepo
 
-## Objetivo
+## Objetivo vigente
 
-Mantener un único flujo de entrega para agentes que trabaje en `int`, consulte y preserve las reservas acordadas de capacidad, valide cambios según su alcance, y publique cada iteración completada con comprobación del SHA remoto. Las aplicaciones siguen siendo productos independientes y conservan sus límites técnicos.
+Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y futuras bajo `apps/*`, con cambios transversales planificados en la raíz. Cada app conserva sus requisitos y límites de producto.
 
 ## Decisiones vigentes
 
-- El protocolo normativo común está en [workflow.md](workflow.md); [AGENTS.md](../AGENTS.md) es su punto de entrada.
-- Las reservas mínimas son 7% en 5h y 2% en 7d. La herramienta de Codex es la fuente de saldo actual; no derivar capacidad de la duración ni de datos históricos.
-- Trabajo secuencial por defecto; delegación requiere autorización explícita para la tarea.
-- Los planes locales registran producto y cambios exclusivos de una app. Los tres documentos de este plan raíz registran cambios transversales; una entrega mantiene un único log principal.
-- `main` es gestionada por el usuario. La publicación autorizada es a `origin/int`.
-- Los templates actuales pueden dejar de ser el mecanismo de creación de apps. La generación futura con [Turborepo Generate](https://turborepo.dev/docs/reference/generate) queda como línea de trabajo separada; esta planificación no implementa generators.
+- [workflow.md](workflow.md) es el único protocolo normativo. Los tres documentos de planificación tienen responsabilidades separadas descritas allí.
+- La política común conserva trabajo en `int`, cierre de iteraciones validadas con commit/push a `origin/int`, verificación del SHA remoto y reservas mínimas de capacidad de 7% en 5h y 2% en 7d. `main` sigue bajo gestión humana.
+- Trabajo secuencial por defecto; delegación solo con autorización explícita.
+- Toda app bajo `apps/*` adopta `plan/master.md`, `plan/iterations.md` y `plan/iteration-log.md` antes de su primera implementación no trivial.
+- La generación futura mediante [Turborepo Generate](https://turborepo.dev/docs/reference/generate) deberá crear esa estructura; no se implementa generador ni control de CI en esta planificación.
 
-## Aplicaciones cubiertas
+## Aplicaciones
 
-`billing-poc`, `dalis-home-management`, `dalis-tasks-events`, `my-next-local-template` y `my-next-template`. Cada una mantiene su stack, seguridad, datos, QA y política de despliegue específica.
+El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events`, `my-next-local-template` y `my-next-template`. La lista de apps puede cambiar; la obligación documental aplica a todas las apps futuras.
+
+## Exclusiones y dudas
+
+No se define aquí un roadmap de producto para ninguna app ni se autoriza promoción a `main`, despliegue o cambios de infraestructura.

@@ -101,7 +101,7 @@ Las pruebas de IndexedDB simulan su API; las del worker comprueban caché/errore
 
 ## Iteraciones con agentes
 
-Empieza por [AGENTS.md](AGENTS.md) y [plan/workflow.md](plan/workflow.md), que remite al flujo común de [la raíz](../../plan/workflow.md). `CLAUDE.md` remite a las mismas reglas. Define objetivo, rutas, dependencias, aceptación y pruebas antes de editar. Mantén las invariantes locales en cada entrega y registra evidencia real.
+Empieza por [AGENTS.md](AGENTS.md), el [plan maestro](plan/master.md), las [iteraciones](plan/iterations.md), el [registro](plan/iteration-log.md) y el [workflow común](../../plan/workflow.md). `CLAUDE.md` remite a las mismas reglas. Define objetivo, rutas, dependencias, aceptación y pruebas antes de editar. Mantén las invariantes locales en cada entrega y registra evidencia real.
 
 > Lee AGENTS.md y plan/master.md. Quiero crear [producto] local para [usuarios]. Concreta el MVP y las primeras iteraciones con IndexedDB, offline e instalación. Define recuperación si habrá datos irremplazables. Implementa la primera entrega autorizada y valida su aceptación.
 

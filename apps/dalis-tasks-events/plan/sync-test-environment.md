@@ -1,3 +1,5 @@
+> Guía técnica auxiliar: sus notas de estado y porcentajes conservan el contexto de cuando se escribieron; no autorizan nuevas entregas ni definen cuotas actuales. El estado vigente está en [master.md](master.md) y [iterations.md](iterations.md); el protocolo único está en el [workflow raíz](../../../plan/workflow.md).
+
 # Entorno de pruebas de sincronización
 
 ## 22c1 — Modos explícitos de regresión final
@@ -55,7 +57,7 @@ Salida: runner reproducible, guards de aislamiento probados y evidencia de commi
 
 Las pruebas de actor/membresía en acciones se añaden en11b1 con sesiones verificadas, además de aislamiento del repositorio. Preferencias, descarga completa y reconciliación son necesarias antes de anunciar convergencia del espacio en dos dispositivos. La matriz no sustituye implementar esas capas.
 
-Cerrar cada corte con lint/tipos/tests/build pertinentes, plan/registro y commit/pushint. Mantener fuera de la suite normal las pruebas que exigen runtime explícito, con ejecución de integración separada y evidencia clara de qué se ejecutó. Ver [workflow](workflow.md) para presupuesto y reservas.
+Cerrar cada corte con lint/tipos/tests/build pertinentes, plan/registro y commit/pushint. Mantener fuera de la suite normal las pruebas que exigen runtime explícito, con ejecución de integración separada y evidencia clara de qué se ejecutó. Ver [workflow raíz](../../../plan/workflow.md) para presupuesto y reservas.
 
 ## Evidencia11b1a
 

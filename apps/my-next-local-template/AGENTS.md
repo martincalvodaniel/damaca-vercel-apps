@@ -24,7 +24,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Agent Workflow
 
-Follow the [root agent workflow](../../plan/workflow.md) for branch, planning, capacity, validation, commits, and publication. Read this app's `plan/master.md`, `plan/workflow.md`, the relevant `plan/iterations.md` entry, and recent `plan/iteration-log.md` entries for product-specific acceptance. Nested app instructions add their local constraints.
+Follow the [root agent workflow](../../plan/workflow.md) for branch, planning, capacity, validation, commits, and publication. Read this app's `plan/master.md`, the relevant `plan/iterations.md` entry, and recent `plan/iteration-log.md` entries for product-specific acceptance. Nested app instructions add their local constraints.
 
 ## Local Iteration Constraints
 

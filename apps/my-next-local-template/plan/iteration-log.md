@@ -1,25 +1,9 @@
 # Registro de iteraciones
 
-## 00 — Preparación de la base reutilizable · 2026-10-23
-
-- Estado: `validated`; entrega local.
-- Cambios: README ajustado al funcionamiento real; reglas raíz y anidadas para planificación y autenticación; plan reutilizable; ejemplos de pruebas neutrales; paquete identificado como `my-next-template`; Bun como única fuente de instalación; condición `react-server` en bootstrap de índices.
-- Limpieza adicional: retirado `package-lock.json`, que describía dependencias antiguas distintas de las actuales. Retirados los cinco SVG sin uso de `create-next-app`, que provocaban errores de accesibilidad en Biome. La búsqueda de referencias confirmó que no los utiliza el código.
-- Decisiones: conservar el modelo de autenticación existente, sin adaptador MongoDB. No incorporar funcionalidades de negocio, reglas de navegación del producto anterior, permisos de publicación, reservas de cuota ni automatizaciones de otros proyectos. Los commits requieren autorización de la entrega actual.
-- `bun install --frozen-lockfile`: aprobado, sin cambios de dependencias.
-- `bun run lint`: aprobado, 28 archivos. La primera pasada detectó los cinco SVG de ejemplo; se corrigió retirando esos recursos sin uso y se repitió el lint.
-- `bun run type-check`: aprobado.
-- `bun run test`: 9 pruebas aprobadas, 0 fallos, 11 aserciones.
-- `bun run build`: aprobado con Next.js 16.4.2/Turbopack; rutas `/`, `/auth/signin` y `/api/auth/[...all]`, más la página de no encontrado y el proxy.
-- Módulo de índices ejecutado con `bun --conditions=react-server` y registro vacío: aprobado sin conexión de datos; acredita la resolución de `server-only`, no una provisión MongoDB real.
-- Referencias: búsqueda de nombres del dominio anterior en archivos del proyecto, sin coincidencias; enlaces Markdown locales comprobados; `git diff --check` aprobado. La revisión excluye historial Git, dependencias, artefactos generados y archivos privados de entorno.
-- Límites: no se ha realizado un login interactivo con Google, una conexión real a MongoDB ni una revisión visual de las pantallas, que no han cambiado. La interfaz inicial sigue teniendo textos mixtos; su idioma se define al personalizar el producto.
-- Publicación: commit local solicitado por el usuario tras la validación; sin push ni despliegue solicitados. No se han modificado credenciales ni el repositorio de referencia.
-- Siguiente paso: definir el producto de destino en `01` a partir de sus requisitos humanos.
+El estado de cada iteración se mantiene únicamente en [iterations.md](iterations.md). Este registro conserva hechos, validación y límites. Las entregas compartidas enlazan al registro transversal [AGW-01](../../../plan/iteration-log.md#agw-01-centralizar-el-flujo-y-el-contrato-documental).
 
 ## 00a — Flujo obligatorio en int · 2026-10-23
 
-- Estado: `validated`; cambio exclusivamente documental.
 - Instrucción humana: trabajar siempre en `int`, crear un commit y hacer push tras cada iteración; el usuario revisa y realiza el merge y push de `main`.
 - Cambios: alineados README, reglas raíz/anidadas, plan maestro y protocolo de cierre. Incluye iteraciones documentales, preparación segura de `int`, publicación explícita a `origin/int`, verificación del SHA y tratamiento de fallos sin force-push.
 - Esta decisión sustituye la política inicial de autorización de commit por entrega de `00`; la entrada anterior se conserva como evidencia histórica.
@@ -28,9 +12,9 @@
 - Publicación: commit/push a `origin/int` autorizados como cierre de esta entrega; verificar el SHA remoto y comunicar el resultado real al usuario, sin anticipar su hash en este registro.
 - Siguiente paso de producto: `01`, pendiente de requisitos; integración a `main` exclusivamente humana.
 
+
 ## 02 — Administración y acceso de usuarios · 2026-10-23
 
-- Estado: `validated`.
 - Instrucción humana: `ALLOWED_EMAILS` concede administración; otros correos acceden como usuarios normales mediante permisos persistidos en MongoDB.
 - Implementación: rol calculado en servidor por petición a partir de sesión con correo verificado; administradores desde entorno y permisos normales desde `user_access`. Las cookies y el modelo sin adaptador persistente de Better Auth se conservan. No se guardan roles en cookies.
 - `/admin`: layout y lectura autorizados, formulario de alta, listado paginado de 50 entradas y revocación. Acciones autorizadas individualmente, Zod compartido, rechazo de cambios a administradores y errores saneados. Enlace desde inicio solo para administradores.
@@ -45,9 +29,9 @@
 - Publicación: cierre mediante commit/push de esta iteración en `int` y verificación remota al finalizar; `main` sin cambios. El SHA real se comunica en el cierre, sin anticiparlo aquí.
 - Próximo paso: revisión humana de `int`; el producto de destino sigue pendiente de definición en `01`.
 
+
 ## 03 — Solicitudes de acceso · 2026-10-23
 
-- Estado: `validated`.
 - Instrucción humana: mostrar una pantalla para solicitar acceso a correos no permitidos y revisar las solicitudes pendientes desde administración.
 - Identidad y permisos: Google puede emitir una sesión de identidad verificada sin conceder acceso al producto. `getVerifiedSession()` queda reservado al autoservicio por identidad; layouts, datos y acciones protegidas siguen exigiendo autorización. Los no miembros se redirigen a `/auth/access`, los anónimos/no verificados a iniciar sesión. La solicitud deriva exclusivamente del correo de sesión.
 - UI: pantalla con solicitud, estado pendiente/rechazado, comprobación de acceso y cambio de cuenta. Administración añade listado paginado y botones Aceptar/Rechazar. Aprobar concede únicamente acceso normal; rechazar no lo concede y permite un nuevo envío.
@@ -63,9 +47,9 @@
 - Publicación: commit y push en `int` con verificación remota al cierre; `main` permanece humano. SHA real comunicado al usuario tras publicar.
 - Próximo paso: revisión humana de `int`; el producto de destino sigue pendiente de definición en `01`.
 
+
 ## 04 — Navegación responsive y ajustes · 2026-10-23
 
-- Estado: `validated`.
 - Petición humana: adaptar el patrón de navegación inferior móvil/superior escritorio de referencia, inicialmente solo con Ajustes, usuario y tema.
 - Implementación: `AppShell` compartido en el layout protegido, único registro de destinos, avatar de iniciales, estado activo `aria-current`, barra inferior con safe area y reserva de contenido; barra superior sticky desde 768px. Sin nuevas pestañas de producto.
 - Ajustes: `/settings` protegido, nombre/correo/rol de sesión desde servidor, cambio de cuenta reutilizado y enlace a administración solo para administradores. Se conservan el inicio y administración existentes.
@@ -80,9 +64,9 @@
 - Publicación: commit/push en `int` y verificación del SHA remoto al cierre; `main` exclusivamente humano. Sin hashes anticipados.
 - Próximo paso: revisión humana de `int`; producto de destino pendiente de definición en `01`.
 
+
 ## 04a — Foto del perfil social en Ajustes · 2026-10-23
 
-- Estado: `validated`.
 - Corrección humana: el icono de Ajustes debe mostrar la foto del login social.
 - Cambio: se transmite `session.user.image` desde el layout autorizado hasta navegación/avatar y se utiliza también en la tarjeta de cuenta. `next/image` sin optimización, 32×32, circular, decorativo y sin referrer, siguiendo el patrón de referencia. Iniciales si no hay URL o si falla su carga; una URL nueva puede volver a intentarse.
 - Validación: lint, tipos, 37 pruebas/93 aserciones y `bun run build --webpack` aprobados. Sin nuevas pruebas unitarias que reflejen solamente props; comprobación directa en navegador del comportamiento de imagen.
@@ -90,9 +74,9 @@
 - Evidencia: `/private/tmp/template-social-avatar-mobile.png`, fuera de Git. Viewport restaurado y pestaña propia cerrada; servidores temporales retirados. No ha sido necesario conectar con MongoDB: sesión admin ficticia, sin cambios de autorización ni persistencia.
 - Publicación: commit/push en `int` y verificación remota al cierre; `main` intacta.
 
+
 ## 05 — UI en inglés · 2026-10-23
 
-- Estado: `validated`.
 - Petición humana: traducir toda la interfaz al inglés.
 - Alcance: navegación, inicio, cuenta/rol, selector de tema y aviso de almacenamiento, login, solicitud/estados, administración, paginación, estados vacíos, acciones, errores y etiquetas accesibles. `html` declara `lang="en"`. Se actualizan instrucciones y decisión de idioma; la documentación de producto puede seguir en español.
 - Sin cambios de rutas, autenticación/autorización, valores de tema/operaciones ni datos persistidos. No se añade un sistema i18n ni dependencias.
@@ -103,18 +87,18 @@
 - Evidencia fuera de Git: `/private/tmp/template-settings-english-mobile.png` y `/private/tmp/template-admin-english-desktop.png`. Viewport restaurado y pestaña propia cerrada; servidores y contenedor temporal retirados.
 - Publicación: commit/push en `int` y verificación remota al cierre; `main` intacta.
 
+
 ## 06 — Home en navegación · 2026-10-23
 
-- Estado: `validated`. Home (`/`) añadido al registro único con icono local; Settings conserva su avatar. Estado activo raíz específico y exclusivo.
 - Lint, tipos, 37 pruebas/93 aserciones, `bun run build --webpack` y `git diff --check` aprobados. Sin nuevas dependencias ni cambios de permisos/datos.
 - Navegador compilado con sesión admin ficticia: Settings→Home a 390px, solo Home activo y sin overflow; Home→Settings a 1280px, solo Settings activo y barra superior sticky. Captura: `/private/tmp/template-home-navigation-mobile.png` fuera de Git.
 - Viewport restaurado, pestaña propia cerrada y servidor temporal retirado; sin acceso a Mongo ni login Google real.
 - Publicación: commit/push en `int` y verificación remota al cierre; `main` intacta.
 
 
+
 ## 07 — Plantilla local instalable · 2026-10-23
 
-- Estado: `validated` para aceptación local. La petición humana sustituye expresamente Google/Better Auth, permisos/solicitudes/administración y MongoDB por una base local con IndexedDB e instalación móvil/escritorio. El historial anterior queda como evidencia y no impone requisitos actuales.
 - Retirados Better Auth, MongoDB, `server-only`, SWR, proxy, rutas API/auth/admin, configuración de credenciales, scripts/pruebas remotas y componentes de identidad sin uso. No se ha leído ni modificado el contenido del `.env.local` preexistente; no se necesita ni debe copiarse al reutilizar la plantilla.
 - Añadidos `idb@8.0.4` y `fake-indexeddb@6.2.6` (solo desarrollo). Se conserva Next/React/TypeScript/Tailwind/Zod/Bun/Biome/Knip; un único lockfile. `bun install --frozen-lockfile` aprobado. Bun instalado temporalmente fuera del repositorio porque no estaba disponible en el PATH de la sesión; no se incorpora otro gestor ni lockfile al proyecto.
 - IndexedDB: conexión compartida y apertura perezosa, esquema inicial `preferences`, validación Zod de entrada/lectura, transacciones confirmadas antes de éxito, recuperación de apertura fallida y cierre ante cambios de versión. El tema es el único dato inicial; localStorage solo mantiene una caché síncrona mínima y señal entre pestañas. Provider global restaura desde IndexedDB también en Home. Fallos visibles en Settings sin fallback volátil que anuncie éxito.
@@ -135,9 +119,9 @@
 - Cierre operativo: perfiles temporales de Chrome cerrados y eliminados; worker de prueba restaurado; preview propio detenido. Publicación reservada a una nueva indicación del usuario después de revisar el remoto.
 
 
+
 ## 08 — Capacidad de Codex por ventanas · 2026-10-23
 
-- Estado: `validated` para la entrega documental local. Petición humana: gestionar las ventanas de 5h/7d, dimensionar cada iteración para cerrarla sin rate limit y aprovechar la capacidad manteniendo reservas del 7%/2%.
 - Nueva sección específica en `workflow.md`, enlazada desde `AGENTS.md` y resumida en el plan maestro. Las reservas se aplican a la capacidad total de cada ventana, tras estimar análisis, implementación, validación, reparaciones y cierre; deben cumplirse ambas. Si no cabe, se entrega un corte menor completo y se deja el resto pendiente.
 - Consultas al inicio, antes de cada iteración, en fases significativas, ante imprevistos y al cierre. Se identifican ventanas por duración, se calcula restante a partir de `usedPercent` y se consideran reinicios, datos desconocidos y actividad compartida. Se consulta la herramienta real al preparar y cerrar esta entrega, sin persistir instantáneas ni identificadores de cuenta en la plantilla.
 - Se distingue el horizonte más amplio de 7d de una proporción de cuota no deducible por duración. La estimación es conservadora; no se garantizan costes ni ausencia absoluta de límites. No se inventa trabajo para gastar capacidad ni se omiten pruebas para aumentar alcance. No hay autorización nueva de créditos, reinicios o trabajo programado.
@@ -147,9 +131,9 @@
 - Próximo paso: esperar la revisión del remoto; aplicar esta política al dimensionar las siguientes iteraciones autorizadas.
 
 
+
 ## 09 — Configuración geográfica tipada de Vercel · 2026-10-23
 
-- Estado: `validated` para configuración local. Se integra el fragmento TypeScript enviado por el usuario. Al iniciar existía `vercel.ts` sin seguimiento con la misma región y regla, pero sin tipado; se conserva íntegramente su comportamiento y se añaden el import de tipo y la anotación `VercelConfig` solicitados.
 - Dependencia añadida y fijada con Bun: `@vercel/config@0.13.0` solo en desarrollo. No se importa en la aplicación ni en el navegador. `bun.lock` actualizado; no se modifica Next, IndexedDB, service worker, UI ni variables de entorno.
 - Se mantienen `regions: ["cdg1"]` y la regla global `missing` sobre `x-vercel-ip-country=ES` con `mitigate.action=deny`. README y plan maestro documentan que `cdg1` es París para funciones, mientras esta base exporta estáticos sin funciones; la regla usa país por IP y deniega también la ausencia de coincidencia. No es identidad ni garantía de ubicación física.
 - Alcance PWA explícito: solo se filtran peticiones que llegan a Vercel; una copia cacheada puede funcionar fuera de España sin consultar al host. No se borran datos ni se añade un servicio remoto a la aplicación. Otros proveedores y previews locales no aplican esa regla.

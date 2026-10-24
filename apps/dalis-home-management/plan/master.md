@@ -1,10 +1,13 @@
-# Dalis Home Management plan
+# Dalis Home Management — plan maestro
 
-Record authorized product scope and acceptance here; do not infer roadmap items from neighboring applications.
+## Estado vigente
 
-## Current decisions
+No hay requisitos de producto ni decisiones adicionales registradas. No inferir roadmap desde README, código o aplicaciones vecinas.
 
-- The root [agent workflow](../../../plan/workflow.md) governs delivery mechanics.
-- Preserve this application's product behavior, architecture, security, data, and deployment boundaries documented in its `AGENTS.md` and nested instructions.
+## Límites aceptados
 
-No additional roadmap or accepted requirements are recorded yet.
+Conservar el comportamiento, arquitectura, seguridad, datos y límites de despliegue documentados en [AGENTS.md](../AGENTS.md). El [workflow común](../../../plan/workflow.md) define el proceso de entrega y el contrato documental.
+
+## Dudas abiertas
+
+El alcance futuro requiere una petición de producto; documentar objetivos y decisiones antes de implementación no trivial.

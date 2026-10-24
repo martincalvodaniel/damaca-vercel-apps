@@ -27,7 +27,11 @@ Run a task for every application with `bun run build`, `bun run test`, or `bun r
 bun run build --filter=@damaca/billing-poc
 ```
 
-Run `bun run lint` to check staged files across the repository, or `bun run lint:fix` to apply safe fixes to them. CI checks files changed from the relevant Git base. The root catalog in `package.json` is the source for shared dependency versions; commit the root `bun.lock` after changing dependencies.
+Run `bun run lint` to check the repository, `bun run lint --staged` for staged files, or `bun run lint --changed --since=<base>` for files changed from a Git base. CI checks files changed from the relevant Git base. The root catalog in `package.json` is the source for shared dependency versions; commit the root `bun.lock` after changing dependencies.
+
+## Agent planning
+
+The [root workflow](plan/workflow.md) is the sole delivery protocol. Every current and future app under `apps/*`, regardless of stack or creation method, must include `plan/master.md`, `plan/iterations.md`, and `plan/iteration-log.md` before its first non-trivial implementation. The [root instructions](AGENTS.md) define each document's role and make the structure, links, and app-specific constraints part of app onboarding. Future Turborepo generation should scaffold the same files; no generator or CI gate is implied.
 
 To share the Turbo cache locally, authenticate with `bun run turbo login` and link this repository with `bun run turbo link`.
 

@@ -1,3 +1,5 @@
+> Guía técnica auxiliar: sus notas de estado y porcentajes conservan el contexto de cuando se escribieron; no autorizan nuevas entregas ni definen cuotas actuales. El estado vigente está en [master.md](master.md) y [iterations.md](iterations.md); el protocolo único está en el [workflow raíz](../../../plan/workflow.md).
+
 # Sincronización de series y apariciones comunes
 
 ## Piloto de deployment cerrado — 17e2b2c

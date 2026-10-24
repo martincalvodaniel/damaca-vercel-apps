@@ -124,7 +124,7 @@ Las dos entradas rechazan destinos que no cumplan sus guardias de aislamiento y 
 
 ## Trabajar con agentes
 
-Empieza por [AGENTS.md](AGENTS.md), [plan/master.md](plan/master.md) y [plan/workflow.md](plan/workflow.md). El flujo define alcance y aceptación antes de editar, entrega cambios pequeños, registra las pruebas y deja el siguiente paso listo para otra sesión. `CLAUDE.md` remite a las mismas reglas.
+Empieza por [AGENTS.md](AGENTS.md), el [plan maestro](plan/master.md), las [iteraciones](plan/iterations.md), el [registro](plan/iteration-log.md) y el [workflow común](../../plan/workflow.md). El flujo define alcance y aceptación antes de editar, entrega cambios pequeños, registra las pruebas y deja el siguiente paso listo para otra sesión. `CLAUDE.md` remite a las mismas reglas.
 
 Ejemplo de petición inicial:
 

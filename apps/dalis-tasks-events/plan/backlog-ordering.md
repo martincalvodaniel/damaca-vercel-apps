@@ -1,3 +1,5 @@
+> Guía técnica auxiliar: sus notas de estado y porcentajes conservan el contexto de cuando se escribieron; no autorizan nuevas entregas ni definen cuotas actuales. El estado vigente está en [master.md](master.md) y [iterations.md](iterations.md); el protocolo único está en el [workflow raíz](../../../plan/workflow.md).
+
 # Orden de apariciones atrasadas: siguiente corte
 
 Estado: diseño pendiente de validar; no existe ejecutor de movimiento overdue para apariciones. El día mixto está entregado en09b4a y el lookup acotado por identidad en09b4b1. No activar todavía formularios ni controles de repetición sobre ese alcance.
@@ -38,7 +40,7 @@ Alternativas que deben compararse: claves lexicográficas dispersas con legado c
 | 09b4b2c              | Ejecutor local completo con schema de colocación compatible, dependencias, CAS y rollback; IndexedDB real, concurrencia, recarga y regresión día/simple. Comando solo se habilita cuando ejecutor y lector convergen. |
 | 09b5                 | Hook/lector/UI de repetición de tareas, backlog paginado y formulario compacto; estado/checklist/editar/cancelar/orden offline y calendario real.                                                                     |
 
-Si el motor requiere otro corte, registrar objetivo y aceptación antes de modificar código. Mantener commit/push int individual y consulta de ambas cuotas al terminar cada subentrega. Continuación futura sigue los límites de [workflow](workflow.md); no prometer consumo exacto.
+Si el motor requiere otro corte, registrar objetivo y aceptación antes de modificar código. Mantener commit/push int individual y consulta de ambas cuotas al terminar cada subentrega. Continuación futura sigue los límites de [workflow raíz](../../../plan/workflow.md); no prometer consumo exacto.
 
 ### Compatibilidad probada en09b4b2a1
 

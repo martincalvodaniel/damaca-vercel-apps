@@ -1,3 +1,5 @@
+> Guía técnica auxiliar: sus notas de estado y porcentajes conservan el contexto de cuando se escribieron; no autorizan nuevas entregas ni definen cuotas actuales. El estado vigente está en [master.md](master.md) y [iterations.md](iterations.md); el protocolo único está en el [workflow raíz](../../../plan/workflow.md).
+
 # Transacciones remotas de preferencias
 
 Estado11c2b0: contrato de implementación siguiente; no ejecutor personal activo. Repositorios y planners están probados por separado. Esta propuesta exige las pruebas siguientes antes de declarar atomicidad personal o activar envío.

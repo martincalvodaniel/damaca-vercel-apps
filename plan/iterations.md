@@ -1,10 +1,20 @@
-# Iteraciones del plan agéntico del monorepo
+# Iteraciones transversales
 
-Este archivo ordena exclusivamente entregas que afectan a más de una app o a las reglas compartidas. La implementación actual del protocolo se registra en [iteration-log.md](iteration-log.md). Los roadmaps de producto permanecen en cada aplicación.
+Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
-| Estado | Iteración | Objetivo |
-| --- | --- | --- |
-| validated | Unificación del flujo agéntico | Consolidar las reglas comunes en la raíz, retirar políticas contradictorias locales y preservar restricciones de producto e historial. |
-| pending | Generación de aplicaciones | Diseñar generadores de workspace con Turborepo Generate cuando se defina el flujo sustituto para crear apps. |
+## AGW-01 — Centralizar el flujo y el contrato documental
 
-Antes de iniciar cada iteración, registrar objetivo, `target_paths`, dependencias, aceptación y validación. No iniciar el elemento pendiente sin petición o autorización humana aplicable.
+- Estado: `validated`.
+- Objetivo: centralizar el protocolo en la raíz, separar funciones de los tres documentos, reducir duplicación local y exigir el sistema a toda app actual y futura.
+- Rutas: instrucciones raíz y de apps, `plan/**`, README y enlaces afectados.
+- Dependencias: autorización del usuario en esta conversación.
+- Aceptación: funciones documentales no duplicadas; workflows locales retirados; archivo histórico conservado donde había volumen; nueva app obligada a incluir estructura antes de trabajo no trivial; sin CI ni generador.
+- Validación prevista: enlaces, coherencia, conservación del archivo, `git diff --check`.
+- Evidencia: [iteration-log.md#AGW-01](iteration-log.md#agw-01-centralizar-el-flujo-y-el-contrato-documental).
+
+## AGW-02 — Generación de apps con Turborepo
+
+- Estado: `pending`; requiere definir y autorizar un trabajo futuro.
+- Objetivo: evaluar la futura creación de apps con Turborepo Generate e incluir el contrato documental en el scaffold.
+- Rutas/dependencias: por definir al iniciar; parte de la generación de apps.
+- Aceptación y validación: por definir antes de implementar; comprobar que se genera la estructura obligatoria, enlaces y límites de producto.

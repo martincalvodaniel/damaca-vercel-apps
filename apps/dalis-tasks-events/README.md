@@ -3,9 +3,11 @@
 Mobile-first, offline-capable personal planning app built with Next.js, React, TypeScript, Better Auth and the native MongoDB driver. The interface is in Spanish.
 - [User guide (Spanish)](plan/user-guide.md)
 - [Release readiness and operating checklist (Spanish)](plan/release-readiness.md)
-- [Current plan and delivery status](plan/master.md)
+- [Current plan](plan/master.md)
+- [Iterations and status](plan/iterations.md)
+- [Recent delivery evidence](plan/iteration-log.md)
 - [Physical two-device acceptance checklist](plan/manual-device-checklist.md)
-- [Contribution and iteration workflow](plan/workflow.md)
+- [Monorepo agent workflow](../../plan/workflow.md)
 - [Historical workflow evidence (not normative)](plan/workflow-history.md)
 
 ## Local development

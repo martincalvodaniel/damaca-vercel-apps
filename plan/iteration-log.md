@@ -1,11 +1,11 @@
 # Registro de entregas transversales
 
-## Unificación del flujo agéntico
+Los hechos de publicación se verifican en Git. El estado normativo está en [iterations.md](iterations.md); este registro conserva evidencia, límites e incidentes observados.
 
-**Estado:** validación documental aprobada; commit, push y verificación SHA pendientes.
+<a id="agw-01-centralizar-el-flujo-y-el-contrato-documental"></a>
+## AGW-01 — Centralizar el flujo y el contrato documental
 
-**Alcance:** protocolo raíz y puntos de entrada de las cinco apps; planificación raíz para trabajo transversal; conservación del historial del workflow de `dalis-tasks-events`; actualización de instrucciones y README. No incluye scripts, cambios de CI ni generación de workspaces.
-
-**Aceptación:** no quedan reglas activas que contradigan `int`, commit/push por iteración validada, reservas 7%/2% o delegación autorizada; las restricciones de producto siguen presentes; workflows y enlaces son coherentes.
-
-**Validación:** `git diff --check` limpio; enlaces locales resueltos en 70 documentos Markdown de entrada activos; inspección de instrucciones activas sin contradicciones de rama, capacidad, commit ni delegación. Historial anterior de `dalis-tasks-events` comparado byte a byte con `HEAD` y preservado.
+- Cambios: contrato de planificación añadido a las instrucciones raíz; responsabilidades y retención documental incorporadas al workflow; cinco workflows locales retirados; instrucciones de planificación redundantes consolidadas; documentos extensos archivados bajo `plan/archive/2026-10-24/` en cada ámbito afectado; las apps conservan sus límites de producto en sus instrucciones.
+- Evidencia: el commit `5800b12d0f9b8183fba89cec97e30c5fc05fa254` está en `int` y `origin/int` (comprobación al iniciar esta entrega).
+- Validación: los enlaces Markdown locales y anclas resuelven; las cinco apps contienen los tres documentos y no conservan workflow local; `bun run lint` pasa para los 1929 archivos (726 warnings y 2112 infos existentes; los archivos de aplicación con esos diagnósticos no se modificaron); los documentos Markdown editados pasan Biome y `git diff --check` queda limpio. Revisión manual confirma que solo `iterations.md` contiene estados y que el log mantiene las diez evidencias recientes de Dalis Tasks & Events; los archivos anteriores están indexados en sus archivos fechados.
+- Límites: solo documentación; no se modifican CI, generadores ni aplicaciones.

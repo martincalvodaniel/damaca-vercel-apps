@@ -1,3 +1,3 @@
-# Dalis Home Management delivery log
+# Registro de entregas
 
-No agent deliveries are recorded yet. Preserve evidence and limitations for each completed iteration here.
+No hay entregas de producto registradas en este ámbito. Añadir evidencia observada por identificador al cerrar una iteración; consultar el estado en `iterations.md`.

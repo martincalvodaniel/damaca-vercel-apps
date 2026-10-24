@@ -12,6 +12,16 @@ Este documento rige el trabajo de agentes en todas las aplicaciones. Las restric
 
 El plan y log de la app son el registro principal para cambios exclusivos de esa app. Para cambios compartidos, usar `plan/master.md`, `plan/iterations.md` y `plan/iteration-log.md` de la raíz. Un mismo corte tiene un único registro principal; incluir enlaces desde los planes de las otras apps afectadas. No inventar roadmap o progreso.
 
+## Contrato de planificación
+
+Toda app presente o futura bajo `apps/*`, sea cual sea su tecnología o mecanismo de creación, debe tener `plan/master.md`, `plan/iterations.md` y `plan/iteration-log.md` antes de su primera implementación no trivial. La incorporación de una app verifica esos archivos, sus enlaces y sus restricciones específicas. El usuario puede autorizar documentación de producto inicialmente vacía; no inventar requisitos ni progreso.
+- `master.md`: estado y resumen vigentes de producto, alcance, requisitos, decisiones aceptadas, exclusiones y dudas abiertas. Cambia cuando cambie ese estado, no por cada entrega.
+- `iterations.md`: orden de entregas con identificador único por ámbito, estado (`pending`, `in_progress`, `blocked` o `validated`), objetivo, rutas, dependencias, aceptación y validación prevista. Es la única fuente del estado de iteración. Conservar identificadores históricos sin renumerarlos.
+- `iteration-log.md`: evidencia observada por identificador: cambios, comprobaciones, limitaciones e incidentes. Enlazar los criterios de aceptación sin copiarlos enteros. No anticipar publicación; comprobarla en Git.
+- Mantener en el registro las diez entregas más recientes. Mover las anteriores a `plan/archive/YYYY-MM-DD/` e indexarlas; las iteraciones completadas conservan referencia compacta a su evidencia. Archivar versiones previas sustanciales y preservar requisitos, decisiones y evidencias.
+- Los tres documentos de la raíz registran entregas transversales. Una entrega de app usa los documentos de esa app. Mantener un registro principal por entrega y añadir referencias desde otros ámbitos afectados.
+- `workflow.md` raíz es el único workflow. Los `AGENTS.md` de apps contienen restricciones de producto/tecnología y remiten a este protocolo; no repetir reglas globales. La futura generación con Turborepo debe crear los tres documentos; esta obligación no añade por sí sola CI ni generadores.
+
 ## Capacidad de Codex
 
 La herramienta de uso informa los límites actuales: consultar `mcp__codex_app__get_usage_limits` o su equivalente disponible. Identificar las ventanas por `windowDurationMins` (300 para 5h y 10080 para 7d), preferir el límite general aplicable en `rateLimitsByLimitId` y usar la alternativa disponible si falta. Calcular el restante como `max(0, min(100, 100 - usedPercent))`; registrar hora, porcentaje restante y reinicio solo si está disponible. Una lectura ausente no significa capacidad ilimitada.

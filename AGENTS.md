@@ -3,7 +3,9 @@
 - Keep all generated or edited code and code comments in English. Communicate with the user in Spanish.
 - Each application remains independent under `apps/<name>`. Preserve its product behavior and scoped instructions.
 - Use Bun workspaces and the root Bun lockfile. Declare common direct dependency versions in the root catalog and reference them with `catalog:`.
-- Use the root Biome configuration. `bun run lint` checks only changed and new files; when an existing file is edited, correct all Biome findings in that file.
+- Use the root Biome configuration. Plain `bun run lint` checks the repository; use
+  `--staged` or `--changed --since=<base>` for an explicit incremental check. When
+  an existing file is edited, correct all Biome findings in that file.
 - Run app tasks through root scripts or Turbo filters, for example `bun run build --filter=@damaca/billing-poc`.
 - Preserve per-app environment variable boundaries and never copy secrets or local Vercel credentials into the repository.
 - Keep Vercel projects scoped to their app directory and keep `main` human-managed.
@@ -20,6 +22,7 @@
   delivery and cross-link it when a change affects another app.
 - Work sequentially by default. Delegate only when the user explicitly authorizes
   delegation for the work; define disjoint paths and one integration owner.
+- Every present and future application under `apps/*`, regardless of technology or creation mechanism, MUST adopt the three-document planning system (`plan/master.md`, `plan/iterations.md`, `plan/iteration-log.md`) before its first non-trivial implementation. The master owns current scope and decisions; iterations own status and acceptance; the log owns observed evidence. The root [workflow](plan/workflow.md) is the sole workflow policy. New-app acceptance includes checking these files, their links, and app-specific constraints. Future Turborepo generators should create this structure; this is documentation only and adds no CI gate or generator.
 - Use the root lint configuration. `bun run lint` checks the repository; narrow it
   explicitly with `--staged` or `--changed --since=<base>` as documented in the
   root workflow. Fix all findings in each edited file.
