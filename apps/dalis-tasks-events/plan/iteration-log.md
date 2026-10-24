@@ -1,5 +1,7 @@
 # Registro de iteraciones
 
+> Este registro conserva evidencia de entregas pasadas. Sus porcentajes y decisiones operativas corresponden a lecturas de ese momento, no a la capacidad o autorización actual. Sigue el [flujo vigente del monorepo](../../../plan/workflow.md) y consulta la herramienta de uso para el saldo actual.
+
 ## 23n — Compatibilidad de Intl en calendario civil
 
 Implementación: `civil-date.ts` y `zoned-time.ts` fijan locale `en-US` y calendario `gregory`, para que ICU exponga era `AD`/`BC` incluso cuando Bun ejecuta en Linux. La guardia de calendario civil sigue rechazando fechas antes del año 0001; el resolver zoned-time reconoce muestras auxiliares BC sin confundirlas con el año 1.

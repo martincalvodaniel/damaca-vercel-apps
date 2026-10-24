@@ -9,7 +9,7 @@
 - Update affected documents together when a decision changes. Preserve historical evidence; add corrections explicitly.
 - Link only to existing local files or verified primary sources. Never copy credentials, personal data, historical account quotas, or permissions from another project.
 - Keep future work pending until the user defines and authorizes the product. Do not turn sample entries into fabricated progress.
-- Preserve the mandatory iteration closing protocol: work on `int`, commit plan and implementation together after validation, push to `origin/int`, and verify the remote SHA. Documentation-only iterations follow the same protocol. The user alone merges and pushes `main`.
+- Follow the root [agent workflow](../../../plan/workflow.md) for branch, capacity, commit, push, and remote verification. The user alone manages `main`.
 
 - Current local-only invariants are authoritative: static export, IndexedDB, installation and offline without accounts, backend or external runtime services. Historical iterations 00–06 are evidence, not active requirements; preserve them and record their supersession explicitly.
 - For storage/PWA changes, plan non-destructive migrations, failures, offline reloads, update behavior and data recovery as applicable. Native installation must be reported separately from browser emulation.

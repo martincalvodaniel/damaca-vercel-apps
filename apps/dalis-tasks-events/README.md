@@ -6,6 +6,7 @@ Mobile-first, offline-capable personal planning app built with Next.js, React, T
 - [Current plan and delivery status](plan/master.md)
 - [Physical two-device acceptance checklist](plan/manual-device-checklist.md)
 - [Contribution and iteration workflow](plan/workflow.md)
+- [Historical workflow evidence (not normative)](plan/workflow-history.md)
 
 ## Local development
 

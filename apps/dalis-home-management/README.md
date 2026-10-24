@@ -132,3 +132,7 @@ bun run test:watch
 bun run lint:fix
 bun run format
 ```
+
+## Agent workflow
+
+Follow the [root agent workflow](../../plan/workflow.md) and [app instructions](AGENTS.md). Product plans and delivery evidence live in this app's `plan/` directory.

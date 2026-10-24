@@ -10,18 +10,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - All user-facing graphical UI copy, including labels, validation messages, accessibility text, and empty states, must be in Spanish. Product names may remain unchanged.
 - Planning and product documentation under `plan/**` may be in Spanish.
 
-## Iteration Delivery
+## Product Iteration Notes
 
-- Read `plan/master.md` and `plan/workflow.md` before starting a product iteration. Follow the current dependency order in `plan/iterations.md`.
-- Before editing, define the iteration goal, `target_paths`, dependencies, acceptance criteria, and validation scope. Keep each iteration independently reviewable.
-- Every completed iteration, including planning-only iterations, must end with a Conventional Commit on the current branch. Do not switch branches, include unrelated user changes, or push unless requested.
-- On the integration branch `int`, the user authorizes commit and push after every completed, validated iteration; pushing triggers the configured preproduction deployment. Keep this authorization scoped to `int`; do not infer permission to push other branches or deploy production.
-- Update the plan and iteration log in the same commit. For documentation-only iterations, validate references, consistency, and `git diff --check`; code changes must satisfy the full Definition of Done below.
-- After every completed iteration, query current account usage directly for BOTH Codex windows: 5 hours and 7 days. Calculate remaining percentages as `100 - usedPercent` and follow the closing reserves in `plan/workflow.md`. Do not ask the user for values available through the usage tool, including during interactive work. If usage cannot be read, stop at the completed iteration and ask only for the missing readings. Reading quotas does not authorize unattended work, scheduling, credits, or resets.
-- Evaluate each remaining window against its closing reserve (currently 10% for 5 hours and 1% for 7 days), recent observed consumption, and `plan/workflow.md` to choose whether to continue, split the next task, or stop. Do not promise exact consumption estimates.
-- Recheck both usage windows during long iterations: after implementation and before costly validation or RPC/browser proofs, and after unexpected failures that change the remaining work. Budget repairs, documentation, commit, push, remote verification, and a final quota read before opening the next cut. The closing reserve is a floor to protect, not a consumption target; stop with more remaining usage when the next complete cut cannot safely fit. Never rely solely on the last post-commit reading through a long iteration.
-- Default to sequential work. Parallel agent work is allowed only when explicitly selected for the iteration, budget permits it, and each agent has disjoint `target_paths`. Shared integration files remain owned by one agent.
-- Nested `AGENTS.md` files may add narrowly scoped instructions, but must preserve the root boundaries, language rules, and iteration closing protocol.
+Follow the [root agent workflow](../../plan/workflow.md) for branch selection, Codex capacity, iteration closure, commit, push, and delegation. This app retains its product-specific acceptance and resource-isolation requirements below and in `plan/`.
 
 ## Responsive Navigation
 
@@ -110,14 +101,6 @@ src/
 - Never commit `.env*` files or credentials.
 - Enforce auth checks in protected route group layouts, not only on the client.
 - Treat all external input as untrusted until validated by `zod`.
-## Agent Workflow
-
-1. **Plan before code**: for any non-trivial task, outline the change, affected paths, and dependencies first.
-2. **Scope discipline**: only modify files relevant to the task. Do not perform unrelated refactors.
-3. **Parallel-safe edits**: if multiple subagents run concurrently, no two may write the same file. Partition work by `target_paths`.
-4. **Small, coherent changes**: keep diffs reviewable; one logical concern per change.
-5. **Document deviations**: if you depart from the baseline architecture, state why in the PR/description and in code comments where helpful.
-
 ## Definition of Done
 
 - [ ] Code placed at the correct target path with the right boundary directive (`server-only` / `"use client"`).

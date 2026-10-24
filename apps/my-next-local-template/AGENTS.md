@@ -22,22 +22,14 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Browser storage is origin/profile/device scoped and may be cleared or evicted. Do not imply backup, encryption, authentication or cross-device sync. Before introducing irreplaceable product data, define export/import and recovery acceptance with the user.
 - Adding a backend, authentication, external requests, sync, notifications, core dependencies or a new storage solution needs explicit human authorization. Routine implementation within these invariants is autonomous. The user has authorized `idb` and development-only `fake-indexeddb` for this conversion.
 
-## Iteration Workflow
+## Agent Workflow
 
-1. Read `plan/master.md`, `plan/workflow.md`, the relevant iteration in `plan/iterations.md`, and recent `plan/iteration-log.md` entries.
-2. Inspect Git and preserve unrelated changes. Work exclusively on `int`: select the existing local branch, track `origin/int` if present, otherwise fetch and create `int` from `origin/main`. Never reset, stash or carry unrelated changes across branches implicitly. Report conflicts before editing. Never implement on `main`.
-3. Before a non-trivial edit, record goal, `target_paths`, dependencies, acceptance and validation in the plan. Include storage migrations, offline behavior and installation impact when relevant.
-4. Deliver the smallest coherent authorized change. Resolve routine choices autonomously; document architecture changes and rationale.
-5. Update status and log with actual results, limits and next step. Blocked checks are not passing checks.
-6. Review exact staged files and close every validated iteration with a Conventional Commit, push to `origin/int` and remote SHA verification, including docs-only changes. Follow `plan/workflow.md`.
+Follow the [root agent workflow](../../plan/workflow.md) for branch, planning, capacity, validation, commits, and publication. Read this app's `plan/master.md`, `plan/workflow.md`, the relevant `plan/iterations.md` entry, and recent `plan/iteration-log.md` entries for product-specific acceptance. Nested app instructions add their local constraints.
 
-Work sequentially by default. Spawn subagents only with explicit authorization. Assign disjoint paths and one integration owner; workers must preserve others' edits. Shared schemas, lockfiles, package scripts, database migrations and planning have one owner. Agent completion does not replace integrated validation.
+## Local Iteration Constraints
 
-## Codex Usage Capacity
-
-- Follow the [5h/7d capacity policy](plan/workflow.md#capacidad-de-codex-ventanas-de-5h-y-7d) throughout agentic iterations. Query Codex usage limits at session start, before each iteration, at significant checkpoints and at closure; track both windows and their reset times.
-- Preserve at least 7% of the total 5h allowance and 2% of the total 7d allowance after the entire delivery. Estimate analysis, implementation, required validation, repairs and closure against both remaining allowances before starting.
-- If the full iteration will not fit, complete a smaller validated delivery that will fit and leave the rest pending. Maximize useful authorized progress within those reserves; never trade required checks for more scope, assume unknown usage is unlimited or start work that cannot be closed.
+- Preserve static export, IndexedDB-only product data, installation and offline behavior, and the prohibition on authentication, backend services, external runtime requests, and secrets. Human authorization is required to change these product boundaries.
+- For storage or PWA work, plan non-destructive migrations and recovery, and validate built previews for offline reload, persistence, navigation, and updates where applicable. Report browser interaction, visual inspection, and native installation separately.
 
 ## Authoritative Stack
 
@@ -90,14 +82,10 @@ For code/config/package changes:
 
 For docs-only changes: check local links, consistency and diff; do not rerun app checks without a relevant reason or add tests mirroring text.
 
-## Permissions and Delivery
+## Delivery
 
-- The user authorizes working on `int` and a Conventional Commit/push after every completed, validated iteration, including docs. Do not request this permission again.
-- Commit implementation and planning together; inspect exact staged files, preserve unrelated changes and never commit known-broken work to satisfy protocol.
-- First publication: `git push -u origin int`; later: `git push origin int`. Verify remote `refs/heads/int` equals the local commit SHA before reporting publication. Never force-push.
-- `main` is exclusively human-managed. Agents must not commit, merge, push, reset or rebase it. The user reviews and promotes `int`.
-- On commit/push/verification failure, preserve validated changes, report the exact pending step and do not accumulate another unpublished iteration silently.
-- Authorization covers only this project's configured remote. When copying the template, configure the destination remote before publishing. Do not change remotes, provision hosting, deploy production or schedule automation implicitly.
+Branch, commit, push, and remote verification follow the root workflow. Preserve this app's local environment and product boundaries.
+
 ## Monorepo Commands
 
 Run Bun installation and all project commands from the monorepo root. This workspace is `@damaca/my-next-local-template`. Use `bun run build --filter=@damaca/my-next-local-template`, `bun run test --filter=@damaca/my-next-local-template`, or `bun run type-check --filter=@damaca/my-next-local-template` to target this application. Dependencies and versions are managed in the root package manifest, Bun catalog, and `bun.lock`; do not create app-local lockfiles. Biome settings are managed at the root. Commit and publish monorepo changes from the monorepo root on `int`.

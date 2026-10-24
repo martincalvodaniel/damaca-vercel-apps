@@ -51,7 +51,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-For detailed setup instructions including MongoDB Atlas configuration and data loading, see [docs/agents/workflow.md](./docs/agents/workflow.md).
+For local setup, app-specific rules, and agent planning, see [AGENTS.md](./AGENTS.md) and the [product plan](./plan/master.md). The root [agent workflow](../../plan/workflow.md) defines delivery mechanics.
 
 ## Development
 
@@ -402,3 +402,7 @@ Vercel will automatically detect Next.js and configure the build settings.
 - [ ] User authentication and authorization
 - [ ] Multi-user support with separate accounts
 - [ ] Payment analytics and reporting
+
+## Agent workflow
+
+Follow the [root agent workflow](../../plan/workflow.md) and [app instructions](AGENTS.md). Product-specific plans and delivery evidence live in this app's `plan/` directory.

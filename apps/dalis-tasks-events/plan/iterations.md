@@ -1,5 +1,7 @@
 # Iteraciones de implementación
 
+> Evidencia histórica de entregas, incluidas decisiones operativas de su momento. No tomar sus referencias antiguas a ramas, cuotas, commits, permisos o despliegues como instrucciones vigentes. El protocolo actual es el [flujo del monorepo](../../../plan/workflow.md). Toda nueva iteración requiere autorización aplicable, criterios y validación propios.
+
 ## 23n — Compatibilidad de Intl en calendario civil
 
 Objetivo: corregir fallos CI causados por `Intl.DateTimeFormat` con calendario iso8601 sin parte era en ICU/Linux; mantener límites 0001–9999. target_paths: `src/lib/calendar/civil-date.ts`, `zoned-time.ts`, sus pruebas, `plan/master.md`, `iterations.md`, `iteration-log.md`, `workflow.md`. Dependencia: reproducción en GitHub Actions run 40020751338. Aceptación: formateadores `en-US`/`gregory`; AD válido, BC rechazado por calendario civil, cálculos auxiliares BC válidos para resolver midnight del año 0001. Validación focalizada y suite, lint, tipos, build, Bun1.4.4 en Linux, diff. Rama main humana; commit local sin push ni despliegue. Sin DB, esquema, dependencias ni cambios de TZ.

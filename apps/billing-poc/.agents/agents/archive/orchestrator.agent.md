@@ -1,3 +1,9 @@
+# Archived legacy billing-poc orchestrator — inactive
+
+Historical record only. The instructions below are retained to explain the former workflow and are not authorized for use. In particular, tool-specific instructions, mandatory subagent delegation, approval bypasses, and manual-only Git delivery are superseded by the [monorepo agent workflow](../../../../../plan/workflow.md).
+
+---
+
 BASE=agent-iterations
 TOPIC=$BASE/03-docker-compose-for-it-and-at
 SUBTOPIC=02-fix-its-and-ats

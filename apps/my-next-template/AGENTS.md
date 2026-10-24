@@ -14,25 +14,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - The starter UI language is English, as recorded in `plan/master.md`. Keep all visible copy, validation messages, accessibility text, and HTML `lang="en"` in English. Change the UI language only when explicitly requested; no localization framework is installed.
 - Read applicable nested `AGENTS.md` files before editing their directories. Nested rules add scoped constraints without weakening root boundaries.
 
-## Iteration Workflow
+## Agent Workflow
 
-1. Read `plan/master.md`, `plan/workflow.md`, the relevant entry in `plan/iterations.md`, and recent entries in `plan/iteration-log.md`.
-2. Inspect the current branch and worktree. Work exclusively on `int`: switch to the existing local branch, track `origin/int` if it exists, or create `int` from the current `origin/main` after fetching when neither exists. This branch setup is authorized. Preserve unrelated user changes; never reset, stash, or carry them across branches implicitly. If they prevent a safe switch, report the conflict before editing. Never implement or commit on `main`.
-3. Before a non-trivial edit, define the goal, `target_paths`, dependencies, acceptance criteria, and validation scope. Record the iteration in the plan; small fixes may use a compact entry.
-4. Execute the smallest coherent delivery that satisfies the authorized request. Resolve routine implementation choices autonomously; document architecture deviations with evidence and rationale.
-5. Update the iteration status and append validation evidence, limitations, and the next step to the log. A blocked check is not a passing check; never label an iteration validated while required acceptance checks remain unresolved.
-6. Review the final diff for scope, secrets, and unrelated changes. Follow `plan/workflow.md` for the mandatory commit, push, and remote verification on `int`, including documentation-only iterations.
-7. Report what changed, what was verified, and any remaining limitation. On interruption, leave a precise resumption point instead of claiming completion.
-
-Default to sequential work. Spawn subagents only when the user or applicable instructions explicitly authorize delegation. Assign disjoint `target_paths`, name an integration owner, and remind workers that they are not alone and must preserve others' edits. Shared schemas, lockfiles, package scripts, index registration, and planning integration have one owner. Agent completion does not replace integrated validation.
-
-## Codex Capacity Management
-
-- This workflow runs in Codex with two account usage windows: 5 hours and 7 days. The weekly horizon is much longer; evaluate each independently, not as interchangeable percentages or per-agent allowances.
-- Follow the capacity policy in `plan/workflow.md`. Query the app's usage tool directly at session start/resumption, before every iteration, after commit/push and remote verification, and at costly or uncertain milestones. Identify windows by duration and calculate remaining capacity as `100 - usedPercent`; missing readings are not unlimited capacity.
-- Preserve at least **7% remaining in the 5h window and 2% in the 7d window** after delivery. Estimate the whole iteration, including validation, repairs, documentation, publication, and closure, against both reserves before editing.
-- Use capacity efficiently within the authorized task. If the intended iteration will not fit, deliver a smaller, independently valid part and leave the rest explicitly pending. Start no new iteration at/below either reserve, or when no useful delivery can fit conservatively. Never skip required checks or publish broken work to fit a budget.
-- Refresh stale readings; report both remaining percentages at closure. Do not ask the user for readings available through tools, invent exact cost guarantees, or use credits/resets/scheduled work without authorization.
+Follow the [root agent workflow](../../plan/workflow.md) for branch, planning, capacity, validation, commits, and publication. Read this app's `plan/master.md`, `plan/workflow.md`, the relevant `plan/iterations.md` entry, and recent `plan/iteration-log.md` entries for product-specific acceptance. Nested app instructions add their local constraints.
 
 ## Authoritative Stack
 
@@ -98,16 +82,10 @@ For code, configuration, or package changes:
 
 For documentation-only changes, check local links, consistency, and `git diff --check`; do not rerun application checks without a relevant reason. Add meaningful tests for behavior and risk, not tests that merely mirror reversible text changes.
 
-## Permissions and Delivery
+## Delivery
 
-- The user authorizes agents to work exclusively on `int` and to create a Conventional Commit and push to `origin/int` after every completed, validated iteration, including planning-only and documentation-only iterations. Do not ask for this permission again for each delivery.
-- Include code and its plan/log updates in the same commit. Review the exact staged files and preserve unrelated user changes. Never commit known-broken work merely to satisfy the closing protocol.
-- Push explicitly with `git push -u origin int` on the first publication and `git push origin int` thereafter. Verify that `origin` reports the same SHA for `refs/heads/int` as the local iteration commit before declaring publication complete. Never force-push.
-- `main` is exclusively human-managed: the user reviews `int`, merges it into `main`, and pushes `main`. Agents must not commit, merge, push, reset, or rebase `main`, or perform that promotion on the user's behalf.
-- If a commit, push, or remote verification fails, preserve validated changes, record the exact pending step, and report the failure. Do not declare publication complete or silently continue accumulating unpublished iterations.
-- This authorization covers the configured remote of the current project and ordinary `int` delivery. It does not authorize production deployment, provisioning infrastructure, scheduled work, or changing remotes. When reusing the template, configure the destination repository's remote before publishing.
-- If `int` has a configured integration deployment triggered by push, follow that project's documented environment policy. Do not assume any deployment exists in this starter.
-- Keep working within the authorized scope. For a material change to architecture, core dependencies, or security posture, finish independent analysis and present the concrete decision for human confirmation.
+Branch, commit, push, and remote verification follow the root workflow. Preserve this app's local environment and product boundaries.
+
 ## Monorepo Commands
 
 Run Bun installation and all project commands from the monorepo root. This workspace is `@damaca/my-next-template`. Use `bun run build --filter=@damaca/my-next-template`, `bun run test --filter=@damaca/my-next-template`, or `bun run type-check --filter=@damaca/my-next-template` to target this application. Dependencies and versions are managed in the root package manifest, Bun catalog, and `bun.lock`; do not create app-local lockfiles. Biome settings are managed at the root. Commit and publish monorepo changes from the monorepo root on `int`.

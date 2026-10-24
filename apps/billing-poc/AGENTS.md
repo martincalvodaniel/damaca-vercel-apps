@@ -100,6 +100,10 @@ src/lib/domain/services/      → Business logic (calculators, Zod validators, a
 - Before planning or making changes under the `src/lib/db/repositories/` directory, always read `src/lib/db/repositories/AGENTS.md`.
 - Before planning or making changes under the `src/app/(dashboard)/month/` directory, always read `src/app/(dashboard)/month/AGENTS.md`.
 - If an `AGENTS.md` file exists in the parent directory of any modified file, explicitly load it into context.
+## Agent Workflow
+
+Follow the [root agent workflow](../../plan/workflow.md) for branch selection, planning, Codex capacity, validation, commits, push, and delegation. App-specific architecture and nested instructions add technical constraints. For non-trivial product work, maintain acceptance and evidence in `plan/`.
+
 ## Monorepo Commands
 
 Run Bun installation and all project commands from the monorepo root. This workspace is `@damaca/billing-poc`. Use `bun run build --filter=@damaca/billing-poc`, `bun run test --filter=@damaca/billing-poc`, or `bun run type-check --filter=@damaca/billing-poc` to target this application. Dependencies and versions are managed in the root package manifest, Bun catalog, and `bun.lock`; do not create app-local lockfiles. Biome settings are managed at the root. Commit and publish monorepo changes from the monorepo root on `int`.

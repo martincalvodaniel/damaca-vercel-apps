@@ -83,14 +83,6 @@ src/
 - Never commit `.env*` files or credentials.
 - Enforce auth checks in protected route group layouts, not only on the client.
 - Treat all external input as untrusted until validated by `zod`.
-## Agent Workflow
-
-1. **Plan before code**: for any non-trivial task, outline the change, affected paths, and dependencies first.
-2. **Scope discipline**: only modify files relevant to the task. Do not perform unrelated refactors.
-3. **Parallel-safe edits**: if multiple subagents run concurrently, no two may write the same file. Partition work by `target_paths`.
-4. **Small, coherent changes**: keep diffs reviewable; one logical concern per change.
-5. **Document deviations**: if you depart from the baseline architecture, state why in the PR/description and in code comments where helpful.
-
 ## Definition of Done
 
 - [ ] Code placed at the correct target path with the right boundary directive (`server-only` / `"use client"`).
@@ -115,6 +107,10 @@ src/
 ## When in Doubt
 
 Prefer the **server-first**, **boundary-safe**, **validated** option. If a decision materially changes architecture, dependencies, or security posture, **pause and request human confirmation** rather than guessing.
+## Monorepo Agent Workflow
+
+Follow the [root agent workflow](../../plan/workflow.md) for branch selection, planning, Codex capacity, validation, commits, push, and delegation. This file and nested instructions add product-specific technical constraints. For non-trivial product work, maintain its acceptance and evidence in `plan/`.
+
 ## Monorepo Commands
 
 Run Bun installation and all project commands from the monorepo root. This workspace is `@damaca/dalis-home-management`. Use `bun run build --filter=@damaca/dalis-home-management`, `bun run test --filter=@damaca/dalis-home-management`, or `bun run type-check --filter=@damaca/dalis-home-management` to target this application. Dependencies and versions are managed in the root package manifest, Bun catalog, and `bun.lock`; do not create app-local lockfiles. Biome settings are managed at the root. Commit and publish monorepo changes from the monorepo root on `int`.

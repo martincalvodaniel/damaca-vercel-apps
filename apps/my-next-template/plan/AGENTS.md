@@ -9,5 +9,4 @@
 - Update affected documents together when a decision changes. Preserve historical evidence; add corrections explicitly.
 - Link only to existing local files or verified primary sources. Never copy credentials, personal data, historical account quotas, or permissions from another project.
 - Keep future work pending until the user defines and authorizes the product. Do not turn sample entries into fabricated progress.
-- Preserve the mandatory iteration closing protocol: work on `int`, commit plan and implementation together after validation, push to `origin/int`, and verify the remote SHA. Documentation-only iterations follow the same protocol. The user alone merges and pushes `main`.
-- Follow the Codex capacity section in `workflow.md`: current readings for both 5h/7d windows, conservative whole-delivery estimates, and closing reserves of 7%/2%. Split work before starting when it will not fit; preserve useful acceptance criteria and record the remainder. Query usage after publication, including documentation-only deliveries; do not create another commit solely for a post-commit reading.
+- Follow the root [agent workflow](../../../plan/workflow.md) for branch, capacity, commit, push, and remote verification. The user alone manages `main`.

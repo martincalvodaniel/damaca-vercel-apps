@@ -130,10 +130,10 @@ Ejemplo de petición inicial:
 
 > Lee AGENTS.md y plan/master.md. Quiero crear [producto] para [usuarios]. Concreta el MVP, las decisiones pendientes y las primeras iteraciones. Implementa la primera entrega autorizada y valida su aceptación.
 
-El trabajo es secuencial por defecto. El paralelismo requiere autorización y archivos asignados sin solapamientos. Los agentes trabajan siempre en `int` y cierran cada iteración validada, incluida documentación, con un Conventional Commit y push a `origin/int`, verificando el SHA remoto. Tú revisas `int` y haces el merge y push de `main` cuando lo consideres correcto. Al reutilizar la plantilla, configura primero el remoto del nuevo proyecto. El trabajo desatendido y los despliegues requieren autorización específica.
+Consulta el [flujo agéntico común](../../plan/workflow.md) para delegación, capacidad, cierre y publicación. Este documento mantiene únicamente los límites del producto de la plantilla.
 
 ### Compatibilidad del registro de acceso
 
 `user_access` mantiene un único documento por correo normalizado. Los permisos anteriores sin `status` se consideran aprobados. Los nuevos estados son `pending`, `rejected` y `approved`; únicamente `approved` concede acceso normal. Las solicitudes añaden `requestId` (UUID), `requestedAt` y, al resolverse, `resolvedAt`. La aceptación cambia el estado en una única escritura condicional: no necesita transacciones multirregistro ni una réplica MongoDB. Revocar elimina el permiso y una posterior solicitud obtiene otra identidad, por lo que las decisiones antiguas no se reaplican.
 
-La [política de capacidad de Codex](plan/workflow.md#gestión-de-capacidad-de-codex-ventanas-de-5h-y-7d) exige consultar las ventanas de 5h y 7d antes de cada iteración y tras su cierre, estimar implementación y validación/publicación, y conservar 7%/2%. Si el alcance no cabe, el agente entrega una parte menor coherente y deja el resto pendiente, aprovechando la capacidad autorizada sin abrir trabajo que no pueda cerrar.
+La [política de capacidad común](../../plan/workflow.md#capacidad-de-codex) rige las dos ventanas de 5h y 7d en este repositorio.
