@@ -10,11 +10,11 @@ Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y f
 - La política común conserva trabajo en `int`, cierre de iteraciones validadas con commit/push a `origin/int`, verificación del SHA remoto y reservas mínimas de capacidad de 7% en 5h y 2% en 7d. `main` sigue bajo gestión humana.
 - Trabajo secuencial por defecto; delegación solo con autorización explícita.
 - Toda app bajo `apps/*` adopta `plan/master.md`, `plan/iterations.md` y `plan/iteration-log.md` antes de su primera implementación no trivial.
-- La generación futura mediante [Turborepo Generate](https://turborepo.dev/docs/reference/generate) deberá crear esa estructura; no se implementa generador ni control de CI en esta planificación.
+- [Turborepo Generate](https://turborepo.dev/docs/reference/generate) crea apps desde dos bases: Google OAuth y MongoDB, o PWA local con IndexedDB. La configuración del generador vive fuera de `apps/*` y crea los tres documentos de planificación antes de cualquier trabajo de producto.
 
 ## Aplicaciones
 
-El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events`, `my-next-local-template` y `my-next-template`. La lista de apps puede cambiar; la obligación documental aplica a todas las apps futuras.
+El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events`, `my-next-local-template` y `my-next-template`. AGW-03 retirará los dos workspaces de plantilla una vez validadas sus bases generables fuera de `apps/*`. La lista de apps puede cambiar; la obligación documental aplica a todas las apps futuras.
 
 ## Exclusiones y dudas
 

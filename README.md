@@ -27,11 +27,23 @@ Run a task for every application with `bun run build`, `bun run test`, or `bun r
 bun run build --filter=@damaca/billing-poc
 ```
 
+## Create an app
+
+Run `bun run generate:app` and select `mongo-google` for Google sign-in with MongoDB, or `local-pwa` for an installable app with browser-local IndexedDB. The generator asks for the app identifier, display name, and an available development port. It creates the new workspace under `apps/<identifier>` and includes the app-specific instructions and planning documents.
+
+The prompts can also be answered in one command:
+
+```sh
+bun run generate:app --args local-pwa personal-notes "Personal Notes" 3007
+```
+
+After generation, run `bun install` and use the printed Turbo-filtered commands. The MongoDB mode requires app-specific environment values and Google OAuth configuration before use. The local PWA mode has no credentials or remote runtime service.
+
 Run `bun run lint` to check the repository, `bun run lint --staged` for staged files, or `bun run lint --changed --since=<base>` for files changed from a Git base. CI checks files changed from the relevant Git base. The root catalog in `package.json` is the source for shared dependency versions; commit the root `bun.lock` after changing dependencies.
 
 ## Agent planning
 
-The [root workflow](plan/workflow.md) is the sole delivery protocol. Every current and future app under `apps/*`, regardless of stack or creation method, must include `plan/master.md`, `plan/iterations.md`, and `plan/iteration-log.md` before its first non-trivial implementation. The [root instructions](AGENTS.md) define each document's role and make the structure, links, and app-specific constraints part of app onboarding. Future Turborepo generation should scaffold the same files; no generator or CI gate is implied.
+The [root workflow](plan/workflow.md) is the sole delivery protocol. Every current and future app under `apps/*`, regardless of stack or creation method, must include `plan/master.md`, `plan/iterations.md`, and `plan/iteration-log.md` before its first non-trivial implementation. The [root instructions](AGENTS.md) define each document's role and make the structure, links, and app-specific constraints part of app onboarding. `bun run generate:app` creates these files in either starter mode; CI tests the generator.
 
 To share the Turbo cache locally, authenticate with `bun run turbo login` and link this repository with `bun run turbo link`.
 

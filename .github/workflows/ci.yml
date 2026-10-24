@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: 24
       - run: bun install --frozen-lockfile
+      - name: Test app generator
+        run: bun run test:generator
       - name: Select Biome comparison base
         id: base
         env:

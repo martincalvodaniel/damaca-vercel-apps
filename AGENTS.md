@@ -22,7 +22,7 @@
   delivery and cross-link it when a change affects another app.
 - Work sequentially by default. Delegate only when the user explicitly authorizes
   delegation for the work; define disjoint paths and one integration owner.
-- Every present and future application under `apps/*`, regardless of technology or creation mechanism, MUST adopt the three-document planning system (`plan/master.md`, `plan/iterations.md`, `plan/iteration-log.md`) before its first non-trivial implementation. The master owns current scope and decisions; iterations own status and acceptance; the log owns observed evidence. The root [workflow](plan/workflow.md) is the sole workflow policy. New-app acceptance includes checking these files, their links, and app-specific constraints. Future Turborepo generators should create this structure; this is documentation only and adds no CI gate or generator.
+- Every present and future application under `apps/*`, regardless of technology or creation mechanism, MUST adopt the three-document planning system (`plan/master.md`, `plan/iterations.md`, `plan/iteration-log.md`) before its first non-trivial implementation. The master owns current scope and decisions; iterations own status and acceptance; the log owns observed evidence. The root [workflow](plan/workflow.md) is the sole workflow policy. New-app acceptance includes checking these files, their links, and app-specific constraints. The root Turborepo app generator creates this structure for both starter modes.
 - Use the root lint configuration. `bun run lint` checks the repository; narrow it
   explicitly with `--staged` or `--changed --since=<base>` as documented in the
   root workflow. Fix all findings in each edited file.
