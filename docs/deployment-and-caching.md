@@ -21,12 +21,17 @@ Build outputs are relative to each workspace:
 - `out/**`, including the static template's service worker.
 - `public/dalis-sw.js` for the tasks app.
 
-The configured build inputs list TypeScript, TSX, CSS, PNG, and SVG files, with
-negative entries for `test/setup.ts` and `**/*.test.ts*`. This is a custom input
-set, not the default set of every tracked workspace file. In particular, changing
-other asset formats, standalone JavaScript templates, or environment files needs
-a cache-input review. The static template's `scripts/service-worker.js` is one
-example of a build-relevant file outside those positive patterns.
+Build inputs extend `$TURBO_DEFAULT$`, preserving Turbo's default file selection
+and Git-ignore handling instead of restricting inputs to a few file extensions.
+This includes JavaScript service-worker templates, configuration files, and other
+asset formats. Explicit `.env*` and `$TURBO_ROOT$/.env*` entries also hash ignored
+environment files in the app and repository root, respectively. App-local files
+invalidate that app's build; root environment files invalidate every app's build.
+
+Tests (`test/setup.ts` and `**/*.test.ts*`) and generated outputs (`.next/`, `out/`,
+`public/dalis-sw.js`, TypeScript build metadata, and `next-env.d.ts`) are excluded
+from build inputs. Generated output changes therefore do not invalidate their
+own task. See [Turbo input configuration](https://turborepo.dev/docs/reference/configuration#inputs).
 
 ## Three different caches
 
@@ -68,10 +73,12 @@ The current configuration sets `envMode: "loose"`. Environment variables remain
 available to tasks, but availability does not automatically make every value part
 of their cache fingerprints. `globalEnv` currently contains negative patterns for
 `TURBO_TELEMETRY_DISABLED` and `VERCEL_DEPLOYMENT_ID`; there is no explicit per-app
-build-variable list or `.env*` input declaration.
+build-variable list. App-local and root `.env*` files are included in build inputs.
 
-Consequently, do not assume a changed private build variable, ignored environment
-file, or external database state always invalidates an existing artifact. Before
+Consequently, do not assume a changed private build variable supplied directly by
+the shell or deployment platform, or external database state, always invalidates
+an existing artifact. File hashing covers environment-file changes; it does not
+replace variable declarations for CI and production. Before
 relying on shared build artifacts, declare every relevant input and variable;
 use an uncached run when diagnosing an uncertain result. Strict environment mode
 and complete app-specific variable declarations were migration goals, but are

@@ -6,13 +6,16 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "$TURBO_ROOT$/.env*",
         "!test/setup.ts",
         "!**/*.test.ts*",
-        "**/*.ts",
-        "**/*.tsx",
-        "**/*.css",
-        "**/*.png",
-        "**/*.svg"
+        "!.next/**",
+        "!out/**",
+        "!public/dalis-sw.js",
+        "!**/*.tsbuildinfo",
+        "!next-env.d.ts"
       ],
       "outputs": [
         ".next/**",

@@ -76,8 +76,7 @@ To update a shared dependency:
 
 `bun.lock` is tracked and is the only installation lockfile. Its format version is
 2, so use Bun 1.4.4 rather than the older Bun supplied by some build images.
-Although `.gitignore` contains a `bun.lock` pattern, Git continues tracking the
-existing root lockfile. Do not create app-local lockfiles.
+Do not create app-local lockfiles.
 
 ## Running the repository
 
