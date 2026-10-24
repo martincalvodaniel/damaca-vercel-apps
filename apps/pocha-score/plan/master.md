@@ -14,6 +14,7 @@ Pocha Score es un marcador local e instalable para partidas presenciales de poch
 - Guardar automáticamente rondas y borradores, reanudar, corregir cualquier ronda cerrada con recálculo posterior, consultar historial y decidir empates finales con victoria compartida o ronda extra de una carta.
 - Exportar todas las partidas a JSON validado e importar como copias nuevas sin sobreescritura.
 - Priorizar el uso móvil con márgenes y separaciones compactos, texto legible y diseño responsive. Los campos numéricos usan controles táctiles minimalistas con decremento a la izquierda e incremento a la derecha.
+- Las pedidas y bazas conseguidas de las rondas nuevas empiezan en cero. La interfaz reduce aún más márgenes, rellenos y separaciones en todas las vistas.
 
 ## Decisiones técnicas
 

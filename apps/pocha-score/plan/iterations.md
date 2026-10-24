@@ -41,3 +41,13 @@ Este archivo es la fuente única del estado de las iteraciones. Sigue el [workfl
 - Aceptación: build estático operativo, persistencia y navegación tras recarga offline, actualización del worker conserva datos; diffs y restricciones revisados.
 - Validación: checks del repositorio filtrados a `@damaca/pocha-score`, pruebas del navegador disponibles y `git diff --check`; registrar límites de QA.
 - Evidencia parcial: [registro](iteration-log.md#04--validar-pwa-y-cerrar).
+
+## 05 — Densidad móvil y valores iniciales
+
+- Estado: `validated`.
+- Objetivo: iniciar pedidas y conseguidas en cero y reducir de forma global los espacios de la interfaz.
+- Rutas: `src/features/game/lib/**`, `src/features/home/components/**`, `src/features/settings/components/**`, `src/components/shared/**` y documentos de planificación.
+- Dependencias: 03.
+- Aceptación: rondas nuevas contienen ceros editables en ambos campos; márgenes, rellenos y separaciones son menores en todas las vistas; la interfaz conserva legibilidad, accesibilidad, operación táctil y ausencia de desbordamiento móvil.
+- Validación: pruebas de reglas, tipos, tests, Biome, build estático, navegador móvil/escritorio y `git diff --check`.
+- Evidencia: [registro](iteration-log.md#05--densidad-móvil-y-valores-iniciales).

@@ -30,11 +30,11 @@ import type { PochaGame, PochaRound } from "@/schemas/game"
 
 type Screen = "home" | "create" | "history"
 const panel =
-  "rounded-xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-4"
+  "rounded-xl border border-zinc-200 bg-white p-1.5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-1.5"
 const primary =
-  "inline-flex min-h-11 items-center justify-center rounded-lg bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-emerald-600 disabled:opacity-50"
+  "inline-flex min-h-10 items-center justify-center rounded-lg bg-emerald-700 px-1.5 py-1 font-semibold text-white hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-emerald-600 disabled:opacity-50"
 const secondary =
-  "inline-flex min-h-10 items-center justify-center rounded-lg border border-zinc-300 px-3 py-1.5 font-semibold hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-3 dark:border-zinc-700 dark:hover:bg-zinc-800"
+  "inline-flex min-h-10 items-center justify-center rounded-lg border border-zinc-300 px-1.5 py-1.5 font-semibold hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-3 dark:border-zinc-700 dark:hover:bg-zinc-800"
 const dateLabel = (date: string) =>
   new Intl.DateTimeFormat("es-ES", { dateStyle: "medium" }).format(
     new Date(date)
@@ -426,13 +426,13 @@ export function HomeScreen() {
   else if (game) title = "Marcador"
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-col gap-3 p-2 py-3 sm:gap-4 sm:p-5">
-      <header className="flex flex-wrap items-center justify-between gap-3">
+    <main className="mx-auto flex w-full max-w-4xl flex-col gap-1.5 p-1.5 py-1 sm:gap-1.5 sm:p-1.5">
+      <header className="flex flex-wrap items-center justify-between gap-1.5">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400">
             Pocha Score
           </p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight">{title}</h1>
+          <h1 className="mt-0.5 text-3xl font-bold tracking-tight">{title}</h1>
         </div>
         {screen !== "home" || game ? (
           <button
@@ -452,7 +452,7 @@ export function HomeScreen() {
       {error ? (
         <div
           role="alert"
-          className="rounded-xl border border-rose-300 bg-rose-50 p-4 text-sm text-rose-900 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-100"
+          className="rounded-xl border border-rose-300 bg-rose-50 p-1.5 text-sm text-rose-900 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-100"
         >
           {error}
           <button
@@ -475,17 +475,17 @@ export function HomeScreen() {
       ) : null}
 
       {screen === "create" ? (
-        <form onSubmit={submitConfiguration} className="flex flex-col gap-3">
+        <form onSubmit={submitConfiguration} className="flex flex-col gap-1.5">
           <section className={panel}>
             <h2 className="text-lg font-semibold">Jugadores y turnos</h2>
-            <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+            <p className="mt-0.5 text-sm text-zinc-600 dark:text-zinc-400">
               Ordénalos alrededor de la mesa. El repartidor se elige abajo.
             </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="mt-0.5 grid gap-1.5 sm:grid-cols-2">
               {names.map((name, index) => (
                 <label
                   key={playerKeys[index]}
-                  className="flex flex-col gap-1 text-sm font-medium"
+                  className="flex flex-col gap-0.5 text-sm font-medium"
                 >
                   Jugador {index + 1}
                   <input
@@ -499,12 +499,12 @@ export function HomeScreen() {
                         )
                       )
                     }
-                    className="min-h-12 rounded-xl border border-zinc-300 bg-transparent px-3 dark:border-zinc-700"
+                    className="min-h-10 rounded-xl border border-zinc-300 bg-transparent px-1.5 dark:border-zinc-700"
                   />
                 </label>
               ))}
             </div>
-            <div className="mt-4 flex flex-wrap items-end gap-3">
+            <div className="mt-0.5 flex flex-wrap items-end gap-1.5">
               {names.length < 6 ? (
                 <button
                   type="button"
@@ -539,14 +539,14 @@ export function HomeScreen() {
                   Quitar último
                 </button>
               ) : null}
-              <label className="flex flex-col gap-1 text-sm font-medium">
+              <label className="flex flex-col gap-0.5 text-sm font-medium">
                 Primer repartidor
                 <select
                   value={dealerIndex}
                   onChange={(event) =>
                     setDealerIndex(Number(event.target.value))
                   }
-                  className="min-h-12 rounded-xl border border-zinc-300 bg-transparent px-3 dark:border-zinc-700"
+                  className="min-h-10 rounded-xl border border-zinc-300 bg-transparent px-1.5 dark:border-zinc-700"
                 >
                   {names.map((name, index) => (
                     <option key={playerKeys[index]} value={index}>
@@ -559,18 +559,18 @@ export function HomeScreen() {
           </section>
           <section className={panel}>
             <h2 className="text-lg font-semibold">Secuencia de rondas</h2>
-            <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+            <p className="mt-0.5 text-sm text-zinc-600 dark:text-zinc-400">
               Baraja española de 40 cartas
               {names.length === 3 ? ", sin doses" : ""}. Puedes reducir el
               máximo según vuestra mesa.
             </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <label className="flex flex-col gap-1 text-sm font-medium">
+            <div className="mt-0.5 grid gap-1.5 sm:grid-cols-2">
+              <label className="flex flex-col gap-0.5 text-sm font-medium">
                 Máximo de cartas
                 <select
                   value={maximum}
                   onChange={(event) => setMaximum(Number(event.target.value))}
-                  className="min-h-12 rounded-xl border border-zinc-300 bg-transparent px-3 dark:border-zinc-700"
+                  className="min-h-10 rounded-xl border border-zinc-300 bg-transparent px-1.5 dark:border-zinc-700"
                 >
                   {Array.from(
                     { length: defaultMaximumByPlayers[names.length] },
@@ -597,7 +597,7 @@ export function HomeScreen() {
               ].map(([label, value, setter]) => (
                 <div
                   key={String(label)}
-                  className="flex flex-col gap-1 text-sm font-medium"
+                  className="flex flex-col gap-0.5 text-sm font-medium"
                 >
                   <span>{String(label)}</span>
                   <NumberStepper
@@ -615,7 +615,7 @@ export function HomeScreen() {
             </div>
             <button
               type="button"
-              className={`${secondary} mt-4`}
+              className={`${secondary} mt-0.5`}
               onClick={() => {
                 try {
                   setPreview(
@@ -636,7 +636,7 @@ export function HomeScreen() {
               Previsualizar secuencia
             </button>
             {preview ? (
-              <p className="mt-3 rounded-xl bg-emerald-50 p-3 text-sm leading-6 text-emerald-950 dark:bg-emerald-950 dark:text-emerald-100">
+              <p className="mt-0.5 rounded-xl bg-emerald-50 p-1.5 text-sm leading-5 text-emerald-950 dark:bg-emerald-950 dark:text-emerald-100">
                 {preview.length} rondas · {preview.join(" · ")} bazas
               </p>
             ) : null}
@@ -655,13 +655,13 @@ export function HomeScreen() {
               " bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950 dark:to-zinc-900"
             }
           >
-            <p className="text-sm leading-6 text-zinc-700 dark:text-zinc-300">
+            <p className="text-sm leading-5 text-zinc-700 dark:text-zinc-300">
               Anota las bazas de cada ronda y deja que Pocha Score lleve la
               cuenta. Tus partidas se guardan en este dispositivo.
             </p>
             <button
               type="button"
-              className={`${primary} mt-4`}
+              className={`${primary} mt-0.5`}
               onClick={() => {
                 setNames(["Jugador 1", "Jugador 2", "Jugador 3", "Jugador 4"])
                 setPlayerKeys(
@@ -681,13 +681,13 @@ export function HomeScreen() {
           </section>
           {loading ? <p role="status">Cargando partidas…</p> : null}
           <section>
-            <h2 className="mb-3 text-xl font-semibold">En curso</h2>
+            <h2 className="mb-0.5 text-xl font-semibold">En curso</h2>
             {activeGames.length === 0 && !loading ? (
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 Todavía no hay partidas en curso.
               </p>
             ) : (
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-1.5 sm:grid-cols-2">
                 {activeGames.map((item) => (
                   <button
                     type="button"
@@ -698,7 +698,7 @@ export function HomeScreen() {
                     <span className="font-semibold">
                       {item.players.map((player) => player.name).join(" · ")}
                     </span>
-                    <span className="mt-2 block text-sm text-zinc-600 dark:text-zinc-400">
+                    <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
                       Ronda {item.rounds.length} de {item.schedule.length} ·{" "}
                       {dateLabel(item.updatedAt)}
                     </span>
@@ -707,7 +707,7 @@ export function HomeScreen() {
               </div>
             )}
           </section>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-1.5">
             <button
               type="button"
               className={secondary}
@@ -747,7 +747,7 @@ export function HomeScreen() {
       ) : null}
 
       {screen === "history" ? (
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-1.5">
           {finishedGames.length === 0 ? (
             <p className="text-sm text-zinc-600 dark:text-zinc-400">
               Las partidas terminadas aparecerán aquí.
@@ -766,7 +766,7 @@ export function HomeScreen() {
                     <span className="font-semibold">
                       {item.players.map((player) => player.name).join(" · ")}
                     </span>
-                    <span className="mt-2 block text-sm text-zinc-600 dark:text-zinc-400">
+                    <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
                       {dateLabel(item.updatedAt)} · Ganador
                       {scores.filter((score) => score === high).length > 1
                         ? "es"
@@ -780,7 +780,7 @@ export function HomeScreen() {
                   </button>
                   <button
                     type="button"
-                    className={`${secondary} mt-3`}
+                    className={`${secondary} mt-0.5`}
                     onClick={() => void removeGame(item)}
                   >
                     Eliminar partida
@@ -797,7 +797,7 @@ export function HomeScreen() {
           {currentRound ? (
             <>
               <section className={panel}>
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <div className="flex flex-wrap items-baseline justify-between gap-1.5">
                   <h2 className="text-xl font-bold">
                     Ronda {currentRoundIndex + 1}{" "}
                     <span className="text-sm font-medium text-zinc-500">
@@ -809,7 +809,7 @@ export function HomeScreen() {
                     {currentRound.cards === 1 ? "baza" : "bazas"}
                   </p>
                 </div>
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="mt-0.5 text-sm text-zinc-600 dark:text-zinc-400">
                   Reparte {game.players[currentRound.dealerIndex].name}. Pide
                   primero{" "}
                   {
@@ -821,20 +821,20 @@ export function HomeScreen() {
                 </p>
               </section>
               <section className={panel}>
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-1.5">
                   <div>
                     <h2 className="text-lg font-semibold">
                       {currentRound.status === "bidding"
                         ? "Bazas pedidas"
                         : "Bazas conseguidas"}
                     </h2>
-                    <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="mt-0.5 text-sm text-zinc-600 dark:text-zinc-400">
                       {currentRound.status === "bidding"
                         ? `La suma de las pedidas no puede coincidir con las bazas de la ronda.${dealerForbiddenBid !== null && dealerForbiddenBid >= 0 && dealerForbiddenBid <= currentRound.cards ? ` El repartidor no puede pedir ${dealerForbiddenBid}.` : ""}`
                         : `Las conseguidas deben sumar ${currentRound.cards}.`}
                     </p>
                   </div>
-                  <span className="rounded-full bg-zinc-100 px-3 py-1 text-sm font-semibold dark:bg-zinc-800">
+                  <span className="rounded-full bg-zinc-100 px-1.5 py-1 text-sm font-semibold dark:bg-zinc-800">
                     {(currentRound.status === "bidding"
                       ? currentRound.bids
                       : currentRound.tricks
@@ -845,7 +845,7 @@ export function HomeScreen() {
                     / {currentRound.cards}
                   </span>
                 </div>
-                <div className="mt-4 flex flex-col gap-3">
+                <div className="mt-0.5 flex flex-col gap-1.5">
                   {biddingOrder(
                     currentRound.dealerIndex,
                     game.players.length
@@ -858,13 +858,13 @@ export function HomeScreen() {
                     return (
                       <div
                         key={player.id}
-                        className="grid grid-cols-[1fr_auto] items-center gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800"
+                        className="grid grid-cols-[1fr_auto] items-center gap-1.5 rounded-lg border border-zinc-200 p-1.5 dark:border-zinc-800"
                       >
                         <span className="font-medium">
                           {player.name}
                           {playerIndex === currentRound.dealerIndex &&
                           currentRound.status === "bidding" ? (
-                            <span className="ml-2 text-xs text-zinc-500">
+                            <span className="ml-1 text-xs text-zinc-500">
                               reparte · último
                             </span>
                           ) : null}
@@ -890,7 +890,7 @@ export function HomeScreen() {
                 </div>
                 <button
                   type="button"
-                  className={`${primary} mt-5 w-full sm:w-auto`}
+                  className={`${primary} mt-0.5 w-full sm:w-auto`}
                   onClick={() => void advanceRound()}
                 >
                   {currentRound.status === "bidding"
@@ -901,20 +901,20 @@ export function HomeScreen() {
             </>
           ) : null}
           <section className={panel}>
-            <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-1.5">
               <h2 className="text-lg font-semibold">Clasificación</h2>
               <span className="text-sm text-zinc-500">
                 {message || "Acumulado"}
               </span>
             </div>
-            <ol className="mt-3 grid gap-2 sm:grid-cols-2">
+            <ol className="mt-0.5 grid gap-1.5 sm:grid-cols-2">
               {game.players
                 .map((player, index) => ({ player, score: totals[index] }))
                 .sort((a, b) => b.score - a.score)
                 .map(({ player, score }, index) => (
                   <li
                     key={player.id}
-                    className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800"
+                    className="flex items-center justify-between rounded-lg bg-zinc-50 px-1.5 py-1 dark:bg-zinc-800"
                   >
                     <span>
                       {index + 1}. {player.name}
@@ -926,17 +926,17 @@ export function HomeScreen() {
           </section>
           <section className={panel}>
             <h2 className="text-lg font-semibold">Rondas anotadas</h2>
-            <div className="mt-3 overflow-x-auto">
+            <div className="mt-0.5 overflow-x-auto">
               <table className="w-full min-w-[36rem] text-left text-sm">
                 <thead>
                   <tr className="border-b border-zinc-200 dark:border-zinc-700">
-                    <th className="py-2 pr-3">#</th>
+                    <th className="py-1 pr-1">#</th>
                     {game.players.map((player) => (
-                      <th key={player.id} className="px-2 py-2">
+                      <th key={player.id} className="px-1.5 py-1">
                         {player.name}
                       </th>
                     ))}
-                    <th className="py-2 pl-2">Editar</th>
+                    <th className="py-1 pl-1">Editar</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -945,7 +945,7 @@ export function HomeScreen() {
                       key={round.id}
                       className="border-b border-zinc-100 dark:border-zinc-800"
                     >
-                      <th className="py-2 pr-3 font-medium">
+                      <th className="py-1 pr-1 font-medium">
                         {index + 1} · {round.cards}
                       </th>
                       {game.players.map((player, playerIndex) => {
@@ -955,7 +955,7 @@ export function HomeScreen() {
                         return (
                           <td
                             key={player.id}
-                            className="px-2 py-2 tabular-nums"
+                            className="px-1.5 py-1 tabular-nums"
                           >
                             {round.status === "complete"
                               ? round.bids[playerIndex] +
@@ -968,7 +968,7 @@ export function HomeScreen() {
                           </td>
                         )
                       })}
-                      <td className="py-2 pl-2">
+                      <td className="py-1 pl-1">
                         {round.status === "complete" ? (
                           <button
                             type="button"
@@ -996,11 +996,11 @@ export function HomeScreen() {
               <h2 className="text-lg font-semibold">
                 Corregir ronda {editingIndex + 1}
               </h2>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className="mt-0.5 grid gap-1.5 sm:grid-cols-2">
                 {game.players.map((player, index) => (
                   <div
                     key={player.id}
-                    className="grid grid-cols-[minmax(3.5rem,1fr)_auto_auto] items-center gap-1"
+                    className="grid grid-cols-[minmax(3.5rem,1fr)_auto_auto] items-center gap-0.5"
                   >
                     <span className="text-sm font-medium">{player.name}</span>
                     {(["bids", "tricks"] as const).map((field) => (
@@ -1023,10 +1023,10 @@ export function HomeScreen() {
                   </div>
                 ))}
               </div>
-              <p className="mt-2 text-xs text-zinc-500">
+              <p className="mt-0.5 text-xs text-zinc-500">
                 Los campos aparecen como pedidas / conseguidas.
               </p>
-              <div className="mt-4 flex gap-3">
+              <div className="mt-0.5 flex gap-1.5">
                 <button
                   type="button"
                   className={primary}
@@ -1065,11 +1065,11 @@ export function HomeScreen() {
                   .map((index) => game.players[index].name)
                   .join(", ")}
               </h2>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="mt-0.5 text-sm text-zinc-600 dark:text-zinc-400">
                 Comparte la victoria o juega una ronda de desempate con una
                 carta.
               </p>
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-0.5 flex flex-wrap gap-1.5">
                 <button
                   type="button"
                   className={primary}
@@ -1090,7 +1090,7 @@ export function HomeScreen() {
           {game.status === "finished" ? (
             <section className={`${panel} border-emerald-500`}>
               <h2 className="text-xl font-bold">Partida terminada</h2>
-              <p className="mt-2">
+              <p className="mt-0.5">
                 {leadersList
                   .map((index) => game.players[index].name)
                   .join(", ")}{" "}

@@ -27,24 +27,24 @@ export function InstallSettings() {
   return (
     <section
       aria-labelledby={headingId}
-      className="rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900 sm:p-4"
+      className="rounded-xl border border-zinc-200 bg-white p-1.5 dark:border-zinc-800 dark:bg-zinc-900 sm:p-1.5"
     >
       <h2 id={headingId} className="text-lg font-semibold">
         Instalación y uso sin conexión
       </h2>
       <p
         role="status"
-        className="mt-2 text-sm leading-5 text-zinc-600 dark:text-zinc-400"
+        className="mt-0.5 text-sm leading-5 text-zinc-600 dark:text-zinc-400"
       >
         {offlineMessages[pwa.status]}
       </p>
       {pwa.installed ? (
-        <p className="mt-3 text-sm">
+        <p className="mt-0.5 text-sm">
           Esta app está instalada en tu dispositivo.
         </p>
       ) : (
         <>
-          <p className="mt-2 text-sm leading-5">
+          <p className="mt-0.5 text-sm leading-5">
             Usa la opción de instalación del navegador. En iPhone o iPad, abre
             Safari, pulsa Compartir y luego Añadir a pantalla de inicio. En
             ordenador, busca Instalar app en la barra de direcciones o el menú.
@@ -53,20 +53,20 @@ export function InstallSettings() {
             <button
               type="button"
               onClick={handleInstall}
-              className="mt-4 min-h-11 rounded-lg bg-emerald-700 px-4 py-2 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-4"
+              className="mt-0.5 min-h-10 rounded-lg bg-emerald-700 px-1.5 py-1 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-4"
             >
               Instalar app
             </button>
           ) : null}
           {installFailed ? (
-            <p role="alert" className="mt-3 text-sm">
+            <p role="alert" className="mt-0.5 text-sm">
               No se pudo iniciar la instalación. Prueba la opción del navegador.
             </p>
           ) : null}
         </>
       )}
       {pwa.updateAvailable ? (
-        <div className="mt-5 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+        <div className="mt-0.5 border-t border-zinc-200 pt-0.5 dark:border-zinc-800">
           <p className="text-sm">
             Hay una actualización lista. Termina lo que estás haciendo antes de
             recargar. Tus datos locales se conservarán.
@@ -74,7 +74,7 @@ export function InstallSettings() {
           <button
             type="button"
             onClick={pwa.update}
-            className="mt-3 min-h-11 rounded-lg border border-zinc-400 px-4 py-2 font-medium focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="mt-0.5 min-h-10 rounded-lg border border-zinc-400 px-1.5 py-1 font-medium focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             Actualizar y recargar
           </button>

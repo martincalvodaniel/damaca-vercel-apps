@@ -37,7 +37,7 @@ export function NumberStepper({
     "grid size-9 shrink-0 place-items-center rounded-lg border border-zinc-300 text-lg font-semibold leading-none hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-1 disabled:opacity-35 dark:border-zinc-700 dark:hover:bg-zinc-800"
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-0.5">
       <button
         type="button"
         className={buttonClass}

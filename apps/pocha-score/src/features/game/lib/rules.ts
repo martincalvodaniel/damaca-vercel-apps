@@ -44,8 +44,8 @@ export function createRound(
     id: crypto.randomUUID(),
     cards,
     dealerIndex,
-    bids: Array(playerCount).fill(null),
-    tricks: Array(playerCount).fill(null),
+    bids: Array(playerCount).fill(0),
+    tricks: Array(playerCount).fill(0),
     status: "bidding",
   }
 }

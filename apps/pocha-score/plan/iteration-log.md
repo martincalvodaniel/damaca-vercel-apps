@@ -31,3 +31,13 @@ Registra evidencia observada por iteración. No registres trabajo futuro como ev
 - `bunx biome check apps/pocha-score`: pasa en 52 archivos. `bun run lint --changed --since=HEAD` comprobó 0 archivos, así que los archivos nuevos y la app completa se verificaron con Biome directamente.
 - `git diff --check`: pasa.
 - Pendiente: la herramienta de navegador disponible no expone un control de red offline; no se verificó recarga offline de extremo a extremo ni instalación nativa. Se conservan pruebas automatizadas del worker y del shell como evidencia parcial.
+
+## 05 — Densidad móvil y valores iniciales
+
+- `createRound` inicia `bids` y `tricks` en cero para cada jugador; se añadió una prueba que comprueba ambos vectores.
+- Se redujeron los rellenos de tarjetas a 6 px, márgenes y separaciones a 2–6 px, campos a 40 px y navegación a 44 px, conservando texto legible y controles táctiles.
+- En la vista previa estática comprobé cuatro pedidas visibles en cero, la transición a bazas conseguidas también en cero, y las pantallas de ajustes y de inicio.
+- Revisión responsive en 390×844 y 1440×900; `document.documentElement.scrollWidth` fue igual al viewport en ambos anchos.
+- Capacidad consultada el 2026-10-24 09:36 UTC: 61% restante en ventana de 5 h (reinicio 13:19 UTC) y 93% restante en ventana de 7 días (reinicio 2026-10-30 18:44 UTC).
+- `bunx biome check apps/pocha-score`, `bun run type-check --filter=@damaca/pocha-score`, `bun run test --filter=@damaca/pocha-score` (26 pasan) y `bun run build --filter=@damaca/pocha-score`: pasan.
+- `git diff --check`: pasa.

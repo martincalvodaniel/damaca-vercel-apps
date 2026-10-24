@@ -44,6 +44,12 @@ it("orders bids after the dealer and makes the dealer last", () => {
   expect(biddingOrder(2, 4)).toEqual([3, 0, 1, 2])
 })
 
+it("initializes bids and tricks at zero for every player", () => {
+  const round = createRound(4, 1, 5)
+  expect(round.bids).toEqual([0, 0, 0, 0, 0])
+  expect(round.tricks).toEqual([0, 0, 0, 0, 0])
+})
+
 it("rejects bids that sum to the tricks and tricks with an incorrect total", () => {
   const round = createRound(3, 0, 3)
   round.bids = [1, 1, 1]
