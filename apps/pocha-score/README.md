@@ -1,6 +1,6 @@
 # Pocha Score
 
-Starter para apps locales, instalables y sin cuentas. Usa **IndexedDB** en el dispositivo y exporta una **PWA estática**: no requiere Google, MongoDB, API, credenciales ni servidor de aplicación.
+Marcador local para partidas presenciales de pocha entre 3 y 6 jugadores. Anota bazas pedidas y conseguidas, calcula puntuaciones y guarda la partida en **IndexedDB** en este dispositivo. Se instala como **PWA estática** y funciona sin cuentas, sincronización ni servidor de aplicación.
 
 ## Arranque
 
@@ -23,18 +23,20 @@ bun run start
 ## Qué incluye
 
 - Next.js App Router con exportación estática; React y TypeScript para interacción local.
-- IndexedDB con `idb`, conexión compartida, versión inicial y repositorio de preferencias validadas con Zod.
-- Home y Settings sin autenticación, navegación inferior móvil/superior escritorio, áreas seguras y tema System/Light/Dark.
+- Partidas con secuencia sube-baja configurable, rotación del repartidor, puntuación habitual, clasificación y corrección de rondas.
+- Historial local, reanudación, guardado automático y copias JSON para exportar e importar partidas.
+- IndexedDB con `idb`, conexión compartida, migración no destructiva de versión 1 a 2 y registros validados con Zod.
+- Interfaz en español, navegación inferior móvil/superior escritorio, áreas seguras y tema Sistema/Claro/Oscuro.
 - Manifest, iconos PNG normales/maskable/Apple y favicon propios. Fuentes del sistema; sin peticiones de fuentes o recursos externos.
 - Caché offline del build completo. Indicador de preparación en Settings y actualización explícita con **Update and reload**. Las actualizaciones no borran IndexedDB.
 - Bun, Biome y pruebas con `fake-indexeddb` para persistencia aislada. No hay ORM, framework PWA, biblioteca de estado ni UI kit.
 
-El tema se guarda en IndexedDB. localStorage conserva únicamente una caché pequeña para aplicar el tema antes de hidratar, y propaga cambios entre pestañas. Si falla la persistencia, la UI muestra el error; no anuncia éxito silenciosamente.
+El tema y las partidas se guardan en IndexedDB. localStorage conserva únicamente una caché pequeña para aplicar el tema antes de hidratar, y propaga cambios entre pestañas. Si falla la persistencia, la UI muestra el error; no anuncia éxito silenciosamente.
 
 ## Instalación y uso sin conexión
 
 1. Sirve `out/` desde la raíz de un origen **HTTPS**; localhost es válido para pruebas. La primera carga y preparación requieren conexión al host.
-2. Abre Settings y espera **Offline ready**. Se prepara la aplicación completa, incluso Settings aunque no se haya visitado antes.
+2. Abre Ajustes y espera **Lista para usar sin conexión**. Se prepara la aplicación completa, incluso Ajustes aunque no se haya visitado antes.
 3. En navegadores compatibles aparece **Install app**. También puedes usar la opción del menú del navegador. En iPhone/iPad: Safari → Compartir → Añadir a pantalla de inicio. En escritorio: opción de instalar en la barra de direcciones o menú.
 4. Abre desde el icono o vuelve al mismo origen. Con la caché preparada, ambas rutas se abren sin conexión.
 
@@ -46,7 +48,7 @@ Cuando hay un build nuevo, se descarga en segundo plano y se ofrece la recarga. 
 
 IndexedDB pertenece al origen, navegador, perfil y dispositivo actuales. No hay cuenta, respaldo automático, cifrado propio ni sincronización entre dispositivos. Borrar datos del sitio, navegar en privado o las políticas de almacenamiento del navegador pueden eliminar los datos; instalar no equivale a hacer una copia.
 
-La plantilla solo persiste una preferencia de tema. Antes de almacenar datos de producto irremplazables, define exportación/importación, recuperación y su aceptación. Una actualización de esquema debe incrementar la versión y migrar sin eliminar registros. Los accesos bloqueados o fallidos deben mostrarse y permitir reintentar. La capa local usa [idb](https://github.com/jakearchibald/idb), un envoltorio de IndexedDB con promesas.
+Exporta periódicamente una copia JSON desde la pantalla de partidas y guárdala fuera del dispositivo. La importación valida todo el archivo y añade cada partida como copia nueva; repetir una importación puede duplicar partidas. Si una escritura falla, conserva la pantalla y vuelve a intentarlo. Una actualización de esquema debe incrementar la versión y migrar sin eliminar registros. Los accesos bloqueados o fallidos deben mostrarse y permitir reintentar. La capa local usa [idb](https://github.com/jakearchibald/idb), un envoltorio de IndexedDB con promesas.
 
 ## Copiar para una aplicación nueva
 

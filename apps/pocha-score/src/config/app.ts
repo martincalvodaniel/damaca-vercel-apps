@@ -1,7 +1,7 @@
 export const appConfig = {
   name: "Pocha Score",
   shortName: "Pocha Score",
-  description: "A private, offline-ready app on your device.",
+  description: "Marcador local e instalable para tus partidas de pocha.",
   storageName: "pocha-score",
   cachePrefix: "pocha-score-shell-",
 } as const

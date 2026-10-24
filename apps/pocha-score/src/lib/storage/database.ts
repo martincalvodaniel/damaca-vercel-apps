@@ -2,11 +2,17 @@
 
 import { type DBSchema, type IDBPDatabase, openDB } from "idb"
 import { appConfig } from "@/config/app"
+import type { PochaGame } from "@/schemas/game"
 
 interface LocalDatabase extends DBSchema {
   preferences: {
     key: string
     value: unknown
+  }
+  games: {
+    key: string
+    value: PochaGame
+    indexes: { "by-updated-at": string; "by-status": string }
   }
 }
 
@@ -21,9 +27,14 @@ export function openLocalDatabase() {
   if (!connection) {
     connection = new Promise<IDBPDatabase<LocalDatabase>>((resolve, reject) => {
       let blocked = false
-      const request = openDB<LocalDatabase>(appConfig.storageName, 1, {
+      const request = openDB<LocalDatabase>(appConfig.storageName, 2, {
         upgrade(database, oldVersion) {
           if (oldVersion < 1) database.createObjectStore("preferences")
+          if (oldVersion < 2) {
+            const games = database.createObjectStore("games", { keyPath: "id" })
+            games.createIndex("by-updated-at", "updatedAt")
+            games.createIndex("by-status", "status")
+          }
         },
         blocked() {
           blocked = true

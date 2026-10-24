@@ -11,7 +11,7 @@ export function AppNavigation() {
   const pathname = usePathname()
   return (
     <nav
-      aria-label="Main navigation"
+      aria-label="Navegación principal"
       className="fixed inset-x-0 bottom-0 z-30 border-t border-zinc-200 bg-white px-2 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:sticky md:top-0 md:border-t-0 md:border-b md:px-5 md:py-3 dark:border-zinc-800 dark:bg-zinc-900"
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
@@ -26,6 +26,11 @@ export function AppNavigation() {
             <li key={destination.id} className="min-w-0 flex-1 md:flex-none">
               <Link
                 href={destination.href}
+                onClick={
+                  destination.id === "home"
+                    ? () => window.dispatchEvent(new Event("pocha:home"))
+                    : undefined
+                }
                 aria-current={
                   pathname === destination.href ||
                   (destination.href !== "/" &&

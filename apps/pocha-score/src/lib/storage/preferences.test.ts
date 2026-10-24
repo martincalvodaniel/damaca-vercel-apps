@@ -19,8 +19,23 @@ it("creates storage lazily and preserves committed preferences after reopening",
   await closeLocalDatabase()
   expect(await readThemePreference()).toBe("dark")
   const database = await openLocalDatabase()
-  expect(database.version).toBe(1)
-  expect([...database.objectStoreNames]).toEqual(["preferences"])
+  expect(database.version).toBe(2)
+  expect([...database.objectStoreNames]).toEqual(["games", "preferences"])
+})
+
+it("migrates version one preferences without removing them and adds the game store", async () => {
+  const { openDB } = await import("idb")
+  const oldDatabase = await openDB(appConfig.storageName, 1, {
+    upgrade(database) {
+      database.createObjectStore("preferences")
+    },
+  })
+  await oldDatabase.put("preferences", "dark", "theme")
+  oldDatabase.close()
+  expect(await readThemePreference()).toBe("dark")
+  const database = await openLocalDatabase()
+  expect(database.version).toBe(2)
+  expect(database.objectStoreNames.contains("games")).toBe(true)
 })
 
 it("rejects invalid input without replacing a valid stored preference", async () => {
@@ -58,7 +73,7 @@ it("reports unavailable storage and can retry when browser access is restored", 
 it("closes the shared connection when another tab upgrades the database", async () => {
   await writeThemePreference("dark")
   const { openDB } = await import("idb")
-  const upgraded = await openDB(appConfig.storageName, 2, {
+  const upgraded = await openDB(appConfig.storageName, 3, {
     upgrade(database) {
       database.createObjectStore("future-records")
     },

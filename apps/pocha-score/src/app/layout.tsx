@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/shared/theme-provider"
 import { appConfig } from "@/config/app"
 import "./globals.css"
 
+// biome-ignore lint/style/useComponentExportOnlyModules: Next.js layouts require route metadata exports in this file.
 export const metadata: Metadata = {
   title: appConfig.name,
   description: appConfig.description,
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   icons: { apple: "/icons/apple-touch-icon.png" },
 }
 
+// biome-ignore lint/style/useComponentExportOnlyModules: Next.js layouts require viewport metadata exports in this file.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -30,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <head>
         <ThemeBootstrap />
       </head>

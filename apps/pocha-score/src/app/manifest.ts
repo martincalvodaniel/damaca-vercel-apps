@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: appConfig.name,
     short_name: appConfig.shortName,
     description: appConfig.description,
-    lang: "en",
+    lang: "es",
     start_url: "/",
     scope: "/",
     display: "standalone",
