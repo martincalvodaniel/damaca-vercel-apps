@@ -15,6 +15,7 @@ Pocha Score es un marcador local e instalable para partidas presenciales de poch
 - Exportar todas las partidas a JSON validado e importar como copias nuevas sin sobreescritura.
 - Priorizar el uso móvil con márgenes y separaciones compactos, texto legible y diseño responsive. Los campos numéricos usan controles táctiles minimalistas con decremento a la izquierda e incremento a la derecha.
 - Las pedidas y bazas conseguidas de las rondas nuevas empiezan en cero. La interfaz reduce aún más márgenes, rellenos y separaciones en todas las vistas.
+- Cada partida guarda su instante de inicio en UTC. Las listas y el historial lo muestran con la zona horaria local del dispositivo; las copias JSON conservan el instante original al importar.
 
 ## Decisiones técnicas
 

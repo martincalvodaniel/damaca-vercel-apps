@@ -32,6 +32,7 @@ function sampleGame(): PochaGame {
     id: crypto.randomUUID(),
     revision: 0,
     createdAt: now,
+    startedAt: "2026-10-24T06:30:00.000Z",
     updatedAt: now,
     players,
     schedule: [1],
@@ -61,7 +62,25 @@ it("exports valid JSON and imports every game as a new independent copy", async 
   const copies = await importGames(backup.games)
   expect(copies).toHaveLength(1)
   expect(copies[0].id).not.toBe(game.id)
+  expect(copies[0].startedAt).toBe(game.startedAt)
   expect(await listGames()).toHaveLength(2)
+})
+
+it("uses the creation timestamp for older backups without a start timestamp", async () => {
+  const game = sampleGame()
+  const oldGame = { ...game }
+  Reflect.deleteProperty(oldGame, "startedAt")
+  const backup = parseGameBackup(
+    JSON.stringify({
+      format: "pocha-score-backup",
+      version: 1,
+      exportedAt: game.createdAt,
+      games: [oldGame],
+    })
+  )
+  expect(backup.games[0].startedAt).toBe(game.createdAt)
+  const copies = await importGames(backup.games)
+  expect(copies[0].startedAt).toBe(game.createdAt)
 })
 
 it("rejects an invalid import before writing any copied games", async () => {

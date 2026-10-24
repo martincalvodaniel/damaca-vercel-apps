@@ -41,3 +41,13 @@ Registra evidencia observada por iteración. No registres trabajo futuro como ev
 - Capacidad consultada el 2026-10-24 09:36 UTC: 61% restante en ventana de 5 h (reinicio 13:19 UTC) y 93% restante en ventana de 7 días (reinicio 2026-10-30 18:44 UTC).
 - `bunx biome check apps/pocha-score`, `bun run type-check --filter=@damaca/pocha-score`, `bun run test --filter=@damaca/pocha-score` (26 pasan) y `bun run build --filter=@damaca/pocha-score`: pasan.
 - `git diff --check`: pasa.
+
+## 06 — Hora de inicio y copias
+
+- Se añadió `startedAt` UTC a nuevas partidas. El esquema normaliza registros y copias antiguos sin el campo usando `createdAt`, sin migración destructiva de IndexedDB.
+- El respaldo JSON incorpora `startedAt`; importar como copia crea nuevos identificadores y fechas de importación, pero conserva exactamente el inicio original.
+- Listado de partidas y historial presentan el inicio con `Intl.DateTimeFormat` del dispositivo; el historial conserva además la fecha final.
+- `bun run test --filter=@damaca/pocha-score`: 27 pruebas pasan, incluidos round-trip, conservación en copias y compatibilidad con respaldos anteriores.
+- `bun run type-check --filter=@damaca/pocha-score`, `bun run build --filter=@damaca/pocha-score`, `bunx biome check apps/pocha-score` y `git diff --check`: pasan.
+- QA de navegador en la vista previa estática: la lista mostró `Inicio 24 oct 2026, 11:39` para el instante guardado en UTC, en la zona local configurada para el dispositivo.
+- Capacidad consultada el 2026-10-24 09:36 UTC: 60% restante en ventana de 5 h (reinicio 13:19 UTC) y 93% restante en ventana de 7 días (reinicio 2026-10-30 18:44 UTC).

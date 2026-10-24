@@ -51,3 +51,13 @@ Este archivo es la fuente única del estado de las iteraciones. Sigue el [workfl
 - Aceptación: rondas nuevas contienen ceros editables en ambos campos; márgenes, rellenos y separaciones son menores en todas las vistas; la interfaz conserva legibilidad, accesibilidad, operación táctil y ausencia de desbordamiento móvil.
 - Validación: pruebas de reglas, tipos, tests, Biome, build estático, navegador móvil/escritorio y `git diff --check`.
 - Evidencia: [registro](iteration-log.md#05--densidad-móvil-y-valores-iniciales).
+
+## 06 — Hora de inicio y copias
+
+- Estado: `validated`.
+- Objetivo: guardar el inicio como instante UTC y exponerlo en listas e importación/exportación.
+- Rutas: `src/schemas/game.ts`, `src/lib/storage/**`, `src/features/home/components/**` y documentos de planificación.
+- Dependencias: 02 y 03.
+- Aceptación: partidas nuevas tienen `startedAt` UTC; listas activas e historial lo muestran con la zona local; JSON exportado incluye el instante; importaciones conservan el inicio original; registros y copias anteriores sin `startedAt` usan su `createdAt` existente como valor de compatibilidad.
+- Validación: pruebas de formato/compatibilidad e importación, tipos, Biome, build estático, revisión del formato local y `git diff --check`.
+- Evidencia: [registro](iteration-log.md#06--hora-de-inicio-y-copias).

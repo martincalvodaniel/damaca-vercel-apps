@@ -53,6 +53,7 @@ export const gameSchema = z
     id: z.string().min(1),
     revision: z.number().int().nonnegative(),
     createdAt: z.string().datetime(),
+    startedAt: z.string().datetime().optional(),
     updatedAt: z.string().datetime(),
     players: z.array(playerSchema).min(3).max(6),
     schedule: z.array(z.number().int().min(1).max(12)).min(1),
@@ -136,6 +137,10 @@ export const gameSchema = z
       }
     }
   })
+  .transform((game) => ({
+    ...game,
+    startedAt: game.startedAt ?? game.createdAt,
+  }))
 
 export const gameBackupSchema = z.object({
   format: z.literal("pocha-score-backup"),

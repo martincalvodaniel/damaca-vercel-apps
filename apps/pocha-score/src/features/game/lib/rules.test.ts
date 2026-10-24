@@ -75,6 +75,7 @@ it("recalculates cumulative scores and reports every tied leader", () => {
     id: "game",
     revision: 0,
     createdAt: "2026-10-24T00:00:00.000Z",
+    startedAt: "2026-10-24T00:00:00.000Z",
     updatedAt: "2026-10-24T00:00:00.000Z",
     players,
     schedule: [1],

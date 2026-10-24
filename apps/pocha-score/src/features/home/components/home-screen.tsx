@@ -39,6 +39,11 @@ const dateLabel = (date: string) =>
   new Intl.DateTimeFormat("es-ES", { dateStyle: "medium" }).format(
     new Date(date)
   )
+const dateTimeLabel = (date: string) =>
+  new Intl.DateTimeFormat("es-ES", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(date))
 
 export function HomeScreen() {
   const [screen, setScreen] = useState<Screen>("home")
@@ -214,6 +219,7 @@ export function HomeScreen() {
       id: crypto.randomUUID(),
       revision: 0,
       createdAt: now,
+      startedAt: now,
       updatedAt: now,
       players: normalized.map((name) => ({ id: crypto.randomUUID(), name })),
       schedule,
@@ -700,7 +706,7 @@ export function HomeScreen() {
                     </span>
                     <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
                       Ronda {item.rounds.length} de {item.schedule.length} ·{" "}
-                      {dateLabel(item.updatedAt)}
+                      Inicio {dateTimeLabel(item.startedAt)}
                     </span>
                   </button>
                 ))}
@@ -767,6 +773,7 @@ export function HomeScreen() {
                       {item.players.map((player) => player.name).join(" · ")}
                     </span>
                     <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
+                      Inicio {dateTimeLabel(item.startedAt)} · Fin{" "}
                       {dateLabel(item.updatedAt)} · Ganador
                       {scores.filter((score) => score === high).length > 1
                         ? "es"
