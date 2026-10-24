@@ -32,3 +32,13 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Aceptación: `apps/*` ya no contiene esos workspaces; README, inventario raíz y lockfile reflejan solo apps activas; ambos modos siguen generándose; ninguna dependencia de las apps activas queda rota.
 - Validación: instalación Bun reproducible; pruebas del generador; lint, type-check y pruebas de todas las apps activas; enlaces y `git diff --check`.
 - Evidencia: [iteration-log.md#agw-03-retirar-workspaces-de-plantilla](iteration-log.md#agw-03-retirar-workspaces-de-plantilla).
+
+## AGW-04 — Incorporar Card Wars al inventario
+
+- Estado: `validated`.
+- Objetivo: registrar el nuevo workspace en la documentación general del monorepo y enlazar su plan de producto.
+- Rutas: `README.md`, `docs/monorepo.md`, `docs/turbopack.md`, `docs/deployment-and-caching.md`, `plan/master.md`, `plan/iterations.md`, `plan/iteration-log.md` y `apps/card-wars/plan/**`.
+- Dependencias: solicitud de crear Card Wars como app local PWA.
+- Aceptación: inventario y conteos incluyen las cinco apps; el plan raíz enlaza el master de Card Wars; el registro del producto queda en la app.
+- Validación: revisar enlaces y conteos; validaciones técnicas de Card Wars se registran en la iteración principal de la app.
+- Evidencia: [iteration-log.md#agw-04-incorporar-card-wars-al-inventario](iteration-log.md#agw-04-incorporar-card-wars-al-inventario).

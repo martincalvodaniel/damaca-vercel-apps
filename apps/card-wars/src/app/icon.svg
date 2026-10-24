@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Card Wars</title>
+  <rect width="64" height="64" rx="14" fill="#213f36" />
+  <path d="M14 15h22a5 5 0 0 1 5 5v31H19a5 5 0 0 1-5-5z" fill="#fff6d8" stroke="#fff" stroke-width="2" />
+  <path d="M39 18h7a5 5 0 0 1 5 5v28H39z" fill="#bbdf84" stroke="#fff" stroke-width="2" />
+  <path d="m25 24 10 10m-10 0 10-10m-5-5v20m-5-15h10" fill="none" stroke="#d87d3b" stroke-linecap="round" stroke-width="3" />
+  <path d="m43 28 2 3 3 .5-2.5 2.5.5 3.5-3-1.5-3 1.5.5-3.5-2.5-2.5 3-.5z" fill="#fff6d8" />
+</svg>

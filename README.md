@@ -1,6 +1,6 @@
 # damaca-vercel-apps
 
-Monorepo for three independent web applications deployed on Vercel. Applications stay in their own workspaces; Bun catalogs keep shared dependency versions aligned, and Turborepo coordinates builds and remote caching.
+Monorepo for independent web applications. Applications stay in their own workspaces; Bun catalogs keep shared dependency versions aligned, and Turborepo coordinates builds and remote caching.
 
 ## Applications
 
@@ -9,6 +9,8 @@ Monorepo for three independent web applications deployed on Vercel. Applications
 | `@damaca/billing-poc`           | `apps/billing-poc`           |             3000 |
 | `@damaca/dalis-home-management` | `apps/dalis-home-management` |             3001 |
 | `@damaca/dalis-tasks-events`    | `apps/dalis-tasks-events`    |             3002 |
+| `@damaca/pocha-score`           | `apps/pocha-score`           |             3003 |
+| `@damaca/card-wars`             | `apps/card-wars`             |             3004 |
 
 ## Getting started
 

@@ -39,6 +39,31 @@
         "typescript": "catalog:",
       },
     },
+    "apps/card-wars": {
+      "name": "@damaca/card-wars",
+      "version": "0.1.0",
+      "dependencies": {
+        "idb": "catalog:",
+        "next": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "@tailwindcss/postcss": "catalog:",
+        "@types/bun": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "@vercel/config": "catalog:",
+        "fake-indexeddb": "catalog:",
+        "knip": "catalog:",
+        "tailwindcss": "catalog:",
+        "turbo": "2.11.10",
+        "typescript": "catalog:",
+      },
+    },
     "apps/dalis-home-management": {
       "name": "@damaca/dalis-home-management",
       "version": "0.1.0",
@@ -189,6 +214,8 @@
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.6.2", "", { "os": "win32", "cpu": "x64" }, "sha512-FVlWD+mDDz8nN5LWKRWUhhb7wKIK0VE3oXQvQBX7Fwwj00CvqMVhMyiz1iz8O5aZGmnkhFlKSwJPrUvMh5prQw=="],
 
     "@damaca/billing-poc": ["@damaca/billing-poc@workspace:apps/billing-poc"],
+
+    "@damaca/card-wars": ["@damaca/card-wars@workspace:apps/card-wars"],
 
     "@damaca/dalis-home-management": ["@damaca/dalis-home-management@workspace:apps/dalis-home-management"],
 

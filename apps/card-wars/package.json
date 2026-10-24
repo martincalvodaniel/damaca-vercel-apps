@@ -1,0 +1,35 @@
+{
+  "name": "@damaca/card-wars",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "bun run --bun next build --webpack && bun run scripts/build-service-worker.ts",
+    "dev": "bun run --bun next dev --port 3004",
+    "knip": "knip",
+    "start": "bun run scripts/preview.ts --port 3004",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "idb": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vercel/config": "catalog:",
+    "fake-indexeddb": "catalog:",
+    "knip": "catalog:",
+    "tailwindcss": "catalog:",
+    "turbo": "2.11.10",
+    "typescript": "catalog:"
+  }
+}

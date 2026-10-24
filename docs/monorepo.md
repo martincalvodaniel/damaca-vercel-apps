@@ -2,7 +2,7 @@
 
 ## Repository boundaries
 
-`damaca-vercel-apps` contains three independent applications. They share dependency
+`damaca-vercel-apps` contains five independent applications. They share dependency
 versions and tooling, while retaining their own source code, configuration, tests,
 environment variables, and Vercel projects. There is currently no shared
 `packages/` workspace or common application build artifact.
@@ -13,6 +13,8 @@ damaca-vercel-apps/
 │   ├── billing-poc/
 │   ├── dalis-home-management/
 │   ├── dalis-tasks-events/
+│   ├── pocha-score/
+│   ├── card-wars/
 ├── docs/
 ├── .github/workflows/ci.yml
 ├── biome.json
@@ -26,11 +28,13 @@ damaca-vercel-apps/
 | `apps/billing-poc`           | `@damaca/billing-poc`           | 3000             | Next.js application                          |
 | `apps/dalis-home-management` | `@damaca/dalis-home-management` | 3001             | Next.js application                          |
 | `apps/dalis-tasks-events`    | `@damaca/dalis-tasks-events`    | 3002             | Next.js application and `public/dalis-sw.js` |
+| `apps/pocha-score`           | `@damaca/pocha-score`           | 3003             | Static Next.js PWA with IndexedDB            |
+| `apps/card-wars`             | `@damaca/card-wars`             | 3004             | Static Next.js PWA with IndexedDB            |
 
 ```mermaid
 flowchart TD
     Root[Root package.json and bun.lock] --> Bun[Bun workspaces and catalog]
-    Bun --> Apps[Three independent application workspaces]
+    Bun --> Apps[Five independent application workspaces]
     Root --> Turbo[Turborepo task scheduler]
     Turbo --> AppTask[Selected application script]
     AppTask --> Next[Next.js and Turbopack]
@@ -85,7 +89,7 @@ bun run dev
 
 | Root command         | Current behavior                                                                 |
 | -------------------- | -------------------------------------------------------------------------------- |
-| `bun run dev`        | Starts all three app dev servers through Turbo in parallel                       |
+| `bun run dev`        | Starts all five app dev servers through Turbo in parallel                        |
 | `bun run build`      | Runs builds through Turbo with concurrency limited to two and telemetry disabled |
 | `bun run type-check` | Runs each workspace's `tsc --noEmit`                                             |
 | `bun run test`       | Runs workspace test scripts; Turbo does not cache these tests                    |
