@@ -14,7 +14,7 @@ Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y f
 
 ## Aplicaciones
 
-El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events`, `my-next-local-template` y `my-next-template`. AGW-03 retirará los dos workspaces de plantilla una vez validadas sus bases generables fuera de `apps/*`. La lista de apps puede cambiar; la obligación documental aplica a todas las apps futuras.
+El monorepo contiene `billing-poc`, `dalis-home-management` y `dalis-tasks-events`. Las bases `mongo-google` y `local-pwa` viven en `turbo/generators/templates/`, fuera de `apps/*`, y crean nuevos workspaces bajo demanda. La lista de apps activas puede cambiar; la obligación documental aplica a todas las apps futuras.
 
 ## Exclusiones y dudas
 

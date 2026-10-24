@@ -2,7 +2,7 @@
 
 ## Repository boundaries
 
-`damaca-vercel-apps` contains five independent applications. They share dependency
+`damaca-vercel-apps` contains three independent applications. They share dependency
 versions and tooling, while retaining their own source code, configuration, tests,
 environment variables, and Vercel projects. There is currently no shared
 `packages/` workspace or common application build artifact.
@@ -13,8 +13,6 @@ damaca-vercel-apps/
 │   ├── billing-poc/
 │   ├── dalis-home-management/
 │   ├── dalis-tasks-events/
-│   ├── my-next-local-template/
-│   └── my-next-template/
 ├── docs/
 ├── .github/workflows/ci.yml
 ├── biome.json
@@ -23,18 +21,16 @@ damaca-vercel-apps/
 └── turbo.json
 ```
 
-| Application directory         | Workspace name                   | Development port | Build result                                 |
-| ----------------------------- | -------------------------------- | ---------------- | -------------------------------------------- |
-| `apps/billing-poc`            | `@damaca/billing-poc`            | 3000             | Next.js application                          |
-| `apps/dalis-home-management`  | `@damaca/dalis-home-management`  | 3001             | Next.js application                          |
-| `apps/dalis-tasks-events`     | `@damaca/dalis-tasks-events`     | 3002             | Next.js application and `public/dalis-sw.js` |
-| `apps/my-next-local-template` | `@damaca/my-next-local-template` | 3003             | Static `out/` export including `sw.js`       |
-| `apps/my-next-template`       | `@damaca/my-next-template`       | 3004             | Next.js application                          |
+| Application directory        | Workspace name                  | Development port | Build result                                 |
+| ---------------------------- | ------------------------------- | ---------------- | -------------------------------------------- |
+| `apps/billing-poc`           | `@damaca/billing-poc`           | 3000             | Next.js application                          |
+| `apps/dalis-home-management` | `@damaca/dalis-home-management` | 3001             | Next.js application                          |
+| `apps/dalis-tasks-events`    | `@damaca/dalis-tasks-events`    | 3002             | Next.js application and `public/dalis-sw.js` |
 
 ```mermaid
 flowchart TD
     Root[Root package.json and bun.lock] --> Bun[Bun workspaces and catalog]
-    Bun --> Apps[Five independent application workspaces]
+    Bun --> Apps[Three independent application workspaces]
     Root --> Turbo[Turborepo task scheduler]
     Turbo --> AppTask[Selected application script]
     AppTask --> Next[Next.js and Turbopack]
@@ -89,7 +85,7 @@ bun run dev
 
 | Root command         | Current behavior                                                                 |
 | -------------------- | -------------------------------------------------------------------------------- |
-| `bun run dev`        | Starts all five app dev servers through Turbo in parallel                        |
+| `bun run dev`        | Starts all three app dev servers through Turbo in parallel                       |
 | `bun run build`      | Runs builds through Turbo with concurrency limited to two and telemetry disabled |
 | `bun run type-check` | Runs each workspace's `tsc --noEmit`                                             |
 | `bun run test`       | Runs workspace test scripts; Turbo does not cache these tests                    |
@@ -102,7 +98,7 @@ Filter Turbo tasks by the full workspace name:
 ```sh
 bun run dev --filter=@damaca/dalis-home-management
 bun run build --filter=@damaca/billing-poc
-bun run test --filter=@damaca/my-next-local-template
+bun run test --filter=@damaca/dalis-tasks-events
 bun run type-check --filter=@damaca/dalis-tasks-events
 ```
 
@@ -110,18 +106,20 @@ Application-specific commands remain in their own manifests. Run one with Bun's
 `--cwd` option, for example:
 
 ```sh
-bun run --cwd=apps/my-next-local-template start --port 3003
+bun run generate:app
 ```
 
-That command previews an existing static export; build the template first.
-Database indexing, migration, sample-data, and service integration scripts remain
+The generator creates either an authenticated MongoDB app or a static local PWA
+under `apps/<identifier>`; use its printed commands to install dependencies and
+run the generated app. Database indexing, migration, sample-data, and service integration scripts remain
 explicit app commands and are not automatically run by the root test task.
 
 ## Environment and application rules
 
 Keep local environment files in the corresponding app directory. Examples exist
-in `billing-poc/.env.local.example` and in `.env.example` in the home-management,
-tasks-events, and server template apps. Configure deployed values separately in
+in `billing-poc/.env.local.example` and in `.env.example` in the home-management
+and tasks-events apps. Generated MongoDB apps include their own `.env.example`.
+Configure deployed values separately in
 each Vercel project. Never commit real `.env.local` files or credentials.
 
 Follow root [AGENTS.md](../AGENTS.md) and any instructions inside the app being

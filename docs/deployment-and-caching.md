@@ -2,7 +2,7 @@
 
 ## Turbo task configuration
 
-The root [turbo.json](../turbo.json) applies to all five workspaces:
+The root [turbo.json](../turbo.json) applies to all three active workspaces:
 
 | Task         | Scheduling and cache behavior                                                    |
 | ------------ | -------------------------------------------------------------------------------- |
@@ -18,7 +18,7 @@ single app and does not include that root concurrency option.
 
 Build outputs are relative to each workspace:
 - `.next/**`, excluding `.next/cache/**` and `.next/dev/**`.
-- `out/**`, including the static template's service worker.
+- `out/**`, including the generated local PWA service worker.
 - `public/dalis-sw.js` for the tasks app.
 
 Build inputs extend `$TURBO_DEFAULT$`, preserving Turbo's default file selection

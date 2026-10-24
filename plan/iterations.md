@@ -25,9 +25,10 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 
 ## AGW-03 — Retirar workspaces de plantilla
 
-- Estado: `pending`.
-- Objetivo: retirar `apps/my-next-template` y `apps/my-next-local-template` una vez que sus bases externas generen apps verificables.
-- Rutas: los dos workspaces de plantilla, `README.md`, `plan/master.md`, `package.json` y `bun.lock`.
+- Estado: `validated`.
+- Objetivo: retirar `apps/my-next-template` y `apps/my-next-local-template` tras validar las bases externas del generador.
+- Rutas: los dos workspaces de plantilla, `README.md`, `docs/monorepo.md`, `docs/turbopack.md`, `docs/deployment-and-caching.md`, `plan/master.md`, `package.json` y `bun.lock`.
 - Dependencias: AGW-02 validada.
 - Aceptación: `apps/*` ya no contiene esos workspaces; README, inventario raíz y lockfile reflejan solo apps activas; ambos modos siguen generándose; ninguna dependencia de las apps activas queda rota.
 - Validación: instalación Bun reproducible; pruebas del generador; lint, type-check y pruebas de todas las apps activas; enlaces y `git diff --check`.
+- Evidencia: [iteration-log.md#agw-03-retirar-workspaces-de-plantilla](iteration-log.md#agw-03-retirar-workspaces-de-plantilla).

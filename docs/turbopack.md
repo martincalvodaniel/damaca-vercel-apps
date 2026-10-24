@@ -17,7 +17,7 @@ scripts; it is not the Next.js bundler.
 
 ## How it is enabled here
 
-The catalog pins Next.js 16.4.3. All five dev scripts invoke
+The catalog pins Next.js 16.4.3. All three app dev scripts invoke
 `bun run --bun next dev` with distinct ports. The normal build scripts invoke
 `bun run --bun next build`; `dalis-tasks-events` wraps Next.js in a custom build
 script. No current dev/build script passes `--webpack`.
@@ -26,13 +26,13 @@ There is no standalone Turbopack installation or root Turbopack configuration.
 Each application has its own `next.config.ts`, and none currently declares a
 `turbopack` block:
 
-| Configuration                                                           | Repository-specific behavior                                         |
-| ----------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| [billing-poc](../apps/billing-poc/next.config.ts)                       | Development origins, Google-hosted image patterns, React strict mode |
-| [dalis-home-management](../apps/dalis-home-management/next.config.ts)   | Default Next.js configuration                                        |
-| [dalis-tasks-events](../apps/dalis-tasks-events/next.config.ts)         | Service-worker content type, scope, and no-cache headers             |
-| [my-next-local-template](../apps/my-next-local-template/next.config.ts) | Static export and trailing slashes                                   |
-| [my-next-template](../apps/my-next-template/next.config.ts)             | Default Next.js configuration                                        |
+| Configuration                                                                  | Repository-specific behavior                                         |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| [billing-poc](../apps/billing-poc/next.config.ts)                              | Development origins, Google-hosted image patterns, React strict mode |
+| [dalis-home-management](../apps/dalis-home-management/next.config.ts)          | Default Next.js configuration                                        |
+| [dalis-tasks-events](../apps/dalis-tasks-events/next.config.ts)                | Service-worker content type, scope, and no-cache headers             |
+| [local-pwa base](../turbo/generators/templates/local-pwa/next.config.ts)       | Static export and trailing slashes                                   |
+| [mongo-google base](../turbo/generators/templates/mongo-google/next.config.ts) | Default Next.js configuration                                        |
 
 Next.js infers the filesystem root from lockfiles. The repository relies on the
 single root `bun.lock`; it does not explicitly set `turbopack.root`. Nested or
@@ -52,7 +52,7 @@ flowchart TD
     Wrapper --> TasksNext[Next.js build with Turbopack]
     TasksNext --> Worker[Bun.build service worker using BUILD_ID and asset URLs]
     Worker --> TasksOut[.next and public/dalis-sw.js]
-    Kind -->|my-next-local-template| Export[Next.js static export with Turbopack]
+    Kind -->|local-pwa| Export[Next.js static export with Webpack]
     Export --> StaticWorker[Hash exported assets and generate service worker]
     StaticWorker --> StaticOut[out directory including sw.js]
 ```
@@ -63,8 +63,8 @@ assets, reads `.next/BUILD_ID`, and uses `Bun.build` to compile its service work
 into `public/dalis-sw.js`. The worker generation is a separate stage after
 Turbopack and belongs to the same Turbo build task.
 
-The local template exports static files to `out/`. Its
-[worker generator](../apps/my-next-local-template/scripts/build-service-worker.ts)
+The `local-pwa` generator base exports static files to `out/`. Its
+[worker generator](../turbo/generators/templates/local-pwa/scripts/build-service-worker.ts)
 hashes the exported content and the worker template, checks required routes, and
 writes `out/sw.js`. Its `start` script serves the export through Bun instead of
 `next start`.
