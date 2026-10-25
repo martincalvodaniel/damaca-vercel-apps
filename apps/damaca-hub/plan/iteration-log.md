@@ -10,6 +10,13 @@ The iteration state is maintained in [iterations.md](iterations.md); this file r
 - Build: Turbopack's default build fails in this environment while binding its auxiliary port (`Operation not permitted`), including when rerun with escalation. The same production build passes with `next build --webpack` and disposable placeholder OAuth/Mongo environment values.
 - Limits: no real Google OAuth credentials or configured callbacks were available, so the live sign-in flow was not exercised. Responsive layout and keyboardable native controls were source-reviewed; no authenticated browser session was available for an interactive visual review. Domains remain unset and the other five applications remain unintegrated, as scoped.
 
+<a id="02--match-hub-session-cookie-detection"></a>
+## 02 — Match Hub session cookie detection
+
+- Changes: pending.
+- Validation: pending.
+- Limits: Google login and stable `int` alias verification pending.
+
 ## Shared consumer integration AGW-05
 
 AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that product decision; see the current [root delivery](../../../plan/iterations.md#agw-08--public-games-and-hub-managed-oidc-clients).

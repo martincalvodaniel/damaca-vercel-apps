@@ -8,7 +8,7 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  if (getSessionCookie(request)) {
+  if (getSessionCookie(request, { cookiePrefix: "damaca-hub" })) {
     return NextResponse.next()
   }
 
