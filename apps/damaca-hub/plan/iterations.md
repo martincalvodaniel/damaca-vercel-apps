@@ -18,10 +18,10 @@ AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that 
 
 ## 02 — Match Hub session cookie detection
 
-- Status: `in_progress`.
+- Status: `validated`.
 - Goal: make the Hub proxy recognize the session cookie configured by its Better Auth instance so authenticated preview users do not enter a sign-in redirect loop.
 - Paths: `src/proxy.ts`, `src/proxy.test.ts`, this plan, and the delivery log.
 - Dependencies: Better Auth exposes a cookie-prefix option for `getSessionCookie`; Google OAuth callback allowlist includes the stable `int` origin and callback.
 - Acceptance: authenticated requests carrying the `damaca-hub` session cookie pass the proxy; unauthenticated requests still redirect to sign-in; Google login on the stable `int` alias completes and returns to the catalog.
-- Validation: focused proxy tests, Hub lint/type-check/tests/build, then browser verification on the `int` alias; record unavailable external checks explicitly.
+- Validation: focused proxy tests, Hub lint/type-check/tests/build, and authenticated catalog on the deployed `int` alias.
 - Evidence: [delivery log](iteration-log.md#02--match-hub-session-cookie-detection).

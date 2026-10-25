@@ -13,9 +13,9 @@ The iteration state is maintained in [iterations.md](iterations.md); this file r
 <a id="02--match-hub-session-cookie-detection"></a>
 ## 02 — Match Hub session cookie detection
 
-- Changes: pending.
-- Validation: pending.
-- Limits: Google login and stable `int` alias verification pending.
+- Changes: configured the Hub proxy's `getSessionCookie` check with Better Auth's `damaca-hub` cookie prefix and added regression coverage for authenticated and unauthenticated requests.
+- Validation: `bunx biome check apps/damaca-hub/src/proxy.ts apps/damaca-hub/src/proxy.test.ts apps/damaca-hub/plan/iterations.md apps/damaca-hub/plan/iteration-log.md` passes; `bun run type-check --filter=@damaca/damaca-hub` passes; `bun run test --filter=@damaca/damaca-hub` passes (24 tests, 71 expectations); `bun run build --filter=@damaca/damaca-hub` passes; `git diff --check` passes. Commit `ae7574c` is published on `origin/int`; Vercel deployment `6LpUgGtEYnHnyqQcCVBwvL8e42du` is Ready on the stable alias, and the browser shows the authenticated application catalog after Google login.
+- Limits: Vercel reported remote build cache unavailable, so the deployment built without remote caching. No production or `main` changes were made.
 
 ## Shared consumer integration AGW-05
 
