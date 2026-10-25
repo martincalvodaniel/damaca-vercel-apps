@@ -28,7 +28,7 @@ AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that 
 
 ## 03 — Improve site administration navigation
 
-- Status: `in_progress`.
+- Status: `validated`.
 - Goal: place administrator access in the main navigation and make each application section collapsible.
 - Paths: `src/components/shared/**`, `src/features/admin/components/admin-screen.tsx`, `src/features/admin/components/application-admin-card.tsx`, `src/features/settings/components/settings-screen.tsx`, and this plan/log.
 - Dependencies: existing admin role check and application administration cards.

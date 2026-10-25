@@ -21,7 +21,8 @@ The iteration state is maintained in [iterations.md](iterations.md); this file r
 ## 03 — Improve site administration navigation
 
 - Changes: removed the “Back to applications” control and the Settings-page administration link. Added a role-filtered Site administration item to the main navigation. Wrapped each application administration panel in a native `<details>` disclosure, collapsed by default with a keyboard-operable summary and visible disclosure indicator.
-- Validation so far: Biome passes on the eight changed files; `bun run type-check --filter=@damaca/damaca-hub`, `bun run test --filter=@damaca/damaca-hub` (25 tests, 72 expectations), `bun run build --filter=@damaca/damaca-hub`, and `git diff --check` pass. Responsive browser inspection remains pending deployment to the `int` preview. Local dev could not start because ports 3005 and 3015 are already occupied; those existing processes were left untouched.
+- Validation: Biome passes on the eight changed files; `bun run type-check --filter=@damaca/damaca-hub`, `bun run test --filter=@damaca/damaca-hub` (25 tests, 72 expectations), `bun run build --filter=@damaca/damaca-hub`, and `git diff --check` pass. The deployed `int` preview shows Site administration in the admin navigation, no “Back to applications” link, and all five application disclosures closed by default; opening one expands its controls. Settings has no administration link in its content. At 390 px, the navigation and content fit without horizontal overflow. The local dev server could not start because ports 3005 and 3015 were occupied; those existing processes were left untouched.
+- Publication: feature commit `a8e5829` is on `origin/int` and its Vercel deployment is Ready. The plan/log status commit follows after the live preview review.
 
 ## Shared consumer integration AGW-05
 
