@@ -21,6 +21,10 @@ El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events
 
 No se define aquí un roadmap de producto para ninguna app ni se autoriza promoción a `main`, despliegue o cambios de infraestructura.
 
+## Calidad actual
+
+AGW-09 restablece el lint global sin errores de formato. Los avisos y diagnósticos informativos existentes quedan fuera de este corte; evidencia en el [registro](iteration-log.md#agw-09-restore-global-lint-success).
+
 ## Previous identity decision (historical, superseded by AGW-08)
 
 - AGW-05 added a reusable Google/OIDC provider and consumer modules. It required game login and withdrew offline access.

@@ -2,6 +2,16 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-09 — Restore global lint success
+
+- Estado: `validated`.
+- Objetivo: corregir los errores de formato que bloquean el lint global sin modificar reglas ni contenido funcional.
+- Rutas: `docs/agents/triage-labels.md` y planificación raíz.
+- Dependencias: autorización del usuario; rama `int` limpia. Capacidad inicial: 70% de 5h y 86% de 7d; entrega documental dentro de las reservas mínimas.
+- Aceptación: `bun run lint` termina correctamente, sin errores; se conservan contenido y etiquetas.
+- Validación prevista: lint global, revisión del diff, enlaces locales y `git diff --check`; sin builds ni tests por alcance exclusivamente documental.
+- Evidencia: [registro](iteration-log.md#agw-09-restore-global-lint-success).
+
 ## AGW-08 — Public games and Hub-managed OIDC clients
 
 - Estado: `in_progress`.

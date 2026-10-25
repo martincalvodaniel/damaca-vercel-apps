@@ -2,6 +2,15 @@
 
 Los hechos de publicación se verifican en Git. El estado normativo está en [iterations.md](iterations.md); este registro conserva evidencia, límites e incidentes observados.
 
+<a id="agw-09-restore-global-lint-success"></a>
+## AGW-09 — Restore global lint success
+
+- Alcance: [aceptación AGW-09](iterations.md#agw-09--restore-global-lint-success). De los tres errores globales observados durante AGW-08, dos ya estaban corregidos en los documentos raíz de esa entrega; al comenzar este corte queda uno en la tabla de `docs/agents/triage-labels.md`.
+- Cambios: alineación de la tabla mediante el formatter de Biome, sin modificar etiquetas, significados ni reglas. Planificación raíz actualizada.
+- Validación: `bunx biome check --write docs/agents/triage-labels.md` corrige un archivo; `bun run lint` revisa 2144 archivos sin errores, con 731 warnings y 2107 infos existentes. Revisión de diff, enlaces locales y `git diff --check`; builds y pruebas de aplicaciones no corresponden al cambio de formato documental.
+- Entrega: commit y publicación en `origin/int` se verifican en Git al cierre; `main` permanece bajo gestión humana.
+- Capacidad inicial: 70% de 5h y 86% de 7d restantes; reserva mínima respetada.
+
 <a id="agw-07-provision-triage-labels"></a>
 ## AGW-07 — Provision triage labels
 
