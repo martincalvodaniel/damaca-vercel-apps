@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AccountAvatar } from "@/components/shared/account-avatar"
 import { HomeIcon } from "@/components/ui/home-icon"
+import { SiteAdminIcon } from "@/components/ui/site-admin-icon"
 import { navigationDestinations } from "@/config/navigation"
 
 interface AppNavigationProps {
@@ -52,7 +53,9 @@ export function AppNavigation({
                     <AccountAvatar name={name} email={email} image={image} />
                   ) : destination.id === "home" ? (
                     <HomeIcon />
-                  ) : null}
+                  ) : (
+                    <SiteAdminIcon />
+                  )}
                   <span>{destination.label}</span>
                 </Link>
               </li>
