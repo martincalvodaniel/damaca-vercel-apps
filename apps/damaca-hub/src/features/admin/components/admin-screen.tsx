@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { ApplicationAdminCard } from "@/features/admin/components/application-admin-card"
 import { requireAdminSession } from "@/lib/auth/session"
@@ -18,12 +17,6 @@ export async function AdminScreen() {
     const applications = await listApplicationAdminData(clientsByApp)
     return (
       <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-6 pb-24 sm:px-8 md:py-10">
-        <Link
-          href="/"
-          className="w-fit rounded text-sm underline focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          Back to applications
-        </Link>
         <header>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-400">
             Damaca Hub

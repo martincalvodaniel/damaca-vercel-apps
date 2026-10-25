@@ -17,6 +17,12 @@ The iteration state is maintained in [iterations.md](iterations.md); this file r
 - Validation: `bunx biome check apps/damaca-hub/src/proxy.ts apps/damaca-hub/src/proxy.test.ts apps/damaca-hub/plan/iterations.md apps/damaca-hub/plan/iteration-log.md` passes; `bun run type-check --filter=@damaca/damaca-hub` passes; `bun run test --filter=@damaca/damaca-hub` passes (24 tests, 71 expectations); `bun run build --filter=@damaca/damaca-hub` passes; `git diff --check` passes. Commit `ae7574c` is published on `origin/int`; Vercel deployment `6LpUgGtEYnHnyqQcCVBwvL8e42du` is Ready on the stable alias, and the browser shows the authenticated application catalog after Google login.
 - Limits: Vercel reported remote build cache unavailable, so the deployment built without remote caching. No production or `main` changes were made.
 
+<a id="03--improve-site-administration-navigation"></a>
+## 03 — Improve site administration navigation
+
+- Changes: removed the “Back to applications” control and the Settings-page administration link. Added a role-filtered Site administration item to the main navigation. Wrapped each application administration panel in a native `<details>` disclosure, collapsed by default with a keyboard-operable summary and visible disclosure indicator.
+- Validation so far: Biome passes on the eight changed files; `bun run type-check --filter=@damaca/damaca-hub`, `bun run test --filter=@damaca/damaca-hub` (25 tests, 72 expectations), `bun run build --filter=@damaca/damaca-hub`, and `git diff --check` pass. Responsive browser inspection remains pending deployment to the `int` preview. Local dev could not start because ports 3005 and 3015 are already occupied; those existing processes were left untouched.
+
 ## Shared consumer integration AGW-05
 
 AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that product decision; see the current [root delivery](../../../plan/iterations.md#agw-08--public-games-and-hub-managed-oidc-clients).

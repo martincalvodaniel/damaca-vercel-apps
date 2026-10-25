@@ -25,3 +25,13 @@ AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that 
 - Acceptance: authenticated requests carrying the `damaca-hub` session cookie pass the proxy; unauthenticated requests still redirect to sign-in; Google login on the stable `int` alias completes and returns to the catalog.
 - Validation: focused proxy tests, Hub lint/type-check/tests/build, and authenticated catalog on the deployed `int` alias.
 - Evidence: [delivery log](iteration-log.md#02--match-hub-session-cookie-detection).
+
+## 03 — Improve site administration navigation
+
+- Status: `in_progress`.
+- Goal: place administrator access in the main navigation and make each application section collapsible.
+- Paths: `src/components/shared/**`, `src/features/admin/components/admin-screen.tsx`, `src/features/admin/components/application-admin-card.tsx`, `src/features/settings/components/settings-screen.tsx`, and this plan/log.
+- Dependencies: existing admin role check and application administration cards.
+- Acceptance: remove the “Back to applications” link; hide the administration link from Settings; show Site administration in the main nav for admins only; render each application collapsed by default and expandable with an accessible native disclosure control.
+- Validation: Hub Biome, type-check, tests, build, desktop/mobile browser review, and `git diff --check`.
+- Evidence: [delivery log](iteration-log.md#03--improve-site-administration-navigation).
