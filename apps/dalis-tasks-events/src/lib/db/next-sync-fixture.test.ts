@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, test as it } from "bun:test"
 import {
   nextSyncProcessEnvironment,
   parseNextSyncTestEnvironment,
@@ -25,7 +25,7 @@ const config = {
   secret: `dalis-next-test-${runId}${runId}`,
 }
 describe("isolated Next fixture guards", () => {
-  test("accepts Next-normalized loopback URLs only with the exact original Host and Origin", () => {
+  it("accepts Next-normalized loopback URLs only with the exact original Host and Origin", () => {
     const normalized = "http://localhost:31001/fixture/guard"
     const headers = {
       host: "127.0.0.1:31001",
@@ -57,7 +57,7 @@ describe("isolated Next fixture guards", () => {
         validateNextSyncFixtureRequest(request, { runId }, config)
       ).toThrow()
   })
-  test("validates only exact synthetic environment without importing auth", () => {
+  it("validates only exact synthetic environment without importing auth", () => {
     const environment = nextSyncProcessEnvironment(config, "")
     expect(parseNextSyncTestEnvironment(environment)).toEqual(config)
     for (const override of [
@@ -65,14 +65,13 @@ describe("isolated Next fixture guards", () => {
       { MONGODB_URI: "mongodb://localhost:27019" },
       { RUN_NEXT_SYNC_TESTS: "0" },
       { BETTER_AUTH_URL: "https://example.com" },
-      { GOOGLE_CLIENT_SECRET: "real-secret" },
-      { ALLOWED_EMAILS: "real@example.com" },
+      { HUB_OIDC_CLIENT_SECRET: "real-secret" },
     ])
       expect(() =>
         parseNextSyncTestEnvironment({ ...environment, ...override })
       ).toThrow()
   })
-  test("capability and origin checks precede all auth initialization", () => {
+  it("capability and origin checks precede all auth initialization", () => {
     expect(
       validateNextSyncFixtureHeaders(new Headers(), { runId }, config).selected
     ).toEqual([])
@@ -91,7 +90,7 @@ describe("isolated Next fixture guards", () => {
       )
     ).toThrow()
   })
-  test("preserves foreign auth cookies and only recognizes exact owned signed values", () => {
+  it("preserves foreign auth cookies and only recognizes exact owned signed values", () => {
     const registered = new Map([
       ["own+signed", { name: "better-auth.session_token" }],
     ])

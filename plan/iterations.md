@@ -2,6 +2,17 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-11 — Dalis Tasks uses Hub identity
+
+- Estado: `validated`.
+- Objetivo: centralizar el login Google y el permiso de Dalis Tasks en Damaca Hub, conservando las sesiones y los identificadores locales Mongo que sustentan la sincronización.
+- Rutas: `packages/identity/**`, `apps/dalis-tasks-events/**`, `turbo.json`, `bun.lock` y planificación raíz/app.
+- Dependencias: AGW-08 validada; callbacks exactos por entorno y cliente OIDC dinámico de Dalis Tasks en Hub. Los secretos deben permanecer en Vercel/local y seguir aislados por entorno.
+- Aceptación: el consumidor reutiliza el paquete compartido y PKCE; Hub valida el permiso vigente para nuevas sesiones y operaciones remotas; IDs de usuario y datos Mongo existentes se conservan; la shell offline de Tasks mantiene su uso local; se retiran credenciales Google y allowlist del runtime de Tasks; callbacks usan URL explícita o alias estable `int`/producción.
+- Validación prevista: pruebas OIDC y acceso compartidas; regresiones de sesión, aislamiento de IDs, sync, PWA offline, lint incremental, tipos, tests y build Tasks/identity; inspección responsive si la herramienta está disponible; revisión de documentación y `git diff --check`. El flujo Google real y la configuración de callbacks/secretos en Hub/Vercel se acreditan por separado.
+- Evidencia: [registro](iteration-log.md#agw-11-dalis-tasks-uses-hub-identity).
+- Capacidad inicial (2026-10-25): 90% de 5h y 74% de 7d restantes; estimación para implementación, pruebas y publicación dentro de las reservas mínimas.
+
 ## AGW-10 — Application favicons
 
 - Estado: `validated`.

@@ -1,5 +1,3 @@
 "use client"
 
-import { createAuthClient } from "better-auth/react"
-
-export const authClient = createAuthClient()
+export { hubAuthClient as authClient } from "@damaca/identity/client"

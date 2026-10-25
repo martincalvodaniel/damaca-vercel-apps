@@ -74,6 +74,14 @@ export function DeviceSettings({
       setFailed(true)
     }
   }
+
+  function closeCurrentSession() {
+    return close()
+  }
+
+  function switchAccount() {
+    return close(true)
+  }
   return (
     <div className="dalis-compact-controls">
       {account && profile?.userId === account.userId ? (
@@ -107,7 +115,7 @@ export function DeviceSettings({
           {state === "unprepared" ? (
             <p>
               {authenticationRequired
-                ? "Inicia sesión con Google. Tu espacio se preparará automáticamente al volver."
+                ? "Inicia sesión con Google a través de Damaca Hub. Tu espacio se preparará automáticamente al volver."
                 : "Prepara este dispositivo con conexión para volver a abrir tu espacio."}
             </p>
           ) : null}
@@ -150,7 +158,7 @@ export function DeviceSettings({
               href="/auth/signin?callbackUrl=%2Fworkspace"
               className="flex min-h-12 items-center justify-center rounded-xl border border-zinc-300 px-5 py-3 font-medium dark:border-zinc-700"
             >
-              Iniciar sesión con Google
+              Iniciar sesión con Google en Damaca Hub
             </a>
           </div>
         ) : null}
@@ -159,14 +167,14 @@ export function DeviceSettings({
         <div className="mt-3 flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => close()}
+            onClick={closeCurrentSession}
             className="min-h-12 rounded-xl border border-zinc-300 px-4 py-3 text-sm font-medium dark:border-zinc-700"
           >
             Cerrar sesión
           </button>
           <button
             type="button"
-            onClick={() => close(true)}
+            onClick={switchAccount}
             className="min-h-12 rounded-xl border border-zinc-300 px-4 py-3 text-sm font-medium dark:border-zinc-700"
           >
             Cambiar cuenta

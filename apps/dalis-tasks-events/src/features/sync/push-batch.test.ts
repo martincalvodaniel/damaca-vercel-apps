@@ -1,6 +1,6 @@
 import "server-only"
 
-import { describe, expect, test } from "bun:test"
+import { describe, expect, test as it, test } from "bun:test"
 import { randomUUID } from "node:crypto"
 import { pushSyncBatch } from "@/features/sync/push-batch"
 import { authorizePersistedSession } from "@/lib/auth/authorized-session"
@@ -17,7 +17,7 @@ function operation(): SyncOperation {
 }
 
 describe("authenticated sync batch", () => {
-  test("a session switch cannot upload account A data under account B", async () => {
+  it("a session switch cannot upload account A data under account B", async () => {
     const result = await pushSyncBatch(
       { expectedUserId: "account-a", operations: [operation()] },
       {
@@ -40,7 +40,7 @@ describe("authenticated sync batch", () => {
       )
     ).toEqual({ status: "invalid_batch" })
   })
-  test("a missing, expired or disallowed session never reaches the executor", async () => {
+  it("a missing, expired or inconsistent session never reaches the executor", async () => {
     const now = new Date("2026-10-08T00:00:00Z")
     const session = {
       user: {
@@ -56,17 +56,13 @@ describe("authenticated sync batch", () => {
     for (const candidate of [
       null,
       { ...session, session: { ...session.session, expiresAt: now } },
-      { ...session, user: { ...session.user, email: "other@example.test" } },
+      { ...session, session: { ...session.session, userId: "another-user" } },
     ]) {
       const result = await pushSyncBatch(
         { expectedUserId: "test-actor", operations: [operation()] },
         {
           readActor: async () =>
-            authorizePersistedSession(
-              candidate,
-              new Set(["test@example.test"]),
-              now
-            )?.user.id ?? null,
+            authorizePersistedSession(candidate, now)?.user.id ?? null,
           execute: async () => {
             throw new Error("Executor must not run")
           },
@@ -76,7 +72,7 @@ describe("authenticated sync batch", () => {
     }
   })
 
-  test("validates the entire batch before writing and rejects actor injection", async () => {
+  it("validates the entire batch before writing and rejects actor injection", async () => {
     const first = operation()
     for (const input of [
       { expectedUserId: "test-actor", operations: [] },
@@ -110,7 +106,7 @@ describe("authenticated sync batch", () => {
     }
   })
 
-  test("uses the session actor and executes sequentially, preserving unsupported results", async () => {
+  it("uses the session actor and executes sequentially, preserving unsupported results", async () => {
     const operations = Array.from({ length: 3 }, operation)
     const calls: string[] = []
     let active = 0
@@ -138,7 +134,7 @@ describe("authenticated sync batch", () => {
     })
   })
 
-  test("returns the completed prefix on transient failure and does not run later operations", async () => {
+  it("returns the completed prefix on transient failure and does not run later operations", async () => {
     const operations = Array.from({ length: 3 }, operation)
     const calls: string[] = []
     const result = await pushSyncBatch(
@@ -168,7 +164,7 @@ describe("authenticated sync batch", () => {
     })
   })
 
-  test("identity reuse is rejected explicitly while independent operations continue", async () => {
+  it("identity reuse is rejected explicitly while independent operations continue", async () => {
     const operations = Array.from({ length: 2 }, operation)
     const result = await pushSyncBatch(
       { expectedUserId: "test-actor", operations },
@@ -191,7 +187,7 @@ describe("authenticated sync batch", () => {
   })
 })
 
-test("an incompatible operation pauses the whole batch before any prefix executes", async () => {
+it("an incompatible operation pauses the whole batch before any prefix executes", async () => {
   const operations = [
     operation(),
     { ...operation(), protocolVersion: 2, command: { type: "future.command" } },

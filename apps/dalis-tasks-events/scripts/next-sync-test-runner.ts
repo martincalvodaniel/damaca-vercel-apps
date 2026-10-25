@@ -154,7 +154,7 @@ async function runNext(arguments_: string[], env: Record<string, string>) {
     // Build diagnostics contain source locations, but never echo auth configuration or sessions.
     const sanitized = logs
       .replaceAll(config.secret, "[redacted]")
-      .replaceAll(environment.GOOGLE_CLIENT_SECRET, "[redacted]")
+      .replaceAll(environment.HUB_OIDC_CLIENT_SECRET, "[redacted]")
       .replace(
         /(?:better-auth\.[\w.-]+|token|cookie|secret)[=:][^\s]+/gi,
         "[redacted]"

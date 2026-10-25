@@ -2,6 +2,16 @@
 
 Los hechos de publicación se verifican en Git. El estado normativo está en [iterations.md](iterations.md); este registro conserva evidencia, límites e incidentes observados.
 
+<a id="agw-11-dalis-tasks-uses-hub-identity"></a>
+## AGW-11 — Dalis Tasks uses Hub identity
+
+- Alcance: [aceptación AGW-11](iterations.md#agw-11--dalis-tasks-uses-hub-identity). Registro principal transversal; [plan de Dalis Tasks](../apps/dalis-tasks-events/plan/master.md) enlaza esta entrega.
+- Cambios: Tasks autentica mediante el cliente OIDC `damaca-hub` del paquete `@damaca/identity`; conserva sus colecciones/modelos Better Auth de Mongo y la identidad local para no reasignar datos sincronizados. La autorización se comprueba contra Hub y se actualiza mediante rutas de acceso/renovación; se retiraron el proveedor Google directo y la allowlist. Se conservan la shell PWA offline y la sincronización existente. La resolución del origen usa URL explícita, alias estable `int` en preview y dominio de producción.
+- Validación: `bun run type-check --filter=@damaca/identity --filter=@damaca/dalis-tasks-events` pasa; pruebas del paquete compartido: 18 tests/98 expectativas; pruebas de Tasks: 1384 pasan, 222 omitidas, 15102 expectativas. `bun run --cwd=apps/dalis-tasks-events build -- --webpack` compila Next 16 y genera el worker offline con 50 recursos. Biome comprueba los archivos editados sin errores; `git diff --check` pasa. La prueba Mongo de identidad existente es opt-in y no se ejecutó porque no hay `mongod` local.
+- Límites e incidentes: el build predeterminado de Turbo/Turbopack falla al crear un proceso auxiliar por `Operation not permitted`; Webpack compila correctamente. Durante el build aislado, discovery no llega al Hub local de prueba y Better Auth lo registra, sin impedir la compilación. No se probó Google real ni la concesión en Hub, ni se modificaron clientes o secretos de Vercel. Antes de desplegar se debe registrar el callback exacto de producción y `int` en el Hub y cargar en cada entorno de Vercel `HUB_URL`, `HUB_OIDC_CLIENT_ID`, `HUB_OIDC_CLIENT_SECRET` y `BETTER_AUTH_SECRET`; `MONGODB_URI` continúa siendo propio de Tasks.
+- Publicación: pendiente de completar con commit, push únicamente a `origin/int` y comprobación del SHA remoto.
+- Capacidad inicial (2026-10-25): 90% de 5h y 74% de 7d restantes. Lectura tras validación (2026-10-25): 87% de 5h y 73% de 7d restantes; la lectura final posterior a publicación queda pendiente.
+
 <a id="agw-10-application-favicons"></a>
 ## AGW-10 — Application favicons
 

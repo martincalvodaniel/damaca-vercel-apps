@@ -17,6 +17,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@damaca/identity": "workspace:*",
     "better-auth": "catalog:",
     "mongodb": "catalog:",
     "next": "catalog:",

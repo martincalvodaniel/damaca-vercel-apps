@@ -1,10 +1,8 @@
 # Identidad y sesiones — operación
 
-- Google OAuth requiere las variables de auth existentes y MongoDB accesible en ejecución. El build no abre una conexión; las primeras consultas provisionan los índices registrados.
-- Tras migrar desde el modo antiguo sin DB, las cookies firmadas anteriores no son una identidad persistida. Volver a iniciar sesión con Google crea o recupera el usuario persistente; no reutilizar IDs transitorios para datos offline.
-- El layout protegido mantiene la comprobación en servidor. Todas las futuras acciones/APIs usan `getAuthorizedSessionFromHeaders` o `getAuthorizedSession`, que ignoran caché de cookie y leen sesión vigente sin renovación durante render.
-- Una sesión expirada, revocada, sin usuario persistido, con identidad inconsistente o email no verificado/permitido no autoriza. La configuración de auth también deshabilita la caché de cookie para lecturas del cliente.
-- `ALLOWED_EMAILS` sigue delimitando el piloto; invitar no amplía el registro. Al retirar un correo de la configuración del despliegue, nuevas verificaciones de acceso lo rechazan.
-- La sesión remota caducada no impedirá editar la copia local preparada cuando se construya el shell offline: eso no concede permiso remoto; reenviar requerirá sesión válida de la misma cuenta.
-- Integración automatizada: DB local con nombre `dalis-auth-test-*`, flag `RUN_AUTH_DB_TESTS=1`, credenciales ficticias y correos `example.test`; el test rechaza host remoto antes de limpiar. El origen de claves es de prueba, pero firma, emisor, audiencia y edad se verifican.
-- El login Google interactivo real se valida en el piloto. No se han probado ni modificado cuentas o documentos de producción.
+- Google se autentica únicamente en Damaca Hub. Cada entorno de Tasks necesita su `HUB_URL`, cliente OIDC, secreto cliente y secreto de sesión propios, además de MongoDB accesible en ejecución. El build no abre una conexión; las primeras consultas provisionan los índices registrados.
+- Registra en el Hub el callback exacto `<origin>/api/auth/callback/damaca-hub` para `dalis-tasks-events`. Producción e `int` requieren clientes independientes. `BETTER_AUTH_URL` explícita tiene prioridad; Vercel usa el alias de rama para preview y el dominio de producción, nunca la URL de despliegue por commit.
+- Las sesiones y usuarios siguen persistidos en las colecciones Mongo de Tasks. Better Auth enlaza el proveedor verificado del Hub con el usuario local existente por email verificado, de modo que se conserva el ID que identifica datos y colas de sincronización. Los permisos vigentes se consultan al Hub antes de páginas protegidas y operaciones remotas.
+- Una sesión expirada o revocada, una identidad persistida inválida, falta de permiso o una comprobación remota no disponible no autoriza operaciones de servidor. La shell precargada conserva la edición local offline; la reconexión no implica permiso de sincronización.
+- Integración automatizada: DB local con nombre `dalis-auth-test-*`, flag `RUN_AUTH_DB_TESTS=1`, secretos ficticios y correos `example.test`; el test rechaza host remoto antes de limpiar. El contrato OAuth y los rechazos de Hub se verifican con los tests aislados de `@damaca/identity`.
+- Google interactivo, callbacks alojados y variables de Vercel se verifican por entorno y se registran aparte. No se modifican cuentas ni documentos de producción.

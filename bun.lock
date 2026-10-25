@@ -96,6 +96,7 @@
       "name": "@damaca/dalis-tasks-events",
       "version": "0.1.0",
       "dependencies": {
+        "@damaca/identity": "workspace:*",
         "better-auth": "catalog:",
         "mongodb": "catalog:",
         "next": "catalog:",

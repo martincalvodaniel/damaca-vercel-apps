@@ -4,7 +4,7 @@ Versión de referencia: generación 6 de `int`, revisión del 21 de octubre de 2
 
 ## Preparar un dispositivo
 
-Abre Dalis con conexión, inicia sesión con Google y prepara tu espacio en ese navegador. Comprueba tu cuenta en Ajustes y que aparece «Disponible sin conexión». Cada dispositivo necesita su preparación inicial; iniciar sesión en otro dispositivo no copia automáticamente la caché del primero.
+Abre Dalis con conexión, inicia sesión con Google a través de Damaca Hub y prepara tu espacio en ese navegador. Tu cuenta necesita permiso para Dalis Tasks en el Hub. Comprueba tu cuenta en Ajustes y que aparece «Disponible sin conexión». Cada dispositivo necesita su preparación inicial; iniciar sesión en otro dispositivo no copia automáticamente la caché del primero.
 
 Después puedes crear y editar planes sin red. El guardado es local; los cambios pendientes se envían cuando vuelve la conexión y la aplicación está abierta. El servidor de desarrollo local no sustituye a la versión construida con soporte offline para probar cierre y reapertura sin red.
 
@@ -24,7 +24,7 @@ Con teclado, usa Tab para recorrer controles. «Saltar al contenido» evita reco
 
 ## Ajustes de cuenta y dispositivo
 
-Ajustes muestra la cuenta Google activa. «Cambiar cuenta» mantiene separados los espacios locales; los pendientes no se transfieren a otra cuenta.
+Ajustes muestra la cuenta Google activa, gestionada por Damaca Hub. «Cambiar cuenta» mantiene separados los espacios locales; los pendientes no se transfieren a otra cuenta.
 
 «Editar zona» guarda una zona horaria válida, por ejemplo `Europe/Madrid`, también sin conexión. Esta preferencia se sincroniza con tu cuenta y se usa para Hoy/Atrasadas. No desplaza las fechas ni cambia la zona guardada en planes o series existentes. No se cambian automáticamente al viajar.
 

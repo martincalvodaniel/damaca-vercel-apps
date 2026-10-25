@@ -12,7 +12,7 @@ Mobile-first, offline-capable personal planning app built with Next.js, React, T
 
 ## Local development
 
-Use the installed Bun toolchain and provide the required environment variables read by `src/config/env.ts`. Never commit credentials or environment files.
+Use the installed Bun toolchain and provide the required environment variables read by `src/config/env.ts`. Login is delegated to Damaca Hub; configure a local Hub OIDC client for the exact callback `http://localhost:3002/api/auth/callback/damaca-hub`. Never commit credentials or environment files.
 
 ```bash
 bun run dev

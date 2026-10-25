@@ -14,11 +14,11 @@ The one-time `db:migrate-public-games` task removes game grants and old game cli
 
 `resolveConsumerOrigin` accepts an explicit environment URL when configured. Otherwise it uses `VERCEL_BRANCH_URL` for `int` and `VERCEL_PROJECT_PRODUCTION_URL` for production. Both system values omit the scheme, which the helper supplies as HTTPS. It deliberately does not use `VERCEL_URL` or request headers, because those can refer to per-commit deployments or untrusted hosts.
 
-Consumers still require their own Hub client ID, client secret, and independent session secret. Their sessions and cookies remain isolated from Hub. The shared factory validates Hub discovery, S256 PKCE, state, nonce, issuer, audience and signed ID tokens. UserInfo derives the app from the validated token's registered client and checks current catalog/grant state. Mongo or Hub failures deny access.
+Consumers still require their own Hub client ID, client secret, and independent session secret. Their sessions and cookies remain isolated from Hub. The shared factory validates Hub discovery, S256 PKCE, state, nonce, issuer, audience and signed ID tokens. It accepts an optional Better Auth database adapter and model-name mapping so existing consumers can retain their local user IDs and storage. UserInfo derives the app from the validated token's registered client and checks current catalog/grant state. Mongo or Hub failures deny access.
 
 ## Storage and validation
 
-Pocha Score and Card Wars are static PWAs. Their IndexedDB data, offline shell and JSON import/export do not require authentication. The reusable consumer modules remain available to future applications without making the games use them.
+Pocha Score and Card Wars are static PWAs. Their IndexedDB data, offline shell and JSON import/export do not require authentication. Dalis Tasks & Events uses the shared consumer factory with its existing Mongo models so Hub identity links to existing local user records; Hub access is checked for protected server work while its prepared local shell remains usable offline.
 
 Run focused checks from the monorepo root:
 

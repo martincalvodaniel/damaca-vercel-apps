@@ -54,6 +54,7 @@ let hubCookie = ""
 let consumerCookie = ""
 let accessToken = ""
 let originalCode = ""
+let existingConsumerUserId = ""
 const configuration = {
   appId: "test-application",
   hubUrl,
@@ -100,6 +101,28 @@ beforeAll(async () => {
     ...configuration,
     baseUrl: consumerUrl,
     secret: "test-consumer-session-secret-with-at-least-32-characters",
+  })
+  const consumerContext = await consumer.auth.$context
+  const localUser = await consumerContext.adapter.create<{ id: string }>({
+    model: "user",
+    data: {
+      name: "Existing local account",
+      email: "player@example.com",
+      emailVerified: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  })
+  existingConsumerUserId = localUser.id
+  await consumerContext.adapter.create({
+    model: "account",
+    data: {
+      accountId: "legacy-google-account",
+      providerId: "google",
+      userId: localUser.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   })
   const context = await hub.$context
   const user = await context.adapter.create<{ id: string }>({
@@ -159,8 +182,13 @@ it("central Hub authenticates an OIDC consumer and checks current app grants", a
   const session = await consumer.auth.api.getSession({
     headers: new Headers({ Cookie: consumerCookie }),
   })
+  expect(session?.user.id).toBe(existingConsumerUserId)
   expect(session?.user.email).toBe("player@example.com")
   expect(session?.user.emailVerified).toBe(true)
+  const linked = await (
+    await consumer.auth.$context
+  ).internalAdapter.findUserByEmail("player@example.com")
+  expect(linked?.user.id).toBe(existingConsumerUserId)
   const token = await consumer.auth.api.getAccessToken({
     headers: new Headers({ Cookie: consumerCookie }),
     body: { useAccountCookie: true },

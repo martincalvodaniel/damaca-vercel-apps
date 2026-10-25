@@ -37,17 +37,9 @@ export function parseNextSyncTestEnvironment(
     secret: environment.BETTER_AUTH_SECRET,
   })
   if (
-    environment.GOOGLE_CLIENT_ID !== "dalis-next-test-client" ||
-    environment.GOOGLE_CLIENT_SECRET !== "dalis-next-test-google-secret" ||
-    environment.ALLOWED_EMAILS !==
-      ["owner", "other", "unverified"]
-        .map((identity) =>
-          fixtureEmail(
-            config.runId,
-            identity as "owner" | "other" | "unverified"
-          )
-        )
-        .join(",")
+    environment.HUB_URL !== config.controlOrigin ||
+    environment.HUB_OIDC_CLIENT_ID !== "dalis-next-test-client" ||
+    environment.HUB_OIDC_CLIENT_SECRET !== "dalis-next-test-hub-secret"
   )
     throw new Error(
       "Next sync fixture requires only its synthetic auth configuration"
@@ -85,12 +77,10 @@ export function nextSyncProcessEnvironment(
     NEXT_SYNC_TEST_PRIMARY_ORIGIN: parsed.origins[0],
     NEXT_SYNC_TEST_SECONDARY_ORIGIN: parsed.origins[1],
     NEXT_SYNC_TEST_CONTROL_ORIGIN: parsed.controlOrigin,
+    HUB_URL: parsed.controlOrigin,
     BETTER_AUTH_URL: parsed.authOrigin,
     BETTER_AUTH_SECRET: parsed.secret,
-    GOOGLE_CLIENT_ID: "dalis-next-test-client",
-    GOOGLE_CLIENT_SECRET: "dalis-next-test-google-secret",
-    ALLOWED_EMAILS: (["owner", "other", "unverified"] as const)
-      .map((identity) => fixtureEmail(parsed.runId, identity))
-      .join(","),
+    HUB_OIDC_CLIENT_ID: "dalis-next-test-client",
+    HUB_OIDC_CLIENT_SECRET: "dalis-next-test-hub-secret",
   }
 }

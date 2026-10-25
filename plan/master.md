@@ -37,4 +37,4 @@ El catálogo y las fichas de administración del Hub muestran los iconos de las 
 - AGW-08 superseded those game requirements. Pocha Score and Card Wars are public, static and offline; Hub manages OIDC clients for other existing private apps.
 - Production and `int` callbacks are explicit per client. Stable Vercel branch aliases are supported; commit-specific preview URLs are out of scope.
 
-> The decision above was superseded by AGW-08: Pocha Score and Card Wars are public offline apps without social login. Google remains in Hub, which manages OIDC clients for other existing applications.
+> AGW-08 superseded the social-login requirement for Pocha Score and Card Wars. AGW-11 now applies Hub-managed identity and per-app access to Dalis Tasks & Events while preserving its local Mongo identity and offline shell.

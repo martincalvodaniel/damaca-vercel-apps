@@ -5,6 +5,7 @@ import { createAuthEndpoint } from "better-auth/api"
 import { getAccountCookie } from "better-auth/cookies"
 import { nextCookies } from "better-auth/next-js"
 import { genericOAuth } from "better-auth/plugins"
+import type { DBAdapterInstance } from "better-auth/types"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
@@ -17,6 +18,14 @@ import {
 export interface ConsumerConfiguration extends HubConfiguration {
   baseUrl: string
   secret: string
+  database?: DBAdapterInstance
+  cookiePrefix?: string
+  modelNames?: Partial<{
+    user: string
+    account: string
+    session: string
+    verification: string
+  }>
 }
 
 export function createConsumerIdentity(configuration: ConsumerConfiguration) {
@@ -34,28 +43,9 @@ export function createConsumerIdentity(configuration: ConsumerConfiguration) {
     baseURL: configuration.baseUrl,
     secret: configuration.secret,
     trustedOrigins: [configuration.baseUrl],
-    disabledPaths: [
-      "/get-access-token",
-      "/refresh-token",
-      "/account-info",
-      "/link-social",
-      "/unlink-account",
-    ],
-    advanced: { cookiePrefix: `damaca-${configuration.appId}` },
-    session: {
-      cookieCache: {
-        enabled: true,
-        maxAge: 7 * 24 * 60 * 60,
-        strategy: "jwt",
-        refreshCache: true,
-      },
-    },
-    account: {
-      storeStateStrategy: "cookie",
-      storeAccountCookie: true,
-      encryptOAuthTokens: false,
-    },
+    database: configuration.database,
     user: {
+      modelName: configuration.modelNames?.user,
       validateUserInfo: ({ user }) => {
         if (!user.emailVerified)
           return {
@@ -63,6 +53,37 @@ export function createConsumerIdentity(configuration: ConsumerConfiguration) {
             errorDescription: "A verified identity is required",
           }
       },
+    },
+    account: {
+      modelName: configuration.modelNames?.account,
+      accountLinking: {
+        enabled: true,
+        trustedProviders: ["damaca-hub"],
+      },
+      storeStateStrategy: "cookie",
+      storeAccountCookie: true,
+      encryptOAuthTokens: false,
+    },
+    session: {
+      modelName: configuration.modelNames?.session,
+      cookieCache: {
+        enabled: true,
+        maxAge: 7 * 24 * 60 * 60,
+        strategy: "jwt",
+        refreshCache: !configuration.database,
+      },
+    },
+    verification: { modelName: configuration.modelNames?.verification },
+    disabledPaths: [
+      "/get-access-token",
+      "/refresh-token",
+      "/account-info",
+      "/link-social",
+      "/unlink-account",
+    ],
+    advanced: {
+      cookiePrefix:
+        configuration.cookiePrefix ?? `damaca-${configuration.appId}`,
     },
     plugins: [
       {
@@ -103,9 +124,9 @@ export function createConsumerIdentity(configuration: ConsumerConfiguration) {
     const session = await auth.api.getSession({ headers: await headers() })
     return session?.user.emailVerified && session.user.email ? session : null
   })
-  const getAccess = cache(async (canRefresh = false) => {
+  async function getAccessResult(canRefresh: boolean) {
     const session = await getSession()
-    if (!session) return "signed-out" as const
+    if (!session) return { decision: "signed-out" as const, cookies: [] }
     try {
       const requestHeaders = await headers()
       const account = await auth.api.readHubAccount({ headers: requestHeaders })
@@ -114,28 +135,44 @@ export function createConsumerIdentity(configuration: ConsumerConfiguration) {
         account.userId !== session.user.id ||
         !account.accessToken
       )
-        return "denied" as const
+        return { decision: "denied" as const, cookies: [] }
       const expiresAt = account.accessTokenExpiresAt
         ? new Date(account.accessTokenExpiresAt).getTime()
         : 0
       if (!canRefresh && expiresAt - Date.now() < 5000)
-        return "refresh-required" as const
+        return { decision: "refresh-required" as const, cookies: [] }
       // Token rotation must run in a Route Handler so refreshed cookies reach the browser.
-      const token = canRefresh
-        ? await auth.api.getAccessToken({
-            headers: requestHeaders,
-            body: { useAccountCookie: true },
-          })
+      const refreshResponse =
+        canRefresh && expiresAt - Date.now() < 30_000
+          ? await auth.api.getAccessToken({
+              headers: requestHeaders,
+              body: { useAccountCookie: true },
+              asResponse: true,
+            })
+          : undefined
+      const token = refreshResponse
+        ? ((await refreshResponse.json()) as { accessToken?: string })
         : account
-      if (!token.accessToken) return "denied" as const
-      return checkHubAccess(
+      if (!token.accessToken)
+        return {
+          decision: "denied" as const,
+          cookies: refreshResponse?.headers.getSetCookie() ?? [],
+        }
+      const decision = await checkHubAccess(
         configuration,
         token.accessToken,
         session.user.email
       )
+      return {
+        decision,
+        cookies: refreshResponse?.headers.getSetCookie() ?? [],
+      }
     } catch {
-      return "unavailable" as const
+      return { decision: "unavailable" as const, cookies: [] }
     }
+  }
+  const getAccess = cache(async (canRefresh = false) => {
+    return (await getAccessResult(canRefresh)).decision
   })
   async function requireAccess() {
     const decision = await getAccess()
@@ -144,19 +181,21 @@ export function createConsumerIdentity(configuration: ConsumerConfiguration) {
     if (decision !== "approved") redirect("/auth/access")
   }
   async function accessResponse() {
-    const decision = await getAccess(true)
+    const result = await getAccessResult(true)
+    const headers = new Headers({ "Cache-Control": "no-store", Vary: "Cookie" })
+    for (const cookie of result.cookies) headers.append("Set-Cookie", cookie)
     return Response.json(
-      { decision },
+      { decision: result.decision },
       {
         status:
-          decision === "approved"
+          result.decision === "approved"
             ? 200
-            : decision === "unavailable"
+            : result.decision === "unavailable"
               ? 503
-              : decision === "signed-out"
+              : result.decision === "signed-out"
                 ? 401
                 : 403,
-        headers: { "Cache-Control": "no-store", Vary: "Cookie" },
+        headers,
       }
     )
   }

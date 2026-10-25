@@ -13,7 +13,7 @@ Aplicación personal mobile-first para planificación, operable offline con sinc
 
 ## Estado actual y exclusiones
 
-No hay nuevas entregas de producto autorizadas. La promoción a `main` y smoke del despliegue son acciones separadas; el usuario gestiona `main`. No inferir permiso de despliegue ni de acceso a datos a partir del cierre de ingeniería.
+La autenticación de Dalis Tasks delega Google y el permiso de aplicación en Damaca Hub; las sesiones y los IDs locales de Mongo siguen siendo propios de Tasks para preservar la identidad de sincronización. La integración transversal [AGW-11](../../../plan/iterations.md#agw-11--dalis-tasks-uses-hub-identity) está en curso. Producción requiere un cliente OIDC de Hub y sus credenciales aisladas; la promoción a `main` y smoke del despliegue son acciones separadas y `main` sigue bajo gestión humana.
 
 ## Evidencia y trabajo previo
 

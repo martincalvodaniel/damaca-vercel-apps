@@ -21,16 +21,16 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
     try {
       await completePendingRemoteLogout()
       const result = await authClient.signIn.social({
-        provider: "google",
+        provider: "damaca-hub",
         callbackURL: callbackUrl,
       })
 
       if (result.error) {
-        setError("No se ha podido conectar con Google. Inténtalo de nuevo.")
+        setError("No se ha podido conectar con Damaca Hub. Inténtalo de nuevo.")
         setIsPending(false)
       }
     } catch {
-      setError("No se ha podido conectar con Google. Inténtalo de nuevo.")
+      setError("No se ha podido conectar con Damaca Hub. Inténtalo de nuevo.")
       setIsPending(false)
     }
   }
@@ -46,7 +46,8 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
             Bienvenido de nuevo
           </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            Inicia sesión para acceder a la gestión del hogar.
+            Inicia sesión con Google a través de Damaca Hub para acceder a la
+            gestión del hogar.
           </p>
         </div>
 
@@ -76,7 +77,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
               fill="#EA4335"
             />
           </svg>
-          {isPending ? "Conectando…" : "Continuar con Google"}
+          {isPending ? "Conectando…" : "Continuar con Google en Damaca Hub"}
         </button>
       </section>
     </main>

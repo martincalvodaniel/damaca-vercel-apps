@@ -1,5 +1,7 @@
 # Registro de iteraciones
 
+La integración de identidad con Damaca Hub se registra en la entrega transversal [AGW-11](../../../plan/iteration-log.md#agw-11-dalis-tasks-uses-hub-identity).
+
 La evidencia reciente se mantiene aquí; el [archivo](archive/2026-10-24/README.md) conserva íntegra la historia anterior. Los porcentajes y decisiones operativas de registros históricos no son políticas vigentes.
 
 <a id="23n"></a>

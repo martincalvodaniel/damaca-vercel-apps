@@ -1,12 +1,14 @@
 import "server-only"
 
+import { resolveConsumerOrigin } from "@damaca/identity/origin"
 import { parsePersonalIndexConnectionConfiguration } from "@/config/personal-index-provisioning"
 import { syncDatabaseTestConfigSchema } from "@/schemas/sync-database-test"
 
 type RequiredEnvName =
   | "BETTER_AUTH_SECRET"
-  | "GOOGLE_CLIENT_ID"
-  | "GOOGLE_CLIENT_SECRET"
+  | "HUB_OIDC_CLIENT_ID"
+  | "HUB_OIDC_CLIENT_SECRET"
+  | "HUB_URL"
   | "MONGODB_URI"
 
 function getRequiredEnv(name: RequiredEnvName): string {
@@ -19,44 +21,21 @@ function getRequiredEnv(name: RequiredEnvName): string {
   return value
 }
 
-function stripTrailingSlash(url: string): string {
-  return url.endsWith("/") ? url.slice(0, -1) : url
-}
-
-function withHttps(host: string): string {
-  return `https://${host}`
-}
-
-export function getAuthBaseUrl(): string {
-  const explicit = process.env.BETTER_AUTH_URL?.trim()
-  if (explicit) {
-    return stripTrailingSlash(explicit)
-  }
-
-  const branchUrl = process.env.VERCEL_BRANCH_URL?.trim()
-  if (branchUrl) {
-    return stripTrailingSlash(withHttps(branchUrl))
-  }
-
-  const deploymentUrl = process.env.VERCEL_URL?.trim()
-  if (deploymentUrl) {
-    return stripTrailingSlash(withHttps(deploymentUrl))
-  }
-
-  const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim()
-  if (productionUrl) {
-    return stripTrailingSlash(withHttps(productionUrl))
-  }
-
-  return "http://localhost:3000"
-}
-
 export function getAuthEnv() {
+  const vercelEnvironment = process.env.VERCEL_ENV
+  const environment = vercelEnvironment === "production" ? "production" : "int"
   return {
-    allowedEmails: process.env.ALLOWED_EMAILS ?? "",
-    baseUrl: getAuthBaseUrl(),
-    googleClientId: getRequiredEnv("GOOGLE_CLIENT_ID"),
-    googleClientSecret: getRequiredEnv("GOOGLE_CLIENT_SECRET"),
+    appId: "dalis-tasks-events",
+    baseUrl: resolveConsumerOrigin({
+      environment,
+      explicitUrl: process.env.BETTER_AUTH_URL,
+      branchUrl: process.env.VERCEL_BRANCH_URL,
+      productionUrl: process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    }),
+    clientId: getRequiredEnv("HUB_OIDC_CLIENT_ID"),
+    clientSecret: getRequiredEnv("HUB_OIDC_CLIENT_SECRET"),
+    environment,
+    hubUrl: getRequiredEnv("HUB_URL"),
     secret: getRequiredEnv("BETTER_AUTH_SECRET"),
   }
 }
