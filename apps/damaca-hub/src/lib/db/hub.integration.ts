@@ -284,15 +284,16 @@ try {
     )?.revision,
     4
   )
-  assert.equal(
-    await updateOidcClient({
-      appId: "card-wars",
-      environment: "int",
-      clientId: intClient.clientId,
-      revision: 1,
-      operation: "disable",
-    }),
-    null
+  await assert.rejects(
+    () =>
+      updateOidcClient({
+        appId: "card-wars",
+        environment: "int",
+        clientId: intClient.clientId,
+        revision: 1,
+        operation: "disable",
+      }),
+    /Public applications cannot have OIDC clients/
   )
   assert.equal((await listOidcClients()).length, 2)
 

@@ -12,6 +12,7 @@ import {
   submitApplicationRequest,
 } from "@/lib/db/hub"
 import { createOidcClient, updateOidcClient } from "@/lib/db/oidc-clients"
+import { getFormDataValues } from "@/lib/form-data"
 import {
   applicationAccessMutationSchema,
   applicationMutationSchema,
@@ -104,7 +105,7 @@ export async function saveHubApplication(
   if (!session)
     return { status: "error", message: "Administrator access is required." }
   const parsed = applicationMutationSchema.safeParse(
-    Object.fromEntries(formData)
+    getFormDataValues(formData)
   )
   if (!parsed.success) return invalidState
   try {
@@ -128,7 +129,7 @@ export async function changeHubAccess(
   if (!session)
     return { status: "error", message: "Administrator access is required." }
   const parsed = applicationAccessMutationSchema.safeParse(
-    Object.fromEntries(formData)
+    getFormDataValues(formData)
   )
   if (!parsed.success) return invalidState
   if (isAdminEmail(parsed.data.email)) {
@@ -175,7 +176,7 @@ export async function reviewHubRequest(
   if (!session)
     return { status: "error", message: "Administrator access is required." }
   const parsed = applicationRequestReviewSchema.safeParse(
-    Object.fromEntries(formData)
+    getFormDataValues(formData)
   )
   if (!parsed.success) return invalidState
   try {
@@ -215,9 +216,7 @@ export async function manageHubOidcClient(
   const session = await requireAdministrator()
   if (!session)
     return { status: "error", message: "Administrator access is required." }
-  const parsed = oidcClientMutationSchema.safeParse(
-    Object.fromEntries(formData)
-  )
+  const parsed = oidcClientMutationSchema.safeParse(getFormDataValues(formData))
   if (!parsed.success)
     return { status: "error", message: "The OIDC client details are invalid." }
   const input = parsed.data
