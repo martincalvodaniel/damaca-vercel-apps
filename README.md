@@ -32,6 +32,8 @@ bun run build --filter=@damaca/billing-poc
 
 Run `bun run generate:app` and select `mongo-google` for Google sign-in with MongoDB, or `local-pwa` for an installable app with browser-local IndexedDB. The generator asks for the app identifier, display name, and an available development port. It creates the new workspace under `apps/<identifier>` and includes the app-specific instructions and planning documents.
 
+Run `bun run icons:generate` to regenerate application favicons (16/32/48-pixel ICO), installation PNGs (192/512), opaque maskable icons (512), and Apple Touch Icons (180) from local SVG sources. Pass an app identifier to update only that app, for example `bun run icons:generate pocha-score`. The source is `src/app/icon.svg`, except Dalis Tasks & Events, which keeps `public/dalis-icon.svg`. Existing PWA manifests use the installation assets; other apps expose Apple icons through Next.js file metadata without adding offline behavior.
+
 The prompts can also be answered in one command:
 
 ```sh

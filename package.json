@@ -38,6 +38,7 @@
     "dev": "turbo run dev --parallel",
     "build": "TURBO_TELEMETRY_DISABLED=1 turbo run build --concurrency=2",
     "generate:app": "turbo gen app",
+    "icons:generate": "bun run scripts/generate-app-icons.ts",
     "test:generator": "bun test turbo/generators/test",
     "type-check": "turbo run type-check",
     "test": "turbo run test",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
+    "sharp": "catalog:",
     "@turbo/gen": "2.11.10",
     "turbo": "2.11.10"
   }

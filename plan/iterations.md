@@ -2,6 +2,16 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-10 — Application favicons
+
+- Estado: `validated`.
+- Objetivo: crear favicons propios para juegos y Hub, actualizar sus iconos PWA y revisar los del resto de aplicaciones, según ampliación explícita del usuario.
+- Rutas: iconos, manifiestos y metadatos de las seis apps, `scripts/generate-app-icons.ts`, configuración Bun y planificación raíz/apps.
+- Dependencias: recursos vectoriales locales; conservar las identidades existentes de Card Wars y ambas Dalis. Sharp ya está autorizado y presente en el catálogo; herramienta común en desarrollo. Capacidad inicial: 67% de 5h y 86% de 7d; corte dentro de reservas.
+- Aceptación: cada app tiene favicon propio SVG y fallback ICO 16/32/48, Apple Touch Icon y recursos PNG de instalación; las tres PWA existentes declaran iconos normales y maskable seguros; Next.js publica los metadatos y recursos; generación compartida reproducible, sin cambios de almacenamiento ni funcionalidad offline.
+- Validación prevista: inspección visual a tamaños de pestaña/instalación, estructura ICO y dimensiones/opacidad PNG, lint, tipos y builds de las seis apps; pruebas existentes del generador offline; comprobar iconos en exports y metadatos generados; `git diff --check`.
+- Evidencia: [registro](iteration-log.md#agw-10-application-favicons).
+
 ## AGW-09 — Restore global lint success
 
 - Estado: `validated`.

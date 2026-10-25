@@ -2,6 +2,18 @@
 
 Los hechos de publicación se verifican en Git. El estado normativo está en [iterations.md](iterations.md); este registro conserva evidencia, límites e incidentes observados.
 
+<a id="agw-10-application-favicons"></a>
+## AGW-10 — Application favicons
+
+- Alcance: [aceptación AGW-10](iterations.md#agw-10--application-favicons), ampliada por el usuario a iconos PWA y revisión de las seis aplicaciones. Registro principal único aquí; los seis planes maestros enlazan esta entrega.
+- Cambios: SVG propios para Pocha Score (carta/marcador), Damaca Hub (nodos) y Billing (recibo); identidades de Card Wars y ambas Dalis conservadas. ICO de tres frames 16/32/48 para las seis apps; PNG 192/512, maskable opaco 512 con margen de seguridad y Apple Touch Icon 180. Los juegos dejan de usar la L del starter en instalación. Dalis Tasks incorpora maskable al manifiesto y al precache; se corrige también su antiguo ICO de un único frame. Los juegos declaran el SVG explícitamente en sus metadatos; las otras apps publican SVG/Apple mediante las convenciones de Next. No se añade servicio offline a ninguna app.
+- Herramienta común: `bun run icons:generate [app]`, desde fuentes SVG locales; Sharp se declara en el catálogo de dependencias de desarrollo raíz usando la versión ya existente. El script previo de Dalis delega en la herramienta común. El lockfile se sincroniza y elimina las referencias de identidad de los juegos que habían quedado en las entradas de workspace tras AGW-08. El wrapper de build de Dalis reenvía argumentos de Next para permitir comprobación con Webpack sin cambiar su build predeterminado.
+- Validación: `bun install --frozen-lockfile`; tipos de las seis apps y paquete de identidad (7/7 tareas); `bun run test --filter=@damaca/pocha-score --filter=@damaca/card-wars` (27+25 tests, cero fallos); builds de juegos/Hub mediante sus filtros raíz y de Billing/ambas Dalis con `-- --webpack` (seis apps compiladas); `bun run lint` global (2148 archivos, cero errores, 731 warnings y 2107 infos existentes); Biome de archivos editados y `git diff --check`. Comprobación real de headers/frames ICO, dimensiones PNG, opacidad completa de maskable/Apple, recursos declarados en los tres manifiestos y metadatos ICO/SVG/Apple del HTML generado en las seis apps. Export de juegos coincide byte a byte con fuentes generadas y precache incluye los seis recursos de iconos; Dalis incluye maskable en su worker compilado.
+- Revisión visual: inspección de los seis diseños renderizados a 16/32/128 píxeles y en recorte circular maskable; iconos legibles y motivos principales conservados. No se acredita instalación nativa ni actualización del icono por un sistema operativo real.
+- Incidentes: primer comando directo de tests desde la raíz falla por la ruta de trabajo que esperan las pruebas del worker; ejecución correcta mediante filtros Turbo pasa. Build predeterminado de las otras apps encuentra restricciones de descarga de Google Fonts y de puerto auxiliar de Turbopack, también tras habilitar red; comprobación con Webpack y acceso a Google Fonts pasa. No se cambian fuentes ni arquitectura de producto por esas restricciones locales. La comprobación de metadatos detectó SVG sin enlace en los juegos; se corrigió en sus layouts y el export reconstruido lo confirma.
+- Entrega: commit, push a `origin/int` y coincidencia del SHA remoto se verifican en Git al cierre; `main` permanece bajo gestión humana.
+- Capacidad inicial: 67% de 5h y 86% de 7d; lectura durante validación: 60% y 85%, dentro de las reservas.
+
 <a id="agw-09-restore-global-lint-success"></a>
 ## AGW-09 — Restore global lint success
 

@@ -25,6 +25,8 @@ No se define aquí un roadmap de producto para ninguna app ni se autoriza promoc
 
 AGW-09 restablece el lint global sin errores de formato. Los avisos y diagnósticos informativos existentes quedan fuera de este corte; evidencia en el [registro](iteration-log.md#agw-09-restore-global-lint-success).
 
+Las seis aplicaciones disponen de favicons propios, recursos de instalación y Apple Touch Icon. Las PWA existentes incluyen iconos maskable; el generador compartido `bun run icons:generate` usa SVG locales y Sharp del catálogo. Entrega transversal [AGW-10](iterations.md#agw-10--application-favicons).
+
 ## Previous identity decision (historical, superseded by AGW-08)
 
 - AGW-05 added a reusable Google/OIDC provider and consumer modules. It required game login and withdrew offline access.

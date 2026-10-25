@@ -36,3 +36,7 @@ Damaca Hub is the authenticated directory for the monorepo's web applications an
 ## Superseded consumer integration AGW-05
 
 AGW-05 temporarily integrated Pocha Score and Card Wars with mandatory identity. The owner reversed that decision in AGW-08. The games are public; Hub Google login remains available for private catalog access and OIDC administration. See [root AGW-08](../../../plan/iterations.md#agw-08--public-games-and-hub-managed-oidc-clients).
+
+## Application icons
+
+Browser and home-screen icons use local SVG sources, a 16/32/48-pixel ICO fallback, installation PNGs and an Apple Touch Icon. Existing PWA manifests also declare an opaque maskable variant. Regenerate with `bun run icons:generate` from the repository root. Shared status and evidence: [AGW-10](../../../plan/iterations.md#agw-10--application-favicons) and [delivery log](../../../plan/iteration-log.md#agw-10-application-favicons).

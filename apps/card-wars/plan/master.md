@@ -30,3 +30,7 @@ Se pueden crear, reanudar, modificar, deshacer, finalizar y abandonar partidas c
 ## Identidad y acceso — decisión sustituida
 
 AGW-05 añadió login obligatorio, pero la petición posterior AGW-08 lo retira. La aplicación es pública, local y offline; conserva IndexedDB y copias sin cambios. La implementación transversal y evidencia se registran en [AGW-08 raíz](../../../plan/iterations.md#agw-08--public-games-and-hub-managed-oidc-clients) y [su registro](../../../plan/iteration-log.md#agw-08-public-games-and-hub-managed-oidc-clients).
+
+## Application icons
+
+Browser and home-screen icons use local SVG sources, a 16/32/48-pixel ICO fallback, installation PNGs and an Apple Touch Icon. Existing PWA manifests also declare an opaque maskable variant. Regenerate with `bun run icons:generate` from the repository root. Shared status and evidence: [AGW-10](../../../plan/iterations.md#agw-10--application-favicons) and [delivery log](../../../plan/iteration-log.md#agw-10-application-favicons).

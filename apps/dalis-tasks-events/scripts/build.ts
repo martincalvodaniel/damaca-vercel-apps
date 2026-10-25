@@ -1,10 +1,13 @@
 import { readdir } from "node:fs/promises"
 import { join } from "node:path"
 
-const nextBuild = Bun.spawn(["bunx", "next", "build"], {
-  stdout: "inherit",
-  stderr: "inherit",
-})
+const nextBuild = Bun.spawn(
+  ["bunx", "next", "build", ...process.argv.slice(2)],
+  {
+    stdout: "inherit",
+    stderr: "inherit",
+  }
+)
 const exitCode = await nextBuild.exited
 if (exitCode !== 0) process.exit(exitCode)
 
@@ -34,6 +37,7 @@ const assets = [
   "/favicon.svg",
   "/icon-192.png",
   "/icon-512.png",
+  "/maskable-512.png",
   "/apple-touch-icon.png",
   ...(await collectAssets(".next/static", "/_next/static")),
 ].sort()

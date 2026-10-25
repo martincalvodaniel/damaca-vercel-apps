@@ -15,7 +15,10 @@ export const metadata: Metadata = {
     title: appConfig.shortName,
     statusBarStyle: "default",
   },
-  icons: { apple: "/icons/apple-touch-icon.png" },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml", sizes: "any" }],
+    apple: "/icons/apple-touch-icon.png",
+  },
 }
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires viewport metadata in the root layout.
