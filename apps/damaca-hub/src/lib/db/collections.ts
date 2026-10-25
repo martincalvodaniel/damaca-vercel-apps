@@ -19,6 +19,7 @@ export const COLLECTION_NAMES = {
   oauthClientAssertion: "oauthClientAssertion",
   applications: "applications",
   appAccess: "app_access",
+  hubOidcClient: "hub_oidc_clients",
 } as const satisfies Record<string, string>
 
 export type CollectionName =

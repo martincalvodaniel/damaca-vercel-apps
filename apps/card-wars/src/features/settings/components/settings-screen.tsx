@@ -1,5 +1,3 @@
-import { HubAccount } from "@damaca/identity/account"
-import { getIdentityConfiguration } from "@/config/identity"
 import { BackupSettings } from "@/features/settings/components/backup-settings"
 import { InstallSettings } from "@/features/settings/components/install-settings"
 import { ThemeSettings } from "@/features/settings/components/theme-settings"
@@ -8,7 +6,6 @@ export function SettingsScreen() {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-2 px-2 pb-2 pt-2 sm:px-4">
       <h1 className="text-2xl font-black tracking-tight">Ajustes</h1>
-      <HubAccount hubUrl={getIdentityConfiguration().hubUrl} />
       <ThemeSettings />
       <InstallSettings />
       <BackupSettings />
@@ -19,8 +16,8 @@ export function SettingsScreen() {
         <h2 className="text-sm font-black">En este dispositivo</h2>
         <p className="mt-1 text-xs leading-5 text-[#4e6450]">
           Las partidas y preferencias se guardan en este navegador. No hay
-          sincronización. Borrar los datos del sitio puede eliminarlas; guarda
-          una copia JSON para conservarlas.
+          cuenta ni sincronización. Borrar los datos del sitio puede
+          eliminarlas; guarda una copia JSON para conservarlas.
         </p>
       </section>
     </main>

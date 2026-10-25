@@ -1,7 +1,5 @@
-# Application sign-in integration
+# OIDC client administration
 
-Google authentication is centralized in Hub. Pocha Score and Card Wars use the shared OIDC consumer integration and must have a current app-specific grant. See [the shared package guide](../../../packages/identity/README.md) for the protocol, configuration, independent sessions, MongoDB persistence, token and signing-key rotation, offline limitations and rollout checks.
+Google authentication and the OIDC provider are centralized in Hub. Pocha Score and Card Wars are public static PWAs and have no social login, grants, or OIDC clients. Administrators manage clients for other existing catalog apps in Hub, one per production/int environment.
 
-UserInfo derives the app from the validated token client and resolves active catalog state and grants on every request. No administrator bypass, caller-supplied email, shared cookies or shared session secrets. Production Hub authorizes production and int consumers with separate clients and exact callbacks; the int Hub and its database remain isolated for testing.
-
-Other apps retain their current authorization. Integrating them requires a separate scoped delivery.
+Client secrets are shown once and stored as hashes. Callbacks are exact and changes take effect on subsequent requests without restarting Hub. Disabling a client also revokes its delegated access and refresh tokens. See [the shared package guide](../../../packages/identity/README.md) for origin resolution, consumer credentials and protocol checks.

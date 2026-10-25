@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, expect, test as it } from "bun:test"
+import { createHash } from "node:crypto"
 import { makeSignature } from "better-auth/crypto"
 import { checkHubAccess } from "./hub-client"
 import { createHubIdentity } from "./provider"
@@ -6,6 +7,8 @@ import { createConsumerIdentity } from "./server"
 
 const hubSecret = "test-hub-session-secret-with-at-least-32-characters"
 const clientSecret = "test-consumer-client-secret-with-at-least-32-characters"
+const clientId = "hub_test_consumer"
+let clientEnabled = true
 let allowed = true
 let grantUnavailable = false
 let tamper: "none" | "signature" | "nonce" | "issuer" | "audience" = "none"
@@ -52,9 +55,9 @@ let consumerCookie = ""
 let accessToken = ""
 let originalCode = ""
 const configuration = {
-  appId: "pocha-score",
+  appId: "test-application",
   hubUrl,
-  clientId: "pocha-score-test",
+  clientId,
   clientSecret,
 }
 
@@ -72,18 +75,24 @@ beforeAll(async () => {
     googleClientId: "test-google-id",
     googleClientSecret: "test-google-secret",
     database: undefined,
-    clients: [
-      {
-        appId: configuration.appId,
-        clientId: configuration.clientId,
-        clientSecret,
-        redirectUri: `${consumerUrl}/api/auth/callback/damaca-hub`,
-      },
-    ],
+    resolveClient: async (id) =>
+      id === clientId
+        ? {
+            appId: configuration.appId,
+            clientId,
+            clientSecretHash: createHash("sha256")
+              .update(clientSecret)
+              .digest("base64url"),
+            redirectUri: `${consumerUrl}/api/auth/callback/damaca-hub`,
+            enabled: clientEnabled,
+          }
+        : null,
     isAllowed: async (appId, email) => {
       if (grantUnavailable) throw new Error("Test grant service unavailable")
       return (
-        allowed && appId === "pocha-score" && email === "player@example.com"
+        allowed &&
+        appId === "test-application" &&
+        email === "player@example.com"
       )
     },
   })
@@ -169,6 +178,11 @@ it("central Hub authenticates an OIDC consumer and checks current app grants", a
   expect(
     await checkHubAccess(configuration, accessToken, "player@example.com")
   ).toBe("approved")
+  clientEnabled = false
+  expect(
+    await checkHubAccess(configuration, accessToken, "player@example.com")
+  ).toBe("denied")
+  clientEnabled = true
   allowed = false
   expect(
     await checkHubAccess(configuration, accessToken, "player@example.com")
@@ -176,7 +190,7 @@ it("central Hub authenticates an OIDC consumer and checks current app grants", a
   allowed = true
   expect(
     await checkHubAccess(
-      { ...configuration, appId: "card-wars" },
+      { ...configuration, appId: "another-application" },
       accessToken,
       "player@example.com"
     )

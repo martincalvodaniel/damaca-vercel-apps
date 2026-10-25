@@ -29,8 +29,8 @@ damaca-vercel-apps/
 | `apps/billing-poc`           | `@damaca/billing-poc`           | 3000             | Next.js application                              |
 | `apps/dalis-home-management` | `@damaca/dalis-home-management` | 3001             | Next.js application                              |
 | `apps/dalis-tasks-events`    | `@damaca/dalis-tasks-events`    | 3002             | Next.js application and `public/dalis-sw.js`     |
-| `apps/pocha-score`           | `@damaca/pocha-score`           | 3003             | Next.js server, Hub OIDC, local IndexedDB        |
-| `apps/card-wars`             | `@damaca/card-wars`             | 3004             | Next.js server, Hub OIDC, local IndexedDB        |
+| `apps/pocha-score`           | `@damaca/pocha-score`           | 3003             | Static offline PWA, local IndexedDB              |
+| `apps/card-wars`             | `@damaca/card-wars`             | 3004             | Static offline PWA, local IndexedDB              |
 | `apps/damaca-hub`            | `@damaca/damaca-hub`            | 3005             | Next.js application with Google auth and MongoDB |
 
 ```mermaid
@@ -148,4 +148,4 @@ the Vercel projects or a local `bun run build`.
 
 ## Shared identity package
 
-`packages/identity` is a Bun workspace consumed by Damaca Hub, Pocha Score and Card Wars. [Integration and setup](../packages/identity/README.md) describe centralized Google, exact environment callbacks, independent sessions, live authorization and network-only PWA migration. Apps remain independently configured and deployed.
+`packages/identity` is a Bun workspace used by Damaca Hub and available to future consumers. [Integration and setup](../packages/identity/README.md) describe Hub-managed OIDC clients, exact environment callbacks, independent consumer sessions and stable Vercel origin resolution. Pocha Score and Card Wars are static offline apps and do not consume identity. Apps remain independently configured and deployed.

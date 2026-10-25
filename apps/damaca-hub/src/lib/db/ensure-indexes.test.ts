@@ -132,4 +132,13 @@ it("enforces unique identity and OAuth token lookup keys", () => {
       )
     ).toBe(true)
   }
+  expect(
+    INDEX_SPECS.filter((spec) => spec.collection === "hub_oidc_clients").map(
+      (spec) => spec.options.name
+    )
+  ).toEqual([
+    "hub_oidc_app_environment_unique",
+    "hub_oidc_client_id_unique",
+    "hub_oidc_redirect_uri_unique",
+  ])
 })

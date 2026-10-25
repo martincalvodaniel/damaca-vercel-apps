@@ -10,6 +10,7 @@
     "./contract": "./src/contract.ts",
     "./hub-client": "./src/hub-client.ts",
     "./registry": "./src/registry.ts",
+    "./origin": "./src/origin.ts",
     "./provider": "./src/provider.ts",
     "./sign-in": "./src/sign-in.tsx",
     "./account": "./src/account.tsx",

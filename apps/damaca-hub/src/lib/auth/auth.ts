@@ -1,9 +1,10 @@
 import "server-only"
 
 import { createHubIdentity } from "@damaca/identity/provider"
-import { getAuthEnv, getOidcClients } from "@/config/env"
+import { getAuthEnv } from "@/config/env"
 import { getAuthDatabaseAdapter } from "@/lib/db/auth-adapter"
 import { hasApplicationAccess } from "@/lib/db/hub"
+import { findOidcClient } from "@/lib/db/oidc-clients"
 
 let identityPromise: Promise<ReturnType<typeof createHubIdentity>> | undefined
 
@@ -14,7 +15,17 @@ export function getHubAuth() {
         createHubIdentity({
           ...getAuthEnv(),
           database,
-          clients: getOidcClients(),
+          resolveClient: async (clientId) => {
+            const client = await findOidcClient(clientId)
+            if (!client) return null
+            return {
+              appId: client.appId,
+              clientId: client.clientId,
+              clientSecretHash: client.clientSecretHash,
+              redirectUri: client.redirectUri,
+              enabled: client.enabled,
+            }
+          },
           isAllowed: hasApplicationAccess,
         })
       )

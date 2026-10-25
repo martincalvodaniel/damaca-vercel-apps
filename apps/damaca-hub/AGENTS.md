@@ -62,9 +62,9 @@ src/hooks/                       Global client hooks, created when needed
 - Implement application mutations in `features/<feature>/actions.ts` with `"use server"`; delegate persistence to the data layer.
 - Check sessions in protected layouts and authorize each data access and mutation at its server entry point. Layouts and proxy redirects alone do not protect Server Actions or API handlers.
 - The proxy only checks cookie presence. Never treat that as validated identity or permissions.
-- Any verified Google identity may view the catalog and submit access requests; these identity-scoped operations use `getVerifiedSession()` and do not require a product grant.
+- Any verified Google identity may view the catalog. Private applications accept access requests; public games do not. Identity-scoped operations use `getVerifiedSession()` and do not require a product grant.
 - `ALLOWED_EMAILS` defines administrators only. Per-application grants and requests are persisted in MongoDB; a grant for one app never grants access to another. Resolve roles and grants on the server for every operation; never trust roles or emails submitted by a client or cached in a session cookie. Keep administration checks inside each action. Do not silently change cookie/session persistence, lifetimes, or authentication strategy.
-- Current app grants authorize registered Pocha Score and Card Wars consumers. Central SSO uses OpenID Connect, app-specific clients and callbacks, separately established consumer sessions, no shared cookies or session secrets, and production Hub authority for both environments. AGW-05 authorizes central OIDC and consumers for Pocha Score and Card Wars.
+- Pocha Score and Card Wars are public and have no app grants or OIDC clients. Administrators manage one OIDC client per existing private app/environment. Resolve client, callback, enabled state, and app binding from MongoDB for every protocol request; disable and rotate operations revoke delegated tokens.
 - Only `lib/db/**` imports the MongoDB driver. Use its singleton, collection registry, and repository functions; never create connections per request.
 - Evaluate indexes whenever introducing a collection or query/sort/lookup/uniqueness pattern. Register required indexes in `src/lib/db/ensure-indexes.ts`, never ad hoc.
 - Never log or commit secrets, tokens, credentials, or personal data. `.env.example` is the only tracked environment template and must contain placeholders only.
@@ -91,6 +91,6 @@ Branch, commit, push, and remote verification follow the root workflow. Preserve
 
 Run Bun installation and all project commands from the monorepo root. This workspace is `@damaca/damaca-hub`. Use `bun run build --filter=@damaca/damaca-hub`, `bun run test --filter=@damaca/damaca-hub`, or `bun run type-check --filter=@damaca/damaca-hub` to target this application. Dependencies and versions are managed in the root package manifest, Bun catalog, and `bun.lock`; do not create app-local lockfiles. Biome settings are managed at the root. Commit and publish monorepo changes from the monorepo root on `int`.
 
-## Authorized consumer access integration (AGW-05)
+## Superseded consumer access integration (AGW-05)
 
-The human request now authorizes integration of Pocha Score and Card Wars. Expose central OIDC with separate registered consumers, exact callbacks, S256 PKCE and signed ID-token validation; derive live grants from the validated token client. MongoDB grants remain unchanged; Hub identity now persists with the native MongoDB adapter and old stateless cookies require reauthentication. This supersedes the earlier prohibition on consumer changes for this delivery; Google credentials exist only in Hub. Never accept a browser's email as an authenticated identity.
+AGW-05 temporarily integrated Pocha Score and Card Wars. The owner reversed that decision in AGW-08. Keep Google sign-in for the Hub; retain its OIDC provider for future/private consumers. Never accept a browser's email as an authenticated identity.

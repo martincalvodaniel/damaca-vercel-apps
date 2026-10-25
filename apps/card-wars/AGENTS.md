@@ -8,7 +8,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Scope and Language
 
-- This is an installable game score application with local records and mandatory Hub identity. Read its product plan; do not infer scope from neighboring repositories.
+- This is an installable, offline game score application with local records and no account requirement. Read its product plan; do not infer scope from neighboring repositories.
 - All code, identifiers, code comments, technical errors and commit messages must be in English. Communicate in the user's language; README and product plans may be Spanish.
 - Keep visible UI, validation, accessibility text and `lang="en"` in English unless explicitly requested otherwise.
 - The product owner explicitly requested a Spanish interface for Card Wars; keep all player-facing copy in Spanish and code/comments in English.
@@ -16,9 +16,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Product Invariants
 
-- Mandatory Google identity is managed centrally by Damaca Hub through the shared `@damaca/identity` OIDC package. Require a current app-specific Hub grant. Game records stay in IndexedDB on the user's browser/device; no telemetry, remote assets or synchronization.
-- Use a Next.js server for independent consumer sessions, OIDC callbacks and authorization checks. Protect every server product entry point and retain the shared client revalidation boundary. Browser game state and mutations remain in local repositories. Read secrets only through `config/**`.
-- Preserve installation, manifest, local icons and safe areas. Access requires connectivity. The network-only service worker retires legacy app caches; it must never cache protected HTML, RSC, auth or authorization responses. Register it only in production.
+- Game records stay in IndexedDB on the user's browser/device; no accounts, telemetry, remote assets or synchronization.
+- Preserve static export, installation, manifest, local icons, safe areas and offline access. The service worker precaches the static shell and app assets using its app-specific cache prefix.
 - Product data belongs in IndexedDB. localStorage is allowed only for the small synchronous theme bootstrap cache, never as an alternative data layer. Cache Storage holds disposable application assets, never user records.
 - Browser storage is origin/profile/device scoped and may be cleared or evicted. Do not imply backup, encryption, authentication or cross-device sync. Before introducing irreplaceable product data, define export/import and recovery acceptance with the user.
 - Adding a backend, authentication, external requests, sync, notifications, core dependencies or a new storage solution needs explicit human authorization. Routine implementation within these invariants is autonomous. The user has authorized `idb` and development-only `fake-indexeddb` for this conversion.
@@ -29,7 +28,7 @@ Follow the [root agent workflow](../../plan/workflow.md) for branch, planning, c
 
 ## Local Iteration Constraints
 
-- Preserve IndexedDB product data, backups and installation. Mandatory identity and live authorization supersede the previous static/offline model by explicit human authorization in AGW-05.
+- Preserve IndexedDB product data, backups, installation and offline behavior.
 - For storage or PWA work, plan non-destructive migrations and recovery, and validate built previews for denied offline access, persistence, navigation, and updates where applicable. Report browser interaction, visual inspection, and native installation separately.
 
 ## Authoritative Stack
@@ -68,7 +67,7 @@ scripts/                        Static preview and service-worker generation
 - Domain UI belongs in `features/<feature>/components/**`; generic UI belongs in `components/ui/**` or `components/shared/**`.
 - Mobile-first responsive UI, accessible labels, keyboard support, focus, touch targets and safe areas; navigation must not cover content. Keep Home/Settings until the actual product defines other destinations.
 - Handle pending, empty, corrupt, blocked, quota and unavailable-storage states. Report a write successful only after commit; never hide failures with in-memory fallback.
-- Generate the network-only worker during each build. App updates must not clear IndexedDB. The security migration activates the new worker to retire old offline shells; ordinary UI updates preserve records.
+- Generate the offline worker during each build. App updates must not clear IndexedDB; worker cache cleanup stays scoped to the app prefix.
 - Keep service-worker cache deletion scoped to this app's prefix. Delete legacy offline shells on activation. Host at the origin root with HTTPS outside loopback development.
 
 ## Definition of Done
@@ -91,6 +90,6 @@ Branch, commit, push, and remote verification follow the root workflow. Preserve
 
 Run Bun installation and all project commands from the monorepo root. This workspace is `@damaca/card-wars`. Use `bun run build --filter=@damaca/card-wars`, `bun run test --filter=@damaca/card-wars`, or `bun run type-check --filter=@damaca/card-wars` to target this application. Dependencies and versions are managed in the root package manifest, Bun catalog, and `bun.lock`; do not create app-local lockfiles. Biome settings are managed at the root. Commit and publish monorepo changes from the monorepo root on `int`.
 
-## Authorized identity integration (AGW-05)
+## Superseded identity integration
 
-The human owner explicitly authorized mandatory Google login and app-specific Hub permission. This supersedes the local-only, static-export, no-auth/backend/external-request and offline-access restrictions above for this integration. Use the shared `@damaca/identity` package, independent server sessions and server-to-server Hub authorization. Preserve all IndexedDB records, schemas and backups. Do not cache authenticated HTML, RSC or auth/access API responses in a service worker. Installation remains supported; product access now requires a live authorization check. Existing local data remains device-scoped and shared by accounts using that browser profile; login does not encrypt it.
+AGW-05 temporarily added mandatory Hub identity. The owner reversed that decision in AGW-08. Preserve the local-only static PWA and remove identity routes, dependencies, configuration, UI and permissions. Historical delivery records remain evidence only.

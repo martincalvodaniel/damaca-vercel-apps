@@ -10,7 +10,6 @@
         "GOOGLE_CLIENT_SECRET",
         "MONGODB_URI",
         "MONGODB_DB",
-        "HUB_OIDC_CLIENTS",
         "NODE_ENV",
         "VERCEL_BRANCH_URL",
         "VERCEL_URL",

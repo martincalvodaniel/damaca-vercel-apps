@@ -9,18 +9,23 @@ export function ApplicationCard({
   application: ApplicationEntry
   isAdmin: boolean
 }) {
-  const canUsePreproduction = isAdmin || application.accessStatus === "approved"
-  const statusLabel = isAdmin
-    ? "Administrator"
-    : application.accessStatus === "approved"
-      ? "Access approved"
-      : application.accessStatus === "pending"
-        ? "Request pending"
-        : application.accessStatus === "rejected"
-          ? "Request rejected"
-          : application.accessStatus === "revoked"
-            ? "Access revoked"
-            : "No access yet"
+  const canUsePreproduction =
+    application.publicAccess ||
+    isAdmin ||
+    application.accessStatus === "approved"
+  const statusLabel = application.publicAccess
+    ? "Public access"
+    : isAdmin
+      ? "Administrator"
+      : application.accessStatus === "approved"
+        ? "Access approved"
+        : application.accessStatus === "pending"
+          ? "Request pending"
+          : application.accessStatus === "rejected"
+            ? "Request rejected"
+            : application.accessStatus === "revoked"
+              ? "Access revoked"
+              : "No access yet"
 
   return (
     <article className="flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -37,11 +42,11 @@ export function ApplicationCard({
           {statusLabel}
         </span>
       </div>
-      <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
-        {application.id === "pocha-score" || application.id === "card-wars"
-          ? "Connected through Hub OIDC when configured. A current application grant is required."
-          : "Not connected to Hub yet. This application still uses its current sign-in and access rules."}
-      </p>
+      {!application.publicAccess ? (
+        <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
+          This application manages access independently.
+        </p>
+      ) : null}
       <div className="mt-5 flex flex-wrap gap-2">
         {application.productionUrl ? (
           <Link
@@ -74,7 +79,9 @@ export function ApplicationCard({
           )
         ) : null}
       </div>
-      {!isAdmin && application.accessStatus !== "approved" ? (
+      {!application.publicAccess &&
+      !isAdmin &&
+      application.accessStatus !== "approved" ? (
         <div className="mt-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
           <AccessRequestForm
             appId={application.id}

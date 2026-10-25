@@ -8,9 +8,9 @@ Damaca Hub is the authenticated directory for the monorepo's web applications an
 
 - Show the five existing applications with product and preproduction links where configured.
 - Persist an editable application catalog and per-application access requests and grants in MongoDB.
-- Let users request access and resubmit after rejection or revocation. Let administrators approve, reject, grant, and revoke access.
-- Pocha Score and Card Wars use central Hub OIDC and live grants when configured. Other applications retain their current access rules.
-- Provide central OpenID Connect for the two registered consumers using the shared package.
+- Let users request access and resubmit after rejection or revocation for private applications. Let administrators approve, reject, grant, and revoke access.
+- Pocha Score and Card Wars are public links and do not use app grants or OIDC clients.
+- Let administrators manage persistent OIDC clients for existing private applications from the Hub.
 
 ## Decisions
 
@@ -33,6 +33,6 @@ Damaca Hub is the authenticated directory for the monorepo's web applications an
 - Production and `int` domains are not known, so links remain unavailable until configured by an administrator.
 - Google OAuth and MongoDB credentials/callbacks must be supplied in the app's local or deployment environment before live authentication and persistence can be verified.
 
-## Shared consumer integration AGW-05
+## Superseded consumer integration AGW-05
 
-The current human request authorizes mandatory Google authentication and Hub authorization for Pocha Score and Card Wars through the central Hub OIDC provider. This supersedes the previous delivery's exclusion of consumer integration. Google is configured only in Hub; consumers use independent OIDC clients and sessions. Primary status and evidence live in [root AGW-05](../../../plan/iterations.md#agw-05--google-identity-and-hub-access-shared-package) and [root delivery log](../../../plan/iteration-log.md#agw-05-google-identity-and-hub-access).
+AGW-05 temporarily integrated Pocha Score and Card Wars with mandatory identity. The owner reversed that decision in AGW-08. The games are public; Hub Google login remains available for private catalog access and OIDC administration. See [root AGW-08](../../../plan/iterations.md#agw-08--public-games-and-hub-managed-oidc-clients).

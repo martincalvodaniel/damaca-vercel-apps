@@ -64,4 +64,4 @@ Este archivo es la fuente única del estado de las iteraciones. Sigue el [workfl
 
 ## Integración transversal de identidad
 
-La entrega de login obligatorio y autorización Hub se sigue exclusivamente en [AGW-05 raíz](../../../plan/iterations.md#agw-05--google-identity-and-hub-access-shared-package).
+La retirada del login y el retorno a la PWA pública offline se siguen en [AGW-08 raíz](../../../plan/iterations.md#agw-08--public-games-and-hub-managed-oidc-clients); AGW-05 queda como historial sustituido.

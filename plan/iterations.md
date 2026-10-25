@@ -2,6 +2,16 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-08 — Public games and Hub-managed OIDC clients
+
+- Estado: `in_progress`.
+- Objetivo: restaurar Pocha Score y Card Wars como PWAs públicas offline y mover la gestión de clientes OIDC del entorno al Hub para apps existentes.
+- Rutas: `packages/identity/**`, `apps/{damaca-hub,pocha-score,card-wars}/**`, `turbo.json`, documentación y planes raíz afectados.
+- Dependencias: reversión explícita de login obligatorio; almacenamiento Mongo del Hub disponible para persistencia real; dominios de producción e int se confirman en cada cliente.
+- Aceptación: sin login en juegos y con exportación estática/offline; catálogo Hub muestra enlaces públicos de juegos y rechaza solicitudes/grants; administración OIDC persistida por app+entorno con callback exacto, secreto en hash y cambios aplicados sin reinicio; migración acotada e idempotente preparada para clientes existentes que no sean juegos; `HUB_OIDC_CLIENTS` retirado del runtime; helper resuelve URL explícita o URL estable de Vercel por entorno.
+- Validación: Biome, tipos, pruebas y builds de las cuatro workspaces; pruebas de persistencia/protocolo, worker/preview estático, links/documentación y `git diff --check`; inspección responsive si hay navegador. Google real, Mongo remoto, previews Vercel e instalación nativa se registran por separado.
+- Evidencia: [registro](iteration-log.md#agw-08-public-games-and-hub-managed-oidc-clients).
+
 ## AGW-06 — Configure engineering skills
 
 - Estado: `validated`.
@@ -65,6 +75,9 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 
 ## AGW-05 — Google identity and Hub access shared package
 
+> Superseded for the games by [AGW-08](iterations.md#agw-08--public-games-and-hub-managed-oidc-clients); retained as delivery history.
+
+> Superseded for Pocha Score and Card Wars by [AGW-08](iterations.md#agw-08--public-games-and-hub-managed-oidc-clients); retained as delivery history.
 - Estado: `validated`.
 - Objetivo: compartir Google OAuth y la comprobación de permisos de Hub e integrarlos obligatoriamente en Pocha Score y Card Wars.
 - Rutas: `packages/identity/**`, manifiestos y lockfile raíz, configuración Turbo, `apps/{pocha-score,card-wars,damaca-hub}/**` y planes afectados.

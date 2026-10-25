@@ -5,6 +5,7 @@
   "scripts": {
     "build": "bun run --bun next build --webpack",
     "db:ensure-indexes": "bun --conditions=react-server run scripts/ensure-indexes.ts",
+    "db:migrate-public-games": "bun --conditions=react-server run scripts/migrate-public-games.ts",
     "dev": "bun run --bun next dev --port 3005",
     "knip": "knip",
     "start": "bun run --bun next start",

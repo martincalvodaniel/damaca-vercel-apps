@@ -5,22 +5,27 @@ import { oauthProvider } from "@better-auth/oauth-provider"
 import { type BetterAuthOptions, betterAuth } from "better-auth"
 import { nextCookies } from "better-auth/next-js"
 import { jwt } from "better-auth/plugins"
+import { appIdSchema } from "./contract"
 import { validateServiceUrl } from "./hub-client"
-import { type OidcClient, oidcClientsSchema } from "./registry"
+
+export interface HubOidcClient {
+  appId: string
+  clientId: string
+  clientSecretHash: string
+  redirectUri: string
+  enabled: boolean
+}
 
 export function createHubIdentity(configuration: {
   baseUrl: string
   secret: string
   googleClientId: string
   googleClientSecret: string
-  clients: OidcClient[]
+  resolveClient: (clientId: string) => Promise<HubOidcClient | null>
   database: BetterAuthOptions["database"]
   isAllowed: (appId: string, email: string) => Promise<boolean>
 }) {
   validateServiceUrl(configuration.baseUrl)
-  const clients = oidcClientsSchema.parse(configuration.clients)
-  if (clients.some((client) => client.clientSecret === configuration.secret))
-    throw new Error("Hub session and client secrets must be independent")
   const hashSecret = (value: string) =>
     createHash("sha256").update(value).digest("base64url")
   return betterAuth({
@@ -88,16 +93,14 @@ export function createHubIdentity(configuration: {
           {
             clientDiscovery: {
               id: "damaca-configured-clients",
-              matches: (clientId) =>
-                clients.some((client) => client.clientId === clientId),
+              matches: () => true,
               resolve: async (_context, clientId) => {
-                const client = clients.find(
-                  (entry) => entry.clientId === clientId
-                )
-                if (!client) return null
+                const client = await configuration.resolveClient(clientId)
+                if (!client?.enabled) return null
+                appIdSchema.parse(client.appId)
                 return {
                   clientId: client.clientId,
-                  clientSecret: hashSecret(client.clientSecret),
+                  clientSecret: client.clientSecretHash,
                   clientDiscoveryId: "damaca-configured-clients",
                   redirectUris: [client.redirectUri],
                   scopes: ["openid", "email", "profile", "offline_access"],
@@ -114,14 +117,16 @@ export function createHubIdentity(configuration: {
           },
         ],
         customUserInfoClaims: async ({ user, jwt: token }) => {
-          const client = clients.find(
-            (entry) => entry.clientId === token.client_id
-          )
+          let client: HubOidcClient | null = null
           let allowed = false
           let available = true
           try {
+            client =
+              typeof token.client_id === "string"
+                ? await configuration.resolveClient(token.client_id)
+                : null
             allowed = Boolean(
-              client &&
+              client?.enabled &&
                 user.emailVerified &&
                 (await configuration.isAllowed(client.appId, user.email))
             )

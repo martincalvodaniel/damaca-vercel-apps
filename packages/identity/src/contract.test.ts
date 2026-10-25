@@ -38,14 +38,14 @@ it("rejects unsafe redirects and loops into auth handlers", () => {
 
 it("requires isolated clients and exact callback registration", () => {
   const first = {
-    appId: "pocha-score",
-    clientId: "pocha-score-local",
+    appId: "test-application",
+    clientId: "test-client-local",
     clientSecret: "a".repeat(32),
     redirectUri: "http://localhost:3003/api/auth/callback/damaca-hub",
   }
   const second = {
-    appId: "card-wars",
-    clientId: "card-wars-local",
+    appId: "another-application",
+    clientId: "another-client",
     clientSecret: "b".repeat(32),
     redirectUri: "http://localhost:3004/api/auth/callback/damaca-hub",
   }

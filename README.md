@@ -60,4 +60,4 @@ Copy an app's checked-in `.env.example` (or `.env.local.example`) to its local `
 
 ## Shared identity
 
-[The identity package](packages/identity/README.md) centralizes Google in Damaca Hub and provides mandatory OIDC login and app-specific authorization for Pocha Score and Card Wars. These apps now run as Next.js servers while preserving local IndexedDB records and installation. Configure their independent Hub clients before use; product access requires connectivity. The app generator's local-PWA mode remains static and unauthenticated.
+[The identity package](packages/identity/README.md) provides reusable Hub OIDC support. Pocha Score and Card Wars are public static PWAs with local IndexedDB records and offline access; they do not use social login. The Hub keeps Google login for its catalog and administrators manage OIDC clients for other existing applications there.

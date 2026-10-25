@@ -3,11 +3,19 @@ import { ErrorBanner } from "@/components/ui/error-banner"
 import { ApplicationAdminCard } from "@/features/admin/components/application-admin-card"
 import { requireAdminSession } from "@/lib/auth/session"
 import { listApplicationAdminData } from "@/lib/db/hub"
+import { listOidcClients } from "@/lib/db/oidc-clients"
 
 export async function AdminScreen() {
   await requireAdminSession()
   try {
-    const applications = await listApplicationAdminData()
+    const clients = await listOidcClients()
+    const clientsByApp = new Map<string, typeof clients>()
+    for (const client of clients) {
+      const entries = clientsByApp.get(client.appId) ?? []
+      entries.push(client)
+      clientsByApp.set(client.appId, entries)
+    }
+    const applications = await listApplicationAdminData(clientsByApp)
     return (
       <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-6 pb-24 sm:px-8 md:py-10">
         <Link

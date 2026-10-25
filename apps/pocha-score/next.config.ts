@@ -1,7 +1,8 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@damaca/identity"],
+  output: "export",
+  trailingSlash: true,
 }
 
 export default nextConfig

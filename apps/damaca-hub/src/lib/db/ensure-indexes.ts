@@ -18,6 +18,21 @@ export interface IndexSpec {
 
 export const INDEX_SPECS: readonly IndexSpec[] = [
   {
+    collection: "hub_oidc_clients",
+    keys: { appId: 1, environment: 1 },
+    options: { name: "hub_oidc_app_environment_unique", unique: true },
+  },
+  {
+    collection: "hub_oidc_clients",
+    keys: { clientId: 1 },
+    options: { name: "hub_oidc_client_id_unique", unique: true },
+  },
+  {
+    collection: "hub_oidc_clients",
+    keys: { redirectUri: 1 },
+    options: { name: "hub_oidc_redirect_uri_unique", unique: true },
+  },
+  {
     collection: "applications",
     keys: { id: 1 },
     options: { name: "application_id_unique", unique: true },

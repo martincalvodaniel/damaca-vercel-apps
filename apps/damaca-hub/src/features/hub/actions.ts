@@ -5,17 +5,20 @@ import { isAdminEmail } from "@/lib/auth/access"
 import { getVerifiedSession } from "@/lib/auth/session"
 import {
   changeApplicationAccess,
+  isPublicApplication,
   listApplications,
   resolveApplicationRequest,
   saveApplication,
   submitApplicationRequest,
 } from "@/lib/db/hub"
+import { createOidcClient, updateOidcClient } from "@/lib/db/oidc-clients"
 import {
   applicationAccessMutationSchema,
   applicationMutationSchema,
   applicationRequestMutationSchema,
   applicationRequestReviewSchema,
 } from "@/schemas/hub"
+import { type OidcActionState, oidcClientMutationSchema } from "@/schemas/oidc"
 import type { AccessActionState } from "@/types/access"
 
 const invalidState: AccessActionState = {
@@ -66,6 +69,8 @@ export async function requestApplicationAccess(
     )
     if (!application)
       return { status: "error", message: "This application is unavailable." }
+    if (application.publicAccess)
+      return { status: "error", message: "This application is public." }
     const result = await submitApplicationRequest(
       application.id,
       session.user.email
@@ -199,6 +204,78 @@ export async function reviewHubRequest(
     return {
       status: "error",
       message: "Could not review this request. Please try again.",
+    }
+  }
+}
+
+export async function manageHubOidcClient(
+  _previous: OidcActionState,
+  formData: FormData
+): Promise<OidcActionState> {
+  const session = await requireAdministrator()
+  if (!session)
+    return { status: "error", message: "Administrator access is required." }
+  const parsed = oidcClientMutationSchema.safeParse(
+    Object.fromEntries(formData)
+  )
+  if (!parsed.success)
+    return { status: "error", message: "The OIDC client details are invalid." }
+  const input = parsed.data
+  if (isPublicApplication(input.appId))
+    return {
+      status: "error",
+      message: "Public applications cannot have OIDC clients.",
+    }
+  try {
+    const application = (await listApplications()).find(
+      (entry) => entry.id === input.appId && entry.active
+    )
+    if (!application)
+      return { status: "error", message: "This application is unavailable." }
+    if (input.operation === "create") {
+      const client = await createOidcClient({
+        appId: input.appId,
+        environment: input.environment,
+        redirectUri: input.redirectUri ?? "",
+      })
+      revalidatePath("/admin")
+      return {
+        status: "success",
+        message:
+          "OIDC client created. Copy its secret now; it will not be shown again.",
+        clientSecret: client.clientSecret,
+      }
+    }
+    const changed = await updateOidcClient({
+      appId: input.appId,
+      environment: input.environment,
+      clientId: input.clientId ?? "",
+      revision: input.revision,
+      operation: input.operation,
+      redirectUri: input.redirectUri,
+    })
+    if (!changed)
+      return {
+        status: "error",
+        message:
+          "This client changed in another session. Refresh and try again.",
+      }
+    revalidatePath("/admin")
+    return {
+      status: "success",
+      message: changed.clientSecret
+        ? "Secret rotated and existing tokens revoked. Copy the new secret now."
+        : input.operation === "disable"
+          ? "Client disabled and existing tokens revoked."
+          : input.operation === "enable"
+            ? "Client enabled."
+            : "Callback saved.",
+      ...(changed.clientSecret ? { clientSecret: changed.clientSecret } : {}),
+    }
+  } catch {
+    return {
+      status: "error",
+      message: "Could not update this OIDC client. Refresh and try again.",
     }
   }
 }

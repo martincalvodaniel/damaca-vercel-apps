@@ -14,4 +14,4 @@ This file is the sole source of iteration status. Follow the [root workflow](../
 
 ## Shared consumer integration AGW-05
 
-The current human request authorizes mandatory Google authentication and Hub authorization for Pocha Score and Card Wars through the central Hub OIDC provider. This supersedes the previous delivery's exclusion of consumer integration. Google is configured only in Hub; consumers use independent OIDC clients and sessions. Primary status and evidence live in [root AGW-05](../../../plan/iterations.md#agw-05--google-identity-and-hub-access-shared-package) and [root delivery log](../../../plan/iteration-log.md#agw-05-google-identity-and-hub-access).
+AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that decision; the games are public and offline. Hub-managed OIDC clients remain available for existing private apps. See [root AGW-08](../../../plan/iterations.md#agw-08--public-games-and-hub-managed-oidc-clients).

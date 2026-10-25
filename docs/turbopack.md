@@ -102,4 +102,4 @@ run or restored cache artifact alone does not prove offline behavior.
 
 ## Hub-connected game applications
 
-Pocha Score and Card Wars now build as Next.js servers and use `packages/identity` for central Hub OIDC. Their build runs the shared package dependency and emits a network-only `public/sw.js`; root cache outputs include it and app-scoped Turbo environment keys include the independent identity configuration. Do not deploy their previous `out/` directory. The local-PWA generator base remains static and unchanged. See [identity rollout instructions](../packages/identity/README.md) for credentials, callbacks, protected-response caching and legacy offline copies.
+Pocha Score and Card Wars build static `out/` exports and generate their offline service workers after export. Their builds no longer depend on `packages/identity` or app-scoped auth environment keys. See [identity package notes](../packages/identity/README.md) for Hub-managed clients used by future/private consumers.

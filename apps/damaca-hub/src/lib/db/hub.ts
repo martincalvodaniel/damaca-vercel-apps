@@ -8,6 +8,12 @@ import type {
   AppRequestStatus,
 } from "@/types/access"
 
+export const PUBLIC_APPLICATION_IDS = new Set(["pocha-score", "card-wars"])
+
+export function isPublicApplication(appId: string): boolean {
+  return PUBLIC_APPLICATION_IDS.has(appId)
+}
+
 interface ApplicationDocument {
   id: string
   name: string
@@ -16,6 +22,7 @@ interface ApplicationDocument {
   preproductionUrl: string | null
   order: number
   active: boolean
+  publicAccess?: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -70,6 +77,7 @@ const APPLICATION_SEEDS: readonly Omit<
     preproductionUrl: null,
     order: 40,
     active: true,
+    publicAccess: true,
   },
   {
     id: "card-wars",
@@ -79,6 +87,7 @@ const APPLICATION_SEEDS: readonly Omit<
     preproductionUrl: null,
     order: 50,
     active: true,
+    publicAccess: true,
   },
 ]
 
@@ -99,6 +108,7 @@ function toApplication(document: ApplicationDocument): ApplicationEntry {
     preproductionUrl: document.preproductionUrl,
     order: document.order,
     active: document.active,
+    publicAccess: document.publicAccess ?? isPublicApplication(document.id),
     accessStatus: null,
   }
 }
@@ -128,7 +138,7 @@ export async function listApplications(): Promise<ApplicationEntry[]> {
 }
 
 export async function saveApplication(
-  application: Omit<ApplicationEntry, "accessStatus">
+  application: Omit<ApplicationEntry, "accessStatus" | "publicAccess">
 ): Promise<void> {
   const collection = await applicationCollection()
   const result = await collection.updateOne(
@@ -162,6 +172,7 @@ export async function submitApplicationRequest(
   appId: string,
   email: string
 ): Promise<{ created: boolean; status: "pending" | "approved" }> {
+  if (isPublicApplication(appId)) throw new Error("Application is public")
   const collection = await accessCollection()
   const normalizedEmail = accessEmailSchema.parse(email)
   const application = await (await applicationCollection()).findOne(
@@ -217,6 +228,7 @@ export async function resolveApplicationRequest(
   decision: "approve" | "reject",
   resolvedBy: string
 ): Promise<boolean> {
+  if (isPublicApplication(appId)) return false
   const application = await (await applicationCollection()).findOne(
     { id: appId },
     { projection: { id: 1 } }
@@ -246,6 +258,7 @@ export async function changeApplicationAccess(
   operation: "grant" | "revoke",
   actorEmail: string
 ): Promise<boolean> {
+  if (isPublicApplication(appId)) return false
   const collection = await accessCollection()
   const normalizedEmail = accessEmailSchema.parse(email)
   const application = await (await applicationCollection()).findOne(
@@ -283,9 +296,12 @@ export async function changeApplicationAccess(
   return true
 }
 
-export async function listApplicationAdminData(): Promise<
-  ApplicationAdminData[]
-> {
+export async function listApplicationAdminData(
+  oidcClientsByApp: Map<
+    string,
+    import("@/types/access").OidcClientSummary[]
+  > = new Map()
+): Promise<ApplicationAdminData[]> {
   const applications = await listApplications()
   const documents = await (await accessCollection())
     .find({})
@@ -321,6 +337,7 @@ export async function listApplicationAdminData(): Promise<
             requestedAt: entry.requestedAt.toISOString(),
           }
         }),
+      oidcClients: oidcClientsByApp.get(app.id) ?? [],
     }
   })
 }
@@ -329,6 +346,7 @@ export async function hasApplicationAccess(
   appId: string,
   email: string
 ): Promise<boolean> {
+  if (isPublicApplication(appId)) return false
   const application = await (await applicationCollection()).findOne({
     id: appId,
     active: true,

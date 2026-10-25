@@ -5,14 +5,17 @@
 import { useId, useState } from "react"
 import { usePwa } from "@/lib/pwa/context"
 
-const installationMessages = {
-  preparing: "Preparando la instalación…",
+const offlineMessages = {
+  preparing:
+    "Preparando el acceso sin conexión… Deja la app abierta hasta terminar.",
   ready:
-    "App preparada. Necesitas conexión para comprobar tu sesión y permiso.",
-  error: "No se pudo preparar la app. Vuelve a abrirla con conexión.",
+    "Lista para usar sin conexión. Puedes abrir la app aunque no tengas internet.",
+  error:
+    "No se pudo preparar el modo sin conexión. Abre la app con internet para reintentar.",
   unsupported:
-    "La instalación requiere un navegador compatible y HTTPS o localhost.",
-  development: "La instalación está disponible en producción.",
+    "El modo sin conexión necesita un navegador compatible y HTTPS o localhost.",
+  development:
+    "El modo sin conexión está disponible en la vista previa de producción.",
 } as const
 
 export function InstallSettings() {
@@ -25,10 +28,10 @@ export function InstallSettings() {
       className="rounded-xl border border-[#9fb493] bg-white/70 p-2 text-[#21352d]"
     >
       <h2 id={headingId} className="text-lg font-semibold">
-        Instalación y conexión
+        Instalación y modo sin conexión
       </h2>
       <p role="status" className="mt-1 text-xs leading-5 text-[#4e6450]">
-        {installationMessages[pwa.status]}
+        {offlineMessages[pwa.status]}
       </p>
       {pwa.installed ? (
         <p className="mt-3 text-sm">

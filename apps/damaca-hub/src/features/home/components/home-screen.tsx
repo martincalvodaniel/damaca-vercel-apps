@@ -2,7 +2,11 @@ import { ErrorBanner } from "@/components/ui/error-banner"
 import { ApplicationCard } from "@/features/home/components/application-card"
 import { isAdminEmail } from "@/lib/auth/access"
 import { getVerifiedSession } from "@/lib/auth/session"
-import { getApplicationStatus, listApplications } from "@/lib/db/hub"
+import {
+  getApplicationStatus,
+  isPublicApplication,
+  listApplications,
+} from "@/lib/db/hub"
 import type { ApplicationEntry, AppRequestStatus } from "@/types/access"
 
 export async function HomeScreen() {
@@ -56,7 +60,9 @@ export async function HomeScreen() {
                   ...application,
                   accessStatus: isAdmin
                     ? "approved"
-                    : (statuses.get(application.id) ?? null),
+                    : isPublicApplication(application.id)
+                      ? null
+                      : (statuses.get(application.id) ?? null),
                 }}
                 isAdmin={isAdmin}
               />

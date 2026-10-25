@@ -8,6 +8,7 @@ export interface ApplicationEntry {
   preproductionUrl: string | null
   order: number
   active: boolean
+  publicAccess: boolean
   accessStatus: AppRequestStatus | null
 }
 
@@ -34,4 +35,14 @@ export interface ApplicationAdminData {
   app: ApplicationEntry
   grants: ApplicationAccessEntry[]
   requests: ApplicationAccessRequestEntry[]
+  oidcClients: OidcClientSummary[]
+}
+
+export interface OidcClientSummary {
+  appId: string
+  clientId: string
+  environment: "production" | "int"
+  redirectUri: string
+  enabled: boolean
+  revision: number
 }
