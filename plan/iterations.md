@@ -6,11 +6,13 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 
 - Estado: `validated`.
 - Objetivo: crear favicons propios para juegos y Hub, actualizar sus iconos PWA y revisar los del resto de aplicaciones, según ampliación explícita del usuario.
-- Rutas: iconos, manifiestos y metadatos de las seis apps, `scripts/generate-app-icons.ts`, configuración Bun y planificación raíz/apps.
+- Rutas: iconos, manifiestos y metadatos de las seis apps, `scripts/generate-app-icons.ts`, configuración Bun, `.github/workflows/ci.yml` y planificación raíz/apps.
 - Dependencias: recursos vectoriales locales; conservar las identidades existentes de Card Wars y ambas Dalis. Sharp ya está autorizado y presente en el catálogo; herramienta común en desarrollo. Capacidad inicial: 67% de 5h y 86% de 7d; corte dentro de reservas.
 - Aceptación: cada app tiene favicon propio SVG y fallback ICO 16/32/48, Apple Touch Icon y recursos PNG de instalación; las tres PWA existentes declaran iconos normales y maskable seguros; Next.js publica los metadatos y recursos; generación compartida reproducible, sin cambios de almacenamiento ni funcionalidad offline.
 - Validación prevista: inspección visual a tamaños de pestaña/instalación, estructura ICO y dimensiones/opacidad PNG, lint, tipos y builds de las seis apps; pruebas existentes del generador offline; comprobar iconos en exports y metadatos generados; `git diff --check`.
 - Evidencia: [registro](iteration-log.md#agw-10-application-favicons).
+- Seguimiento de despliegue: corregido TS2307 observado en Vercel con `6e9d659`: retirado el adaptador que importaba el generador raíz en la compilación de Dalis. Seis instalaciones filtradas limpias y sus tipos pasan; build de Dalis desde instalación filtrada validado con Webpack.
+- Regresión: CI comprobará los tipos de cada app con una instalación filtrada independiente; las apps no deben importar herramientas de mantenimiento que dependan del entorno de desarrollo raíz.
 
 ## AGW-09 — Restore global lint success
 

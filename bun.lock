@@ -114,7 +114,6 @@
         "@types/react-dom": "catalog:",
         "@vercel/config": "catalog:",
         "knip": "catalog:",
-        "sharp": "catalog:",
         "tailwindcss": "catalog:",
         "turbo": "2.11.10",
         "typescript": "catalog:",

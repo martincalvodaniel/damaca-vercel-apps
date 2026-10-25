@@ -147,6 +147,15 @@ bun run turbo ls
 bun run turbo run build --filter=@damaca/dalis-home-management --dry=json
 ```
 
+CI also installs and type-checks each app independently to catch imports that accidentally depend on root development tools. Reproduce this check in a clean checkout, without a previous full install:
+
+```sh
+bun install --frozen-lockfile --filter @damaca/dalis-tasks-events
+bun run --filter @damaca/dalis-tasks-events type-check
+```
+
+Here `--filter` precedes the command so Bun runs the app's script directly, without requiring the root Turbo executable. Root maintenance scripts such as `icons:generate` stay outside application TypeScript import graphs; deployments use their committed output.
+
 A meaningful remote-cache verification builds once, then repeats with local cache
 reads disabled, for example using `--cache=remote:rw`. Confirm the task logs show a
 remote hit and that the expected artifacts, including service workers, are present.

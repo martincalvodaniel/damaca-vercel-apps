@@ -10,6 +10,33 @@ permissions:
   contents: read
 
 jobs:
+  filtered-type-check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        workspace:
+          - "@damaca/billing-poc"
+          - "@damaca/card-wars"
+          - "@damaca/dalis-home-management"
+          - "@damaca/dalis-tasks-events"
+          - "@damaca/damaca-hub"
+          - "@damaca/pocha-score"
+    env:
+      APP_WORKSPACE: ${{ matrix.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install only the app workspace
+        run: bun install --frozen-lockfile --filter "$APP_WORKSPACE"
+      - name: Type check without root development dependencies
+        run: bun run --filter "$APP_WORKSPACE" type-check
+
   validate:
     runs-on: ubuntu-latest
     steps:

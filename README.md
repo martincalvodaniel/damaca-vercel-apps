@@ -34,6 +34,8 @@ Run `bun run generate:app` and select `mongo-google` for Google sign-in with Mon
 
 Run `bun run icons:generate` to regenerate application favicons (16/32/48-pixel ICO), installation PNGs (192/512), opaque maskable icons (512), and Apple Touch Icons (180) from local SVG sources. Pass an app identifier to update only that app, for example `bun run icons:generate pocha-score`. The source is `src/app/icon.svg`, except Dalis Tasks & Events, which keeps `public/dalis-icon.svg`. Existing PWA manifests use the installation assets; other apps expose Apple icons through Next.js file metadata without adding offline behavior.
 
+Icon generation is a root maintenance task and requires a full `bun install --frozen-lockfile`. App deployments use the committed assets and do not import the generator or require root development dependencies.
+
 The prompts can also be answered in one command:
 
 ```sh

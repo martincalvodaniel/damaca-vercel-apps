@@ -27,6 +27,8 @@ AGW-09 restablece el lint global sin errores de formato. Los avisos y diagnósti
 
 Las seis aplicaciones disponen de favicons propios, recursos de instalación y Apple Touch Icon. Las PWA existentes incluyen iconos maskable; el generador compartido `bun run icons:generate` usa SVG locales y Sharp del catálogo. Entrega transversal [AGW-10](iterations.md#agw-10--application-favicons).
 
+El generador de iconos se ejecuta desde el entorno de desarrollo raíz; las apps compilan de forma independiente con sus instalaciones filtradas de Vercel. CI comprueba los tipos con una instalación aislada por app.
+
 ## Previous identity decision (historical, superseded by AGW-08)
 
 - AGW-05 added a reusable Google/OIDC provider and consumer modules. It required game login and withdrew offline access.

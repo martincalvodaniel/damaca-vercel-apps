@@ -14,6 +14,15 @@ Los hechos de publicación se verifican en Git. El estado normativo está en [it
 - Entrega: commit, push a `origin/int` y coincidencia del SHA remoto se verifican en Git al cierre; `main` permanece bajo gestión humana.
 - Capacidad inicial: 67% de 5h y 86% de 7d; lectura durante validación: 60% y 85%, dentro de las reservas.
 
+### Deployment follow-up — isolated dependencies
+
+- Regresión observada por el usuario: el build de Vercel `6e9d659` compila con Turbopack pero falla en TypeScript con `../../scripts/generate-app-icons.ts(4,19): TS2307: Cannot find module 'sharp'`. El adaptador manual dentro de `apps/dalis-tasks-events/scripts/` importaba la herramienta raíz, incorporándola al grafo de tipos de la app. Una instalación filtrada proporciona Sharp en la app, pero no en la raíz desde la que ese módulo lo resuelve; la instalación completa local ocultó el fallo.
+- Reproducción antes de corregir: copia desechable de `git archive HEAD`; `bun install --frozen-lockfile --filter @damaca/dalis-tasks-events` y `bun run --filter @damaca/dalis-tasks-events type-check` reproducen exactamente TS2307. Resolución desde la app encuentra Sharp, resolución desde raíz falla y el lockfile coincide. El primer intento de usar el script Turbo raíz también confirma que una instalación filtrada no incluye el ejecutable raíz; para esta regresión se usa el filtro nativo de Bun antes del comando.
+- Corrección: eliminado el adaptador redundante `generate-pwa-icons.ts` y su dependencia directa Sharp en Dalis; generación única mediante el comando raíz documentado. CI añade una matriz con seis instalaciones filtradas limpias y comprobación directa de tipos, sin instalar herramientas raíz. README y guía de despliegue explican la separación entre mantenimiento y compilación de apps. No se cambian iconos, credenciales ni configuración Vercel.
+- Verificación: seis copias nuevas con archivos versionados actuales, sin `.env.local` ni `node_modules` previo; instalación filtrada y tipos pasan en todas, con Sharp ausente en raíz. Build completo de Dalis desde esa instalación filtrada con `bun run --filter @damaca/dalis-tasks-events build --webpack` pasa, genera el worker de 47 recursos y solo usa valores de entorno ficticios sin acceso a bases reales. Tipos de Dalis desde el workspace habitual pasan; `bun run lint --diagnostic-level=error` revisa 2147 archivos sin errores; regeneración raíz de Dalis no modifica los recursos. Biome de archivos editados, enlaces locales y diff revisados. No se repiten pruebas de negocio porque la regresión corresponde al aislamiento de instalación/compilación y queda cubierta en su punto real de fallo.
+- Entrega: publicación de la corrección y SHA remoto se comprueban en Git al cierre. Los builds remotos de Vercel y la matriz alojada de GitHub se distinguen de las comprobaciones aisladas locales.
+- Capacidad al reanudar: 51% de 5h y 83% de 7d, dentro de reservas. Se eliminan las copias desechables tras verificar el resultado.
+
 <a id="agw-09-restore-global-lint-success"></a>
 ## AGW-09 — Restore global lint success
 
