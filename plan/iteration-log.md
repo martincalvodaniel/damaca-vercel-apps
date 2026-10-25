@@ -23,6 +23,14 @@ Los hechos de publicación se verifican en Git. El estado normativo está en [it
 - Entrega: publicación de la corrección y SHA remoto se comprueban en Git al cierre. Los builds remotos de Vercel y la matriz alojada de GitHub se distinguen de las comprobaciones aisladas locales.
 - Capacidad al reanudar: 51% de 5h y 83% de 7d, dentro de reservas. Se eliminan las copias desechables tras verificar el resultado.
 
+### Hub catalog icons
+
+- Petición posterior: mostrar los iconos propios de cada aplicación en el Hub. `ApplicationIcon` centraliza su presentación a 48×48 en catálogo y administración, con tamaños reservados, SVG sin optimización raster y texto alternativo vacío por ser decorativo junto al nombre. Un identificador desconocido usa el icono del Hub; los IDs conocidos se resuelven desde una lista local.
+- El generador raíz sincroniza cinco SVG canónicos en `apps/damaca-hub/public/app-icons/`; las fichas no leen el código de otras apps ni solicitan favicons a dominios de producción/preview. Recursos y componente quedan dentro del despliegue independiente del Hub. README y plan del Hub describen el uso y regeneración.
+- Validación: `bun run icons:generate` mantiene los otros recursos y genera las cinco copias, comprobadas byte a byte contra sus fuentes; `bun run test --filter=@damaca/damaca-hub` pasa 22 tests/69 assertions; tipos de Hub e identidad (2 tareas) y build filtrado de Hub pasan; lint global sin errores (2153 archivos), Biome de archivos editados, enlaces y diff revisados.
+- Navegador: vista temporal con componentes reales `HomeScreen`/`ApplicationAdminCard` y CSS del build, datos sintéticos y acciones inertes, sin sesión ni Mongo reales. Inspección visual de catálogo y administración a 1280 y 390 píxeles; cinco iconos del catálogo cargados a 48×48; sin desbordamiento horizontal en ambas vistas. Los iconos de administración fuera de pantalla conservan carga diferida normal. No se acredita una sesión administrativa real. Servidor y fixture temporales retirados al terminar.
+- Capacidad al inicio de esta ampliación: 37% de 5h y 81% de 7d. Registro principal y publicación en `int` continúan bajo AGW-10; `main` no se modifica.
+
 <a id="agw-09-restore-global-lint-success"></a>
 ## AGW-09 — Restore global lint success
 

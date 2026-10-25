@@ -2,11 +2,18 @@ import { ApplicationEditor } from "@/features/admin/components/application-edito
 import { ApplicationGrantForm } from "@/features/admin/components/application-grant-form"
 import { ApplicationRequestReviewForm } from "@/features/admin/components/application-request-review-form"
 import { OidcClientManager } from "@/features/admin/components/oidc-client-manager"
+import { ApplicationIcon } from "@/features/hub/components/application-icon"
 import type { ApplicationAdminData } from "@/types/access"
 
 export function ApplicationAdminCard({ data }: { data: ApplicationAdminData }) {
   return (
     <section className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex min-w-0 items-center gap-3">
+        <ApplicationIcon appId={data.app.id} />
+        <h2 className="min-w-0 break-words text-xl font-semibold tracking-tight">
+          {data.app.name}
+        </h2>
+      </div>
       <ApplicationEditor application={data.app} />
       {data.app.publicAccess ? (
         <p className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">

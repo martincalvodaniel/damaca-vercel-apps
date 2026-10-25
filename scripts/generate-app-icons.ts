@@ -69,6 +69,14 @@ export async function generateApplicationIcons(
     const source = await readFile(
       resolve(directory, "source" in app ? app.source : "src/app/icon.svg")
     )
+    if (app.name !== "damaca-hub") {
+      const catalogDirectory = resolve(
+        rootDirectory,
+        "apps/damaca-hub/public/app-icons"
+      )
+      await mkdir(catalogDirectory, { recursive: true })
+      await writeFile(resolve(catalogDirectory, `${app.name}.svg`), source)
+    }
     const isTasks = app.name === "dalis-tasks-events"
     if (isTasks) {
       await writeFile(resolve(directory, "public/favicon.svg"), source)

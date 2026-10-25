@@ -13,6 +13,7 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Evidencia: [registro](iteration-log.md#agw-10-application-favicons).
 - Seguimiento de despliegue: corregido TS2307 observado en Vercel con `6e9d659`: retirado el adaptador que importaba el generador raíz en la compilación de Dalis. Seis instalaciones filtradas limpias y sus tipos pasan; build de Dalis desde instalación filtrada validado con Webpack.
 - Regresión: CI comprobará los tipos de cada app con una instalación filtrada independiente; las apps no deben importar herramientas de mantenimiento que dependan del entorno de desarrollo raíz.
+- Ampliación del Hub: mostrar los iconos propios junto al nombre de las aplicaciones en catálogo y administración, desde copias SVG locales actualizadas por el generador común. Validar assets, render responsive, lint, tipos y build del Hub; conservar aislamiento de despliegues y permisos.
 
 ## AGW-09 — Restore global lint success
 

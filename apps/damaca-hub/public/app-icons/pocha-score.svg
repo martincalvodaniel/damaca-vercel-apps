@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Pocha Score</title>
+  <rect width="64" height="64" rx="14" fill="#047857" />
+  <rect x="15" y="8" width="34" height="48" rx="5" fill="#fffbeb" />
+  <path d="m32 15 8 9-8 9-8-9z" fill="#d97706" />
+  <path d="M24 40h16m-16 8h10" fill="none" stroke="#047857" stroke-linecap="round" stroke-width="4" />
+</svg>

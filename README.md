@@ -36,6 +36,8 @@ Run `bun run icons:generate` to regenerate application favicons (16/32/48-pixel 
 
 Icon generation is a root maintenance task and requires a full `bun install --frozen-lockfile`. App deployments use the committed assets and do not import the generator or require root development dependencies.
 
+The same command synchronizes the catalog SVG copies in `apps/damaca-hub/public/app-icons/`. Hub cards serve these local files so icons work independently of each application's production and preview URLs.
+
 The prompts can also be answered in one command:
 
 ```sh

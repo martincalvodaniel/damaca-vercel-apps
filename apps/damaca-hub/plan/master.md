@@ -11,6 +11,7 @@ Damaca Hub is the authenticated directory for the monorepo's web applications an
 - Let users request access and resubmit after rejection or revocation for private applications. Let administrators approve, reject, grant, and revoke access.
 - Pocha Score and Card Wars are public links and do not use app grants or OIDC clients.
 - Let administrators manage persistent OIDC clients for existing private applications from the Hub.
+- Show each application's own local icon in the catalog and administration cards. Keep copies synchronized through the root icon generator and independent of application deployment URLs.
 
 ## Decisions
 

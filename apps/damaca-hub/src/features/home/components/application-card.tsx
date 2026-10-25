@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { AccessRequestForm } from "@/features/home/components/access-request-form"
+import { ApplicationIcon } from "@/features/hub/components/application-icon"
 import type { ApplicationEntry } from "@/types/access"
 
 export function ApplicationCard({
@@ -29,19 +30,20 @@ export function ApplicationCard({
 
   return (
     <article className="flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold tracking-tight">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-1 basis-52 items-center gap-3">
+          <ApplicationIcon appId={application.id} />
+          <h2 className="min-w-0 break-words text-xl font-semibold tracking-tight">
             {application.name}
           </h2>
-          <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-            {application.description}
-          </p>
         </div>
         <span className="shrink-0 rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
           {statusLabel}
         </span>
       </div>
+      <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+        {application.description}
+      </p>
       {!application.publicAccess ? (
         <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
           This application manages access independently.
