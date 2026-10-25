@@ -2,6 +2,15 @@
 
 Los hechos de publicación se verifican en Git. El estado normativo está en [iterations.md](iterations.md); este registro conserva evidencia, límites e incidentes observados.
 
+<a id="agw-07-provision-triage-labels"></a>
+## AGW-07 — Provision triage labels
+
+- Alcance: [aceptación AGW-07](iterations.md#agw-07--provision-triage-labels). El usuario renovó la sesión; `gh auth status --hostname github.com` y `gh api user --jq .login` confirman `martincalvodaniel` como cuenta activa válida.
+- Cambios remotos: creadas `needs-triage`, `needs-info`, `ready-for-agent` y `ready-for-human` mediante `gh label create --repo martincalvodaniel/damaca-vercel-apps`, con descripciones en inglés. Se conserva `wontfix` y las otras nueve etiquetas previas, incluidos colores y descripciones.
+- Evidencia: `gh label list --repo martincalvodaniel/damaca-vercel-apps --json name,color,description --limit 100` devuelve las catorce etiquetas, con los cinco roles configurados disponibles. El bloqueo de autenticación observado en AGW-06 queda resuelto; setup completado.
+- Validación documental: enlaces locales, coherencia y `git diff --check`; no corresponden builds ni tests de aplicaciones. Se revisan únicamente los dos archivos de planificación modificados para el commit; publicación y coincidencia del SHA de `origin/int` verificadas en Git al cierre.
+- Capacidad al reanudar (2026-10-25, comprobación de cierre de etiquetas a las 15:36 CET): 94% de 5h y 90% de 7d; reserva mínima respetada. La lectura final se comunica tras publicar.
+
 <a id="agw-06-configure-engineering-skills"></a>
 ## AGW-06 — Configure engineering skills
 

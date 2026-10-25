@@ -14,13 +14,13 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 
 ## AGW-07 — Provision triage labels
 
-- Estado: `blocked`.
+- Estado: `validated`.
 - Objetivo: crear las cuatro etiquetas de triaje ausentes en GitHub y conservar `wontfix`.
 - Rutas: etiquetas de `martincalvodaniel/damaca-vercel-apps` y registro raíz.
-- Dependencias: AGW-06; autenticar `gh` con una cuenta con permisos de escritura sobre el repositorio. La cuenta personal guardada no tiene sesión válida y la activa recibe HTTP 404 al crear etiquetas.
+- Dependencias: AGW-06; sesión personal renovada por el usuario y verificada como activa mediante `gh api user`. Capacidad al reanudar: 94% de 5h y 90% de 7d; corte estimado dentro de reservas.
 - Aceptación: las cinco etiquetas configuradas existen; se conservan las etiquetas previas.
 - Validación prevista: listar las etiquetas remotas tras crear únicamente las ausentes.
-- Evidencia: [incidente y siguiente paso](iteration-log.md#agw-06-configure-engineering-skills).
+- Evidencia: [registro](iteration-log.md#agw-07-provision-triage-labels).
 
 ## AGW-01 — Centralizar el flujo y el contrato documental
 
