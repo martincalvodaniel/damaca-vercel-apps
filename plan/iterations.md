@@ -27,7 +27,7 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 
 ## AGW-08 — Public games and Hub-managed OIDC clients
 
-- Estado: `in_progress`.
+- Estado: `validated`.
 - Objetivo: restaurar Pocha Score y Card Wars como PWAs públicas offline y mover la gestión de clientes OIDC del entorno al Hub para apps existentes.
 - Rutas: `packages/identity/**`, `apps/{damaca-hub,pocha-score,card-wars}/**`, `turbo.json`, documentación y planes raíz afectados.
 - Dependencias: reversión explícita de login obligatorio; almacenamiento Mongo del Hub disponible para persistencia real; dominios de producción e int se confirman en cada cliente.
