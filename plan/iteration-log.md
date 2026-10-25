@@ -2,6 +2,17 @@
 
 Los hechos de publicación se verifican en Git. El estado normativo está en [iterations.md](iterations.md); este registro conserva evidencia, límites e incidentes observados.
 
+<a id="agw-06-configure-engineering-skills"></a>
+## AGW-06 — Configure engineering skills
+
+- Alcance: [aceptación AGW-06](iterations.md#agw-06--configure-engineering-skills). Bloque `Agent skills` añadido a `AGENTS.md` por instrucción explícita del usuario; `CLAUDE.md` conserva su importación. Configuración creada en `docs/agents/` para GitHub Issues con repositorio explícito, cinco roles de triaje y dominio multi-contexto por app/paquete con creación diferida de glosarios y ADR.
+- Compatibilidad: las skills aportan métodos bajo el workflow raíz; Issues conserva solicitudes/especificaciones y los planes enlazan sin duplicar cuerpos. La preparación de un ticket no autoriza ejecución ni delegación. Las revisiones sin delegación se realizan secuencialmente; los modelos de ramas y concurrencia de `implement-spec` y `wayfinder` requieren acuerdo explícito sobre el workflow.
+- Etiquetas: consulta remota correcta; `wontfix` ya existe y se conserva. Crear `needs-triage` devuelve HTTP 404, por lo que el comando secuencial no llega a las otras tres creaciones. `gh auth status` con red confirma activa la cuenta `daniel-martin_mango`; la sesión de `martincalvodaniel` no es válida. Pendiente autenticar la cuenta con permisos y crear/verificar `needs-triage`, `needs-info`, `ready-for-agent` y `ready-for-human`. No se modifica la cuenta activa ni se sobrescriben etiquetas existentes.
+- Incidentes locales: la primera extracción del borrador falló por una expresión regular demasiado amplia antes de escribir configuración; corregida con cabecera limitada a una línea y aserciones sobre cantidad y rutas. Las consultas iniciales de red en sandbox fallaron; se repitieron con acceso a red y se distinguieron del fallo real de autorización.
+- Validación documental: enlaces locales y ancla de evidencia revisados; `git diff --check` y revisión del diff. `bun run lint --changed --since=c0c8e161f719ff595b35872c9a404affb4803bb7` no encuentra archivos compatibles con Biome (Markdown excluido/no soportado); no se contabiliza como lint de Markdown. Sin cambios de aplicaciones, no corresponden builds ni tests.
+- Publicación: commit y coincidencia del SHA remoto se verifican en Git durante el cierre. El corte documental AGW-06 queda validado; la provisión remota se separa como AGW-07, bloqueada por autenticación. La configuración completa sigue pendiente de ese corte.
+- Capacidad al iniciar: 96% de 5h y 90% de 7d restantes; corte documental dentro de reservas. La lectura final se comunica al cierre.
+
 <a id="agw-01-centralizar-el-flujo-y-el-contrato-documental"></a>
 ## AGW-01 — Centralizar el flujo y el contrato documental
 

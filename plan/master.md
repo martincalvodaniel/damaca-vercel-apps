@@ -9,6 +9,7 @@ Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y f
 - [workflow.md](workflow.md) es el único protocolo normativo. Los tres documentos de planificación tienen responsabilidades separadas descritas allí.
 - La política común conserva trabajo en `int`, cierre de iteraciones validadas con commit/push a `origin/int`, verificación del SHA remoto y reservas mínimas de capacidad de 7% en 5h y 2% en 7d. `main` sigue bajo gestión humana.
 - Trabajo secuencial por defecto; delegación solo con autorización explícita.
+- Las skills de ingeniería complementan el workflow raíz. [GitHub Issues](../docs/agents/issue-tracker.md) conserva solicitudes y especificaciones; los planes enlazan los tickets sin duplicarlos. Las [etiquetas de triaje](../docs/agents/triage-labels.md) expresan preparación, no autorización de ejecución. La [documentación de dominio](../docs/agents/domain.md) usa contextos por aplicación o paquete y se crea cuando se resuelven términos o decisiones. Los modelos de ramas o concurrencia de otras skills requieren acordar explícitamente su compatibilidad con el workflow antes de usarlos.
 - Toda app bajo `apps/*` adopta `plan/master.md`, `plan/iterations.md` y `plan/iteration-log.md` antes de su primera implementación no trivial.
 - [Turborepo Generate](https://turborepo.dev/docs/reference/generate) crea apps desde dos bases: Google OAuth y MongoDB, o PWA local con IndexedDB. La configuración del generador vive fuera de `apps/*` y crea los tres documentos de planificación antes de cualquier trabajo de producto.
 

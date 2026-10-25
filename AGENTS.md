@@ -26,3 +26,17 @@
 - Use the root lint configuration. `bun run lint` checks the repository; narrow it
   explicitly with `--staged` or `--changed --since=<base>` as documented in the
   root workflow. Fix all findings in each edited file.
+
+## Agent skills
+
+### Issue tracker
+
+Before reading or publishing tickets, read [the GitHub Issues conventions](docs/agents/issue-tracker.md).
+
+### Triage labels
+
+Before assigning triage roles, read [the label mapping](docs/agents/triage-labels.md).
+
+### Domain docs
+
+Before exploring domain terminology or decisions, read [the multi-context domain rules](docs/agents/domain.md).

@@ -2,6 +2,26 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-06 — Configure engineering skills
+
+- Estado: `validated`.
+- Objetivo: configurar GitHub Issues, etiquetas de triaje y documentación multi-contexto para las skills de ingeniería, conservando el workflow raíz.
+- Rutas: `AGENTS.md`, `docs/agents/*.md` y los tres documentos de planificación raíz; etiquetas del repositorio GitHub configurado.
+- Dependencias: propuesta aprobada por el usuario, bloque solicitado explícitamente en `AGENTS.md`; acceso a GitHub. Capacidad inicial: 96% de 5h y 90% de 7d; entrega documental estimada dentro de las reservas mínimas.
+- Aceptación: configuración enlazada desde `AGENTS.md`; GitHub Issues con repositorio explícito; mapeo de las cinco etiquetas documentado sin modificar las existentes; layout multi-contexto con creación diferida de artefactos; compatibilidad explícita con planificación, delegación y Git del workflow raíz.
+- Validación prevista: enlaces locales, coherencia, consulta de etiquetas remotas, Biome de los archivos editados, `git diff --check`, revisión del diff y publicación verificada en `int`. Sin builds ni tests de aplicaciones por alcance exclusivamente documental.
+- Evidencia: [registro](iteration-log.md#agw-06-configure-engineering-skills).
+
+## AGW-07 — Provision triage labels
+
+- Estado: `blocked`.
+- Objetivo: crear las cuatro etiquetas de triaje ausentes en GitHub y conservar `wontfix`.
+- Rutas: etiquetas de `martincalvodaniel/damaca-vercel-apps` y registro raíz.
+- Dependencias: AGW-06; autenticar `gh` con una cuenta con permisos de escritura sobre el repositorio. La cuenta personal guardada no tiene sesión válida y la activa recibe HTTP 404 al crear etiquetas.
+- Aceptación: las cinco etiquetas configuradas existen; se conservan las etiquetas previas.
+- Validación prevista: listar las etiquetas remotas tras crear únicamente las ausentes.
+- Evidencia: [incidente y siguiente paso](iteration-log.md#agw-06-configure-engineering-skills).
+
 ## AGW-01 — Centralizar el flujo y el contrato documental
 
 - Estado: `validated`.
