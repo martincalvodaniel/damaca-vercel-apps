@@ -105,7 +105,7 @@ export function GamePlay({
         </p>
       ) : null}
       {!active ? (
-        <p className="rounded-lg bg-[#fff0b6] px-2 py-2 text-sm font-bold">
+        <p className="rounded-lg bg-[#fff0b6] px-2 py-2 text-sm font-bold text-[#21352d]">
           {game.status === "abandoned"
             ? "Partida abandonada"
             : `Ganó ${winner?.name ?? "—"}`}

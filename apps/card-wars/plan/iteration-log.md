@@ -25,3 +25,10 @@ Registra evidencia observada por iteración; no anticipes cambios no realizados.
 - `bun run type-check --filter=@damaca/card-wars`, Biome sobre los archivos cambiados y `bun run build --filter=@damaca/card-wars` pasan; la exportación estática sigue incluyendo Partidas e Historial y el worker incluye 53 recursos.
 - Inspección visual de escritorio a 1280×720 confirma el botón «Eliminar partida» en el marcador; la vista previa mostró la confirmación con los nombres. Se canceló la eliminación del registro sintético y la herramienta del navegador dejó de responder después del diálogo; no se completó una interacción de eliminación ni se inspeccionó un historial poblado en navegador. El repositorio cubre la operación de borrado en IndexedDB.
 - Turbo remoto no estuvo accesible; las tareas locales finalizaron correctamente.
+
+## 03 — Contraste del resultado en tema oscuro
+
+- El banner de resultado ahora fija texto `#21352d` sobre fondo `#fff0b6`, evitando heredar el texto claro del tema oscuro. Se aplica tanto al resultado abandonado como al ganador.
+- `bunx biome check` sobre el componente y los documentos; `bun run test --filter=@damaca/card-wars` (25 pruebas), `bun run type-check --filter=@damaca/card-wars` y `bun run build --filter=@damaca/card-wars` pasan. La exportación estática conserva sus rutas y worker de 53 recursos.
+- El contraste se corrigió explícitamente en el componente; no se repitió inspección visual del banner en navegador.
+- Turbo remoto no estuvo accesible; las tareas locales finalizaron correctamente.
