@@ -2,7 +2,7 @@
 
 ## Turbo task configuration
 
-The root [turbo.json](../turbo.json) applies to all five active workspaces:
+The root [turbo.json](../turbo.json) applies to all six active workspaces:
 
 | Task         | Scheduling and cache behavior                                                    |
 | ------------ | -------------------------------------------------------------------------------- |

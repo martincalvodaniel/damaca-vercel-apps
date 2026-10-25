@@ -17,7 +17,7 @@ scripts; it is not the Next.js bundler.
 
 ## How it is enabled here
 
-The catalog pins Next.js 16.4.3. All five app dev scripts invoke
+The catalog pins Next.js 16.4.3. All six app dev scripts invoke
 `bun run --bun next dev` with distinct ports. The normal build scripts invoke
 `bun run --bun next build`; `dalis-tasks-events` wraps Next.js in a custom build
 script. No current dev/build script passes `--webpack`.

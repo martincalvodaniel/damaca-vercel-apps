@@ -11,6 +11,7 @@ Monorepo for independent web applications. Applications stay in their own worksp
 | `@damaca/dalis-tasks-events`    | `apps/dalis-tasks-events`    |             3002 |
 | `@damaca/pocha-score`           | `apps/pocha-score`           |             3003 |
 | `@damaca/card-wars`             | `apps/card-wars`             |             3004 |
+| `@damaca/damaca-hub`            | `apps/damaca-hub`            |             3005 |
 
 ## Getting started
 

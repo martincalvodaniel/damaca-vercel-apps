@@ -14,7 +14,7 @@ Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y f
 
 ## Aplicaciones
 
-El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events`, `pocha-score` y `card-wars`. Las bases `mongo-google` y `local-pwa` viven en `turbo/generators/templates/`, fuera de `apps/*`, y crean nuevos workspaces bajo demanda. La lista de apps activas puede cambiar; la obligación documental aplica a todas las apps futuras. El alcance y registro de Card Wars se mantienen en [su plan](../apps/card-wars/plan/master.md).
+El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events`, `pocha-score`, `card-wars` y [Damaca Hub](../apps/damaca-hub/plan/master.md). Las bases `mongo-google` y `local-pwa` viven en `turbo/generators/templates/`, fuera de `apps/*`, y crean nuevos workspaces bajo demanda. La lista de apps activas puede cambiar; la obligación documental aplica a todas las apps futuras. El alcance y registro de producto se mantienen en cada plan de app.
 
 ## Exclusiones y dudas
 

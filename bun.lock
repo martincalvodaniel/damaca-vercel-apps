@@ -119,6 +119,33 @@
         "typescript": "catalog:",
       },
     },
+    "apps/damaca-hub": {
+      "name": "@damaca/damaca-hub",
+      "version": "0.1.0",
+      "dependencies": {
+        "@vercel/config": "catalog:",
+        "better-auth": "catalog:",
+        "mongodb": "catalog:",
+        "next": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "server-only": "catalog:",
+        "swr": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "@tailwindcss/postcss": "catalog:",
+        "@types/bun": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "knip": "catalog:",
+        "tailwindcss": "catalog:",
+        "turbo": "2.11.10",
+        "typescript": "catalog:",
+      },
+    },
     "apps/pocha-score": {
       "name": "@damaca/pocha-score",
       "version": "0.1.0",
@@ -220,6 +247,8 @@
     "@damaca/dalis-home-management": ["@damaca/dalis-home-management@workspace:apps/dalis-home-management"],
 
     "@damaca/dalis-tasks-events": ["@damaca/dalis-tasks-events@workspace:apps/dalis-tasks-events"],
+
+    "@damaca/damaca-hub": ["@damaca/damaca-hub@workspace:apps/damaca-hub"],
 
     "@damaca/pocha-score": ["@damaca/pocha-score@workspace:apps/pocha-score"],
 
