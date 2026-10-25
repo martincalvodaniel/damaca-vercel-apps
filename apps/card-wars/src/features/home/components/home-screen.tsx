@@ -12,6 +12,7 @@ import {
   undoLastLifeChange,
 } from "@/features/game/lib/game"
 import {
+  deleteGame,
   listGames,
   saveGame,
   createGame as storeGame,
@@ -132,6 +133,33 @@ export function HomeScreen() {
     await saveNext(selectedGame, finishGame(selectedGame, undefined))
   }
 
+  async function remove(game: CardWarsGame) {
+    const players = game.players.map((player) => player.name).join(" y ")
+    if (
+      !window.confirm(
+        `¿Eliminar definitivamente la partida de ${players}? Esta acción no se puede deshacer.`
+      )
+    )
+      return
+    setBusy(true)
+    setError("")
+    try {
+      await deleteGame(game.id, game.revision)
+      setGames((current) => current.filter((item) => item.id !== game.id))
+      setSelectedId(null)
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : "No se pudo eliminar la partida."
+      )
+      if (cause instanceof Error && cause.name === "GameConflictError")
+        await refresh()
+    } finally {
+      setBusy(false)
+    }
+  }
+
   if (selectedGame) {
     return (
       <>
@@ -150,6 +178,7 @@ export function HomeScreen() {
           onUndo={() => void undo()}
           onFinish={(winnerId) => void finish(winnerId)}
           onAbandon={() => void abandon()}
+          onDelete={() => void remove(selectedGame)}
           onBack={() => setSelectedId(null)}
         />
       </>
@@ -221,25 +250,44 @@ export function HomeScreen() {
           </p>
         ) : activeGames.length ? (
           activeGames.map((game) => (
-            <button
+            <div
               key={game.id}
-              type="button"
-              onClick={() => setSelectedId(game.id)}
-              className="grid min-h-16 grid-cols-[1fr_auto] items-center gap-x-2 rounded-lg border border-[#9fb493] bg-white/70 px-2 py-1 text-left text-[#21352d] focus-visible:outline-2"
+              className="grid min-h-16 grid-cols-[1fr_auto] items-center gap-x-2 rounded-lg border border-[#9fb493] bg-white/70 px-2 py-1 text-[#21352d]"
             >
-              <span className="truncate text-sm font-black">
-                {game.players[0].name} <span className="font-normal">vs</span>{" "}
-                {game.players[1].name}
-              </span>
-              <span className="row-span-2 rounded-md bg-[#dceec3] px-2 py-1 text-xs font-bold">
-                ▶ Seguir
-              </span>
-              <span className="text-xs text-[#4e6450]">
-                {game.lives[0]} · {game.lives[1]} vidas{" "}
-                <span className="px-1">·</span>{" "}
-                {formatLocalDate(game.startedAt)}
-              </span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setSelectedId(game.id)}
+                className="min-w-0 py-1 text-left focus-visible:outline-2"
+              >
+                <span className="block truncate text-sm font-black">
+                  {game.players[0].name} <span className="font-normal">vs</span>{" "}
+                  {game.players[1].name}
+                </span>
+                <span className="block text-xs text-[#4e6450]">
+                  {game.lives[0]} · {game.lives[1]} vidas{" "}
+                  <span className="px-1">·</span>{" "}
+                  {formatLocalDate(game.startedAt)}
+                </span>
+              </button>
+              <div className="flex flex-col items-end gap-1">
+                <button
+                  type="button"
+                  onClick={() => setSelectedId(game.id)}
+                  className="min-h-10 rounded-md bg-[#dceec3] px-2 py-1 text-xs font-bold focus-visible:outline-2"
+                >
+                  ▶ Seguir
+                </button>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void remove(game)}
+                  aria-label={`Eliminar partida de ${game.players[0].name} y ${game.players[1].name}`}
+                  className="min-h-10 px-2 text-[11px] font-semibold text-red-800 underline focus-visible:outline-2 disabled:opacity-40"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
           ))
         ) : (
           <div className="rounded-lg border border-dashed border-[#9fb493] px-3 py-5 text-center">

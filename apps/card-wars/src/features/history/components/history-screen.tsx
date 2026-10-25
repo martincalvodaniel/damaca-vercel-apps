@@ -1,14 +1,17 @@
+// biome-ignore-all lint/performance/noJsxPropsBind: Row handlers capture the selected local game action.
+
 "use client"
 
 import { useEffect, useState } from "react"
 import { formatLocalDate } from "@/features/game/lib/date"
-import { listGames } from "@/lib/storage/games"
+import { deleteGame, listGames } from "@/lib/storage/games"
 import type { CardWarsGame } from "@/schemas/game"
 
 export function HistoryScreen() {
   const [games, setGames] = useState<CardWarsGame[]>([])
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(true)
+  const [busyId, setBusyId] = useState<string | null>(null)
 
   useEffect(() => {
     void listGames()
@@ -22,6 +25,37 @@ export function HistoryScreen() {
       })
       .finally(() => setLoading(false))
   }, [])
+
+  async function remove(game: CardWarsGame) {
+    const players = game.players.map((player) => player.name).join(" y ")
+    if (
+      !window.confirm(
+        `¿Eliminar definitivamente la partida de ${players}? Esta acción no se puede deshacer.`
+      )
+    )
+      return
+    setBusyId(game.id)
+    setError("")
+    try {
+      await deleteGame(game.id, game.revision)
+      setGames((current) => current.filter((item) => item.id !== game.id))
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : "No se pudo eliminar la partida."
+      )
+      if (cause instanceof Error && cause.name === "GameConflictError") {
+        try {
+          setGames(await listGames())
+        } catch {
+          setError("La partida cambió y no se pudo actualizar el historial.")
+        }
+      }
+    } finally {
+      setBusyId(null)
+    }
+  }
 
   const history = games.filter((game) => game.status !== "active")
   return (
@@ -108,6 +142,17 @@ export function HistoryScreen() {
                     <p className="pb-2 text-xs">Sin cambios de vidas.</p>
                   )}
                 </details>
+                <div className="mt-1 flex justify-end">
+                  <button
+                    type="button"
+                    disabled={busyId !== null}
+                    onClick={() => void remove(game)}
+                    aria-label={`Eliminar partida de ${game.players[0].name} y ${game.players[1].name}`}
+                    className="min-h-10 px-2 text-xs font-semibold text-red-800 underline disabled:opacity-40"
+                  >
+                    Eliminar partida
+                  </button>
+                </div>
               </li>
             )
           })}

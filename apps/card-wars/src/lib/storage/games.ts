@@ -52,6 +52,18 @@ export async function saveGame(game: CardWarsGame, expectedRevision: number) {
   return updated
 }
 
+export async function deleteGame(id: string, expectedRevision: number) {
+  const database = await openLocalDatabase()
+  const transaction = database.transaction("games", "readwrite")
+  const current = await transaction.store.get(id)
+  if (!current || gameSchema.parse(current).revision !== expectedRevision) {
+    await transaction.done
+    throw new GameConflictError()
+  }
+  await transaction.store.delete(id)
+  await transaction.done
+}
+
 export function exportGames(games: CardWarsGame[]) {
   return JSON.stringify(
     gameBackupSchema.parse({

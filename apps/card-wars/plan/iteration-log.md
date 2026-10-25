@@ -16,3 +16,12 @@ Registra evidencia observada por iteración; no anticipes cambios no realizados.
 - `bun run test:generator`: 6 pruebas pasan. `git diff --check` y enlaces locales de los documentos de la app pasan.
 - La vista previa indicó acceso sin conexión listo. Tras detener el servidor estático, se recargó Partidas y se abrió Historial y Ajustes desde la caché; la partida de prueba seguía en IndexedDB. La instalación nativa no se verificó. La caché remota de Turbo no estuvo accesible; las tareas locales terminaron correctamente.
 - El cambio del inventario monorepo está registrado en [AGW-04](../../../plan/iteration-log.md#agw-04-incorporar-card-wars-al-inventario).
+
+## 02 — Eliminar partidas
+
+- Se añadió eliminación permanente con confirmación en el marcador activo, en cada partida en curso y en cada registro del historial. El texto identifica a ambos jugadores y avisa que la acción no se puede deshacer.
+- IndexedDB elimina dentro de una transacción y exige que la revisión coincida; si otra pestaña modificó o eliminó la partida, informa el conflicto. Las exportaciones reflejan únicamente los registros existentes.
+- `bun run test --filter=@damaca/card-wars`: 25 pruebas pasan (92 expectativas), incluida eliminación, conflicto de revisión, listado vacío y respaldo sin el registro borrado.
+- `bun run type-check --filter=@damaca/card-wars`, Biome sobre los archivos cambiados y `bun run build --filter=@damaca/card-wars` pasan; la exportación estática sigue incluyendo Partidas e Historial y el worker incluye 53 recursos.
+- Inspección visual de escritorio a 1280×720 confirma el botón «Eliminar partida» en el marcador; la vista previa mostró la confirmación con los nombres. Se canceló la eliminación del registro sintético y la herramienta del navegador dejó de responder después del diálogo; no se completó una interacción de eliminación ni se inspeccionó un historial poblado en navegador. El repositorio cubre la operación de borrado en IndexedDB.
+- Turbo remoto no estuvo accesible; las tareas locales finalizaron correctamente.

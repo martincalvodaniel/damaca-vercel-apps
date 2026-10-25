@@ -13,6 +13,7 @@ export function GamePlay({
   onUndo,
   onFinish,
   onAbandon,
+  onDelete,
   onBack,
 }: {
   game: CardWarsGame
@@ -21,6 +22,7 @@ export function GamePlay({
   onUndo: () => void
   onFinish: (winnerId: string) => void
   onAbandon: () => void
+  onDelete: () => void
   onBack: () => void
 }) {
   const [winnerId, setWinnerId] = useState(game.players[0].id)
@@ -156,6 +158,14 @@ export function GamePlay({
             {starter?.name} empezó la partida
           </span>
         )}
+        <button
+          type="button"
+          disabled={busy}
+          onClick={onDelete}
+          className="min-h-11 rounded-lg px-2 text-xs font-bold text-red-800 underline disabled:opacity-40"
+        >
+          Eliminar partida
+        </button>
       </section>
       <details className="rounded-lg border border-[#94ae88] bg-white/60 px-2 py-1">
         <summary className="min-h-10 cursor-pointer content-center text-sm font-bold">

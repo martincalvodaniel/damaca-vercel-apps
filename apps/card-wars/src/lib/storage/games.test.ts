@@ -5,6 +5,7 @@ import { appConfig } from "@/config/app"
 import { createGame } from "@/features/game/lib/game"
 import { closeLocalDatabase, openLocalDatabase } from "@/lib/storage/database"
 import {
+  deleteGame,
   exportGames,
   GameConflictError,
   importGames,
@@ -72,4 +73,15 @@ it("rejects malformed backups without changing local games", async () => {
   backup.games.push({ id: "broken" })
   await expect(importGames(backup.games as never[])).rejects.toThrow()
   expect(await listGames()).toHaveLength(1)
+})
+
+it("deletes a game only when its revision still matches", async () => {
+  const game = createGame(["Finn", "Jake"], 0)
+  await saveNewGame(game)
+  await expect(deleteGame(game.id, 1)).rejects.toBeInstanceOf(GameConflictError)
+  expect(await readGame(game.id)).toEqual(game)
+  await deleteGame(game.id, game.revision)
+  expect(await readGame(game.id)).toBeUndefined()
+  expect(await listGames()).toEqual([])
+  expect(parseGameBackup(exportGames(await listGames())).games).toEqual([])
 })
