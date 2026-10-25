@@ -16,6 +16,7 @@ Damaca Hub is the authenticated directory for the monorepo's web applications an
 ## Decisions
 
 - Access is independent for each application and applies to its production and preproduction environments.
+- `ALLOWED_EMAILS` grants Hub administration only. Administrators need an explicit grant for each private application, just like other users.
 - Production links are visible to authenticated users. Preproduction links are visible to administrators and users authorized for that application.
 - The production Hub is intended to authorize both environments of connected applications. The `int` Hub deployment must use isolated configuration and data.
 - Persist Google identities, sessions, OAuth records and signing keys in MongoDB, with versioned independent Hub cookies. Do not share cookies or session secrets between applications.

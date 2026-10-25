@@ -25,8 +25,8 @@ export async function AdminScreen() {
             Application access
           </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            Administrators are configured in ALLOWED_EMAILS. Access is managed
-            separately for each application.
+            Administrators are configured in ALLOWED_EMAILS. Application
+            permissions are granted separately, including for administrators.
           </p>
         </header>
         <ul className="flex flex-col gap-5">

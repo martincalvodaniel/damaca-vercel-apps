@@ -61,9 +61,6 @@ export async function requestApplicationAccess(
       status: "error",
       message: "Sign in with Google to request access.",
     }
-  if (isAdminEmail(session.user.email)) {
-    return { status: "success", message: "Administrators already have access." }
-  }
   try {
     const application = (await listApplications()).find(
       (entry) => entry.id === parsed.data.appId && entry.active
@@ -72,6 +69,13 @@ export async function requestApplicationAccess(
       return { status: "error", message: "This application is unavailable." }
     if (application.publicAccess)
       return { status: "error", message: "This application is public." }
+    if (isAdminEmail(session.user.email)) {
+      return {
+        status: "error",
+        message:
+          "Administrators must grant themselves access from Site administration.",
+      }
+    }
     const result = await submitApplicationRequest(
       application.id,
       session.user.email
@@ -132,12 +136,6 @@ export async function changeHubAccess(
     getFormDataValues(formData)
   )
   if (!parsed.success) return invalidState
-  if (isAdminEmail(parsed.data.email)) {
-    return {
-      status: "error",
-      message: "Administrator access is managed through ALLOWED_EMAILS.",
-    }
-  }
   try {
     const changed = await changeApplicationAccess(
       parsed.data.appId,

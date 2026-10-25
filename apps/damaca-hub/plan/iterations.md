@@ -35,3 +35,13 @@ AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that 
 - Acceptance: remove the “Back to applications” link; hide the administration link from Settings; show Site administration in the main nav for admins only; render each application collapsed by default and expandable with an accessible native disclosure control.
 - Validation: Hub Biome, type-check, tests, build, desktop/mobile browser review, and `git diff --check`.
 - Evidence: [delivery log](iteration-log.md#03--improve-site-administration-navigation).
+
+## 04 — Keep administrator application grants explicit
+
+- Status: `in_progress`.
+- Goal: allow Hub administrators to grant or revoke application access for administrator accounts while retaining explicit per-application authorization.
+- Paths: `src/features/hub/actions.ts`, `src/features/admin/components/admin-screen.tsx`, this plan, and the delivery log.
+- Dependencies: existing `ALLOWED_EMAILS` administrator check and MongoDB per-app grant store.
+- Acceptance: only verified Hub administrators can manage grants; administrators can receive and lose a grant for an individual private app; administrator membership never bypasses OIDC app-grant checks; public games remain ungrantable; admin-facing text explains the distinction.
+- Validation: Hub Biome, type-check, tests, production build, and `git diff --check`; publish to `int` and verify the explicit Tasks grant through Site administration.
+- Evidence: [delivery log](iteration-log.md#04--keep-administrator-application-grants-explicit).

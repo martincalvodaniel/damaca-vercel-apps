@@ -28,3 +28,10 @@ The iteration state is maintained in [iterations.md](iterations.md); this file r
 ## Shared consumer integration AGW-05
 
 AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that product decision; see the current [root delivery](../../../plan/iterations.md#agw-08--public-games-and-hub-managed-oidc-clients).
+
+<a id="04--keep-administrator-application-grants-explicit"></a>
+## 04 — Keep administrator application grants explicit
+
+- Changes: removed the restriction that blocked Hub administrators from receiving or revoking an explicit private-app grant. `ALLOWED_EMAILS` remains the source of Hub admin membership; OIDC authorization still depends on the per-app grant lookup. Updated the admin screen and access-request response to explain that an administrator must grant themselves access from Site administration.
+- Validation: `bun run type-check --filter=@damaca/damaca-hub` passes; `bun run test --filter=@damaca/damaca-hub` passes (25 tests, 72 expectations); `bun run build --filter=@damaca/damaca-hub` passes; explicit Biome on the four changed files passes; `git diff --check` passes. Incremental lint reported zero files because it does not include the untracked/new diff in this checkout, so the explicit Biome invocation is the applicable lint evidence.
+- Publication: pending verification on the stable `int` preview alias.
