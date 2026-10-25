@@ -42,3 +42,14 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Aceptación: inventario y conteos incluyen las cinco apps; el plan raíz enlaza el master de Card Wars; el registro del producto queda en la app.
 - Validación: revisar enlaces y conteos; validaciones técnicas de Card Wars se registran en la iteración principal de la app.
 - Evidencia: [iteration-log.md#agw-04-incorporar-card-wars-al-inventario](iteration-log.md#agw-04-incorporar-card-wars-al-inventario).
+
+## AGW-05 — Google identity and Hub access shared package
+
+- Estado: `validated`.
+- Objetivo: compartir Google OAuth y la comprobación de permisos de Hub e integrarlos obligatoriamente en Pocha Score y Card Wars.
+- Rutas: `packages/identity/**`, manifiestos y lockfile raíz, configuración Turbo, `apps/{pocha-score,card-wars,damaca-hub}/**` y planes afectados.
+- Dependencias: autorización del usuario para login obligatorio; credenciales Google, secretos propios y Hub/Mongo para verificación real. Capacidad inicial: 80% de 5h y 97% de 7d; corte estimado dentro de reservas (7%/2%).
+- Aceptación: paquete workspace compartido; Google central en Hub, sesiones consumidoras independientes con email verificado; permisos actuales por app consultados servidor a servidor con credenciales aisladas; sin permiso, ante revocación o fallo no se abre el producto; no se comparten cookies; IndexedDB y copias existentes se conservan; instalación disponible y acceso offline retirado explícitamente; configuración documentada sin secretos.
+- Decisión: Google OAuth y proveedor OIDC centralizados en Hub mediante Better Auth. Google solo se configura en Hub; consumidores usan código de autorización, S256 PKCE, state/nonce y validación de firma, emisor y audiencia. UserInfo comprueba el permiso vigente por cliente registrado; no se aceptan emails afirmados por consumidores. Hub adopta persistencia de identidad en MongoDB y rotación de claves.
+- Validación prevista: contrato de API, tests de aislamiento, autenticación, rechazo, revocación, fallos y cliente HTTP; lint incremental, tipos/tests/build de las tres apps y paquete; navegación autenticada/no autenticada, móvil/escritorio y migración del worker según entorno disponible; diff, commit/push a int y SHA remoto.
+- Evidencia: [registro](iteration-log.md#agw-05-google-identity-and-hub-access).

@@ -7,6 +7,7 @@ interface SignInPageProps {
   searchParams: Promise<{
     callbackUrl?: string | string[]
     error?: string | string[]
+    sig?: string | string[]
   }>
 }
 
@@ -29,7 +30,7 @@ function getErrorMessage(error: string | undefined): string | undefined {
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const query = await searchParams
   const callbackUrl = getSafeCallbackUrl(getFirstValue(query.callbackUrl))
-  if (await getVerifiedSession()) redirect(callbackUrl)
+  if (!query.sig && (await getVerifiedSession())) redirect(callbackUrl)
 
   return (
     <SignInCard

@@ -1,5 +1,7 @@
 import { SettingsScreen } from "@/features/settings/components/settings-screen"
+import { getIdentity } from "@/lib/auth/identity"
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  await getIdentity().requireAccess()
   return <SettingsScreen />
 }

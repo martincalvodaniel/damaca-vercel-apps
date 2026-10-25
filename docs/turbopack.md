@@ -99,3 +99,7 @@ changes the build being validated.
 For PWA validation, use a production build and a browser, then verify worker
 registration, controlled navigation, and offline reload. A successful compiler
 run or restored cache artifact alone does not prove offline behavior.
+
+## Hub-connected game applications
+
+Pocha Score and Card Wars now build as Next.js servers and use `packages/identity` for central Hub OIDC. Their build runs the shared package dependency and emits a network-only `public/sw.js`; root cache outputs include it and app-scoped Turbo environment keys include the independent identity configuration. Do not deploy their previous `out/` directory. The local-PWA generator base remains static and unchanged. See [identity rollout instructions](../packages/identity/README.md) for credentials, callbacks, protected-response caching and legacy offline copies.

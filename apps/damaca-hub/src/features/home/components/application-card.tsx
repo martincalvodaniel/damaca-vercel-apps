@@ -38,8 +38,9 @@ export function ApplicationCard({
         </span>
       </div>
       <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
-        Not connected to Hub yet. This application still uses its current
-        sign-in and access rules.
+        {application.id === "pocha-score" || application.id === "card-wars"
+          ? "Connected through Hub OIDC when configured. A current application grant is required."
+          : "Not connected to Hub yet. This application still uses its current sign-in and access rules."}
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
         {application.productionUrl ? (

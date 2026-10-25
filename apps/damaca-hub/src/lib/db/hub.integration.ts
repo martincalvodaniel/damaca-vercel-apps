@@ -8,6 +8,7 @@ import {
   changeApplicationAccess,
   ensureApplicationSeeds,
   getApplicationStatus,
+  hasApplicationAccess,
   listApplicationAdminData,
   listApplications,
   resolveApplicationRequest,
@@ -165,6 +166,30 @@ try {
   assert.equal(
     (await getApplicationStatus("manual@example.com")).get("pocha-score"),
     "approved"
+  )
+
+  assert.equal(
+    await hasApplicationAccess("pocha-score", "manual@example.com"),
+    true
+  )
+  assert.equal(
+    await hasApplicationAccess("card-wars", "manual@example.com"),
+    false
+  )
+  assert.equal(await hasApplicationAccess("card-wars", pending.email), false)
+  const pocha = (await listApplications()).find(
+    (entry) => entry.id === "pocha-score"
+  )
+  assert.ok(pocha)
+  await saveApplication({ ...pocha, active: false })
+  assert.equal(
+    await hasApplicationAccess("pocha-score", "manual@example.com"),
+    false
+  )
+  await saveApplication({ ...pocha, active: true })
+  assert.equal(
+    await hasApplicationAccess("pocha-score", "manual@example.com"),
+    true
   )
 
   const database = await getDatabase()

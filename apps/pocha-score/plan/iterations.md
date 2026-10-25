@@ -61,3 +61,7 @@ Este archivo es la fuente única del estado de las iteraciones. Sigue el [workfl
 - Aceptación: partidas nuevas tienen `startedAt` UTC; listas activas e historial lo muestran con la zona local; JSON exportado incluye el instante; importaciones conservan el inicio original; registros y copias anteriores sin `startedAt` usan su `createdAt` existente como valor de compatibilidad.
 - Validación: pruebas de formato/compatibilidad e importación, tipos, Biome, build estático, revisión del formato local y `git diff --check`.
 - Evidencia: [registro](iteration-log.md#06--hora-de-inicio-y-copias).
+
+## Integración transversal de identidad
+
+La entrega de login obligatorio y autorización Hub se sigue exclusivamente en [AGW-05 raíz](../../../plan/iterations.md#agw-05--google-identity-and-hub-access-shared-package).

@@ -2,7 +2,7 @@
 
 ## Estado actual
 
-Card Wars es un contador local e instalable para partidas presenciales a dos jugadores de Card Wars, el juego de mesa de Hora de Aventuras. La experiencia se comparte en un dispositivo, conserva partidas en IndexedDB y funciona sin conexión una vez preparada la PWA. Interfaz y mensajes en español; sin cuentas, backend, telemetría ni sincronización.
+Card Wars es un contador local e instalable para partidas presenciales a dos jugadores de Card Wars, el juego de mesa de Hora de Aventuras. La experiencia se comparte en un dispositivo, conserva partidas en IndexedDB y requiere conexión para comprobar el acceso a través de Damaca Hub. Interfaz y mensajes en español; con identidad central del Hub, sin telemetría ni sincronización.
 
 ## Alcance
 
@@ -17,7 +17,7 @@ Card Wars es un contador local e instalable para partidas presenciales a dos jug
 
 ## Decisiones técnicas y límites
 
-- Mantener Next.js 16 con exportación estática, PWA, IndexedDB, Zod y el envoltorio `idb` del starter local.
+- Mantener Next.js 16 con servidor de identidad, PWA instalable, IndexedDB, Zod y el envoltorio `idb` del starter local.
 - Partidas y preferencias permanecen en IndexedDB local al origen/dispositivo. Las copias son manuales; no hay sincronización ni recuperación automática.
 - Cada partida almacena inicio UTC (`startedAt`), jugadores, vidas, primer jugador, estado, ganador opcional y cambios de vida. Sin reglas de cartas, turnos, mazos o efectos automatizados.
 - Usar la base local generada como punto de partida. Crear un almacén de partidas mediante migración no destructiva; preservar preferencias y almacenamiento existente.
@@ -25,4 +25,8 @@ Card Wars es un contador local e instalable para partidas presenciales a dos jug
 
 ## Criterios de producto
 
-Se pueden crear, reanudar, modificar, deshacer, finalizar y abandonar partidas offline. Las vidas y movimientos persisten tras cerrar/abrir la app. Los respaldos válidos mantienen los instantes UTC y los inválidos no modifican datos. La app cabe en una pantalla móvil compacta sin desbordamiento horizontal y se puede operar con teclado y controles táctiles.
+Se pueden crear, reanudar, modificar, deshacer, finalizar y abandonar partidas con acceso vigente. Las vidas y movimientos persisten tras cerrar/abrir la app. Los respaldos válidos mantienen los instantes UTC y los inválidos no modifican datos. La app cabe en una pantalla móvil compacta sin desbordamiento horizontal y se puede operar con teclado y controles táctiles.
+
+## Identidad y acceso — decisión vigente AGW-05
+
+La petición posterior del usuario sustituye los límites de ausencia de cuentas, exportación estática y acceso offline descritos arriba: el producto requiere login Google y permiso vigente de damaca-hub. Se conserva IndexedDB sin migraciones ni sincronización; las partidas locales pertenecen al navegador y siguen compartidas entre sus cuentas. Instalación disponible, acceso con conexión obligatoria. La implementación compartida, estado y evidencia se registran en [AGW-05 raíz](../../../plan/iterations.md#agw-05--google-identity-and-hub-access-shared-package) y [su registro](../../../plan/iteration-log.md#agw-05-google-identity-and-hub-access).

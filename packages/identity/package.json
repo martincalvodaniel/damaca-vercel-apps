@@ -1,0 +1,41 @@
+{
+  "name": "@damaca/identity",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./server": "./src/server.ts",
+    "./client": "./src/client.ts",
+    "./access-boundary": "./src/access-boundary.tsx",
+    "./contract": "./src/contract.ts",
+    "./hub-client": "./src/hub-client.ts",
+    "./registry": "./src/registry.ts",
+    "./provider": "./src/provider.ts",
+    "./sign-in": "./src/sign-in.tsx",
+    "./account": "./src/account.tsx",
+    "./service-worker": "./src/service-worker.ts"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "test": "bun test --preload ./test/setup.ts",
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "better-auth": "catalog:",
+    "server-only": "catalog:",
+    "zod": "catalog:",
+    "@better-auth/oauth-provider": "catalog:"
+  },
+  "peerDependencies": {
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
+  }
+}

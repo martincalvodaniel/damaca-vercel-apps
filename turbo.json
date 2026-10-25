@@ -15,18 +15,21 @@
         "!out/**",
         "!public/dalis-sw.js",
         "!**/*.tsbuildinfo",
-        "!next-env.d.ts"
+        "!next-env.d.ts",
+        "!public/sw.js"
       ],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
         "!.next/dev/**",
         "out/**",
-        "public/dalis-sw.js"
+        "public/dalis-sw.js",
+        "public/sw.js"
       ]
     },
     "type-check": {
-      "outputs": ["*.tsbuildinfo"]
+      "outputs": ["*.tsbuildinfo"],
+      "dependsOn": ["^type-check"]
     },
     "test": {
       "cache": false

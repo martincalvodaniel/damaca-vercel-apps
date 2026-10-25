@@ -1,0 +1,50 @@
+openapi: 3.1.0
+info:
+  title: Damaca Hub application authorization
+  version: 1.0.0
+  description: OIDC UserInfo with a current app-specific grant. Google authentication is centralized in Hub. Protocol endpoints are owned by Better Auth.
+paths:
+  /api/auth/oauth2/userinfo:
+    get:
+      operationId: getApplicationIdentityAndAccess
+      description: Validates the access token and its Hub session, resolves the registered client to its application, and reads the current grant and active catalog entry. Clients never supply an email or application identifier. No administrator bypass.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Verified identity and live application authorization. Never cache this response. damaca_authorization_available=false means authorization persistence failed and the consumer must deny access with retry; damaca_access=false with availability true means no current grant.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  [ sub, email, email_verified, damaca_app_id, damaca_access ]
+                properties:
+                  sub: { type: string }
+                  email: { type: string, format: email }
+                  email_verified: { const: true }
+                  damaca_app_id: { type: string }
+                  damaca_access: { type: boolean }
+                  damaca_authorization_available:
+                    { type: boolean, default: true }
+              example:
+                sub: test-user
+                email: player@example.com
+                email_verified: true
+                damaca_app_id: pocha-score
+                damaca_access: true
+                damaca_authorization_available: true
+        "401":
+          description: Invalid, expired, revoked or unknown token/session; consumer must deny access.
+        "403":
+          description: Token lacks the required identity scopes or is not authorized; consumer must deny access.
+        "429":
+          description: Rate limit exceeded; consumer must deny access and allow retry.
+        "500":
+          description: Authorization or persistence failed; consumer must deny access and allow retry.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Access token obtained through Hub authorization code flow with S256 PKCE, client_secret_basic, openid/email/profile/offline_access scopes. Client secrets and tokens remain server-side. Hub discovery is at /api/auth/.well-known/openid-configuration.

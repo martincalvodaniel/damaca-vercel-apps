@@ -1,5 +1,7 @@
 import "server-only"
 
+import { oidcClientsSchema } from "@damaca/identity/registry"
+
 type RequiredEnvName =
   | "BETTER_AUTH_SECRET"
   | "GOOGLE_CLIENT_ID"
@@ -64,4 +66,10 @@ export function getDatabaseEnv() {
     isDevelopment: process.env.NODE_ENV === "development",
     uri: getRequiredEnv("MONGODB_URI"),
   }
+}
+
+export function getOidcClients() {
+  return oidcClientsSchema.parse(
+    JSON.parse(process.env.HUB_OIDC_CLIENTS ?? "[]")
+  )
 }

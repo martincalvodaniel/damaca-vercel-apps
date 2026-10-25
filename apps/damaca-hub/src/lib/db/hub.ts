@@ -324,3 +324,20 @@ export async function listApplicationAdminData(): Promise<
     }
   })
 }
+
+export async function hasApplicationAccess(
+  appId: string,
+  email: string
+): Promise<boolean> {
+  const application = await (await applicationCollection()).findOne({
+    id: appId,
+    active: true,
+  })
+  if (!application) return false
+  const grant = await (await accessCollection()).findOne({
+    appId,
+    email: accessEmailSchema.parse(email),
+    status: "approved",
+  })
+  return grant !== null
+}

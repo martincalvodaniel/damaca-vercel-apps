@@ -2,7 +2,7 @@
 
 ## Estado actual
 
-Pocha Score es un marcador local e instalable para partidas presenciales de pocha. Una persona anota desde un dispositivo compartido entre 3 y 6 jugadores. Interfaz y mensajes en español. El producto conserva el almacenamiento local, exportación estática, instalación y acceso offline de esta app; no tiene cuentas, backend, telemetría ni sincronización.
+Pocha Score es un marcador local e instalable para partidas presenciales de pocha. Una persona anota desde un dispositivo compartido entre 3 y 6 jugadores. Interfaz y mensajes en español. El producto conserva almacenamiento local e instalación; requiere identidad y permiso del Hub, sin telemetría ni sincronización.
 
 ## Alcance vigente
 
@@ -19,7 +19,7 @@ Pocha Score es un marcador local e instalable para partidas presenciales de poch
 
 ## Decisiones técnicas
 
-- Mantener Next.js 16 con exportación estática, PWA, IndexedDB, Zod y la arquitectura existente. Añadir store de partidas con migración no destructiva de base 1 a 2; conservar preferencias.
+- Mantener Next.js 16 con servidor de identidad, PWA instalable, IndexedDB, Zod y la arquitectura existente. Añadir store de partidas con migración no destructiva de base 1 a 2; conservar preferencias.
 - Mantener puntuación y calendario como funciones puras. No guardar acumulados derivados.
 - Guardar con revisiones para detectar cambios de otra pestaña. El conflicto pide recargar en vez de sobrescribir.
 - Los datos pertenecen al origen, navegador, perfil y dispositivo. La exportación es el mecanismo de copia manual; instalación no es respaldo.
@@ -27,9 +27,13 @@ Pocha Score es un marcador local e instalable para partidas presenciales de poch
 
 ## Criterios de producto
 
-Una partida puede configurarse, pausarse, reabrirse y completarse offline. La app valida entradas y sumas, mantiene puntuaciones correctas al corregir rondas, resuelve empates y conserva la información tras cerrar y abrir. Una exportación válida puede recuperarse como otra partida; un archivo inválido no modifica datos. La interfaz es legible, compacta y operable con teclado y táctil en móvil y escritorio; los valores numéricos se pueden escribir o ajustar con controles −/+.
+Una partida puede configurarse, pausarse, reabrirse y completarse con acceso vigente. La app valida entradas y sumas, mantiene puntuaciones correctas al corregir rondas, resuelve empates y conserva la información tras cerrar y abrir. Una exportación válida puede recuperarse como otra partida; un archivo inválido no modifica datos. La interfaz es legible, compacta y operable con teclado y táctil en móvil y escritorio; los valores numéricos se pueden escribir o ajustar con controles −/+.
 
 ## Referencias y dudas
 
 - La regla de puntuación, prohibición de sumar las bazas pedidas y variantes de calendario se basan en [Ludoteka: reglas de la pocha](https://www.ludoteka.com/games/pocha/rules). Las reglas varían por mesa; la secuencia elegida aquí es configurable.
 - No quedan decisiones de producto pendientes para el MVP. Producción y alojamiento no forman parte de esta entrega.
+
+## Identidad y acceso — decisión vigente AGW-05
+
+La petición posterior del usuario sustituye los límites de ausencia de cuentas, exportación estática y acceso offline descritos arriba: el producto requiere login Google y permiso vigente de damaca-hub. Se conserva IndexedDB sin migraciones ni sincronización; las partidas locales pertenecen al navegador y siguen compartidas entre sus cuentas. Instalación disponible, acceso con conexión obligatoria. La implementación compartida, estado y evidencia se registran en [AGW-05 raíz](../../../plan/iterations.md#agw-05--google-identity-and-hub-access-shared-package) y [su registro](../../../plan/iteration-log.md#agw-05-google-identity-and-hub-access).

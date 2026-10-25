@@ -32,3 +32,7 @@ Registra evidencia observada por iteración; no anticipes cambios no realizados.
 - `bunx biome check` sobre el componente y los documentos; `bun run test --filter=@damaca/card-wars` (25 pruebas), `bun run type-check --filter=@damaca/card-wars` y `bun run build --filter=@damaca/card-wars` pasan. La exportación estática conserva sus rutas y worker de 53 recursos.
 - El contraste se corrigió explícitamente en el componente; no se repitió inspección visual del banner en navegador.
 - Turbo remoto no estuvo accesible; las tareas locales finalizaron correctamente.
+
+## Integración compartida AGW-05
+
+Evidencia y limitaciones en [registro raíz](../../../plan/iteration-log.md#agw-05-google-identity-and-hub-access).

@@ -51,3 +51,7 @@ Registra evidencia observada por iteración. No registres trabajo futuro como ev
 - `bun run type-check --filter=@damaca/pocha-score`, `bun run build --filter=@damaca/pocha-score`, `bunx biome check apps/pocha-score` y `git diff --check`: pasan.
 - QA de navegador en la vista previa estática: la lista mostró `Inicio 24 oct 2026, 11:39` para el instante guardado en UTC, en la zona local configurada para el dispositivo.
 - Capacidad consultada el 2026-10-24 09:36 UTC: 60% restante en ventana de 5 h (reinicio 13:19 UTC) y 93% restante en ventana de 7 días (reinicio 2026-10-30 18:44 UTC).
+
+## Integración compartida AGW-05
+
+Evidencia y limitaciones en [registro raíz](../../../plan/iteration-log.md#agw-05-google-identity-and-hub-access).

@@ -102,3 +102,34 @@ describe("MongoDB index specifications", () => {
     ])
   })
 })
+
+it("enforces unique identity and OAuth token lookup keys", () => {
+  for (const collection of [
+    "user",
+    "session",
+    "account",
+    "oauthClient",
+    "oauthAccessToken",
+    "oauthRefreshToken",
+  ]) {
+    expect(
+      INDEX_SPECS.some(
+        (spec) => spec.collection === collection && spec.options.unique
+      )
+    ).toBe(true)
+  }
+  for (const collection of [
+    "session",
+    "verification",
+    "oauthAccessToken",
+    "oauthRefreshToken",
+  ]) {
+    expect(
+      INDEX_SPECS.some(
+        (spec) =>
+          spec.collection === collection &&
+          spec.options.expireAfterSeconds === 0
+      )
+    ).toBe(true)
+  }
+})

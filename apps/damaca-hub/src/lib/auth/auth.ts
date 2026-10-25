@@ -1,44 +1,27 @@
 import "server-only"
 
-import { betterAuth } from "better-auth"
-import { nextCookies } from "better-auth/next-js"
-import { getAuthEnv } from "@/config/env"
+import { createHubIdentity } from "@damaca/identity/provider"
+import { getAuthEnv, getOidcClients } from "@/config/env"
+import { getAuthDatabaseAdapter } from "@/lib/db/auth-adapter"
+import { hasApplicationAccess } from "@/lib/db/hub"
 
-const authEnv = getAuthEnv()
+let identityPromise: Promise<ReturnType<typeof createHubIdentity>> | undefined
 
-export const auth = betterAuth({
-  baseURL: authEnv.baseUrl,
-  secret: authEnv.secret,
-  trustedOrigins: [authEnv.baseUrl],
-  socialProviders: {
-    google: {
-      clientId: authEnv.googleClientId,
-      clientSecret: authEnv.googleClientSecret,
-    },
-  },
-  session: {
-    cookieCache: {
-      enabled: true,
-      maxAge: 7 * 24 * 60 * 60,
-      strategy: "jwt",
-      refreshCache: true,
-    },
-  },
-  account: {
-    storeStateStrategy: "cookie",
-    storeAccountCookie: true,
-  },
-  databaseHooks: {
-    user: {
-      create: {
-        before: async (user) => {
-          // Verified identity may request access; application authorization is separate.
-          if (!user.emailVerified) {
-            return false
-          }
-        },
-      },
-    },
-  },
-  plugins: [nextCookies()],
-})
+export function getHubAuth() {
+  if (!identityPromise) {
+    identityPromise = getAuthDatabaseAdapter()
+      .then((database) =>
+        createHubIdentity({
+          ...getAuthEnv(),
+          database,
+          clients: getOidcClients(),
+          isAllowed: hasApplicationAccess,
+        })
+      )
+      .catch((error: unknown) => {
+        identityPromise = undefined
+        throw error
+      })
+  }
+  return identityPromise
+}

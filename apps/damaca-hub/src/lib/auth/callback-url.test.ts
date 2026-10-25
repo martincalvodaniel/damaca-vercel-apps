@@ -11,6 +11,8 @@ describe("getSafeCallbackUrl", () => {
   it("rejects absolute and protocol-relative URLs", () => {
     expect(getSafeCallbackUrl("https://example.com")).toBe("/")
     expect(getSafeCallbackUrl("//example.com")).toBe("/")
+    expect(getSafeCallbackUrl("/\\example.com")).toBe("/")
+    expect(getSafeCallbackUrl("/auth/signin")).toBe("/")
   })
 
   it("falls back when no callback is provided", () => {

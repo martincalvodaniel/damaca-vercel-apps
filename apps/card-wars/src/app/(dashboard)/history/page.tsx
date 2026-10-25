@@ -1,5 +1,7 @@
 import { HistoryScreen } from "@/features/history/components/history-screen"
+import { getIdentity } from "@/lib/auth/identity"
 
-export default function HistoryPage() {
+export default async function HistoryPage() {
+  await getIdentity().requireAccess()
   return <HistoryScreen />
 }

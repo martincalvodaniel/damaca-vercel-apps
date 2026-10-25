@@ -57,3 +57,7 @@ Vercel Remote Cache is provided by Turborepo. Add `TURBO_TOKEN` and `TURBO_TEAM`
 ## Environment variables
 
 Copy an app's checked-in `.env.example` (or `.env.local.example`) to its local `.env.local` as needed. Configure production values in that app's Vercel project. Never commit real credentials.
+
+## Shared identity
+
+[The identity package](packages/identity/README.md) centralizes Google in Damaca Hub and provides mandatory OIDC login and app-specific authorization for Pocha Score and Card Wars. These apps now run as Next.js servers while preserving local IndexedDB records and installation. Configure their independent Hub clients before use; product access requires connectivity. The app generator's local-PWA mode remains static and unauthenticated.

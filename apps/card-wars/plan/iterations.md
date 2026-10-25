@@ -31,3 +31,7 @@ Este archivo es la fuente única del estado de las iteraciones. Sigue el [workfl
 - Aceptación: el texto del banner de partida abandonada y del ganador conserva contraste en tema oscuro y claro.
 - Validación: Biome, tipos, pruebas de la app, build y revisión del estilo explícito.
 - Evidencia: [registro](iteration-log.md#03--contraste-del-resultado-en-tema-oscuro).
+
+## Integración transversal de identidad
+
+La entrega de login obligatorio y autorización Hub se sigue exclusivamente en [AGW-05 raíz](../../../plan/iterations.md#agw-05--google-identity-and-hub-access-shared-package).

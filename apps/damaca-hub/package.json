@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "bun run --bun next build",
+    "build": "bun run --bun next build --webpack",
     "db:ensure-indexes": "bun --conditions=react-server run scripts/ensure-indexes.ts",
     "dev": "bun run --bun next dev --port 3005",
     "knip": "knip",
@@ -22,7 +22,9 @@
     "react-dom": "catalog:",
     "server-only": "catalog:",
     "swr": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@damaca/identity": "workspace:*",
+    "@better-auth/oauth-provider": "catalog:"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",

@@ -1,4 +1,14 @@
-import { toNextJsHandler } from "better-auth/next-js"
-import { auth } from "@/lib/auth/auth"
+import { getHubAuth } from "@/lib/auth/auth"
 
-export const { GET, POST } = toNextJsHandler(auth)
+async function handler(request: Request) {
+  try {
+    return await (await getHubAuth()).handler(request)
+  } catch {
+    return Response.json(
+      { error: "Identity service unavailable" },
+      { status: 503, headers: { "Cache-Control": "no-store" } }
+    )
+  }
+}
+
+export { handler as GET, handler as POST }

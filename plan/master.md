@@ -19,3 +19,10 @@ El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events
 ## Exclusiones y dudas
 
 No se define aquí un roadmap de producto para ninguna app ni se autoriza promoción a `main`, despliegue o cambios de infraestructura.
+
+## Shared identity and Hub authorization
+
+- `packages/identity` owns the central Google/OIDC provider, consumer sessions, Hub authorization client and access UI. Pocha Score and Card Wars require Google login and an explicit grant for their own application.
+- Consumers become server-rendered Next.js applications. Local IndexedDB records remain unchanged and device-scoped; authentication does not encrypt them, isolate existing records by account, back them up or synchronize them.
+- Google is configured only in Hub; each consumer/environment has its own OIDC callback, session secret and Hub client credential. The production Hub authorizes production and preproduction; test Hub configuration remains isolated. Hub issues signed identity tokens and derives application authorization from each validated access token and its registered client. No consumer-supplied email assertion is accepted.
+- Offline product access is withdrawn by explicit user decision in AGW-05. Previously installed static copies cannot be revoked until they reconnect and update. No changes to infrastructure or production promotion are included.

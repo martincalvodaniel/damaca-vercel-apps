@@ -37,6 +37,126 @@ export const INDEX_SPECS: readonly IndexSpec[] = [
     keys: { email: 1, appId: 1 },
     options: { name: "email_asc_app_id_asc" },
   },
+  {
+    collection: "user",
+    keys: { email: 1 },
+    options: { name: "auth_user_email_unique", unique: true },
+  },
+  {
+    collection: "session",
+    keys: { token: 1 },
+    options: { name: "auth_session_token_unique", unique: true },
+  },
+  {
+    collection: "session",
+    keys: { userId: 1 },
+    options: { name: "auth_session_user" },
+  },
+  {
+    collection: "session",
+    keys: { expiresAt: 1 },
+    options: { name: "auth_session_expiry", expireAfterSeconds: 0 },
+  },
+  {
+    collection: "account",
+    keys: { providerId: 1, accountId: 1 },
+    options: { name: "auth_account_provider_subject_unique", unique: true },
+  },
+  {
+    collection: "account",
+    keys: { userId: 1 },
+    options: { name: "auth_account_user" },
+  },
+  {
+    collection: "verification",
+    keys: { identifier: 1 },
+    options: { name: "auth_verification_identifier" },
+  },
+  {
+    collection: "verification",
+    keys: { expiresAt: 1 },
+    options: { name: "auth_verification_expiry", expireAfterSeconds: 0 },
+  },
+  {
+    collection: "jwks",
+    keys: { createdAt: -1 },
+    options: { name: "auth_jwks_created_desc" },
+  },
+  {
+    collection: "oauthClient",
+    keys: { clientId: 1 },
+    options: { name: "oauth_client_id_unique", unique: true },
+  },
+  {
+    collection: "oauthAccessToken",
+    keys: { token: 1 },
+    options: { name: "oauthAccessToken_token_unique", unique: true },
+  },
+  {
+    collection: "oauthAccessToken",
+    keys: { clientId: 1 },
+    options: { name: "oauthAccessToken_clientId" },
+  },
+  {
+    collection: "oauthAccessToken",
+    keys: { sessionId: 1 },
+    options: { name: "oauthAccessToken_sessionId" },
+  },
+  {
+    collection: "oauthAccessToken",
+    keys: { userId: 1 },
+    options: { name: "oauthAccessToken_userId" },
+  },
+  {
+    collection: "oauthAccessToken",
+    keys: { authorizationCodeId: 1 },
+    options: { name: "oauthAccessToken_authorizationCodeId" },
+  },
+  {
+    collection: "oauthAccessToken",
+    keys: { expiresAt: 1 },
+    options: { name: "oauthAccessToken_expiry", expireAfterSeconds: 0 },
+  },
+  {
+    collection: "oauthRefreshToken",
+    keys: { token: 1 },
+    options: { name: "oauthRefreshToken_token_unique", unique: true },
+  },
+  {
+    collection: "oauthRefreshToken",
+    keys: { clientId: 1 },
+    options: { name: "oauthRefreshToken_clientId" },
+  },
+  {
+    collection: "oauthRefreshToken",
+    keys: { sessionId: 1 },
+    options: { name: "oauthRefreshToken_sessionId" },
+  },
+  {
+    collection: "oauthRefreshToken",
+    keys: { userId: 1 },
+    options: { name: "oauthRefreshToken_userId" },
+  },
+  {
+    collection: "oauthRefreshToken",
+    keys: { authorizationCodeId: 1 },
+    options: { name: "oauthRefreshToken_authorizationCodeId" },
+  },
+  {
+    collection: "oauthRefreshToken",
+    keys: { expiresAt: 1 },
+    options: { name: "oauthRefreshToken_expiry", expireAfterSeconds: 0 },
+  },
+  {
+    collection: "oauthAccessToken",
+    keys: { refreshId: 1 },
+    options: { name: "oauth_access_refresh" },
+  },
+  {
+    collection: "oauthConsent",
+    keys: { clientId: 1, userId: 1 },
+    options: { name: "oauth_consent_client_user" },
+  },
 ]
 
 export function validateIndexSpecs(specs: readonly IndexSpec[]): void {

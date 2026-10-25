@@ -152,3 +152,7 @@ reads disabled, for example using `--cache=remote:rw`. Confirm the task logs sho
 remote hit and that the expected artifacts, including service workers, are present.
 Successful local checks alone do not establish that a Vercel preview, login flow,
 or offline application behavior has been validated.
+
+## Hub-connected game applications
+
+Pocha Score and Card Wars now build as Next.js servers and use `packages/identity` for central Hub OIDC. Their build runs the shared package dependency and emits a network-only `public/sw.js`; root cache outputs include it and app-scoped Turbo environment keys include the independent identity configuration. Do not deploy their previous `out/` directory. The local-PWA generator base remains static and unchanged. See [identity rollout instructions](../packages/identity/README.md) for credentials, callbacks, protected-response caching and legacy offline copies.

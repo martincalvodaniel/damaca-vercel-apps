@@ -1,0 +1,6 @@
+simulation: identity
+routing: path
+mocks:
+  - name: damaca-hub
+    routeKey: api
+    path: ../mocks/damaca-hub/config.yaml

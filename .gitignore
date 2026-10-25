@@ -15,3 +15,5 @@ build
 !.env.local.example
 .DS_Store
 *.pem
+
+**/public/sw.js

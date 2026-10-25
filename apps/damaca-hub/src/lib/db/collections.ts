@@ -5,6 +5,18 @@ import { getDatabase } from "@/lib/db/client"
 
 // Register collection names here alongside the feature that introduces them.
 export const COLLECTION_NAMES = {
+  authUser: "user",
+  authSession: "session",
+  authAccount: "account",
+  authVerification: "verification",
+  authJwks: "jwks",
+  oauthClient: "oauthClient",
+  oauthResource: "oauthResource",
+  oauthClientResource: "oauthClientResource",
+  oauthRefreshToken: "oauthRefreshToken",
+  oauthAccessToken: "oauthAccessToken",
+  oauthConsent: "oauthConsent",
+  oauthClientAssertion: "oauthClientAssertion",
   applications: "applications",
   appAccess: "app_access",
 } as const satisfies Record<string, string>
