@@ -2,7 +2,16 @@
 
 La integración de identidad con Damaca Hub se registra en la entrega transversal [AGW-11](../../../plan/iteration-log.md#agw-11-dalis-tasks-uses-hub-identity).
 
-La evidencia reciente se mantiene aquí; el [archivo](archive/2026-10-24/README.md) conserva íntegra la historia anterior. Los porcentajes y decisiones operativas de registros históricos no son políticas vigentes.
+La evidencia reciente se mantiene aquí; las entregas anteriores se conservan en los archivos [2026-10-26](archive/2026-10-26/README.md) y [2026-10-24](archive/2026-10-24/README.md). Los porcentajes y decisiones operativas de registros históricos no son políticas vigentes.
+
+<a id="23o"></a>
+## 23o — Login transparente con Google
+
+El acceso visible ahora presenta “Continuar con Google” y mensajes genéricos de inicio de sesión. Los estados sin permiso o con verificación fallida explican cómo solicitar acceso o reintentar sin exponer Damaca Hub. Ajustes del dispositivo usan el mismo texto; la configuración OIDC y el flujo de identidad permanecen sin cambios.
+
+Validación: Biome en 11 archivos, `type-check` y suite completa (1384 pass/222 skip/0 fail/15102 aserciones). Build de Dalis Tasks pasa con Webpack y variables locales efímeras no válidas para identidad, sin conectarse a servicios; Turbopack no pudo enlazar un puerto en el entorno y produjo `Operation not permitted`. Los mensajes de discovery de ese build reflejan la URL de prueba inaccesible, no un fallo de compilación. `git diff --check` pasa; revisión de textos confirma que no queda mención visible del Hub en `src`.
+
+La validación de inicio de sesión real se hizo previamente en Preview al resolver la protección de Vercel; esta entrega cambia solo textos y fue validada con build. Sin cambios de credenciales, permisos, datos, base de datos ni producción.
 
 <a id="23n"></a>
 ## 23n — Compatibilidad de Intl en calendario civil
@@ -102,13 +111,3 @@ Completados pasa de verde a azul700/negrita en claro y azul400/negrita en oscuro
 Prueba con93excepciones completadas: lectura anterior conserva cursor, nueva lectura completa93/31días con3porfecha, sin pendientes; reabrir última excepción en página posterior deja sólo31oct pendiente. Entradas intactas y rechazo de rango excesivo antes de expansión. SSR valida azul seleccionado y guardias de evidencia/carga parcial.17focalizadas/127aserciones; DoD1370pass/225opt-in skip/0fail/14939aserciones, lint1111sinavisos/tipos/Webpack16.4.2/worker46/diff aprobados.
 
 UI productiva+IndexedDB propio: tres planes completados vuelven el día azul visible, peso calculado700 y color oklch(0.707 0.165 254.624) en oscuro; al reabrir uno vuelve rojo. Captura390px /private/tmp/dalis-23f-calendar-blue.png. La expansión93 se prueba en núcleo real, no se atribuye a esta fixture de3planes. Prueba y bases propias eliminadas, pestaña/servidor retirados y viewport restablecido. No se ha inspeccionado la cuenta del usuario ni se afirma causa única de su dispositivo; sin RPC/Google/prueba física nueva ni DBusuario/producción. Entrada66%5h/95%7d, control63%/94%, reservas10%/1%; mismo commit/pushint/SHA/cuotas.
-
-
-<a id="23e"></a>
-## 23e — Día rojo o verde sin recuento
-
-El calendario elimina número de planes, punto y leyenda de recuento. El número del día es rojo/negrita con al menos un plan sin completar, verde/negrita cuando todos sus planes conocidos están completados y neutro sin planes. Selección usa borde/fondo neutro para no tapar el estado; hoy mantiene borde reconocible. Rojo700/verde700 en claro y400 en oscuro. Etiquetas accesibles españolas anuncian estado sin recuento. No se afirma completado si la evidencia de progreso falta, quedan páginas de apariciones o hay errores de expansión; los pendientes conocidos sí quedan rojos. Mensajes/botón de carga mensual ya no hablan de recuento.
-
-SSR de selección en cada estado, vacío, ausencia de evidencia y página parcial. Catorce pruebas focalizadas/114aserciones iniciales; añadida guardia parcial después de inspeccionar consumidor mensual. DoD final1368pass/225opt-in skip/0fail/14929aserciones, lint1111sinavisos/tipos/Webpack16.4.2/worker46/diff aprobados sobre fuentes finales. Cálculo común de fechas/apariciones sigue intacto, sin nueva persistencia/protocolo/índice.
-
-QA de PlanCalendarBoard real con IndexedDB propio: hoy rojo con tres planes; completar los tres lo vuelve verde y mantiene mañana/pasado rojos; reabrir uno vuelve hoy rojo. Vacíos neutros, sin contador ni punto. Captura390px /private/tmp/dalis-23e-calendar.png. Prueba/bases propias eliminadas, servidor/pestaña retirados y viewport restablecido. La guardia de carga parcial posterior se valida en SSR; no se atribuye recorrido UI parcial ni RPC/Google/físico nuevos. Entrada73%5h/96%7d y control68%/95%, reservas10%/1%; mismo commit/pushint/SHA/cuotas, sin DBusuario/producción.

@@ -4,10 +4,9 @@ import { useCallback, useEffect, useState } from "react"
 
 interface HubAccessCheckProps {
   callbackUrl: string
-  hubUrl: string
 }
 
-export function HubAccessCheck({ callbackUrl, hubUrl }: HubAccessCheckProps) {
+export function HubAccessCheck({ callbackUrl }: HubAccessCheckProps) {
   const [state, setState] = useState<"checking" | "denied" | "unavailable">(
     "checking"
   )
@@ -54,15 +53,14 @@ export function HubAccessCheck({ callbackUrl, hubUrl }: HubAccessCheckProps) {
         </h1>
         {state === "denied" ? (
           <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
-            Tu cuenta no tiene permiso para esta aplicación. Solicita acceso en
-            Damaca Hub y vuelve a comprobarlo. Si acabas de cambiar a Hub,
-            vuelve a conectar tu cuenta.
+            Tu cuenta no tiene acceso a esta aplicación. Contacta con el
+            administrador para solicitar acceso.
           </p>
         ) : null}
         {state === "unavailable" ? (
           <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
-            No se pudo comprobar el permiso en Damaca Hub. Revisa la conexión e
-            inténtalo de nuevo.
+            No se pudo comprobar tu acceso. Revisa la conexión e inténtalo de
+            nuevo.
           </p>
         ) : null}
         {state !== "checking" ? (
@@ -79,12 +77,6 @@ export function HubAccessCheck({ callbackUrl, hubUrl }: HubAccessCheckProps) {
               href={`/auth/signin?reauthenticate=1&callbackUrl=${encodeURIComponent(callbackUrl)}`}
             >
               Volver a conectar con Google
-            </a>
-            <a
-              className="min-h-11 content-center text-center underline"
-              href={hubUrl}
-            >
-              Abrir Damaca Hub
             </a>
           </div>
         ) : null}

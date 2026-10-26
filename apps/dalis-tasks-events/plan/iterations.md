@@ -2,7 +2,17 @@
 
 El contrato común de planificación para esta app se estableció en la entrega transversal [AGW-01](../../../plan/iteration-log.md#agw-01-centralizar-el-flujo-y-el-contrato-documental). El [workflow raíz](../../../plan/workflow.md) es el único protocolo.
 
-Este archivo es la única fuente del estado de las entregas. Las diez iteraciones recientes mantienen objetivo, rutas, dependencias, aceptación y validación prevista; la evidencia observada permanece en [iteration-log.md](iteration-log.md). La ingeniería del alcance de lanzamiento está cerrada según [release-readiness.md](release-readiness.md). No hay trabajo de producto autorizado pendiente. Promoción a `main` y smoke posterior al despliegue son acciones separadas; el trabajo pospuesto no se convierte en backlog sin nueva decisión.
+Este archivo es la única fuente del estado de las entregas. Las diez iteraciones recientes mantienen objetivo, rutas, dependencias, aceptación y validación prevista; la evidencia observada permanece en [iteration-log.md](iteration-log.md). La ingeniería del alcance de lanzamiento está cerrada según [release-readiness.md](release-readiness.md). Promoción a `main` y smoke posterior al despliegue son acciones separadas; el trabajo pospuesto no se convierte en backlog sin nueva decisión.
+
+## 23o — Login transparente con Google
+
+- Estado: `validated`.
+- Objetivo: Ocultar la implementación interna de identidad y presentar un inicio de sesión normal con Google.
+- Rutas: Componentes de acceso y ajustes, páginas de comprobación de permisos, plan y registro de la app.
+- Dependencias: Integración de identidad AGW-11 vigente.
+- Aceptación: Ningún texto visible de autenticación o permisos menciona Damaca Hub; se mantienen instrucciones útiles para acceso denegado, reautenticación y errores.
+- Validación prevista: Biome, tipos, pruebas y build de Dalis Tasks; inspección del texto visible.
+- Evidencia: [registro](iteration-log.md#23o).
 
 ## 23n — Compatibilidad Intl en calendario civil
 
@@ -94,16 +104,6 @@ Este archivo es la única fuente del estado de las entregas. Las diez iteracione
 - Validación prevista: Pruebas con >50 apariciones, SSR y revisión UI de completar/reabrir.
 - Evidencia: [registro](iteration-log.md#23f).
 
-## 23e — Estado diario sin recuento
-
-- Estado: `validated`.
-- Objetivo: Comunicar pendientes/completados por color, sin recuento ni punto.
-- Rutas: Cuadrícula mensual, vista calendario y pruebas.
-- Dependencias: Resumen diario local de planes/apariciones.
-- Aceptación: Rojo con pendiente, verde solo con evidencia completa, neutro vacío; mantener accesibilidad, selección y estados de carga.
-- Validación prevista: SSR de estados/carga parcial, revisión de completar/reabrir y suite.
-- Evidencia: [registro](iteration-log.md#23e).
-
 ## Historial anterior
 
-Las iteraciones anteriores a `23e` se conservan en el [archivo histórico](archive/2026-10-24/README.md).
+La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).

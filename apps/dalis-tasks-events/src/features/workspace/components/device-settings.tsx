@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useState } from "react"
+import { useCallback, useId, useState } from "react"
 import { canPrepareOfflineShell } from "@/config/pwa"
 import { DeviceSyncSettings } from "@/features/sync/components/device-sync-settings"
 import { AccountIdentity } from "@/features/workspace/components/account-identity"
@@ -46,7 +46,7 @@ export function DeviceSettings({
         : failed || error
           ? "error"
           : "unprepared"
-  async function prepare() {
+  const prepare = useCallback(async () => {
     setPreparing(true)
     setFailed(false)
     try {
@@ -57,31 +57,34 @@ export function DeviceSettings({
     } finally {
       setPreparing(false)
     }
-  }
-  async function close(switchAccount = false) {
-    setFailed(false)
-    try {
-      const completed = await closeLocalAccount()
-      await refresh()
-      setNotice(
-        completed
-          ? "Sesión cerrada. Tus cambios locales se conservan para cuando vuelvas con la misma cuenta."
-          : "Espacio oculto en este dispositivo. Falta cerrar la sesión remota cuando vuelva la conexión; tus cambios locales se conservan."
-      )
-      if (switchAccount && completed)
-        window.location.assign("/auth/signin?callbackUrl=%2Fworkspace")
-    } catch {
-      setFailed(true)
-    }
-  }
+  }, [refresh])
+  const close = useCallback(
+    async (switchAccount = false) => {
+      setFailed(false)
+      try {
+        const completed = await closeLocalAccount()
+        await refresh()
+        setNotice(
+          completed
+            ? "Sesión cerrada. Tus cambios locales se conservan para cuando vuelvas con la misma cuenta."
+            : "Espacio oculto en este dispositivo. Falta cerrar la sesión remota cuando vuelva la conexión; tus cambios locales se conservan."
+        )
+        if (switchAccount && completed)
+          window.location.assign("/auth/signin?callbackUrl=%2Fworkspace")
+      } catch {
+        setFailed(true)
+      }
+    },
+    [refresh]
+  )
 
-  function closeCurrentSession() {
+  const closeCurrentSession = useCallback(() => {
     return close()
-  }
+  }, [close])
 
-  function switchAccount() {
+  const switchAccount = useCallback(() => {
     return close(true)
-  }
+  }, [close])
   return (
     <div className="dalis-compact-controls">
       {account && profile?.userId === account.userId ? (
@@ -115,7 +118,7 @@ export function DeviceSettings({
           {state === "unprepared" ? (
             <p>
               {authenticationRequired
-                ? "Inicia sesión con Google a través de Damaca Hub. Tu espacio se preparará automáticamente al volver."
+                ? "Inicia sesión con Google. Tu espacio se preparará automáticamente al volver."
                 : "Prepara este dispositivo con conexión para volver a abrir tu espacio."}
             </p>
           ) : null}
@@ -158,7 +161,7 @@ export function DeviceSettings({
               href="/auth/signin?callbackUrl=%2Fworkspace"
               className="flex min-h-12 items-center justify-center rounded-xl border border-zinc-300 px-5 py-3 font-medium dark:border-zinc-700"
             >
-              Iniciar sesión con Google en Damaca Hub
+              Iniciar sesión con Google
             </a>
           </div>
         ) : null}

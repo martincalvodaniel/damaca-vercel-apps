@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { completePendingRemoteLogout } from "@/features/auth/pending-logout"
 import { authClient } from "@/lib/auth/auth-client"
@@ -14,7 +14,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
   const [error, setError] = useState(initialError)
   const [isPending, setIsPending] = useState(false)
 
-  async function handleSignIn(): Promise<void> {
+  const handleSignIn = useCallback(async (): Promise<void> => {
     setError(undefined)
     setIsPending(true)
 
@@ -26,14 +26,16 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
       })
 
       if (result.error) {
-        setError("No se ha podido conectar con Damaca Hub. Inténtalo de nuevo.")
+        setError(
+          "No se ha podido iniciar sesión con Google. Inténtalo de nuevo."
+        )
         setIsPending(false)
       }
     } catch {
-      setError("No se ha podido conectar con Damaca Hub. Inténtalo de nuevo.")
+      setError("No se ha podido iniciar sesión con Google. Inténtalo de nuevo.")
       setIsPending(false)
     }
-  }
+  }, [callbackUrl])
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-zinc-950">
@@ -46,8 +48,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
             Bienvenido de nuevo
           </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            Inicia sesión con Google a través de Damaca Hub para acceder a la
-            gestión del hogar.
+            Inicia sesión con Google para acceder a la gestión del hogar.
           </p>
         </div>
 
@@ -77,7 +78,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
               fill="#EA4335"
             />
           </svg>
-          {isPending ? "Conectando…" : "Continuar con Google en Damaca Hub"}
+          {isPending ? "Conectando…" : "Continuar con Google"}
         </button>
       </section>
     </main>
