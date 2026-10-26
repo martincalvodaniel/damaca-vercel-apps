@@ -38,7 +38,7 @@ AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that 
 
 ## 04 — Keep administrator application grants explicit
 
-- Status: `in_progress`.
+- Status: `validated`.
 - Goal: allow Hub administrators to grant or revoke application access for administrator accounts while retaining explicit per-application authorization.
 - Paths: `src/features/hub/actions.ts`, `src/features/admin/components/admin-screen.tsx`, this plan, and the delivery log.
 - Dependencies: existing `ALLOWED_EMAILS` administrator check and MongoDB per-app grant store.
