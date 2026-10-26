@@ -25,7 +25,8 @@
     "swr": "catalog:",
     "zod": "catalog:",
     "@damaca/identity": "workspace:*",
-    "@better-auth/oauth-provider": "catalog:"
+    "@better-auth/oauth-provider": "catalog:",
+    "@damaca/database-refresh": "workspace:*"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",

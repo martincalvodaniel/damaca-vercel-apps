@@ -10,11 +10,22 @@
         "GOOGLE_CLIENT_SECRET",
         "MONGODB_URI",
         "MONGODB_DB",
+        "MONGODB_INDEX_MODE",
         "NODE_ENV",
         "VERCEL_BRANCH_URL",
         "VERCEL_URL",
         "VERCEL_PROJECT_PRODUCTION_URL"
+      ],
+      "passThroughEnv": [
+        "DATABASE_REFRESH_ENABLED",
+        "DATABASE_REFRESH_SOURCE_URI",
+        "DATABASE_REFRESH_TARGET_URI",
+        "DATABASE_REFRESH_TARGET_DB",
+        "CRON_SECRET"
       ]
+    },
+    "test": {
+      "passThroughEnv": ["CRON_SECRET", "VERCEL_ENV"]
     }
   }
 }

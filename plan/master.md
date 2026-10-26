@@ -21,6 +21,8 @@ El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events
 
 No se define aquí un roadmap de producto para ninguna app ni se autoriza promoción a `main`, despliegue o cambios de infraestructura.
 
+La issue transversal [#3](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/3) define la separación de MongoDB pro/int y el refresco por cron. La primera entrega [AGW-12](iterations.md#agw-12--shared-database-refresh-and-hub-integration) implementa el motor común y configura solo Damaca Hub; las demás apps permanecen fuera de esta configuración.
+
 ## Calidad actual
 
 AGW-09 restablece el lint global sin errores de formato. Los avisos y diagnósticos informativos existentes quedan fuera de este corte; evidencia en el [registro](iteration-log.md#agw-09-restore-global-lint-success).

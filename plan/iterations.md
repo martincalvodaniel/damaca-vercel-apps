@@ -2,6 +2,18 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-12 — Shared database refresh and Hub integration
+
+- Estado: `in_progress`.
+- Objetivo: implementar el motor compartido de copia producción→int con alineación exacta de índices e integrarlo solo en Damaca Hub, según [issue #3](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/3).
+- Alcance de esta entrega: paquete `@damaca/database-refresh`; cron diario y ruta protegida del Hub; copia del catálogo y grants; validación de índices en el arranque Hub `int`. No configurar conexiones, cron ni código en las otras aplicaciones.
+- Rutas: `packages/database-refresh/**`, catálogos/manifiestos raíz, `apps/damaca-hub/**` y planificación raíz/Hub.
+- Dependencias: credenciales Atlas con lectura solo de pro y escritura limitada a int; variables privadas y cron habilitado en Vercel. Los valores remotos no se guardan en Git.
+- Aceptación: copiar las colecciones declaradas, conservar los datos propios del Hub `int`, replicar y verificar índices de origen, bloquear arranques Hub `int` con manifiesto ausente/divergente, rechazar invocación no autorizada o entorno distinto, y programar el cron del Hub diariamente. La entrega no cambia las otras apps.
+- Validación prevista: pruebas unitarias e integración sobre Mongo local/desechable; lint, tipos, tests y build del paquete y Hub; enlaces y `git diff --check`. Atlas, credenciales Vercel y primera ejecución programada se comprobarán de forma separada cuando estén disponibles. La iteración sigue `in_progress` hasta configurar el destino y activar la primera ejecución en Vercel.
+- Evidencia: [registro AGW-12](iteration-log.md#agw-12-shared-database-refresh-and-hub-integration). Referencia desde [plan del Hub](../apps/damaca-hub/plan/master.md).
+- Decisiones: refresco diario del Hub a las 00:00 UTC; política explícita de copiar catálogo/grants y conservar identidad/OIDC/secrets de int; los índices de aplicaciones en Hub int se validan exactamente contra el manifiesto de pro sin creación automática.
+
 ## AGW-11 — Dalis Tasks uses Hub identity
 
 - Estado: `validated`.

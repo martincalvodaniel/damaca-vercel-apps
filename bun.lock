@@ -125,6 +125,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@better-auth/oauth-provider": "catalog:",
+        "@damaca/database-refresh": "workspace:*",
         "@damaca/identity": "workspace:*",
         "@vercel/config": "catalog:",
         "better-auth": "catalog:",
@@ -171,6 +172,19 @@
         "knip": "catalog:",
         "tailwindcss": "catalog:",
         "turbo": "2.11.10",
+        "typescript": "catalog:",
+      },
+    },
+    "packages/database-refresh": {
+      "name": "@damaca/database-refresh",
+      "version": "0.1.0",
+      "dependencies": {
+        "mongodb": "catalog:",
+        "server-only": "catalog:",
+      },
+      "devDependencies": {
+        "@types/bun": "catalog:",
+        "@types/node": "catalog:",
         "typescript": "catalog:",
       },
     },
@@ -277,6 +291,8 @@
     "@damaca/dalis-tasks-events": ["@damaca/dalis-tasks-events@workspace:apps/dalis-tasks-events"],
 
     "@damaca/damaca-hub": ["@damaca/damaca-hub@workspace:apps/damaca-hub"],
+
+    "@damaca/database-refresh": ["@damaca/database-refresh@workspace:packages/database-refresh"],
 
     "@damaca/identity": ["@damaca/identity@workspace:packages/identity"],
 

@@ -22,4 +22,12 @@ describe("Hub authentication proxy", () => {
       "https://hub.example/auth/signin?callbackUrl=%2Fdashboard"
     )
   })
+
+  it("allows the authenticated cron route through the session proxy", () => {
+    const request = new NextRequest("https://hub.example/api/cron/refresh-int")
+
+    const response = proxy(request)
+
+    expect(response.headers.get("x-middleware-next")).toBe("1")
+  })
 })

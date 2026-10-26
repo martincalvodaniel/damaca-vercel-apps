@@ -5,9 +5,11 @@ import { redirect } from "next/navigation"
 import { cache } from "react"
 import { isAdminEmail } from "@/lib/auth/access"
 import { getHubAuth } from "@/lib/auth/auth"
+import { getDatabase } from "@/lib/db/client"
 
 export const getVerifiedSession = cache(async () => {
   const requestHeaders = await headers()
+  await getDatabase()
   const session = await (await getHubAuth()).api.getSession({
     headers: requestHeaders,
   })

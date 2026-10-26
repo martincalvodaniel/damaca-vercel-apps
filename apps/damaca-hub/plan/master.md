@@ -42,3 +42,5 @@ AGW-05 temporarily integrated Pocha Score and Card Wars with mandatory identity.
 ## Application icons
 
 Browser and home-screen icons use local SVG sources, a 16/32/48-pixel ICO fallback, installation PNGs and an Apple Touch Icon. Existing PWA manifests also declare an opaque maskable variant. Regenerate with `bun run icons:generate` from the repository root. Shared status and evidence: [AGW-10](../../../plan/iterations.md#agw-10--application-favicons) and [delivery log](../../../plan/iteration-log.md#agw-10-application-favicons).
+
+The shared production-to-int refresh engine is integrated for the Hub only in [root AGW-12](../../../plan/iterations.md#agw-12--shared-database-refresh-and-hub-integration), tracked by [issue #3](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/3). It refreshes the catalog and access grants while retaining Hub int identity and OIDC data.

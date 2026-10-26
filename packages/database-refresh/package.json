@@ -1,0 +1,24 @@
+{
+  "name": "@damaca/database-refresh",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "test": "bun --conditions=react-server test",
+    "test:integration": "bun --conditions=react-server run src/index.integration.ts",
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "mongodb": "catalog:",
+    "server-only": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

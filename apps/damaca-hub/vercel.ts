@@ -7,9 +7,10 @@ export const config: VercelConfig = {
   installCommand:
     '[ "$VERCEL_INSTALL_COMPLETED" = "1" ] || bunx bun@1.4.4 install --frozen-lockfile --filter @damaca/damaca-hub',
   regions: ["cdg1"],
+  crons: [{ path: "/api/cron/refresh-int", schedule: "0 0 * * *" }],
   routes: [
     {
-      src: "/((?!api/auth/(?:oauth2/(?:token|userinfo|introspect|revoke)|jwks|\\.well-known/(?:openid-configuration|oauth-authorization-server))(?:/|$)).*)",
+      src: "/((?!api/cron/refresh-int(?:/|$)|api/auth/(?:oauth2/(?:token|userinfo|introspect|revoke)|jwks|\\.well-known/(?:openid-configuration|oauth-authorization-server))(?:/|$)).*)",
       missing: [
         {
           type: "header",
