@@ -6,6 +6,17 @@ Este archivo es la única fuente del estado de las entregas. Las diez iteracione
 
 La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). AGW-11 ya no es una dependencia vigente.
 
+## 23q — Ocultar categorías vacías durante el arrastre
+
+- Estado: `validated`.
+- Objetivo: Mostrar solo categorías con planes visibles al arrastrar en Mi espacio y Calendario, incluida Sin fecha.
+- Rutas: `src/features/plans/components/plan-list.tsx` y `plan/**`.
+- Dependencias: Agrupación y destinos de arrastre compartidos existentes; sin dependencias nuevas.
+- Aceptación: No aparecen categorías vacías ni «Sin categoría» vacía; se conserva el movimiento y orden entre grupos con contenido y el arrastre de fechas del calendario.
+- Validación prevista: Biome incremental, tipos, suite y build filtrados; revisión de diff y publicación en `int`.
+- Capacidad inicial: 2026-10-31, 62% en 5h y 94% en 7d; estimación conservadora 5%/1%, reservas 7%/2%.
+- Evidencia: [registro](iteration-log.md#23q).
+
 ## 23p — Planes sin fecha
 
 - Estado: `validated`.
@@ -97,16 +108,6 @@ La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.
 - Validación prevista: Suite, tipos, build y medida visual móvil.
 - Evidencia: [registro](iteration-log.md#23h).
 
-## 23g — Movimiento entre categorías
-
-- Estado: `validated`.
-- Objetivo: Permitir mover un plan antes/después o a una categoría vacía en el mismo día.
-- Rutas: LongPressOrder, agrupación, PlanList, calendario, núcleo puro y pruebas.
-- Dependencias: Operación `task.move` y persistencia existentes.
-- Aceptación: Guardar categoría/posición en una operación; preservar fecha y estado; gestionar series, cancelación y destinos obsoletos con guardias.
-- Validación prevista: Pruebas de planner, gesto UI, recarga/cola y regresiones pertinentes.
-- Evidencia: [registro](iteration-log.md#23g).
-
 ## Historial anterior
 
-La iteración `23f` y su evidencia se conservan en el [archivo del 2026-10-31](archive/2026-10-31/README.md). La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).
+Las iteraciones `23g` y `23f` y su evidencia se conservan en el [archivo del 2026-10-31](archive/2026-10-31/README.md). La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).

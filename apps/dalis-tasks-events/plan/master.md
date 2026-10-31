@@ -13,13 +13,15 @@ Aplicación personal mobile-first para planificación, operable offline con sinc
 
 - Los planes pueden no tener fecha; se muestran en «Sin fecha», encima de Atrasadas y plegada por defecto en cada entrada. Conservan categorías y orden manual. Las series requieren fecha de inicio.
 
+- Al arrastrar planes en Mi espacio (incluida Sin fecha) y Calendario, solo se muestran categorías con planes visibles. Las categorías vacías dejan de ofrecerse como destinos de arrastre.
+
 ## Estado actual y exclusiones
 
 Tasks vuelve a autenticar directamente con Google y autoriza mediante `ALLOWED_EMAILS`, con configuración independiente por entorno. No consulta permisos ni identidad al Hub. Se conservan las sesiones/usuarios Mongo y los datos locales offline; quienes usaron la integración temporal pueden necesitar iniciar sesión de nuevo con Google. La reversión de AGW-11 y la suspensión del refresco se registran en [AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). `main` sigue bajo gestión humana.
 
 ## Evidencia y trabajo previo
 
-Las diez entregas recientes son `23p`–`23g` en [iteraciones](iterations.md) y [registro](iteration-log.md). Las decisiones y registros anteriores se conservan en el [archivo](archive/2026-10-24/README.md).
+Las diez entregas recientes son `23q`–`23h` en [iteraciones](iterations.md) y [registro](iteration-log.md). Las decisiones y registros anteriores se conservan en el [archivo](archive/2026-10-24/README.md).
 
 ## Application icons
 

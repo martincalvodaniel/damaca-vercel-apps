@@ -132,20 +132,18 @@ export function PlanList({
       !appearances.nextCursor
   )
   const groups = data
-    ? groupPlanAgendaRows(rows, data.tags, data.views, allowCategoryDrop).map(
-        (group) => ({
-          ...group,
-          rows:
-            placements && !placementReadError
-              ? orderPlanAgendaRows(
-                  group.rows,
-                  placements,
-                  selection,
-                  group.id === "uncategorized" ? null : group.id
-                )
-              : group.rows,
-        })
-      )
+    ? groupPlanAgendaRows(rows, data.tags, data.views).map((group) => ({
+        ...group,
+        rows:
+          placements && !placementReadError
+            ? orderPlanAgendaRows(
+                group.rows,
+                placements,
+                selection,
+                group.id === "uncategorized" ? null : group.id
+              )
+            : group.rows,
+      }))
     : []
   const categoryByRow = new Map(
     groups.flatMap((group) =>

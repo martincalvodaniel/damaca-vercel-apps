@@ -4,6 +4,15 @@ La integración temporal AGW-11 queda retirada por [AGW-13](../../../plan/iterat
 
 La evidencia reciente se mantiene aquí; las entregas anteriores se conservan en los archivos [2026-10-31](archive/2026-10-31/README.md), [2026-10-26](archive/2026-10-26/README.md) y [2026-10-24](archive/2026-10-24/README.md). Los porcentajes y decisiones operativas de registros históricos no son políticas vigentes.
 
+<a id="23q"></a>
+## 23q — Ocultar categorías vacías durante el arrastre
+
+Aceptación: [23q](iterations.md#23q--ocultar-categorías-vacías-durante-el-arrastre). `PlanList`, compartido por Mi espacio y Calendario, deja de incluir grupos vacíos al habilitar el movimiento entre categorías. Tanto las secciones renderizadas como los destinos del gesto se derivan ahora solo de grupos con planes visibles; también se excluye «Sin categoría» vacía. Aplica a días y Sin fecha. Conserva el orden y movimiento entre grupos con contenido y el arrastre a fechas del calendario. Sin cambios de datos ni dependencias.
+
+Validación: `bun run type-check --filter=@damaca/dalis-tasks-events`, `bun run test --filter=@damaca/dalis-tasks-events` (1392 pass, 225 skip opt-in, 0 fail, 15163 aserciones) y `bun run build --filter=@damaca/dalis-tasks-events -- --webpack` correctos, worker offline de 47 recursos. Build con valores efímeros ficticios para autenticación y URI loopback. Biome directo del archivo editado correcto tras ajustar formato; el primer lint incremental sin preparar no seleccionó archivos, por lo que se verifica también lo preparado. `git diff --check` correcto. Sin nuevas pruebas para este ajuste de presentación de bajo impacto; se ejecuta la suite existente de agrupación y arrastre. Sin recorrido visual interactivo nuevo.
+
+Entrada: 62%/94% (5h/7d), reservas 7%/2%; trabajo secuencial en `int`. La entrega 23g se conserva íntegra en el [archivo](archive/2026-10-31/README.md#23g) para mantener diez entregas recientes. Commit, publicación y coincidencia de SHA remoto se verifican en Git al cierre.
+
 <a id="23p"></a>
 ## 23p — Planes sin fecha
 
@@ -100,17 +109,3 @@ Fixture de navegación sin DB: H1 móvil de1×1px/positionabsolute, Categorías 
 Altura mínima de cada día reducida de56a44px (min-h-14→min-h-11), conservando superficie táctil de44px, bordes, colores/estado, selección, navegación y destinos de arrastre. Sólo cambia esta claseCSS. Sin nuevas pruebas que reflejen literalmente la implementación. Suite vigente1381pass/225opt-in skip/0fail/15041aserciones, lint1113sinavisos/tipos/Webpack16.4.2/worker46/diff aprobados.
 
 QA de PlanCalendarBoard productivo con cuenta/IndexedDB propios a390px:35celdas renderizadas, altura real44px uniforme; captura /private/tmp/dalis-23h-calendar-compact.png. Datos/bases propios eliminados, pestaña/servidor retirados y viewport restablecido. Sin nueva prueba de gestos/RPC/Google/dispositivo físico ni cambios de datos/protocolo/índices/dependencias. Entrada39%5h/90%7d, reservas10%/1%, secuencial; mismo commit/pushint/SHA/cuotas, sin DBusuario/producción.
-
-
-<a id="23g"></a>
-## 23g — Arrastre entre categorías del mismo día
-
-Hoy y día del Calendario permiten soltar un plan antes/después de una fila de otra categoría, en su cabecera para añadirlo al final o en una categoría vacía/Sin categoría. Destinos vacíos se revelan sólo durante el gesto; no añaden bloques vacíos permanentes. Se amplía LongPressOrder con grupos tipados y scope propio de sección, vecinos calculados del catálogo actual y previsualización accesible. Fingerprint/busy/escape preservados. Se captura destino antes de retirar selección, para que una zona vacía no desaparezca antes del hit-test. Pulsación inmóvil requiere desplazamiento>12px para evitar cambios al revelarse zonas por encima de la fila.
-
-PlanList usa un único task.move productivo que ya guarda vista de categoría y posiciones en la misma TX/outbox; sin concatenar dos mutaciones ni ACK local. El motor remoto ya soporta esta operación y no cambia. Para una aparición, asignación pertenece al padre y cambia toda la serie; preview lo advierte, y vecinos incluyen hermanos visibles de ese padre que entrarán también en destino. La posición se guarda sólo en fecha/slot elegido. Atrasadas/Próximas continuas no son destinos de este gesto; se mantienen fecha-drop del Calendario y teclado dentro de categoría/selector accesible.
-
-Veinte pruebas focalizadas/205aserciones con vecinos primero/medio/último/vacío, destinos obsoletos/duplicados y no-op de mismo grupo, SSR vacío sólo durante gesto y8casos contra planner real (cuatro variantes×simple/aparición, incluidos hermanos solapados). Comprueban comando validado, vista+placement conjunto, snapshot intacto, fecha/identidad originales y vacíos. DoD final1381pass/225opt-in skip/0fail/15041aserciones, lint1113sinavisos/tipos/Webpack16.4.2/worker46/diff aprobados. Sin cambios de esquema/protocolo/ejecutor/índices, por lo que no se repite matriz Mongo/Next remota histórica ni se atribuye ACK/convergencia nueva.
-
-Fixture Touch sintetizada sobre PlanAgenda/PlanCalendarBoard reales+IndexedDB propio a390px: cinco movimientos (simple→otra categoría antes/después, retorno a categoría vacía, serie→Vacía→Sin categoría), en ambas vistas. Tras recarga, vista y orden Plan2→Plan1 correctos, categoría de serie y futuras apariciones coherentes, cinco comandos pending/attempt0/sinlease y contenido/slots/tags/settings idénticos al baseline. Escape y pulsación sin desplazar no añaden operación. Primer intento de cancelación del harness falló al identificar preview por coordenadas junto al borde/auto-scroll; se centraron source/destino y se repitió tras recarga con preview válido y cancelación confirmada, sin alterar aserciones de persistencia. Regresión independiente del arrastre dentro de categoría en Calendario pasa (Plan3→Plan1→Plan2, un comando pending). No evidencia de nuevo dispositivo físico ni Google/RPC. Captura /private/tmp/dalis-23g-category-drag.png. Particiones/bases de control propias eliminadas con ownership, pestañas/servidores retirados y viewport restaurado.
-
-Entrada59%5h/94%7d, controles54/93,51/92 y42/91; reservas10%/1%, secuencial, sin créditos/reinicios/programación. Mismo commit/pushint/SHA/cuotas. No DBusuario/producción/dependencias nuevas.
