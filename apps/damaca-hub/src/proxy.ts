@@ -4,11 +4,7 @@ import { type NextRequest, NextResponse } from "next/server"
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
 
-  if (
-    pathname === "/api/cron/refresh-int" ||
-    pathname.startsWith("/auth") ||
-    pathname.startsWith("/api/auth")
-  ) {
+  if (pathname.startsWith("/auth") || pathname.startsWith("/api/auth")) {
     return NextResponse.next()
   }
 

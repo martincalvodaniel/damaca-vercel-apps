@@ -21,7 +21,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
     try {
       await completePendingRemoteLogout()
       const result = await authClient.signIn.social({
-        provider: "damaca-hub",
+        provider: "google",
         callbackURL: callbackUrl,
       })
 

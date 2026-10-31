@@ -58,14 +58,8 @@ export function getAuthEnv() {
 }
 
 export function getDatabaseEnv() {
-  const indexMode = process.env.MONGODB_INDEX_MODE?.trim() || "ensure"
-  if (indexMode !== "ensure" && indexMode !== "source-manifest") {
-    throw new Error("MONGODB_INDEX_MODE must be ensure or source-manifest")
-  }
-
   return {
     databaseName: process.env.MONGODB_DB?.trim() || "damaca-hub",
-    indexMode,
     isDevelopment: process.env.NODE_ENV === "development",
     uri: getRequiredEnv("MONGODB_URI"),
   }
@@ -77,7 +71,8 @@ export function getDatabaseRefreshEnv() {
   const cronSecret = process.env.CRON_SECRET?.trim() ?? ""
 
   return {
-    enabled: process.env.DATABASE_REFRESH_ENABLED?.trim() === "true",
+    // Suspended by owner decision; environment variables cannot reactivate it.
+    enabled: false,
     configured: Boolean(sourceUri && targetUri && cronSecret),
     sourceUri,
     targetUri,

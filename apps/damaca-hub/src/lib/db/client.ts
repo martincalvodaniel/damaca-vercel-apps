@@ -1,6 +1,5 @@
 import "server-only"
 
-import { requireDatabaseRefreshManifest } from "@damaca/database-refresh"
 import { type Db, MongoClient } from "mongodb"
 import { getDatabaseEnv } from "@/config/env"
 import { ensureIndexes } from "@/lib/db/ensure-indexes"
@@ -59,35 +58,11 @@ async function ensureIndexesOnce(database: Db): Promise<void> {
   await indexesPromise
 }
 
-async function validateIndexesOnce(database: Db): Promise<void> {
-  if (!indexesPromise) {
-    indexesPromise = requireDatabaseRefreshManifest(database).catch(
-      (error: unknown) => {
-        indexesPromise = undefined
-        throw error
-      }
-    )
-  }
-
-  await indexesPromise
-}
-
 export async function getDatabase(): Promise<Db> {
   const client = await getClientPromise()
   const database = client.db(databaseEnv.databaseName)
 
-  if (databaseEnv.indexMode === "source-manifest") {
-    if (
-      await database
-        .collection<{ _id: string }>("__database_refresh")
-        .findOne({ _id: "lock" }, { projection: { _id: 1 } })
-    ) {
-      throw new Error("Integration database refresh is in progress")
-    }
-    await validateIndexesOnce(database)
-  } else {
-    await ensureIndexesOnce(database)
-  }
+  await ensureIndexesOnce(database)
 
   return database
 }

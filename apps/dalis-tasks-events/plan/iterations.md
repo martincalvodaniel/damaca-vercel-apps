@@ -4,6 +4,8 @@ El contrato común de planificación para esta app se estableció en la entrega 
 
 Este archivo es la única fuente del estado de las entregas. Las diez iteraciones recientes mantienen objetivo, rutas, dependencias, aceptación y validación prevista; la evidencia observada permanece en [iteration-log.md](iteration-log.md). La ingeniería del alcance de lanzamiento está cerrada según [release-readiness.md](release-readiness.md). Promoción a `main` y smoke posterior al despliegue son acciones separadas; el trabajo pospuesto no se convierte en backlog sin nueva decisión.
 
+La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). AGW-11 ya no es una dependencia vigente.
+
 ## 23o — Login transparente con Google
 
 - Estado: `validated`.

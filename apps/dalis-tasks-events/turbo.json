@@ -1,0 +1,34 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": [
+        "BETTER_AUTH_URL",
+        "BETTER_AUTH_SECRET",
+        "ALLOWED_EMAILS",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "MONGODB_URI",
+        "MONGODB_DB",
+        "NODE_ENV",
+        "VERCEL_BRANCH_URL",
+        "VERCEL_URL",
+        "VERCEL_PROJECT_PRODUCTION_URL"
+      ],
+      "passThroughEnv": [
+        "RUN_AUTH_DB_TESTS",
+        "RUN_SYNC_DB_TESTS",
+        "SYNC_TEST_RUN_ID",
+        "SYNC_TEST_PORT"
+      ]
+    },
+    "test": {
+      "passThroughEnv": [
+        "RUN_AUTH_DB_TESTS",
+        "RUN_SYNC_DB_TESTS",
+        "SYNC_TEST_RUN_ID",
+        "SYNC_TEST_PORT"
+      ]
+    }
+  }
+}

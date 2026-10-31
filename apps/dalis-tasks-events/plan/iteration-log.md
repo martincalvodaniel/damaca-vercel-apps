@@ -1,6 +1,6 @@
 # Registro de iteraciones
 
-La integración de identidad con Damaca Hub se registra en la entrega transversal [AGW-11](../../../plan/iteration-log.md#agw-11-dalis-tasks-uses-hub-identity).
+La integración temporal AGW-11 queda retirada por [AGW-13](../../../plan/iteration-log.md#agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh), registro principal de la reversión a Google directo.
 
 La evidencia reciente se mantiene aquí; las entregas anteriores se conservan en los archivos [2026-10-26](archive/2026-10-26/README.md) y [2026-10-24](archive/2026-10-24/README.md). Los porcentajes y decisiones operativas de registros históricos no son políticas vigentes.
 

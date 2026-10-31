@@ -2,6 +2,8 @@
 
 This file is the sole source of iteration status. Follow the [root workflow](../../../plan/workflow.md).
 
+The Tasks identity rollback and unconditional database-refresh suspension are tracked in [root AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh), with one [shared delivery log](../../../plan/iteration-log.md#agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh).
+
 ## 01 — Catalog and central access management
 
 - Status: `validated`.

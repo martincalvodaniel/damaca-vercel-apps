@@ -21,7 +21,7 @@ El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events
 
 No se define aquí un roadmap de producto para ninguna app ni se autoriza promoción a `main`, despliegue o cambios de infraestructura.
 
-La issue transversal [#3](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/3) define la separación de MongoDB pro/int y el refresco por cron. La primera entrega [AGW-12](iterations.md#agw-12--shared-database-refresh-and-hub-integration) implementa el motor común y configura solo Damaca Hub; las demás apps permanecen fuera de esta configuración.
+La issue transversal [#3](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/3) define la separación de MongoDB pro/int y el refresco por cron. El motor común de [AGW-12](iterations.md#agw-12--shared-database-refresh-and-hub-integration) se conserva, pero AGW-13 suspende su ejecución en todos los entornos y retira su programación e integración de arranque. No activar el refresco sin nueva decisión del usuario.
 
 ## Calidad actual
 
@@ -39,4 +39,4 @@ El catálogo y las fichas de administración del Hub muestran los iconos de las 
 - AGW-08 superseded those game requirements. Pocha Score and Card Wars are public, static and offline; Hub manages OIDC clients for other existing private apps.
 - Production and `int` callbacks are explicit per client. Stable Vercel branch aliases are supported; commit-specific preview URLs are out of scope.
 
-> AGW-08 superseded the social-login requirement for Pocha Score and Card Wars. AGW-11 now applies Hub-managed identity and per-app access to Dalis Tasks & Events while preserving its local Mongo identity and offline shell.
+> AGW-08 superseded the social-login requirement for Pocha Score and Card Wars. AGW-11 temporarily applied Hub-managed identity to Tasks. AGW-13 restores direct Google authentication and the Tasks email allowlist, preserving Mongo identity and the offline shell.

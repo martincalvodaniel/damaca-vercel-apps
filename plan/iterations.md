@@ -2,20 +2,33 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-13 — Restore independent Tasks authentication and suspend database refresh
+
+- Estado: `validated`.
+- Objetivo: restaurar Google directo y la allowlist de Tasks; dejar el refresco de bases sin efecto en ningún entorno conservando su implementación para el futuro.
+- Rutas: autenticación/configuración/pruebas/documentación de `apps/dalis-tasks-events/**`; cron/configuración/cliente Mongo de `apps/damaca-hub/**`; lockfile y planificación transversal.
+- Dependencias: decisión explícita del usuario de retirar temporalmente AGW-11 y suspender AGW-12. Credenciales Google propias de Tasks por entorno para validar login alojado.
+- Aceptación: Tasks no importa ni consulta Hub; autorización por sesión Mongo y `ALLOWED_EMAILS`; IDs/datos/offline preservados. Hub no programa cron, su endpoint no ejecuta refrescos ni recuperación y las funciones retenidas rechazan ejecución incluso con variables antiguas. El arranque Mongo no depende del manifiesto de refresco.
+- Validación prevista: lint incremental y explícito, tipos, suites Tasks/Hub, builds filtrados, pruebas de denegación del refresco con configuración antigua, revisión de referencias/contratos y `git diff --check`; comprobar configuración alojada sin revelar secretos si está disponible.
+- Registro principal: [AGW-13](iteration-log.md#agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh).
+- Capacidad inicial (2026-10-31): 97% de 5h y 100% de 7d restantes; corte secuencial estimado dentro de reservas.
+
 ## AGW-12 — Shared database refresh and Hub integration
 
-- Estado: `in_progress`.
+- Estado: `pending`.
+- Suspensión: decisión del usuario en AGW-13; no activar ni ejecutar el refresco. Código retenido para posible reanudación.
 - Objetivo: implementar el motor compartido de copia producción→int con alineación exacta de índices e integrarlo solo en Damaca Hub, según [issue #3](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/3).
 - Alcance de esta entrega: paquete `@damaca/database-refresh`; cron diario y ruta protegida del Hub; copia del catálogo y grants; validación de índices en el arranque Hub `int`. No configurar conexiones, cron ni código en las otras aplicaciones.
 - Rutas: `packages/database-refresh/**`, catálogos/manifiestos raíz, `apps/damaca-hub/**` y planificación raíz/Hub.
 - Dependencias: credenciales Atlas con lectura solo de pro y escritura limitada a int; variables privadas y cron habilitado en Vercel. Los valores remotos no se guardan en Git.
 - Aceptación: copiar las colecciones declaradas, conservar los datos propios del Hub `int`, replicar y verificar índices de origen, bloquear arranques Hub `int` con manifiesto ausente/divergente, rechazar invocación no autorizada o entorno distinto, y programar el cron del Hub diariamente. La entrega no cambia las otras apps.
-- Validación prevista: pruebas unitarias e integración sobre Mongo local/desechable; lint, tipos, tests y build del paquete y Hub; enlaces y `git diff --check`. Atlas, credenciales Vercel y primera ejecución programada se comprobarán de forma separada cuando estén disponibles. La iteración sigue `in_progress` hasta configurar el destino y activar la primera ejecución en Vercel.
+- Validación prevista: pruebas unitarias e integración sobre Mongo local/desechable; lint, tipos, tests y build del paquete y Hub; enlaces y `git diff --check`. Atlas, credenciales Vercel y primera ejecución programada se comprobarán de forma separada cuando estén disponibles. Reanudación pospuesta por AGW-13; no configurar ni activar ejecuciones sin una nueva decisión del usuario.
 - Evidencia: [registro AGW-12](iteration-log.md#agw-12-shared-database-refresh-and-hub-integration). Referencia desde [plan del Hub](../apps/damaca-hub/plan/master.md).
 - Decisiones: refresco diario del Hub a las 00:00 UTC; política explícita de copiar catálogo/grants y conservar identidad/OIDC/secrets de int; los índices de aplicaciones en Hub int se validan exactamente contra el manifiesto de pro sin creación automática.
 
 ## AGW-11 — Dalis Tasks uses Hub identity
 
+> Integración retirada por decisión del usuario en AGW-13; se conserva esta entrega como historial.
 - Estado: `validated`.
 - Objetivo: centralizar el login Google y el permiso de Dalis Tasks en Damaca Hub, conservando las sesiones y los identificadores locales Mongo que sustentan la sincronización.
 - Rutas: `packages/identity/**`, `apps/dalis-tasks-events/**`, `turbo.json`, `bun.lock` y planificación raíz/app.
@@ -86,7 +99,7 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Dependencias: autorización del usuario en esta conversación.
 - Aceptación: funciones documentales no duplicadas; workflows locales retirados; archivo histórico conservado donde había volumen; nueva app obligada a incluir estructura antes de trabajo no trivial; sin CI ni generador.
 - Validación prevista: enlaces, coherencia, conservación del archivo, `git diff --check`.
-- Evidencia: [iteration-log.md#AGW-01](iteration-log.md#agw-01-centralizar-el-flujo-y-el-contrato-documental).
+- Evidencia: [iteration-log.md#AGW-01](archive/2026-10-31/iteration-log.md#agw-01-centralizar-el-flujo-y-el-contrato-documental).
 
 ## AGW-02 — Generación de apps con Turborepo
 
@@ -97,7 +110,7 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Aceptación: comando interactivo y por argumentos; validaciones impiden colisiones antes de escribir; ambos scaffolds tienen identidad, puerto, instrucciones y planes propios; conservan auth/Mongo o PWA/IndexedDB respectivamente; no hay secretos ni configuración Vercel local.
 - Validación: generación interactiva y aislada con argumentos; errores para slug/nombre/puerto/directorio inválidos; lint, tipos y pruebas de cada app; build de producción de ambos modos; recarga offline de la PWA; enlaces y `git diff --check`.
 - Siguiente corte: AGW-03 retira los workspaces de plantilla tras validar sus sustitutos y actualiza inventario y lockfile.
-- Evidencia: [iteration-log.md#AGW-02](iteration-log.md#agw-02-generación-de-apps-con-turborepo).
+- Evidencia: [iteration-log.md#AGW-02](archive/2026-10-31/iteration-log.md#agw-02-generación-de-apps-con-turborepo).
 
 ## AGW-03 — Retirar workspaces de plantilla
 

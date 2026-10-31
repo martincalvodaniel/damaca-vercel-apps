@@ -1,10 +1,26 @@
 # Registro de entregas transversales
 
+Las evidencias AGW-01 y AGW-02 están en el [archivo del 31 de octubre](archive/2026-10-31/README.md).
+
 Los hechos de publicación se verifican en Git. El estado normativo está en [iterations.md](iterations.md); este registro conserva evidencia, límites e incidentes observados.
+
+<a id="agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh"></a>
+## AGW-13 — Restore independent Tasks authentication and suspend database refresh
+
+- Alcance: [aceptación AGW-13](iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). Decisión explícita del usuario: retirar temporalmente la dependencia de Tasks respecto al Hub y suspender el volcado en todos los entornos, conservando el código.
+- Tasks: restaurados proveedor Google directo, cliente Better Auth propio, allowlist y autorización por sesión persistida Mongo. Retirados la dependencia workspace de identidad y las rutas/componentes de comprobación/renovación Hub. Se restauran fixtures y pruebas de Google/sesiones. Los IDs, colecciones, protocolo de sincronización, datos offline e iconos permanecen. El panel de acceso conserva su aspecto y el botón Google; las variables `HUB_*` antiguas quedan ignoradas. No se modifican cuentas ni grants remotos. Configuración de build de Tasks declara sus variables independientes.
+- Hub: retirada la programación cron y sus excepciones de proxy/regla geográfica. La ruta antigua devuelve 410 sin importar configuración ni código de base de datos. `getDatabaseRefreshEnv().enabled` es falso incondicional y ambas funciones retenidas de refresco/restore rechazan antes de abrir conexiones. Se conserva el paquete/motor y las políticas de copia; el cliente Mongo vuelve a provisionar índices normales, sin leer manifiesto ni `MONGODB_INDEX_MODE`. Retomar exige un cambio explícito de código.
+- Validación: suites filtradas de Tasks/Hub pasan (Tasks: 1386 pass, 225 opt-in skip, 15108 aserciones; Hub: 33 pass, 93 aserciones). Los tests nuevos cubren refresh y restore en Production/Preview/Development aun con bearer y `DATABASE_REFRESH_ENABLED=true`, y denegación de las funciones retenidas antes de conectar. Tipos filtrados pasan en las cuatro workspaces implicadas por dependencias. Builds filtrados pasan con credenciales ficticias y Mongo loopback inaccesible: Tasks con `-- --webpack` y worker de 47 recursos; Hub con su build habitual Webpack. Biome explícito sobre todos los archivos editados/nuevos pasa sin hallazgos; enlaces y `git diff --check` revisados.
+- Integración: MongoDB 8 desechable, publicado solo en loopback y base `dalis-auth-test-agw13`. `RUN_AUTH_DB_TESTS=1 ... bun run test --filter=@damaca/dalis-tasks-events -- src/lib/db/auth-identity.integration.test.ts` pasa 5 pruebas/28 aserciones: Google directo y callback, ID estable al reconectar/cerrar sesión, aislamiento entre cuentas, unicidad, rechazo de sesiones expiradas/revocadas y cookies antiguas. Firma, emisor, audiencia y edad verificados con claves sintéticas. La prueba elimina su base y se retira el contenedor propio. No se ejecuta Google interactivo real.
+- Comprobación remota de solo lectura: Vercel identifica los dos proyectos y sus directorios correctos. Tasks mantiene declaradas `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `BETTER_AUTH_SECRET` y `ALLOWED_EMAILS` para Production/Preview; no se leen valores secretos. La API del proyecto Hub confirma `crons.definitions=[]` y Production en `999049684ade8c7750a64845da5cb4efd512de39` (main, anterior al refresco). No se cambian variables remotas, producción ni datos de usuario.
+- Incidentes resueltos: tipos inicialmente referían rutas eliminadas desde `.next/types` y `.next/dev/types`; se retiran solo esos artefactos generados y el build/tipos regenerados pasan. El lint incremental previo al staging encuentra cero archivos; la evidencia aplicable es Biome explícito y el lint staged al cierre. Avisos de caché remota Turbo no impiden builds ni tipos. Se archivan evidencias antiguas AGW-01/02 para conservar diez entregas recientes.
+- Publicación: cierre mediante Conventional Commit y push a `origin/int`; SHA remoto y estado de despliegue Preview se verifican al cierre. `main` permanece sin cambios.
+- Capacidad durante validación (2026-10-31): 93% de 5h y 99% de 7d restantes.
 
 <a id="agw-12-shared-database-refresh-and-hub-integration"></a>
 ## AGW-12 — Shared database refresh and Hub integration
 
+> Implementación suspendida por AGW-13; conservar esta evidencia como historial.
 - Alcance: [aceptación AGW-12](iterations.md#agw-12--shared-database-refresh-and-hub-integration), originada en [issue #3](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/3). En esta entrega el motor común se integra únicamente con Damaca Hub; ninguna otra app cambia sus conexiones ni configuración.
 - Cambios: el paquete `@damaca/database-refresh` copia colecciones con lectura snapshot, verifica cambios de esquema/índices de origen antes del intercambio, aplica índices exactos y publica un manifiesto que Hub `int` comprueba al arrancar. El Hub copia `applications` y `app_access`, conserva sus usuarios, sesiones, secretos y clientes OIDC `int`, y alinea los índices de las colecciones preservadas aunque no existan en pro. El staging usa nombres únicos por ejecución; cada colección se cambia con respaldo y un bloqueo persistente. El cron `/api/cron/refresh-int` queda programado a las 00:00 UTC, protegido por `CRON_SECRET`, restringido a Production y deshabilitado hasta activación explícita.
 - Validación: `bun install --frozen-lockfile`; integración contra MongoDB 8 desechable en loopback con replica set (`DATABASE_REFRESH_TEST_URI=... bun run --cwd packages/database-refresh test:integration`) pasa: catálogo reemplazado, documentos locales preservados, colección solo de int preservada y todos sus índices verificados contra el manifiesto. Se elimina la base efímera del test; el contenedor local se retira al cierre. `bun run type-check --filter=@damaca/database-refresh --filter=@damaca/damaca-hub` (3 tareas), `bun run test --filter=@damaca/database-refresh --filter=@damaca/damaca-hub` (31 tests: 2 del paquete y 29 del Hub, 79 expectativas en el Hub), builds filtrados de ambos y Biome explícito sobre los 20 archivos editados pasan; `git diff --check` pasa.
@@ -15,6 +31,7 @@ Los hechos de publicación se verifican en Git. El estado normativo está en [it
 <a id="agw-11-dalis-tasks-uses-hub-identity"></a>
 ## AGW-11 — Dalis Tasks uses Hub identity
 
+> Integración retirada por AGW-13; Tasks vuelve a Google directo.
 - Alcance: [aceptación AGW-11](iterations.md#agw-11--dalis-tasks-uses-hub-identity). Registro principal transversal; [plan de Dalis Tasks](../apps/dalis-tasks-events/plan/master.md) enlaza esta entrega.
 - Cambios: Tasks autentica mediante el cliente OIDC `damaca-hub` del paquete `@damaca/identity`; conserva sus colecciones/modelos Better Auth de Mongo y la identidad local para no reasignar datos sincronizados. La autorización se comprueba contra Hub y se actualiza mediante rutas de acceso/renovación; se retiraron el proveedor Google directo y la allowlist. Se conservan la shell PWA offline y la sincronización existente. La resolución del origen usa URL explícita, alias estable `int` en preview y dominio de producción.
 - Validación: `bun run type-check --filter=@damaca/identity --filter=@damaca/dalis-tasks-events` pasa; pruebas del paquete compartido: 18 tests/98 expectativas; pruebas de Tasks: 1384 pasan, 222 omitidas, 15102 expectativas. `bun run --cwd=apps/dalis-tasks-events build -- --webpack` compila Next 16 y genera el worker offline con 50 recursos. Biome comprueba los archivos editados sin errores; `git diff --check` pasa. La prueba Mongo de identidad existente es opt-in y no se ejecutó porque no hay `mongod` local.
@@ -81,21 +98,7 @@ Los hechos de publicación se verifican en Git. El estado normativo está en [it
 - Publicación: commit y coincidencia del SHA remoto se verifican en Git durante el cierre. El corte documental AGW-06 queda validado; la provisión remota se separa como AGW-07, bloqueada por autenticación. La configuración completa sigue pendiente de ese corte.
 - Capacidad al iniciar: 96% de 5h y 90% de 7d restantes; corte documental dentro de reservas. La lectura final se comunica al cierre.
 
-<a id="agw-01-centralizar-el-flujo-y-el-contrato-documental"></a>
-## AGW-01 — Centralizar el flujo y el contrato documental
 
-- Cambios: contrato de planificación añadido a las instrucciones raíz; responsabilidades y retención documental incorporadas al workflow; cinco workflows locales retirados; instrucciones de planificación redundantes consolidadas; documentos extensos archivados bajo `plan/archive/2026-10-24/` en cada ámbito afectado; las apps conservan sus límites de producto en sus instrucciones.
-- Evidencia: el commit `5800b12d0f9b8183fba89cec97e30c5fc05fa254` está en `int` y `origin/int` (comprobación al iniciar esta entrega).
-- Validación: los enlaces Markdown locales y anclas resuelven; las cinco apps contienen los tres documentos y no conservan workflow local; `bun run lint` pasa para los 1929 archivos (726 warnings y 2112 infos existentes; los archivos de aplicación con esos diagnósticos no se modificaron); los documentos Markdown editados pasan Biome y `git diff --check` queda limpio. Revisión manual confirma que solo `iterations.md` contiene estados y que el log mantiene las diez evidencias recientes de Dalis Tasks & Events; los archivos anteriores están indexados en sus archivos fechados.
-- Límites: solo documentación; no se modifican CI, generadores ni aplicaciones.
-
-<a id="agw-02-generación-de-apps-con-turborepo"></a>
-## AGW-02 — Generación de apps con Turborepo
-
-- Cambios: `bun run generate:app` ejecuta `turbo gen app`, con preguntas o respuestas por `--args`; la base `mongo-google` conserva Better Auth, Google, MongoDB y gestión de acceso; `local-pwa` conserva IndexedDB, exportación e instalación offline. Ambos modos generan identidad, puerto, instrucciones específicas y planificación de producto. Se excluyen `.env.local`, `.vercel`, dependencias y artefactos de build.
-- Evidencia: `bun run test:generator` pasa 6 casos y 37 aserciones; ambas apps temporales generadas pasan type-check, y sus pruebas pasan (local: 14; MongoDB: 37). Las apps temporales se retiraron después de comprobar los resultados.
-- Validación: generación interactiva con puerto predeterminado 3007 y por argumentos para ambos modos; los tests rechazan colisiones, entradas inválidas y destino ocupado, preservan archivos existentes y comprueban enlaces/documentos. El build local pasa mediante el filtro raíz y su exportación contiene 47 recursos de shell offline. El build MongoDB pasa con `next build --webpack`. En navegador, Settings y Home siguen cargando desde la caché y permiten navegar con el preview detenido. `bun install --frozen-lockfile`, `git diff --check` y Biome pasan sin errores.
-- Límites: el build MongoDB mediante Turbo/Turbopack no pudo ejecutarse porque el sandbox denegó un proceso auxiliar (`Operation not permitted`); el mismo código compiló con Webpack. No se probaron credenciales OAuth reales ni conexión a una base MongoDB externa. Biome conserva 14 warnings presentes en las bases copiadas; no hubo errores.
 
 <a id="agw-03-retirar-workspaces-de-plantilla"></a>
 ## AGW-03 — Retirar workspaces de plantilla
@@ -144,3 +147,7 @@ Los hechos de publicación se verifican en Git. El estado normativo está en [it
 - Documentación: planes e instrucciones vigentes actualizados y enlazados desde los tres ámbitos, con registro principal único aquí. Rutas Markdown locales, Biome de archivos editados/nuevos y `git diff --check` revisados. Las validaciones con servicios externos se distinguen de la aceptación de implementación local.
 - Publicación: el SHA y su coincidencia con `refs/heads/int` remoto se verifican en Git durante el cierre; `main` permanece bajo gestión humana.
 - Capacidad antes del cierre: 45% de 5h y 91% de 7d restantes; reserva mínima respetada. La lectura final se comunica después de verificar publicación.
+
+<a id="agw-01-centralizar-el-flujo-y-el-contrato-documental"></a>
+<a id="agw-02-generación-de-apps-con-turborepo"></a>
+Evidencias históricas [AGW-01 y AGW-02](archive/2026-10-31/iteration-log.md) archivadas; estas anclas conservan los enlaces anteriores.

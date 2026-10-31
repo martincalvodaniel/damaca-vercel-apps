@@ -1,6 +1,6 @@
 import "server-only"
 
-import { describe, expect, test as it, test } from "bun:test"
+import { describe, expect, test as it } from "bun:test"
 import { randomUUID } from "node:crypto"
 import { pushSyncBatch } from "@/features/sync/push-batch"
 import { authorizePersistedSession } from "@/lib/auth/authorized-session"
@@ -40,7 +40,7 @@ describe("authenticated sync batch", () => {
       )
     ).toEqual({ status: "invalid_batch" })
   })
-  it("a missing, expired or inconsistent session never reaches the executor", async () => {
+  it("a missing, expired or disallowed session never reaches the executor", async () => {
     const now = new Date("2026-10-08T00:00:00Z")
     const session = {
       user: {
@@ -56,13 +56,17 @@ describe("authenticated sync batch", () => {
     for (const candidate of [
       null,
       { ...session, session: { ...session.session, expiresAt: now } },
-      { ...session, session: { ...session.session, userId: "another-user" } },
+      { ...session, user: { ...session.user, email: "other@example.test" } },
     ]) {
       const result = await pushSyncBatch(
         { expectedUserId: "test-actor", operations: [operation()] },
         {
           readActor: async () =>
-            authorizePersistedSession(candidate, now)?.user.id ?? null,
+            authorizePersistedSession(
+              candidate,
+              new Set(["test@example.test"]),
+              now
+            )?.user.id ?? null,
           execute: async () => {
             throw new Error("Executor must not run")
           },

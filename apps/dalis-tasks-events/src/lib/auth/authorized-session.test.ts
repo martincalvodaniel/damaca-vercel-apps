@@ -4,6 +4,7 @@ import { describe, expect, test as it } from "bun:test"
 import { authorizePersistedSession } from "@/lib/auth/authorized-session"
 
 const now = new Date("2026-10-06T12:00:00Z")
+const allowed = new Set(["alpha@example.test"])
 
 function createSession() {
   return {
@@ -20,13 +21,13 @@ function createSession() {
 }
 
 describe("persisted session authorization", () => {
-  it("accepts a verified, unexpired matching identity", () => {
+  it("accepts a verified, allowed, unexpired matching identity", () => {
     const session = createSession()
-    expect(authorizePersistedSession(session, now)).toBe(session)
+    expect(authorizePersistedSession(session, allowed, now)).toBe(session)
   })
 
   it("rejects missing, expired and invalid sessions", () => {
-    expect(authorizePersistedSession(null, now)).toBeNull()
+    expect(authorizePersistedSession(null, allowed, now)).toBeNull()
     for (const expiresAt of [
       now,
       new Date("2026-10-05"),
@@ -34,19 +35,25 @@ describe("persisted session authorization", () => {
     ]) {
       const session = createSession()
       session.session.expiresAt = expiresAt
-      expect(authorizePersistedSession(session, now)).toBeNull()
+      expect(authorizePersistedSession(session, allowed, now)).toBeNull()
     }
   })
 
-  it("rejects mismatched, empty and unverified identities", () => {
+  it("rejects mismatched, empty, unverified and disallowed identities", () => {
     const mismatch = createSession()
     mismatch.session.userId = "another-user"
-    expect(authorizePersistedSession(mismatch, now)).toBeNull()
+    expect(authorizePersistedSession(mismatch, allowed, now)).toBeNull()
     const empty = createSession()
     empty.user.id = " "
-    expect(authorizePersistedSession(empty, now)).toBeNull()
+    expect(authorizePersistedSession(empty, allowed, now)).toBeNull()
     const unverified = createSession()
     unverified.user.emailVerified = false
-    expect(authorizePersistedSession(unverified, now)).toBeNull()
+    expect(authorizePersistedSession(unverified, allowed, now)).toBeNull()
+    const disallowed = createSession()
+    disallowed.user.email = "other@example.test"
+    expect(authorizePersistedSession(disallowed, allowed, now)).toBeNull()
+    expect(
+      authorizePersistedSession(createSession(), new Set(), now)
+    ).toBeNull()
   })
 })

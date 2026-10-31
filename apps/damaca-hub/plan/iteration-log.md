@@ -3,6 +3,8 @@
 The iteration state is maintained in [iterations.md](iterations.md); this file records observed evidence only.
 
 <a id="01--catalog-and-central-access-management"></a>
+The Tasks identity rollback and unconditional database-refresh suspension are tracked in [root AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh), with one [shared delivery log](../../../plan/iteration-log.md#agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh).
+
 ## 01 — Catalog and central access management
 
 - Changes: generated `apps/damaca-hub` from `mongo-google`, then replaced its global user-grant flow with verified-identity catalog access and app-scoped requests/grants. Added an editable five-app seed catalog, gated preproduction links, pending/rejected/revoked states, admin review and grant/revoke actions, stable indexes, and safe Mongo integration coverage. Removed the unused starter's global `user_access` flow. Added the future OIDC boundary in [access-integration.md](../docs/access-integration.md); updated the monorepo inventory, shared lockfile, README and product instructions.

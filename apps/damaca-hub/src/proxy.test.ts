@@ -23,11 +23,13 @@ describe("Hub authentication proxy", () => {
     )
   })
 
-  it("allows the authenticated cron route through the session proxy", () => {
+  it("does not exempt the suspended cron route from session checks", () => {
     const request = new NextRequest("https://hub.example/api/cron/refresh-int")
 
     const response = proxy(request)
 
-    expect(response.headers.get("x-middleware-next")).toBe("1")
+    expect(response.headers.get("location")).toBe(
+      "https://hub.example/auth/signin?callbackUrl=%2Fapi%2Fcron%2Frefresh-int"
+    )
   })
 })

@@ -1,58 +1,43 @@
 import { afterEach, describe, expect, it } from "bun:test"
 import { GET } from "./route"
 
-const originalCronSecret = process.env.CRON_SECRET
-const originalVercelEnv = process.env.VERCEL_ENV
-const originalRefreshEnabled = process.env.DATABASE_REFRESH_ENABLED
+const originalEnvironment = { ...process.env }
 
 afterEach(() => {
-  if (originalCronSecret === undefined) delete process.env.CRON_SECRET
-  else process.env.CRON_SECRET = originalCronSecret
-
-  if (originalVercelEnv === undefined) delete process.env.VERCEL_ENV
-  else process.env.VERCEL_ENV = originalVercelEnv
-
-  if (originalRefreshEnabled === undefined)
-    delete process.env.DATABASE_REFRESH_ENABLED
-  else process.env.DATABASE_REFRESH_ENABLED = originalRefreshEnabled
+  for (const name of [
+    "CRON_SECRET",
+    "VERCEL_ENV",
+    "DATABASE_REFRESH_ENABLED",
+  ]) {
+    const value = originalEnvironment[name]
+    if (value === undefined) delete process.env[name]
+    else process.env[name] = value
+  }
 })
 
-describe("Hub database refresh route", () => {
-  it("rejects requests without the cron bearer secret", async () => {
-    process.env.CRON_SECRET = "refresh-test-secret"
-    process.env.VERCEL_ENV = "production"
+describe("suspended Hub database refresh route", () => {
+  for (const environment of ["production", "preview", "development"]) {
+    for (const action of ["refresh", "restore"]) {
+      it(`cannot ${action} in ${environment} even with legacy enablement`, async () => {
+        process.env.CRON_SECRET = "refresh-test-secret"
+        process.env.VERCEL_ENV = environment
+        process.env.DATABASE_REFRESH_ENABLED = "true"
 
-    const response = await GET(
-      new Request("https://hub.example/api/cron/refresh-int")
-    )
+        const response = GET(
+          new Request(
+            `https://hub.example/api/cron/refresh-int?action=${action}`,
+            {
+              headers: { authorization: "Bearer refresh-test-secret" },
+            }
+          )
+        )
 
-    expect(response.status).toBe(401)
-  })
-
-  it("rejects authenticated requests outside production", async () => {
-    process.env.CRON_SECRET = "refresh-test-secret"
-    process.env.VERCEL_ENV = "preview"
-
-    const response = await GET(
-      new Request("https://hub.example/api/cron/refresh-int", {
-        headers: { authorization: "Bearer refresh-test-secret" },
+        expect(response.status).toBe(410)
+        expect(await response.json()).toEqual({
+          error: "Database refresh is suspended",
+        })
+        expect(response.headers.get("Cache-Control")).toBe("no-store")
       })
-    )
-
-    expect(response.status).toBe(403)
-  })
-
-  it("requires explicit enablement before refreshing data", async () => {
-    process.env.CRON_SECRET = "refresh-test-secret"
-    process.env.VERCEL_ENV = "production"
-    delete process.env.DATABASE_REFRESH_ENABLED
-
-    const response = await GET(
-      new Request("https://hub.example/api/cron/refresh-int", {
-        headers: { authorization: "Bearer refresh-test-secret" },
-      })
-    )
-
-    expect(response.status).toBe(503)
-  })
+    }
+  }
 })

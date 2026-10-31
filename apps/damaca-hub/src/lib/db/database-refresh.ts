@@ -26,6 +26,9 @@ const HUB_COLLECTION_POLICIES = {
 
 export async function refreshHubIntDatabase() {
   const refreshEnv = getDatabaseRefreshEnv()
+  if (!refreshEnv.enabled) {
+    throw new Error("Hub database refresh is suspended")
+  }
   const sourceDatabase = getDatabaseEnv().databaseName
   if (refreshEnv.targetDatabase !== "damaca-hub-int") {
     throw new Error("The configured refresh target is not the Hub int database")
@@ -45,6 +48,9 @@ export async function refreshHubIntDatabase() {
 
 export async function restoreHubIntDatabase() {
   const refreshEnv = getDatabaseRefreshEnv()
+  if (!refreshEnv.enabled) {
+    throw new Error("Hub database refresh is suspended")
+  }
   if (refreshEnv.targetDatabase !== "damaca-hub-int") {
     throw new Error("The configured refresh target is not the Hub int database")
   }

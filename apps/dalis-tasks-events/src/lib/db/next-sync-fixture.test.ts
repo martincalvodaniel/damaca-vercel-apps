@@ -65,7 +65,8 @@ describe("isolated Next fixture guards", () => {
       { MONGODB_URI: "mongodb://localhost:27019" },
       { RUN_NEXT_SYNC_TESTS: "0" },
       { BETTER_AUTH_URL: "https://example.com" },
-      { HUB_OIDC_CLIENT_SECRET: "real-secret" },
+      { GOOGLE_CLIENT_SECRET: "real-secret" },
+      { ALLOWED_EMAILS: "real@example.com" },
     ])
       expect(() =>
         parseNextSyncTestEnvironment({ ...environment, ...override })
