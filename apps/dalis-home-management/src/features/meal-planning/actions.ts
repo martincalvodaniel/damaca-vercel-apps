@@ -79,6 +79,7 @@ async function resolveDishInput(
 
   return {
     name: input.name,
+    notes: input.notes,
     ingredients: input.ingredients.map((ingredient) => {
       const product = productsById.get(ingredient.inventoryItemId)
       if (!product) {

@@ -2,7 +2,7 @@
 
 ## Estado vigente
 
-No hay requisitos de producto ni decisiones adicionales registradas. No inferir roadmap desde README, código o aplicaciones vecinas.
+Los platos admiten una receta u observaciones opcionales como texto libre de hasta 10.000 caracteres. Se pueden añadir, editar, borrar y consultar desde el recetario y el menú semanal, conservando saltos de línea. Los platos existentes sin notas siguen siendo válidos; no se requiere migración.
 
 ## Límites aceptados
 
@@ -10,7 +10,7 @@ Conservar el comportamiento, arquitectura, seguridad, datos y límites de despli
 
 ## Dudas abiertas
 
-El alcance futuro requiere una petición de producto; documentar objetivos y decisiones antes de implementación no trivial.
+No hay dudas abiertas para el alcance actual.
 
 ## Application icons
 

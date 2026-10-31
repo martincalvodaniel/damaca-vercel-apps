@@ -1,6 +1,13 @@
 "use client"
 
-import { type FormEvent, useId, useState, useTransition } from "react"
+import {
+  type FormEvent,
+  useCallback,
+  useId,
+  useMemo,
+  useState,
+  useTransition,
+} from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { CatalogProductDialog } from "@/features/catalog/components/catalog-product-dialog"
 import type { CatalogProductOption } from "@/features/catalog/product-option"
@@ -47,6 +54,7 @@ export function DishForm({
   onSaved,
 }: DishFormProps) {
   const nameId = useId()
+  const notesId = useId()
   const [ingredients, setIngredients] = useState<IngredientDraft[]>(() =>
     getInitialIngredients(dish)
   )
@@ -58,25 +66,30 @@ export function DishForm({
   const [isPending, startTransition] = useTransition()
   const isEditing = dish !== null
 
-  function updateIngredient(index: number, ingredient: IngredientDraft) {
-    setIngredients((current) =>
-      current.map((entry, entryIndex) =>
-        entryIndex === index ? ingredient : entry
-      )
-    )
-  }
+  const ingredientRows = useMemo(
+    () =>
+      ingredients.map((ingredient, index) => ({
+        ingredient,
+        onChange: (nextIngredient: IngredientDraft) => {
+          setIngredients((current) =>
+            current.map((entry, entryIndex) =>
+              entryIndex === index ? nextIngredient : entry
+            )
+          )
+        },
+        onRemove: () => {
+          setIngredients((current) =>
+            current.length === 1
+              ? [{ ...blankIngredient, key: crypto.randomUUID() }]
+              : current.filter((_, entryIndex) => entryIndex !== index)
+          )
+        },
+        onRequestProductCreation: () => setCreatingProductForIndex(index),
+      })),
+    [ingredients]
+  )
 
-  function removeIngredient(index: number) {
-    setIngredients((current) => {
-      if (current.length === 1) {
-        return [{ ...blankIngredient, key: crypto.randomUUID() }]
-      }
-
-      return current.filter((_, entryIndex) => entryIndex !== index)
-    })
-  }
-
-  function addIngredient() {
+  const addIngredient = useCallback(() => {
     setIngredients((current) => [
       ...current,
       {
@@ -84,64 +97,76 @@ export function DishForm({
         key: crypto.randomUUID(),
       },
     ])
-  }
+  }, [])
 
-  function handleProductCreated(product: CatalogProductOption) {
-    setAvailableProducts((current) =>
-      current.some((entry) => entry.id === product.id)
-        ? current
-        : [...current, product].toSorted((left, right) =>
-            left.name.localeCompare(right.name, "es", { sensitivity: "base" })
-          )
-    )
-    if (creatingProductForIndex !== null) {
-      setIngredients((current) =>
-        current.map((ingredient, index) =>
-          index === creatingProductForIndex
-            ? {
-                ...ingredient,
-                inventoryItemId: product.id,
-                legacyName: undefined,
-                productSearch: undefined,
-              }
-            : ingredient
-        )
+  const handleProductCreated = useCallback(
+    function handleProductCreated(product: CatalogProductOption) {
+      setAvailableProducts((current) =>
+        current.some((entry) => entry.id === product.id)
+          ? current
+          : [...current, product].toSorted((left, right) =>
+              left.name.localeCompare(right.name, "es", { sensitivity: "base" })
+            )
       )
-    }
-    setCreatingProductForIndex(null)
-  }
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setError(null)
-    const form = event.currentTarget
-    const formData = new FormData(form)
-    const input = {
-      name: formData.get("name"),
-      ingredients: ingredients.map((ingredient) => ({
-        quantity: Number(ingredient.quantity),
-        inventoryItemId: ingredient.inventoryItemId,
-      })),
-    }
-
-    startTransition(async () => {
-      try {
-        const result = dish
-          ? await updateDishAction(dish.id, input)
-          : await createDishAction(input)
-
-        if (!result.success) {
-          setError(result.message)
-          return
-        }
-
-        form.reset()
-        onSaved()
-      } catch {
-        setError("No se ha podido guardar el plato. Inténtalo de nuevo.")
+      if (creatingProductForIndex !== null) {
+        setIngredients((current) =>
+          current.map((ingredient, index) =>
+            index === creatingProductForIndex
+              ? {
+                  ...ingredient,
+                  inventoryItemId: product.id,
+                  legacyName: undefined,
+                  productSearch: undefined,
+                }
+              : ingredient
+          )
+        )
       }
-    })
-  }
+      setCreatingProductForIndex(null)
+    },
+    [creatingProductForIndex]
+  )
+
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      setError(null)
+      const form = event.currentTarget
+      const formData = new FormData(form)
+      const input = {
+        name: formData.get("name"),
+        notes: formData.get("notes"),
+        ingredients: ingredients.map((ingredient) => ({
+          quantity: Number(ingredient.quantity),
+          inventoryItemId: ingredient.inventoryItemId,
+        })),
+      }
+
+      startTransition(async () => {
+        try {
+          const result = dish
+            ? await updateDishAction(dish.id, input)
+            : await createDishAction(input)
+
+          if (!result.success) {
+            setError(result.message)
+            return
+          }
+
+          form.reset()
+          onSaved()
+        } catch {
+          setError("No se ha podido guardar el plato. Inténtalo de nuevo.")
+        }
+      })
+    },
+    [dish, ingredients, onSaved]
+  )
+
+  const dismissProductDialog = useCallback(
+    () => setCreatingProductForIndex(null),
+    []
+  )
 
   return (
     <section className="rounded-[1.75rem] border border-[#e4d9b8] bg-[#f3e8c8] p-5 shadow-[0_18px_50px_rgba(86,73,39,0.08)] sm:p-6 dark:border-[#685c38] dark:bg-[#39331f]">
@@ -170,23 +195,26 @@ export function DishForm({
         </label>
 
         <div className="space-y-2 sm:space-y-3">
-          {ingredients.map((ingredient, index) => (
-            <IngredientRow
-              key={ingredient.key}
-              index={index}
-              ingredient={ingredient}
-              products={availableProducts}
-              canRemove={
-                ingredients.length > 1 || Boolean(ingredient.inventoryItemId)
-              }
-              disabled={isPending}
-              onChange={(nextIngredient) =>
-                updateIngredient(index, nextIngredient)
-              }
-              onRemove={() => removeIngredient(index)}
-              onRequestProductCreation={() => setCreatingProductForIndex(index)}
-            />
-          ))}
+          {ingredientRows.map(
+            (
+              { ingredient, onChange, onRemove, onRequestProductCreation },
+              index
+            ) => (
+              <IngredientRow
+                key={ingredient.key}
+                index={index}
+                ingredient={ingredient}
+                products={availableProducts}
+                canRemove={
+                  ingredients.length > 1 || Boolean(ingredient.inventoryItemId)
+                }
+                disabled={isPending}
+                onChange={onChange}
+                onRemove={onRemove}
+                onRequestProductCreation={onRequestProductCreation}
+              />
+            )
+          )}
         </div>
 
         <button
@@ -197,6 +225,19 @@ export function DishForm({
         >
           + Añadir ingrediente
         </button>
+
+        <label className="block text-sm font-semibold" htmlFor={notesId}>
+          Receta / observaciones (opcional)
+          <textarea
+            id={notesId}
+            name="notes"
+            rows={6}
+            maxLength={10_000}
+            defaultValue={dish?.notes ?? ""}
+            placeholder="Escribe los pasos de la receta o cualquier nota sobre el plato"
+            className="mt-2 w-full resize-y rounded-xl border border-[#d0c69d] bg-white/85 px-4 py-3 font-normal outline-none transition placeholder:text-[#9a9788] focus:border-[#8a7633] focus:ring-2 focus:ring-[#8a7633]/15 dark:border-white/15 dark:bg-[#252316]"
+          />
+        </label>
 
         {error ? <ErrorBanner>{error}</ErrorBanner> : null}
 
@@ -228,7 +269,7 @@ export function DishForm({
               ingredients[creatingProductForIndex]?.legacyName
         }
         purchasePlaces={getPurchasePlaces(availableProducts)}
-        onDismiss={() => setCreatingProductForIndex(null)}
+        onDismiss={dismissProductDialog}
         onCreated={handleProductCreated}
       />
     </section>

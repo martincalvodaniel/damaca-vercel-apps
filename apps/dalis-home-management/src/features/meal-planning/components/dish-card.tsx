@@ -1,10 +1,11 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useCallback, useState, useTransition } from "react"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { quantityUnitShortLabels } from "@/config/quantity-units"
 import { deleteDishAction } from "@/features/meal-planning/actions"
 import type { Dish } from "@/schemas/dish"
+import { DishNotes } from "./dish-notes"
 
 interface DishCardProps {
   dish: Dish
@@ -20,7 +21,7 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 
-  function removeDish() {
+  const removeDish = useCallback(() => {
     setIsDeleteDialogOpen(false)
     setError(null)
     startTransition(async () => {
@@ -33,7 +34,11 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
         setError("No se ha podido eliminar el plato.")
       }
     })
-  }
+  }, [dish.id])
+
+  const editDish = useCallback(() => onEdit(dish), [dish, onEdit])
+  const openDeleteDialog = useCallback(() => setIsDeleteDialogOpen(true), [])
+  const closeDeleteDialog = useCallback(() => setIsDeleteDialogOpen(false), [])
 
   return (
     <>
@@ -65,6 +70,8 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
           ))}
         </ul>
 
+        <DishNotes notes={dish.notes} />
+
         {error ? (
           <p className="mt-3 text-xs font-medium text-red-700 dark:text-red-300">
             {error}
@@ -74,7 +81,7 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
         <div className="mt-5 flex gap-2 border-t border-[#e3e6df] pt-4 dark:border-white/10">
           <button
             type="button"
-            onClick={() => onEdit(dish)}
+            onClick={editDish}
             disabled={isPending}
             className="rounded-full bg-[#edf0e9] px-3.5 py-2 text-xs font-semibold transition hover:bg-[#e1e7de] focus:outline-none focus:ring-2 focus:ring-[#75611f] disabled:opacity-50 dark:bg-white/10"
           >
@@ -82,7 +89,7 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
           </button>
           <button
             type="button"
-            onClick={() => setIsDeleteDialogOpen(true)}
+            onClick={openDeleteDialog}
             disabled={isPending}
             className="ml-auto rounded-full px-3 py-2 text-xs font-semibold text-[#8f5140] transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#e9a995] dark:hover:bg-red-950/30"
           >
@@ -97,7 +104,7 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
         confirmLabel="Eliminar"
         tone="danger"
         onConfirm={removeDish}
-        onDismiss={() => setIsDeleteDialogOpen(false)}
+        onDismiss={closeDeleteDialog}
       />
     </>
   )

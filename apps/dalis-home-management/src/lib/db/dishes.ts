@@ -19,6 +19,7 @@ interface DishDocument extends Omit<Dish, "id" | "ingredients"> {
 
 export interface DishWriteInput {
   name: string
+  notes?: string
   ingredients: Array<{
     name: string
     quantity: number
@@ -61,6 +62,7 @@ function toDish(
   return {
     id: document._id.toHexString(),
     name: document.name,
+    notes: document.notes ?? "",
     ingredients: document.ingredients.map((ingredient) =>
       toIngredient(ingredient, inventoryItemsById)
     ),
@@ -128,6 +130,7 @@ export async function createDish(input: DishWriteInput): Promise<string> {
   const result = await collection.insertOne({
     _id: new ObjectId(),
     name: input.name,
+    notes: input.notes ?? "",
     ingredients: input.ingredients.map(toIngredientDocument),
     createdAt: now,
     updatedAt: now,
@@ -146,6 +149,7 @@ export async function updateDish(
     {
       $set: {
         name: input.name,
+        notes: input.notes ?? "",
         ingredients: input.ingredients.map(toIngredientDocument),
         updatedAt: new Date(),
       },

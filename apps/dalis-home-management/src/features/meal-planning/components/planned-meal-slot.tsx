@@ -1,8 +1,10 @@
+import { useCallback } from "react"
 import { quantityUnitShortLabels } from "@/config/quantity-units"
 import type { DishOption } from "@/features/meal-planning/dish-option"
 import type { MealSlotLocation } from "@/features/meal-planning/meal-slot-move"
 import type { Dish } from "@/schemas/dish"
 import type { MealType } from "@/schemas/weekly-meal-plan"
+import { DishNotes } from "./dish-notes"
 import { ExecuteMealButton } from "./execute-meal-button"
 import { MealSlotDragHandle } from "./meal-slot-drag-handle"
 import { MealSlotSelect } from "./meal-slot-select"
@@ -50,7 +52,20 @@ export function PlannedMealSlot({
   onDragEnd,
   onDragCancel,
 }: PlannedMealSlotProps) {
-  const location = { date, mealType }
+  const handleDragStart = useCallback(
+    () => onDragStart({ date, mealType }),
+    [date, mealType, onDragStart]
+  )
+  const handleDragMove = useCallback(
+    (clientX: number, clientY: number) =>
+      onDragMove({ date, mealType }, clientX, clientY),
+    [date, mealType, onDragMove]
+  )
+  const handleDragEnd = useCallback(
+    (clientX: number, clientY: number) =>
+      onDragEnd({ date, mealType }, clientX, clientY),
+    [date, mealType, onDragEnd]
+  )
 
   return (
     <div
@@ -82,13 +97,9 @@ export function PlannedMealSlot({
             <MealSlotDragHandle
               dishName={dish.name}
               disabled={dragDisabled}
-              onDragStart={() => onDragStart(location)}
-              onDragMove={(clientX, clientY) =>
-                onDragMove(location, clientX, clientY)
-              }
-              onDragEnd={(clientX, clientY) =>
-                onDragEnd(location, clientX, clientY)
-              }
+              onDragStart={handleDragStart}
+              onDragMove={handleDragMove}
+              onDragEnd={handleDragEnd}
               onDragCancel={onDragCancel}
             />
           ) : null
@@ -124,6 +135,7 @@ export function PlannedMealSlot({
           </ul>
         </details>
       ) : null}
+      <DishNotes notes={dish?.notes} />
     </div>
   )
 }

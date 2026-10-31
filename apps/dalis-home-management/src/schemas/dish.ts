@@ -19,6 +19,7 @@ export const dishIngredientInputSchema = dishIngredientSchema
 export const dishSchema = z.object({
   id: objectIdSchema,
   name: z.string().trim().min(1).max(120),
+  notes: z.string().trim().max(10_000).optional(),
   ingredients: z.array(dishIngredientSchema).min(1).max(30),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -27,6 +28,7 @@ export const dishSchema = z.object({
 export const dishInputSchema = z
   .object({
     name: dishSchema.shape.name,
+    notes: dishSchema.shape.notes,
     ingredients: z.array(dishIngredientInputSchema).min(1).max(30),
   })
   .strict()
