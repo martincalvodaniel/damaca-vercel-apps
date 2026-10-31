@@ -1,4 +1,4 @@
-import { expect, test } from "bun:test"
+import { expect, test as it } from "bun:test"
 import { resolveEventSchedule } from "@/lib/calendar/event-time"
 import {
   type PlanOccurrencePage,
@@ -14,7 +14,7 @@ const now = "2026-10-10T09:00:00.000Z"
 const variants: PlanVariant[] = ["task", "event", "appointment", "note"]
 function parent(
   variant: PlanVariant = "task",
-  schedule: Plan["schedule"] = {
+  schedule: NonNullable<Plan["schedule"]> = {
     mode: "all_day",
     startDate: "2026-10-10",
     endDateExclusive: "2026-10-12",
@@ -53,7 +53,7 @@ const query = (startDate: string, endDate = startDate, limit = 100) => ({
   limit,
 })
 
-test("four variants share stable slots, civil length and independent initial progress", () => {
+it("four variants share stable slots, civil length and independent initial progress", () => {
   let reference: PlanOccurrencePage | undefined
   for (const variant of variants) {
     const series = parent(variant)
@@ -76,6 +76,7 @@ test("four variants share stable slots, civil length and independent initial pro
       revision: 0,
       checklist: [{ id: stepId, completed: false }],
     })
+    // biome-ignore lint/suspicious/noConditionalExpect: The first variant establishes the reference; subsequent variants must match it.
     if (reference) expect(page).toEqual(reference)
     reference = structuredClone(page)
     page.occurrences[0].checklist[0].completed = true
@@ -85,7 +86,7 @@ test("four variants share stable slots, civil length and independent initial pro
   }
 })
 
-test("page size, original date cursor and count limits remain authoritative", () => {
+it("page size, original date cursor and count limits remain authoritative", () => {
   const series = parent()
   if (!series.recurrence) throw new Error("Fixture recurrence is required")
   series.recurrence.end = { type: "count", count: 3 }
@@ -119,7 +120,7 @@ test("page size, original date cursor and count limits remain authoritative", ()
   ).toThrow()
 })
 
-test("weekly selection and excluded calendar dates do not depend on the visual variant", () => {
+it("weekly selection and excluded calendar dates do not depend on the visual variant", () => {
   for (const variant of variants) {
     const series = parent(variant)
     if (!series.recurrence) throw new Error("Fixture recurrence is required")
@@ -138,7 +139,7 @@ test("weekly selection and excluded calendar dates do not depend on the visual v
   }
 })
 
-test("timed slots retain wall clock endpoints and day offsets across DST", () => {
+it("timed slots retain wall clock endpoints and day offsets across DST", () => {
   const series = parent("appointment", {
     mode: "timed",
     localStart: "2026-03-28T01:30",
@@ -171,7 +172,7 @@ test("timed slots retain wall clock endpoints and day offsets across DST", () =>
   })
 })
 
-test("DST gaps and folds are explicit issues and consume the original pagination slot", () => {
+it("DST gaps and folds are explicit issues and consume the original pagination slot", () => {
   for (const [anchor, invalid, reason] of [
     ["2026-03-28", "2026-03-29", "nonexistent"],
     ["2026-10-24", "2026-10-25", "ambiguous"],
@@ -212,7 +213,7 @@ test("DST gaps and folds are explicit issues and consume the original pagination
   }
 })
 
-test("year boundaries report overflow and retain the slot rather than truncate duration", () => {
+it("year boundaries report overflow and retain the slot rather than truncate duration", () => {
   const series = parent()
   const page = planOccurrencesPage(series, query("9999-12-30", "9999-12-31", 1))
   expect(page.occurrences).toEqual([])
@@ -237,7 +238,7 @@ test("year boundaries report overflow and retain the slot rather than truncate d
   ).toBe("0001-01-01")
 })
 
-test("deleted or non-recurring parents cannot manufacture active occurrences", () => {
+it("deleted or non-recurring parents cannot manufacture active occurrences", () => {
   expect(
     planOccurrencesPage({ ...parent(), deletedAt: now }, query("2026-10-10"))
   ).toEqual({ occurrences: [], issues: [], nextAfter: null })
@@ -246,7 +247,7 @@ test("deleted or non-recurring parents cannot manufacture active occurrences", (
   ).toThrow("recurring series")
 })
 
-test("occurrence validation preserves identity and coherent completion without variant data", () => {
+it("occurrence validation preserves identity and coherent completion without variant data", () => {
   const record = planOccurrencesPage(parent(), query("2026-10-10"))
     .occurrences[0]
   expect(

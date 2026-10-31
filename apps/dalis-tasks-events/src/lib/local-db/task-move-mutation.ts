@@ -40,6 +40,8 @@ export function planLocalTaskMove(
   current: TaskPlacement | null
 } {
   const { items, tags, views, placements, settings } = snapshot
+  if (command.scope === "undated")
+    throw new Error("Undated movement requires a common plan")
   if (command.scope === "day")
     return planLocalDayTaskMove(snapshot, command, userId, timestamp)
   if (command.occurrenceId !== null)

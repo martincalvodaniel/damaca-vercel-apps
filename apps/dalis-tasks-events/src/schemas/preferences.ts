@@ -35,7 +35,7 @@ export const itemViewSchema = z.strictObject({
 export const taskPlacementSchema = z.strictObject({
   userId: userIdSchema,
   occurrenceId: occurrenceIdSchema,
-  scope: z.enum(["day", "overdue"]),
+  scope: z.enum(["day", "overdue", "undated"]),
   date: civilDateSchema,
   tagId: entityIdSchema.nullable(),
   position: positionSchema,

@@ -29,6 +29,7 @@ function dayDistance(first: string, last: string): number {
 }
 function lookbackStart(parent: Plan, visibleStart: string): string {
   const schedule = parent.schedule
+  if (!schedule) throw new Error("Recurring plans require a schedule")
   const duration =
     schedule.mode === "all_day"
       ? dayDistance(schedule.startDate, schedule.endDateExclusive) - 1

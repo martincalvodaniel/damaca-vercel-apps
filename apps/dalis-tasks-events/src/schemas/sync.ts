@@ -84,7 +84,7 @@ export const syncCommandSchema = z.discriminatedUnion("type", [
       type: z.literal("task.move"),
       itemId: entityIdSchema,
       occurrenceId: occurrenceIdSchema.nullable(),
-      scope: z.enum(["day", "overdue"]),
+      scope: z.enum(["day", "overdue", "undated"]),
       date: civilDateSchema,
       tagId: entityIdSchema.nullable(),
       beforeId: taskReferenceIdSchema.nullable(),

@@ -23,6 +23,8 @@ import type { TaskPlacement } from "@/types/preferences"
 import type { SyncCommand } from "@/types/sync"
 
 export function planOrderContext(selection: PlanAgendaSelection, plan: Plan) {
+  if (selection.kind === "undated")
+    return { scope: "undated" as const, date: overduePlacementDate }
   return selection.kind === "overdue"
     ? { scope: "overdue" as const, date: selection.date }
     : {
@@ -40,7 +42,9 @@ export function planOrderPeers(
     (record) =>
       !record.recurrence &&
       !record.deletedAt &&
-      (context.scope === "overdue" || planIncludesDate(record, context.date))
+      (context.scope === "undated"
+        ? !record.schedule
+        : context.scope === "overdue" || planIncludesDate(record, context.date))
   )
 }
 
@@ -64,11 +68,13 @@ export function planRowOrderPeers(
   if (selection.kind === "upcoming" && context.date < selection.date) return []
   const belongs = (record: PlanAgendaRow) =>
     isOrderableRow(record) &&
-    (context.scope === "overdue"
-      ? isPlanOverdue(record.plan, context.date)
-      : selection.kind === "day"
-        ? planIncludesDate(record.plan, context.date)
-        : planStartDate(record.plan) === context.date)
+    (context.scope === "undated"
+      ? !record.plan.schedule
+      : context.scope === "overdue"
+        ? isPlanOverdue(record.plan, context.date)
+        : selection.kind === "day"
+          ? planIncludesDate(record.plan, context.date)
+          : planStartDate(record.plan) === context.date)
   return belongs(row) ? rows.filter(belongs) : []
 }
 
@@ -79,7 +85,7 @@ export function planRowCategoryDropGroups(
   placements: readonly TaskPlacement[]
 ): OrderDropGroup[] {
   if (
-    selection.kind !== "day" ||
+    (selection.kind !== "day" && selection.kind !== "undated") ||
     !planRowOrderPeers([row], selection, row).length
   )
     return []
@@ -130,7 +136,7 @@ export function orderAgendaGroupPlans(
 ): Plan[] {
   const order = (
     items: readonly Plan[],
-    scope: "day" | "overdue",
+    scope: "day" | "overdue" | "undated",
     date: string
   ) =>
     orderPlacedTasks(
@@ -141,6 +147,8 @@ export function orderAgendaGroupPlans(
       tagId,
       (left, right) => compareCommonItems(left.source, right.source)
     ).map((record) => record.source as Plan)
+  if (selection.kind === "undated")
+    return order(plans, "undated", overduePlacementDate)
   if (selection.kind === "overdue")
     return order(plans, "overdue", overduePlacementDate)
   if (selection.kind === "day") return order(plans, "day", selection.date)

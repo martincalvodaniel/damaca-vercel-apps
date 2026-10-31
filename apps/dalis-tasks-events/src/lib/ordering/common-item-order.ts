@@ -21,9 +21,9 @@ export function compareCommonItems(
 ) {
   function start(item: CommonOrderItem) {
     if (item.kind === "task") return item.scheduledDate
-    return item.schedule.mode === "all_day"
+    return item.schedule?.mode === "all_day"
       ? item.schedule.startDate
-      : item.schedule.localStart
+      : (item.schedule?.localStart ?? "")
   }
   const leftStart = start(left),
     rightStart = start(right)

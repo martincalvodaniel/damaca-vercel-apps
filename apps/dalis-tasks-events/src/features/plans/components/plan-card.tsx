@@ -62,15 +62,21 @@ export function PlanCard({
             {plan.title}
           </h4>
           <p className="wrap-anywhere text-xs text-zinc-500 dark:text-zinc-400">
-            <time dateTime={start}>
-              {dateFormatter.format(civilDateToUtc(start))}
-            </time>
-            {end !== start
-              ? ` – ${dateFormatter.format(civilDateToUtc(end))}`
-              : ""}
-            {plan.schedule.mode === "timed"
-              ? ` · ${plan.schedule.localStart.slice(11, 16)}${plan.schedule.localEnd ? `–${plan.schedule.localEnd.slice(11, 16)}` : ""}`
-              : ""}{" "}
+            {plan.schedule ? (
+              <>
+                <time dateTime={start}>
+                  {dateFormatter.format(civilDateToUtc(start))}
+                </time>
+                {end !== start
+                  ? ` – ${dateFormatter.format(civilDateToUtc(end))}`
+                  : ""}
+                {plan.schedule.mode === "timed"
+                  ? ` · ${plan.schedule.localStart.slice(11, 16)}${plan.schedule.localEnd ? `–${plan.schedule.localEnd.slice(11, 16)}` : ""}`
+                  : ""}
+              </>
+            ) : (
+              "Sin fecha"
+            )}{" "}
             · {statusLabels[plan.status]}
           </p>
         </div>

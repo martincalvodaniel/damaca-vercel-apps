@@ -42,13 +42,15 @@ export function planRemoteTaskPlacementOperation(
   if (item.kind !== "task" && item.kind !== "plan")
     return { status: "unsupported" }
   const belongsToScope = (record: Task | Plan) =>
-    command.scope === "day"
-      ? record.kind === "task"
-        ? record.scheduledDate === command.date
-        : planIncludesDate(record, command.date)
-      : record.kind === "task"
-        ? isTaskOverdue(record, command.date)
-        : isPlanOverdue(record, command.date)
+    command.scope === "undated"
+      ? record.kind === "plan" && !record.schedule
+      : command.scope === "day"
+        ? record.kind === "task"
+          ? record.scheduledDate === command.date
+          : planIncludesDate(record, command.date)
+        : record.kind === "task"
+          ? isTaskOverdue(record, command.date)
+          : isPlanOverdue(record, command.date)
   const date = placementDate(command.scope, command.date)
   const scoped = placements.filter(
     (record) => record.scope === command.scope && record.date === date

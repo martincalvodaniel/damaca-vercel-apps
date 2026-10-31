@@ -1,7 +1,8 @@
+// biome-ignore-all lint/performance/noJsxPropsBind: Choice handlers bind the explicit resolution choice and these controls are not memoized.
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { MixedPlacementResolutionVersion } from "@/features/sync/components/mixed-placement-resolution-version"
 import { PlacementResolutionVersion } from "@/features/sync/components/placement-resolution-version"
-import { civilDateToUtc } from "@/lib/calendar/civil-date"
+import { PlacementScopeLabel } from "@/features/sync/components/placement-scope-label"
 import {
   availableMixedPlacementResolutionChoices,
   previewMixedPlacementResolutionChoice,
@@ -19,10 +20,6 @@ import type {
   PlacementResolutionSnapshot,
 } from "@/types/placement-resolution"
 
-const dayFormatter = new Intl.DateTimeFormat("es-ES", {
-  dateStyle: "medium",
-  timeZone: "UTC",
-})
 export function PlacementIncidentResolutionDialog({
   snapshot,
   reviewKind,
@@ -83,8 +80,7 @@ export function PlacementIncidentResolutionDialog({
         ) : null}
         <span>
           {tag?.name ?? "Sin categoría"} ·{" "}
-          {command.scope === "overdue" ? "Atrasadas; día de referencia" : "Día"}{" "}
-          {dayFormatter.format(civilDateToUtc(command.date))}
+          <PlacementScopeLabel scope={command.scope} date={command.date} />
         </span>
       </p>
       <fieldset disabled={busy} className="mt-3 space-y-1 text-sm">

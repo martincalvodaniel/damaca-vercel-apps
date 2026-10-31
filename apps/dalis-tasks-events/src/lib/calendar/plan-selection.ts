@@ -9,13 +9,16 @@ const variantOrder: Record<PlanVariant, number> = {
   note: 3,
 }
 
+// Undated records use a canonical ordering key only; visibility always checks schedule presence.
 export function planStartDate(plan: Plan): string {
+  if (!plan.schedule) return "0001-01-01"
   return plan.schedule.mode === "all_day"
     ? plan.schedule.startDate
     : plan.schedule.localStart.slice(0, 10)
 }
 
 export function planDueDate(plan: Plan): string {
+  if (!plan.schedule) return "0001-01-01"
   return plan.schedule.mode === "all_day"
     ? addCivilDays(plan.schedule.endDateExclusive, -1)
     : (plan.schedule.localEnd ?? plan.schedule.localStart).slice(0, 10)
@@ -24,6 +27,7 @@ export function planDueDate(plan: Plan): string {
 export function isPlanOverdue(plan: Plan, today: string): boolean {
   const date = civilDateSchema.parse(today)
   return (
+    Boolean(plan.schedule) &&
     !plan.deletedAt &&
     !plan.recurrence &&
     plan.status !== "completed" &&
@@ -34,6 +38,7 @@ export function isPlanOverdue(plan: Plan, today: string): boolean {
 export function planIncludesDate(plan: Plan, dateInput: string): boolean {
   const date = civilDateSchema.parse(dateInput)
   return (
+    Boolean(plan.schedule) &&
     !plan.deletedAt &&
     !plan.recurrence &&
     planStartDate(plan) <= date &&
@@ -43,13 +48,13 @@ export function planIncludesDate(plan: Plan, dateInput: string): boolean {
 
 export function comparePlans(left: Plan, right: Plan): number {
   const leftStart =
-    left.schedule.mode === "all_day"
+    left.schedule?.mode === "all_day"
       ? left.schedule.startDate
-      : left.schedule.localStart
+      : (left.schedule?.localStart ?? "")
   const rightStart =
-    right.schedule.mode === "all_day"
+    right.schedule?.mode === "all_day"
       ? right.schedule.startDate
-      : right.schedule.localStart
+      : (right.schedule?.localStart ?? "")
   return leftStart < rightStart
     ? -1
     : leftStart > rightStart

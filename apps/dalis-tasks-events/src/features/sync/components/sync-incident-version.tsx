@@ -43,7 +43,9 @@ export function SyncIncidentVersion({
               ) : null}
             </>
           ) : item.kind === "event" || item.kind === "plan" ? (
-            item.schedule.mode === "all_day" ? (
+            !item.schedule ? (
+              <p>Sin fecha</p>
+            ) : item.schedule.mode === "all_day" ? (
               <p>
                 Todo el día · desde {item.schedule.startDate} hasta{" "}
                 {item.schedule.endDateExclusive} (sin incluir)

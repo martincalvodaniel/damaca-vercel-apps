@@ -1,3 +1,4 @@
+import { addCivilDays } from "@/lib/calendar/civil-date"
 import { projectOccurrenceSchedule } from "@/lib/calendar/occurrence-schedule"
 import { planInputSchema } from "@/schemas/plan-input"
 import { planSchema } from "@/schemas/plan-item"
@@ -19,6 +20,12 @@ export function rescheduledPlanInput(input: Plan, dateInput: string) {
     status: plan.status,
     checklist: plan.checklist,
     recurrence: null,
-    schedule: projectOccurrenceSchedule(plan.schedule, date),
+    schedule: plan.schedule
+      ? projectOccurrenceSchedule(plan.schedule, date)
+      : {
+          mode: "all_day",
+          startDate: date,
+          endDateExclusive: addCivilDays(date, 1),
+        },
   })
 }

@@ -33,6 +33,7 @@ export function compareRecurringMovementItems(
   )
 }
 function scheduleStart(record: Plan | PlanOccurrence) {
+  if (!record.schedule) return "0001-01-01"
   return record.schedule.mode === "all_day"
     ? record.schedule.startDate
     : record.schedule.localStart
@@ -75,13 +76,17 @@ export function recurringMovementCatalog(
       continue
     const selected =
       item.kind === "task"
-        ? command.scope === "day"
-          ? item.scheduledDate === command.date
-          : isTaskOverdue(item, command.date)
+        ? command.scope === "undated"
+          ? false
+          : command.scope === "day"
+            ? item.scheduledDate === command.date
+            : isTaskOverdue(item, command.date)
         : item.kind === "plan" &&
-          (command.scope === "day"
-            ? planIncludesDate(item, command.date)
-            : isPlanOverdue(item, command.date))
+          (command.scope === "undated"
+            ? !item.schedule
+            : command.scope === "day"
+              ? planIncludesDate(item, command.date)
+              : isPlanOverdue(item, command.date))
     if (!selected || (item.kind !== "task" && item.kind !== "plan")) continue
     const start =
       item.kind === "task" ? item.scheduledDate : scheduleStart(item)
@@ -98,7 +103,7 @@ export function recurringMovementCatalog(
   const activeSeries = plans.filter(
     (plan) => plan.recurrence && !plan.deletedAt
   )
-  if (!activeSeries.length) return result
+  if (!activeSeries.length || command.scope === "undated") return result
   // Overdue is evaluated as-of the civil day in the durable command, including past exceptions.
   const startDate =
     command.scope === "day"
@@ -108,7 +113,7 @@ export function recurringMovementCatalog(
           ...occurrences.map((occurrence) =>
             scheduleStart(occurrence).slice(0, 10)
           ),
-        ].reduce((left, right) => (left < right ? left : right))
+        ].toSorted()[0]
   if (command.scope === "overdue" && startDate >= command.date) return result
   const query = {
     startDate,

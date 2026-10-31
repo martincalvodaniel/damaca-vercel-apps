@@ -1,3 +1,4 @@
+// biome-ignore-all lint/performance/noJsxPropsBind: Form and row handlers capture current state; these consumers do not rely on callback identity.
 "use client"
 
 import { type FormEvent, useId, useRef, useState } from "react"
@@ -46,6 +47,7 @@ export function PlanForm({
   const form = useRef<HTMLFormElement>(null)
   const schedule = initialPlan?.schedule
   const [variant, setVariant] = useState(initialPlan?.variant ?? "task")
+  const [undated, setUndated] = useState(initialPlan?.schedule === null)
   const [allDay, setAllDay] = useState(schedule?.mode !== "timed")
   const [primaryTagId, setPrimaryTagId] = useState(initialTagId)
   const [checklist, setChecklist] = useState<ChecklistEntry[]>(
@@ -231,70 +233,89 @@ export function PlanForm({
         onChange={setChecklist}
         disabled={saving}
       />
-      <div className="flex flex-wrap items-center justify-between gap-x-4">
-        <label className="flex min-h-11 items-center gap-2 text-sm font-medium">
-          Todo el día
-          <input
-            name="allDay"
-            type="checkbox"
-            checked={allDay}
-            onChange={(event) => setAllDay(event.target.checked)}
-            disabled={saving}
-            className="size-5 accent-amber-500"
-          />
-        </label>
-        <label className="flex min-h-11 items-center gap-2 text-sm font-medium">
-          Con fin
-          <input
-            type="checkbox"
-            checked={hasEnd}
-            onChange={(event) => changeHasEnd(event.target.checked)}
-            disabled={saving}
-            className="size-5 accent-amber-500"
-          />
-        </label>
-      </div>
-      <div className="dalis-date-time-container space-y-2">
-        <DateTimeFields
-          dateValue={dates.startDate}
-          onDateChange={changeStartDate}
-          showDayControls
-          name="localStart"
-          label="Inicio"
-          initialValue={
-            schedule?.mode === "timed"
-              ? schedule.localStart
-              : `${startDate}T09:00`
-          }
-          disabled={saving}
-          hideTime={allDay}
-          maxDate={allDay ? "9999-12-30" : "9999-12-31"}
+      <label className="flex min-h-11 items-center gap-2 text-sm font-medium">
+        Sin fecha
+        <input
+          name="undated"
+          type="checkbox"
+          checked={undated}
+          onChange={(event) => setUndated(event.target.checked)}
+          disabled={saving || Boolean(initialPlan?.recurrence)}
+          className="size-5 accent-amber-500"
         />
-        {hasEnd ? (
+      </label>
+      <fieldset
+        hidden={undated}
+        disabled={saving || undated}
+        className="space-y-2"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-x-4">
+          <label className="flex min-h-11 items-center gap-2 text-sm font-medium">
+            Todo el día
+            <input
+              name="allDay"
+              type="checkbox"
+              checked={allDay}
+              onChange={(event) => setAllDay(event.target.checked)}
+              disabled={saving}
+              className="size-5 accent-amber-500"
+            />
+          </label>
+          <label className="flex min-h-11 items-center gap-2 text-sm font-medium">
+            Con fin
+            <input
+              type="checkbox"
+              checked={hasEnd}
+              onChange={(event) => changeHasEnd(event.target.checked)}
+              disabled={saving}
+              className="size-5 accent-amber-500"
+            />
+          </label>
+        </div>
+        <div className="dalis-date-time-container space-y-2">
           <DateTimeFields
-            dateValue={dates.endDate}
-            onDateChange={(value) =>
-              setDates((previous) => ({ ...previous, endDate: value }))
-            }
+            dateValue={dates.startDate}
+            onDateChange={changeStartDate}
             showDayControls
-            name="localEnd"
-            label="Fin"
+            name="localStart"
+            label="Inicio"
             initialValue={
-              schedule?.mode === "timed" ? (schedule.localEnd ?? "") : lastDate
+              schedule?.mode === "timed"
+                ? schedule.localStart
+                : `${startDate}T09:00`
             }
             disabled={saving}
             hideTime={allDay}
-            maxDate={maxDate}
+            maxDate={allDay ? "9999-12-30" : "9999-12-31"}
           />
-        ) : null}
-      </div>
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">
-        El fin es opcional. En todo el día, la fecha final está incluida.
-      </p>
-      <PlanRecurrenceFields
-        initialRule={initialPlan?.recurrence ?? null}
-        disabled={saving}
-      />
+          {hasEnd ? (
+            <DateTimeFields
+              dateValue={dates.endDate}
+              onDateChange={(value) =>
+                setDates((previous) => ({ ...previous, endDate: value }))
+              }
+              showDayControls
+              name="localEnd"
+              label="Fin"
+              initialValue={
+                schedule?.mode === "timed"
+                  ? (schedule.localEnd ?? "")
+                  : lastDate
+              }
+              disabled={saving}
+              hideTime={allDay}
+              maxDate={maxDate}
+            />
+          ) : null}
+        </div>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          El fin es opcional. En todo el día, la fecha final está incluida.
+        </p>
+        <PlanRecurrenceFields
+          initialRule={initialPlan?.recurrence ?? null}
+          disabled={saving}
+        />
+      </fieldset>
       <div className="dalis-plan-field-row flex items-center justify-between gap-3">
         <label htmlFor={`${id}-status`} className="text-sm font-medium">
           Estado
@@ -312,6 +333,7 @@ export function PlanForm({
         </select>
       </div>
       <details
+        hidden={undated}
         open={zoneOpen}
         onToggle={(event) => setZoneOpen(event.currentTarget.open)}
       >

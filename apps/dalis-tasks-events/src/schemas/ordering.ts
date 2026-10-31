@@ -22,17 +22,20 @@ export const taskReferenceIdSchema = z.union([
 export const overduePlacementDate = "0001-01-01"
 const placementKeyTupleSchema = z.tuple([
   occurrenceIdSchema,
-  z.enum(["day", "overdue"]),
+  z.enum(["day", "overdue", "undated"]),
   civilDateSchema,
 ])
 
-export function placementDate(scope: "day" | "overdue", date: string): string {
-  return scope === "overdue" ? overduePlacementDate : date
+export function placementDate(
+  scope: "day" | "overdue" | "undated",
+  date: string
+): string {
+  return scope === "day" ? date : overduePlacementDate
 }
 
 export function taskPlacementEntityKey(
   occurrenceId: string,
-  scope: "day" | "overdue",
+  scope: "day" | "overdue" | "undated",
   date: string
 ): string {
   return `task-placement:${JSON.stringify([occurrenceId, scope, placementDate(scope, date)])}`

@@ -4,6 +4,7 @@ import { ZonedTimeError } from "@/lib/calendar/zoned-time"
 import { planDraftSchema } from "@/schemas/plan-item"
 
 export const planInputSchema = planDraftSchema.superRefine((plan, context) => {
+  if (!plan.schedule) return
   try {
     resolveEventSchedule(plan.schedule)
   } catch (error) {

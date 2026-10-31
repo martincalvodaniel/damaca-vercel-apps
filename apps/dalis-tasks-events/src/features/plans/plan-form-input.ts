@@ -3,6 +3,7 @@ import { planInputSchema } from "@/schemas/plan-input"
 import type { ChecklistEntry } from "@/types/calendar-item"
 
 export function parsePlanForm(fields: FormData, checklist: ChecklistEntry[]) {
+  const undated = fields.get("undated") === "on"
   const allDay = fields.get("allDay") === "on"
   const startDate = fields.get("localStartDate")
   let endDateExclusive: unknown = fields.get("localEndDate") || startDate
@@ -22,7 +23,7 @@ export function parsePlanForm(fields: FormData, checklist: ChecklistEntry[]) {
   const frequency = fields.get("frequency")
   const endType = fields.get("recurrenceEnd")
   const recurrence =
-    frequency === "none"
+    undated || frequency === "none"
       ? null
       : {
           frequency,
@@ -47,13 +48,15 @@ export function parsePlanForm(fields: FormData, checklist: ChecklistEntry[]) {
     status: fields.get("status"),
     checklist,
     recurrence,
-    schedule: allDay
-      ? { mode: "all_day", startDate, endDateExclusive }
-      : {
-          mode: "timed",
-          localStart: localDateTime("localStart"),
-          localEnd: localDateTime("localEnd"),
-          timeZone: fields.get("timeZone"),
-        },
+    schedule: undated
+      ? null
+      : allDay
+        ? { mode: "all_day", startDate, endDateExclusive }
+        : {
+            mode: "timed",
+            localStart: localDateTime("localStart"),
+            localEnd: localDateTime("localEnd"),
+            timeZone: fields.get("timeZone"),
+          },
   })
 }

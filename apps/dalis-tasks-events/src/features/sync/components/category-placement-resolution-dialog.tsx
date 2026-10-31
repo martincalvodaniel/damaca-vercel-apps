@@ -1,6 +1,7 @@
+// biome-ignore-all lint/performance/noJsxPropsBind: Choice handlers bind the explicit resolution choice and these controls are not memoized.
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { CategoryPlacementResolutionVersion } from "@/features/sync/components/category-placement-resolution-version"
-import { civilDateToUtc } from "@/lib/calendar/civil-date"
+import { PlacementScopeLabel } from "@/features/sync/components/placement-scope-label"
 import {
   availableCategoryPlacementResolutionChoices,
   previewCategoryPlacementResolutionChoice,
@@ -11,10 +12,6 @@ import type {
   PlacementResolutionSnapshot,
 } from "@/types/placement-resolution"
 
-const dayFormatter = new Intl.DateTimeFormat("es-ES", {
-  dateStyle: "medium",
-  timeZone: "UTC",
-})
 export function CategoryPlacementIncidentResolutionDialog({
   snapshot,
   actor,
@@ -69,8 +66,7 @@ export function CategoryPlacementIncidentResolutionDialog({
       failureMessage="No se pudo guardar la elección. La categoría o el orden pueden haber cambiado; cierra y vuelve a revisar."
     >
       <p className="mt-2 text-xs">
-        {review.scope === "overdue" ? "Atrasadas; día de referencia" : "Día"}{" "}
-        {dayFormatter.format(civilDateToUtc(review.declaredDate))}
+        <PlacementScopeLabel scope={review.scope} date={review.declaredDate} />
       </p>
       <fieldset disabled={busy} className="mt-3 space-y-1 text-sm">
         <legend className="font-medium">Cómo resolver el movimiento</legend>

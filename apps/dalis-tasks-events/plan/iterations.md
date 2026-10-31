@@ -6,6 +6,17 @@ Este archivo es la única fuente del estado de las entregas. Las diez iteracione
 
 La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). AGW-11 ya no es una dependencia vigente.
 
+## 23p — Planes sin fecha
+
+- Estado: `validated`.
+- Objetivo: Crear y editar planes sin fecha, visibles encima de Atrasadas en una sección inicialmente plegada.
+- Rutas: `src/features/plans/**`, esquemas de planes/orden, selección de calendario, ordenación y persistencia compartida, vistas de copia/conflictos y `plan/**`.
+- Dependencias: Modelo común de planes, cola offline y orden manual existentes; sin dependencias nuevas.
+- Aceptación: Todas las variantes admiten fecha opcional; los planes sin fecha no aparecen en días/atrasadas/próximas; sección Sin fecha plegada al entrar, con categorías y orden manual persistente; asignar/quitar fecha conserva contenido/estado; series requieren fecha; sincronización y copias admiten el modelo.
+- Validación prevista: Regresiones de formulario, selección, orden y mutaciones; Biome, tipos, suite y build filtrados; revisión de diff y publicación en `int`.
+- Capacidad inicial: 2026-10-31, 78% en 5h y 97% en 7d; estimación conservadora 25%/6%, con reservas 7%/2%.
+- Evidencia: [registro](iteration-log.md#23p).
+
 ## 23o — Login transparente con Google
 
 - Estado: `validated`.
@@ -96,16 +107,6 @@ La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.
 - Validación prevista: Pruebas de planner, gesto UI, recarga/cola y regresiones pertinentes.
 - Evidencia: [registro](iteration-log.md#23g).
 
-## 23f — Completados azules y expansión mensual
-
-- Estado: `validated`.
-- Objetivo: Evitar que una página parcial oculte completados del calendario.
-- Rutas: Cuadrícula mensual, lector de apariciones y pruebas.
-- Dependencias: Lector paginado local existente.
-- Aceptación: Expandir dentro de límites; no afirmar mes completo si hay páginas pendientes, errores o tope alcanzado.
-- Validación prevista: Pruebas con >50 apariciones, SSR y revisión UI de completar/reabrir.
-- Evidencia: [registro](iteration-log.md#23f).
-
 ## Historial anterior
 
-La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).
+La iteración `23f` y su evidencia se conservan en el [archivo del 2026-10-31](archive/2026-10-31/README.md). La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).

@@ -63,7 +63,7 @@ export function createPlanAgendaRows(
       occurrence: null,
     })
   )
-  if (selection.kind !== "all") {
+  if (selection.kind !== "all" && selection.kind !== "undated") {
     const date = civilDateSchema.parse(selection.date)
     const excludedDate =
       selection.kind === "upcoming" && selection.excludeDate
@@ -154,7 +154,7 @@ export function orderPlanAgendaRows(
 ): PlanAgendaRow[] {
   const order = (
     source: readonly PlanAgendaRow[],
-    scope: "day" | "overdue",
+    scope: "day" | "overdue" | "undated",
     date: string
   ) =>
     orderPlacedTasks(
@@ -170,6 +170,8 @@ export function orderPlanAgendaRows(
       tagId,
       (left, right) => compareRows(left.source, right.source)
     ).map((record) => structuredClone(record.source))
+  if (selection.kind === "undated")
+    return order(rows, "undated", overduePlacementDate)
   if (selection.kind === "overdue") {
     civilDateSchema.parse(selection.date)
     return order(rows, "overdue", overduePlacementDate)
@@ -223,7 +225,7 @@ export function planAppearanceRange(
   const horizon = civilDateSchema.parse(upcomingEndDate)
   const plans = plansSchema.parse(plansInput)
   const exceptions = exceptionsSchema.parse(exceptionsInput)
-  if (selection.kind === "all") return null
+  if (selection.kind === "all" || selection.kind === "undated") return null
   const date = civilDateSchema.parse(selection.date)
   const active = plans.filter(
     (parent) => parent.recurrence && !parent.deletedAt

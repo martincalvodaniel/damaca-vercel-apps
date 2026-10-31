@@ -1,3 +1,4 @@
+// biome-ignore-all lint/performance/noJsxPropsBind: Form and row handlers capture current state; these consumers do not rely on callback identity.
 "use client"
 
 import { useId, useMemo, useState } from "react"
@@ -55,18 +56,20 @@ export function PlanList({
   collapsible = false,
   groupByCategory = true,
   flushTop = false,
+  defaultCollapsed = false,
 }: {
   account: LocalAccount
   selection?: PlanAgendaSelection
   calendarDropScope?: string
   heading?: string
+  defaultCollapsed?: boolean
   flushTop?: boolean
   groupByCategory?: boolean
   collapsible?: boolean
 }) {
   const contentId = useId()
   const categoryDropScope = useId()
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(defaultCollapsed)
   const { data, error, isLoading, mutate } = useLocalPlans(account)
   const { refresh } = useLocalAccount()
   const { mutate: refreshTags } = useLocalTags(account)
@@ -122,7 +125,7 @@ export function PlanList({
     : []
   const allowCategoryDrop = Boolean(
     groupByCategory &&
-      selection.kind === "day" &&
+      (selection.kind === "day" || selection.kind === "undated") &&
       data &&
       placements &&
       !placementReadError &&
@@ -187,15 +190,17 @@ export function PlanList({
   return (
     <section
       aria-label={
-        selection.kind === "day"
-          ? "Planes del día"
-          : selection.kind === "overdue"
-            ? "Atrasadas"
-            : selection.kind === "upcoming"
-              ? selection.excludeDate
-                ? "Próximas"
-                : "Hoy y próximas"
-              : "Planes guardados"
+        selection.kind === "undated"
+          ? "Sin fecha"
+          : selection.kind === "day"
+            ? "Planes del día"
+            : selection.kind === "overdue"
+              ? "Atrasadas"
+              : selection.kind === "upcoming"
+                ? selection.excludeDate
+                  ? "Próximas"
+                  : "Hoy y próximas"
+                : "Planes guardados"
       }
       className={`space-y-2 ${flushTop ? "mt-0" : "mt-4 sm:mt-6"}`}
     >
@@ -510,15 +515,17 @@ export function PlanList({
           </div>
         ) : (
           <p className="rounded-xl border border-dashed border-zinc-300 p-3 text-sm text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
-            {selection.kind === "day"
-              ? "No hay planes para este día. Pulsa + para añadir uno."
-              : selection.kind === "overdue"
-                ? "No tienes planes atrasados."
-                : selection.kind === "upcoming"
-                  ? selection.excludeDate
-                    ? "No hay planes para próximas fechas. Pulsa + para añadir uno."
-                    : "No hay planes para hoy o próximas fechas. Pulsa + para añadir uno."
-                  : "Pulsa + para añadir tu primer plan."}
+            {selection.kind === "undated"
+              ? "No hay planes sin fecha."
+              : selection.kind === "day"
+                ? "No hay planes para este día. Pulsa + para añadir uno."
+                : selection.kind === "overdue"
+                  ? "No tienes planes atrasados."
+                  : selection.kind === "upcoming"
+                    ? selection.excludeDate
+                      ? "No hay planes para próximas fechas. Pulsa + para añadir uno."
+                      : "No hay planes para hoy o próximas fechas. Pulsa + para añadir uno."
+                    : "Pulsa + para añadir tu primer plan."}
           </p>
         )}
 

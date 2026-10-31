@@ -11,6 +11,7 @@ import type { ItemView, Tag } from "@/types/preferences"
 
 export type PlanAgendaSelection =
   | { kind: "all" }
+  | { kind: "undated" }
   | { kind: "day" | "overdue"; date: string }
   | { kind: "upcoming"; date: string; excludeDate?: string }
 export interface PlanAgendaGroup {
@@ -26,6 +27,10 @@ export function selectAgendaPlans(
 ) {
   if (selection.kind === "all")
     return plans.filter((plan) => !plan.deletedAt).toSorted(comparePlans)
+  if (selection.kind === "undated")
+    return plans
+      .filter((plan) => !plan.deletedAt && !plan.schedule)
+      .toSorted(comparePlans)
   const date = civilDateSchema.parse(selection.date)
   const excludedDate =
     selection.kind === "upcoming" && selection.excludeDate
@@ -36,6 +41,7 @@ export function selectAgendaPlans(
       (plan) =>
         !plan.deletedAt &&
         !plan.recurrence &&
+        Boolean(plan.schedule) &&
         (selection.kind === "day"
           ? planIncludesDate(plan, date)
           : selection.kind === "overdue"

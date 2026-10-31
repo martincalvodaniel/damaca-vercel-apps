@@ -15,8 +15,9 @@ export function usePlanReschedule(account: LocalAccount) {
   const { mutate } = useLocalPlans(account)
   return useLocalIntent<{ row: PlanAgendaRow; date: string }>(
     async ({ row, date }, operationId) => {
-      if (date === planStartDate(row.plan)) return
+      if (row.plan.schedule && date === planStartDate(row.plan)) return
       const input = rescheduledPlanInput(row.plan, date)
+      if (!input.schedule) throw new Error("Rescheduled plans require a date")
       if (row.occurrence)
         await changeLocalPlanOccurrence(
           account,

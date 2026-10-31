@@ -1,4 +1,4 @@
-import { expect, test } from "bun:test"
+import { expect, test as it } from "bun:test"
 import { diagnosePersonalQueue } from "@/lib/sync/personal-queue-diagnostics"
 import { summarizeSyncQueueV2 } from "@/lib/sync/queue-summary-v2"
 import {
@@ -81,10 +81,11 @@ function entry(
   }
 }
 
-test("prepared recurrence policy admits common series and canonical appearances without widening generation four", () => {
+it("prepared recurrence policy admits common series and canonical appearances without widening generation four", () => {
   for (const variant of ["task", "event", "appointment", "note"] as const) {
     const parent = { ...series(), variant },
       slot = `${parent.id}:2026-10-11T09:30`
+    if (!parent.schedule) throw new Error("Expected dated fixture")
     const commands: SyncCommand[] = [
       {
         type: "plan.set-occurrence-status",
@@ -175,7 +176,7 @@ test("prepared recurrence policy admits common series and canonical appearances 
     expect(Object.isFrozen(object)).toBe(true)
 })
 
-test("missing CAS, foreign or invalid slots and unknown parents remain unsupported without rewriting history", () => {
+it("missing CAS, foreign or invalid slots and unknown parents remain unsupported without rewriting history", () => {
   const parent = series(),
     historical: SyncCommand = {
       type: "plan.cancel-occurrence",
@@ -215,7 +216,7 @@ test("missing CAS, foreign or invalid slots and unknown parents remain unsupport
   expect(historical).toEqual(before)
 })
 
-test("root progress, missing occurrence movement, legacy recurrence and unsupported families stay gated", () => {
+it("root progress, missing occurrence movement, legacy recurrence and unsupported families stay gated", () => {
   const parent = series()
   for (const command of [
     { type: "plan.set-status", itemId: parent.id, status: "in_progress" },
@@ -285,7 +286,7 @@ test("root progress, missing occurrence movement, legacy recurrence and unsuppor
   ).toBe(true)
 })
 
-test("future diagnostics release only supported dependency chains while preserving original intentions", () => {
+it("future diagnostics release only supported dependency chains while preserving original intentions", () => {
   const parent = series(),
     slot = `${parent.id}:2026-10-11`
   const historical = entry(

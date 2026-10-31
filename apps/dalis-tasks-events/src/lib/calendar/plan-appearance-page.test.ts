@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, test as it } from "bun:test"
 import { readPlanAppearancePage } from "@/lib/calendar/plan-appearance-page"
 import { planOccurrencesPage } from "@/lib/calendar/plan-occurrences"
 import {
@@ -17,7 +17,7 @@ function uuid(value: number) {
 function parent(
   value = 1,
   variant: PlanVariant = "task",
-  schedule: Plan["schedule"] = {
+  schedule: NonNullable<Plan["schedule"]> = {
     mode: "all_day",
     startDate: "2026-10-10",
     endDateExclusive: "2026-10-13",
@@ -58,7 +58,7 @@ function occurrence(series: Plan, date = "2026-10-10") {
 const query = { startDate: "2026-10-11", endDate: "2026-10-11" }
 
 describe("bounded common plan appearance pages", () => {
-  test("all-day lookback includes carryover and respects exclusive ends", () => {
+  it("all-day lookback includes carryover and respects exclusive ends", () => {
     const series = parent()
     const page = readPlanAppearancePage([series], [], owner, query)
     expect(page.views.map((view) => view.occurrence.slotKey)).toEqual([
@@ -87,7 +87,7 @@ describe("bounded common plan appearance pages", () => {
       }).views
     ).toEqual([])
   })
-  test("timed civil duration carries across days and the minimum civil date is bounded", () => {
+  it("timed civil duration carries across days and the minimum civil date is bounded", () => {
     const timed = parent(1, "event", {
       mode: "timed",
       localStart: "2026-10-10T23:00",
@@ -111,7 +111,7 @@ describe("bounded common plan appearance pages", () => {
       }).views.map((view) => view.occurrence.slotKey)
     ).toEqual(["0001-01-01", "0001-01-02"])
   })
-  test("exceptions come first and moved, cancelled and deleted original slots never return", () => {
+  it("exceptions come first and moved, cancelled and deleted original slots never return", () => {
     const series = parent()
     const moved = planOccurrenceSchema.parse({
       ...occurrence(series),
@@ -152,7 +152,7 @@ describe("bounded common plan appearance pages", () => {
       "2026-10-31",
     ])
   })
-  test("exception pagination keeps its explicit cursor before generation", () => {
+  it("exception pagination keeps its explicit cursor before generation", () => {
     const first = parent(1)
     const second = parent(2)
     const exceptions = [occurrence(first), occurrence(second)]
@@ -189,12 +189,13 @@ describe("bounded common plan appearance pages", () => {
       afterDate: null,
     })
   })
-  test("empty filtered generation advances dates and exactly one series per call", () => {
+  it("empty filtered generation advances dates and exactly one series per call", () => {
     const first = parent(1, "task", {
       mode: "all_day",
       startDate: "2026-10-10",
       endDateExclusive: "2026-10-11",
     })
+    if (!first.schedule) throw new Error("Expected dated fixture")
     const second = parent(2, "note", first.schedule)
     const exceptions = ["2026-10-10", "2026-10-11", "2026-10-12"].map(
       (date) => ({ ...occurrence(first, date), cancelled: true })
@@ -240,7 +241,7 @@ describe("bounded common plan appearance pages", () => {
     expect(nextSeries.views).toHaveLength(1)
     expect(nextSeries.views[0].variant).toBe("note")
   })
-  test("four variants and future anchors advance through stable series identities", () => {
+  it("four variants and future anchors advance through stable series identities", () => {
     const variants = ["task", "event", "appointment", "note"] as const
     const parents = variants.map((variant, index) =>
       parent(index + 1, variant, {
@@ -278,7 +279,7 @@ describe("bounded common plan appearance pages", () => {
         }).views[0].variant
       ).toBe(series.variant)
   })
-  test("invalid DST slots remain issues and advance the original generation date", () => {
+  it("invalid DST slots remain issues and advance the original generation date", () => {
     const series = parent(1, "appointment", {
       mode: "timed",
       localStart: "2026-03-28T02:30",
@@ -307,7 +308,7 @@ describe("bounded common plan appearance pages", () => {
     expect(next.issues).toEqual([])
     expect(next.nextCursor).toBeNull()
   })
-  test("strict owner, catalogs, ranges and derived lookback cursor bounds are enforced", () => {
+  it("strict owner, catalogs, ranges and derived lookback cursor bounds are enforced", () => {
     const series = parent()
     expect(() =>
       planAppearanceCursorSchema.parse({
@@ -369,7 +370,7 @@ describe("bounded common plan appearance pages", () => {
       }).views
     ).toHaveLength(2)
   })
-  test("completed exception filtering and returned snapshots never alter inputs", () => {
+  it("completed exception filtering and returned snapshots never alter inputs", () => {
     const series = parent()
     const completed = {
       ...occurrence(series),

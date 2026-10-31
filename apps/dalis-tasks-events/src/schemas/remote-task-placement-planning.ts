@@ -22,8 +22,7 @@ export const remoteTaskPlacementKeySchema = taskPlacementSchema
   .pick({ occurrenceId: true, scope: true, date: true })
   .extend({ occurrenceId: taskReferenceIdSchema })
   .refine(
-    (record) =>
-      record.scope !== "overdue" || record.date === overduePlacementDate,
+    (record) => record.scope === "day" || record.date === overduePlacementDate,
     "Remote overdue placements require their canonical date"
   )
 export const remoteTaskPlacementSchema = taskPlacementSchema
@@ -32,8 +31,7 @@ export const remoteTaskPlacementSchema = taskPlacementSchema
     occurrenceId: taskReferenceIdSchema,
   })
   .refine(
-    (record) =>
-      record.scope !== "overdue" || record.date === overduePlacementDate,
+    (record) => record.scope === "day" || record.date === overduePlacementDate,
     "Remote overdue placements require their canonical date"
   )
 
@@ -49,8 +47,8 @@ export const taskPlacementPlanningInputSchema = z
       .array(
         taskPlacementSchema.refine(
           (record) =>
-            record.scope !== "overdue" || record.date === overduePlacementDate,
-          "Overdue placements require their canonical date"
+            record.scope === "day" || record.date === overduePlacementDate,
+          "Non-day placements require their canonical date"
         )
       )
       .max(maximumRemoteTaskCatalog),

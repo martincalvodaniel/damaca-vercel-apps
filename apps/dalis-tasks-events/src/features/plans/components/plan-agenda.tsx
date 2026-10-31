@@ -22,6 +22,13 @@ export function PlanAgenda({ account }: { account: LocalAccount }) {
       <PlanList
         flushTop
         collapsible
+        defaultCollapsed
+        account={account}
+        selection={{ kind: "undated" }}
+        heading="Sin fecha"
+      />
+      <PlanList
+        collapsible
         account={account}
         groupByCategory={false}
         selection={{ kind: "overdue", date: today }}

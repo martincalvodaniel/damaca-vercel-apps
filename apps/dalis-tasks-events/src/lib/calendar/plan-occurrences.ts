@@ -23,7 +23,7 @@ export function planOccurrencesPage(
 ): PlanOccurrencePage {
   const series = planSchema.parse(input)
   const query = recurrenceQuerySchema.parse(queryInput)
-  if (!series.recurrence)
+  if (!series.recurrence || !series.schedule)
     throw new Error("Plan occurrence generation requires a recurring series")
   if (series.deletedAt) return { occurrences: [], issues: [], nextAfter: null }
   const page = recurrenceDatesPage(series.recurrence, query)

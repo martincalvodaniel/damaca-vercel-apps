@@ -26,13 +26,21 @@ export const planDraftSchema = z
     variant: planVariantSchema,
     title: titleSchema,
     description: descriptionSchema,
-    schedule: eventScheduleSchema,
+    schedule: eventScheduleSchema.nullable(),
     status: taskStatusSchema,
     checklist: checklistSchema,
     recurrence: recurrenceSchema.nullable(),
   })
   .superRefine((plan, context) => {
     if (!plan.recurrence) return
+    if (!plan.schedule) {
+      context.addIssue({
+        code: "custom",
+        path: ["recurrence"],
+        message: "Undated plans cannot recur",
+      })
+      return
+    }
     const startDate =
       plan.schedule.mode === "all_day"
         ? plan.schedule.startDate

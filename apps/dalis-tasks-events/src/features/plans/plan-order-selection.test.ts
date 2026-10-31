@@ -1,4 +1,4 @@
-import { expect, test } from "bun:test"
+import { expect, test as it } from "bun:test"
 import {
   createPlanAgendaRows,
   groupPlanAgendaRows,
@@ -72,7 +72,7 @@ function fixture(variant: PlanVariant = "task") {
   return { first, second, parent, parents, views, rows }
 }
 
-test("two simple plans and a three-day repetition can all be reordered today", () => {
+it("two simple plans and a three-day repetition can all be reordered today", () => {
   for (const variant of ["task", "event", "appointment", "note"] as const) {
     const f = fixture(variant)
     expect(f.rows).toHaveLength(3)
@@ -94,7 +94,7 @@ test("two simple plans and a three-day repetition can all be reordered today", (
   }
 })
 
-test("real recurring planner orders the occurrence and simple plans without changing other days", () => {
+it("real recurring planner orders the occurrence and simple plans without changing other days", () => {
   const f = fixture()
   const selection = { kind: "day", date } as const
   const appearance = f.rows.find((record) => record.occurrence)
@@ -155,7 +155,7 @@ test("real recurring planner orders the occurrence and simple plans without chan
   expect(nextRows[0].occurrence?.id).toBe(`${f.parent.id}:2026-10-12T14:30`)
 })
 
-test("upcoming rows keep same-day peers using each occurrence's effective date", () => {
+it("upcoming rows keep same-day peers using each occurrence's effective date", () => {
   const f = fixture()
   const rows = createPlanAgendaRows(f.parents, f.views, {
     kind: "upcoming",
@@ -163,6 +163,7 @@ test("upcoming rows keep same-day peers using each occurrence's effective date",
   })
   for (const selected of rows) {
     const peers = planRowOrderPeers(rows, { kind: "upcoming", date }, selected)
+    if (!selected.plan.schedule) throw new Error("Expected dated fixture")
     const selectedDate =
       selected.plan.schedule.mode === "timed"
         ? selected.plan.schedule.localStart.slice(0, 10)
@@ -171,7 +172,7 @@ test("upcoming rows keep same-day peers using each occurrence's effective date",
       rows
         .filter(
           (record) =>
-            record.plan.schedule.mode === "timed" &&
+            record.plan.schedule?.mode === "timed" &&
             record.plan.schedule.localStart.startsWith(selectedDate)
         )
         .map((record) => record.key)
@@ -188,7 +189,7 @@ test("upcoming rows keep same-day peers using each occurrence's effective date",
   ).toEqual([])
 })
 
-test("moved appearance preserves original slot while ordering on its new day", () => {
+it("moved appearance preserves original slot while ordering on its new day", () => {
   const f = fixture()
   const original = f.views[0].occurrence
   const moved = {
@@ -236,7 +237,7 @@ test("moved appearance preserves original slot while ordering on its new day", (
   ).toBe(original.id)
 })
 
-test("overdue mixes dates and appearances while excluding completed or future rows", () => {
+it("overdue mixes dates and appearances while excluding completed or future rows", () => {
   const f = fixture()
   const selection = { kind: "overdue", date: "2026-10-13" } as const
   const rows = createPlanAgendaRows(f.parents, f.views, selection)
@@ -260,7 +261,7 @@ test("overdue mixes dates and appearances while excluding completed or future ro
   }
 })
 
-test("a multi-day visible plan can be ordered on the selected day, not only its start day", () => {
+it("a multi-day visible plan can be ordered on the selected day, not only its start day", () => {
   const f = fixture()
   const simple = row(4, "2026-10-10")
   const spanning = {
@@ -302,7 +303,7 @@ test("a multi-day visible plan can be ordered on the selected day, not only its 
   ).toHaveLength(4)
 })
 
-test("deleted and cancelled rows and raw series are protected without blocking valid neighbors", () => {
+it("deleted and cancelled rows and raw series are protected without blocking valid neighbors", () => {
   const f = fixture()
   const occurrence = f.rows.find((record) => record.occurrence)
   if (!occurrence?.occurrence) throw new Error("Missing occurrence")
@@ -336,7 +337,7 @@ test("deleted and cancelled rows and raw series are protected without blocking v
 
 for (const variant of ["task", "event", "appointment", "note"] as const) {
   for (const recurring of [false, true]) {
-    test(`cross-category ${variant} ${recurring ? "occurrence" : "simple"} uses one real movement for assignment and position`, () => {
+    it(`cross-category ${variant} ${recurring ? "occurrence" : "simple"} uses one real movement for assignment and position`, () => {
       const f = fixture(variant),
         selection = { kind: "day", date } as const
       f.first.plan.variant = variant

@@ -42,7 +42,7 @@ function planId(index: number, recurring: boolean) {
 function stepId(index: number, recurring: boolean) {
   return uuid(index + (recurring ? 111 : 101))
 }
-function assert(value: unknown, message: string): asserts value {
+function ensureCondition(value: unknown, message: string): asserts value {
   if (!value) throw new Error(message)
 }
 const rootElement = document.getElementById("root")
@@ -55,20 +55,20 @@ const actions = actionsElement
 const existing = await indexedDB.databases()
 const reload = query.get("phase") === "reload"
 if (reload)
-  assert(
+  ensureCondition(
     sessionStorage.getItem(marker) === "owned" &&
       existing.some((value) => value.name === databaseName),
     "Reload requires this run's prepared partition"
   )
 else {
-  assert(
+  ensureCondition(
     !existing.some(
       (value) =>
         value.name === ACCOUNT_CONTROL_DATABASE || value.name === databaseName
     ),
     "Existing account control blocks the isolated UI fixture"
   )
-  assert(
+  ensureCondition(
     localStorage.getItem(OFFLINE_ACCOUNT_KEY) === null,
     "Foreign legacy account blocks the isolated UI fixture"
   )
@@ -80,14 +80,14 @@ else {
 }
 let control = await readAccountControl()
 if (reload)
-  assert(
+  ensureCondition(
     control.userId === userId &&
       !control.logoutPending &&
       control.epoch === sessionStorage.getItem(epochKey),
     "Reload account ownership changed"
   )
 else {
-  assert(
+  ensureCondition(
     control.userId === null && !control.logoutPending,
     "Foreign account blocks the UI fixture"
   )
@@ -236,8 +236,8 @@ run.onclick = async () => {
       `li[data-order-item="${planId(0, false)}"]`
     )
     const title = source?.querySelector("h4")
-    assert(source && destination && title, "Gesture rows are missing")
-    assert(
+    ensureCondition(source && destination && title, "Gesture rows are missing")
+    ensureCondition(
       getComputedStyle(title).userSelect === "none",
       "Row selection must be disabled before long press starts"
     )
@@ -246,11 +246,14 @@ run.onclick = async () => {
       cancelable: true,
     })
     title.dispatchEvent(selection)
-    assert(selection.defaultPrevented, "Native row selection was not blocked")
+    ensureCondition(
+      selection.defaultPrevented,
+      "Native row selection was not blocked"
+    )
     const editable = document.createElement("input")
     source.append(editable)
     try {
-      assert(
+      ensureCondition(
         getComputedStyle(editable).userSelect === "text",
         "Editable field selection must remain available"
       )
@@ -259,7 +262,7 @@ run.onclick = async () => {
         cancelable: true,
       })
       editable.dispatchEvent(fieldSelection)
-      assert(
+      ensureCondition(
         !fieldSelection.defaultPrevented,
         "Editable field selection was intercepted"
       )
@@ -313,20 +316,20 @@ run.onclick = async () => {
         cancelable: true,
       })
       title.dispatchEvent(menu)
-      assert(
+      ensureCondition(
         menu.defaultPrevented,
         "Native callout must be blocked before the activation timer"
       )
       dispatch("pointerup")
       dispatch("pointerdown")
-      assert(
+      ensureCondition(
         !dispatch("pointermove", origin.left + 30).defaultPrevented,
         "Movement before pickup must permit native scroll"
       )
       dispatch("pointerup")
       dispatch("pointerdown")
       await new Promise((resolve) => setTimeout(resolve, 500))
-      assert(
+      ensureCondition(
         source.dataset.orderDragging === "true",
         "Touch hold did not visibly select the plan"
       )
@@ -337,15 +340,15 @@ run.onclick = async () => {
           pointerType: "touch",
         })
       )
-      assert(
+      ensureCondition(
         source.dataset.orderDragging === "true",
         "Pointer cancellation incorrectly cancelled the native touch gesture"
       )
-      assert(
+      ensureCondition(
         rootElement.querySelector("[data-order-preview]"),
         "Touch pickup did not show a drag preview"
       )
-      assert(
+      ensureCondition(
         dispatch("pointermove", target.left + 50, target.top + 3)
           .defaultPrevented,
         "Picked-up touch must block native scroll"
@@ -356,17 +359,17 @@ run.onclick = async () => {
       const stored = await LocalOutbox.open(userId)
       try {
         const entries = await stored.listEntries()
-        assert(
+        ensureCondition(
           entries.length === before + 1,
           "Long press must enqueue exactly one operation"
         )
         const last = entries.at(-1)
-        assert(
+        ensureCondition(
           last?.operation.command.type === "task.move" &&
             last.operation.command.itemId === planId(3, false),
           "Long press must retain the moved plan identity"
         )
-        assert(
+        ensureCondition(
           last.operation.command.date === date &&
             last.operation.command.beforeId === planId(0, false),
           "Drop must retain day and neighbor"
@@ -374,7 +377,7 @@ run.onclick = async () => {
       } finally {
         stored.close()
       }
-      assert(
+      ensureCondition(
         rootElement
           .querySelector("li[data-order-item]")
           ?.getAttribute("data-order-item") === planId(3, false),
@@ -399,11 +402,11 @@ verify.onclick = async () => {
     const placements = await repository.list("taskPlacements", {
       includeDeleted: true,
     })
-    assert(
+    ensureCondition(
       placements.some((record) => record.occurrenceId === planId(3, false)),
       "Placement was not persisted"
     )
-    assert(
+    ensureCondition(
       rootElement
         .querySelector("li[data-order-item]")
         ?.getAttribute("data-order-item") === planId(3, false),
@@ -434,7 +437,7 @@ move.onclick = async () => {
     const destination = rootElement.querySelector<HTMLElement>(
       '[data-order-drop-date="2026-10-12"]'
     )
-    assert(destination, "Calendar target is missing")
+    ensureCondition(destination, "Calendar target is missing")
     const outbox = await LocalOutbox.open(userId)
     const before = (await outbox.listEntries()).length
     outbox.close()
@@ -452,7 +455,10 @@ move.onclick = async () => {
       const cell = rootElement?.querySelector<HTMLElement>(
         `[data-order-drop-date="${targetDate}"]`
       )
-      assert(source && title && cell, "Calendar drag source is missing")
+      ensureCondition(
+        source && title && cell,
+        "Calendar drag source is missing"
+      )
       const capture = source.setPointerCapture
       source.setPointerCapture = () => undefined
       const origin = title.getBoundingClientRect()
@@ -475,7 +481,7 @@ move.onclick = async () => {
         dispatch("pointerdown")
         await new Promise((resolve) => setTimeout(resolve, 500))
         const target = cell.getBoundingClientRect()
-        assert(
+        ensureCondition(
           dispatch(
             "pointermove",
             target.left + target.width / 2,
@@ -506,11 +512,11 @@ move.onclick = async () => {
       saved = await LocalOutbox.open(userId)
     try {
       const entries = await saved.listEntries()
-      assert(
+      ensureCondition(
         entries.length === before + 2,
         `Calendar drops must enqueue two operations: ${entries.length - before}`
       )
-      assert(
+      ensureCondition(
         entries.at(-2)?.operation.command.type === "item.update" &&
           entries.at(-1)?.operation.command.type === "plan.update-occurrence",
         "Calendar drops must use original producers"
@@ -521,27 +527,27 @@ move.onclick = async () => {
         "occurrences",
         `${planId(0, true)}:${date}`
       )
-      assert(
+      ensureCondition(
         simple?.kind === "plan" &&
-          simple.schedule.mode === "all_day" &&
+          simple.schedule?.mode === "all_day" &&
           simple.schedule.startDate === "2026-10-12" &&
           simple.schedule.endDateExclusive === "2026-10-13",
         "Simple interval was not moved"
       )
-      assert(
+      ensureCondition(
         parent?.kind === "plan" &&
-          parent.schedule.mode === "all_day" &&
+          parent.schedule?.mode === "all_day" &&
           parent.schedule.startDate === date,
         "Occurrence drag moved its parent"
       )
-      assert(
+      ensureCondition(
         occurrence?.kind === "plan" &&
           occurrence.slotKey === date &&
           occurrence.schedule.mode === "all_day" &&
           occurrence.schedule.startDate === "2026-10-12",
         "Appearance identity or date was lost"
       )
-      assert(
+      ensureCondition(
         !rootElement.querySelector(
           `li[data-order-item="${planId(0, false)}"]`
         ) &&
@@ -573,9 +579,9 @@ verifyDate.onclick = async () => {
         "occurrences",
         `${planId(0, true)}:${date}`
       )
-    assert(
+    ensureCondition(
       simple?.kind === "plan" &&
-        simple.schedule.mode === "all_day" &&
+        simple.schedule?.mode === "all_day" &&
         simple.schedule.startDate === "2026-10-12" &&
         occurrence?.kind === "plan" &&
         occurrence.schedule.mode === "all_day" &&
@@ -600,7 +606,7 @@ progressProof.onclick = async () => {
   const outbox = await LocalOutbox.open(userId)
   try {
     if (calendarMode)
-      assert(
+      ensureCondition(
         query.get("date") === date,
         "Progress fixture must select its seeded day"
       )
@@ -626,15 +632,18 @@ progressProof.onclick = async () => {
           `li[data-order-item="${rowKey}"]`
         )
         const button = row?.querySelector<HTMLButtonElement>("article > button")
-        assert(row && button, "Progress row is missing")
+        ensureCondition(row && button, "Progress row is missing")
         const details = row.querySelector("details")
-        assert(!details?.open, "Progress must start outside details")
+        ensureCondition(!details?.open, "Progress must start outside details")
         for (const [desired, pressed] of [
           ["in_progress", "mixed"],
           ["completed", "true"],
           ["not_started", "false"],
         ] as const) {
-          assert(!button.disabled, "Progress control is unexpectedly disabled")
+          ensureCondition(
+            !button.disabled,
+            "Progress control is unexpectedly disabled"
+          )
           button.click()
           for (let attempt = 0; attempt < 120; attempt++) {
             if (
@@ -645,33 +654,36 @@ progressProof.onclick = async () => {
             await new Promise((resolve) => setTimeout(resolve, 16))
           }
           expectedCount++
-          assert(
+          ensureCondition(
             !button.disabled && button.getAttribute("aria-pressed") === pressed,
             "Progress state did not refresh"
           )
-          assert(!details?.open, "Changing progress must not open details")
+          ensureCondition(
+            !details?.open,
+            "Changing progress must not open details"
+          )
           const value = recurring
             ? await repository.get("occurrences", rowKey)
             : await repository.get("items", itemId)
-          assert(
+          ensureCondition(
             value?.kind === "plan" && value.status === desired,
             "Progress state was not persisted"
           )
-          assert(
+          ensureCondition(
             (value.completedAt !== null) === (desired === "completed"),
             "Completion timestamp does not follow status"
           )
-          assert(
+          ensureCondition(
             value.checklist.every((step) => !step.completed),
             "Plan progress changed checklist steps"
           )
           const entries = await outbox.listEntries()
           const last = entries.at(-1)
-          assert(
+          ensureCondition(
             entries.length === expectedCount && last?.state === "pending",
             "One click must persist one pending intention"
           )
-          assert(
+          ensureCondition(
             last.operation.command.type ===
               (recurring ? "plan.set-occurrence-status" : "plan.set-status") &&
               "status" in last.operation.command &&
@@ -679,7 +691,7 @@ progressProof.onclick = async () => {
             "Progress intention does not match the requested state"
           )
           if (recurring)
-            assert(
+            ensureCondition(
               (await repository.get("items", itemId))?.kind === "plan" &&
                 ((await repository.get("items", itemId)) as { status: string })
                   .status === "not_started",
@@ -706,7 +718,7 @@ verifyProgress.onclick = async () => {
   const outbox = await LocalOutbox.open(userId)
   try {
     const expected = Number(sessionStorage.getItem(progressProofKey))
-    assert(
+    ensureCondition(
       expected > 0 && (await outbox.listEntries()).length === expected,
       "Reload lost progress intentions"
     )
@@ -716,7 +728,7 @@ verifyProgress.onclick = async () => {
         const value = recurring
           ? await repository.get("occurrences", `${itemId}:${date}`)
           : await repository.get("items", itemId)
-        assert(
+        ensureCondition(
           value?.kind === "plan" &&
             value.status === "not_started" &&
             value.completedAt === null,
@@ -736,12 +748,12 @@ const cleanup = document.createElement("button")
 cleanup.textContent = "Limpiar prueba"
 cleanup.className = "ml-3 min-h-11 rounded border px-3 text-sm"
 cleanup.onclick = async () => {
-  assert(
+  ensureCondition(
     sessionStorage.getItem(marker) === "owned",
     "Cleanup run ownership is missing"
   )
   const current = await readAccountControl()
-  assert(
+  ensureCondition(
     current.userId === userId &&
       current.epoch === account.epoch &&
       !current.logoutPending,
@@ -750,7 +762,7 @@ cleanup.onclick = async () => {
   root.unmount()
   const hidden = await hideLocalAccount()
   const closed = await completeRemoteLogout(hidden.epoch)
-  assert(
+  ensureCondition(
     closed.userId === null &&
       !closed.logoutPending &&
       closed.epoch === hidden.epoch,

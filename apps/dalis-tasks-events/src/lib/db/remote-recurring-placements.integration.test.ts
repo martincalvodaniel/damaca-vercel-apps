@@ -1,6 +1,6 @@
 import "server-only"
 
-import { afterAll, beforeAll, describe, expect, test } from "bun:test"
+import { afterAll, beforeAll, describe, expect, test as it } from "bun:test"
 import { getSyncDatabaseTestConfig } from "@/config/env"
 import { closeDatabaseConnection, getDatabase } from "@/lib/db/client"
 import { COLLECTION_NAMES, getCollection } from "@/lib/db/collections"
@@ -164,7 +164,7 @@ describe.skipIf(!config)("prepared atomic recurring mixed placements", () => {
     }
   }, 30000)
 
-  test("all variants mix generated or materialized timed appearances with simple peers and replay once", async () => {
+  it("all variants mix generated or materialized timed appearances with simple peers and replay once", async () => {
     for (const variant of ["task", "event", "appointment", "note"] as const) {
       const actor = `${prefix}${variant}`
       const input = draft(variant)
@@ -176,9 +176,11 @@ describe.skipIf(!config)("prepared atomic recurring mixed placements", () => {
           timeZone: "Europe/Madrid",
         }
       const itemId = await seed(actor, input)
+      if (!input.schedule) throw new Error("Expected dated fixture")
       const slot = input.schedule.mode === "timed" ? `${date}T09:00` : date
       const occurrenceId = `${itemId}:${slot}`
       if (variant === "note")
+        // biome-ignore lint/suspicious/noConditionalExpect: Only this variant seeds a materialized occurrence; all variants assert their movement outcome below.
         expect(
           (
             await executeRemotePlanOccurrenceOperation(
@@ -229,7 +231,7 @@ describe.skipIf(!config)("prepared atomic recurring mixed placements", () => {
     }
   }, 30000)
 
-  test("position CAS has one winner and historical unsupported or cross-family identity remains exact", async () => {
+  it("position CAS has one winner and historical unsupported or cross-family identity remains exact", async () => {
     const actor = `${prefix}cas`
     const itemId = await seed(actor)
     const historical = move(itemId)
@@ -286,7 +288,7 @@ describe.skipIf(!config)("prepared atomic recurring mixed placements", () => {
     ).rejects.toBeInstanceOf(OperationIdentityReuseError)
   }, 30000)
 
-  test("late failure rolls back every peer, view, guard, receipt and journal before clean retry", async () => {
+  it("late failure rolls back every peer, view, guard, receipt and journal before clean retry", async () => {
     const actor = `${prefix}rollback`
     const itemId = await seed(actor)
     const peer = await seed(actor, draft("event", false))
@@ -320,7 +322,7 @@ describe.skipIf(!config)("prepared atomic recurring mixed placements", () => {
     )
   }, 30000)
 
-  test("a guarded parent edit or deletion after the movement snapshot forces full reread", async () => {
+  it("a guarded parent edit or deletion after the movement snapshot forces full reread", async () => {
     for (const deleted of [false, true]) {
       const actor = `${prefix}race-${deleted}`
       const itemId = await seed(actor)

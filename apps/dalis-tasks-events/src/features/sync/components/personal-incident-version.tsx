@@ -31,7 +31,7 @@ export function PersonalIncidentVersion({
                   : record.store === "itemViews"
                     ? `Categoría: ${record.record.primaryTagId === null ? "sin categoría" : (tagNames[record.record.primaryTagId] ?? "no disponible")}`
                     : record.store === "taskPlacements"
-                      ? `${record.record.scope === "overdue" ? "Atrasadas" : record.record.date} · posición ${record.record.position} · ${record.record.tagId === null ? "sin categoría" : (tagNames[record.record.tagId] ?? "categoría no disponible")}`
+                      ? `${record.record.scope === "undated" ? "Sin fecha" : record.record.scope === "overdue" ? "Atrasadas" : record.record.date} · posición ${record.record.position} · ${record.record.tagId === null ? "sin categoría" : (tagNames[record.record.tagId] ?? "categoría no disponible")}`
                       : record.store === "settings"
                         ? `Zona horaria: ${record.record.timeZone}`
                         : "Preferencia conservada"}
