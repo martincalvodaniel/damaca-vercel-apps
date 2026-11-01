@@ -1,6 +1,6 @@
 # Registro de entregas
 
-No hay entregas de producto registradas en este ámbito. Añadir evidencia observada por identificador al cerrar una iteración; consultar el estado en `iterations.md`.
+Evidencia observada por entrega. El estado de cada iteración se consulta en `iterations.md`.
 
 ## HM-01 — Receta y observaciones opcionales
 
@@ -125,3 +125,21 @@ No hay entregas de producto registradas en este ámbito. Añadir evidencia obser
 - Capacidad refrescada tras validación: 48% de 5h y 85% de 7d; margen suficiente para cierre y reservas.
 - Enlaces locales de planificación y `git diff --check` correctos. Base remota de `int` comprobada: `00346ffe495218218124c02e52c5cdaef9be567e`, igual a la base local. Revisados archivos y diff: solo Home Management, sin credenciales, cambios ajenos ni modificaciones en Tasks; publicación se verifica al cierre.
 - Validación final: `bun run lint --staged` comprobó 14 archivos sin hallazgos; `git diff --cached --check` correcto.
+
+## HM-10 — Sistema de color cohesionado y accesible
+
+- Inicio: 2026-11-01. Antes de implementar, promoción explícitamente autorizada de `int` a `main`: avance fast-forward desde `dd3e7e3` hasta `c94856cb6b52dd413001ff746fc34e81fc8443ce`; push normal de `main` correcto y SHA remoto verificado. Vuelta a `int` con árbol limpio y sin commits locales pendientes. No se ejecutó un despliegue manual de Vercel.
+- Capacidad al iniciar esta iteración: 36% de 5h y 83% de 7d. Estimación conservadora máxima de 24 y 6 puntos respectivamente para implementación, reparación, validación y publicación; conserva reservas de 7%/2%. Se refresca en cada fase relevante por petición del usuario.
+- Alcance y aceptación: [HM-10](iterations.md#hm-10--sistema-de-color-cohesionado-y-accesible).
+- Implementados tokens semánticos claros/oscuros para fondo, superficies, campos, texto, bordes, foco, acción principal, acentos y estados. Fondo global y de página alineados; `color-scheme` declarado; sombras centralizadas. Migrados los componentes, páginas, acceso, vacíos, errores, navegación y modales a estos roles; solo se conservan literales oficiales del logo de Google.
+- Modales/tarjetas con superficies comunes y opacas; acciones principales verdes con foreground y hover apropiados en ambos temas; foco uniforme; cantidad y búsqueda con aspecto y límites comunes. Eliminadas las antiguas variantes cromáticas locales de los steppers y selectores de producto.
+- Comprados conservan texto y controles legibles sin opacidad de grupo. Día actual usa selección primaria y agotados advertencia; errores/eliminación rojo y confirmación/éxito verde; acentos de sección limitados a pequeños indicadores.
+- Contrato obligatorio en `docs/design-system.md`, enlazado desde `AGENTS.md` con disparadores explícitos y desde el plan maestro. Valores pertenecen únicamente a CSS; la documentación fija propósito, excepciones, contraste, temas y criterios de extensión.
+- Añadida prueba de paleta que valida pares de texto normal a 4,5:1, límites de campo a 3:1 y centralización de hexadecimales en componentes. Primera ejecución detectó tres pares insuficientes (muted sobre selección clara, accent sobre fondo suave claro y primary sobre selección oscura); ajustados y aprobados sin redondear umbrales.
+- Corregidos todos los avisos previos de Biome en archivos tocados mediante callbacks con dependencias completas; en listas de lugares, handlers estables identifican la opción mediante `data-place`. Sin cambios de esquema, consultas o acciones de negocio ni dependencias nuevas.
+- Validación final: `bun run type-check --filter=@damaca/dalis-home-management`, `bun run test --filter=@damaca/dalis-home-management` y `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correctos; 159 tests, 0 fallos, 401 aserciones. Biome sobre los 47 archivos de código modificados/nuevos: sin hallazgos.
+- Chrome con componentes reales y datos/servicios aislados: navegación, cuatro páginas, vacíos, acceso y errores en claro/oscuro, 390/1440px; contraste de texto visible calculado sobre fondos compuestos, sin hallazgos; modales neutras, fondo global y `color-scheme` coherentes; comprados sin atenuación de grupo. Capturas de modales y Compra revisadas en ambos temas.
+- Prueba de interacción Chrome final a 320/390/1440px: cabecera fija, scroll largo, validación nativa, estados pendientes, creación en Inventario/Compra/Platos/Catálogo, notas, vista previa, ejecución, vaciado, Escape, catálogo anidado y viewport de teclado simulado correctos; sin errores de ejecución. Sin prueba física de teclado ni escrituras reales.
+- Capacidad consultada en cada fase: 36→35→33→32→30→29→28→27→25→24→23% de 5h, con saldo semanal de 83→81%. Todas las fases mantienen margen para cierre y reservas.
+- Enlaces locales entre AGENTS, contrato de diseño, plan y prueba de paleta correctos; `git diff --check` correcto. Revisión final: cambios limitados a Home Management y sus instrucciones, sin secretos ni cambios de datos. El estado final de `main`/`int` y la publicación se verifican antes del cierre.
+- Referencias remotas previas al commit verificadas: `main` e `int` en `c94856cb6b52dd413001ff746fc34e81fc8443ce`. La paleta se publica solo en `int`. Validación final preparada: `bun run lint --staged` comprobó 52 archivos sin hallazgos; `git diff --cached --check` correcto. Capacidad antes de commit/publicación: 21% de 5h y 81% de 7d, por encima de reservas.

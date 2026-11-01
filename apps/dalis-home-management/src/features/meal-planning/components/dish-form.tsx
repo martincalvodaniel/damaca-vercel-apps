@@ -171,7 +171,7 @@ export function DishForm({
   )
 
   return (
-    <section className="flex h-full min-h-0 flex-col bg-[#f3e8c8] dark:bg-[#39331f]">
+    <section className="flex h-full min-h-0 flex-col bg-surface">
       <DialogHeader
         title={isEditing ? dish.name : "Guardar una comida"}
         onDismiss={onCancel}
@@ -199,7 +199,7 @@ export function DishForm({
             maxLength={120}
             defaultValue={dish?.name ?? initialName}
             placeholder="Por ejemplo, lentejas"
-            className="mt-2 min-h-12 w-full rounded-xl border border-[#d0c69d] bg-white/85 px-4 font-normal outline-none transition placeholder:text-[#9a9788] focus:border-[#8a7633] focus:ring-2 focus:ring-[#8a7633]/15 dark:border-white/15 dark:bg-[#252316]"
+            className="mt-2 min-h-12 w-full rounded-xl border border-control-border bg-field px-4 font-normal outline-none transition placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring"
           />
         </label>
 
@@ -230,7 +230,7 @@ export function DishForm({
           type="button"
           onClick={addIngredient}
           disabled={ingredients.length >= 30 || isPending}
-          className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-dashed border-[#b4a66e] px-4 text-sm font-semibold text-[#75611f] transition hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-[#8a7633] disabled:opacity-50 dark:border-[#877a4c] dark:text-[#dccb8d] dark:hover:bg-white/5"
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-dashed border-border px-4 text-sm font-semibold text-primary transition hover:bg-field focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
         >
           + Añadir ingrediente
         </button>
@@ -244,7 +244,7 @@ export function DishForm({
             maxLength={10_000}
             defaultValue={dish?.notes ?? ""}
             placeholder="Escribe los pasos de la receta o cualquier nota sobre el plato"
-            className="mt-2 w-full resize-y rounded-xl border border-[#d0c69d] bg-white/85 px-4 py-3 font-normal outline-none transition placeholder:text-[#9a9788] focus:border-[#8a7633] focus:ring-2 focus:ring-[#8a7633]/15 dark:border-white/15 dark:bg-[#252316]"
+            className="mt-2 w-full resize-y rounded-xl border border-control-border bg-field px-4 py-3 font-normal outline-none transition placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring"
           />
         </label>
 

@@ -96,15 +96,15 @@ export function ShoppingList({
 
   if (items.length === 0) {
     return (
-      <section className="grid min-h-48 place-items-center rounded-[1.75rem] border border-dashed border-[#d8c5b8] bg-white/35 p-4 text-center dark:border-white/15 dark:bg-white/[0.025]">
+      <section className="grid min-h-48 place-items-center rounded-[1.75rem] border border-dashed border-border bg-field p-4 text-center">
         <div className="max-w-sm">
-          <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#f5dfd2] text-2xl dark:bg-[#4a3025]">
+          <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-accent-soft text-2xl">
             <span aria-hidden="true">✓</span>
           </div>
           <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
             La lista está vacía
           </h2>
-          <p className="mt-2 text-sm leading-6 text-[#697970] dark:text-[#aebbb3]">
+          <p className="mt-2 text-sm leading-6 text-muted">
             Añade lo primero que necesitéis en vuestra próxima compra.
           </p>
         </div>
@@ -116,7 +116,7 @@ export function ShoppingList({
     <section aria-labelledby={titleId}>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div className="hidden sm:block">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7a8a81] dark:text-[#9baaa1]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
             Por comprar
           </p>
           <h2
@@ -134,7 +134,7 @@ export function ShoppingList({
             value={search}
             onChange={changeSearch}
             placeholder="Buscar producto"
-            className="min-h-9 w-full rounded-full border border-[#ccd5ca] bg-white/75 px-4 text-sm outline-none transition placeholder:text-[#8d9a92] focus:border-[#a75938] focus:ring-2 focus:ring-[#a75938]/15 dark:border-white/15 dark:bg-[#182e26]"
+            className="min-h-9 w-full rounded-full border border-control-border bg-field px-4 text-sm outline-none transition placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring"
           />
         </label>
       </div>
@@ -146,9 +146,9 @@ export function ShoppingList({
       />
 
       {filteredItems.length === 0 ? (
-        <div className="mt-2 rounded-2xl border border-dashed border-[#d8c5b8] bg-white/35 px-5 py-5 text-center dark:border-white/15 dark:bg-white/[0.025]">
+        <div className="mt-2 rounded-2xl border border-dashed border-border bg-field px-5 py-5 text-center">
           <p className="font-semibold">No hay productos que coincidan.</p>
-          <p className="mt-1 text-sm text-[#697970] dark:text-[#aebbb3]">
+          <p className="mt-1 text-sm text-muted">
             Prueba con otro nombre o lugar de compra.
           </p>
         </div>
@@ -156,9 +156,9 @@ export function ShoppingList({
         <>
           <div className="mt-2 space-y-2">
             {pendingItems.length === 0 ? (
-              <div className="rounded-2xl border border-[#dce5d9] bg-[#e9f0e7]/65 px-5 py-4 text-center dark:border-[#345245] dark:bg-[#203b31]">
+              <div className="rounded-2xl border border-border bg-surface px-5 py-4 text-center">
                 <p className="font-semibold">Todo comprado</p>
-                <p className="mt-1 text-sm text-[#627268] dark:text-[#b7c5bc]">
+                <p className="mt-1 text-sm text-muted">
                   No queda nada pendiente en la lista.
                 </p>
               </div>
@@ -183,7 +183,7 @@ export function ShoppingList({
           {purchasedItems.length > 0 ? (
             <div className="mt-4">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#89958e]">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
                   Ya comprado
                 </p>
                 <ClearPurchasedButton
@@ -198,7 +198,7 @@ export function ShoppingList({
                   }
                 />
               </div>
-              <div className="mt-3 space-y-2 opacity-75">
+              <div className="mt-3 space-y-2">
                 {purchasedItems.map((item) => (
                   <ShoppingListItemRow
                     key={item.id}

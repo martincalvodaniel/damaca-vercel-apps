@@ -41,7 +41,7 @@ export function SearchInput({
           onClick={clearSearch}
           disabled={disabled}
           aria-label="Limpiar búsqueda"
-          className="absolute top-1/2 right-1 grid size-8 -translate-y-1/2 place-items-center rounded-full text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-red-600 disabled:opacity-50 dark:text-red-300 dark:hover:bg-red-950/30"
+          className="absolute top-1/2 right-1 grid size-8 -translate-y-1/2 place-items-center rounded-full text-danger transition hover:bg-danger-soft focus-visible:outline-2 focus-visible:outline-ring disabled:opacity-50"
         >
           <svg
             aria-hidden="true"

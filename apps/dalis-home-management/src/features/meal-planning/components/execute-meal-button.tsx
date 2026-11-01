@@ -132,7 +132,7 @@ export function ExecuteMealButton({
         disabled={disabled || isPending}
         aria-label={`Marcar ${mealLabels[mealType]} ${dishName} como ejecutada`}
         title="Marcar como ejecutada"
-        className="grid size-9 shrink-0 place-items-center rounded-xl border border-[#7ca687] bg-[#eff6ef] text-[#315847] transition hover:bg-[#dcebdd] focus:outline-none focus:ring-2 focus:ring-[#1d6b50] disabled:cursor-wait disabled:opacity-55 dark:border-[#47775a] dark:bg-[#203c2b] dark:text-[#bce3c5] dark:hover:bg-[#294b35]"
+        className="grid size-9 shrink-0 place-items-center rounded-xl border border-border bg-accent-soft text-ink transition hover:bg-accent-soft focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-wait disabled:opacity-55"
       >
         <svg
           viewBox="0 0 24 24"
@@ -148,7 +148,7 @@ export function ExecuteMealButton({
         ariaLabel={`Ejecutar ${mealLabels[mealType]} ${dishName}`}
         onDismiss={closeDialog}
       >
-        <section className="flex h-full min-h-0 flex-col bg-[#eeeddc] text-[#303b2d] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
+        <section className="flex h-full min-h-0 flex-col bg-surface text-ink">
           <DialogHeader
             title={`Ejecutar ${mealLabels[mealType]}: ${dishName}`}
             onDismiss={closeDialog}
@@ -160,20 +160,20 @@ export function ExecuteMealButton({
           />
           {error ? (
             <p
-              className="shrink-0 px-4 py-2 text-sm font-semibold text-[#a34435] dark:text-[#ffb4a4]"
+              className="shrink-0 px-4 py-2 text-sm font-semibold text-danger"
               role="alert"
             >
               {error}
             </p>
           ) : null}
           <div className="dialog-content p-4 sm:p-6">
-            <p className="mb-3 text-sm text-[#69705b] dark:text-[#c0c7b5]">
+            <p className="mb-3 text-sm text-muted">
               Revisa y ajusta el inventario que quedará tras preparar esta
               comida.
             </p>
             {isLoading ? (
               <p
-                className="py-10 text-center text-sm font-semibold text-[#69705b] dark:text-[#c0c7b5]"
+                className="py-10 text-center text-sm font-semibold text-muted"
                 role="status"
               >
                 Preparando el inventario…

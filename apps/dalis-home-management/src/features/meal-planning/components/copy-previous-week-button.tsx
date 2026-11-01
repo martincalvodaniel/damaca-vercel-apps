@@ -39,10 +39,10 @@ export function CopyPreviousWeekButton({
         type="button"
         onClick={copyPreviousWeek}
         disabled={isPending}
-        className="flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl border border-[#d8d7bd] bg-[#eeeddc] px-3 py-2 text-right text-[#303b2d] shadow-[0_18px_50px_rgba(50,72,60,0.08)] transition hover:bg-[#e8e7d3] focus:outline-none focus:ring-2 focus:ring-[#74794f] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-65 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7] dark:hover:bg-[#374333] dark:ring-offset-[#10221c]"
+        className="flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl border border-border bg-surface-raised px-3 py-2 text-right text-ink shadow-soft transition hover:bg-primary-soft focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-wait disabled:opacity-65 ring-offset-canvas"
       >
         <span
-          className="grid size-7 shrink-0 place-items-center rounded-full bg-white/60 text-lg dark:bg-white/10"
+          className="grid size-7 shrink-0 place-items-center rounded-full bg-field text-lg"
           aria-hidden="true"
         >
           ←
@@ -52,10 +52,7 @@ export function CopyPreviousWeekButton({
         </span>
       </button>
       {error ? (
-        <p
-          className="mt-2 text-xs font-semibold text-[#a34435] dark:text-[#ffb4a4]"
-          role="alert"
-        >
+        <p className="mt-2 text-xs font-semibold text-danger" role="alert">
           {error}
         </p>
       ) : null}

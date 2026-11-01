@@ -91,3 +91,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: pantalla completa en móvil y escritorio; cruz roja izquierda y tick verde derecha, título centrado y cabecera siempre visible; validación y envío nativos, accesibilidad y estados pendientes conservados; contenido desplazable desde arriba; teclado y diálogos anidados compatibles; sin botones duplicados al pie.
 - Validación prevista: Biome, tipos, tests, build Webpack y Chrome con scroll, validación, envíos aislados, teclado simulado y diálogos anidados.
 - Evidencia: [HM-09](iteration-log.md#hm-09--modales-de-pantalla-completa-y-acciones-superiores).
+
+## HM-10 — Sistema de color cohesionado y accesible
+
+- Estado: `validated`.
+- Objetivo: implementar todas las recomendaciones cromáticas aceptadas y dejar un contrato de diseño para futuras iteraciones.
+- Rutas: `src/app/globals.css`, componentes y páginas TSX de la app, `docs/design-system.md`, `AGENTS.md` y `plan/`.
+- Dependencias: Tailwind y temas existentes; sin nuevas dependencias ni cambios de datos.
+- Aceptación: superficies comunes y opacas en modales/tarjetas; acciones principales y foco uniformes; estados semánticos separados de acentos de sección; textos pequeños con contraste AA; productos comprados legibles sin atenuar todo el bloque; capas oscuras y controles nativos coherentes; colores centralizados y componentes migrados; reglas accesibles desde AGENTS; conservar comportamiento, modales completas y teclado.
+- Validación prevista: Biome de todos los archivos tocados, tipos, tests, build Webpack, revisión visual clara/oscura y contraste calculado sobre colores compuestos, prueba de interacción de formularios y comprobación de referencias documentales.
+- Evidencia: [HM-10](iteration-log.md#hm-10--sistema-de-color-cohesionado-y-accesible).

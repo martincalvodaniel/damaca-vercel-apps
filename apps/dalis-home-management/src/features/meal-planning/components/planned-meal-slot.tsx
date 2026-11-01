@@ -71,7 +71,7 @@ export function PlannedMealSlot({
     <div
       data-meal-slot-date={date}
       data-meal-slot-type={mealType}
-      className={`min-w-0 rounded-xl transition ${isDragged ? "opacity-45" : "opacity-100"} ${isDropTarget ? "bg-[#e7efe8] outline-2 outline-offset-4 outline-[#1d6b50] dark:bg-[#1b4537] dark:outline-[#7bc5a7]" : "outline-transparent"}`}
+      className={`min-w-0 rounded-xl transition ${isDragged ? "opacity-45" : "opacity-100"} ${isDropTarget ? "bg-surface outline-2 outline-offset-4 outline-ring" : "outline-transparent"}`}
     >
       <MealSlotSelect
         key={`${mealType}-${dish?.id ?? "empty"}`}
@@ -106,8 +106,8 @@ export function PlannedMealSlot({
         }
       />
       {dish ? (
-        <details className="group mt-1 rounded-lg bg-[#f2f4ef] px-2.5 py-1 dark:bg-white/5">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-[0.7rem] font-semibold text-[#68776e] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] dark:text-[#afbbb3]">
+        <details className="group mt-1 rounded-lg bg-surface px-2.5 py-1">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-[0.7rem] font-semibold text-muted focus:outline-none focus:ring-2 focus:ring-ring">
             <span>
               {dish.ingredients.length}{" "}
               {dish.ingredients.length === 1 ? "ingrediente" : "ingredientes"}
@@ -119,7 +119,7 @@ export function PlannedMealSlot({
               +
             </span>
           </summary>
-          <ul className="mt-1 space-y-1 border-t border-[#dce2da] pt-1 text-xs text-[#607067] dark:border-white/10 dark:text-[#bdc8c0]">
+          <ul className="mt-1 space-y-1 border-t border-border pt-1 text-xs text-muted">
             {dish.ingredients.map((ingredient) => (
               <li
                 key={ingredient.id}

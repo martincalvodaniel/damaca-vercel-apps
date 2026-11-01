@@ -72,7 +72,7 @@ export function ConfirmationDialog({
       ref={dialogRef}
       onCancel={handleCancel}
       aria-label={title}
-      className="fullscreen-dialog bg-[#fbfaf6] p-0 text-[#17352b] backdrop:bg-[#0b2119]/65 backdrop:backdrop-blur-sm dark:bg-[#182e26] dark:text-[#f4f1e7]"
+      className="fullscreen-dialog bg-surface p-0 text-ink backdrop:bg-overlay/65 backdrop:backdrop-blur-sm"
     >
       <section className="flex h-full min-h-0 flex-col">
         <DialogHeader
@@ -84,7 +84,7 @@ export function ConfirmationDialog({
         />
         <div className="dialog-content space-y-4 p-4 sm:p-6">
           <p
-            className={`text-sm leading-6 ${tone === "danger" ? "text-[#a34435] dark:text-[#ffb4a4]" : "text-[#63736a] dark:text-[#b4c0b8]"}`}
+            className={`text-sm leading-6 ${tone === "danger" ? "text-danger" : "text-muted"}`}
           >
             {description}
           </p>
@@ -92,7 +92,7 @@ export function ConfirmationDialog({
             <button
               type="button"
               onClick={onSecondary}
-              className="min-h-11 rounded-full border border-[#9bb0a1] px-4 text-sm font-semibold text-[#315847] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] dark:border-[#587166] dark:text-[#d4e1d8]"
+              className="min-h-11 rounded-full border border-border px-4 text-sm font-semibold text-ink focus:outline-none focus:ring-2 focus:ring-ring"
             >
               {secondaryLabel}
             </button>

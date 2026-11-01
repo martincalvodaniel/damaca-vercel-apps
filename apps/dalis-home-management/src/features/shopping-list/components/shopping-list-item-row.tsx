@@ -68,13 +68,13 @@ export function ShoppingListItemRow({
 
   return (
     <>
-      <article className="relative rounded-2xl border border-[#dde1d8] bg-white/75 px-4 py-2 shadow-[0_8px_25px_rgba(50,72,60,0.04)] dark:border-white/10 dark:bg-[#182e26]/80">
+      <article className="relative rounded-2xl border border-border bg-surface px-4 py-2 shadow-soft">
         <button
           type="button"
           onClick={openDeleteDialog}
           disabled={isPending || isSavingPurchase || isSavingQuantity}
           aria-label={`Eliminar ${item.name}`}
-          className="absolute top-2 right-3 grid size-8 place-items-center rounded-full text-[#a75938] transition hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#ef9f86] dark:hover:bg-red-950/30 dark:hover:text-red-200"
+          className="absolute top-2 right-3 grid size-8 place-items-center rounded-full text-danger transition hover:bg-danger-soft hover:text-danger focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
         >
           <svg
             viewBox="0 0 24 24"
@@ -99,10 +99,10 @@ export function ShoppingListItemRow({
                 ? `Marcar ${item.name} como pendiente`
                 : `Marcar ${item.name} como comprado`
             }
-            className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border-2 text-sm font-bold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] focus:ring-offset-2 disabled:opacity-50 ${
+            className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border-2 text-sm font-bold transition focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 ${
               item.isPurchased
-                ? "border-[#76977d] bg-[#76977d] text-white"
-                : "border-[#aebcaf] hover:border-[#76977d] hover:bg-[#e7efe5] dark:border-[#789086]"
+                ? "border-border bg-success text-on-success"
+                : "border-control-border hover:border-primary hover:bg-primary-soft"
             }`}
           >
             {item.isPurchased ? "✓" : null}
@@ -111,13 +111,13 @@ export function ShoppingListItemRow({
           <div className="min-w-0 flex-1 pr-8">
             <div className="flex min-w-0 items-center gap-2">
               <p
-                className={`min-w-0 truncate font-semibold ${item.isPurchased ? "text-[#7f8d85] line-through" : ""}`}
+                className={`min-w-0 truncate font-semibold ${item.isPurchased ? "text-muted line-through" : ""}`}
               >
                 {item.name}
               </p>
               {item.isMealPlanGenerated ? (
                 <span
-                  className="grid size-6 shrink-0 place-items-center rounded-full bg-[#f3e8c8] text-[#75611f] dark:bg-[#4b4225] dark:text-[#ead78d]"
+                  className="grid size-6 shrink-0 place-items-center rounded-full bg-primary-soft text-primary"
                   title="Menú semanal"
                 >
                   <svg
@@ -147,15 +147,10 @@ export function ShoppingListItemRow({
               disabled={isPending}
               onValueChange={setQuantityDraft}
               onValueCommit={updateQuantity}
-              className="mt-1.5 w-full text-[#41564b] sm:w-56 dark:text-[#d5ded8]"
-              buttonClassName="border-[#d8dfd5] bg-[#edf0e9] text-[#5c6e64] hover:bg-[#e1e7de] dark:border-white/10 dark:bg-white/10 dark:text-[#c6d1ca] dark:hover:bg-white/15"
-              fieldClassName="border-[#d8dfd5] bg-[#f7f8f5] text-[#41564b] focus-within:border-[#1d4f40] focus-within:ring-[#1d4f40]/15 dark:border-white/10 dark:bg-white/5 dark:text-[#d5ded8]"
+              className="mt-1.5 w-full text-ink sm:w-56"
             />
             {error || purchaseError || quantityError ? (
-              <p
-                role="alert"
-                className="mt-2 text-xs font-medium text-red-700 dark:text-red-300"
-              >
+              <p role="alert" className="mt-2 text-xs font-medium text-danger">
                 {error ?? quantityError ?? purchaseError}
               </p>
             ) : null}

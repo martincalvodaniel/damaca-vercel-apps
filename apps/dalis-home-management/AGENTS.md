@@ -114,3 +114,7 @@ Follow the [root agent workflow](../../plan/workflow.md) for branch selection, p
 ## Monorepo Commands
 
 Run Bun installation and all project commands from the monorepo root. This workspace is `@damaca/dalis-home-management`. Use `bun run build --filter=@damaca/dalis-home-management`, `bun run test --filter=@damaca/dalis-home-management`, or `bun run type-check --filter=@damaca/dalis-home-management` to target this application. Dependencies and versions are managed in the root package manifest, Bun catalog, and `bun.lock`; do not create app-local lockfiles. Biome settings are managed at the root. Commit and publish monorepo changes from the monorepo root on `int`.
+
+## Visual Design Contract
+
+Before creating or editing pages, components, forms, dialogs, or visual states, read [the design system](docs/design-system.md). Use the semantic color tokens in `src/app/globals.css` and validate light/dark contrast. This document owns color roles, section accents, surfaces, focus, and state conventions for this app.

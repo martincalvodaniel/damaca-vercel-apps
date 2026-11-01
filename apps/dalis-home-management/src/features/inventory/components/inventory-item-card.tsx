@@ -92,8 +92,8 @@ export function InventoryItemCard({
       <article
         className={`min-w-0 max-w-full rounded-2xl border px-4 py-2 transition ${
           isOutOfStock
-            ? "border-[#ead6ca] bg-[#fbede5]/70 dark:border-[#704735] dark:bg-[#412d24]/80"
-            : "border-[#dde1d8] bg-white/75 shadow-[0_10px_30px_rgba(50,72,60,0.05)] dark:border-white/10 dark:bg-[#182e26]/80"
+            ? "border-warning bg-warning-soft"
+            : "border-border bg-surface shadow-soft"
         }`}
       >
         <div className="flex min-w-0 items-start justify-between gap-3">
@@ -110,42 +110,29 @@ export function InventoryItemCard({
             onValueChange={setQuantityDraft}
             onValueCommit={updateQuantity}
             className="ml-auto w-40 max-w-[60%] shrink-0"
-            buttonClassName={
-              isOutOfStock
-                ? "border-[#e7bda8] bg-[#f3cdb9] text-[#7d3e25] hover:bg-[#efbea5] dark:border-[#8a563e] dark:bg-[#754530] dark:text-[#ffe2d2] dark:hover:bg-[#815039]"
-                : "border-[#cadcca] bg-[#dce9dc] text-[#365b43] hover:bg-[#d0e3d1] dark:border-[#365d4d] dark:bg-[#294b3e] dark:text-[#cfe2d5] dark:hover:bg-[#315746]"
-            }
-            fieldClassName={
-              isOutOfStock
-                ? "border-[#e7bda8] bg-[#fff4ee] text-[#7d3e25] focus-within:border-[#b76543] focus-within:ring-[#b76543]/20 dark:border-[#8a563e] dark:bg-[#4b3025] dark:text-[#ffe2d2]"
-                : "border-[#cadcca] bg-[#f4f8f2] text-[#365b43] focus-within:border-[#1d4f40] focus-within:ring-[#1d4f40]/15 dark:border-[#365d4d] dark:bg-[#203a30] dark:text-[#cfe2d5]"
-            }
           />
         </div>
 
         {error || quantityError ? (
-          <p
-            role="alert"
-            className="mt-1.5 text-xs font-medium text-red-700 dark:text-red-300"
-          >
+          <p role="alert" className="mt-1.5 text-xs font-medium text-danger">
             {error ?? quantityError}
           </p>
         ) : null}
         {notice ? (
           <p
-            className="mt-1.5 text-xs font-medium text-[#3e674b] dark:text-[#b9d4c0]"
+            className="mt-1.5 text-xs font-medium text-success"
             aria-live="polite"
           >
             {notice}
           </p>
         ) : null}
 
-        <div className="mt-2 flex flex-wrap gap-2 border-t border-[#e3e6df] pt-2 dark:border-white/10">
+        <div className="mt-2 flex flex-wrap gap-2 border-t border-border pt-2">
           <button
             type="button"
             onClick={editItem}
             disabled={isPending || isSavingQuantity}
-            className="rounded-full bg-[#edf0e9] px-3.5 py-1 text-xs font-semibold transition hover:bg-[#e1e7de] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:opacity-50 dark:bg-white/10 dark:hover:bg-white/15"
+            className="rounded-full bg-surface px-3.5 py-1 text-xs font-semibold transition hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
           >
             Editar
           </button>
@@ -154,7 +141,7 @@ export function InventoryItemCard({
               type="button"
               onClick={addToShoppingList}
               disabled={isPending}
-              className="rounded-full bg-[#1d4f40] px-3.5 py-1 text-xs font-semibold text-white transition hover:bg-[#173f34] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-wait disabled:opacity-50"
+              className="rounded-full bg-primary px-3.5 py-1 text-xs font-semibold text-on-primary transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-wait disabled:opacity-50"
             >
               {isPending ? "Añadiendo…" : "Añadir a compra"}
             </button>
@@ -164,7 +151,7 @@ export function InventoryItemCard({
               type="button"
               onClick={markOutOfStock}
               disabled={isPending || isSavingQuantity}
-              className="rounded-full border border-[#d8c5b8] px-3.5 py-1 text-xs font-semibold text-[#8b5138] transition hover:bg-[#fae8dd] focus:outline-none focus:ring-2 focus:ring-[#b76543] disabled:opacity-50 dark:border-[#704b39] dark:text-[#efb89e] dark:hover:bg-[#4a3025]"
+              className="rounded-full border border-border px-3.5 py-1 text-xs font-semibold text-warning transition hover:bg-warning-soft focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
             >
               Marcar agotado
             </button>
@@ -173,7 +160,7 @@ export function InventoryItemCard({
             type="button"
             onClick={openDeleteDialog}
             disabled={isPending || isSavingQuantity}
-            className="ml-auto rounded-full px-3 py-1 text-xs font-semibold text-[#8f5140] transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#e9a995] dark:hover:bg-red-950/30"
+            className="ml-auto rounded-full px-3 py-1 text-xs font-semibold text-danger transition hover:bg-danger-soft focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
           >
             Eliminar
           </button>

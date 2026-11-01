@@ -60,7 +60,7 @@ export function ModalDialog({
       ref={dialogRef}
       aria-label={ariaLabel}
       onCancel={handleCancel}
-      className="fullscreen-dialog bg-[#fbfaf6] p-0 text-[#17352b] backdrop:bg-[#0b2119]/65 backdrop:backdrop-blur-sm dark:bg-[#182e26] dark:text-[#f4f1e7]"
+      className="fullscreen-dialog bg-surface p-0 text-ink backdrop:bg-overlay/65 backdrop:backdrop-blur-sm"
     >
       {children}
     </dialog>

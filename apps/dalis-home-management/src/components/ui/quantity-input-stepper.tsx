@@ -19,8 +19,6 @@ interface QuantityInputStepperProps {
   required?: boolean
   compact?: boolean
   className?: string
-  fieldClassName?: string
-  buttonClassName?: string
   onValueChange: (value: string) => void
   onValueCommit?: (quantity: number) => void
 }
@@ -46,8 +44,6 @@ export function QuantityInputStepper({
   required = false,
   compact = false,
   className,
-  fieldClassName,
-  buttonClassName,
   onValueChange,
   onValueCommit,
 }: QuantityInputStepperProps) {
@@ -137,13 +133,13 @@ export function QuantityInputStepper({
   )
 
   const defaultButtonClassName =
-    "border-[#d0c69d] bg-white text-[#75611f] hover:bg-[#faf6e8] dark:border-white/15 dark:bg-[#10231c] dark:text-[#dccb8d] dark:hover:bg-white/5"
+    "border-control-border bg-field text-ink hover:bg-surface-raised"
   const defaultFieldClassName =
-    "border-[#d0d4c8] bg-white focus-within:border-[#8a7633] focus-within:ring-[#8a7633]/15 dark:border-white/15 dark:bg-[#10231c]"
+    "border-control-border bg-field focus-within:border-ring focus-within:ring-ring"
 
   return (
     <fieldset
-      className={`m-0 flex min-w-0 max-w-full items-center gap-1.5 border-0 p-0 ${className ?? ""}`}
+      className={`m-0 flex min-w-0 max-w-full items-center gap-1.5 border-0 text-ink p-0 ${className ?? ""}`}
       onBlur={handleBlur}
       aria-label={`Cantidad de ${label}`}
     >
@@ -152,12 +148,12 @@ export function QuantityInputStepper({
         onClick={decreaseQuantity}
         disabled={disabled || !canDecrease}
         aria-label={`Reducir cantidad de ${label}`}
-        className={`grid ${compact ? "size-8" : "size-9 sm:size-10"} shrink-0 place-items-center rounded-xl border text-base font-bold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-not-allowed disabled:opacity-35 ${buttonClassName ?? defaultButtonClassName}`}
+        className={`grid ${compact ? "size-8" : "size-9 sm:size-10"} shrink-0 place-items-center rounded-xl border text-base font-bold transition focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-35 ${defaultButtonClassName}`}
       >
         −
       </button>
       <div
-        className={`flex ${compact ? "h-8" : "h-9 sm:h-10"} min-w-0 flex-1 items-center rounded-xl border transition focus-within:ring-2 ${fieldClassName ?? defaultFieldClassName}`}
+        className={`flex ${compact ? "h-8" : "h-9 sm:h-10"} min-w-0 flex-1 items-center rounded-xl border transition focus-within:ring-2 ${defaultFieldClassName}`}
       >
         <input
           id={id}
@@ -184,7 +180,7 @@ export function QuantityInputStepper({
         onClick={increaseQuantity}
         disabled={disabled || !canIncrease}
         aria-label={`Aumentar cantidad de ${label}`}
-        className={`grid ${compact ? "size-8" : "size-9 sm:size-10"} shrink-0 place-items-center rounded-xl border text-base font-bold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-not-allowed disabled:opacity-35 ${buttonClassName ?? defaultButtonClassName}`}
+        className={`grid ${compact ? "size-8" : "size-9 sm:size-10"} shrink-0 place-items-center rounded-xl border text-base font-bold transition focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-35 ${defaultButtonClassName}`}
       >
         +
       </button>

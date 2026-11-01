@@ -122,7 +122,7 @@ export function CatalogProductDialog({
       ref={dialogRef}
       aria-label="Crear producto"
       onCancel={handleCancel}
-      className="fullscreen-dialog bg-[#fbfaf6] p-0 text-[#17352b] backdrop:bg-[#0b2119]/65 backdrop:backdrop-blur-sm dark:bg-[#182e26] dark:text-[#f4f1e7]"
+      className="fullscreen-dialog bg-surface p-0 text-ink backdrop:bg-overlay/65 backdrop:backdrop-blur-sm"
     >
       <form className="flex h-full min-h-0 flex-col" onSubmit={handleSubmit}>
         <DialogHeader
@@ -134,7 +134,7 @@ export function CatalogProductDialog({
           pending={isPending}
         />
         <div className="dialog-content space-y-4 p-4 sm:p-6">
-          <p className="text-sm text-[#63736a] dark:text-[#b4c0b8]">
+          <p className="text-sm text-muted">
             Se añadirá al inventario con existencias a cero y quedará
             seleccionado.
           </p>
@@ -149,7 +149,7 @@ export function CatalogProductDialog({
               maxLength={120}
               placeholder="Por ejemplo, tomates"
               defaultValue={initialName}
-              className="mt-2 min-h-12 w-full rounded-xl border border-[#ccd5ca] bg-white px-4 font-normal outline-none transition placeholder:text-[#9aa59e] focus:border-[#1d4f40] focus:ring-2 focus:ring-[#1d4f40]/15 dark:border-white/15 dark:bg-[#10231c]"
+              className="mt-2 min-h-12 w-full rounded-xl border border-control-border bg-field px-4 font-normal outline-none transition placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring"
             />
           </label>
 

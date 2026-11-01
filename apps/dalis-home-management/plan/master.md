@@ -4,7 +4,16 @@
 
 Los platos admiten una receta u observaciones opcionales como texto libre de hasta 10.000 caracteres. Se pueden añadir, editar, borrar y consultar desde el recetario y el menú semanal, conservando saltos de línea. Los platos existentes sin notas siguen siendo válidos; no se requiere migración.
 
-Las cuatro páginas (inventario, compra, recetario y menú semanal) usan listas compactas con menor espacio vertical. El padding superior de las listas es de 8px. El acceso a la vista previa de compra muestra el contador junto al título, y la navegación y el vaciado de semana comparten fila también en móvil. Los títulos y textos de presentación se conservan en escritorio y se ocultan en móvil; el rango semanal permanece visible junto a una etiqueta numérica `X/14` de comidas planificadas. Cuando la semana está vacía, el acceso a copiar la semana anterior comparte el aspecto compacto de vista previa, con flecha a la izquierda y texto alineado a la derecha, sin panel explicativo. El calendario omite la frase de ayuda sobre arrastrar; «Vaciar semana» permanece visible y se deshabilita si no hay comidas planificadas. Los filtros de lugares de compra en Compra e Inventario permiten desplazamiento horizontal con la barra visual oculta. Todas las modales ocupan la pantalla completa y muestran el contenido de arriba abajo, con cruz roja para cancelar/cerrar y tick verde para guardar/confirmar en una cabecera independiente del scroll. Conservan la adaptación al viewport visual al aparecer el teclado y las zonas seguras del dispositivo. Todos los buscadores ofrecen una cruz roja para limpiar cuando contienen texto, visible también sin foco.
+## Interfaz vigente
+
+- Listas compactas en Inventario, Compra, Platos y Menú, con padding superior de 8px. Títulos de escritorio visibles y títulos móviles ocultos.
+- Menú con rango semanal y etiqueta `X/14`, selector y vaciado en una fila. «Vaciar semana» siempre visible y deshabilitado si está vacía. Copia y vista previa son accesos compactos excluyentes; copia lleva flecha izquierda y texto derecho.
+- Filtros de compra desplazables horizontalmente sin barra visible. Buscadores con cruz roja siempre visible cuando hay texto.
+- Modales de pantalla completa con cruz roja, título y tick verde en cabecera independiente del scroll; contenido desde arriba, adaptación al viewport visual y zonas seguras.
+
+## Decisiones de color aceptadas
+
+Aplicar el [sistema de diseño](../docs/design-system.md) al crear o modificar UI. Centralizar la paleta clara/oscura en tokens por función, usar superficies comunes, acciones principales y foco uniformes, separar estados de acentos de sección y mantener contraste AA. Los productos comprados conservan legibilidad. Los valores cromáticos pertenecen a `globals.css`; la documentación fija sus reglas de uso.
 
 ## Límites aceptados
 

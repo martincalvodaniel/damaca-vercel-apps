@@ -98,7 +98,7 @@ export function InventoryForm({
   )
 
   return (
-    <section className="flex h-full min-h-0 flex-col bg-[#fbfaf6] dark:bg-[#182e26]">
+    <section className="flex h-full min-h-0 flex-col bg-surface">
       <DialogHeader
         title={isEditing ? item.name : "Añadir al inventario"}
         onDismiss={onCancel}
@@ -126,7 +126,7 @@ export function InventoryForm({
             maxLength={120}
             defaultValue={item?.name ?? initialName}
             placeholder="Por ejemplo, arroz"
-            className="mt-2 min-h-12 w-full rounded-xl border border-[#ccd5ca] bg-white px-4 font-normal outline-none transition placeholder:text-[#9aa59e] focus:border-[#1d4f40] focus:ring-2 focus:ring-[#1d4f40]/15 dark:border-white/15 dark:bg-[#10231c] dark:placeholder:text-[#718078]"
+            className="mt-2 min-h-12 w-full rounded-xl border border-control-border bg-field px-4 font-normal outline-none transition placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring"
           />
         </label>
 
@@ -143,8 +143,6 @@ export function InventoryForm({
               required
               onValueChange={setQuantity}
               className="mt-2"
-              buttonClassName="border-[#ccd5ca] bg-white text-[#365b43] hover:bg-[#edf0e9] dark:border-white/15 dark:bg-[#10231c] dark:text-[#cfe2d5] dark:hover:bg-white/10"
-              fieldClassName="border-[#ccd5ca] bg-white text-[#365b43] focus-within:border-[#1d4f40] focus-within:ring-[#1d4f40]/15 dark:border-white/15 dark:bg-[#10231c] dark:text-[#cfe2d5]"
             />
           </div>
           <div className="block text-sm font-semibold">

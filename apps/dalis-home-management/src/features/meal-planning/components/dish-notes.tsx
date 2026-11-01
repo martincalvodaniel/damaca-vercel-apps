@@ -8,8 +8,8 @@ export function DishNotes({ notes }: DishNotesProps) {
   }
 
   return (
-    <details className="mt-2 rounded-lg bg-[#f2f4ef] px-3 py-1 text-sm text-[#607067] dark:bg-white/5 dark:text-[#bdc8c0]">
-      <summary className="cursor-pointer font-semibold focus:outline-none focus:ring-2 focus:ring-[#1d4f40]">
+    <details className="mt-2 rounded-lg bg-surface px-3 py-1 text-sm text-muted">
+      <summary className="cursor-pointer font-semibold focus:outline-none focus:ring-2 focus:ring-ring">
         Receta / observaciones
       </summary>
       <p className="mt-1 whitespace-pre-wrap wrap-anywhere">{notes}</p>

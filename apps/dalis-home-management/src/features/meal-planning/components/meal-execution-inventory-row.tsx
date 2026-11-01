@@ -1,6 +1,6 @@
 "use client"
 
-import { useId } from "react"
+import { useCallback, useId } from "react"
 import { QuantityInputStepper } from "@/components/ui/quantity-input-stepper"
 import { quantityUnitShortLabels } from "@/config/quantity-units"
 import type { QuantityUnit } from "@/schemas/quantity-unit"
@@ -30,11 +30,16 @@ export function MealExecutionInventoryRow({
   const finalQuantityId = useId()
   const unitLabel = quantityUnitShortLabels[item.unit]
 
+  const changeFinalQuantity = useCallback(
+    (quantity: string) => onFinalQuantityChange(item.inventoryItemId, quantity),
+    [onFinalQuantityChange, item]
+  )
+
   return (
-    <li className="rounded-2xl border border-white/65 bg-white/55 p-3 dark:border-white/5 dark:bg-white/5">
+    <li className="rounded-2xl border border-border bg-field p-3">
       <div className="flex items-baseline justify-between gap-3">
         <p className="min-w-0 truncate font-semibold">{item.name}</p>
-        <p className="shrink-0 text-xs text-[#69705b] dark:text-[#c0c7b5]">
+        <p className="shrink-0 text-xs text-muted">
           Necesitas {quantityFormatter.format(item.consumedQuantity)}{" "}
           {unitLabel}
         </p>
@@ -44,7 +49,7 @@ export function MealExecutionInventoryRow({
           <label htmlFor={finalQuantityId} className="text-xs font-semibold">
             Inventario final
           </label>
-          <p className="shrink-0 text-xs text-[#69705b] dark:text-[#c0c7b5]">
+          <p className="shrink-0 text-xs text-muted">
             Inicial: {quantityFormatter.format(item.initialQuantity)}{" "}
             {unitLabel}
           </p>
@@ -56,12 +61,8 @@ export function MealExecutionInventoryRow({
           minimum={0}
           label={`inventario final de ${item.name}`}
           disabled={disabled}
-          onValueChange={(quantity) =>
-            onFinalQuantityChange(item.inventoryItemId, quantity)
-          }
+          onValueChange={changeFinalQuantity}
           className="mt-1.5"
-          buttonClassName="border-[#c8cab1] bg-white text-[#69705b] hover:bg-[#eef1e8] dark:border-white/15 dark:bg-[#202d22] dark:text-[#c0c7b5] dark:hover:bg-white/10"
-          fieldClassName="border-[#c8cab1] bg-white text-[#69705b] focus-within:border-[#74794f] focus-within:ring-[#74794f]/20 dark:border-white/15 dark:bg-[#202d22] dark:text-[#c0c7b5]"
         />
       </div>
     </li>

@@ -65,10 +65,10 @@ export function MealDayCard({
 
   return (
     <article
-      className={`min-w-0 rounded-2xl border px-3 py-2 shadow-sm ${
+      className={`min-w-0 rounded-2xl border px-3 py-2 shadow-soft ${
         isToday
-          ? "border-[#c36d49] bg-[#fff8f2] ring-1 ring-[#c36d49]/20 dark:bg-[#342820]"
-          : "border-[#dce1d9] bg-white/80 dark:border-white/10 dark:bg-white/5"
+          ? "border-primary bg-primary-soft ring-1 ring-ring"
+          : "border-border bg-surface"
       }`}
     >
       <header className="mb-2 flex items-start justify-between gap-3">
@@ -76,12 +76,12 @@ export function MealDayCard({
           <h2 className="capitalize text-lg font-semibold tracking-[-0.03em]">
             {dayFormatter.format(parsedDate)}
           </h2>
-          <p className="shrink-0 text-sm text-[#758078] dark:text-[#aeb9b2]">
+          <p className="shrink-0 text-sm text-muted">
             {dateFormatter.format(parsedDate)}
           </p>
         </div>
         {isToday ? (
-          <span className="rounded-full bg-[#f1d9ca] px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-[#914b2e] dark:bg-[#65402f] dark:text-[#ffd9c5]">
+          <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-primary">
             Hoy
           </span>
         ) : null}

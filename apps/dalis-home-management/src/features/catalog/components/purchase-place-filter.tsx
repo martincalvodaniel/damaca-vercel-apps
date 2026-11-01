@@ -46,7 +46,7 @@ export function PurchasePlaceFilter({
         type="button"
         onClick={clearPlaces}
         aria-pressed={selectedPlaces.length === 0}
-        className={`min-h-8 shrink-0 rounded-full border px-3 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] ${selectedPlaces.length === 0 ? "border-[#1d4f40] bg-[#1d4f40] text-white dark:border-[#8bb9a6] dark:bg-[#8bb9a6] dark:text-[#10221c]" : "border-[#ccd5ca] bg-white/65 text-[#5f7167] hover:bg-white dark:border-white/15 dark:bg-white/5 dark:text-[#c4d0c8] dark:hover:bg-white/10"}`}
+        className={`min-h-8 shrink-0 rounded-full border px-3 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-ring ${selectedPlaces.length === 0 ? "border-border bg-primary text-on-primary" : "border-border bg-field text-muted hover:bg-field"}`}
       >
         *
       </button>
@@ -60,7 +60,7 @@ export function PurchasePlaceFilter({
             data-place={place}
             onClick={handlePlaceClick}
             aria-pressed={isSelected}
-            className={`min-h-8 shrink-0 rounded-full border px-3 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] ${isSelected ? "border-[#1d4f40] bg-[#1d4f40] text-white dark:border-[#8bb9a6] dark:bg-[#8bb9a6] dark:text-[#10221c]" : "border-[#ccd5ca] bg-white/65 text-[#5f7167] hover:bg-white dark:border-white/15 dark:bg-white/5 dark:text-[#c4d0c8] dark:hover:bg-white/10"}`}
+            className={`min-h-8 shrink-0 rounded-full border px-3 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-ring ${isSelected ? "border-border bg-primary text-on-primary" : "border-border bg-field text-muted hover:bg-field"}`}
           >
             {place}
           </button>

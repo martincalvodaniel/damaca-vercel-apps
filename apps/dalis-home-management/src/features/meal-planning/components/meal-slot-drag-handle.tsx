@@ -1,6 +1,7 @@
 "use client"
 
 import type { PointerEvent } from "react"
+import { useCallback } from "react"
 
 interface MealSlotDragHandleProps {
   dishName: string
@@ -19,35 +20,44 @@ export function MealSlotDragHandle({
   onDragEnd,
   onDragCancel,
 }: MealSlotDragHandleProps) {
-  function handlePointerDown(event: PointerEvent<HTMLSpanElement>) {
-    if (disabled || !event.isPrimary || event.button !== 0) {
-      return
-    }
+  const handlePointerDown = useCallback(
+    (event: PointerEvent<HTMLSpanElement>) => {
+      if (disabled || !event.isPrimary || event.button !== 0) {
+        return
+      }
 
-    event.currentTarget.setPointerCapture(event.pointerId)
-    onDragStart()
-  }
+      event.currentTarget.setPointerCapture(event.pointerId)
+      onDragStart()
+    },
+    [disabled, onDragStart]
+  )
 
-  function handlePointerMove(event: PointerEvent<HTMLSpanElement>) {
-    if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
-      return
-    }
+  const handlePointerMove = useCallback(
+    (event: PointerEvent<HTMLSpanElement>) => {
+      if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
+        return
+      }
 
-    onDragMove(event.clientX, event.clientY)
-  }
+      onDragMove(event.clientX, event.clientY)
+    },
+    [onDragMove]
+  )
 
-  function handlePointerUp(event: PointerEvent<HTMLSpanElement>) {
-    if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
-      return
-    }
+  const handlePointerUp = useCallback(
+    (event: PointerEvent<HTMLSpanElement>) => {
+      if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
+        return
+      }
 
-    onDragEnd(event.clientX, event.clientY)
-    event.currentTarget.releasePointerCapture(event.pointerId)
-  }
+      onDragEnd(event.clientX, event.clientY)
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    },
+    [onDragEnd]
+  )
 
   return (
     <span
-      className={`grid size-9 touch-none select-none place-items-center rounded-lg border text-lg leading-none transition ${disabled ? "cursor-not-allowed border-[#d8ded5] opacity-45 dark:border-white/10" : "cursor-grab border-[#c9d2cb] bg-white/70 text-[#5f7167] hover:border-[#1d4f40] hover:text-[#1d4f40] active:cursor-grabbing dark:border-white/15 dark:bg-white/5 dark:text-[#bac5be]"}`}
+      className={`grid size-9 touch-none select-none place-items-center rounded-lg border text-lg leading-none transition ${disabled ? "cursor-not-allowed border-border opacity-45" : "cursor-grab border-border bg-field text-muted hover:border-border hover:text-primary active:cursor-grabbing"}`}
       title={`Arrastrar ${dishName}`}
       aria-hidden="true"
       onPointerDown={handlePointerDown}

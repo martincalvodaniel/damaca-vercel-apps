@@ -299,7 +299,7 @@ export function SelectField({
         disabled={disabled}
         onClick={toggleListbox}
         onKeyDown={handleKeyDown}
-        className={`flex ${compact ? "min-h-9" : "min-h-12"} w-full items-center justify-between gap-3 rounded-xl border border-[#ccd5ca] bg-white px-4 text-left text-base font-normal outline-none transition focus:border-[#1d4f40] focus:ring-2 focus:ring-[#1d4f40]/20 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/15 dark:bg-[#10231c] ${className}`}
+        className={`flex ${compact ? "min-h-9" : "min-h-12"} w-full items-center justify-between gap-3 rounded-xl border border-border bg-field px-4 text-left text-base font-normal outline-none transition focus:border-ring focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-60   ${className}`}
       >
         <span className="min-w-0 truncate">{selectedOption?.label}</span>
         <svg
@@ -319,9 +319,9 @@ export function SelectField({
       </button>
 
       {isOpen ? (
-        <div className="absolute left-0 top-[calc(100%+0.375rem)] z-50 max-h-64 w-full overflow-y-auto rounded-2xl border border-[#bfcac0] bg-white p-1.5 text-base shadow-[0_18px_45px_rgba(19,53,43,0.24)] dark:border-[#496058] dark:bg-[#173128]">
+        <div className="absolute left-0 top-[calc(100%+0.375rem)] z-50 max-h-64 w-full overflow-y-auto rounded-2xl border border-border bg-field p-1.5 text-base shadow-dialog">
           {searchable ? (
-            <div className="sticky top-0 z-10 bg-white pb-1.5 dark:bg-[#173128]">
+            <div className="sticky top-0 z-10 bg-field pb-1.5">
               <SearchInput
                 ref={searchInputRef}
                 onClear={clearSearch}
@@ -338,7 +338,7 @@ export function SelectField({
                 onChange={changeSearch}
                 onKeyDown={handleSearchKeyDown}
                 onBlur={blurSearch}
-                className="min-h-11 w-full rounded-xl border border-[#cbd4cc] bg-[#f7f8f5] px-3 text-sm font-normal outline-none placeholder:text-[#829087] focus:border-[#1d4f40] focus:ring-2 focus:ring-[#1d4f40]/20 dark:border-white/15 dark:bg-[#10231c] dark:placeholder:text-[#8fa098]"
+                className="min-h-11 w-full rounded-xl border border-control-border bg-field px-3 text-sm font-normal outline-none placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring"
               />
             </div>
           ) : null}
@@ -359,8 +359,8 @@ export function SelectField({
                   onClick={handleOptionClick}
                   className={`flex ${compact ? "min-h-9 py-1" : "min-h-12 py-2.5"} w-full cursor-pointer items-center rounded-xl px-3.5 text-left leading-6 ${
                     index === activeIndex
-                      ? "bg-[#e3ece1] text-[#17352b] dark:bg-[#294b3f] dark:text-white"
-                      : "text-[#314d40] dark:text-[#e4ece7]"
+                      ? "bg-primary-soft text-ink"
+                      : "text-ink"
                   }`}
                 >
                   <span className="min-w-0 flex-1 break-words">
@@ -374,7 +374,7 @@ export function SelectField({
                 </button>
               ))
             ) : (
-              <p className="px-3.5 py-3 text-sm text-[#68776e] dark:text-[#afbbb3]">
+              <p className="px-3.5 py-3 text-sm text-muted">
                 No hay resultados.
               </p>
             )}

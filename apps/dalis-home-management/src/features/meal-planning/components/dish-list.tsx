@@ -51,15 +51,15 @@ export function DishList({
 
   if (dishes.length === 0) {
     return (
-      <section className="grid min-h-48 place-items-center rounded-[1.75rem] border border-dashed border-[#d6cfb7] bg-white/35 p-4 text-center dark:border-white/15 dark:bg-white/[0.025]">
+      <section className="grid min-h-48 place-items-center rounded-[1.75rem] border border-dashed border-border bg-field p-4 text-center">
         <div className="max-w-sm">
-          <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#eee3bd] text-2xl dark:bg-[#4b4329]">
+          <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-accent-soft text-2xl">
             <span aria-hidden="true">♨</span>
           </div>
           <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
             El recetario está vacío
           </h2>
-          <p className="mt-2 text-sm leading-6 text-[#697970] dark:text-[#aebbb3]">
+          <p className="mt-2 text-sm leading-6 text-muted">
             Guarda vuestro primer plato para empezar a preparar el menú.
           </p>
         </div>
@@ -71,7 +71,7 @@ export function DishList({
     <section aria-labelledby={titleId}>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div className="hidden sm:block">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7a8a81] dark:text-[#9baaa1]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
             Para repetir
           </p>
           <h2
@@ -89,15 +89,15 @@ export function DishList({
             value={search}
             onChange={changeSearch}
             placeholder="Buscar plato o ingrediente"
-            className="min-h-9 w-full rounded-full border border-[#ccd5ca] bg-white/75 px-4 text-sm outline-none transition placeholder:text-[#8d9a92] focus:border-[#75611f] focus:ring-2 focus:ring-[#75611f]/15 dark:border-white/15 dark:bg-[#182e26]"
+            className="min-h-9 w-full rounded-full border border-control-border bg-field px-4 text-sm outline-none transition placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring"
           />
         </label>
       </div>
 
       {filteredDishes.length === 0 ? (
-        <div className="mt-3 rounded-2xl border border-dashed border-[#cbd4ca] bg-white/35 px-5 py-5 text-center dark:border-white/15 dark:bg-white/[0.025]">
+        <div className="mt-3 rounded-2xl border border-dashed border-border bg-field px-5 py-5 text-center">
           <p className="font-semibold">No hay platos que coincidan.</p>
-          <p className="mt-1 text-sm text-[#697970] dark:text-[#aebbb3]">
+          <p className="mt-1 text-sm text-muted">
             Prueba con otro plato o ingrediente.
           </p>
         </div>

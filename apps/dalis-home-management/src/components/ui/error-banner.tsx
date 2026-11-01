@@ -10,7 +10,7 @@ export function ErrorBanner({ children }: ErrorBannerProps) {
       role="alert"
       aria-live="polite"
       aria-atomic="true"
-      className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
+      className="rounded-lg border border-border bg-danger-soft p-3 text-sm text-danger"
     >
       {children}
     </div>

@@ -70,12 +70,12 @@ export function MealSlotSelect({
       <div className="mb-1 flex min-h-5 items-center justify-between gap-2">
         <label
           htmlFor={`${date}-${mealType}`}
-          className="text-xs font-bold uppercase tracking-[0.12em] text-[#68776e] dark:text-[#afbbb3]"
+          className="text-xs font-bold uppercase tracking-[0.12em] text-muted"
         >
           {label}
         </label>
         {isPending ? (
-          <span className="text-xs font-bold text-[#c36d49]">Guardando…</span>
+          <span className="text-xs font-bold text-muted">Guardando…</span>
         ) : null}
       </div>
       <div className="flex min-w-0 items-center gap-2">
@@ -90,13 +90,13 @@ export function MealSlotSelect({
             compact
             searchable
             searchPlaceholder="Buscar plato"
-            className="min-h-9 border-[#d8ded5] text-sm font-medium text-[#28483d] dark:border-white/10 dark:bg-[#20372f] dark:text-[#f4f1e7]"
+            className="min-h-9 text-sm font-medium text-ink"
           />
         </div>
         {dragHandle}
       </div>
       {error ? (
-        <p className="mt-1.5 text-xs font-medium text-[#a34435]" role="alert">
+        <p className="mt-1.5 text-xs font-medium text-danger" role="alert">
           {error}
         </p>
       ) : null}

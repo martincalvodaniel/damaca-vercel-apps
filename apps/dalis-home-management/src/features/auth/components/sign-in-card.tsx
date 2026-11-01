@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useState, useTransition } from "react"
+import { useCallback, useState, useTransition } from "react"
 import { BrandMark } from "@/components/shared/brand-mark"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { authClient } from "@/lib/auth/auth-client"
@@ -15,7 +15,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
   const [error, setError] = useState(initialError)
   const [isPending, startTransition] = useTransition()
 
-  function handleSignIn(): void {
+  const handleSignIn = useCallback((): void => {
     setError(undefined)
     startTransition(async () => {
       try {
@@ -31,35 +31,35 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
         setError("No se ha podido conectar con Google. Inténtalo de nuevo.")
       }
     })
-  }
+  }, [callbackUrl])
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f5f4ee] p-4 text-[#17352b] sm:p-8 dark:bg-[#10221c] dark:text-[#f4f1e7]">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas p-4 text-ink sm:p-8">
       <div
-        className="absolute -left-28 -top-32 size-80 rounded-full bg-[#dce8d9] blur-3xl dark:bg-[#1d4035]"
+        className="absolute -left-28 -top-32 size-80 rounded-full bg-primary-soft blur-3xl"
         aria-hidden="true"
       />
       <div
-        className="absolute -bottom-36 -right-24 size-80 rounded-full bg-[#f2d8c9]/70 blur-3xl dark:bg-[#4a3025]/60"
+        className="absolute -bottom-36 -right-24 size-80 rounded-full bg-accent-soft/70 blur-3xl"
         aria-hidden="true"
       />
-      <section className="relative w-full max-w-md rounded-[2rem] border border-[#dde1d8] bg-white/75 p-6 shadow-[0_24px_70px_rgba(50,72,60,0.12)] backdrop-blur sm:p-9 dark:border-white/10 dark:bg-[#182e26]/90">
+      <section className="relative w-full max-w-md rounded-[2rem] border border-border bg-field p-6 shadow-dialog backdrop-blur sm:p-9">
         <Link
           href="/"
           aria-label="Volver al inicio de Dali"
-          className="inline-flex rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1d4f40] focus:ring-offset-4 dark:ring-offset-[#182e26]"
+          className="inline-flex rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-4 ring-offset-canvas"
         >
           <BrandMark />
         </Link>
 
         <div className="mb-7 mt-9">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#c36d49]">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
             Acceso privado
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
             Bienvenido de nuevo
           </h1>
-          <p className="mt-3 text-sm leading-6 text-[#63736a] dark:text-[#b4c0b8]">
+          <p className="mt-3 text-sm leading-6 text-muted">
             Inicia sesión para acceder a la gestión del hogar.
           </p>
         </div>
@@ -70,7 +70,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
           type="button"
           onClick={handleSignIn}
           disabled={isPending}
-          className="mt-5 flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-[#1d4f40] px-5 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(29,79,64,0.2)] transition hover:-translate-y-0.5 hover:bg-[#173f34] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 dark:ring-offset-[#182e26]"
+          className="mt-5 flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-primary px-5 text-sm font-semibold text-on-primary shadow-soft transition hover:-translate-y-0.5 hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 ring-offset-canvas"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
             <path

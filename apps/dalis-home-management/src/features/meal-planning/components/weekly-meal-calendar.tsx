@@ -122,16 +122,13 @@ export function WeeklyMealCalendar({
   return (
     <div>
       {isPending ? (
-        <p
-          className="mb-2 px-1 text-xs font-semibold text-[#c36d49]"
-          role="status"
-        >
+        <p className="mb-2 px-1 text-xs font-semibold text-muted" role="status">
           Moviendo…
         </p>
       ) : null}
       {error ? (
         <p
-          className="mb-3 rounded-xl bg-[#f9e5df] px-3 py-2 text-sm font-medium text-[#a34435] dark:bg-[#4b2924] dark:text-[#ffb4a4]"
+          className="mb-3 rounded-xl bg-danger-soft px-3 py-2 text-sm font-medium text-danger"
           role="alert"
         >
           {error}

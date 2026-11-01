@@ -160,13 +160,13 @@ export function ShoppingListPreview({
       <button
         type="button"
         onClick={openPreview}
-        className="flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl border border-[#d8d7bd] bg-[#eeeddc] px-3 py-2 text-left text-[#303b2d] shadow-[0_18px_50px_rgba(50,72,60,0.08)] transition hover:bg-[#e8e7d3] focus:outline-none focus:ring-2 focus:ring-[#74794f] focus:ring-offset-2 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7] dark:hover:bg-[#374333] dark:ring-offset-[#10221c]"
+        className="flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl border border-border bg-surface-raised px-3 py-2 text-left text-ink shadow-soft transition hover:bg-primary-soft focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ring-offset-canvas"
       >
         <div className="flex min-w-0 items-center gap-2">
           <span className="text-sm font-semibold">
             Vista previa de la compra
           </span>
-          <span className="grid min-w-6 shrink-0 place-items-center rounded-full bg-white/60 px-1.5 text-xs font-bold tabular-nums leading-6 dark:bg-white/10">
+          <span className="grid min-w-6 shrink-0 place-items-center rounded-full bg-field px-1.5 text-xs font-bold tabular-nums leading-6">
             {suggestions.length}
             <span className="sr-only">
               {suggestions.length === 1 ? "producto" : "productos"} por revisar
@@ -174,7 +174,7 @@ export function ShoppingListPreview({
           </span>
         </div>
         <span
-          className="grid size-7 shrink-0 place-items-center rounded-full bg-white/60 text-lg dark:bg-white/10"
+          className="grid size-7 shrink-0 place-items-center rounded-full bg-field text-lg"
           aria-hidden="true"
         >
           →
@@ -186,7 +186,7 @@ export function ShoppingListPreview({
         ariaLabel="Vista previa de la compra"
         onDismiss={closePreview}
       >
-        <section className="flex h-full min-h-0 flex-col bg-[#eeeddc] text-[#303b2d] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
+        <section className="flex h-full min-h-0 flex-col bg-surface text-ink">
           <DialogHeader
             title="Vista previa de la compra"
             onDismiss={closePreview}
@@ -200,7 +200,7 @@ export function ShoppingListPreview({
           <div className="shrink-0 px-4 empty:hidden">
             {message ? (
               <p
-                className={`text-sm font-semibold ${isError ? "text-[#a34435] dark:text-[#ffb4a4]" : "text-[#477052] dark:text-[#a9d6b4]"}`}
+                className={`text-sm font-semibold ${isError ? "text-danger" : "text-success"}`}
                 role={isError ? "alert" : "status"}
               >
                 {message}{" "}
@@ -216,12 +216,12 @@ export function ShoppingListPreview({
             ) : null}
           </div>
           <div className="dialog-content p-4 sm:p-6">
-            <p className="mb-3 text-sm text-[#69705b] dark:text-[#c0c7b5]">
+            <p className="mb-3 text-sm text-muted">
               Revisa lo que tienes en casa y ajusta cuánto comprar.
             </p>
             {isLoading ? (
               <p
-                className="py-10 text-center text-sm font-semibold text-[#69705b] dark:text-[#c0c7b5]"
+                className="py-10 text-center text-sm font-semibold text-muted"
                 role="status"
               >
                 Actualizando la compra…
@@ -229,7 +229,7 @@ export function ShoppingListPreview({
             ) : items.length > 0 ? (
               <>
                 <div
-                  className="mt-5 mb-2 hidden grid-cols-[minmax(10rem,1fr)_minmax(7rem,0.45fr)_repeat(2,minmax(10rem,0.65fr))] gap-3 px-3 text-xs font-bold uppercase tracking-[0.08em] text-[#69705b] lg:grid dark:text-[#c0c7b5]"
+                  className="mt-5 mb-2 hidden grid-cols-[minmax(10rem,1fr)_minmax(7rem,0.45fr)_repeat(2,minmax(10rem,0.65fr))] gap-3 px-3 text-xs font-bold uppercase tracking-[0.08em] text-muted lg:grid"
                   aria-hidden="true"
                 >
                   <span>Producto</span>
@@ -251,7 +251,7 @@ export function ShoppingListPreview({
                 </ul>
               </>
             ) : (
-              <p className="py-10 text-center text-sm leading-6 text-[#69705b] dark:text-[#c0c7b5]">
+              <p className="py-10 text-center text-sm leading-6 text-muted">
                 El menú no necesita productos para esta semana.
               </p>
             )}

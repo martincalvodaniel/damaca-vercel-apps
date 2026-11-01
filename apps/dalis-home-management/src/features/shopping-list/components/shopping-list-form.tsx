@@ -117,7 +117,7 @@ export function ShoppingListForm({
   )
 
   return (
-    <section className="flex h-full min-h-0 flex-col bg-[#f8e7dd] dark:bg-[#412d24]">
+    <section className="flex h-full min-h-0 flex-col bg-surface">
       <DialogHeader
         title="¿Qué hace falta?"
         onDismiss={onCancel}
@@ -140,7 +140,7 @@ export function ShoppingListForm({
               type="button"
               onClick={openProductDialog}
               disabled={isPending}
-              className="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-[#8e4d31] underline decoration-[#c98d72] underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#a75938] disabled:opacity-60 dark:text-[#efb89e]"
+              className="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-primary underline decoration-accent underline-offset-4 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-60"
             >
               + Crear producto nuevo
             </button>
@@ -155,7 +155,6 @@ export function ShoppingListForm({
             disabled={isPending}
             searchable
             showPurchasePlaces={false}
-            className="border-[#d8c5b8] bg-white/85 focus:border-[#a75938] focus:ring-[#a75938]/20 dark:bg-[#2e211c]"
           />
         </div>
 
@@ -171,13 +170,11 @@ export function ShoppingListForm({
             required
             onValueChange={setQuantity}
             className="mt-2"
-            buttonClassName="border-[#d8c5b8] bg-white/85 text-[#8e4d31] hover:bg-white dark:border-white/15 dark:bg-[#2e211c] dark:text-[#efb89e] dark:hover:bg-white/10"
-            fieldClassName="border-[#d8c5b8] bg-white/85 text-[#8e4d31] focus-within:border-[#a75938] focus-within:ring-[#a75938]/15 dark:border-white/15 dark:bg-[#2e211c] dark:text-[#efb89e]"
           />
         </div>
 
         {notice ? (
-          <p className="text-xs font-semibold text-[#477052]" role="status">
+          <p className="text-xs font-semibold text-success" role="status">
             {notice}
           </p>
         ) : null}

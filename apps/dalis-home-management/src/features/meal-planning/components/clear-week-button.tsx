@@ -47,13 +47,13 @@ export function ClearWeekButton({
         type="button"
         onClick={openDialog}
         disabled={disabled || isPending}
-        className="inline-flex min-h-9 whitespace-nowrap items-center justify-center rounded-lg border border-[#d8b8ad] bg-white/70 px-3 text-xs font-semibold text-[#9a4d39] transition hover:bg-[#fff3ef] focus:outline-none focus:ring-2 focus:ring-[#a75938] disabled:cursor-not-allowed disabled:opacity-65 sm:rounded-xl sm:px-4 sm:text-sm dark:border-[#754c40] dark:bg-white/5 dark:text-[#f2b7a5] dark:hover:bg-[#4b3027]"
+        className="inline-flex min-h-9 whitespace-nowrap items-center justify-center rounded-lg border border-border bg-field px-3 text-xs font-semibold text-danger transition hover:bg-danger-soft focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-65 sm:rounded-xl sm:px-4 sm:text-sm"
       >
         {isPending ? "Vaciando…" : "Vaciar semana"}
       </button>
       {error ? (
         <p
-          className="mt-1.5 max-w-48 text-xs font-semibold text-[#a34435] dark:text-[#ffb4a4]"
+          className="mt-1.5 max-w-48 text-xs font-semibold text-danger"
           role="alert"
         >
           {error}

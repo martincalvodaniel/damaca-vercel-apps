@@ -1,33 +1,129 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f4ee;
-  --foreground: #17352b;
+  color-scheme: light;
+  --canvas: #f5f4ee;
+  --surface: #fbfaf6;
+  --surface-raised: #edf1eb;
+  --field: #ffffff;
+  --ink: #17352b;
+  --muted: #58695e;
+  --placeholder: #5f7065;
+  --border: #ccd7cf;
+  --control-border: #75877b;
+  --primary: #1d4f40;
+  --on-primary: #ffffff;
+  --primary-hover: #173f34;
+  --primary-soft: #e3ece1;
+  --accent: #a75938;
+  --accent-soft: #fcf3ec;
+  --success: #26734d;
+  --on-success: #ffffff;
+  --success-soft: #e5efe8;
+  --danger: #b42318;
+  --on-danger: #ffffff;
+  --danger-soft: #fef3f2;
+  --warning: #8a651f;
+  --on-warning: #ffffff;
+  --warning-soft: #f8efd9;
+  --ring: #1d4f40;
+  --overlay: #0b2119;
+  --section-inventory: #1d4f40;
+  --section-shopping: #a75938;
+  --section-dishes: #8a651f;
+  --section-menu: #74794f;
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --shadow-soft-value: 0 8px 24px rgb(23 53 43 / 0.06);
+  --shadow-dialog-value: 0 24px 70px rgb(23 53 43 / 0.18);
 }
 
 @theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-field: var(--field);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-placeholder: var(--placeholder);
+  --color-border: var(--border);
+  --color-control-border: var(--control-border);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-on-success: var(--on-success);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-on-danger: var(--on-danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warning: var(--warning);
+  --color-on-warning: var(--on-warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-ring: var(--ring);
+  --color-overlay: var(--overlay);
+  --color-section-inventory: var(--section-inventory);
+  --color-section-shopping: var(--section-shopping);
+  --color-section-dishes: var(--section-dishes);
+  --color-section-menu: var(--section-menu);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --shadow-soft: var(--shadow-soft-value);
+  --shadow-dialog: var(--shadow-dialog-value);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #09090b;
-    --foreground: #fafafa;
+    color-scheme: dark;
+    --canvas: #10221c;
+    --surface: #182e26;
+    --surface-raised: #203a30;
+    --field: #10231c;
+    --ink: #f4f1e7;
+    --muted: #b4c0b8;
+    --placeholder: #a8b8ae;
+    --border: #365348;
+    --control-border: #6f8d7d;
+    --primary: #8bb9a6;
+    --on-primary: #10221c;
+    --primary-hover: #a3cbb9;
+    --primary-soft: #244236;
+    --accent: #e99a77;
+    --accent-soft: #3c2c25;
+    --success: #9dd2af;
+    --on-success: #10221c;
+    --success-soft: #244333;
+    --danger: #ffb4a4;
+    --on-danger: #3d1713;
+    --danger-soft: #422723;
+    --warning: #e5c77e;
+    --on-warning: #10221c;
+    --warning-soft: #40351f;
+    --ring: #8bb9a6;
+    --overlay: #0b2119;
+    --section-inventory: #8bb9a6;
+    --section-shopping: #e99a77;
+    --section-dishes: #e5c77e;
+    --section-menu: #c0c7b5;
+    --shadow-soft-value: 0 8px 24px rgb(0 0 0 / 0.16);
+    --shadow-dialog-value: 0 24px 70px rgb(0 0 0 / 0.3);
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--canvas);
+  color: var(--ink);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 ::selection {
-  background: #c9ddc8;
-  color: #17352b;
+  background: var(--primary);
+  color: var(--on-primary);
 }
 
 .fullscreen-dialog {

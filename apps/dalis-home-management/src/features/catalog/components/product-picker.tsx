@@ -20,7 +20,6 @@ interface ProductPickerProps {
   value: string
   onValueChange: (value: string) => void
   disabled?: boolean
-  className?: string
   searchable?: boolean
   showPurchasePlaces?: boolean
   initialSearch?: string
@@ -42,7 +41,6 @@ export function ProductPicker({
   value,
   onValueChange,
   disabled = false,
-  className,
   searchable = false,
   showPurchasePlaces = true,
   initialSearch = "",
@@ -155,12 +153,12 @@ export function ProductPicker({
           disabled={disabled}
           placeholder="Escribe para buscar producto"
           autoComplete="off"
-          className={`min-h-11 w-full rounded-xl border border-[#d8c5b8] bg-white/85 px-3 text-sm font-normal outline-none transition placeholder:text-[#9b887e] focus:border-[#a75938] focus:ring-2 focus:ring-[#a75938]/15 disabled:opacity-60 dark:border-white/15 dark:bg-[#2e211c] ${className ?? ""}`}
+          className={`min-h-11 w-full rounded-xl border border-control-border bg-field px-3 text-sm font-normal outline-none transition placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring disabled:opacity-60`}
         />
         {isOpen ? (
           <div
             id={resultListId}
-            className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-[#d8c5b8] bg-[#fffaf6] p-1 shadow-xl dark:border-white/15 dark:bg-[#2e211c]"
+            className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-border bg-surface-raised p-1 shadow-dialog"
           >
             {visibleProducts.length > 0 ? (
               visibleProducts.map((product) => (
@@ -169,16 +167,16 @@ export function ProductPicker({
                   type="button"
                   data-product-id={product.id}
                   onClick={selectProduct}
-                  className="flex min-h-10 w-full items-center justify-between gap-3 rounded-lg px-3 text-left text-sm font-medium transition hover:bg-[#f3e3d8] focus:bg-[#f3e3d8] focus:outline-none dark:hover:bg-white/10 dark:focus:bg-white/10"
+                  className="flex min-h-10 w-full items-center justify-between gap-3 rounded-lg px-3 text-left text-sm font-medium transition hover:bg-primary-soft focus:bg-primary-soft focus:outline-none"
                 >
                   <span className="truncate">{product.name}</span>
-                  <span className="shrink-0 text-xs text-[#8b7164] dark:text-[#c8afa2]">
+                  <span className="shrink-0 text-xs text-muted">
                     {quantityUnitShortLabels[product.unit]}
                   </span>
                 </button>
               ))
             ) : (
-              <p className="px-3 py-2 text-xs font-medium text-[#8f5140]">
+              <p className="px-3 py-2 text-xs font-medium text-danger">
                 No hay productos que coincidan.
               </p>
             )}
@@ -196,7 +194,6 @@ export function ProductPicker({
         onValueChange={onValueChange}
         options={options}
         disabled={disabled}
-        className={className}
       />
     </div>
   )

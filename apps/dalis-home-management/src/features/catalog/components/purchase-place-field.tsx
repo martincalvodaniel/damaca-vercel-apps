@@ -1,6 +1,13 @@
 "use client"
 
-import { type KeyboardEvent, useId, useState } from "react"
+import type * as React from "react"
+import {
+  type KeyboardEvent,
+  type MouseEvent,
+  useCallback,
+  useId,
+  useState,
+} from "react"
 import { normalizePurchasePlaceKey } from "@/features/catalog/purchase-places"
 
 interface PurchasePlaceFieldProps {
@@ -24,23 +31,26 @@ export function PurchasePlaceField({
     (place) => !selectedKeys.has(normalizePurchasePlaceKey(place))
   )
 
-  function addPlace(value: string) {
-    const place = value.trim().replace(/\s+/g, " ")
-    const normalizedPlace = normalizePurchasePlaceKey(place)
+  const addPlace = useCallback(
+    (value: string) => {
+      const place = value.trim().replace(/\s+/g, " ")
+      const normalizedPlace = normalizePurchasePlaceKey(place)
 
-    if (
-      !place ||
-      selectedPlaces.length >= 20 ||
-      selectedKeys.has(normalizedPlace)
-    ) {
-      return
-    }
+      if (
+        !place ||
+        selectedPlaces.length >= 20 ||
+        selectedKeys.has(normalizedPlace)
+      ) {
+        return
+      }
 
-    setSelectedPlaces((currentPlaces) => [...currentPlaces, place])
-    setDraft("")
-  }
+      setSelectedPlaces((currentPlaces) => [...currentPlaces, place])
+      setDraft("")
+    },
+    [selectedPlaces, selectedKeys]
+  )
 
-  function removePlace(place: string) {
+  const removePlace = useCallback((place: string) => {
     const normalizedPlace = normalizePurchasePlaceKey(place)
     setSelectedPlaces((currentPlaces) =>
       currentPlaces.filter(
@@ -48,16 +58,41 @@ export function PurchasePlaceField({
           normalizePurchasePlaceKey(currentPlace) !== normalizedPlace
       )
     )
-  }
+  }, [])
 
-  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key !== "Enter") {
-      return
-    }
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key !== "Enter") {
+        return
+      }
 
-    event.preventDefault()
-    addPlace(draft)
-  }
+      event.preventDefault()
+      addPlace(draft)
+    },
+    [addPlace, draft]
+  )
+
+  const handleRemovePlace = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      removePlace(event.currentTarget.dataset.place ?? "")
+    },
+    [removePlace]
+  )
+
+  const handleAddPlace = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      addPlace(event.currentTarget.dataset.place ?? "")
+    },
+    [addPlace]
+  )
+
+  const changeDraft = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      setDraft(event.target.value),
+    []
+  )
+
+  const addDraft = useCallback(() => addPlace(draft), [addPlace, draft])
 
   return (
     <div className="text-sm font-semibold">
@@ -70,17 +105,17 @@ export function PurchasePlaceField({
           list={suggestionListId}
           maxLength={80}
           value={draft}
-          onChange={(event) => setDraft(event.target.value)}
+          onChange={changeDraft}
           onKeyDown={handleKeyDown}
           placeholder="Por ejemplo, Mercado"
           autoComplete="off"
-          className="min-h-12 min-w-0 flex-1 rounded-xl border border-[#ccd5ca] bg-white px-4 font-normal outline-none transition placeholder:text-[#9aa59e] focus:border-[#1d4f40] focus:ring-2 focus:ring-[#1d4f40]/15 dark:border-white/15 dark:bg-[#10231c] dark:placeholder:text-[#718078]"
+          className="min-h-12 min-w-0 flex-1 rounded-xl border border-control-border bg-field px-4 font-normal outline-none transition placeholder:text-placeholder focus:border-ring focus:ring-2 focus:ring-ring"
         />
         <button
           type="button"
-          onClick={() => addPlace(draft)}
+          onClick={addDraft}
           disabled={!draft.trim() || selectedPlaces.length >= 20}
-          className="min-h-12 shrink-0 rounded-xl border border-[#9eb0a1] px-3 text-xs font-semibold text-[#365b43] transition hover:bg-[#edf2eb] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-not-allowed disabled:opacity-45 dark:border-white/15 dark:text-[#c4d0c8] dark:hover:bg-white/5"
+          className="min-h-12 shrink-0 rounded-xl border border-border px-3 text-xs font-semibold text-ink transition hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-45"
         >
           Añadir
         </button>
@@ -99,14 +134,15 @@ export function PurchasePlaceField({
           {selectedPlaces.map((place) => (
             <span
               key={place}
-              className="inline-flex items-center gap-1 rounded-full border border-[#cbd5cb] bg-[#edf2eb] py-1 pl-2.5 pr-1 text-xs font-semibold text-[#486055] dark:border-white/10 dark:bg-white/5 dark:text-[#c4d0c8]"
+              className="inline-flex items-center gap-1 rounded-full border border-border bg-surface py-1 pl-2.5 pr-1 text-xs font-semibold text-muted"
             >
               {place}
               <button
                 type="button"
-                onClick={() => removePlace(place)}
+                data-place={place}
+                onClick={handleRemovePlace}
                 aria-label={`Quitar ${place}`}
-                className="grid size-5 place-items-center rounded-full text-sm font-bold leading-none text-[#b4493d] transition hover:bg-[#f6d8d3] hover:text-[#8f2f27] focus:outline-none focus:ring-2 focus:ring-[#b4493d] dark:text-[#ff9f92] dark:hover:bg-[#5a302c]"
+                className="grid size-5 place-items-center rounded-full text-sm font-bold leading-none text-danger transition hover:bg-danger-soft hover:text-danger focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 ×
               </button>
@@ -121,8 +157,9 @@ export function PurchasePlaceField({
             <button
               key={place}
               type="button"
-              onClick={() => addPlace(place)}
-              className="rounded-full border border-dashed border-[#cbd5cb] px-2.5 py-1 text-xs font-semibold text-[#66786e] transition hover:border-[#829b89] hover:bg-[#edf2eb] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] dark:border-white/15 dark:text-[#aebbb3] dark:hover:bg-white/5"
+              data-place={place}
+              onClick={handleAddPlace}
+              className="rounded-full border border-dashed border-border px-2.5 py-1 text-xs font-semibold text-muted transition hover:border-border hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring"
             >
               + {place}
             </button>
