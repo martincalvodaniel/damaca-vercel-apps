@@ -30,18 +30,31 @@ body {
   color: #17352b;
 }
 
-@media (width < 40rem) {
-  .mobile-dialog {
-    --dialog-available-height: calc(
-      var(--dialog-viewport-height, 100dvh) -
-      max(0.5rem, env(safe-area-inset-top)) -
-      0.5rem
-    );
-    margin-block-start: calc(
-      var(--dialog-viewport-top, 0px) +
-      max(0.5rem, env(safe-area-inset-top))
-    );
-    margin-block-end: auto;
-    max-height: var(--dialog-available-height);
-  }
+.fullscreen-dialog {
+  --dialog-available-height: var(--dialog-viewport-height, 100dvh);
+  position: fixed;
+  inset: var(--dialog-viewport-top, 0px) 0 auto;
+  margin: 0;
+  width: 100%;
+  max-width: none;
+  height: var(--dialog-available-height);
+  max-height: var(--dialog-available-height);
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+}
+
+.dialog-header {
+  padding-top: max(0.25rem, env(safe-area-inset-top));
+  padding-inline: max(0.75rem, env(safe-area-inset-left))
+    max(0.75rem, env(safe-area-inset-right));
+}
+
+.dialog-content {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-top: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
 }

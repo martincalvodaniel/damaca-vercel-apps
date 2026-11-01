@@ -38,7 +38,6 @@ export function DishManager({
       <ModalDialog
         open={isFormOpen}
         ariaLabel={editingDish ? `Editar ${editingDish.name}` : "Añadir plato"}
-        size="lg"
         onDismiss={onClose}
       >
         {isFormOpen ? (

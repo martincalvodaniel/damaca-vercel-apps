@@ -81,3 +81,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: modales superiores en móvil con margen seguro, altura limitada al área visible y contenido desplazable; formularios accesibles al reducirse el viewport por teclado; paneles de altura completa y diálogos anidados compatibles; escritorio centrado; conservar cierre, foco y bloqueo del fondo.
 - Validación prevista: Biome, tipos, tests, build Webpack y Chrome con reducción simulada del viewport visual, navegación por formularios y comprobación desktop.
 - Evidencia: [HM-08](iteration-log.md#hm-08--modales-móviles-adaptadas-al-teclado).
+
+## HM-09 — Modales de pantalla completa y acciones superiores
+
+- Estado: `validated`.
+- Objetivo: adoptar el patrón de edición de Tasks, con modales de pantalla completa, contenido de arriba abajo y acciones superiores independientes del scroll.
+- Rutas: diálogos y nueva cabecera compartida en `src/components/ui/`, formularios de inventario/compra/platos/catálogo, vista previa y ejecución, gestores, `src/app/globals.css`, `plan/`.
+- Dependencias: controles nativos de formulario, hook de viewport de HM-08 y referencia de Tasks (solo lectura); sin nuevas dependencias.
+- Aceptación: pantalla completa en móvil y escritorio; cruz roja izquierda y tick verde derecha, título centrado y cabecera siempre visible; validación y envío nativos, accesibilidad y estados pendientes conservados; contenido desplazable desde arriba; teclado y diálogos anidados compatibles; sin botones duplicados al pie.
+- Validación prevista: Biome, tipos, tests, build Webpack y Chrome con scroll, validación, envíos aislados, teclado simulado y diálogos anidados.
+- Evidencia: [HM-09](iteration-log.md#hm-09--modales-de-pantalla-completa-y-acciones-superiores).

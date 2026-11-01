@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useCallback, useState, useTransition } from "react"
+import { DialogHeader } from "@/components/ui/dialog-header"
 import { ModalDialog } from "@/components/ui/modal-dialog"
 import {
   executeWeeklyMealSlotAction,
@@ -145,25 +146,31 @@ export function ExecuteMealButton({
       <ModalDialog
         open={isOpen}
         ariaLabel={`Ejecutar ${mealLabels[mealType]} ${dishName}`}
-        size="lg"
-        scrollable={false}
         onDismiss={closeDialog}
       >
-        <section className="flex h-[var(--dialog-available-height,calc(100dvh-2rem))] flex-col overflow-hidden rounded-[1.75rem] border border-[#d8d7bd] bg-[#eeeddc] p-4 text-[#303b2d] sm:p-5 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
-          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-            <header className="-mx-4 -mt-4 border-b border-[#d4d3b9] bg-[#eeeddc] px-4 pt-4 pb-4 sm:-mx-5 sm:-mt-5 sm:px-5 sm:pt-5 dark:border-white/10 dark:bg-[#2e382b]">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#477052] dark:text-[#a9d6b4]">
-                Ejecutar {mealLabels[mealType]}
-              </p>
-              <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em]">
-                {dishName}
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-[#69705b] dark:text-[#c0c7b5]">
-                Revisa y ajusta el inventario que quedará tras preparar esta
-                comida.
-              </p>
-            </header>
-
+        <section className="flex h-full min-h-0 flex-col bg-[#eeeddc] text-[#303b2d] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
+          <DialogHeader
+            title={`Ejecutar ${mealLabels[mealType]}: ${dishName}`}
+            onDismiss={closeDialog}
+            cancelDisabled={isPending}
+            confirmLabel={isPending ? "Preparando…" : "Confirmar"}
+            confirmDisabled={isLoading || isPending || items.length === 0}
+            onConfirm={executeMeal}
+            pending={isPending}
+          />
+          {error ? (
+            <p
+              className="shrink-0 px-4 py-2 text-sm font-semibold text-[#a34435] dark:text-[#ffb4a4]"
+              role="alert"
+            >
+              {error}
+            </p>
+          ) : null}
+          <div className="dialog-content p-4 sm:p-6">
+            <p className="mb-3 text-sm text-[#69705b] dark:text-[#c0c7b5]">
+              Revisa y ajusta el inventario que quedará tras preparar esta
+              comida.
+            </p>
             {isLoading ? (
               <p
                 className="py-10 text-center text-sm font-semibold text-[#69705b] dark:text-[#c0c7b5]"
@@ -184,35 +191,6 @@ export function ExecuteMealButton({
               </ul>
             ) : null}
           </div>
-
-          <footer className="-mx-4 -mb-4 mt-5 border-t border-[#d4d3b9] bg-[#eeeddc] px-4 py-4 sm:-mx-5 sm:-mb-5 sm:px-5 dark:border-white/10 dark:bg-[#2e382b]">
-            {error ? (
-              <p
-                className="text-sm font-semibold text-[#a34435] dark:text-[#ffb4a4]"
-                role="alert"
-              >
-                {error}
-              </p>
-            ) : null}
-            <div className={`flex gap-2 sm:justify-end ${error ? "mt-4" : ""}`}>
-              <button
-                type="button"
-                onClick={closeDialog}
-                disabled={isPending}
-                className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-[#c8cab1] px-5 text-sm font-semibold transition hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-[#74794f] disabled:opacity-60 sm:flex-none dark:border-white/15 dark:hover:bg-white/10"
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                onClick={executeMeal}
-                disabled={isLoading || isPending || items.length === 0}
-                className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full bg-[#477052] px-5 text-sm font-semibold text-white transition hover:bg-[#385e43] focus:outline-none focus:ring-2 focus:ring-[#477052] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-65 sm:flex-none dark:ring-offset-[#2e382b]"
-              >
-                {isPending ? "Preparando…" : "Confirmar"}
-              </button>
-            </div>
-          </footer>
         </section>
       </ModalDialog>
     </>

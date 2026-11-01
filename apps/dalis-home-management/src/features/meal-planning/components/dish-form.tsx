@@ -8,6 +8,7 @@ import {
   useState,
   useTransition,
 } from "react"
+import { DialogHeader } from "@/components/ui/dialog-header"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { CatalogProductDialog } from "@/features/catalog/components/catalog-product-dialog"
 import type { CatalogProductOption } from "@/features/catalog/product-option"
@@ -53,6 +54,7 @@ export function DishForm({
   onCancel,
   onSaved,
 }: DishFormProps) {
+  const formId = useId()
   const nameId = useId()
   const notesId = useId()
   const [ingredients, setIngredients] = useState<IngredientDraft[]>(() =>
@@ -169,17 +171,24 @@ export function DishForm({
   )
 
   return (
-    <section className="rounded-[1.75rem] border border-[#e4d9b8] bg-[#f3e8c8] p-5 shadow-[0_18px_50px_rgba(86,73,39,0.08)] sm:p-6 dark:border-[#685c38] dark:bg-[#39331f]">
-      <header className="sticky -top-5 z-10 -mx-5 -mt-5 border-b border-[#e4d9b8] bg-[#f3e8c8] px-5 pt-5 pb-4 sm:-top-6 sm:-mx-6 sm:-mt-6 sm:px-6 sm:pt-6 dark:border-[#685c38] dark:bg-[#39331f]">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8a6d1f] dark:text-[#dec778]">
-          {isEditing ? "Editar plato" : "Nuevo plato"}
-        </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">
-          {isEditing ? dish.name : "Guardar una comida"}
-        </h2>
-      </header>
+    <section className="flex h-full min-h-0 flex-col bg-[#f3e8c8] dark:bg-[#39331f]">
+      <DialogHeader
+        title={isEditing ? dish.name : "Guardar una comida"}
+        onDismiss={onCancel}
+        cancelDisabled={isPending}
+        confirmLabel={
+          isPending ? "Guardando…" : isEditing ? "Guardar" : "Crear plato"
+        }
+        confirmDisabled={isPending}
+        confirmForm={formId}
+        pending={isPending}
+      />
 
-      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+      <form
+        id={formId}
+        className="dialog-content space-y-4 p-4 sm:p-6"
+        onSubmit={handleSubmit}
+      >
         <label className="block text-sm font-semibold" htmlFor={nameId}>
           Nombre del plato
           <input
@@ -240,24 +249,6 @@ export function DishForm({
         </label>
 
         {error ? <ErrorBanner>{error}</ErrorBanner> : null}
-
-        <div className="sticky -bottom-5 z-10 -mx-5 -mb-5 flex gap-2 border-t border-[#e4d9b8] bg-[#f3e8c8] px-5 py-4 sm:-bottom-6 sm:-mx-6 sm:-mb-6 sm:px-6 dark:border-[#685c38] dark:bg-[#39331f]">
-          <button
-            type="submit"
-            disabled={isPending}
-            className="order-2 inline-flex min-h-12 flex-1 items-center justify-center rounded-full bg-[#75611f] px-5 text-sm font-semibold text-white transition hover:bg-[#615018] focus:outline-none focus:ring-2 focus:ring-[#75611f] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 dark:ring-offset-[#39331f]"
-          >
-            {isPending ? "Guardando…" : isEditing ? "Guardar" : "Crear plato"}
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={isPending}
-            className="order-1 inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-[#c4b989] px-5 text-sm font-semibold transition hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-[#75611f] disabled:opacity-60 dark:border-white/15 dark:hover:bg-white/5"
-          >
-            Cancelar
-          </button>
-        </div>
       </form>
       <CatalogProductDialog
         key={`catalog-product-${creatingProductForIndex ?? "closed"}`}

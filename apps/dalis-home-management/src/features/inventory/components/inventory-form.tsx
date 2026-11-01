@@ -1,6 +1,13 @@
 "use client"
 
-import { type FormEvent, useId, useState, useTransition } from "react"
+import {
+  type FormEvent,
+  useCallback,
+  useId,
+  useState,
+  useTransition,
+} from "react"
+import { DialogHeader } from "@/components/ui/dialog-header"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { QuantityInputStepper } from "@/components/ui/quantity-input-stepper"
 import { SelectField } from "@/components/ui/select-field"
@@ -35,6 +42,7 @@ export function InventoryForm({
   onCancel,
   onSaved,
 }: InventoryFormProps) {
+  const formId = useId()
   const nameId = useId()
   const quantityId = useId()
   const unitId = useId()
@@ -45,54 +53,69 @@ export function InventoryForm({
   const [isPending, startTransition] = useTransition()
   const isEditing = item !== null
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setError(null)
-    const form = event.currentTarget
-    const formData = new FormData(form)
-    const input = {
-      name: formData.get("name"),
-      quantity: Number(quantity),
-      unit,
-      purchasePlaces: normalizePurchasePlaces(
-        [
-          ...formData.getAll("purchasePlaces"),
-          formData.get("purchasePlaceDraft"),
-        ].filter((value): value is string => typeof value === "string")
-      ),
-    }
-
-    startTransition(async () => {
-      try {
-        const result = item
-          ? await updateInventoryItemAction(item.id, input)
-          : await createInventoryItemAction(input)
-
-        if (!result.success) {
-          setError(result.message)
-          return
-        }
-
-        form.reset()
-        onSaved()
-      } catch {
-        setError("No se ha podido guardar el producto. Inténtalo de nuevo.")
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      setError(null)
+      const form = event.currentTarget
+      const formData = new FormData(form)
+      const input = {
+        name: formData.get("name"),
+        quantity: Number(quantity),
+        unit,
+        purchasePlaces: normalizePurchasePlaces(
+          [
+            ...formData.getAll("purchasePlaces"),
+            formData.get("purchasePlaceDraft"),
+          ].filter((value): value is string => typeof value === "string")
+        ),
       }
-    })
-  }
+
+      startTransition(async () => {
+        try {
+          const result = item
+            ? await updateInventoryItemAction(item.id, input)
+            : await createInventoryItemAction(input)
+
+          if (!result.success) {
+            setError(result.message)
+            return
+          }
+
+          form.reset()
+          onSaved()
+        } catch {
+          setError("No se ha podido guardar el producto. Inténtalo de nuevo.")
+        }
+      })
+    },
+    [quantity, item, onSaved, unit]
+  )
+
+  const changeUnit = useCallback(
+    (value: string) => setUnit(value as QuantityUnit),
+    []
+  )
 
   return (
-    <section className="rounded-[1.75rem] border border-[#dde1d8] bg-[#fbfaf6] p-5 shadow-[0_18px_50px_rgba(50,72,60,0.08)] sm:p-6 dark:border-white/10 dark:bg-[#182e26]">
-      <header className="sticky -top-5 z-10 -mx-5 -mt-5 border-b border-[#dde1d8] bg-[#fbfaf6] px-5 pt-5 pb-4 sm:-top-6 sm:-mx-6 sm:-mt-6 sm:px-6 sm:pt-6 dark:border-white/10 dark:bg-[#182e26]">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c36d49]">
-          {isEditing ? "Editar producto" : "Nuevo producto"}
-        </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">
-          {isEditing ? item.name : "Añadir al inventario"}
-        </h2>
-      </header>
+    <section className="flex h-full min-h-0 flex-col bg-[#fbfaf6] dark:bg-[#182e26]">
+      <DialogHeader
+        title={isEditing ? item.name : "Añadir al inventario"}
+        onDismiss={onCancel}
+        cancelDisabled={isPending}
+        confirmLabel={
+          isPending ? "Guardando…" : isEditing ? "Guardar" : "Añadir"
+        }
+        confirmDisabled={isPending}
+        confirmForm={formId}
+        pending={isPending}
+      />
 
-      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+      <form
+        id={formId}
+        className="dialog-content space-y-4 p-4 sm:p-6"
+        onSubmit={handleSubmit}
+      >
         <label className="block text-sm font-semibold" htmlFor={nameId}>
           Nombre
           <input
@@ -129,7 +152,7 @@ export function InventoryForm({
             <SelectField
               id={unitId}
               value={unit}
-              onValueChange={(value) => setUnit(value as QuantityUnit)}
+              onValueChange={changeUnit}
               options={unitOptions}
               className="mt-2"
             />
@@ -143,24 +166,6 @@ export function InventoryForm({
         />
 
         {error ? <ErrorBanner>{error}</ErrorBanner> : null}
-
-        <div className="sticky -bottom-5 z-10 -mx-5 -mb-5 flex gap-2 border-t border-[#dde1d8] bg-[#fbfaf6] px-5 py-4 sm:-bottom-6 sm:-mx-6 sm:-mb-6 sm:px-6 dark:border-white/10 dark:bg-[#182e26]">
-          <button
-            type="submit"
-            disabled={isPending}
-            className="order-2 inline-flex min-h-12 flex-1 items-center justify-center rounded-full bg-[#1d4f40] px-5 text-sm font-semibold text-white transition hover:bg-[#173f34] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 dark:ring-offset-[#182e26]"
-          >
-            {isPending ? "Guardando…" : isEditing ? "Guardar" : "Añadir"}
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={isPending}
-            className="order-1 inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-[#ccd5ca] px-5 text-sm font-semibold transition hover:bg-[#edf0e9] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:opacity-60 dark:border-white/15 dark:hover:bg-white/5"
-          >
-            Cancelar
-          </button>
-        </div>
       </form>
     </section>
   )

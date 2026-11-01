@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useCallback, useState, useTransition } from "react"
+import { DialogHeader } from "@/components/ui/dialog-header"
 import { ModalDialog } from "@/components/ui/modal-dialog"
 import {
   getWeeklyShoppingListSuggestionsAction,
@@ -183,26 +184,41 @@ export function ShoppingListPreview({
       <ModalDialog
         open={isOpen}
         ariaLabel="Vista previa de la compra"
-        size="xl"
-        scrollable={false}
         onDismiss={closePreview}
       >
-        <section className="flex h-[var(--dialog-available-height,calc(100dvh-2rem))] flex-col overflow-hidden rounded-[1.75rem] border border-[#d8d7bd] bg-[#eeeddc] p-4 text-[#303b2d] sm:p-5 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
-          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-            <header className="-mx-4 -mt-4 border-b border-[#d4d3b9] bg-[#eeeddc] px-4 pt-4 pb-4 sm:-mx-5 sm:-mt-5 sm:px-5 sm:pt-5 dark:border-white/10 dark:bg-[#2e382b]">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a75938] dark:text-[#e99a77]">
-                Compra de esta semana
+        <section className="flex h-full min-h-0 flex-col bg-[#eeeddc] text-[#303b2d] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
+          <DialogHeader
+            title="Vista previa de la compra"
+            onDismiss={closePreview}
+            cancelLabel="Cerrar"
+            cancelDisabled={isPending}
+            confirmLabel={isPending ? "Guardando ajustes…" : "Guardar"}
+            confirmDisabled={isPending || isLoading || items.length === 0}
+            onConfirm={prepareShoppingList}
+            pending={isPending}
+          />
+          <div className="shrink-0 px-4 empty:hidden">
+            {message ? (
+              <p
+                className={`text-sm font-semibold ${isError ? "text-[#a34435] dark:text-[#ffb4a4]" : "text-[#477052] dark:text-[#a9d6b4]"}`}
+                role={isError ? "alert" : "status"}
+              >
+                {message}{" "}
+                {!isError ? (
+                  <Link
+                    href="/shopping-list"
+                    className="underline underline-offset-2"
+                  >
+                    Abrir lista
+                  </Link>
+                ) : null}
               </p>
-              <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em]">
-                Ajusta inventario y compra
-              </h2>
-              <p className="mt-2 hidden max-w-2xl text-sm leading-6 text-[#69705b] sm:block dark:text-[#c0c7b5]">
-                La información se actualiza al abrir esta ventana. Revisa lo que
-                tienes en casa; también puedes ajustar manualmente cuánto
-                comprar.
-              </p>
-            </header>
-
+            ) : null}
+          </div>
+          <div className="dialog-content p-4 sm:p-6">
+            <p className="mb-3 text-sm text-[#69705b] dark:text-[#c0c7b5]">
+              Revisa lo que tienes en casa y ajusta cuánto comprar.
+            </p>
             {isLoading ? (
               <p
                 className="py-10 text-center text-sm font-semibold text-[#69705b] dark:text-[#c0c7b5]"
@@ -240,47 +256,6 @@ export function ShoppingListPreview({
               </p>
             )}
           </div>
-
-          <footer className="-mx-4 -mb-4 mt-5 border-t border-[#d4d3b9] bg-[#eeeddc] px-4 py-4 sm:-mx-5 sm:-mb-5 sm:px-5 dark:border-white/10 dark:bg-[#2e382b]">
-            {message ? (
-              <p
-                className={`text-sm font-semibold ${isError ? "text-[#a34435] dark:text-[#ffb4a4]" : "text-[#477052] dark:text-[#a9d6b4]"}`}
-                role={isError ? "alert" : "status"}
-              >
-                {message}{" "}
-                {!isError ? (
-                  <Link
-                    href="/shopping-list"
-                    className="underline underline-offset-2"
-                  >
-                    Abrir lista
-                  </Link>
-                ) : null}
-              </p>
-            ) : null}
-            <div
-              className={`flex gap-2 sm:justify-end ${message ? "mt-4" : ""}`}
-            >
-              <button
-                type="button"
-                onClick={closePreview}
-                disabled={isPending}
-                className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-[#c8cab1] px-5 text-sm font-semibold transition hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-[#74794f] disabled:opacity-60 sm:flex-none dark:border-white/15 dark:hover:bg-white/10"
-              >
-                Cerrar
-              </button>
-              {items.length > 0 ? (
-                <button
-                  type="button"
-                  onClick={prepareShoppingList}
-                  disabled={isPending || isLoading}
-                  className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full bg-[#a75938] px-5 text-sm font-semibold text-white transition hover:bg-[#8f482d] focus:outline-none focus:ring-2 focus:ring-[#a75938] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-65 sm:flex-none dark:ring-offset-[#2e382b]"
-                >
-                  {isPending ? "Guardando ajustes…" : "Guardar"}
-                </button>
-              ) : null}
-            </div>
-          </footer>
         </section>
       </ModalDialog>
     </>

@@ -1,6 +1,13 @@
 "use client"
 
-import { type FormEvent, useId, useState, useTransition } from "react"
+import {
+  type FormEvent,
+  useCallback,
+  useId,
+  useState,
+  useTransition,
+} from "react"
+import { DialogHeader } from "@/components/ui/dialog-header"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { QuantityInputStepper } from "@/components/ui/quantity-input-stepper"
 import { CatalogProductDialog } from "@/features/catalog/components/catalog-product-dialog"
@@ -22,6 +29,7 @@ export function ShoppingListForm({
   onCancel,
   onSaved,
 }: ShoppingListFormProps) {
+  const formId = useId()
   const productId = useId()
   const quantityId = useId()
   const [availableProducts, setAvailableProducts] = useState(products)
@@ -36,72 +44,101 @@ export function ShoppingListForm({
     (product) => product.id === selectedProductId
   )
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setError(null)
-    const form = event.currentTarget
-    const input = {
-      inventoryItemId: selectedProductId,
-      quantity: Number(quantity),
-    }
-
-    startTransition(async () => {
-      try {
-        const result = await createShoppingListItemAction(input)
-
-        if (!result.success) {
-          setError(result.message)
-          return
-        }
-
-        form.reset()
-        setSelectedProductId("")
-        setQuantity("1")
-        onSaved()
-      } catch {
-        setError("No se ha podido guardar el producto. Inténtalo de nuevo.")
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      setError(null)
+      const form = event.currentTarget
+      const input = {
+        inventoryItemId: selectedProductId,
+        quantity: Number(quantity),
       }
-    })
-  }
 
-  function handleProductCreated(
-    product: CatalogProductOption,
-    created: boolean
-  ) {
-    setAvailableProducts((current) =>
-      current.some((entry) => entry.id === product.id)
-        ? current
-        : [...current, product].toSorted((left, right) =>
-            left.name.localeCompare(right.name, "es", { sensitivity: "base" })
-          )
-    )
-    setSelectedProductId(product.id)
-    setNotice(
-      created
-        ? "Producto creado y seleccionado."
-        : "El producto ya existía y ha quedado seleccionado."
-    )
-    setIsProductDialogOpen(false)
-  }
+      startTransition(async () => {
+        try {
+          const result = await createShoppingListItemAction(input)
+
+          if (!result.success) {
+            setError(result.message)
+            return
+          }
+
+          form.reset()
+          setSelectedProductId("")
+          setQuantity("1")
+          onSaved()
+        } catch {
+          setError("No se ha podido guardar el producto. Inténtalo de nuevo.")
+        }
+      })
+    },
+    [selectedProductId, quantity, onSaved]
+  )
+
+  const handleProductCreated = useCallback(
+    (product: CatalogProductOption, created: boolean) => {
+      setAvailableProducts((current) =>
+        current.some((entry) => entry.id === product.id)
+          ? current
+          : [...current, product].toSorted((left, right) =>
+              left.name.localeCompare(right.name, "es", { sensitivity: "base" })
+            )
+      )
+      setSelectedProductId(product.id)
+      setNotice(
+        created
+          ? "Producto creado y seleccionado."
+          : "El producto ya existía y ha quedado seleccionado."
+      )
+      setIsProductDialogOpen(false)
+    },
+    []
+  )
+
+  const openProductDialog = useCallback(() => setIsProductDialogOpen(true), [])
+
+  const selectProduct = useCallback(
+    (productId: string) => {
+      setSelectedProductId(productId)
+      const selectedProduct = availableProducts.find(
+        (product) => product.id === productId
+      )
+      if (selectedProduct) {
+        setProductSearch(selectedProduct.name)
+      }
+      setNotice(null)
+    },
+    [availableProducts]
+  )
+
+  const closeProductDialog = useCallback(
+    () => setIsProductDialogOpen(false),
+    []
+  )
 
   return (
-    <section className="rounded-[1.75rem] border border-[#e6d8cb] bg-[#f8e7dd]/75 p-5 shadow-[0_18px_50px_rgba(91,57,40,0.08)] sm:p-6 dark:border-[#704735] dark:bg-[#412d24]/80">
-      <header className="sticky -top-5 z-10 -mx-5 -mt-5 border-b border-[#e6d8cb] bg-[#f8e7dd] px-5 pt-5 pb-4 sm:-top-6 sm:-mx-6 sm:-mt-6 sm:px-6 sm:pt-6 dark:border-[#704735] dark:bg-[#412d24]">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a75938] dark:text-[#efb89e]">
-          Apuntar producto
-        </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">
-          ¿Qué hace falta?
-        </h2>
-      </header>
+    <section className="flex h-full min-h-0 flex-col bg-[#f8e7dd] dark:bg-[#412d24]">
+      <DialogHeader
+        title="¿Qué hace falta?"
+        onDismiss={onCancel}
+        cancelDisabled={isPending}
+        confirmLabel={isPending ? "Guardando…" : "Añadir"}
+        confirmDisabled={isPending}
+        confirmForm={formId}
+        pending={isPending}
+      />
 
-      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+      <form
+        id={formId}
+        className="dialog-content space-y-4 p-4 sm:p-6"
+        onSubmit={handleSubmit}
+      >
         <div className="text-sm font-semibold">
           <div className="flex items-center justify-between gap-3">
             <label htmlFor={productId}>Producto</label>
             <button
               type="button"
-              onClick={() => setIsProductDialogOpen(true)}
+              onClick={openProductDialog}
               disabled={isPending}
               className="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-[#8e4d31] underline decoration-[#c98d72] underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#a75938] disabled:opacity-60 dark:text-[#efb89e]"
             >
@@ -114,16 +151,7 @@ export function ShoppingListForm({
             value={selectedProductId}
             initialSearch={productSearch}
             onSearchChange={setProductSearch}
-            onValueChange={(productId) => {
-              setSelectedProductId(productId)
-              const selectedProduct = availableProducts.find(
-                (product) => product.id === productId
-              )
-              if (selectedProduct) {
-                setProductSearch(selectedProduct.name)
-              }
-              setNotice(null)
-            }}
+            onValueChange={selectProduct}
             disabled={isPending}
             searchable
             showPurchasePlaces={false}
@@ -155,24 +183,6 @@ export function ShoppingListForm({
         ) : null}
 
         {error ? <ErrorBanner>{error}</ErrorBanner> : null}
-
-        <div className="sticky -bottom-5 z-10 -mx-5 -mb-5 flex gap-2 border-t border-[#e6d8cb] bg-[#f8e7dd] px-5 py-4 sm:-bottom-6 sm:-mx-6 sm:-mb-6 sm:px-6 dark:border-[#704735] dark:bg-[#412d24]">
-          <button
-            type="submit"
-            disabled={isPending}
-            className="order-2 inline-flex min-h-12 flex-1 items-center justify-center rounded-full bg-[#a75938] px-5 text-sm font-semibold text-white transition hover:bg-[#8e472c] focus:outline-none focus:ring-2 focus:ring-[#a75938] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 dark:ring-offset-[#412d24]"
-          >
-            {isPending ? "Guardando…" : "Añadir"}
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={isPending}
-            className="order-1 inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-[#d8c5b8] px-5 text-sm font-semibold transition hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-[#a75938] disabled:opacity-60 dark:border-white/15 dark:hover:bg-white/5"
-          >
-            Cancelar
-          </button>
-        </div>
       </form>
       <CatalogProductDialog
         key={
@@ -183,7 +193,7 @@ export function ShoppingListForm({
         open={isProductDialogOpen}
         initialName={productSearch.trim() || undefined}
         purchasePlaces={getPurchasePlaces(availableProducts)}
-        onDismiss={() => setIsProductDialogOpen(false)}
+        onDismiss={closeProductDialog}
         onCreated={handleProductCreated}
       />
     </section>
