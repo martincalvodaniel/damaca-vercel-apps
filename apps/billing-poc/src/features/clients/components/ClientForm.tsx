@@ -23,6 +23,7 @@ export default function ClientForm({
     address: client?.address || "",
     phone: client?.phone || "",
     email: client?.email || "",
+    instagram: client?.instagram || "",
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -198,6 +199,25 @@ export default function ClientForm({
             disabled={isSubmitting}
           />
         </div>
+      </div>
+
+      <div>
+        <label
+          htmlFor={`${id}-client-instagram`}
+          className="block text-sm font-medium text-zinc-900 dark:text-zinc-50"
+        >
+          Instagram
+        </label>
+        <input
+          type="text"
+          id={`${id}-client-instagram`}
+          name="instagram"
+          value={formData.instagram || ""}
+          onChange={handleChange}
+          placeholder="E.g., @username"
+          className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:ring-offset-zinc-900"
+          disabled={isSubmitting}
+        />
       </div>
 
       <div className="flex justify-end gap-2 pt-4">

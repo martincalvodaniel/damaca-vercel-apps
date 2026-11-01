@@ -7,12 +7,13 @@ export interface ClientFilter {
 }
 
 export type ClientUpdateData = Partial<
-  Omit<Client, "taxId" | "address" | "phone" | "email">
+  Omit<Client, "taxId" | "address" | "phone" | "email" | "instagram">
 > & {
   taxId?: string | null
   address?: string | null
   phone?: string | null
   email?: string | null
+  instagram?: string | null
 }
 
 export interface ClientRepository {

@@ -7,6 +7,13 @@ import {
   updateClientSchema,
 } from "./client-validator"
 
+function getParsedData<T>(
+  result: { success: true; data: T } | { success: false; error: unknown }
+): T {
+  if (!result.success) throw result.error
+  return result.data
+}
+
 describe("createClientSchema", () => {
   const validClient = {
     clientType: "company",
@@ -36,11 +43,9 @@ describe("createClientSchema", () => {
       clientType: "individual",
       name: "Jane Doe",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.taxId).toBeUndefined()
-      expect(result.data.address).toBeUndefined()
-    }
+    const data = getParsedData(result)
+    expect(data.taxId).toBeUndefined()
+    expect(data.address).toBeUndefined()
   })
 
   it("accepts taxId-only (without address)", () => {
@@ -49,11 +54,9 @@ describe("createClientSchema", () => {
       name: "Acme",
       taxId: "B123",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.taxId).toBe("B123")
-      expect(result.data.address).toBeUndefined()
-    }
+    const data = getParsedData(result)
+    expect(data.taxId).toBe("B123")
+    expect(data.address).toBeUndefined()
   })
 
   it("accepts address-only (without taxId)", () => {
@@ -62,11 +65,9 @@ describe("createClientSchema", () => {
       name: "Acme",
       address: "1 Main St",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.address).toBe("1 Main St")
-      expect(result.data.taxId).toBeUndefined()
-    }
+    const data = getParsedData(result)
+    expect(data.address).toBe("1 Main St")
+    expect(data.taxId).toBeUndefined()
   })
 
   it("normalises empty taxId after trim to undefined", () => {
@@ -74,10 +75,7 @@ describe("createClientSchema", () => {
       ...validClient,
       taxId: "   ",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.taxId).toBeUndefined()
-    }
+    expect(getParsedData(result).taxId).toBeUndefined()
   })
 
   it("rejects missing taxId only when name is also missing", () => {
@@ -101,10 +99,7 @@ describe("createClientSchema", () => {
       ...validClient,
       name: "  Acme Corp  ",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.name).toBe("Acme Corp")
-    }
+    expect(getParsedData(result).name).toBe("Acme Corp")
   })
 
   it("accepts optional phone and email", () => {
@@ -121,10 +116,7 @@ describe("createClientSchema", () => {
       ...validClient,
       phone: "   ",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.phone).toBeUndefined()
-    }
+    expect(getParsedData(result).phone).toBeUndefined()
   })
 
   it("normalises whitespace-only email to undefined", () => {
@@ -132,10 +124,21 @@ describe("createClientSchema", () => {
       ...validClient,
       email: "   ",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.email).toBeUndefined()
-    }
+    expect(getParsedData(result).email).toBeUndefined()
+  })
+
+  it("trims Instagram and normalises an empty value to undefined", () => {
+    const populated = createClientSchema.safeParse({
+      ...validClient,
+      instagram: "  @acme  ",
+    })
+    const empty = createClientSchema.safeParse({
+      ...validClient,
+      instagram: "   ",
+    })
+
+    expect(getParsedData(populated).instagram).toBe("@acme")
+    expect(getParsedData(empty).instagram).toBeUndefined()
   })
 
   it("trims phone and email", () => {
@@ -144,11 +147,9 @@ describe("createClientSchema", () => {
       phone: "  555-0100  ",
       email: "  info@acme.com  ",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.phone).toBe("555-0100")
-      expect(result.data.email).toBe("info@acme.com")
-    }
+    const data = getParsedData(result)
+    expect(data.phone).toBe("555-0100")
+    expect(data.email).toBe("info@acme.com")
   })
 })
 
@@ -182,10 +183,7 @@ describe("updateClientSchema", () => {
       name: "Acme",
       phone: "   ",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.phone).toBeUndefined()
-    }
+    expect(getParsedData(result).phone).toBeUndefined()
   })
 
   it("normalises whitespace-only email to undefined", () => {
@@ -194,10 +192,15 @@ describe("updateClientSchema", () => {
       name: "Acme",
       email: "   ",
     })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.email).toBeUndefined()
-    }
+    expect(getParsedData(result).email).toBeUndefined()
+  })
+
+  it("normalises whitespace-only Instagram to null to clear the value", () => {
+    const result = updateClientSchema.safeParse({
+      id: "abc123",
+      instagram: "   ",
+    })
+    expect(getParsedData(result).instagram).toBeNull()
   })
 })
 
@@ -216,19 +219,14 @@ describe("deleteClientSchema", () => {
 describe("clientQuerySchema", () => {
   it("defaults page and pageSize", () => {
     const result = clientQuerySchema.safeParse({})
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.page).toBe(1)
-      expect(result.data.pageSize).toBe(10)
-    }
+    const data = getParsedData(result)
+    expect(data.page).toBe(1)
+    expect(data.pageSize).toBe(10)
   })
 
   it("coerces string page to number", () => {
     const result = clientQuerySchema.safeParse({ page: "3" })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.page).toBe(3)
-    }
+    expect(getParsedData(result).page).toBe(3)
   })
 
   it("rejects page < 1", () => {
@@ -243,10 +241,7 @@ describe("clientQuerySchema", () => {
 
   it("accepts search query", () => {
     const result = clientQuerySchema.safeParse({ search: "acme" })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.search).toBe("acme")
-    }
+    expect(getParsedData(result).search).toBe("acme")
   })
 })
 
@@ -260,10 +255,7 @@ describe("clientIdsQuerySchema", () => {
 
   it("trims client IDs", () => {
     const result = clientIdsQuerySchema.safeParse({ ids: ["  client-1  "] })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.ids).toEqual(["client-1"])
-    }
+    expect(getParsedData(result).ids).toEqual(["client-1"])
   })
 
   it("rejects an empty list", () => {

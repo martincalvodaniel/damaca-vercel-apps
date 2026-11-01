@@ -36,6 +36,13 @@ export const createClientSchema = z.object({
       const trimmed = v?.trim()
       return trimmed ? trimmed : undefined
     }),
+  instagram: z
+    .string()
+    .optional()
+    .transform((v) => {
+      const trimmed = v?.trim()
+      return trimmed ? trimmed : undefined
+    }),
 })
 
 export const updateClientSchema = z
@@ -78,6 +85,14 @@ export const updateClientSchema = z
       .transform((v) => {
         const trimmed = v?.trim()
         return trimmed ? trimmed : undefined
+      }),
+    instagram: z
+      .string()
+      .optional()
+      .transform((v) => {
+        if (v === undefined) return undefined
+        const trimmed = v.trim()
+        return trimmed ? trimmed : null
       }),
   })
   .refine(

@@ -8,6 +8,7 @@ export interface Client {
   address?: string
   phone?: string
   email?: string
+  instagram?: string
   createdAt: Date
   updatedAt: Date
 }
@@ -19,6 +20,7 @@ export interface ClientFormData {
   address?: string
   phone?: string
   email?: string
+  instagram?: string
 }
 
 interface PaginationMeta {

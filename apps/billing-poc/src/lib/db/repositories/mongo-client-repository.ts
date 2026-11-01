@@ -24,6 +24,7 @@ function toDomain(doc: MongoClient): Client {
     address: doc.address,
     phone: doc.phone,
     email: doc.email,
+    instagram: doc.instagram,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
   }
@@ -101,6 +102,7 @@ export class MongoClientRepository implements ClientRepository {
       address: client.address,
       phone: client.phone,
       email: client.email,
+      instagram: client.instagram,
       createdAt: client.createdAt,
       updatedAt: client.updatedAt,
     })
@@ -120,6 +122,8 @@ export class MongoClientRepository implements ClientRepository {
     if (data.address !== undefined) builder.setOrUnset("address", data.address)
     if (data.phone !== undefined) builder.setOrUnset("phone", data.phone)
     if (data.email !== undefined) builder.setOrUnset("email", data.email)
+    if (data.instagram !== undefined)
+      builder.setOrUnset("instagram", data.instagram)
 
     const result = await col.updateOne({ _id: toObjectId(id) }, builder.build())
     return result.matchedCount > 0

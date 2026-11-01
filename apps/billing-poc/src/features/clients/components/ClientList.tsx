@@ -102,6 +102,9 @@ export default function ClientList({ clients }: ClientListProps) {
                   <th className="px-6 py-3 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                     Email
                   </th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                    Instagram
+                  </th>
                   <th />
                 </tr>
               </thead>

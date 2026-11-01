@@ -81,3 +81,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: franja sticky con fondo de página en ambos temas y padding superior/inferior permanente; contenido oculto al pasar por detrás, ancho de barra conservado y overlays por encima.
 - Validación: lint staged, tipos, suite y build de billing; revisión de estructura y capas.
 - Evidencia: [BILL-08](iteration-log.md#bill-08--márgenes-opacos-de-navegación).
+
+## BILL-09 — Instagram de clientes
+
+- Estado: `validated`.
+- Objetivo: añadir Instagram como campo opcional de Client, editable, persistido y visible en el listado.
+- Rutas: entidad y puerto de Client, schema, repositorio Mongo, formulario y tabla de clientes, pruebas y planificación de billing.
+- Dependencias: patrones actuales para campos opcionales de Client; sin nuevas dependencias ni migración.
+- Aceptación: creación/edición aceptan y recortan Instagram, un valor vacío lo omite y permite borrar uno existente; Mongo no guarda nullish; los clientes existentes siguen cargando; el formulario y la tabla muestran el campo.
+- Validación: pruebas de esquema pertinentes, type-check, suite de billing, lint incremental y diff check.
+- Evidencia: [BILL-09](iteration-log.md#bill-09--instagram-de-clientes).

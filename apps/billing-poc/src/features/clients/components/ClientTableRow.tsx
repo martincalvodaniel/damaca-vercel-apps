@@ -88,6 +88,9 @@ export default function ClientTableRow({
           "—"
         )}
       </td>
+      <td className="px-6 py-4 text-sm text-zinc-600 dark:text-zinc-400">
+        {client.instagram || "—"}
+      </td>
       <td className="px-6 py-4 text-right">
         <IconButton
           variant="danger"
