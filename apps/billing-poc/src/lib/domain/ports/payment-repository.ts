@@ -9,7 +9,8 @@ export interface PaymentRepository {
   findAll(filter: PaymentFilter): Promise<Payment[]>
   findAllWithGeneratedInvoices(): Promise<Payment[]>
   findById(id: string): Promise<Payment | null>
-  create(payment: NewPayment): Promise<string>
+  /** A reserved ID makes retryable origin workflows idempotent. */
+  create(payment: NewPayment, id?: string): Promise<string>
   update(id: string, data: Partial<Payment>): Promise<boolean>
   delete(id: string): Promise<boolean>
   findDistinctTags(type?: string): Promise<string[]>

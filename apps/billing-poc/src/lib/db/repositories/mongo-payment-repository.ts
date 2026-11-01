@@ -67,7 +67,7 @@ export class MongoPaymentRepository implements PaymentRepository {
     return doc ? toDomain(doc) : null
   }
 
-  async create(payment: NewPayment): Promise<string> {
+  async create(payment: NewPayment, id?: string): Promise<string> {
     const col = await this.collection()
     const tag = payment.tag?.trim() ? payment.tag.trim() : undefined
     const deliveryNoteRef = payment.deliveryNoteRef?.trim()
@@ -87,6 +87,7 @@ export class MongoPaymentRepository implements PaymentRepository {
         ? payment.surchargeAmount
         : undefined
     const doc = omitNullish({
+      _id: id ? toObjectId(id) : undefined,
       type: payment.type,
       date: payment.date,
       tag,

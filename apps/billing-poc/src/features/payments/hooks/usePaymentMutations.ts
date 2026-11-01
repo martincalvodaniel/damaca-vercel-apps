@@ -2,6 +2,8 @@
 
 import { useSWRConfig } from "swr"
 import useSWRMutation from "swr/mutation"
+import { isCommissionByPaymentKey } from "@/features/commissions/hooks/useCommissionByPayment"
+import { isCommissionsKey } from "@/features/commissions/hooks/useCommissions"
 import { isInvoiceCountersKey } from "@/features/invoices/hooks/useInvoiceCounters"
 import { FetchError } from "@/lib/client/swr-fetcher"
 import type {
@@ -132,6 +134,8 @@ function useInvalidatePayments() {
       mutate(isPaymentsKey),
       mutate(isPaymentKey),
       mutate(isInvoiceCountersKey),
+      mutate(isCommissionsKey, undefined, { revalidate: true }),
+      mutate(isCommissionByPaymentKey, undefined, { revalidate: true }),
     ])
 }
 

@@ -2,15 +2,17 @@
 
 ## Estado vigente
 
-No hay requisitos de producto ni decisiones adicionales registradas. No inferir roadmap desde README, código o aplicaciones vecinas.
+Commissions gestiona encargos con título obligatorio, cliente/descripción/fecha límite opcionales, conceptos libres o de productos e IVA (21 % inicial). Estado de pago manual 0/50/100 %, independiente del pago generado. Listado por fecha límite ascendente, sin fecha al final y desempate por creación descendente e identificador.
+
+Un encargo genera un solo ingreso completo con etiqueta `commission`, sin modificar stock. Navegación encargo ↔ pago. Los cambios de cliente, conceptos o IVA sincronizan el pago sin factura generada; los pagos facturados se conservan y se avisa. Eliminar el pago limpia el vínculo; eliminar el encargo conserva el pago. La generación reserva un identificador de forma atómica y reutilizable; mientras está pendiente se permite reintentar pero no editar/eliminar el encargo, evitando carreras y pagos huérfanos. No se puede vaciar un encargo con pago vinculado.
 
 ## Límites aceptados
 
-Conservar el comportamiento, arquitectura, seguridad, datos y límites de despliegue documentados en [AGENTS.md](../AGENTS.md). El [workflow común](../../../plan/workflow.md) define el proceso de entrega y el contrato documental.
+Sin anticipos, pagos múltiples, reservas de stock ni estados de producción/entrega. Conservar arquitectura, seguridad y despliegue de [AGENTS.md](../AGENTS.md). El [workflow común](../../../plan/workflow.md) rige la entrega. Términos: [glosario](../GLOSSARY.md).
 
 ## Dudas abiertas
 
-El alcance futuro requiere una petición de producto; documentar objetivos y decisiones antes de implementación no trivial.
+Ninguna para BILL-01.
 
 ## Application icons
 

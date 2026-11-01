@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog"
@@ -6,6 +7,7 @@ import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import { IconButton } from "@/components/ui/IconButton"
 import { TrashIcon } from "@/components/ui/icons/TrashIcon"
 import { Modal } from "@/components/ui/Modal"
+import { useCommissionByPayment } from "@/features/commissions/hooks/useCommissionByPayment"
 import { formatEventDateTime } from "@/features/events/components/eventsUi"
 import { useEventByPayment } from "@/features/events/hooks/useEventByPayment"
 import type { Payment, PaymentFormData } from "@/lib/domain/entities/payment"
@@ -86,6 +88,9 @@ export default function PaymentDetailModal({
   const isDuplicate = mode === "duplicate"
   const paymentId = payment._id ?? null
   const { event: linkedEvent } = useEventByPayment(paymentId)
+  const { commission: linkedCommission } = useCommissionByPayment(
+    isDuplicate ? null : paymentId
+  )
   const initialFormData: PaymentFormData = isDuplicate
     ? buildDuplicateSeed(payment)
     : buildEditFormData(payment)
@@ -259,6 +264,16 @@ export default function PaymentDetailModal({
                 {formatEventDateTime(linkedEvent)}
               </button>
             </div>
+          ) : null}
+
+          {!isDuplicate && linkedCommission ? (
+            <Link
+              href={`/commissions?commissionId=${encodeURIComponent(linkedCommission.id)}`}
+              onClick={onClose}
+              className="block rounded text-sm text-blue-700 underline focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-blue-300"
+            >
+              Linked commission: {linkedCommission.title}
+            </Link>
           ) : null}
 
           <PaymentFormFields

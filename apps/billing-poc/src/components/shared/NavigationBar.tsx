@@ -22,6 +22,11 @@ const NAV_ITEMS: readonly NavItem[] = [
     matches: (p) => p === "/clients",
   },
   {
+    href: "/commissions",
+    label: "Commissions",
+    matches: (p) => p === "/commissions",
+  },
+  {
     href: "/events",
     label: "Events",
     matches: (p) => p === "/events",
@@ -90,7 +95,7 @@ export default function NavigationBar({ subtitle }: NavigationBarProps) {
         </div>
 
         {/* Desktop nav links */}
-        <div className="hidden items-center gap-2 sm:flex">
+        <div className="hidden items-center gap-2 xl:flex">
           {NAV_ITEMS.map((item) => {
             const isActive = item.matches(pathname)
             return (
@@ -133,7 +138,7 @@ export default function NavigationBar({ subtitle }: NavigationBarProps) {
           type="button"
           onClick={handleMenuOpenChange}
           aria-label="Open navigation menu"
-          className="min-h-11 min-w-11 rounded-md p-2 text-zinc-700 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:hidden dark:text-zinc-200 dark:hover:bg-zinc-800"
+          className="min-h-11 min-w-11 rounded-md p-2 text-zinc-700 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 xl:hidden dark:text-zinc-200 dark:hover:bg-zinc-800"
         >
           <svg
             className="h-6 w-6"

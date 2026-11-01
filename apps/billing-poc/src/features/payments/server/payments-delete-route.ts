@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { requireAuth } from "@/lib/auth/require-auth"
+import { MongoCommissionRepository } from "@/lib/db/repositories/mongo-commission-repository"
 import { MongoEventRepository } from "@/lib/db/repositories/mongo-event-repository"
 import { MongoPaymentRepository } from "@/lib/db/repositories/mongo-payment-repository"
 import { unlinkPaymentFromEvents } from "@/lib/domain/services/event-payment-service"
@@ -8,6 +9,7 @@ import { deletePaymentSchema } from "@/schemas/payment-validator"
 
 const payments = new MongoPaymentRepository()
 const events = new MongoEventRepository()
+const commissions = new MongoCommissionRepository()
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -24,6 +26,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const deleted = await payments.delete(parsed.data.id)
+    await commissions.unlinkPayment(parsed.data.id)
     if (!deleted) {
       return NextResponse.json({ error: "Payment not found" }, { status: 404 })
     }

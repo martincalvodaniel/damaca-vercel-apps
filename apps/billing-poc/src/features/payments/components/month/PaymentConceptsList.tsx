@@ -8,12 +8,13 @@ import type {
 } from "@/lib/domain/entities/payment"
 
 interface PaymentConceptsListProps {
-  formData: PaymentFormData
+  formData: Pick<PaymentFormData, "concepts">
   onChangeField: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     conceptIndex?: number
   ) => void
   onAddConcept: () => void
+  allowEmpty?: boolean
   onRemoveConcept: (index: number) => void
 }
 export default function PaymentConceptsList({
@@ -21,6 +22,7 @@ export default function PaymentConceptsList({
   onChangeField,
   onAddConcept,
   onRemoveConcept,
+  allowEmpty = false,
 }: PaymentConceptsListProps) {
   const id = useId()
   return (
@@ -32,7 +34,8 @@ export default function PaymentConceptsList({
         <button
           type="button"
           onClick={onAddConcept}
-          className="rounded-md bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+          aria-label="Add concept"
+          className="rounded-md bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-900 hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
         >
           +
         </button>
@@ -45,7 +48,7 @@ export default function PaymentConceptsList({
           idPrefix={id}
           concept={concept}
           index={index}
-          removable={formData.concepts.length > 1}
+          removable={allowEmpty || formData.concepts.length > 1}
           onChangeField={onChangeField}
           onRemove={onRemoveConcept}
         />
@@ -107,7 +110,7 @@ function PaymentConceptRow({
         id={`${idPrefix}-conceptAmount-${index}`}
         name="conceptAmount"
         label="Amount (€)"
-        value={String(concept.amount || "")}
+        value={Number.isFinite(concept.amount) ? String(concept.amount) : ""}
         onValueChange={handleAmountChange}
         placeholder="0.00"
         step={5}
@@ -120,7 +123,9 @@ function PaymentConceptRow({
         id={`${idPrefix}-conceptQuantity-${index}`}
         name="conceptQuantity"
         label="Quantity"
-        value={String(concept.quantity ?? 1)}
+        value={
+          Number.isFinite(concept.quantity) ? String(concept.quantity) : ""
+        }
         onValueChange={handleQuantityChange}
         placeholder="1"
         step={1}
@@ -132,7 +137,7 @@ function PaymentConceptRow({
         <button
           type="button"
           onClick={handleRemove}
-          className="absolute right-2 top-2 flex h-5 w-5 flex-shrink-0 items-center justify-center text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
+          className="absolute right-2 top-2 flex h-5 w-5 flex-shrink-0 items-center justify-center text-zinc-400 hover:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-zinc-500 dark:hover:text-zinc-300"
           aria-label="Remove component"
         >
           <svg

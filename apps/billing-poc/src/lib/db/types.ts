@@ -15,6 +15,7 @@
 import type { ObjectId } from "mongodb"
 import type { Absence } from "@/lib/domain/entities/absence"
 import type { Client } from "@/lib/domain/entities/client"
+import type { Commission } from "@/lib/domain/entities/commission"
 import type { Event, EventAttendee } from "@/lib/domain/entities/event"
 import type { InvoiceCounter } from "@/lib/domain/entities/invoice"
 import type { Payment } from "@/lib/domain/entities/payment"
@@ -63,4 +64,18 @@ export type MongoEventAttendee = Omit<
 export type MongoEvent = Omit<Event, "_id" | "attendees"> & {
   _id?: ObjectId
   attendees: MongoEventAttendee[]
+}
+
+export type MongoCommission = Omit<
+  Commission,
+  "_id" | "clientId" | "paymentId" | "paymentGeneration"
+> & {
+  _id?: ObjectId
+  clientId?: ObjectId
+  paymentId?: ObjectId
+  paymentGeneration?: {
+    paymentId: ObjectId
+    date: string
+    paymentMethod: NonNullable<Commission["paymentGeneration"]>["paymentMethod"]
+  }
 }
