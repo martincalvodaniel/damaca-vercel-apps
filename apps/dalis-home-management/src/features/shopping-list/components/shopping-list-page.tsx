@@ -26,7 +26,7 @@ export function ShoppingListPage({ items, products }: ShoppingListPageProps) {
     <main className="min-h-screen bg-[#f5f4ee] px-4 py-5 text-[#17352b] sm:px-8 sm:py-8 dark:bg-[#10221c] dark:text-[#f4f1e7]">
       <div className="mx-auto w-full max-w-6xl">
         <header className="flex flex-col gap-3 border-b border-[#d9ded3] pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-5 sm:pb-2 dark:border-white/10">
-          <div className="sm:sr-only">
+          <div className="hidden sm:block">
             <p className="hidden text-xs font-bold uppercase tracking-[0.2em] text-[#c36d49] sm:block">
               Nuestra próxima compra
             </p>

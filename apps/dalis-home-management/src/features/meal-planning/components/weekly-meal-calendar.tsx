@@ -121,17 +121,14 @@ export function WeeklyMealCalendar({
 
   return (
     <div>
-      <div className="mb-3 flex min-h-5 flex-col items-start gap-1.5 px-1 text-xs leading-5 text-[#68776e] sm:flex-row sm:items-center sm:justify-between sm:gap-4 dark:text-[#afbbb3]">
-        <p className="min-w-0">
-          Arrastra desde el asa ⠿ para mover o intercambiar platos, o usa los
-          selectores.
+      {isPending ? (
+        <p
+          className="mb-2 px-1 text-xs font-semibold text-[#c36d49]"
+          role="status"
+        >
+          Moviendo…
         </p>
-        {isPending ? (
-          <p className="shrink-0 font-semibold text-[#c36d49]" role="status">
-            Moviendo…
-          </p>
-        ) : null}
-      </div>
+      ) : null}
       {error ? (
         <p
           className="mb-3 rounded-xl bg-[#f9e5df] px-3 py-2 text-sm font-medium text-[#a34435] dark:bg-[#4b2924] dark:text-[#ffb4a4]"

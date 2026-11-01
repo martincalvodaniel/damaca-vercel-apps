@@ -90,7 +90,7 @@ export function InventoryList({
   return (
     <section aria-labelledby={listTitleId}>
       <div className="flex flex-col gap-2 xl:flex-row xl:items-end xl:justify-between">
-        <div className="sr-only">
+        <div className="hidden sm:block">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7a8a81] dark:text-[#9baaa1]">
             En casa
           </p>

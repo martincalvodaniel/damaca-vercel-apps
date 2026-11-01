@@ -48,3 +48,17 @@ No hay entregas de producto registradas en este ámbito. Añadir evidencia obser
 - `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto sobre la versión final. Se utilizó Webpack por la limitación de puertos de Turbopack acreditada en HM-02, sin cambiar configuración. Una repetición del build iniciada antes de terminar la anterior devolvió código 1; se repitió secuencialmente con éxito.
 - Referencia remota previa a publicación: `d54d01a6ff23bbc1e3a823420c5d8f4e7db5ca3d`, igual a la base local. Revisados diff, alcance y archivos: solo esta app, sin credenciales ni cambios ajenos. La coincidencia del commit publicado se verifica al cierre.
 - Validación final de preparación: `bun run lint --staged` comprobó 15 archivos sin hallazgos; `git diff --cached --check` correcto.
+
+## HM-04 — Corregir visibilidad responsive de títulos
+
+- Inicio: 2026-11-01. Rama `int`, árbol limpio. Capacidad inicial: 83% de 5h y 91% de 7d. Estimación conservadora inferior a 4 y 1 puntos; respeta reservas.
+- Alcance y aceptación: [HM-04](iterations.md#hm-04--corregir-visibilidad-responsive-de-títulos).
+- Corrección de la interpretación anterior: el usuario confirma títulos visibles en escritorio y ocultos en móvil.
+- Invertida la visibilidad responsive de cabeceras: títulos y presentación visibles desde `sm` (640px), ocultos por debajo. Restauradas las cabeceras de las tres listas en escritorio. Conservados rango semanal, botones compactos, contador de vista previa y buscadores.
+- `bun run type-check --filter=@damaca/dalis-home-management`: correcto. `bun run test --filter=@damaca/dalis-home-management`: 101 tests correctos, 0 fallos. Biome de los siete TSX modificados y `git diff --check`: correctos.
+- Chrome sobre las cuatro páginas con datos ficticios y acciones aisladas: títulos ocultos en 320/390px y visibles en 768/1440px; buscadores a 8px del divisor en móvil; controles semanales en una fila, vista previa compacta con contador y diálogo funcional, sin desbordamiento ni errores. Captura móvil inspeccionada. Sin acceso autenticado ni escrituras sobre datos reales.
+- Incorporadas las dos indicaciones posteriores del usuario: eliminado el texto sobre arrastrar y su contenedor vacío; se conserva el estado «Moviendo…». «Vaciar semana» se renderiza siempre y usa `disabled` cuando `slots.length === 0`, además del estado de guardado.
+- Repetidas comprobaciones de tipos y los 101 tests tras estos ajustes: correctas. Biome de los nueve TSX modificados: sin hallazgos.
+- Repetida la prueba de Chrome sobre la versión final: ausencia del texto de ayuda y botón de vaciado visible y deshabilitado con semana vacía; resto de comprobaciones responsive correctas.
+- `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto sobre la versión final, sin cambiar configuración. `bun run lint --staged`: 12 archivos sin hallazgos; enlaces locales de planificación y `git diff --cached --check`: correctos.
+- Capacidad antes del cierre: 80% de 5h y 90% de 7d. Revisados diff y alcance: sin credenciales ni cambios ajenos. Base remota de `int` comprobada: `d48c7dc298f9c841c14ace8fa3a1d886558b6086`, igual a la base local; la coincidencia del commit publicado se verifica al cierre.

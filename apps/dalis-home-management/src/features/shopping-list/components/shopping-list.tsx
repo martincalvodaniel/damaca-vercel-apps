@@ -115,7 +115,7 @@ export function ShoppingList({
   return (
     <section aria-labelledby={titleId}>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div className="sr-only">
+        <div className="hidden sm:block">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7a8a81] dark:text-[#9baaa1]">
             Por comprar
           </p>

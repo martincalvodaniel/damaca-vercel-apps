@@ -52,11 +52,13 @@ export function MealPlanPage({
         <header className="border-b border-[#d9ded3] pb-4 sm:pb-2 dark:border-white/10">
           <div className="flex flex-col gap-3 sm:gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="sr-only">Planificación de casa</p>
-              <h1 className="mt-2 text-2xl font-semibold tracking-[-0.05em] sm:sr-only">
+              <p className="hidden text-xs font-bold uppercase tracking-[0.2em] text-[#c36d49] sm:block">
+                Planificación de casa
+              </p>
+              <h1 className="mt-2 hidden text-2xl font-semibold tracking-[-0.05em] sm:block sm:text-5xl">
                 Menú semanal
               </h1>
-              <p className="mt-1 text-xs text-[#63736a] sm:mt-0 sm:text-base dark:text-[#b4c0b8]">
+              <p className="mt-1 text-xs text-[#63736a] sm:mt-3 sm:text-base dark:text-[#b4c0b8]">
                 {formatWeekRange(weekStart)} · {slots.length} de 14 comidas
                 planificadas
               </p>
@@ -88,9 +90,10 @@ export function MealPlanPage({
                   <span aria-hidden="true">→</span>
                 </Link>
               </nav>
-              {slots.length > 0 ? (
-                <ClearWeekButton weekStart={weekStart} />
-              ) : null}
+              <ClearWeekButton
+                weekStart={weekStart}
+                disabled={slots.length === 0}
+              />
             </div>
           </div>
         </header>

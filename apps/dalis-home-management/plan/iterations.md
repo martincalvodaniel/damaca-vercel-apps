@@ -31,3 +31,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: separación superior de 8px en las tres listas; vista previa en una fila con contador numérico a la derecha del título; selector y vaciado de semana en la misma fila también en móvil, sin desbordamiento; ocultar títulos y textos de presentación redundantes en escritorio, conservar títulos móviles y rango semanal.
 - Validación prevista: Biome, tipos, tests, build Webpack y comprobación visual aislada de disposición responsive.
 - Evidencia: [HM-03](iteration-log.md#hm-03--cabeceras-y-vista-previa-compactas).
+
+## HM-04 — Corregir visibilidad responsive de títulos
+
+- Estado: `validated`.
+- Objetivo: conservar títulos en escritorio y ocultarlos en móvil según la corrección explícita del usuario.
+- Rutas: páginas de inventario, compra, platos y menú; cabeceras de las tres listas, calendario y botón de vaciado semanal; `plan/`.
+- Dependencias: disposición compacta de HM-03.
+- Aceptación: títulos y presentación visibles desde 640px y ocultos por debajo; conservar buscadores, contador, rango semanal y controles compactos; eliminar el texto de ayuda sobre arrastrar; mantener «Vaciar semana» visible y deshabilitado cuando no hay comidas planificadas.
+- Validación prevista: Biome, tipos, tests, build Webpack y verificación responsive en Chrome.
+- Evidencia: [HM-04](iteration-log.md#hm-04--corregir-visibilidad-responsive-de-títulos).

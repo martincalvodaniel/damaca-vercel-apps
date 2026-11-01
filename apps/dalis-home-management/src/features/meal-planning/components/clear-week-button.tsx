@@ -7,9 +7,13 @@ import { clearWeeklyMealPlanAction } from "@/features/meal-planning/actions"
 
 interface ClearWeekButtonProps {
   weekStart: string
+  disabled?: boolean
 }
 
-export function ClearWeekButton({ weekStart }: ClearWeekButtonProps) {
+export function ClearWeekButton({
+  weekStart,
+  disabled = false,
+}: ClearWeekButtonProps) {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -42,8 +46,8 @@ export function ClearWeekButton({ weekStart }: ClearWeekButtonProps) {
       <button
         type="button"
         onClick={openDialog}
-        disabled={isPending}
-        className="inline-flex min-h-9 whitespace-nowrap items-center justify-center rounded-lg border border-[#d8b8ad] bg-white/70 px-3 text-xs font-semibold text-[#9a4d39] transition hover:bg-[#fff3ef] focus:outline-none focus:ring-2 focus:ring-[#a75938] disabled:cursor-wait disabled:opacity-65 sm:rounded-xl sm:px-4 sm:text-sm dark:border-[#754c40] dark:bg-white/5 dark:text-[#f2b7a5] dark:hover:bg-[#4b3027]"
+        disabled={disabled || isPending}
+        className="inline-flex min-h-9 whitespace-nowrap items-center justify-center rounded-lg border border-[#d8b8ad] bg-white/70 px-3 text-xs font-semibold text-[#9a4d39] transition hover:bg-[#fff3ef] focus:outline-none focus:ring-2 focus:ring-[#a75938] disabled:cursor-not-allowed disabled:opacity-65 sm:rounded-xl sm:px-4 sm:text-sm dark:border-[#754c40] dark:bg-white/5 dark:text-[#f2b7a5] dark:hover:bg-[#4b3027]"
       >
         {isPending ? "Vaciando…" : "Vaciar semana"}
       </button>
