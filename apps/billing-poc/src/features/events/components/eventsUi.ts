@@ -3,11 +3,11 @@ import { formatDate } from "@/lib/utils/formatters"
 
 /**
  * Format an event's date/time for display. Handles partial dates:
- *  - full year+month+day → "Apr 29, 2026"
- *  - year+month         → "April 2026"
+ *  - full year+month+day → "29 abr 2026"
+ *  - year+month         → "abril de 2026"
  *  - year only          → "2026"
  *  - hour (with optional minute) appended as "HH:MM"
- *  - nothing             → "No date"
+ *  - nothing             → "Sin fecha"
  */
 export function formatEventDateTime(
   event: Pick<
@@ -27,11 +27,13 @@ export function formatEventDateTime(
       day: undefined,
     })
     const weekday = formatEventWeekday(event)
-    const recurringLabel = weekday ? `${weekday}s` : ""
+    const recurringLabel = weekday
+      ? `los ${weekday.endsWith("s") ? weekday : `${weekday}s`}`
+      : ""
     const timePart = formatEventTime(event) ?? ""
 
     if (monthYear === "" && recurringLabel === "" && timePart === "") {
-      return "No date"
+      return "Sin fecha"
     }
 
     const base = [monthYear, recurringLabel].filter(Boolean).join(" ")
@@ -41,7 +43,8 @@ export function formatEventDateTime(
   const datePart = formatEventDate(event)
   const weekdayPart = formatEventWeekday(event)
   const timePart = formatEventTime(event) ?? ""
-  if (datePart === "" && weekdayPart === "" && timePart === "") return "No date"
+  if (datePart === "" && weekdayPart === "" && timePart === "")
+    return "Sin fecha"
 
   const baseDate =
     weekdayPart && datePart

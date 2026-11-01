@@ -22,16 +22,13 @@ describe("formatCurrency", () => {
 describe("formatDate", () => {
   it("formats ISO date string", () => {
     const result = formatDate("2024-03-15")
-    expect(result).toContain("Mar")
-    expect(result).toContain("15")
-    expect(result).toContain("2024")
+    expect(result).toBe("15 mar 2024")
   })
 })
 
 describe("formatMonthYear", () => {
   it("formats date to month and year", () => {
     const result = formatMonthYear(new Date(2024, 2, 1)) // March 2024
-    expect(result).toContain("March")
-    expect(result).toContain("2024")
+    expect(result).toBe("marzo de 2024")
   })
 })

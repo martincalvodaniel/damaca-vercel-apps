@@ -112,7 +112,7 @@ export function buildDayAriaLabel(date: Date, count: number): string {
     month: "long",
     day: "numeric",
   })
-  if (count === 0) return `${dateLabel}, no events`
-  const noun = count === 1 ? "event" : "events"
+  if (count === 0) return `${dateLabel}, sin eventos`
+  const noun = count === 1 ? "evento" : "eventos"
   return `${dateLabel}, ${count} ${noun}`
 }

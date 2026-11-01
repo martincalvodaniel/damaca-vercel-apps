@@ -1,6 +1,6 @@
 # Registro de entregas
 
-Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md).
+Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md).
 
 ## BILL-10 — Copiar Instagram desde el listado
 
@@ -20,13 +20,6 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md).
 
 
 
-## BILL-03 — Alineación de acciones en tarjetas
-
-- Inicio: 2026-11-01, rama `int`, base `e56ef56`, árbol limpio; capacidad 41 % en 5 h y 71 % en 7 d, suficiente para este ajuste y su cierre.
-- Aceptación: [BILL-03](iterations.md#bill-03--alineación-de-acciones-en-tarjetas).
-- Implementado: cabecera flex sin salto de línea para título e iconos de edición/borrado; grupo de importe y acciones de pago dentro del mismo `dd` flex. Se conservan los componentes, etiquetas accesibles, bloqueo durante generación y callbacks existentes. El título puede ocupar varias líneas sin desplazar los iconos a otra fila; los metadatos completos pueden distribuirse en varias filas en móvil.
-- Validación: Biome del componente correcto; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 966 pruebas, 0 fallos; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto. Revisión estática de grupos flex y anchos móviles; no se han añadido pruebas que reproduzcan el JSX ni repetido la prueba funcional de pagos. `bun run lint --staged`: 4 archivos, sin hallazgos; `git diff --cached --check`: correcto.
-- Commit/push y SHA remoto se verifican al cerrar y se comunican en el cierre; este registro no anticipa publicación.
 
 ## BILL-04 — Prepaid y agrupación por pago
 
@@ -98,3 +91,13 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md).
 - Navegador real, tema oscuro: creación de plantilla y cocción, búsqueda/selección, pago por tarjeta desde el modal, enlace inverso, edición/apertura del pago, alta con fecha/descripción y pago en efectivo desde listado. Recarga confirma plantillas y pagadas cerradas por defecto. Verificado viewport 390×844 sin desbordamiento horizontal (`scrollWidth = clientWidth = 390`) y escritorio 1440×900. Evidencia: [listado y plantillas](evidence/firings-desktop.jpg), [formulario móvil](evidence/firings-form-mobile.jpg).
 - Comprobación focalizada final: `bun run --filter @damaca/billing-poc test src/features/commissions src/features/firings src/lib/domain/services/commission-service.test.ts src/lib/domain/entities/commission.test.ts src/lib/db/repositories/mongo-commission-repository-helpers.test.ts src/lib/db/repositories/ensure-indexes.test.ts src/schemas/commission-validator.test.ts src/schemas/firing-template-validator.test.ts`: 41 pruebas, 0 fallos. Enlaces locales de planificación y `git diff --check` correctos. Base temporal eliminada y procesos de prueba detenidos.
 - Cierre técnico: `bun run lint --staged` comprobó 40 archivos sin hallazgos; `git diff --cached --check` correcto. Durante implementación se corrigieron la inferencia genérica de SWRMutation y los avisos Biome; `turbo run start` no está definido y la instancia se arrancó mediante el filtro Bun desde raíz. La conexión loopback necesitó permisos fuera del sandbox. Capacidad antes de publicar: 78 % restante en 5 h y 63 % en 7 d. Commit, push a `origin/int` y SHA remoto se verifican al cerrar; este registro no anticipa publicación.
+
+## BILL-13 — Reparar las pruebas de localización
+
+- Inicio: 2026-11-01, 21:26 UTC, rama `int`, base `115a8b2`, árbol limpio y sin commits pendientes de publicar. Capacidad inicial: 77 % restante en 5 h y 62 % en 7 d; margen estimado suficiente para reparación, validación y publicación conservando reservas.
+- Aceptación: [BILL-13](iterations.md#bill-13--reparar-las-pruebas-de-localización).
+- Reproducción: `bun run test --filter=@damaca/billing-poc`: 977 pruebas, 963 correctas y 14 fallidas (2,51 s). Los asserts fallidos muestran expectativas en inglés frente a fechas/etiquetas españolas. La revisión identifica además el sufijo inglés de plural añadido a días españoles (`martess`) y textos accesibles que mezclan ambos idiomas. La señal es directa y determinista; no se necesita instrumentación adicional ni bisección.
+- Regresión antes del arreglo: las expectativas de salida españolas y los siete casos de días recurrentes se ejecutaron contra la implementación anterior: 68 pruebas, 55 correctas y 13 fallidas. El fallo exacto de pluralización y los textos accesibles mixtos quedan cubiertos por estas pruebas.
+- Implementado: expectativas de PaymentActions y formatos de fecha alineadas con español, conservando controles sobre botones deshabilitados, métodos reservados, apertura e importes. Fechas recurrentes con «los» y plurales correctos para los siete días; fallback «Sin fecha». Calendarios de ausencias/eventos con anuncios completos en español, incluyendo singular/plural de ausencia, recuperación y evento. Sin instrumentación temporal ni nuevas dependencias.
+- Validación final: `bun run test --filter=@damaca/billing-poc`: 984 pruebas correctas, 0 fallos, 95 archivos y 1761 assertions (564 ms). `bun run type-check --filter=@damaca/billing-poc`: correcto. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (14,425 s). La caché remota de Turbo no estaba disponible; comprobaciones locales completadas. Sin prueba de navegador: se verifican las cadenas exactas desde los helpers reales y el render estático de PaymentActions.
+- Cierre técnico: `bun run lint --staged` comprobó 12 archivos sin hallazgos; `git diff --cached --check` y enlaces locales correctos. Los 14 fallos originales quedan resueltos y hay siete casos adicionales de regresión. Publicación y SHA remoto se verifican al cerrar.

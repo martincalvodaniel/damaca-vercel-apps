@@ -18,7 +18,7 @@ Sin anticipos, pagos múltiples, reservas de stock ni estados de producción/ent
 
 ## Dudas abiertas
 
-Ninguna para BILL-12.
+Ninguna para BILL-13.
 
 ## Application icons
 
@@ -29,3 +29,7 @@ Browser and home-screen icons use local SVG sources, a 16/32/48-pixel ICO fallba
 Cocciones (`/firings`) comparte los patrones de Encargos con datos separados: título, cliente/fecha límite/descripción opcionales, conceptos e IVA (21 % inicial). No muestra anticipo. Plantillas independientes con nombre y precio en EUR (IVA incluido), gestionadas en una sección al inicio cerrada por defecto. Los conceptos copian los valores de la plantilla sin referencia a productos ni efectos de stock. Editar/eliminar plantillas no modifica cocciones previas.
 
 La conversión genera un pago completo único con etiqueta `Cocción`, con las mismas garantías de reintento, sincronización y protección de facturas de Encargos. Acciones compartidas en listado y modal; el modal guarda antes de convertir. Alcance y aceptación: [BILL-12](iterations.md#bill-12--cocciones-y-plantillas).
+
+## Localización y pruebas
+
+La UI usa español y fechas `es-ES`. Los calendarios anuncian ausencias, recuperaciones y eventos en español, con singular/plural; las fechas recurrentes muestran «los lunes», «los martes», …, «los sábados» y «los domingos». Un evento sin fecha muestra «Sin fecha». Las pruebas deben verificar estas salidas sin volver a introducir textos ingleses. Reparación: [BILL-13](iterations.md#bill-13--reparar-las-pruebas-de-localización).

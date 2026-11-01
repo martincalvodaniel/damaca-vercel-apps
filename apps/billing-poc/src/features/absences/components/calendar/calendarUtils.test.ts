@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, test as it } from "bun:test"
 import type { Absence } from "@/lib/domain/entities/absence"
 import {
   aggregateByPart,
@@ -19,14 +19,14 @@ function makeAbsence(
 }
 
 describe("toDateKey", () => {
-  test("formats date in YYYY-MM-DD", () => {
+  it("formats date in YYYY-MM-DD", () => {
     expect(toDateKey(new Date(2026, 0, 5))).toBe("2026-01-05")
     expect(toDateKey(new Date(2026, 11, 31))).toBe("2026-12-31")
   })
 })
 
 describe("mondayIndex", () => {
-  test("returns 0 for Monday and 6 for Sunday", () => {
+  it("returns 0 for Monday and 6 for Sunday", () => {
     // 2026-04-27 is a Monday
     expect(mondayIndex(new Date(2026, 3, 27))).toBe(0)
     // 2026-05-03 is a Sunday
@@ -37,11 +37,11 @@ describe("mondayIndex", () => {
 })
 
 describe("aggregateByPart", () => {
-  test("returns empty map for empty records", () => {
+  it("returns empty map for empty records", () => {
     expect(aggregateByPart([]).size).toBe(0)
   })
 
-  test("buckets by date, partOfDay and type", () => {
+  it("buckets by date, partOfDay and type", () => {
     const records: Absence[] = [
       makeAbsence({
         date: "2026-04-29",
@@ -82,24 +82,24 @@ describe("aggregateByPart", () => {
 })
 
 describe("buildAriaLabel", () => {
-  test("reports 'no records' for empty day", () => {
+  it("reports 'no records' for empty day", () => {
     const label = buildAriaLabel(new Date(2026, 3, 29), emptyDayCounts())
-    expect(label).toBe("April 29, no records")
+    expect(label).toBe("29 de abril, sin registros")
   })
 
-  test("uses singular and plural correctly", () => {
+  it("uses singular and plural correctly", () => {
     const label = buildAriaLabel(new Date(2026, 3, 29), {
       morning: { absences: 1, recoveries: 2 },
       evening: { absences: 0, recoveries: 1 },
     })
     expect(label).toBe(
-      "April 29, Morning: 1 absence, 2 recoveries; Evening: 0 absences, 1 recovery"
+      "29 de abril, Mañana: 1 ausencia, 2 recuperaciones; Tarde: 0 ausencias, 1 recuperación"
     )
   })
 })
 
 describe("buildMonthCells", () => {
-  test("produces 42 cells aligned to Monday", () => {
+  it("produces 42 cells aligned to Monday", () => {
     // April 2026: April 1 is Wednesday; mondayIndex = 2
     const cells = buildMonthCells(new Date(2026, 3, 15), "2026-04-29")
     expect(cells).toHaveLength(42)
@@ -110,7 +110,7 @@ describe("buildMonthCells", () => {
     expect(apr1.inMonth).toBe(true)
   })
 
-  test("marks the cell matching todayKey", () => {
+  it("marks the cell matching todayKey", () => {
     const cells = buildMonthCells(new Date(2026, 3, 15), "2026-04-29")
     const today = cells.find((c) => c.key === "2026-04-29")
     expect(today?.isToday).toBe(true)
@@ -118,7 +118,7 @@ describe("buildMonthCells", () => {
     expect(other?.isToday).toBe(false)
   })
 
-  test("marks cells outside the selected month as not inMonth", () => {
+  it("marks cells outside the selected month as not inMonth", () => {
     const cells = buildMonthCells(new Date(2026, 3, 15), "2026-04-29")
     expect(cells.filter((c) => !c.inMonth).length).toBeGreaterThan(0)
     expect(cells.filter((c) => c.inMonth).length).toBe(30) // April has 30 days

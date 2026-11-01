@@ -68,18 +68,18 @@ export function buildAriaLabel(date: Date, dayCounts: DayCounts): string {
     evening.absences === 0 &&
     evening.recoveries === 0
   if (isEmpty) {
-    return `${dateLabel}, no records`
+    return `${dateLabel}, sin registros`
   }
-  const morningLabel = `Morning: ${pluralize(
+  const morningLabel = `Mañana: ${pluralize(
     morning.absences,
-    "absence",
-    "absences"
-  )}, ${pluralize(morning.recoveries, "recovery", "recoveries")}`
-  const eveningLabel = `Evening: ${pluralize(
+    "ausencia",
+    "ausencias"
+  )}, ${pluralize(morning.recoveries, "recuperación", "recuperaciones")}`
+  const eveningLabel = `Tarde: ${pluralize(
     evening.absences,
-    "absence",
-    "absences"
-  )}, ${pluralize(evening.recoveries, "recovery", "recoveries")}`
+    "ausencia",
+    "ausencias"
+  )}, ${pluralize(evening.recoveries, "recuperación", "recuperaciones")}`
   return `${dateLabel}, ${morningLabel}; ${eveningLabel}`
 }
 

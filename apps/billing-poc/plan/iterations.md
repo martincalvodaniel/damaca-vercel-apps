@@ -30,7 +30,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: componentes de iconos y acciones de pago existentes.
 - Aceptación: ambos grupos comparten su fila correspondiente, sin cambiar interacciones ni crear componentes.
 - Validación: Biome incremental, tipos, suite existente y build de billing; revisión de la estructura y clases responsive.
-- Evidencia: [BILL-03](iteration-log.md#bill-03--alineación-de-acciones-en-tarjetas).
+- Evidencia: [BILL-03](archive/2026-11-01/bill-03.md#bill-03--alineación-de-acciones-en-tarjetas).
 
 ## BILL-04 — Prepaid y agrupación por pago
 
@@ -123,3 +123,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Validación: pruebas de dominio/reintentos/sincronización y contratos/helpers SWR/plantillas; Biome en archivos editados, tipos, suite y build de billing; revisión visual si hay sesión accesible.
 
 - Evidencia BILL-12: [registro y limitaciones de la suite previa](iteration-log.md#bill-12--cocciones-y-plantillas).
+
+## BILL-13 — Reparar las pruebas de localización
+
+- Estado: `validated`.
+- Objetivo: corregir los 14 fallos previos de la suite y los defectos de localización que exponen.
+- Rutas: pruebas de `PaymentActions`, `lib/utils/formatters`, helpers y pruebas de `features/events/components/eventsUi` y calendarios de eventos/ausencias; planificación de billing.
+- Dependencias: localización española aceptada en BILL-11 y pruebas existentes; sin nuevas dependencias.
+- Aceptación: etiquetas de pago y fechas esperadas en español; calendarios accesibles completamente en español con singular/plural correcto; fechas recurrentes sin plurales inválidos para los siete días; ausencia de fecha en español; suite completa sin fallos conservando las comprobaciones de comportamiento.
+- Validación: reproducción inicial de 977 pruebas con 14 fallos; tests de regresión antes del arreglo, suite completa, lint incremental, type-check y build de billing; diff check y enlaces locales.
+- Evidencia: [BILL-13](iteration-log.md#bill-13--reparar-las-pruebas-de-localización).

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, test as it } from "bun:test"
 import type { EventAttendee } from "@/lib/domain/entities/event"
 import {
   compareEventsChronologicalAsc,
@@ -11,7 +11,7 @@ import {
 } from "./eventsUi"
 
 describe("formatEventDateTime", () => {
-  test("formats a full date", () => {
+  it("formats a full date", () => {
     expect(
       formatEventDateTime({
         date: "2026-04-29",
@@ -19,10 +19,10 @@ describe("formatEventDateTime", () => {
         month: 4,
         day: 29,
       })
-    ).toBe("Apr 29, 2026")
+    ).toBe("29 abr 2026")
   })
 
-  test("appends a time when hour is set", () => {
+  it("appends a time when hour is set", () => {
     expect(
       formatEventDateTime({
         date: "2026-04-29",
@@ -32,10 +32,10 @@ describe("formatEventDateTime", () => {
         hour: 9,
         minute: 5,
       })
-    ).toBe("Apr 29, 2026 09:05")
+    ).toBe("29 abr 2026 09:05")
   })
 
-  test("defaults minute to 00 when absent", () => {
+  it("defaults minute to 00 when absent", () => {
     expect(
       formatEventDateTime({
         date: "2026-04-29",
@@ -44,16 +44,16 @@ describe("formatEventDateTime", () => {
         day: 29,
         hour: 18,
       })
-    ).toBe("Apr 29, 2026 18:00")
+    ).toBe("29 abr 2026 18:00")
   })
 
-  test("formats year+month only", () => {
+  it("formats year+month only", () => {
     expect(formatEventDateTime({ date: undefined, year: 2026, month: 4 })).toBe(
-      "April 2026"
+      "abril de 2026"
     )
   })
 
-  test("formats recurring events as 'Month YYYY Weekday(s) HH:MM'", () => {
+  it("formats recurring events with a Spanish weekday and time", () => {
     expect(
       formatEventDateTime({
         date: undefined,
@@ -63,14 +63,31 @@ describe("formatEventDateTime", () => {
         hour: 9,
         minute: 5,
       })
-    ).toBe("April 2026 Tuesdays 09:05")
+    ).toBe("abril de 2026 los martes 09:05")
   })
 
-  test("formats year only", () => {
+  it.each([
+    [0, "domingos"],
+    [1, "lunes"],
+    [2, "martes"],
+    [3, "miércoles"],
+    [4, "jueves"],
+    [5, "viernes"],
+    [6, "sábados"],
+  ] as const)(
+    "uses the correct recurring plural for weekday %s",
+    (dayOfWeek, weekday) => {
+      expect(formatEventDateTime({ year: 2026, month: 4, dayOfWeek })).toBe(
+        `abril de 2026 los ${weekday}`
+      )
+    }
+  )
+
+  it("formats year only", () => {
     expect(formatEventDateTime({ date: undefined, year: 2026 })).toBe("2026")
   })
 
-  test("formats time only", () => {
+  it("formats time only", () => {
     expect(
       formatEventDateTime({
         date: undefined,
@@ -80,40 +97,40 @@ describe("formatEventDateTime", () => {
     ).toBe("10:30")
   })
 
-  test("returns 'No date' when nothing is set", () => {
-    expect(formatEventDateTime({})).toBe("No date")
+  it("returns a Spanish fallback when nothing is set", () => {
+    expect(formatEventDateTime({})).toBe("Sin fecha")
   })
 })
 
 describe("formatDuration", () => {
-  test("returns em-dash for undefined or non-positive values", () => {
+  it("returns em-dash for undefined or non-positive values", () => {
     expect(formatDuration(undefined)).toBe("—")
     expect(formatDuration(0)).toBe("—")
     expect(formatDuration(-30)).toBe("—")
   })
 
-  test("formats minutes only when < 60", () => {
+  it("formats minutes only when < 60", () => {
     expect(formatDuration(45)).toBe("45m")
     expect(formatDuration(1)).toBe("1m")
   })
 
-  test("formats whole hours", () => {
+  it("formats whole hours", () => {
     expect(formatDuration(60)).toBe("1h")
     expect(formatDuration(120)).toBe("2h")
   })
 
-  test("formats hours and minutes", () => {
+  it("formats hours and minutes", () => {
     expect(formatDuration(90)).toBe("1h 30m")
     expect(formatDuration(125)).toBe("2h 5m")
   })
 })
 
 describe("totalSeats", () => {
-  test("returns 0 for empty list", () => {
+  it("returns 0 for empty list", () => {
     expect(totalSeats([])).toBe(0)
   })
 
-  test("sums seats across attendees", () => {
+  it("sums seats across attendees", () => {
     const attendees: EventAttendee[] = [
       { clientId: "a", seats: 2, addedAt: new Date() },
       { clientId: "b", seats: 3, addedAt: new Date() },
@@ -124,48 +141,48 @@ describe("totalSeats", () => {
 })
 
 describe("eventIsPlottable", () => {
-  test("returns true when date is set", () => {
+  it("returns true when date is set", () => {
     expect(eventIsPlottable({ date: "2026-04-29" })).toBe(true)
   })
-  test("returns false when date is undefined or empty", () => {
+  it("returns false when date is undefined or empty", () => {
     expect(eventIsPlottable({ date: undefined })).toBe(false)
     expect(eventIsPlottable({ date: "" })).toBe(false)
   })
 })
 
 describe("formatTimeOfDay", () => {
-  test("returns empty string when hour is undefined", () => {
+  it("returns empty string when hour is undefined", () => {
     expect(formatTimeOfDay(undefined, undefined)).toBe("")
     expect(formatTimeOfDay(undefined, 30)).toBe("")
   })
 
-  test("formats hour with zero padding and defaults minute to 0", () => {
+  it("formats hour with zero padding and defaults minute to 0", () => {
     expect(formatTimeOfDay(9, undefined)).toBe("09:00")
     expect(formatTimeOfDay(0, 0)).toBe("00:00")
   })
 
-  test("formats hour and minute with zero padding", () => {
+  it("formats hour and minute with zero padding", () => {
     expect(formatTimeOfDay(18, 5)).toBe("18:05")
     expect(formatTimeOfDay(23, 59)).toBe("23:59")
   })
 })
 
 describe("parseTimeOfDay", () => {
-  test("returns empty object for empty string", () => {
+  it("returns empty object for empty string", () => {
     expect(parseTimeOfDay("")).toEqual({})
     expect(parseTimeOfDay("   ")).toEqual({})
   })
 
-  test("parses HH:MM", () => {
+  it("parses HH:MM", () => {
     expect(parseTimeOfDay("09:05")).toEqual({ hour: 9, minute: 5 })
     expect(parseTimeOfDay("23:59")).toEqual({ hour: 23, minute: 59 })
   })
 
-  test("parses HH:MM:SS by ignoring seconds", () => {
+  it("parses HH:MM:SS by ignoring seconds", () => {
     expect(parseTimeOfDay("18:30:00")).toEqual({ hour: 18, minute: 30 })
   })
 
-  test("returns empty object for malformed values", () => {
+  it("returns empty object for malformed values", () => {
     expect(parseTimeOfDay("abc")).toEqual({})
     expect(parseTimeOfDay("25:00")).toEqual({})
     expect(parseTimeOfDay("12:60")).toEqual({})
@@ -180,26 +197,26 @@ describe("compareEventsChronologicalAsc", () => {
   })
   const sign = (n: number) => (n < 0 ? -1 : n > 0 ? 1 : 0)
 
-  test("same day, one with no time comes first", () => {
+  it("same day, one with no time comes first", () => {
     const noTime = make({ year: 2024, month: 1, day: 1 })
     const timed = make({ year: 2024, month: 1, day: 1, hour: 10, minute: 0 })
     expect(sign(compareEventsChronologicalAsc(noTime, timed))).toBe(-1)
     expect(sign(compareEventsChronologicalAsc(timed, noTime))).toBe(1)
   })
 
-  test("same day, 09:30 < 10:00", () => {
+  it("same day, 09:30 < 10:00", () => {
     const earlier = make({ year: 2024, month: 1, day: 1, hour: 9, minute: 30 })
     const later = make({ year: 2024, month: 1, day: 1, hour: 10, minute: 0 })
     expect(sign(compareEventsChronologicalAsc(earlier, later))).toBe(-1)
   })
 
-  test("same year/month, undefined day < day 1", () => {
+  it("same year/month, undefined day < day 1", () => {
     const noDay = make({ year: 2024, month: 1 })
     const day1 = make({ year: 2024, month: 1, day: 1 })
     expect(sign(compareEventsChronologicalAsc(noDay, day1))).toBe(-1)
   })
 
-  test("same year/month, recurring events sort by dayOfWeek", () => {
+  it("same year/month, recurring events sort by dayOfWeek", () => {
     const monday = make({ year: 2024, month: 1, dayOfWeek: 1 })
     const thursday = make({ year: 2024, month: 1, dayOfWeek: 4 })
     const sunday = make({ year: 2024, month: 1, dayOfWeek: 0 })
@@ -209,7 +226,7 @@ describe("compareEventsChronologicalAsc", () => {
     expect(sorted.map((e) => e.dayOfWeek)).toEqual([1, 4, 0])
   })
 
-  test("specific day takes precedence over dayOfWeek fallback", () => {
+  it("specific day takes precedence over dayOfWeek fallback", () => {
     const recurringTuesday = make({ year: 2024, month: 1, dayOfWeek: 2 })
     const dayOne = make({ year: 2024, month: 1, day: 1 })
     expect(sign(compareEventsChronologicalAsc(dayOne, recurringTuesday))).toBe(
@@ -217,19 +234,19 @@ describe("compareEventsChronologicalAsc", () => {
     )
   })
 
-  test("same year, undefined month < month 1", () => {
+  it("same year, undefined month < month 1", () => {
     const noMonth = make({ year: 2024 })
     const m1 = make({ year: 2024, month: 1 })
     expect(sign(compareEventsChronologicalAsc(noMonth, m1))).toBe(-1)
   })
 
-  test("undefined year < any year", () => {
+  it("undefined year < any year", () => {
     const noYear = make({})
     const y = make({ year: 2024 })
     expect(sign(compareEventsChronologicalAsc(noYear, y))).toBe(-1)
   })
 
-  test("identical date fields tie-break by createdAt ascending", () => {
+  it("identical date fields tie-break by createdAt ascending", () => {
     const a = make({
       year: 2024,
       month: 1,
@@ -251,7 +268,7 @@ describe("compareEventsChronologicalAsc", () => {
     expect(compareEventsChronologicalAsc(a, a)).toBe(0)
   })
 
-  test("prompt example: same day, no time before timed", () => {
+  it("prompt example: same day, no time before timed", () => {
     const events = [
       make({ year: 2024, month: 1, day: 1, hour: 10, minute: 0 }),
       make({ year: 2024, month: 1, day: 1 }),
@@ -261,7 +278,7 @@ describe("compareEventsChronologicalAsc", () => {
     expect(sorted[1].hour).toBe(10)
   })
 
-  test("prompt example: same month, no day before dated", () => {
+  it("prompt example: same month, no day before dated", () => {
     const events = [
       make({ year: 2024, month: 1, day: 1 }),
       make({ year: 2024, month: 1 }),
@@ -271,7 +288,7 @@ describe("compareEventsChronologicalAsc", () => {
     expect(sorted[1].day).toBe(1)
   })
 
-  test("full chronological ordering across mixed events", () => {
+  it("full chronological ordering across mixed events", () => {
     const events = [
       make({ year: 2024, month: 2, day: 1 }),
       make({ year: 2024, month: 1, day: 1, hour: 10 }),
