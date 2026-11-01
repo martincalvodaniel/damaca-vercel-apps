@@ -33,3 +33,18 @@ No hay entregas de producto registradas en este ámbito. Añadir evidencia obser
 - Capacidad refrescada tras el fallo de Turbopack: 94% de 5h y 93% de 7d, con margen para cierre.
 - Validación final: `bun run lint --staged` revisó 20 archivos sin hallazgos; `git diff --cached --check` y enlaces locales de planificación correctos. Revisados diff y archivos preparados: solo esta app, sin credenciales ni cambios ajenos.
 - El sandbox bloqueó inicialmente la escritura del índice Git y la resolución DNS de GitHub; preparación y lectura remota completadas fuera del sandbox con autorización de herramientas. `origin/int` comprobado antes de publicar: `dd3e7e3adcd0bde60f877ae1ca55f3eaed6b0afa`, igual a la base local. Commit y publicación a `int` se verifican al cierre.
+
+## HM-03 — Cabeceras y vista previa compactas
+
+- Inicio: 2026-11-01. Rama `int`, árbol limpio y sin commits locales pendientes. Capacidad inicial: 90% de 5h y 92% de 7d. Estimación conservadora inferior a 7 y 2 puntos respectivamente; respeta reservas.
+- Alcance y aceptación: [HM-03](iterations.md#hm-03--cabeceras-y-vista-previa-compactas).
+- Reducido de 28–40px a 8px el padding superior de los gestores de Compra, Inventario y Platos. Ocultados visualmente en escritorio los bloques de presentación y títulos de lista redundantes; conservada su semántica accesible, títulos móviles y rango semanal.
+- Acceso a vista previa reducido de al menos 80px a 46px, con contador numérico inmediatamente a la derecha del título y descripción accesible del número. Eliminada la segunda línea también cuando el contador es cero.
+- Navegación y vaciado semanal en una fila, controles de 36px y texto «Esta semana» sin salto de línea a 320px. Se conserva la confirmación antes de vaciar. Separación sobre calendario y vista previa reducida a 8px.
+- Corregidos avisos previos de callbacks en los archivos editados, sin cambiar la lógica de las acciones. La primera revisión detectó un `aria-label` en un span sin rol compatible; sustituido por texto `sr-only`. Revisadas las guías React ya aplicadas en HM-02: sin dependencias nuevas, sin peticiones añadidas, callbacks con dependencias completas y marcado accesible.
+- `bun run type-check --filter=@damaca/dalis-home-management`: correcto. `bun run test --filter=@damaca/dalis-home-management`: 101 tests correctos, 0 fallos. Biome sobre los 12 TSX editados: sin hallazgos.
+- Prueba temporal en Chrome con las cuatro páginas reales, datos ficticios y acciones/Next aislados: anchos de 320, 390, 768 y 1440px; separación exacta de 8px bajo el divisor; títulos visualmente ocultos en escritorio y conservados en móvil; vista previa de 46px con contador alineado; controles semanales en la misma fila; ningún desbordamiento ni error de ejecución; apertura y cierre del diálogo de vista previa. Capturas móvil y escritorio inspeccionadas. Sin acceso autenticado ni escrituras en datos reales.
+- Enlaces locales de planificación y `git diff --check`: correctos. Capacidad refrescada antes del cierre: 85% de 5h y 91% de 7d.
+- `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto sobre la versión final. Se utilizó Webpack por la limitación de puertos de Turbopack acreditada en HM-02, sin cambiar configuración. Una repetición del build iniciada antes de terminar la anterior devolvió código 1; se repitió secuencialmente con éxito.
+- Referencia remota previa a publicación: `d54d01a6ff23bbc1e3a823420c5d8f4e7db5ca3d`, igual a la base local. Revisados diff, alcance y archivos: solo esta app, sin credenciales ni cambios ajenos. La coincidencia del commit publicado se verifica al cierre.
+- Validación final de preparación: `bun run lint --staged` comprobó 15 archivos sin hallazgos; `git diff --cached --check` correcto.

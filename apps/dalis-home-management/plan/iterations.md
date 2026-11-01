@@ -21,3 +21,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: reducir padding, márgenes y separaciones verticales en inventario, compra, recetario y menú; conservar acciones y legibilidad; cruz roja visible con texto, oculta sin texto y accesible con teclado en búsquedas y selectores con búsqueda.
 - Validación prevista: Biome incremental, tipos, tests de la app, build y revisión del diff.
 - Evidencia: [HM-02](iteration-log.md#hm-02--listas-compactas-y-limpieza-de-búsquedas).
+
+## HM-03 — Cabeceras y vista previa compactas
+
+- Estado: `validated`.
+- Objetivo: reducir el hueco entre divisor y buscadores, compactar el acceso a vista previa y alinear navegación y vaciado de semana.
+- Rutas: gestores de inventario, compra y platos; `meal-plan-page.tsx`, `shopping-list-preview.tsx`, `clear-week-button.tsx`; páginas y cabeceras de listas; `plan/`.
+- Dependencias: componentes existentes, sin cambios de datos ni dependencias nuevas.
+- Aceptación: separación superior de 8px en las tres listas; vista previa en una fila con contador numérico a la derecha del título; selector y vaciado de semana en la misma fila también en móvil, sin desbordamiento; ocultar títulos y textos de presentación redundantes en escritorio, conservar títulos móviles y rango semanal.
+- Validación prevista: Biome, tipos, tests, build Webpack y comprobación visual aislada de disposición responsive.
+- Evidencia: [HM-03](iteration-log.md#hm-03--cabeceras-y-vista-previa-compactas).

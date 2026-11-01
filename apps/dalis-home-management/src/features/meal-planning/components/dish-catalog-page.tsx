@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import type { CatalogProductOption } from "@/features/catalog/product-option"
 import type { Dish } from "@/schemas/dish"
 import { DishManager } from "./dish-manager"
@@ -15,21 +15,26 @@ export function DishCatalogPage({ dishes, products }: DishCatalogPageProps) {
   const [editingDish, setEditingDish] = useState<Dish | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
 
-  function closeForm() {
+  const closeForm = useCallback(() => {
     setIsFormOpen(false)
     setEditingDish(null)
-  }
+  }, [])
 
-  function editDish(dish: Dish) {
+  const editDish = useCallback((dish: Dish) => {
     setEditingDish(dish)
     setIsFormOpen(true)
-  }
+  }, [])
+
+  const openCreateForm = useCallback(() => {
+    setEditingDish(null)
+    setIsFormOpen(true)
+  }, [])
 
   return (
     <main className="min-h-screen bg-[#f5f4ee] px-4 py-5 text-[#17352b] sm:px-8 sm:py-8 dark:bg-[#10221c] dark:text-[#f4f1e7]">
       <div className="mx-auto w-full max-w-7xl">
-        <header className="flex flex-col gap-3 border-b border-[#d9ded3] pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-5 sm:pb-6 dark:border-white/10">
-          <div>
+        <header className="flex flex-col gap-3 border-b border-[#d9ded3] pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-5 sm:pb-2 dark:border-white/10">
+          <div className="sm:sr-only">
             <p className="hidden text-xs font-bold uppercase tracking-[0.2em] text-[#c36d49] sm:block">
               Recetario de casa
             </p>
@@ -48,10 +53,7 @@ export function DishCatalogPage({ dishes, products }: DishCatalogPageProps) {
             </div>
             <button
               type="button"
-              onClick={() => {
-                setEditingDish(null)
-                setIsFormOpen(true)
-              }}
+              onClick={openCreateForm}
               className="inline-flex items-center justify-center rounded-full bg-[#75611f] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#615018] focus:outline-none focus:ring-2 focus:ring-[#75611f] focus:ring-offset-2 sm:px-4 sm:py-2 sm:text-sm dark:ring-offset-[#10221c]"
             >
               + Añadir

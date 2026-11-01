@@ -49,43 +49,41 @@ export function MealPlanPage({
   return (
     <main className="min-h-screen overflow-x-clip bg-[#f5f4ee] px-4 py-5 text-[#17352b] sm:px-8 sm:py-8 dark:bg-[#10221c] dark:text-[#f4f1e7]">
       <div className="mx-auto w-full max-w-[96rem]">
-        <header className="border-b border-[#d9ded3] pb-4 sm:pb-6 dark:border-white/10">
+        <header className="border-b border-[#d9ded3] pb-4 sm:pb-2 dark:border-white/10">
           <div className="flex flex-col gap-3 sm:gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="hidden text-xs font-bold uppercase tracking-[0.2em] text-[#c36d49] sm:block">
-                Planificación de casa
-              </p>
-              <h1 className="mt-2 text-2xl font-semibold tracking-[-0.05em] sm:text-5xl">
+              <p className="sr-only">Planificación de casa</p>
+              <h1 className="mt-2 text-2xl font-semibold tracking-[-0.05em] sm:sr-only">
                 Menú semanal
               </h1>
-              <p className="mt-1 text-xs text-[#63736a] sm:mt-3 sm:text-base dark:text-[#b4c0b8]">
+              <p className="mt-1 text-xs text-[#63736a] sm:mt-0 sm:text-base dark:text-[#b4c0b8]">
                 {formatWeekRange(weekStart)} · {slots.length} de 14 comidas
                 planificadas
               </p>
             </div>
 
-            <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-start">
+            <div className="flex min-w-0 items-start gap-2">
               <nav
                 aria-label="Cambiar semana"
-                className="flex w-full overflow-hidden rounded-lg border border-[#ccd5ce] bg-white/70 sm:w-auto sm:rounded-xl dark:border-white/15 dark:bg-white/5"
+                className="flex min-w-0 flex-1 overflow-hidden rounded-lg border border-[#ccd5ce] bg-white/70 sm:w-auto sm:rounded-xl dark:border-white/15 dark:bg-white/5"
               >
                 <Link
                   href={`/meal-plan?week=${previousWeek}`}
                   aria-label="Semana anterior"
-                  className="grid min-h-11 min-w-11 place-items-center transition hover:bg-[#e8ece6] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#1d4f40] dark:hover:bg-white/10"
+                  className="grid min-h-9 min-w-9 place-items-center transition hover:bg-[#e8ece6] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#1d4f40] dark:hover:bg-white/10"
                 >
                   <span aria-hidden="true">←</span>
                 </Link>
                 <Link
                   href="/meal-plan"
-                  className="inline-flex min-h-11 flex-1 items-center justify-center border-x border-[#ccd5ce] px-3 text-xs font-semibold transition hover:bg-[#e8ece6] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#1d4f40] sm:flex-none sm:px-4 sm:text-sm dark:border-white/15 dark:hover:bg-white/10"
+                  className="inline-flex min-h-9 flex-1 items-center justify-center whitespace-nowrap border-x border-[#ccd5ce] px-2 text-xs font-semibold transition hover:bg-[#e8ece6] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#1d4f40] sm:flex-none sm:px-4 sm:text-sm dark:border-white/15 dark:hover:bg-white/10"
                 >
                   Esta semana
                 </Link>
                 <Link
                   href={`/meal-plan?week=${nextWeek}`}
                   aria-label="Semana siguiente"
-                  className="grid min-h-11 min-w-11 place-items-center transition hover:bg-[#e8ece6] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#1d4f40] dark:hover:bg-white/10"
+                  className="grid min-h-9 min-w-9 place-items-center transition hover:bg-[#e8ece6] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#1d4f40] dark:hover:bg-white/10"
                 >
                   <span aria-hidden="true">→</span>
                 </Link>
@@ -98,7 +96,7 @@ export function MealPlanPage({
         </header>
 
         <section
-          className="space-y-4 py-6"
+          className="space-y-2 py-2"
           aria-label="Comidas y cenas de la semana"
         >
           {slots.length === 0 && dishes.length > 0 ? (

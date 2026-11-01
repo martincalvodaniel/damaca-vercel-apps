@@ -22,7 +22,7 @@ export function ShoppingListManager({
   onClose,
 }: ShoppingListManagerProps) {
   return (
-    <div className="py-7 lg:py-10">
+    <div className="pt-2 pb-4">
       <ShoppingList
         items={items}
         products={products}

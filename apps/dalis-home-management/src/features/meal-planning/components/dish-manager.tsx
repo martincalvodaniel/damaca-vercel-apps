@@ -28,7 +28,7 @@ export function DishManager({
   onClose,
 }: DishManagerProps) {
   return (
-    <div className="py-7 xl:py-10">
+    <div className="pt-2 pb-4">
       <DishList
         dishes={dishes}
         search={search}

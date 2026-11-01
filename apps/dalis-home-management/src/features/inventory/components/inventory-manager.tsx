@@ -28,7 +28,7 @@ export function InventoryManager({
   const purchasePlaces = getPurchasePlaces(items)
 
   return (
-    <div className="py-7 lg:py-10">
+    <div className="pt-2 pb-4">
       <InventoryList
         items={items}
         search={search}

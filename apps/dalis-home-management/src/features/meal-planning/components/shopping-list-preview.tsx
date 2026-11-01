@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useState, useTransition } from "react"
+import { useCallback, useState, useTransition } from "react"
 import { ModalDialog } from "@/components/ui/modal-dialog"
 import {
   getWeeklyShoppingListSuggestionsAction,
@@ -48,7 +48,7 @@ export function ShoppingListPreview({
   const [isLoading, setIsLoading] = useState(false)
   const [isPending, startTransition] = useTransition()
 
-  function openPreview() {
+  const openPreview = useCallback(() => {
     setIsOpen(true)
     setIsLoading(true)
     setItems([])
@@ -73,52 +73,54 @@ export function ShoppingListPreview({
         setIsLoading(false)
       }
     })
-  }
+  }, [weekStart])
 
-  function updateInventoryQuantity(
-    inventoryItemId: string,
-    inventoryQuantity: string
-  ) {
-    const parsedInventoryQuantity = Number(inventoryQuantity)
-    const normalizedInventoryQuantity = Number.isFinite(parsedInventoryQuantity)
-      ? Math.max(parsedInventoryQuantity, 0)
-      : 0
-    setMessage(null)
-    setItems((currentItems) =>
-      currentItems.map((item) =>
-        item.inventoryItemId === inventoryItemId
-          ? {
-              ...item,
-              inventoryQuantity,
-              quantity: String(
-                roundQuantity(
-                  Math.max(
-                    item.requiredQuantity - normalizedInventoryQuantity,
-                    0
+  const updateInventoryQuantity = useCallback(
+    (inventoryItemId: string, inventoryQuantity: string) => {
+      const parsedInventoryQuantity = Number(inventoryQuantity)
+      const normalizedInventoryQuantity = Number.isFinite(
+        parsedInventoryQuantity
+      )
+        ? Math.max(parsedInventoryQuantity, 0)
+        : 0
+      setMessage(null)
+      setItems((currentItems) =>
+        currentItems.map((item) =>
+          item.inventoryItemId === inventoryItemId
+            ? {
+                ...item,
+                inventoryQuantity,
+                quantity: String(
+                  roundQuantity(
+                    Math.max(
+                      item.requiredQuantity - normalizedInventoryQuantity,
+                      0
+                    )
                   )
-                )
-              ),
-            }
-          : item
+                ),
+              }
+            : item
+        )
       )
-    )
-  }
+    },
+    []
+  )
 
-  function updateShoppingQuantity(
-    inventoryItemId: string,
-    shoppingQuantity: string
-  ) {
-    setMessage(null)
-    setItems((currentItems) =>
-      currentItems.map((item) =>
-        item.inventoryItemId === inventoryItemId
-          ? { ...item, quantity: shoppingQuantity }
-          : item
+  const updateShoppingQuantity = useCallback(
+    (inventoryItemId: string, shoppingQuantity: string) => {
+      setMessage(null)
+      setItems((currentItems) =>
+        currentItems.map((item) =>
+          item.inventoryItemId === inventoryItemId
+            ? { ...item, quantity: shoppingQuantity }
+            : item
+        )
       )
-    )
-  }
+    },
+    []
+  )
 
-  function prepareShoppingList() {
+  const prepareShoppingList = useCallback(() => {
     setMessage(null)
     setIsError(false)
 
@@ -148,25 +150,30 @@ export function ShoppingListPreview({
         setMessage("No se han podido guardar los ajustes. Inténtalo de nuevo.")
       }
     })
-  }
+  }, [weekStart, items])
+
+  const closePreview = useCallback(() => setIsOpen(false), [])
 
   return (
     <>
       <button
         type="button"
         onClick={openPreview}
-        className="flex min-h-20 w-full items-center justify-between gap-4 rounded-[1.75rem] border border-[#d8d7bd] bg-[#eeeddc] p-4 text-left text-[#303b2d] shadow-[0_18px_50px_rgba(50,72,60,0.08)] transition hover:bg-[#e8e7d3] focus:outline-none focus:ring-2 focus:ring-[#74794f] focus:ring-offset-2 sm:p-5 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7] dark:hover:bg-[#374333] dark:ring-offset-[#10221c]"
+        className="flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl border border-[#d8d7bd] bg-[#eeeddc] px-3 py-2 text-left text-[#303b2d] shadow-[0_18px_50px_rgba(50,72,60,0.08)] transition hover:bg-[#e8e7d3] focus:outline-none focus:ring-2 focus:ring-[#74794f] focus:ring-offset-2 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7] dark:hover:bg-[#374333] dark:ring-offset-[#10221c]"
       >
-        <div>
-          <p className="text-sm font-semibold">Vista previa de la compra</p>
-          <p className="mt-1 text-xs text-[#69705b] dark:text-[#c0c7b5]">
-            {suggestions.length === 0
-              ? "Actualiza la información antes de preparar la compra"
-              : `${suggestions.length} ${suggestions.length === 1 ? "producto" : "productos"} por revisar`}
-          </p>
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="text-sm font-semibold">
+            Vista previa de la compra
+          </span>
+          <span className="grid min-w-6 shrink-0 place-items-center rounded-full bg-white/60 px-1.5 text-xs font-bold tabular-nums leading-6 dark:bg-white/10">
+            {suggestions.length}
+            <span className="sr-only">
+              {suggestions.length === 1 ? "producto" : "productos"} por revisar
+            </span>
+          </span>
         </div>
         <span
-          className="grid size-8 shrink-0 place-items-center rounded-full bg-white/60 text-lg dark:bg-white/10"
+          className="grid size-7 shrink-0 place-items-center rounded-full bg-white/60 text-lg dark:bg-white/10"
           aria-hidden="true"
         >
           →
@@ -178,7 +185,7 @@ export function ShoppingListPreview({
         ariaLabel="Vista previa de la compra"
         size="xl"
         scrollable={false}
-        onDismiss={() => setIsOpen(false)}
+        onDismiss={closePreview}
       >
         <section className="flex h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-[1.75rem] border border-[#d8d7bd] bg-[#eeeddc] p-4 text-[#303b2d] sm:p-5 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
@@ -256,7 +263,7 @@ export function ShoppingListPreview({
             >
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={closePreview}
                 disabled={isPending}
                 className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-[#c8cab1] px-5 text-sm font-semibold transition hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-[#74794f] disabled:opacity-60 sm:flex-none dark:border-white/15 dark:hover:bg-white/10"
               >

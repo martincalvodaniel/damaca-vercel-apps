@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import type { InventoryItem } from "@/schemas/inventory-item"
 import { InventoryManager } from "./inventory-manager"
 
@@ -13,21 +13,26 @@ export function InventoryPage({ items }: InventoryPageProps) {
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
 
-  function closeForm() {
+  const closeForm = useCallback(() => {
     setIsFormOpen(false)
     setEditingItem(null)
-  }
+  }, [])
 
-  function editItem(item: InventoryItem) {
+  const editItem = useCallback((item: InventoryItem) => {
     setEditingItem(item)
     setIsFormOpen(true)
-  }
+  }, [])
+
+  const openCreateForm = useCallback(() => {
+    setEditingItem(null)
+    setIsFormOpen(true)
+  }, [])
 
   return (
     <main className="min-h-screen overflow-x-clip bg-[#f5f4ee] px-4 py-5 text-[#17352b] sm:px-8 sm:py-8 dark:bg-[#10221c] dark:text-[#f4f1e7]">
       <div className="mx-auto w-full max-w-7xl">
-        <header className="flex flex-col gap-3 border-b border-[#d9ded3] pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-5 sm:pb-6 dark:border-white/10">
-          <div>
+        <header className="flex flex-col gap-3 border-b border-[#d9ded3] pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-5 sm:pb-2 dark:border-white/10">
+          <div className="sm:sr-only">
             <p className="hidden text-xs font-bold uppercase tracking-[0.2em] text-[#c36d49] sm:block">
               Nuestro hogar
             </p>
@@ -46,10 +51,7 @@ export function InventoryPage({ items }: InventoryPageProps) {
             </div>
             <button
               type="button"
-              onClick={() => {
-                setEditingItem(null)
-                setIsFormOpen(true)
-              }}
+              onClick={openCreateForm}
               className="inline-flex items-center justify-center rounded-full bg-[#1d4f40] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#173f34] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] focus:ring-offset-2 sm:px-4 sm:py-2 sm:text-sm dark:ring-offset-[#10221c]"
             >
               + Añadir
