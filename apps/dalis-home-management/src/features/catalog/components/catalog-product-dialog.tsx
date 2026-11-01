@@ -1,10 +1,11 @@
 "use client"
 
+import type * as React from "react"
 import {
   type FormEvent,
+  useCallback,
   useEffect,
   useId,
-  useRef,
   useState,
   useTransition,
 } from "react"
@@ -15,6 +16,7 @@ import { PurchasePlaceField } from "@/features/catalog/components/purchase-place
 import type { CatalogProductOption } from "@/features/catalog/product-option"
 import { normalizePurchasePlaces } from "@/features/catalog/purchase-places"
 import { inventoryUnitLabels } from "@/features/inventory/inventory-options"
+import { useDialogViewport } from "@/hooks/use-dialog-viewport"
 import { inventoryItemUnits } from "@/schemas/inventory-item"
 
 interface CatalogProductDialogProps {
@@ -37,7 +39,7 @@ export function CatalogProductDialog({
   onDismiss,
   onCreated,
 }: CatalogProductDialogProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null)
+  const dialogRef = useDialogViewport(open)
   const nameId = useId()
   const unitId = useId()
   const purchasePlaceId = useId()
@@ -67,49 +69,58 @@ export function CatalogProductDialog({
     return () => {
       document.body.style.overflow = previousOverflow
     }
-  }, [open])
+  }, [open, dialogRef])
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setError(null)
-    const form = event.currentTarget
-    const formData = new FormData(form)
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      setError(null)
+      const form = event.currentTarget
+      const formData = new FormData(form)
 
-    startTransition(async () => {
-      try {
-        const result = await createCatalogProductAction({
-          name: formData.get("name"),
-          unit: formData.get("unit"),
-          purchasePlaces: normalizePurchasePlaces(
-            [
-              ...formData.getAll("purchasePlaces"),
-              formData.get("purchasePlaceDraft"),
-            ].filter((value): value is string => typeof value === "string")
-          ),
-        })
-        if (!result.success) {
-          setError(result.message)
-          return
+      startTransition(async () => {
+        try {
+          const result = await createCatalogProductAction({
+            name: formData.get("name"),
+            unit: formData.get("unit"),
+            purchasePlaces: normalizePurchasePlaces(
+              [
+                ...formData.getAll("purchasePlaces"),
+                formData.get("purchasePlaceDraft"),
+              ].filter((value): value is string => typeof value === "string")
+            ),
+          })
+          if (!result.success) {
+            setError(result.message)
+            return
+          }
+
+          form.reset()
+          onCreated(result.product, result.created)
+        } catch {
+          setError("No se ha podido crear el producto. Inténtalo de nuevo.")
         }
+      })
+    },
+    [onCreated]
+  )
 
-        form.reset()
-        onCreated(result.product, result.created)
-      } catch {
-        setError("No se ha podido crear el producto. Inténtalo de nuevo.")
+  const handleCancel = useCallback(
+    (event: React.SyntheticEvent<HTMLDialogElement>) => {
+      event.preventDefault()
+      event.stopPropagation()
+      if (!isPending) {
+        onDismiss()
       }
-    })
-  }
+    },
+    [isPending, onDismiss]
+  )
 
   return (
     <dialog
       ref={dialogRef}
-      onCancel={(event) => {
-        event.preventDefault()
-        if (!isPending) {
-          onDismiss()
-        }
-      }}
-      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg overflow-y-auto overscroll-contain rounded-[1.75rem] border border-[#d8dfd7] bg-[#fbfaf6] p-0 text-[#17352b] shadow-[0_28px_90px_rgba(10,35,27,0.35)] backdrop:bg-[#0b2119]/65 backdrop:backdrop-blur-sm dark:border-white/15 dark:bg-[#182e26] dark:text-[#f4f1e7]"
+      onCancel={handleCancel}
+      className="mobile-dialog m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg overflow-y-auto overscroll-contain rounded-[1.75rem] border border-[#d8dfd7] bg-[#fbfaf6] p-0 text-[#17352b] shadow-[0_28px_90px_rgba(10,35,27,0.35)] backdrop:bg-[#0b2119]/65 backdrop:backdrop-blur-sm dark:border-white/15 dark:bg-[#182e26] dark:text-[#f4f1e7]"
     >
       <form className="p-6 sm:p-7" onSubmit={handleSubmit}>
         <header className="sticky -top-6 z-10 -mx-6 -mt-6 border-b border-[#d8dfd7] bg-[#fbfaf6] px-6 pt-6 pb-4 sm:-top-7 sm:-mx-7 sm:-mt-7 sm:px-7 sm:pt-7 dark:border-white/15 dark:bg-[#182e26]">

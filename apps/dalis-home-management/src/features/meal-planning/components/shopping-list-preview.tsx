@@ -187,7 +187,7 @@ export function ShoppingListPreview({
         scrollable={false}
         onDismiss={closePreview}
       >
-        <section className="flex h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-[1.75rem] border border-[#d8d7bd] bg-[#eeeddc] p-4 text-[#303b2d] sm:p-5 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
+        <section className="flex h-[var(--dialog-available-height,calc(100dvh-2rem))] flex-col overflow-hidden rounded-[1.75rem] border border-[#d8d7bd] bg-[#eeeddc] p-4 text-[#303b2d] sm:p-5 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
             <header className="-mx-4 -mt-4 border-b border-[#d4d3b9] bg-[#eeeddc] px-4 pt-4 pb-4 sm:-mx-5 sm:-mt-5 sm:px-5 sm:pt-5 dark:border-white/10 dark:bg-[#2e382b]">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a75938] dark:text-[#e99a77]">

@@ -29,3 +29,19 @@ body {
   background: #c9ddc8;
   color: #17352b;
 }
+
+@media (width < 40rem) {
+  .mobile-dialog {
+    --dialog-available-height: calc(
+      var(--dialog-viewport-height, 100dvh) -
+      max(0.5rem, env(safe-area-inset-top)) -
+      0.5rem
+    );
+    margin-block-start: calc(
+      var(--dialog-viewport-top, 0px) +
+      max(0.5rem, env(safe-area-inset-top))
+    );
+    margin-block-end: auto;
+    max-height: var(--dialog-available-height);
+  }
+}

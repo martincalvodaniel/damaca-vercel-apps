@@ -1,6 +1,9 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import type * as React from "react"
+import { useCallback, useEffect } from "react"
+
+import { useDialogViewport } from "@/hooks/use-dialog-viewport"
 
 interface ConfirmationDialogProps {
   open: boolean
@@ -27,7 +30,7 @@ export function ConfirmationDialog({
   onSecondary,
   tone = "default",
 }: ConfirmationDialogProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null)
+  const dialogRef = useDialogViewport(open)
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -52,16 +55,22 @@ export function ConfirmationDialog({
     return () => {
       document.body.style.overflow = previousOverflow
     }
-  }, [open])
+  }, [open, dialogRef])
+
+  const handleCancel = useCallback(
+    (event: React.SyntheticEvent<HTMLDialogElement>) => {
+      event.preventDefault()
+      event.stopPropagation()
+      onDismiss()
+    },
+    [onDismiss]
+  )
 
   return (
     <dialog
       ref={dialogRef}
-      onCancel={(event) => {
-        event.preventDefault()
-        onDismiss()
-      }}
-      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto overscroll-contain rounded-[1.75rem] border border-[#d8dfd7] bg-[#fbfaf6] p-0 text-[#17352b] shadow-[0_28px_90px_rgba(10,35,27,0.35)] backdrop:bg-[#0b2119]/65 backdrop:backdrop-blur-sm dark:border-white/15 dark:bg-[#182e26] dark:text-[#f4f1e7]"
+      onCancel={handleCancel}
+      className="mobile-dialog m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto overscroll-contain rounded-[1.75rem] border border-[#d8dfd7] bg-[#fbfaf6] p-0 text-[#17352b] shadow-[0_28px_90px_rgba(10,35,27,0.35)] backdrop:bg-[#0b2119]/65 backdrop:backdrop-blur-sm dark:border-white/15 dark:bg-[#182e26] dark:text-[#f4f1e7]"
     >
       <div className="p-6 sm:p-7">
         <header className="sticky -top-6 z-10 -mx-6 -mt-6 border-b border-[#d8dfd7] bg-[#fbfaf6] px-6 pt-6 pb-4 sm:-top-7 sm:-mx-7 sm:-mt-7 sm:px-7 sm:pt-7 dark:border-white/15 dark:bg-[#182e26]">

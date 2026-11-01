@@ -71,3 +71,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: barra invisible con soporte estándar y WebKit; contenido horizontal desplazable y filtros accesibles mediante teclado.
 - Validación prevista: Biome, tipos, tests, build Webpack y comprobación de scroll en Chrome.
 - Evidencia: [HM-07](iteration-log.md#hm-07--ocultar-barra-horizontal-de-filtros).
+
+## HM-08 — Modales móviles adaptadas al teclado
+
+- Estado: `validated`.
+- Objetivo: abrir todas las modales móviles en la parte superior y adaptar su altura al área visible al aparecer el teclado.
+- Rutas: `src/hooks/use-dialog-viewport.ts`, `src/components/ui/*dialog.tsx`, diálogo de catálogo, vista previa/ejecución de comidas, `src/app/globals.css` y `plan/`.
+- Dependencias: dialog nativo y VisualViewport del navegador; sin dependencias nuevas.
+- Aceptación: modales superiores en móvil con margen seguro, altura limitada al área visible y contenido desplazable; formularios accesibles al reducirse el viewport por teclado; paneles de altura completa y diálogos anidados compatibles; escritorio centrado; conservar cierre, foco y bloqueo del fondo.
+- Validación prevista: Biome, tipos, tests, build Webpack y Chrome con reducción simulada del viewport visual, navegación por formularios y comprobación desktop.
+- Evidencia: [HM-08](iteration-log.md#hm-08--modales-móviles-adaptadas-al-teclado).
