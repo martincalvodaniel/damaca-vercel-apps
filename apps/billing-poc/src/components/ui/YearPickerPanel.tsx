@@ -22,7 +22,7 @@ export default function YearPickerPanel({
   return (
     <PickerOverlay
       onClose={onClose}
-      closeLabel="Close year picker"
+      closeLabel="Cerrar selector de año"
       desktopAlign="left"
     >
       <div className="px-4 pb-4">
@@ -30,7 +30,7 @@ export default function YearPickerPanel({
           <button
             type="button"
             onClick={showPreviousYears}
-            aria-label="Previous years"
+            aria-label="Años anteriores"
             className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >
             ←
@@ -41,7 +41,7 @@ export default function YearPickerPanel({
           <button
             type="button"
             onClick={showNextYears}
-            aria-label="Next years"
+            aria-label="Años siguientes"
             className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >
             →

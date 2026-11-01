@@ -44,8 +44,8 @@ export default function EventsListTable({
   if (sorted.length === 0) {
     return (
       <EmptyState variant="card" className="bg-white dark:bg-zinc-900">
-        No events yet. Click <span className="font-medium">New event</span> to
-        create one.
+        Aún no hay eventos. Pulsa{" "}
+        <span className="font-medium">Nuevo evento</span> para crear uno.
       </EmptyState>
     )
   }
@@ -54,11 +54,11 @@ export default function EventsListTable({
       <table className="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
         <thead className="bg-zinc-50 dark:bg-zinc-800/50">
           <tr>
-            <Th>Title</Th>
-            <Th>Date & Time</Th>
-            <Th>Duration</Th>
-            <Th>Occupancy</Th>
-            <Th>Price</Th>
+            <Th>Título</Th>
+            <Th>Fecha y hora</Th>
+            <Th>Duración</Th>
+            <Th>Ocupación</Th>
+            <Th>Precio</Th>
             <th />
           </tr>
         </thead>
@@ -124,7 +124,7 @@ function EventTableRow({
       onKeyDown={handleRowKeyDown}
       role="button"
       tabIndex={0}
-      aria-label={`Edit event ${event.title}`}
+      aria-label={`Editar evento ${event.title}`}
       className="cursor-pointer hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:hover:bg-zinc-800/40"
     >
       <td className="px-3 py-2">
@@ -150,7 +150,7 @@ function EventTableRow({
             <IconButton
               stopPropagation
               onClick={handleCopy}
-              ariaLabel={`Copy event ${event.title}`}
+              ariaLabel={`Copiar evento ${event.title}`}
             >
               <DuplicateIcon />
             </IconButton>
@@ -174,7 +174,7 @@ function EventTableRow({
             variant="danger"
             stopPropagation
             onClick={handleDelete}
-            ariaLabel={`Delete event ${event.title}`}
+            ariaLabel={`Eliminar evento ${event.title}`}
           >
             <TrashIcon />
           </IconButton>

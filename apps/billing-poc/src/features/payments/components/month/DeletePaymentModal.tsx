@@ -17,15 +17,15 @@ export default function DeletePaymentModal({
   return (
     <ConfirmDialog
       isOpen
-      title="Delete Payment"
+      title="Eliminar pago"
       variant="danger"
-      confirmLabel="Delete"
-      pendingLabel="Deleting..."
+      confirmLabel="Eliminar"
+      pendingLabel="Eliminando..."
       isPending={isDeleting}
       onCancel={onClose}
       onConfirm={onConfirm}
     >
-      <p>Are you sure you want to delete this payment?</p>
+      <p>¿Seguro que quieres eliminar este pago?</p>
       <div className="mt-4 space-y-3 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800">
         <div className="flex justify-between text-sm">
           <span className="text-zinc-600 dark:text-zinc-400">Date:</span>

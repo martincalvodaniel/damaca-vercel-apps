@@ -48,14 +48,14 @@ export default function SuggestionInput({
   onEditOption,
   onDeleteOption,
   selectedOption,
-  placeholder = "Start typing to see suggestions...",
+  placeholder = "Empieza a escribir para ver sugerencias...",
   required = false,
   disabled = false,
   maxLength,
   name,
   leading,
-  createNewLabel = "No suggestions found",
-  createNewHint = "Press Enter to create a new item.",
+  createNewLabel = "No se encontraron sugerencias",
+  createNewHint = "Pulsa Intro para crear un elemento nuevo.",
 }: SuggestionInputProps) {
   const id = useId()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -267,7 +267,7 @@ function SuggestionItem({
           <IconButton
             onClick={handleEditClick}
             onMouseDown={onMouseDown}
-            ariaLabel={`Edit payment template ${label}`}
+            ariaLabel={`Editar plantilla de pago ${label}`}
             variant="neutral"
             size="sm"
           >
@@ -278,7 +278,7 @@ function SuggestionItem({
           <IconButton
             onClick={handleDeleteClick}
             onMouseDown={onMouseDown}
-            ariaLabel={`Delete payment template ${label}`}
+            ariaLabel={`Eliminar plantilla de pago ${label}`}
             variant="danger"
             size="sm"
           >

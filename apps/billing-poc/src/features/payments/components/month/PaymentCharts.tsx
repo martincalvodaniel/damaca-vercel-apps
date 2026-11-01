@@ -22,14 +22,14 @@ export default function PaymentCharts({
     <div className="grid gap-4 sm:grid-cols-2">
       <DonutChart
         data={incomeByTag}
-        title="Income by Tag"
+        title="Ingresos por etiqueta"
         colors={CHART_COLORS}
         selectedTags={selectedTags}
         onToggleTag={onToggleTag}
       />
       <DonutChart
         data={outcomeByTag}
-        title="Outcome by Tag"
+        title="Gastos por etiqueta"
         colors={CHART_COLORS}
         selectedTags={selectedTags}
         onToggleTag={onToggleTag}

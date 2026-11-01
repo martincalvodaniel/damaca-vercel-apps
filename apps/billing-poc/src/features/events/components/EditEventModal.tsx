@@ -127,8 +127,8 @@ export default function EditEventModal({
     <EventFormShell
       isOpen={isOpen}
       onClose={onClose}
-      title="Edit event"
-      submitLabel="Save changes"
+      title="Editar evento"
+      submitLabel="Guardar cambios"
       maxWidth="xl"
       resetKey={event._id ?? "edit"}
       computeInitialValues={computeInitialValues}

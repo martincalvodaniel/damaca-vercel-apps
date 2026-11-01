@@ -74,7 +74,7 @@ function PaymentTemplateForm({
       event.preventDefault()
       const trimmedName = name.trim()
       if (trimmedName === "") {
-        setError("Template name is required")
+        setError("El nombre de la plantilla es obligatorio")
         return
       }
       try {
@@ -82,7 +82,10 @@ function PaymentTemplateForm({
         await onSubmit(trimmedName, formData)
       } catch (error) {
         setError(
-          extractPaymentTemplateError(error, "Failed to save payment template")
+          extractPaymentTemplateError(
+            error,
+            "No se pudo guardar la plantilla de pago"
+          )
         )
       }
     },
@@ -179,7 +182,9 @@ export default function PaymentTemplateFormModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditMode ? "Edit Payment Template" : "New Payment Template"}
+      title={
+        isEditMode ? "Editar plantilla de pago" : "Nueva plantilla de pago"
+      }
       maxWidth="xl"
       footer={
         <div className="flex gap-2">
@@ -198,7 +203,9 @@ export default function PaymentTemplateFormModal({
             aria-busy={isCreating || isUpdating}
             className="flex-1 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-offset-zinc-900"
           >
-            {String(isCreating || isUpdating ? "Saving..." : "Save Template")}
+            {String(
+              isCreating || isUpdating ? "Guardando..." : "Guardar plantilla"
+            )}
           </button>
         </div>
       }

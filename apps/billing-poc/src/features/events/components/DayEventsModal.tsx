@@ -38,15 +38,15 @@ export default function DayEventsModal({
       maxWidth="xl"
       headerActions={
         <AddButton
-          ariaLabel={`Add event on ${dateLabel}`}
+          ariaLabel={`Añadir evento el ${dateLabel}`}
           onClick={handleAdd}
         />
       }
     >
       <p className="mb-3 text-xs text-zinc-600 dark:text-zinc-400">
-        For recurring events, use{" "}
-        <span className="font-medium">Exclude date</span> to skip this
-        occurrence (for example, holidays).
+        Para los eventos recurrentes, usa{" "}
+        <span className="font-medium">Excluir fecha</span> para omitir esta
+        ocurrencia (por ejemplo, durante los días festivos).
       </p>
       <EventsListTable
         events={events}

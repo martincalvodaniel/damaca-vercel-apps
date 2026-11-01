@@ -32,7 +32,7 @@ export default function PaymentAdditionalFields({
         onClick={handleSetShowAdditionalFields}
         className="flex w-full items-center justify-between rounded-md bg-zinc-100 px-4 py-2.5 text-sm font-medium text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
       >
-        <span>Additional Fields</span>
+        <span>Campos adicionales</span>
         <svg
           className={`h-4 w-4 transition-transform ${showAdditionalFields ? "rotate-180" : ""}`}
           fill="none"
@@ -88,7 +88,7 @@ export default function PaymentAdditionalFields({
                 placeholder="0"
                 inputMode="decimal"
                 emptyStepBase={0}
-                ariaLabel="Surcharge percentage"
+                ariaLabel="Porcentaje del recargo"
               />
             </div>
 

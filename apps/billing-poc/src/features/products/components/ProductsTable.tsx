@@ -40,14 +40,14 @@ export default function ProductsTable({
         <thead>
           <tr className="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
             <SortableTableHeader
-              label="Name"
+              label="Nombre"
               sortKey="name"
               sort={sortState}
               onSortChange={onSortChange}
               align="left"
             />
             <SortableTableHeader
-              label="Tag"
+              label="Etiqueta"
               sortKey="tag"
               sort={sortState}
               onSortChange={onSortChange}
@@ -55,7 +55,7 @@ export default function ProductsTable({
               className="hidden px-4 py-3 text-left text-sm font-semibold text-zinc-900 lg:table-cell dark:text-zinc-50"
             />
             <SortableTableHeader
-              label="Price"
+              label="Precio"
               sortKey="finalPrice"
               sort={sortState}
               onSortChange={onSortChange}
@@ -69,7 +69,7 @@ export default function ProductsTable({
               align="left"
             />
             <th className="w-24 px-4 py-3 text-right text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">Acciones</span>
             </th>
           </tr>
         </thead>

@@ -22,7 +22,7 @@ export default function EventPricingFields({
       <div className="min-w-0 space-y-1">
         <FormField
           id={`${idPrefix}-price`}
-          label="Price per seat (gross)"
+          label="Precio por plaza (IVA incluido)"
           required
         >
           <NumberStepperInput
@@ -33,7 +33,7 @@ export default function EventPricingFields({
             onValueChange={onChangeValue("pricePerSeat")}
             disabled={isSubmitting}
             required
-            ariaLabel="Price per seat (gross)"
+            ariaLabel="Precio por plaza (IVA incluido)"
           />
         </FormField>
         <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -42,7 +42,7 @@ export default function EventPricingFields({
         </p>
       </div>
       <div className="min-w-0 space-y-1">
-        <FormField id={`${idPrefix}-vat-rate`} label="VAT rate (%)" required>
+        <FormField id={`${idPrefix}-vat-rate`} label="Tipo de IVA (%)" required>
           <NumberStepperInput
             id={`${idPrefix}-vat-rate`}
             min={0}
@@ -52,7 +52,7 @@ export default function EventPricingFields({
             onValueChange={onChangeValue("vatRate")}
             disabled={isSubmitting}
             required
-            ariaLabel="VAT rate percentage"
+            ariaLabel="Porcentaje del IVA"
           />
         </FormField>
       </div>

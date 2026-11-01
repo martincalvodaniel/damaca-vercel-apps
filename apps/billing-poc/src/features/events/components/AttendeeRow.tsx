@@ -79,7 +79,7 @@ export default function AttendeeRow({
   return (
     <li className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 text-sm">
       <div className="min-w-0 flex-1">
-        {name === "Unknown client" ? (
+        {name === "Cliente desconocido" ? (
           <p
             className="truncate font-medium text-zinc-900 dark:text-zinc-100"
             title={attendee.clientId}
@@ -90,7 +90,7 @@ export default function AttendeeRow({
           <button
             type="button"
             className="truncate rounded-sm text-left font-medium text-emerald-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:text-emerald-400"
-            aria-label={`Edit client ${name}`}
+            aria-label={`Editar cliente ${name}`}
             title={attendee.clientId}
             onClick={handleEditClient}
           >
@@ -113,7 +113,7 @@ export default function AttendeeRow({
               min={1}
               step={1}
               disabled={isSaving}
-              ariaLabel={`Seats for ${name}`}
+              ariaLabel={`Plazas para ${name}`}
             />
           </div>
           {isSaving ? (
@@ -137,7 +137,7 @@ export default function AttendeeRow({
         <IconButton
           variant="danger"
           onClick={handleRemove}
-          ariaLabel={`Remove attendee ${name}`}
+          ariaLabel={`Quitar asistente ${name}`}
         >
           <TrashIcon />
         </IconButton>

@@ -37,7 +37,7 @@ export default function InvoicesPageContent() {
     error instanceof Error
       ? error.message
       : error
-        ? "Failed to fetch invoice numbering"
+        ? "No se pudo cargar la numeración de facturas"
         : null
   const handleSelectCounter = useCallback(
     (year: number, counter: InvoiceSeriesCounter) => {
@@ -55,23 +55,23 @@ export default function InvoicesPageContent() {
   const handleReductionSuccess = useCallback(
     (preview: InvoiceReductionPreviewSnapshot) => {
       setSuccessMessage(
-        `Numbering reduced to ${formatInvoiceCounter(preview.newLastNumber)}. ${preview.invoices.length} invoice${preview.invoices.length === 1 ? "" : "s"} removed from ${preview.affectedPaymentCount} payment${preview.affectedPaymentCount === 1 ? "" : "s"}.`
+        `Numeración reducida a ${formatInvoiceCounter(preview.newLastNumber)}. Se eliminaron ${preview.invoices.length} facturas de ${preview.affectedPaymentCount} pagos.`
       )
       setSelectedCounter(null)
     },
     []
   )
   const handlePaymentUpdated = useCallback(() => {
-    setSuccessMessage("Payment updated successfully.")
+    setSuccessMessage("El pago se ha actualizado correctamente.")
   }, [])
   const handlePaymentDeleted = useCallback(() => {
     setSelectedPaymentId(null)
-    setSuccessMessage("Payment deleted successfully.")
+    setSuccessMessage("El pago se ha eliminado correctamente.")
   }, [])
 
   return (
     <PageLayout
-      navigationSubtitle="Invoices"
+      navigationSubtitle="Facturas"
       headerContent={
         <div className="rounded-lg border border-zinc-200 bg-white px-6 py-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
@@ -94,7 +94,9 @@ export default function InvoicesPageContent() {
       ) : null}
 
       {isLoading && yearGroups.length === 0 ? (
-        <EmptyState variant="card">Loading invoice numbering...</EmptyState>
+        <EmptyState variant="card">
+          Cargando numeración de facturas...
+        </EmptyState>
       ) : yearGroups.length === 0 ? (
         <EmptyState variant="card">
           No numbered invoices have been generated yet.
@@ -104,7 +106,7 @@ export default function InvoicesPageContent() {
           {yearGroups.map((group) => (
             <section
               key={group.year}
-              aria-label={`Invoice numbering for ${group.year}`}
+              aria-label={`Numeración de facturas de ${group.year}`}
               className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
             >
               <div className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">

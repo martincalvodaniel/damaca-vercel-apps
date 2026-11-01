@@ -46,10 +46,10 @@ export default function AttendeesPanel({
     return void handleCreateClient(name)
   }
   const handleEmailsCopied = useCallback(() => {
-    onActionSuccess("Emails copied to clipboard")
+    onActionSuccess("Correos copiados")
   }, [onActionSuccess])
   const handleEmailsCopyError = useCallback(() => {
-    onActionError("Failed to copy emails")
+    onActionError("No se pudieron copiar los correos")
   }, [onActionError])
   const id = useId()
   const {
@@ -92,9 +92,13 @@ export default function AttendeesPanel({
           <CopyToClipboardButton
             value={emailsString}
             disabled={!hasEmails}
-            ariaLabel="Copy attendee emails"
-            title={hasEmails ? "Copy attendee emails" : "No attendees to copy"}
-            copiedTitle="Emails copied to clipboard"
+            ariaLabel="Copiar correos de asistentes"
+            title={
+              hasEmails
+                ? "Copiar correos de asistentes"
+                : "No hay asistentes para copiar"
+            }
+            copiedTitle="Correos copiados"
             onCopied={handleEmailsCopied}
             onCopyError={handleEmailsCopyError}
           />
@@ -113,7 +117,7 @@ export default function AttendeesPanel({
       ) : null}
 
       {event.attendees.length === 0 ? (
-        <EmptyState>No attendees yet.</EmptyState>
+        <EmptyState>Aún no hay asistentes.</EmptyState>
       ) : areClientsLoading ? (
         <div
           role="status"
@@ -126,7 +130,7 @@ export default function AttendeesPanel({
         <ul className="divide-y divide-zinc-200 rounded-md border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
           {event.attendees.map((attendee) => {
             const name =
-              clientNameById.get(attendee.clientId) ?? "Unknown client"
+              clientNameById.get(attendee.clientId) ?? "Cliente desconocido"
             const isSaving = savingClientId === attendee.clientId
             const isGenerating = pendingPayment === attendee.clientId
             const hasPayment = Boolean(attendee.paymentId)
@@ -163,7 +167,7 @@ export default function AttendeesPanel({
         <ClientSelector
           key={selectorResetKey}
           onChange={handleClientSelection}
-          label="Client"
+          label="Cliente"
           required
           onCreateClient={handleInlineCreateClient}
           isCreating={isCreatingClient}

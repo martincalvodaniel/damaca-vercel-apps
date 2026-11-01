@@ -24,14 +24,14 @@ export default function DayPickerPanel({
   const offset = dayCalendarOffset(year, month)
   const firstOfMonth = new Date(0, month - 1, 1)
   firstOfMonth.setFullYear(year)
-  const monthLabel = firstOfMonth.toLocaleDateString("en-US", {
+  const monthLabel = firstOfMonth.toLocaleDateString("es-ES", {
     month: "long",
     year: "numeric",
   })
   return (
     <PickerOverlay
       onClose={onClose}
-      closeLabel="Close day picker"
+      closeLabel="Cerrar selector de día"
       desktopAlign="left"
     >
       <div className="px-4 pb-4">

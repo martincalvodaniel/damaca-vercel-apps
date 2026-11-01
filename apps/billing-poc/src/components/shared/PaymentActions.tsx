@@ -22,6 +22,12 @@ interface PaymentActionsProps {
   onOpen: (paymentId: string) => void
 }
 
+function methodLabel(method: string) {
+  if (method === "cash") return "efectivo"
+  if (method === "card") return "tarjeta"
+  return "transferencia bancaria"
+}
+
 export default function PaymentActions({
   name,
   paymentId,
@@ -55,8 +61,8 @@ export default function PaymentActions({
   }
   function label(method: string) {
     return hasPayment
-      ? `Payment already generated for ${name}`
-      : `${reservedMethod ? "Retry" : "Generate"} ${method} payment for ${name}`
+      ? `Ya se generó el pago para ${name}`
+      : `${reservedMethod ? "Reintentar" : "Generar"} el pago por ${methodLabel(method)} para ${name}`
   }
   return (
     <div className="inline-flex items-center gap-1">
@@ -65,8 +71,8 @@ export default function PaymentActions({
           type="button"
           onClick={openPayment}
           disabled={isOpeningPayment}
-          aria-label={`Open payment for ${name}`}
-          title="Open payment"
+          aria-label={`Abrir pago de ${name}`}
+          title="Abrir pago"
           className={`inline-flex items-center rounded-full font-medium transition-colors hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-green-900/50 ${getBadgeSizeClass("sm")} ${getBadgeToneClass("success")}`}
         >
           {isOpeningPayment ? "€ …" : "€ ✓"}
@@ -78,7 +84,7 @@ export default function PaymentActions({
         disabled={isDisabled("cash")}
         onClick={generateCash}
         ariaLabel={label("cash")}
-        title="Generate cash payment"
+        title="Generar pago en efectivo"
       >
         <CashIcon />
       </IconButton>
@@ -88,7 +94,7 @@ export default function PaymentActions({
         disabled={isDisabled("card")}
         onClick={generateCard}
         ariaLabel={label("card")}
-        title="Generate card payment"
+        title="Generar pago con tarjeta"
       >
         <CardIcon />
       </IconButton>
@@ -98,7 +104,7 @@ export default function PaymentActions({
         disabled={isDisabled("bank_transfer")}
         onClick={generateBankTransfer}
         ariaLabel={label("bank transfer")}
-        title="Generate bank transfer payment"
+        title="Generar transferencia bancaria"
       >
         <BankTransferIcon />
       </IconButton>

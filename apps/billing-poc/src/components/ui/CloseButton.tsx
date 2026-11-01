@@ -5,7 +5,7 @@ interface CloseButtonProps {
 
 export default function CloseButton({
   onClick,
-  label = "Close",
+  label = "Cerrar",
 }: CloseButtonProps) {
   return (
     <button

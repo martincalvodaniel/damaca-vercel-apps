@@ -21,9 +21,9 @@ export function WordpressCouponDeleteDialog({
   return (
     <ConfirmDialog
       isOpen={coupon !== null}
-      title="Delete WordPress coupon"
-      confirmLabel="Delete coupon"
-      pendingLabel="Deleting..."
+      title="Eliminar cupón de WordPress"
+      confirmLabel="Eliminar cupón"
+      pendingLabel="Eliminando..."
       variant="danger"
       isPending={isPending}
       error={error}

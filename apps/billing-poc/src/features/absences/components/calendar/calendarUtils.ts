@@ -57,7 +57,7 @@ function pluralize(count: number, singular: string, plural: string): string {
 }
 
 export function buildAriaLabel(date: Date, dayCounts: DayCounts): string {
-  const dateLabel = date.toLocaleDateString("en-US", {
+  const dateLabel = date.toLocaleDateString("es-ES", {
     month: "long",
     day: "numeric",
   })

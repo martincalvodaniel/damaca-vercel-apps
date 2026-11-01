@@ -23,7 +23,7 @@ export function formatOrderTime(value: string): string {
     return "-"
   }
 
-  return parsedDate.toLocaleTimeString("en-US", {
+  return parsedDate.toLocaleTimeString("es-ES", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,

@@ -30,7 +30,7 @@ export default function ClientTableRow({
       ? "bg-white dark:bg-zinc-900"
       : "bg-zinc-50 dark:bg-zinc-800/50"
   const typeLabel =
-    client.clientType === "individual" ? "Person / Freelancer" : "Company"
+    client.clientType === "individual" ? "Persona física / autónomo" : "Empresa"
   const handlePhoneCopied = useCallback(() => {
     onCopy?.("phone", client.phone ?? "")
   }, [client.phone, onCopy])
@@ -62,7 +62,7 @@ export default function ClientTableRow({
           <CopyToClipboardButton
             value={client.phone}
             title={client.phone}
-            ariaLabel={`Copy phone ${client.phone}`}
+            ariaLabel={`Copiar teléfono ${client.phone}`}
             className="rounded px-1 py-0.5 text-left hover:bg-zinc-200/60 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:bg-zinc-700/60"
             showIcon={false}
             stopPropagation
@@ -79,7 +79,7 @@ export default function ClientTableRow({
           <CopyToClipboardButton
             value={client.email}
             title={client.email}
-            ariaLabel={`Copy email ${client.email}`}
+            ariaLabel={`Copiar correo electrónico ${client.email}`}
             className="rounded px-1 py-0.5 text-left hover:bg-zinc-200/60 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:bg-zinc-700/60"
             showIcon={false}
             stopPropagation
@@ -96,7 +96,7 @@ export default function ClientTableRow({
           <CopyToClipboardButton
             value={client.instagram}
             title={client.instagram}
-            ariaLabel={`Copy Instagram ${client.instagram}`}
+            ariaLabel={`Copiar Instagram ${client.instagram}`}
             className="rounded px-1 py-0.5 text-left hover:bg-zinc-200/60 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:bg-zinc-700/60"
             showIcon={false}
             stopPropagation
@@ -113,7 +113,7 @@ export default function ClientTableRow({
           variant="danger"
           stopPropagation
           onClick={handleDelete}
-          ariaLabel={`Delete client ${client.name}`}
+          ariaLabel={`Eliminar cliente ${client.name}`}
         >
           <TrashIcon />
         </IconButton>

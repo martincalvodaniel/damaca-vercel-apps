@@ -18,8 +18,8 @@ interface ConfirmDeleteModalProps {
 export default function ConfirmDeleteModal({
   isOpen,
   title,
-  confirmLabel = "Delete",
-  pendingLabel = "Deleting…",
+  confirmLabel = "Eliminar",
+  pendingLabel = "Eliminando…",
   isPending,
   errorMessage,
   onCancel,

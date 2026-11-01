@@ -20,9 +20,9 @@ export default function EventDeleteDialog({
   return (
     <ConfirmDialog
       isOpen={!!event}
-      title="Delete event"
-      confirmLabel="Delete"
-      pendingLabel="Deleting…"
+      title="Eliminar evento"
+      confirmLabel="Eliminar"
+      pendingLabel="Eliminando…"
       variant="danger"
       isPending={isPending}
       error={error}

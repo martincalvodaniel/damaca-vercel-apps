@@ -68,7 +68,7 @@ export default function ClientSelectorField({
       const { id } = await createClient({ name, clientType: newClientType })
       onChange(id, name)
     } catch (error) {
-      onError?.(extractErrorMessage(error, "Failed to create client"))
+      onError?.(extractErrorMessage(error, "No se pudo crear el cliente"))
     } finally {
       setIsCreatingClient(false)
     }

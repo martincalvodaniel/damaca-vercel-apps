@@ -88,8 +88,8 @@ export default function PaymentInvoicesSection({
       })
       window.open(data.downloadUrl, "_blank")
     } catch (err) {
-      console.error(`Error generating invoice: ${err}`)
-      setGenerateError(extractMessage(err, "Failed to generate invoice"))
+      console.error(`Error al generar la factura: ${err}`)
+      setGenerateError(extractMessage(err, "No se pudo generar la factura"))
     }
   }
   const handleAppendLink = async (e: React.FormEvent) => {
@@ -107,8 +107,10 @@ export default function PaymentInvoicesSection({
       })
       setLinkUrl("")
     } catch (err) {
-      console.error(`Error appending invoice link: ${err}`)
-      setLinkError(extractMessage(err, "Failed to add invoice link"))
+      console.error(`Error al añadir el enlace de la factura: ${err}`)
+      setLinkError(
+        extractMessage(err, "No se pudo añadir el enlace de la factura")
+      )
     }
   }
   const handleRemoveLink = (link: string) => {
@@ -130,8 +132,10 @@ export default function PaymentInvoicesSection({
       setShowRemoveConfirm(false)
       setPendingRemoveLink(null)
     } catch (err) {
-      console.error(`Error removing invoice link: ${err}`)
-      setRemoveError(extractMessage(err, "Failed to remove invoice link"))
+      console.error(`Error al eliminar el enlace de la factura: ${err}`)
+      setRemoveError(
+        extractMessage(err, "No se pudo eliminar el enlace de la factura")
+      )
     }
   }
   return (
@@ -183,9 +187,9 @@ export default function PaymentInvoicesSection({
 
       <ConfirmDialog
         isOpen={showRemoveConfirm}
-        title="Delete invoice link"
-        confirmLabel="Delete"
-        pendingLabel="Deleting..."
+        title="Eliminar enlace de factura"
+        confirmLabel="Eliminar"
+        pendingLabel="Eliminando..."
         variant="danger"
         isPending={isRemoving}
         error={removeError}

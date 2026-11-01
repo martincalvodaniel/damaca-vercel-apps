@@ -27,10 +27,10 @@ export default function EventScheduleFields({
           value={values.durationMinutes}
           onValueChange={onChangeValue("durationMinutes")}
           disabled={isSubmitting}
-          ariaLabel="Duration in minutes"
+          ariaLabel="Duración en minutos"
         />
       </FormField>
-      <FormField id={`${idPrefix}-max`} label="Max attendees">
+      <FormField id={`${idPrefix}-max`} label="Aforo máximo">
         <NumberStepperInput
           id={`${idPrefix}-max`}
           min={1}
@@ -38,7 +38,7 @@ export default function EventScheduleFields({
           value={values.maxAttendees}
           onValueChange={onChangeValue("maxAttendees")}
           disabled={isSubmitting}
-          ariaLabel="Max attendees"
+          ariaLabel="Aforo máximo"
         />
       </FormField>
     </div>

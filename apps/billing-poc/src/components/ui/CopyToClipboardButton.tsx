@@ -36,7 +36,7 @@ export function CopyToClipboardButton({
   ariaLabel,
   children,
   className = "inline-flex items-center justify-center rounded-md p-1 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-zinc-500 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:disabled:hover:bg-transparent dark:disabled:hover:text-zinc-400",
-  copiedTitle = "Copied",
+  copiedTitle = "Copiado",
   disabled = false,
   iconClassName = "h-4 w-4",
   onCopied,

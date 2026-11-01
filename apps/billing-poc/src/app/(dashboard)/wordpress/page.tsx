@@ -101,11 +101,14 @@ export default function WordpressPage() {
   })
   const errorMessage = useMemo(() => {
     if (!error) return null
-    return extractApiError(error, "Failed to fetch WordPress orders")
+    return extractApiError(
+      error,
+      "No se pudieron cargar los pedidos de WordPress"
+    )
   }, [error])
   const pagination = data?.pagination
   return (
-    <PageLayout navigationSubtitle="WordPress Orders">
+    <PageLayout navigationSubtitle="Pedidos de WordPress">
       <section className="space-y-4 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-6">
         <WordpressOrdersHeader
           onReload={handlePageChange}
@@ -117,9 +120,13 @@ export default function WordpressPage() {
         ) : null}
 
         {isLoading && orders.length === 0 ? (
-          <EmptyState variant="card">Loading WordPress orders...</EmptyState>
+          <EmptyState variant="card">
+            Cargando pedidos de WordPress...
+          </EmptyState>
         ) : orders.length === 0 ? (
-          <EmptyState variant="card">No orders found for this page.</EmptyState>
+          <EmptyState variant="card">
+            No se encontraron pedidos en esta página.
+          </EmptyState>
         ) : (
           <WordpressOrdersTable
             orders={orders}

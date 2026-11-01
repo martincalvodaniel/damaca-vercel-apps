@@ -7,7 +7,7 @@ import { useStableCallback } from "@/hooks/useStableCallback"
 
 const MONTH_INDEXES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const
 const MONTH_SHORT_LABELS: readonly string[] = MONTH_INDEXES.map((m) =>
-  new Date(2000, m).toLocaleDateString("en-US", { month: "short" })
+  new Date(2000, m).toLocaleDateString("es-ES", { month: "short" })
 )
 
 interface MonthPickerProps {
@@ -58,7 +58,7 @@ export default function MonthPicker({
           showCalendar ? (
             <PickerOverlay
               onClose={handleShowCalendarChange}
-              closeLabel="Close calendar"
+              closeLabel="Cerrar calendario"
             >
               {/* Calendar Header */}
               <div className="border-b border-zinc-200 px-6 pb-4 dark:border-zinc-700">
@@ -67,7 +67,7 @@ export default function MonthPicker({
                     type="button"
                     onClick={handleDayPrev}
                     className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                    aria-label="Previous month"
+                    aria-label="Mes anterior"
                   >
                     ←
                   </button>
@@ -75,7 +75,7 @@ export default function MonthPicker({
                     {new Date(
                       selectedDate.getFullYear(),
                       selectedDate.getMonth()
-                    ).toLocaleDateString("en-US", {
+                    ).toLocaleDateString("es-ES", {
                       year: "numeric",
                       month: "long",
                     })}
@@ -84,7 +84,7 @@ export default function MonthPicker({
                     type="button"
                     onClick={handleDayNext}
                     className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                    aria-label="Next month"
+                    aria-label="Mes siguiente"
                   >
                     →
                   </button>
@@ -110,7 +110,7 @@ export default function MonthPicker({
                     type="button"
                     onClick={handlePrevYear}
                     className="text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                    aria-label="Previous year"
+                    aria-label="Año anterior"
                   >
                     ←
                   </button>
@@ -121,7 +121,7 @@ export default function MonthPicker({
                     type="button"
                     onClick={handleNextYear}
                     className="text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                    aria-label="Next year"
+                    aria-label="Año siguiente"
                   >
                     →
                   </button>

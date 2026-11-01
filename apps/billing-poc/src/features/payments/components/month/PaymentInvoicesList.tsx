@@ -88,7 +88,7 @@ function PaymentInvoiceItem({
         type="button"
         onClick={handleRemove}
         disabled={isRemoving || !paymentId}
-        aria-label={`Remove ${label} link`}
+        aria-label={`Eliminar enlace de ${label}`}
         className="ml-auto inline-flex items-center rounded-md p-1 text-red-600 hover:bg-red-50 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-red-400 dark:hover:bg-red-950"
       >
         <TrashIcon />

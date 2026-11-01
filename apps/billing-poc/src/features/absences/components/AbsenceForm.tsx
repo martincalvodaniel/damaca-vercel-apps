@@ -174,7 +174,7 @@ export function TypeField() {
   const { idPrefix, state, isSubmitting } = useAbsenceFormContext()
   return (
     <RadioPillGroup<AbsenceType>
-      legend="Type"
+      legend="Tipo"
       name={`${idPrefix}-type`}
       idPrefix={`${idPrefix}-type`}
       value={state.type}
@@ -183,13 +183,13 @@ export function TypeField() {
       options={[
         {
           value: "absence",
-          label: "Absence",
+          label: "Ausencia",
           dotClass: "bg-red-500",
           ringClass: "text-red-600 focus:ring-2 focus:ring-red-500",
         },
         {
           value: "recovery",
-          label: "Recovery",
+          label: "Recuperación",
           dotClass: "bg-green-500",
           ringClass: "text-green-600 focus:ring-2 focus:ring-green-500",
         },
@@ -202,7 +202,7 @@ export function PartOfDayField() {
   const { idPrefix, state, isSubmitting } = useAbsenceFormContext()
   return (
     <RadioPillGroup<PartOfDay>
-      legend="Part of day"
+      legend="Parte del día"
       name={`${idPrefix}-partOfDay`}
       idPrefix={`${idPrefix}-partOfDay`}
       value={state.partOfDay}
@@ -212,12 +212,12 @@ export function PartOfDayField() {
       options={[
         {
           value: "morning",
-          label: "Morning",
+          label: "Mañana",
           ringClass: "text-blue-600 focus:ring-2 focus:ring-blue-500",
         },
         {
           value: "evening",
-          label: "Evening",
+          label: "Tarde",
           ringClass: "text-blue-600 focus:ring-2 focus:ring-blue-500",
         },
       ]}

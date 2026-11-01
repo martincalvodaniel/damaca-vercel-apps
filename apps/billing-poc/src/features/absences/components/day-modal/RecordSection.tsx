@@ -92,8 +92,8 @@ function RecordListItem({
       <RecordRowActions
         onEdit={handleEdit}
         onDelete={handleDelete}
-        editLabel={`Edit ${record.type} for ${record.studentName}`}
-        deleteLabel={`Delete ${record.type} for ${record.studentName}`}
+        editLabel={`Editar ${record.type === "absence" ? "ausencia" : "recuperación"} de ${record.studentName}`}
+        deleteLabel={`Eliminar ${record.type === "absence" ? "ausencia" : "recuperación"} de ${record.studentName}`}
       />
     </li>
   )

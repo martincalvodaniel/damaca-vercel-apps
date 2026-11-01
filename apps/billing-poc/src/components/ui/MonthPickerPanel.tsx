@@ -3,18 +3,18 @@ import { useStableCallback } from "@/hooks/useStableCallback"
 import PickerOverlay from "./PickerOverlay"
 
 const MONTH_NAMES = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+  "ene",
+  "feb",
+  "mar",
+  "abr",
+  "may",
+  "jun",
+  "jul",
+  "ago",
+  "sep",
+  "oct",
+  "nov",
+  "dic",
 ]
 interface MonthPickerPanelProps {
   months: number[]
@@ -31,7 +31,7 @@ export default function MonthPickerPanel({
   return (
     <PickerOverlay
       onClose={onClose}
-      closeLabel="Close month picker"
+      closeLabel="Cerrar selector de mes"
       desktopAlign="left"
     >
       <div className="px-4 pb-4">

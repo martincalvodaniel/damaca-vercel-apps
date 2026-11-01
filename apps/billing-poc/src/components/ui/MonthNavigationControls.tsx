@@ -30,7 +30,7 @@ export default function MonthNavigationControls({
       <GoToCurrentButton
         disabled={isViewingCurrentMonth}
         onClick={onGoToCurrentMonth}
-        label="Go to current month"
+        label="Ir al mes actual"
       />
       <div className="flex items-center gap-0.75">
         <PrevMonthButton onClick={onPrevMonth} />

@@ -60,7 +60,7 @@ export function WordpressOrdersTable({
                     data-order-id={order.id}
                     onClick={handleSelectOrder}
                     className="text-left text-sm font-semibold text-zinc-900 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-zinc-50 dark:focus:ring-offset-zinc-900"
-                    aria-label={`Open order ${order.id} details`}
+                    aria-label={`Abrir detalles del pedido ${order.id}`}
                   >
                     #{order.id}
                   </button>
@@ -69,7 +69,7 @@ export function WordpressOrdersTable({
                     data-order-id={order.id}
                     onClick={handleSelectStatus}
                     className="block rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
-                    aria-label={`Change status for order ${order.id}`}
+                    aria-label={`Cambiar estado del pedido ${order.id}`}
                   >
                     <Badge tone={getOrderStatusTone(order.status)} size="sm">
                       {order.status}
@@ -87,7 +87,7 @@ export function WordpressOrdersTable({
                   data-order-id={order.id}
                   onClick={handleSelectBilling}
                   className="text-left hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
-                  aria-label={`Import billing data for order ${order.id}`}
+                  aria-label={`Importar datos de facturación del pedido ${order.id}`}
                 >
                   <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                     {order.billing.first_name} {order.billing.last_name}
@@ -146,7 +146,7 @@ export function WordpressOrdersTable({
                         data-order-id={order.id}
                         onClick={handleSelectStatus}
                         className="block rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
-                        aria-label={`Change status for order ${order.id}`}
+                        aria-label={`Cambiar estado del pedido ${order.id}`}
                       >
                         <Badge
                           tone={getOrderStatusTone(order.status)}
@@ -163,7 +163,7 @@ export function WordpressOrdersTable({
                       data-order-id={order.id}
                       onClick={handleSelectBilling}
                       className="text-left hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
-                      aria-label={`Import billing data for order ${order.id}`}
+                      aria-label={`Importar datos de facturación del pedido ${order.id}`}
                     >
                       <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                         {order.billing.first_name} {order.billing.last_name}

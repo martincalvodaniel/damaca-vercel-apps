@@ -14,9 +14,9 @@ export default function ChartsToggle({
   return (
     <BinaryToggle
       value={showCharts ? "left" : "right"}
-      leftLabel="Show"
-      rightLabel="Hide"
-      ariaLabel="Toggle charts visibility"
+      leftLabel="Mostrar"
+      rightLabel="Ocultar"
+      ariaLabel="Mostrar u ocultar gráficos"
       onChange={handleChange}
       leading="📊"
     />

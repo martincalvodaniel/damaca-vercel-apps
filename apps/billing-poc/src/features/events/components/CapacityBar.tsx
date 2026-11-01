@@ -39,7 +39,7 @@ export default function CapacityBar({ used, max }: CapacityBarProps) {
     <div className="space-y-1">
       <div
         role="progressbar"
-        aria-label="Event capacity"
+        aria-label="Aforo del evento"
         aria-valuemin={0}
         aria-valuemax={ariaValueMax}
         aria-valuenow={used}

@@ -44,7 +44,7 @@ interface PaymentMethodDropdownProps {
 export default function PaymentMethodDropdown({
   value,
   onChange,
-  label = "Payment Method (Optional)",
+  label = "Método de pago (opcional)",
 }: PaymentMethodDropdownProps) {
   const handleClearSelection = () => handleSelect("")
   const handleIsOpenChange = () => setIsOpen((prev) => !prev)
@@ -100,7 +100,7 @@ export default function PaymentMethodDropdown({
             ) : (
               <>
                 <XIcon className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
-                <span>— Not specified —</span>
+                <span>— Sin especificar —</span>
               </>
             )}
           </span>
@@ -123,7 +123,7 @@ export default function PaymentMethodDropdown({
         {isOpen ? (
           <ul
             id={`${id}-paymentMethod-list`}
-            aria-label="Payment method options"
+            aria-label="Opciones del método de pago"
             className="absolute z-20 mt-1 max-h-64 w-full overflow-auto rounded-md border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-800"
           >
             <li>
@@ -134,7 +134,7 @@ export default function PaymentMethodDropdown({
                 className="flex w-full items-center gap-2 px-4 py-2 text-left text-zinc-900 hover:bg-zinc-100 focus:outline-none focus:bg-zinc-100 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:focus:bg-zinc-700"
               >
                 <XIcon className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
-                <span>— Not specified —</span>
+                <span>— Sin especificar —</span>
               </button>
             </li>
 

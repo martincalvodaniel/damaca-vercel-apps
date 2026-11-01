@@ -17,7 +17,9 @@ export function WordpressOrderDetailsModal({
     <Modal
       isOpen={order !== null}
       onClose={onClose}
-      title={order ? `Order #${order.id} details` : "Order details"}
+      title={
+        order ? `Detalles del pedido n.º ${order.id}` : "Detalles del pedido"
+      }
       maxWidth="xl"
     >
       {order ? (
@@ -46,9 +48,9 @@ export function WordpressOrderDetailsModal({
                   <CopyToClipboardButton
                     value={order.billing.email}
                     disabled={!order.billing.email}
-                    ariaLabel="Copy billing email"
-                    title="Copy billing email"
-                    copiedTitle="Email copied"
+                    ariaLabel="Copiar correo de facturación"
+                    title="Copiar correo de facturación"
+                    copiedTitle="Correo copiado"
                   />
                 </p>
                 <p className="flex items-center gap-2">
@@ -58,9 +60,9 @@ export function WordpressOrderDetailsModal({
                   <CopyToClipboardButton
                     value={order.billing.phone}
                     disabled={!order.billing.phone}
-                    ariaLabel="Copy billing phone"
-                    title="Copy billing phone"
-                    copiedTitle="Phone copied"
+                    ariaLabel="Copiar teléfono de facturación"
+                    title="Copiar teléfono de facturación"
+                    copiedTitle="Teléfono copiado"
                   />
                 </p>
               </div>
@@ -77,11 +79,13 @@ export function WordpressOrderDetailsModal({
                 <dd className="text-right text-zinc-900 dark:text-zinc-100">
                   {formatAmount(order.cart_tax)}
                 </dd>
-                <dt className="text-zinc-600 dark:text-zinc-300">Discount</dt>
+                <dt className="text-zinc-600 dark:text-zinc-300">Descuento</dt>
                 <dd className="text-right text-zinc-900 dark:text-zinc-100">
                   {formatAmount(order.discount_total)}
                 </dd>
-                <dt className="text-zinc-600 dark:text-zinc-300">Total tax</dt>
+                <dt className="text-zinc-600 dark:text-zinc-300">
+                  Impuestos totales
+                </dt>
                 <dd className="text-right text-zinc-900 dark:text-zinc-100">
                   {formatAmount(order.total_tax)}
                 </dd>

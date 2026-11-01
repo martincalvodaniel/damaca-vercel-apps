@@ -96,7 +96,7 @@ export default function ProductTableRow({
         <div className="flex items-center justify-end gap-2">
           <IconButton
             onClick={handleEditClick}
-            ariaLabel={`Edit product ${product.name}`}
+            ariaLabel={`Editar producto ${product.name}`}
             variant="neutral"
             size="sm"
             stopPropagation
@@ -105,7 +105,7 @@ export default function ProductTableRow({
           </IconButton>
           <IconButton
             onClick={handleDeleteClick}
-            ariaLabel={`Delete product ${product.name}`}
+            ariaLabel={`Eliminar producto ${product.name}`}
             variant="danger"
             size="sm"
             stopPropagation

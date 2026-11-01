@@ -26,7 +26,9 @@ export default function ClientFormModal({
     try {
       await updateClient({ id: client._id, ...data })
     } catch (err) {
-      throw new Error(extractClientApiError(err, "Failed to update client"))
+      throw new Error(
+        extractClientApiError(err, "No se pudo actualizar el cliente")
+      )
     }
     onClose()
     onSuccess?.()
@@ -36,7 +38,7 @@ export default function ClientFormModal({
     <Modal
       isOpen={isOpen && !!client}
       onClose={onClose}
-      title="Edit Client"
+      title="Editar cliente"
       maxWidth="xl"
     >
       {client ? (

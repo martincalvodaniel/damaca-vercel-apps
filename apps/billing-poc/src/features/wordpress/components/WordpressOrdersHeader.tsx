@@ -22,8 +22,8 @@ export function WordpressOrdersHeader({
 
       <IconButton
         onClick={onReload}
-        ariaLabel="Reload orders and go to page 1"
-        title="Reload"
+        ariaLabel="Recargar pedidos e ir a la página 1"
+        title="Recargar"
         size="md"
         variant="info"
         disabled={isReloadDisabled}

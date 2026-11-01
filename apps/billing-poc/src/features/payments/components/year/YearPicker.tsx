@@ -71,12 +71,12 @@ export default function YearPicker({
       <GoToCurrentButton
         disabled={isViewingCurrentYear}
         onClick={onGoToCurrentYear}
-        label="Jump to current year"
+        label="Ir al año actual"
       />
       <div className="flex items-center gap-1">
         <NavButton
           onClick={handleYearChangePrevious}
-          aria-label="View previous year"
+          aria-label="Ver año anterior"
         >
           ←
         </NavButton>
@@ -94,7 +94,7 @@ export default function YearPicker({
           {showYearPicker ? (
             <PickerOverlay
               onClose={closeYearPicker}
-              closeLabel="Close year picker"
+              closeLabel="Cerrar selector de año"
               width="w-64"
               className="p-4"
             >
@@ -113,7 +113,7 @@ export default function YearPicker({
                   onChange={handleYearInputEventChange}
                   onKeyDown={handleYearInputKeyDown}
                   className="w-24 rounded border border-zinc-300 px-2 py-1 text-sm dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                  aria-label="Enter year manually"
+                  aria-label="Introducir año manualmente"
                 />
                 <button
                   type="button"
@@ -137,7 +137,10 @@ export default function YearPicker({
             </PickerOverlay>
           ) : null}
         </div>
-        <NavButton onClick={handleYearChangeNext} aria-label="View next year">
+        <NavButton
+          onClick={handleYearChangeNext}
+          aria-label="Ver año siguiente"
+        >
           →
         </NavButton>
       </div>

@@ -84,18 +84,18 @@ export default function ProductForm({
       stockInput.length > 0 ? Number.parseFloat(stockInput) : undefined
 
     if (!name) {
-      setError("Name is required")
+      setError("El nombre es obligatorio")
       return
     }
     if (Number.isNaN(finalPrice) || finalPrice < 0) {
-      setError("Final price must be 0 or greater")
+      setError("El precio final debe ser igual o superior a 0")
       return
     }
     if (
       stock !== undefined &&
       (Number.isNaN(stock) || stock < 0 || !Number.isInteger(stock))
     ) {
-      setError("Stock must be a whole number greater than or equal to 0")
+      setError("El stock debe ser un número entero igual o superior a 0")
       return
     }
 
@@ -108,7 +108,7 @@ export default function ProductForm({
         stock: stockInput.length > 0 ? stockInput : null,
       })
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      setError(err instanceof Error ? err.message : "Se ha producido un error")
     } finally {
       setIsSubmitting(false)
     }
@@ -132,7 +132,7 @@ export default function ProductForm({
           name="name"
           value={formData.name}
           onChange={handleNameChange}
-          placeholder="E.g., Premium Subscription"
+          placeholder="Ej.: Suscripción prémium"
           className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:ring-offset-zinc-900"
           required
           aria-required="true"
@@ -141,8 +141,8 @@ export default function ProductForm({
       </div>
 
       <SuggestionInput
-        label="Tag (optional)"
-        ariaLabel="Tag (optional)"
+        label="Etiqueta (opcional)"
+        ariaLabel="Etiqueta (opcional)"
         name="tag"
         value={formData.tag}
         options={availableTags}
@@ -150,7 +150,7 @@ export default function ProductForm({
         onSelect={handleTagChange}
         disabled={isSubmitting}
         maxLength={100}
-        placeholder="Start typing to see suggestions..."
+        placeholder="Empieza a escribir para ver sugerencias..."
         leading={
           <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-zinc-50 text-xs font-medium text-zinc-500 dark:border-zinc-700 dark:bg-zinc-700 dark:text-zinc-300">
             #
@@ -172,7 +172,7 @@ export default function ProductForm({
             name="finalPrice"
             value={formData.finalPrice}
             onValueChange={handleFinalPriceChange}
-            ariaLabel="Final price"
+            ariaLabel="Precio final"
             step={5}
             inputMode="decimal"
             min={0}
@@ -196,7 +196,7 @@ export default function ProductForm({
             name="stock"
             value={formData.stock ?? ""}
             onValueChange={handleStockChange}
-            ariaLabel="Current stock"
+            ariaLabel="Stock actual"
             step={1}
             min={0}
             inputMode="numeric"
@@ -206,7 +206,7 @@ export default function ProductForm({
               formData.stock != null && formData.stock !== "" ? (
                 <ClearButton
                   onClick={handleClearStock}
-                  ariaLabel="Clear current stock"
+                  ariaLabel="Borrar stock actual"
                   disabled={isSubmitting}
                   className="top-1 right-1"
                 />
@@ -231,7 +231,8 @@ export default function ProductForm({
           aria-busy={isSubmitting}
           className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-offset-zinc-900"
         >
-          {isSubmitting ? "Saving..." : product ? "Update" : "Create"} Product
+          {isSubmitting ? "Guardando..." : product ? "Actualizar" : "Crear"}{" "}
+          producto
         </button>
       </div>
     </form>

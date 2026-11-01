@@ -24,8 +24,8 @@ interface AddRecordButtonProps {
 export default function AddRecordButton({
   onClick,
   label,
-  ariaLabel = "Add record",
-  title = "Add record",
+  ariaLabel = "Añadir registro",
+  title = "Añadir registro",
   className = "",
   disabled = false,
 }: AddRecordButtonProps) {

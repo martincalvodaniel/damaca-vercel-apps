@@ -64,7 +64,7 @@ export default function EventBasicFields({
   const hasConcreteDay = values.day.trim().length > 0
   return (
     <>
-      <FormField id={`${idPrefix}-title`} label="Title">
+      <FormField id={`${idPrefix}-title`} label="Título">
         <input
           ref={titleRef}
           id={`${idPrefix}-title`}
@@ -78,8 +78,8 @@ export default function EventBasicFields({
         />
       </FormField>
       <SuggestionInput
-        label="Tag (optional)"
-        ariaLabel="Tag (optional)"
+        label="Etiqueta (opcional)"
+        ariaLabel="Etiqueta (opcional)"
         name="tag"
         value={values.tag}
         options={availableTags}
@@ -87,7 +87,7 @@ export default function EventBasicFields({
         onSelect={handleTagChange}
         disabled={isSubmitting}
         maxLength={100}
-        placeholder="Start typing to see suggestions..."
+        placeholder="Empieza a escribir para ver sugerencias..."
         leading={
           <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-zinc-50 text-xs font-medium text-zinc-500 dark:border-zinc-700 dark:bg-zinc-700 dark:text-zinc-300">
             #
@@ -104,11 +104,11 @@ export default function EventBasicFields({
             onChange={onDateChange}
             disabled={isSubmitting}
             disableDay={isRecurring}
-            ariaLabelPrefix="Event date"
+            ariaLabelPrefix="Fecha del evento"
           />
         </div>
 
-        <FormField id={`${idPrefix}-time`} label="Time (optional)">
+        <FormField id={`${idPrefix}-time`} label="Hora (opcional)">
           <input
             id={`${idPrefix}-time`}
             type="time"
@@ -120,7 +120,10 @@ export default function EventBasicFields({
         </FormField>
 
         <div className="col-span-2 md:col-span-1">
-          <FormField id={`${idPrefix}-dayOfWeek`} label="Repeat weekly on">
+          <FormField
+            id={`${idPrefix}-dayOfWeek`}
+            label="Repetir cada semana el"
+          >
             <div className="relative w-full md:w-[180px]">
               <select
                 id={`${idPrefix}-dayOfWeek`}
@@ -129,20 +132,20 @@ export default function EventBasicFields({
                 disabled={isSubmitting || hasConcreteDay}
                 className="min-h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 pr-8 text-sm font-medium text-zinc-900 transition hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
               >
-                <option value="">— Not recurring —</option>
-                <option value="1">Monday</option>
-                <option value="2">Tuesday</option>
-                <option value="3">Wednesday</option>
-                <option value="4">Thursday</option>
-                <option value="5">Friday</option>
-                <option value="6">Saturday</option>
-                <option value="0">Sunday</option>
+                <option value="">— No se repite —</option>
+                <option value="1">Lunes</option>
+                <option value="2">Martes</option>
+                <option value="3">Miércoles</option>
+                <option value="4">Jueves</option>
+                <option value="5">Viernes</option>
+                <option value="6">Sábado</option>
+                <option value="0">Domingo</option>
               </select>
               {!hasConcreteDay && values.dayOfWeek ? (
                 <ClearButton
                   onClick={handleChangeField}
                   disabled={isSubmitting}
-                  ariaLabel="Clear repeat weekly"
+                  ariaLabel="Borrar repetición semanal"
                 />
               ) : null}
             </div>

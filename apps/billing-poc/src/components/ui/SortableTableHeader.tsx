@@ -98,7 +98,7 @@ export function SortableTableHeader<TKey extends string>({
       <button
         type="button"
         onClick={handleSort}
-        aria-label={`Sort by ${label}`}
+        aria-label={`Ordenar por ${label}`}
         className={triggerClassName}
       >
         <span>{label}</span>

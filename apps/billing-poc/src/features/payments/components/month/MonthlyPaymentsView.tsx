@@ -123,11 +123,11 @@ export default function MonthlyPaymentsView({
     (fetchError instanceof Error
       ? fetchError.message
       : fetchError
-        ? "Failed to fetch payments"
+        ? "No se pudieron cargar los pagos"
         : clientFetchError instanceof Error
           ? clientFetchError.message
           : clientFetchError
-            ? "Failed to fetch clients"
+            ? "No se pudieron cargar los clientes"
             : null)
   return (
     <div className="w-full space-y-2">

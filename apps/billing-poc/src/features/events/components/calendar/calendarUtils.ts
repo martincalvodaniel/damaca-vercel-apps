@@ -108,7 +108,7 @@ export function buildMonthCells(
 }
 
 export function buildDayAriaLabel(date: Date, count: number): string {
-  const dateLabel = date.toLocaleDateString("en-US", {
+  const dateLabel = date.toLocaleDateString("es-ES", {
     month: "long",
     day: "numeric",
   })

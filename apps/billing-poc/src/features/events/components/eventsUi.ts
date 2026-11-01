@@ -63,7 +63,7 @@ function formatEventWeekday(event: Pick<Event, "dayOfWeek">): string {
     return ""
   }
 
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("es-ES", {
     weekday: "long",
     timeZone: "UTC",
   }).format(new Date(Date.UTC(2026, 0, 4 + event.dayOfWeek)))
@@ -80,7 +80,7 @@ function formatEventDate(
     const m = String(event.month).padStart(2, "0")
     // Use day 01 as anchor for locale formatting, then strip the day.
     return new Date(`${event.year}-${m}-01T00:00:00`).toLocaleDateString(
-      "en-US",
+      "es-ES",
       { year: "numeric", month: "long" }
     )
   }

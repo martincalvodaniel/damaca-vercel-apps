@@ -32,9 +32,7 @@ function PaymentSideNavigationButton({
   disabled: boolean
 }) {
   const isPrevious = direction === "previous"
-  const label = isPrevious
-    ? "Previous displayed payment"
-    : "Next displayed payment"
+  const label = isPrevious ? "Pago anterior" : "Pago siguiente"
 
   return (
     <button
@@ -154,7 +152,7 @@ export default function PaymentDetailModal({
       <Modal
         isOpen={true}
         onClose={onClose}
-        title={isDuplicate ? "Duplicate Payment" : "Edit Payment"}
+        title={isDuplicate ? "Duplicar pago" : "Editar pago"}
         maxWidth="xl"
         initialFocus={navigation ? "container" : "first"}
         stickyHeader={!!navigation}
@@ -182,8 +180,8 @@ export default function PaymentDetailModal({
           navigation ? (
             <div className="flex items-center gap-1">
               <IconButton
-                ariaLabel="Previous displayed payment"
-                title="Previous displayed payment"
+                ariaLabel="Pago anterior"
+                title="Pago anterior"
                 disabled={!navigation.onPrevious || isSaving || isDeleting}
                 onClick={navigation.onPrevious ?? ignoreNavigation}
               >
@@ -199,8 +197,8 @@ export default function PaymentDetailModal({
                 Payment {navigation.currentPosition} of {navigation.total}
               </span>
               <IconButton
-                ariaLabel="Next displayed payment"
-                title="Next displayed payment"
+                ariaLabel="Pago siguiente"
+                title="Pago siguiente"
                 disabled={!navigation.onNext || isSaving || isDeleting}
                 onClick={navigation.onNext ?? ignoreNavigation}
               >
@@ -213,8 +211,8 @@ export default function PaymentDetailModal({
           !isDuplicate ? (
             <IconButton
               variant="danger"
-              ariaLabel="Delete payment"
-              title="Delete payment"
+              ariaLabel="Eliminar pago"
+              title="Eliminar pago"
               disabled={isSaving || isDeleting}
               onClick={handleDeleteErrorChange}
             >
@@ -241,11 +239,11 @@ export default function PaymentDetailModal({
             >
               {isDuplicate
                 ? isCreating
-                  ? "Creating..."
-                  : "Create Payment"
+                  ? "Creando..."
+                  : "Crear pago"
                 : isUpdating
-                  ? "Saving..."
-                  : "Save Changes"}
+                  ? "Guardando..."
+                  : "Guardar cambios"}
             </button>
           </div>
         }
@@ -315,9 +313,9 @@ export default function PaymentDetailModal({
       {!isDuplicate ? (
         <ConfirmDialog
           isOpen={showDeleteConfirm}
-          title="Delete payment"
-          confirmLabel="Delete"
-          pendingLabel="Deleting…"
+          title="Eliminar pago"
+          confirmLabel="Eliminar"
+          pendingLabel="Eliminando…"
           variant="danger"
           isPending={isDeleting}
           error={deleteError}

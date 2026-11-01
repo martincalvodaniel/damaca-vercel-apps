@@ -50,24 +50,24 @@ export default function PartSection({
         </h3>
       </header>
       <RecordSection
-        title="Absences"
+        title="Ausencias"
         colorClass="bg-red-500"
         records={absences}
         editingId={editingId}
         onEdit={onEdit}
         onDelete={onDelete}
         onAddNew={handleAddNewAbsence}
-        addAriaLabel={`Add absence in ${label}`}
+        addAriaLabel={`Añadir ausencia en ${label}`}
       />
       <RecordSection
-        title="Recoveries"
+        title="Recuperaciones"
         colorClass="bg-green-500"
         records={recoveries}
         editingId={editingId}
         onEdit={onEdit}
         onDelete={onDelete}
         onAddNew={handleAddNewRecovery}
-        addAriaLabel={`Add recovery in ${label}`}
+        addAriaLabel={`Añadir recuperación en ${label}`}
       />
     </section>
   )

@@ -106,7 +106,7 @@ export default function MonthPageContent() {
     return buildPaymentTemplateFormData(selectedPaymentTemplate, initialDate)
   }, [initialDate, selectedPaymentTemplate])
   const formatMonthYear = (date: Date) => {
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString("es-ES", {
       year: "numeric",
       month: "long",
     })
@@ -229,7 +229,7 @@ export default function MonthPageContent() {
   }
   return (
     <PageLayout
-      navigationSubtitle="Monthly Overview"
+      navigationSubtitle="Resumen mensual"
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 border-b border-zinc-200 px-6 py-4 lg:flex-row lg:items-center lg:justify-between dark:border-zinc-800">
@@ -244,12 +244,12 @@ export default function MonthPageContent() {
             <div className="flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:flex-wrap lg:items-end lg:justify-end">
               <div className="flex min-w-0 flex-nowrap items-end gap-2 lg:min-w-[20rem] lg:flex-1">
                 <AddButton
-                  ariaLabel="Add payment"
+                  ariaLabel="Añadir pago"
                   onClick={handleAddPaymentClick}
                 />
                 <div className="relative min-w-0 flex-1">
                   <SuggestionInput
-                    ariaLabel="Payment template"
+                    ariaLabel="Plantilla de pago"
                     value={paymentTemplateQuery}
                     options={paymentTemplates.map(
                       (paymentTemplate) => paymentTemplate.name
@@ -260,14 +260,14 @@ export default function MonthPageContent() {
                     onCreateNew={handleCreatePaymentTemplate}
                     onEditOption={handleOpenPaymentTemplateEditor}
                     onDeleteOption={handleDeletePaymentTemplate}
-                    placeholder="Choose or type a template..."
-                    createNewLabel="No payment template found"
-                    createNewHint="Press Enter or click here to create a new template."
+                    placeholder="Elige o escribe una plantilla..."
+                    createNewLabel="No se encontró ninguna plantilla de pago"
+                    createNewHint="Pulsa Intro o haz clic aquí para crear una plantilla."
                   />
                   {paymentTemplateQuery ? (
                     <ClearButton
                       onClick={handleClearPaymentTemplate}
-                      ariaLabel="Clear payment template"
+                      ariaLabel="Borrar plantilla de pago"
                       className="top-1 right-1"
                     />
                   ) : null}
@@ -302,7 +302,7 @@ export default function MonthPageContent() {
       <PaymentFormModal
         isOpen={showPaymentModal}
         onClose={handleCloseModal}
-        title="New Payment"
+        title="Nuevo pago"
         initialDate={initialDate}
         initialData={initialPaymentData}
       />
@@ -317,15 +317,15 @@ export default function MonthPageContent() {
 
       <ConfirmDialog
         isOpen={paymentTemplateToDelete !== null}
-        title="Delete Payment Template"
-        confirmLabel="Delete Template"
-        pendingLabel="Deleting..."
+        title="Eliminar plantilla de pago"
+        confirmLabel="Eliminar plantilla"
+        pendingLabel="Eliminando..."
         isPending={isDeleting}
         error={
           deletePaymentTemplateError
             ? extractPaymentTemplateMutationError(
                 deletePaymentTemplateError,
-                "Failed to delete payment template"
+                "No se pudo eliminar la plantilla de pago"
               )
             : null
         }

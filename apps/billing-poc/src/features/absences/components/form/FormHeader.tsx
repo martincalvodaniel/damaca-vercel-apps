@@ -26,8 +26,8 @@ export default function FormHeader({
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
-            title="Cancel"
-            aria-label="Cancel"
+            title="Cancelar"
+            aria-label="Cancelar"
             className="inline-flex h-7 w-7 items-center justify-center rounded-md text-rose-600 hover:bg-rose-50 hover:text-rose-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-rose-400 dark:hover:bg-rose-900/30 dark:hover:text-rose-300"
           >
             <XIcon />

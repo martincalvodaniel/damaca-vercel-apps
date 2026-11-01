@@ -38,7 +38,7 @@ export default function MobileMenuOverlay({
       <button
         type="button"
         onClick={onClose}
-        aria-label="Close navigation menu"
+        aria-label="Cerrar menú de navegación"
         className="absolute inset-0 bg-black/50"
       />
 
@@ -46,7 +46,7 @@ export default function MobileMenuOverlay({
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Navigation menu"
+        aria-label="Menú de navegación"
         className="absolute bottom-0 right-0 top-0 w-64 bg-white p-6 shadow-xl dark:bg-zinc-900"
       >
         <div className="mb-6 flex items-center justify-between">
@@ -56,7 +56,7 @@ export default function MobileMenuOverlay({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close navigation menu"
+            aria-label="Cerrar menú de navegación"
             className="min-h-11 min-w-11 rounded-md p-2 text-zinc-700 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-zinc-200 dark:hover:bg-zinc-800"
           >
             <svg
@@ -98,7 +98,7 @@ export default function MobileMenuOverlay({
               {session.user.image ? (
                 <Image
                   src={session.user.image}
-                  alt={session.user.name ?? "User avatar"}
+                  alt={session.user.name ?? "Avatar de usuario"}
                   width={32}
                   height={32}
                   className="h-8 w-8 rounded-full"

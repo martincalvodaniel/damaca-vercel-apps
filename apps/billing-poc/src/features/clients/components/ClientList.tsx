@@ -46,7 +46,7 @@ export default function ClientList({ clients }: ClientListProps) {
       await deleteClient({ id: deletingClientId })
       setDeletingClientId(null)
     } catch (err) {
-      setError(extractClientApiError(err, "An error occurred"))
+      setError(extractClientApiError(err, "Se ha producido un error"))
     }
   }
 

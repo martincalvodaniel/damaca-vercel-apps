@@ -29,24 +29,24 @@ export function CouponPaymentButtons({
       <IconButton
         variant="success"
         onClick={handleCashPayment}
-        ariaLabel={`Create cash gift card payment for coupon ${coupon.code}`}
-        title="Create cash payment"
+        ariaLabel={`Crear pago en efectivo de la tarjeta regalo del cupón ${coupon.code}`}
+        title="Crear pago en efectivo"
       >
         <CashIcon />
       </IconButton>
       <IconButton
         variant="info"
         onClick={handleCardPayment}
-        ariaLabel={`Create card gift card payment for coupon ${coupon.code}`}
-        title="Create card payment"
+        ariaLabel={`Crear pago con tarjeta de la tarjeta regalo del cupón ${coupon.code}`}
+        title="Crear pago con tarjeta"
       >
         <CardIcon />
       </IconButton>
       <IconButton
         variant="neutral"
         onClick={handleBankTransferPayment}
-        ariaLabel={`Create bank transfer gift card payment for coupon ${coupon.code}`}
-        title="Create bank transfer payment"
+        ariaLabel={`Crear transferencia bancaria de la tarjeta regalo del cupón ${coupon.code}`}
+        title="Crear transferencia bancaria"
       >
         <BankTransferIcon />
       </IconButton>

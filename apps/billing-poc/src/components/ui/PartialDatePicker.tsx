@@ -22,34 +22,34 @@ interface PartialDatePickerProps {
 }
 type Segment = "year" | "month" | "day"
 const MONTH_NAMES = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+  "ene",
+  "feb",
+  "mar",
+  "abr",
+  "may",
+  "jun",
+  "jul",
+  "ago",
+  "sep",
+  "oct",
+  "nov",
+  "dic",
 ]
 function formatYear(year?: number): string {
-  return typeof year === "number" ? String(year) : "YEAR"
+  return typeof year === "number" ? String(year) : "AÑO"
 }
 function formatMonth(month?: number): string {
-  return typeof month === "number" ? MONTH_NAMES[month - 1] : "MONTH"
+  return typeof month === "number" ? MONTH_NAMES[month - 1] : "MES"
 }
 function formatDay(day?: number): string {
-  return typeof day === "number" ? String(day) : "DAY"
+  return typeof day === "number" ? String(day) : "DÍA"
 }
 export default function PartialDatePicker({
   value,
   onChange,
   disabled,
   disableDay = false,
-  ariaLabelPrefix = "Date",
+  ariaLabelPrefix = "Fecha",
 }: PartialDatePickerProps) {
   const closePicker = () => setOpenSegment(null)
   const [openSegment, setOpenSegment] = useState<Segment | null>(null)
@@ -147,7 +147,7 @@ export default function PartialDatePicker({
               <ClearButton
                 onClick={handleClearDay}
                 disabled={disabled}
-                ariaLabel={`Clear ${ariaLabelPrefix} ${segment}`}
+                ariaLabel={`Borrar ${ariaLabelPrefix} ${segment === "day" ? "día" : segment === "month" ? "mes" : "año"}`}
               />
             ) : null}
           </div>

@@ -66,7 +66,7 @@ const PaymentForm = function PaymentForm({
       // Validate concepts
       const validation = validateConcepts(formData.concepts)
       if (!validation.isValid) {
-        throw new Error(validation.error || "Validation failed")
+        throw new Error(validation.error || "La validación ha fallado")
       }
       const conceptsTotal = calculateTotal()
       const discountValidation = validateDiscount(
@@ -74,7 +74,7 @@ const PaymentForm = function PaymentForm({
         conceptsTotal
       )
       if (!discountValidation.isValid) {
-        throw new Error(discountValidation.error || "Validation failed")
+        throw new Error(discountValidation.error || "La validación ha fallado")
       }
       await createPayment({
         ...formData,
@@ -88,7 +88,7 @@ const PaymentForm = function PaymentForm({
 
       onPaymentSaved?.(formData.date)
     } catch (err) {
-      setError(extractPaymentFormError(err, "An error occurred"))
+      setError(extractPaymentFormError(err, "Se ha producido un error"))
       console.error(`Error saving payment: ${err}`)
     }
   }
@@ -97,7 +97,7 @@ const PaymentForm = function PaymentForm({
       {/* Success Toast Notification */}
       {showSuccess ? (
         <Toast
-          message="Payment saved successfully!"
+          message="¡Pago guardado correctamente!"
           onClose={handleShowSuccessChange}
         />
       ) : null}

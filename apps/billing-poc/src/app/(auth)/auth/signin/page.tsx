@@ -31,8 +31,8 @@ function SignInContent() {
         {error ? (
           <ErrorBanner className="mb-4">
             {error === "AccessDenied"
-              ? "Your email is not authorized to access this application."
-              : "Sign-in failed."}
+              ? "Tu correo electrónico no tiene autorización para acceder a esta aplicación."
+              : "No se pudo iniciar sesión."}
           </ErrorBanner>
         ) : null}
 

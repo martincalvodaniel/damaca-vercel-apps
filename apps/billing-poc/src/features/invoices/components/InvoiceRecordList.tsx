@@ -39,7 +39,7 @@ const InvoicePaymentTitle = memo(function InvoicePaymentTitle({
 
 function InvoiceRecordListComponent({
   invoices,
-  emptyMessage = "No invoices generated in this series.",
+  emptyMessage = "No se han generado facturas en esta serie.",
   onPaymentClick,
 }: InvoiceRecordListProps) {
   if (invoices.length === 0) {

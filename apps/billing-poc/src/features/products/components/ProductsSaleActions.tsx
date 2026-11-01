@@ -29,11 +29,11 @@ export default function ProductsSaleActions({
       </span>
       <button
         type="button"
-        aria-label="Create payment with LocalSale tag"
+        aria-label="Crear pago con etiqueta LocalSale"
         title={
           hasSelection
-            ? "Create payment with LocalSale"
-            : "Select one or more products first"
+            ? "Crear pago con etiqueta LocalSale"
+            : "Selecciona primero uno o varios productos"
         }
         onClick={onLocalSaleClick}
         disabled={!hasSelection}
@@ -44,33 +44,33 @@ export default function ProductsSaleActions({
       </button>
       <button
         type="button"
-        aria-label="Create payment with MarketSale tag"
+        aria-label="Crear pago con etiqueta MarketSale"
         title={
           hasSelection
-            ? "Create payment with MarketSale"
-            : "Select one or more products first"
+            ? "Crear pago con etiqueta MarketSale"
+            : "Selecciona primero uno o varios productos"
         }
         onClick={onMarketSaleClick}
         disabled={!hasSelection}
         className={saleActionButtonClass}
       >
         <MarketSaleIcon />
-        <span>Market</span>
+        <span>Mercado</span>
       </button>
       <button
         type="button"
-        aria-label="Create payment with Cocción tag"
+        aria-label="Crear pago con etiqueta Cocción"
         title={
           hasSelection
-            ? "Create kiln payment"
-            : "Select one or more products first"
+            ? "Crear pago de cerámica"
+            : "Selecciona primero uno o varios productos"
         }
         onClick={onKilnClick}
         disabled={!hasSelection}
         className={saleActionButtonClass}
       >
         <KilnIcon />
-        <span>Kiln</span>
+        <span>Horno</span>
       </button>
     </div>
   )

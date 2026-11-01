@@ -49,7 +49,7 @@ export default function ClientForm({
 
     // Validate form data
     if (!formData.name.trim()) {
-      setError("Name is required")
+      setError("El nombre es obligatorio")
       return
     }
 
@@ -57,7 +57,7 @@ export default function ClientForm({
     try {
       await onSubmit(formData)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      setError(err instanceof Error ? err.message : "Se ha producido un error")
     } finally {
       setIsSubmitting(false)
     }
@@ -83,8 +83,8 @@ export default function ClientForm({
             className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:ring-offset-zinc-900"
             disabled={isSubmitting}
           >
-            <option value="individual">Individual / Freelancer</option>
-            <option value="company">Company</option>
+            <option value="individual">Persona física / autónomo</option>
+            <option value="company">Empresa</option>
           </select>
         </div>
       </div>
@@ -95,8 +95,8 @@ export default function ClientForm({
           className="block text-sm font-medium text-zinc-900 dark:text-zinc-50"
         >
           {formData.clientType === "individual"
-            ? "Name & Surname"
-            : "Business Name"}
+            ? "Nombre y apellidos"
+            : "Nombre de la empresa"}
           <span className="ml-0.5 text-red-600" aria-hidden="true">
             *
           </span>
@@ -109,8 +109,8 @@ export default function ClientForm({
           onChange={handleChange}
           placeholder={
             formData.clientType === "individual"
-              ? "E.g., John Doe"
-              : "E.g., Empresa, S.L."
+              ? "Ej.: Ana Pérez"
+              : "Ej.: Empresa, S. L."
           }
           className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:ring-offset-zinc-900"
           required
@@ -134,8 +134,8 @@ export default function ClientForm({
           onChange={handleChange}
           placeholder={
             formData.clientType === "individual"
-              ? "E.g., 12345678A"
-              : "E.g., A12345678"
+              ? "Ej.: 12345678A"
+              : "Ej.: A12345678"
           }
           className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:ring-offset-zinc-900"
           disabled={isSubmitting}
@@ -154,7 +154,7 @@ export default function ClientForm({
           name="address"
           value={formData.address || ""}
           onChange={handleChange}
-          placeholder="E.g., Calle Principal 123, 28001 Madrid"
+          placeholder="Ej.: Calle Mayor 123, 28001 Madrid"
           rows={3}
           className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:ring-offset-zinc-900"
           disabled={isSubmitting}
@@ -175,7 +175,7 @@ export default function ClientForm({
             name="phone"
             value={formData.phone || ""}
             onChange={handleChange}
-            placeholder="E.g., +34 123 456 789"
+            placeholder="Ej.: +34 123 456 789"
             className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:ring-offset-zinc-900"
             disabled={isSubmitting}
           />
@@ -194,7 +194,7 @@ export default function ClientForm({
             name="email"
             value={formData.email || ""}
             onChange={handleChange}
-            placeholder="E.g., client@example.com"
+            placeholder="Ej.: cliente@ejemplo.es"
             className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:ring-offset-zinc-900"
             disabled={isSubmitting}
           />
@@ -214,7 +214,7 @@ export default function ClientForm({
           name="instagram"
           value={formData.instagram || ""}
           onChange={handleChange}
-          placeholder="E.g., @username"
+          placeholder="Ej.: @usuario"
           className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:ring-offset-zinc-900"
           disabled={isSubmitting}
         />
@@ -235,7 +235,8 @@ export default function ClientForm({
           aria-busy={isSubmitting}
           className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:focus:ring-offset-zinc-900"
         >
-          {isSubmitting ? "Saving..." : client ? "Update" : "Create"} Client
+          {isSubmitting ? "Guardando..." : client ? "Actualizar" : "Crear"}{" "}
+          cliente
         </button>
       </div>
     </form>

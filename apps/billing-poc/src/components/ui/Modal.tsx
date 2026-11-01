@@ -148,7 +148,7 @@ export function Modal({
       ) : null}
       <div className="col-start-3 row-start-1 flex items-center justify-self-end gap-1 sm:gap-2">
         {headerActions}
-        <CloseButton onClick={onClose} label="Close dialog" />
+        <CloseButton onClick={onClose} label="Cerrar diálogo" />
       </div>
     </div>
   )
@@ -216,9 +216,9 @@ export function ConfirmFooter({
   onConfirm,
   onCancel,
   isPending = false,
-  confirmLabel = "Confirm",
-  pendingLabel = "Working…",
-  cancelLabel = "Cancel",
+  confirmLabel = "Confirmar",
+  pendingLabel = "Procesando…",
+  cancelLabel = "Cancelar",
   variant = "primary",
 }: ConfirmFooterProps) {
   const confirmClass =

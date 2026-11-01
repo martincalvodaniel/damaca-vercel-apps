@@ -38,7 +38,7 @@ export default function MonthlyBreakdown({
           const monthLabel = new Date(
             selectedYear,
             month.monthIndex
-          ).toLocaleDateString("en-US", {
+          ).toLocaleDateString("es-ES", {
             month: "short",
           })
           const barWidth = Math.min(
@@ -56,7 +56,7 @@ export default function MonthlyBreakdown({
             <Link
               key={month.monthIndex}
               href={`/month?month=${month.monthIndex + 1}&year=${selectedYear}`}
-              aria-label={`View ${monthLabel} ${selectedYear}, net ${formatCurrency(month.net)}`}
+              aria-label={`Ver ${monthLabel} de ${selectedYear}, saldo neto ${formatCurrency(month.net)}`}
               className="block rounded-lg border border-zinc-200 p-3 transition hover:border-blue-300 hover:shadow-md dark:border-zinc-800 dark:hover:border-blue-700"
             >
               <div className="flex items-center justify-between">
@@ -77,13 +77,13 @@ export default function MonthlyBreakdown({
               </div>
               <div className="mt-2 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
                 <div className="flex items-center justify-between">
-                  <span>Income</span>
+                  <span>Ingresos</span>
                   <span className="font-semibold text-green-600 dark:text-green-400">
                     {formatCurrency(month.income)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Outcome</span>
+                  <span>Gastos</span>
                   <span className="font-semibold text-red-600 dark:text-red-400">
                     {formatCurrency(month.outcome)}
                   </span>

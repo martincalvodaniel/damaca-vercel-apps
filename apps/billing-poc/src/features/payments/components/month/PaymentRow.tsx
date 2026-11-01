@@ -120,8 +120,8 @@ export default function PaymentRow({
             onClick={handleInvoiceFilterToggle}
             aria-label={
               hasInvoice
-                ? "Filter by payments with invoice"
-                : "Filter by payments without invoice"
+                ? "Filtrar pagos con factura"
+                : "Filtrar pagos sin factura"
             }
             className={`rounded p-0.5 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
               (hasInvoice && hasInvoiceFilter === "yes") ||
@@ -129,7 +129,7 @@ export default function PaymentRow({
                 ? "ring-1 ring-blue-500"
                 : ""
             }`}
-            title={hasInvoice ? "Invoice present" : "Invoice missing"}
+            title={hasInvoice ? "Factura adjunta" : "Falta la factura"}
           >
             <InvoiceMarker has={hasInvoice} />
           </button>
@@ -138,8 +138,8 @@ export default function PaymentRow({
             onClick={handleReceiptFilterToggle}
             aria-label={
               hasReceipt
-                ? "Filter by payments with receipt"
-                : "Filter by payments without receipt"
+                ? "Filtrar pagos con recibo"
+                : "Filtrar pagos sin recibo"
             }
             className={`rounded p-0.5 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
               (hasReceipt && hasReceiptFilter === "yes") ||
@@ -147,11 +147,11 @@ export default function PaymentRow({
                 ? "ring-1 ring-blue-500"
                 : ""
             }`}
-            title={hasReceipt ? "Receipt present" : "Receipt missing"}
+            title={hasReceipt ? "Recibo adjunto" : "Falta el recibo"}
           >
             <ReceiptMarker has={hasReceipt} />
           </button>
-          <span title={payment.paymentMethod ?? "No payment method"}>
+          <span title={payment.paymentMethod ?? "Sin método de pago"}>
             <PaymentMethodMarker method={payment.paymentMethod} />
           </span>
         </div>
@@ -187,7 +187,7 @@ export default function PaymentRow({
         <button
           type="button"
           onClick={handleTypeFilterToggle}
-          aria-label={`Filter by ${payment.type}`}
+          aria-label={`Filtrar por ${payment.type}`}
           className="rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           <Badge
@@ -205,7 +205,7 @@ export default function PaymentRow({
           <button
             type="button"
             onClick={handleTagFilterToggle}
-            aria-label={`Filter by tag ${payment.tag}`}
+            aria-label={`Filtrar por etiqueta ${payment.tag}`}
             className="rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <Badge
@@ -228,7 +228,7 @@ export default function PaymentRow({
           <button
             type="button"
             onClick={handleClientClick}
-            aria-label={`Edit client ${clientName}`}
+            aria-label={`Editar cliente ${clientName}`}
             title={clientName}
             className="truncate rounded text-left text-emerald-700 hover:underline focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:text-emerald-400"
           >
@@ -271,7 +271,7 @@ export default function PaymentRow({
             variant="info"
             stopPropagation
             onClick={handleDuplicateClick}
-            ariaLabel="Duplicate payment"
+            ariaLabel="Duplicar pago"
           >
             <DuplicateIcon />
           </IconButton>
@@ -279,7 +279,7 @@ export default function PaymentRow({
             variant="danger"
             stopPropagation
             onClick={handleDeleteClick}
-            ariaLabel="Delete payment"
+            ariaLabel="Eliminar pago"
           >
             <TrashIcon />
           </IconButton>

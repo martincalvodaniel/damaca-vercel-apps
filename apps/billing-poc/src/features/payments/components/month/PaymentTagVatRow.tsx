@@ -38,14 +38,14 @@ export default function PaymentTagVatRow({
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <SuggestionInput
-        label="Tag (Optional)"
-        ariaLabel="Tag (Optional)"
+        label="Etiqueta (opcional)"
+        ariaLabel="Etiqueta (opcional)"
         name="tag"
         value={formData.tag || ""}
         options={availableTags}
         onChange={handleTagChange}
         onSelect={onTagSelect}
-        placeholder="Start typing to see suggestions..."
+        placeholder="Empieza a escribir para ver sugerencias..."
         leading={
           <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-zinc-50 text-xs font-medium text-zinc-500 dark:border-zinc-700 dark:bg-zinc-700 dark:text-zinc-300">
             #
@@ -70,7 +70,7 @@ export default function PaymentTagVatRow({
           max={100}
           placeholder="0"
           inputMode="decimal"
-          ariaLabel="VAT percentage"
+          ariaLabel="Porcentaje del IVA"
           required
         />
       </div>

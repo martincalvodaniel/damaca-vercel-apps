@@ -16,13 +16,13 @@ interface WordpressOrderStatusModalProps {
   onConfirmed?: (message: string) => void
 }
 const WORDPRESS_ORDER_STATUS_LABELS: Record<WordPressOrderStatus, string> = {
-  pending: "Pending payment",
-  processing: "Processing",
-  "on-hold": "On hold",
-  completed: "Completed",
-  cancelled: "Cancelled",
-  refunded: "Refunded",
-  failed: "Failed",
+  pending: "Pendiente de pago",
+  processing: "En proceso",
+  "on-hold": "En espera",
+  completed: "Completado",
+  cancelled: "Cancelado",
+  refunded: "Reembolsado",
+  failed: "Fallido",
 }
 export function WordpressOrderStatusModal({
   order,
@@ -55,7 +55,7 @@ export function WordpressOrderStatusModal({
     try {
       await trigger({ orderId: order.id, status: selectedStatus })
       onConfirmed?.(
-        `Order #${order.id} marked as ${WORDPRESS_ORDER_STATUS_LABELS[selectedStatus]}`
+        `Pedido n.º ${order.id} marcado como ${WORDPRESS_ORDER_STATUS_LABELS[selectedStatus]}`
       )
       reset()
       onClose()
@@ -67,14 +67,16 @@ export function WordpressOrderStatusModal({
     <Modal
       isOpen={order !== null}
       onClose={handleClose}
-      title={order ? `Change order #${order.id} status` : "Change status"}
+      title={
+        order ? `Cambiar estado del pedido n.º ${order.id}` : "Cambiar estado"
+      }
       footer={
         <ConfirmFooter
           onCancel={handleClose}
           onConfirm={handleConfirmClick}
           isPending={isMutating}
-          confirmLabel="Update status"
-          pendingLabel="Updating..."
+          confirmLabel="Actualizar estado"
+          pendingLabel="Actualizando..."
         />
       }
     >
@@ -104,7 +106,10 @@ export function WordpressOrderStatusModal({
 
           {error ? (
             <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
-              {extractApiError(error, "Failed to update WordPress order")}
+              {extractApiError(
+                error,
+                "No se pudo actualizar el pedido de WordPress"
+              )}
             </p>
           ) : null}
         </div>

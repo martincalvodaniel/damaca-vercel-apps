@@ -59,11 +59,11 @@ export default function ReduceInvoiceCounterModal({
     setError(null)
     const parsedNumber = Number(newLastNumber)
     if (!Number.isInteger(parsedNumber) || parsedNumber < 0) {
-      setError("Enter a whole number greater than or equal to zero.")
+      setError("Introduce un número entero igual o superior a cero.")
       return
     }
     if (parsedNumber >= counter.lastNumber) {
-      setError(`Enter a number lower than ${counter.lastNumber}.`)
+      setError(`Introduce un número inferior a ${counter.lastNumber}.`)
       return
     }
 
@@ -75,7 +75,10 @@ export default function ReduceInvoiceCounterModal({
       })
     } catch (caught) {
       setError(
-        getErrorMessage(caught, "Failed to preview invoice counter reduction")
+        getErrorMessage(
+          caught,
+          "No se pudo previsualizar la reducción de la numeración de facturas"
+        )
       )
     }
   }
@@ -100,7 +103,9 @@ export default function ReduceInvoiceCounterModal({
       if (caught instanceof FetchError && caught.status === 409) {
         resetPreview()
       }
-      setError(getErrorMessage(caught, "Failed to reduce invoice counter"))
+      setError(
+        getErrorMessage(caught, "No se pudo reducir la numeración de facturas")
+      )
     }
   }
 
@@ -108,7 +113,7 @@ export default function ReduceInvoiceCounterModal({
     <Modal
       isOpen
       onClose={handleClose}
-      title={`Reduce ${counter.label} — ${year}`}
+      title={`Reducir ${counter.label} — ${year}`}
       maxWidth="xl"
       stickyFooter
       footer={
@@ -117,9 +122,9 @@ export default function ReduceInvoiceCounterModal({
             onCancel={handleBack}
             onConfirm={handleConfirm}
             isPending={isPending}
-            cancelLabel="Back"
-            confirmLabel="Delete invoices and reduce"
-            pendingLabel="Reducing…"
+            cancelLabel="Volver"
+            confirmLabel="Eliminar facturas y reducir"
+            pendingLabel="Reduciendo…"
             variant="danger"
           />
         ) : (
@@ -127,8 +132,8 @@ export default function ReduceInvoiceCounterModal({
             onCancel={handleClose}
             onConfirm={handleReview}
             isPending={isPending}
-            confirmLabel="Review impact"
-            pendingLabel="Reviewing…"
+            confirmLabel="Revisar el impacto"
+            pendingLabel="Revisando…"
             variant="primary"
           />
         )
@@ -172,7 +177,7 @@ export default function ReduceInvoiceCounterModal({
             <div className="overflow-hidden rounded-md border border-zinc-200 dark:border-zinc-700">
               <InvoiceRecordList
                 invoices={preview.invoices}
-                emptyMessage="No invoice references or payments will be affected; only the counter will change."
+                emptyMessage="No se verán afectadas las referencias de facturas ni los pagos; solo cambiará el contador."
                 onPaymentClick={onPaymentClick}
               />
             </div>
@@ -189,13 +194,13 @@ export default function ReduceInvoiceCounterModal({
                 htmlFor={inputId}
                 className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-200"
               >
-                New last number
+                Nuevo número
               </label>
               <NumberStepperInput
                 id={inputId}
                 value={newLastNumber}
                 onValueChange={setNewLastNumber}
-                ariaLabel="new last invoice number"
+                ariaLabel="nuevo número de factura"
                 min={0}
                 max={counter.lastNumber - 1}
                 step={1}

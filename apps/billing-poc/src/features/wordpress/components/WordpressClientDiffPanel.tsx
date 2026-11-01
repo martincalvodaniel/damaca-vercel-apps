@@ -64,14 +64,14 @@ function ClientDiffRowItem({
             onChange={handleChange}
             className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
           />
-          <span>Store</span>
+          <span>Tienda</span>
         </label>
       </div>
 
       <div className="grid gap-2 sm:grid-cols-2">
-        <DiffValueCard label="Current" value={row.currentValue} />
+        <DiffValueCard label="Actual" value={row.currentValue} />
         <DiffValueCard
-          label="Incoming"
+          label="Entrante"
           value={row.nextValue}
           variant="incoming"
         />

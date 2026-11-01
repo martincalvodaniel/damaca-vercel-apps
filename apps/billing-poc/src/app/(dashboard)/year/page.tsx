@@ -28,7 +28,11 @@ export default function YearSummaryPage() {
   const [showCharts, setShowCharts] = useState(true)
   const { payments, isLoading, error } = usePayments({ year: selectedYear })
   const errorMessage =
-    error instanceof Error ? error.message : error ? "An error occurred" : null
+    error instanceof Error
+      ? error.message
+      : error
+        ? "Se ha producido un error"
+        : null
   // On mobile, hide charts by default after mount
   useEffect(() => {
     if (!window.matchMedia("(min-width: 640px)").matches) {
@@ -57,7 +61,7 @@ export default function YearSummaryPage() {
     for (const payment of payments) {
       const paymentMonth = new Date(payment.date).getMonth()
       const bucket = buckets[paymentMonth]
-      const tag = payment.tag || "Untagged"
+      const tag = payment.tag || "Sin etiqueta"
       if (payment.type === "income") {
         bucket.income += payment.total
         incByTag[tag] = (incByTag[tag] || 0) + payment.total
@@ -98,7 +102,7 @@ export default function YearSummaryPage() {
 
   return (
     <PageLayout
-      navigationSubtitle="Yearly Overview"
+      navigationSubtitle="Resumen anual"
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
@@ -127,17 +131,17 @@ export default function YearSummaryPage() {
         {showCharts ? (
           <div className="grid gap-4 sm:grid-cols-3">
             <SummaryCard
-              label={`Total Income (${incomeCount})`}
+              label={`Ingresos totales (${incomeCount})`}
               value={formatCurrency(yearlyIncome)}
               valueClassName="text-green-600 dark:text-green-400"
             />
             <SummaryCard
-              label={`Total Outcome (${outcomeCount})`}
+              label={`Gastos totales (${outcomeCount})`}
               value={formatCurrency(yearlyOutcome)}
               valueClassName="text-red-600 dark:text-red-400"
             />
             <SummaryCard
-              label="Net Balance"
+              label="Saldo neto"
               value={formatCurrency(yearlyNet)}
               valueClassName={
                 yearlyNet >= 0
@@ -158,12 +162,12 @@ export default function YearSummaryPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <DonutChart
                   data={incomeByTagYear}
-                  title={`Income by Tag (${selectedYear})`}
+                  title={`Ingresos por etiqueta (${selectedYear})`}
                   colors={CHART_COLORS}
                 />
                 <DonutChart
                   data={outcomeByTagYear}
-                  title={`Outcome by Tag (${selectedYear})`}
+                  title={`Gastos por etiqueta (${selectedYear})`}
                   colors={CHART_COLORS}
                 />
               </div>

@@ -116,7 +116,7 @@ export default function StudentDetailModal({
   const handleCloseEditForm = () => {
     mutations.clearFormError()
     setFormState({ mode: "create" })
-    inlineForm.hide('button[aria-label^="Add record for"]')
+    inlineForm.hide('button[aria-label^="Añadir registro para"]')
   }
   handleCloseEditFormRef.current = handleCloseEditForm
 
@@ -164,14 +164,14 @@ export default function StudentDetailModal({
               <div className="flex items-center gap-2">
                 <AddRecordButton
                   onClick={handleAddNew}
-                  ariaLabel={`Add record for ${studentName}`}
-                  title={`Add record for ${studentName}`}
+                  ariaLabel={`Añadir registro para ${studentName}`}
+                  title={`Añadir registro para ${studentName}`}
                 />
                 {records.length > 0 ? (
                   <button
                     type="button"
                     onClick={openDeleteAllConfirm}
-                    aria-label={`Delete all records for ${studentName}`}
+                    aria-label={`Eliminar todos los registros de ${studentName}`}
                     className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-100 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-red-400 dark:hover:bg-red-900/30 dark:hover:text-red-300"
                   >
                     <TrashIcon />
@@ -181,7 +181,7 @@ export default function StudentDetailModal({
               </div>
             </div>
             {groupedRecords.length === 0 ? (
-              <EmptyState>No records yet.</EmptyState>
+              <EmptyState>Todavía no hay registros.</EmptyState>
             ) : (
               <StudentRecordsList
                 groups={groupedRecords}
@@ -207,11 +207,13 @@ export default function StudentDetailModal({
                 }
                 title={
                   formState.mode === "edit"
-                    ? `Edit record for ${studentName}`
-                    : `Add record for ${studentName}`
+                    ? `Editar registro de ${studentName}`
+                    : `Añadir registro para ${studentName}`
                 }
                 submitTooltip={
-                  formState.mode === "edit" ? "Save changes" : "Add record"
+                  formState.mode === "edit"
+                    ? "Guardar cambios"
+                    : "Añadir registro"
                 }
                 initialStudentName={studentName}
                 initial={
@@ -237,7 +239,7 @@ export default function StudentDetailModal({
       {pendingDelete ? (
         <ConfirmDeleteModal
           isOpen
-          title="Delete Record"
+          title="Eliminar registro"
           isPending={isDeleting}
           errorMessage={deleteError}
           onCancel={cancelPendingDelete}
@@ -259,7 +261,7 @@ export default function StudentDetailModal({
       {deleteAllConfirmOpen ? (
         <ConfirmDeleteModal
           isOpen
-          title="Delete all records?"
+          title="¿Eliminar todos los registros?"
           isPending={isDeleting}
           errorMessage={deleteAllError}
           onCancel={closeDeleteAllConfirm}

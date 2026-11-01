@@ -20,9 +20,9 @@ interface ConfirmDialogProps {
 export function ConfirmDialog({
   isOpen,
   title,
-  confirmLabel = "Confirm",
-  pendingLabel = "Working…",
-  cancelLabel = "Cancel",
+  confirmLabel = "Confirmar",
+  pendingLabel = "Procesando…",
+  cancelLabel = "Cancelar",
   variant = "danger",
   isPending,
   error,

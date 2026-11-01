@@ -34,7 +34,7 @@ export function WordpressPagination({
 
       <p className="text-sm text-zinc-700 dark:text-zinc-300">
         {pagination
-          ? `Showing page ${pagination.page} of ${pagination.totalPages} (${pagination.total} ${itemLabel})`
+          ? `Página ${pagination.page} de ${pagination.totalPages} (${pagination.total} ${itemLabel})`
           : "-"}
       </p>
 

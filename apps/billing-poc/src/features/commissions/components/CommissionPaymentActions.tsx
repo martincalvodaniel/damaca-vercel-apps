@@ -26,15 +26,13 @@ export default function CommissionPaymentActions({
         id: commission._id,
         paymentMethod: method,
       })
-      onSuccess(
-        result.alreadyExists ? "Payment already exists" : "Payment generated"
-      )
+      onSuccess(result.alreadyExists ? "El pago ya existe" : "Pago generado")
       if (result.paymentId) onOpen(result.paymentId)
     } catch (error) {
       onError(
         extractErrorMessage(
           error,
-          "Failed to generate payment. Retry to finish the pending generation."
+          "No se pudo generar el pago. Reintenta para completar la generación pendiente."
         )
       )
     }

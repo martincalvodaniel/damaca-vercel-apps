@@ -40,9 +40,9 @@ export default function PaymentTypeDateRow({
         </span>
         <BinaryToggle
           value={formData.type === "income" ? "left" : "right"}
-          leftLabel="Income"
-          rightLabel="Outcome"
-          ariaLabel="Payment type"
+          leftLabel="Ingreso"
+          rightLabel="Gasto"
+          ariaLabel="Tipo de pago"
           onChange={handleTypeChange}
           className="w-full"
           leftIndicatorClassName={getBadgeToneClass("success")}

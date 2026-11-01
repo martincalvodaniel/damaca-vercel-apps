@@ -43,8 +43,8 @@ export default memo(function CommissionCard({
           <IconButton
             disabled={Boolean(commission.paymentGeneration)}
             onClick={edit}
-            ariaLabel={`Edit commission ${commission.title}`}
-            title="Edit commission"
+            ariaLabel={`Editar encargo ${commission.title}`}
+            title="Editar encargo"
           >
             <PencilIcon className="h-3.5 w-3.5" />
           </IconButton>
@@ -52,8 +52,8 @@ export default memo(function CommissionCard({
             variant="danger"
             disabled={Boolean(commission.paymentGeneration)}
             onClick={remove}
-            ariaLabel={`Delete commission ${commission.title}`}
-            title="Delete commission"
+            ariaLabel={`Eliminar encargo ${commission.title}`}
+            title="Eliminar encargo"
           >
             <TrashIcon className="h-3.5 w-3.5" />
           </IconButton>
@@ -61,23 +61,23 @@ export default memo(function CommissionCard({
       </div>
       <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-zinc-600 lg:grid-cols-[minmax(0,1fr)_auto_auto_auto] dark:text-zinc-300">
         <div className="col-span-2 min-w-0 lg:col-span-1">
-          <dt className="inline font-medium">Client:</dt>{" "}
+          <dt className="inline font-medium">Cliente:</dt>{" "}
           <dd className="inline break-words">
             {commission.clientId
-              ? (clientName ?? "Unavailable client")
-              : "No client"}
+              ? (clientName ?? "Cliente no disponible")
+              : "Sin cliente"}
           </dd>
         </div>
         <div>
-          <dt className="inline font-medium">Deadline:</dt>{" "}
+          <dt className="inline font-medium">Fecha límite:</dt>{" "}
           <dd className="inline">
             {commission.dueDate
               ? formatDate(commission.dueDate)
-              : "No deadline"}
+              : "Sin fecha límite"}
           </dd>
         </div>
         <div>
-          <dt className="inline font-medium">Prepaid:</dt>{" "}
+          <dt className="inline font-medium">Anticipo:</dt>{" "}
           <dd className="inline">{formatCurrency(commission.prepaidAmount)}</dd>
         </div>
         <div className="col-span-2 flex items-center gap-1 lg:col-span-1">

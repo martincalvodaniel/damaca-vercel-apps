@@ -19,7 +19,7 @@ export default function InvoiceGuardModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Invoice already generated"
+      title="La factura ya se ha generado"
       maxWidth="md"
     >
       <div className="space-y-4">

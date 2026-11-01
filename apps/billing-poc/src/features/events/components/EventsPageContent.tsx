@@ -150,7 +150,7 @@ export default function EventsPageContent() {
   } = useEventsPageState()
   return (
     <PageLayout
-      navigationSubtitle="Events"
+      navigationSubtitle="Eventos"
       headerContent={
         <EventsPageHeader
           selectedDate={selectedDate}

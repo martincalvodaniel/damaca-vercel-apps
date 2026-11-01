@@ -69,7 +69,7 @@ export default function PaymentsTable({
       })
     } catch (exportFailure) {
       console.error(`Error exporting monthly payments: ${exportFailure}`)
-      setExportError("Failed to export payments")
+      setExportError("No se pudieron exportar los pagos")
     } finally {
       setIsExporting(false)
     }
@@ -88,7 +88,7 @@ export default function PaymentsTable({
         </EmptyState>
       ) : filteredPayments.length === 0 ? (
         <EmptyState variant="inline" className="px-6 py-12">
-          No payments in {formatMonthYear(selectedDate)}
+          No hay pagos en {formatMonthYear(selectedDate)}
         </EmptyState>
       ) : (
         <>
@@ -98,17 +98,19 @@ export default function PaymentsTable({
                 type="button"
                 onClick={handleExport}
                 disabled={isExporting}
-                aria-label="Export monthly payments to Excel"
+                aria-label="Exportar pagos mensuales a Excel"
                 className="h-9 rounded-md border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:focus:ring-offset-zinc-900"
               >
-                {isExporting ? "Exporting..." : "Export"}
+                {isExporting ? "Exportando..." : "Exportar"}
               </button>
 
               <fieldset
                 className="inline-flex h-9 items-stretch overflow-hidden rounded-md border border-zinc-300 dark:border-zinc-700"
-                aria-label="Toggle money columns"
+                aria-label="Mostrar u ocultar columnas de importes"
               >
-                <legend className="sr-only">Toggle money columns</legend>
+                <legend className="sr-only">
+                  Mostrar u ocultar columnas de importes
+                </legend>
                 <button
                   type="button"
                   onClick={showCompactMoneyColumns}
@@ -142,28 +144,28 @@ export default function PaymentsTable({
                 <tr className="border-b border-zinc-200 dark:border-zinc-800">
                   <th className="w-14 px-1 py-2" />
                   <SortableHeader
-                    label="Invoice"
+                    label="Factura"
                     sortKey="invoices"
                     sort={sort}
                     onSortChange={onSortChange}
                     align="left"
                   />
                   <SortableHeader
-                    label="Day"
+                    label="Día"
                     sortKey="day"
                     sort={sort}
                     onSortChange={onSortChange}
                     align="left"
                   />
                   <SortableHeader
-                    label="Type"
+                    label="Tipo"
                     sortKey="type"
                     sort={sort}
                     onSortChange={onSortChange}
                     align="left"
                   />
                   <SortableHeader
-                    label="Tag"
+                    label="Etiqueta"
                     sortKey="tag"
                     sort={sort}
                     onSortChange={onSortChange}
@@ -188,7 +190,7 @@ export default function PaymentsTable({
                   />
                   {showAllMoneyColumns ? (
                     <SortableHeader
-                      label="Surcharge"
+                      label="Recargo"
                       sortKey="surcharge"
                       sort={sort}
                       onSortChange={onSortChange}
@@ -197,7 +199,7 @@ export default function PaymentsTable({
                   ) : null}
                   {showAllMoneyColumns ? (
                     <SortableHeader
-                      label="Net"
+                      label="Neto"
                       sortKey="net"
                       sort={sort}
                       onSortChange={onSortChange}

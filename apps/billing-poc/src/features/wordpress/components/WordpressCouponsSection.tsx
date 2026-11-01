@@ -32,11 +32,14 @@ export function WordpressCouponsSection({
   const deleteMutation = useDeleteWordpressCoupon()
   const errorMessage = useMemo(() => {
     return error
-      ? extractApiError(error, "Failed to fetch WordPress coupons")
+      ? extractApiError(error, "No se pudieron cargar los cupones de WordPress")
       : null
   }, [error])
   const deleteError = deleteMutation.error
-    ? extractApiError(deleteMutation.error, "Failed to delete WordPress coupon")
+    ? extractApiError(
+        deleteMutation.error,
+        "No se pudo eliminar el cupón de WordPress"
+      )
     : null
 
   const openCreateModal = useStableCallback(() => {
@@ -57,13 +60,13 @@ export function WordpressCouponsSection({
     onConfirmed(message)
   })
   const handlePaymentSaved = useStableCallback((coupon: WordPressCoupon) => {
-    onConfirmed(`Payment created for coupon ${coupon.code}`)
+    onConfirmed(`Pago creado para el cupón ${coupon.code}`)
   })
   const handleDelete = useStableCallback(async () => {
     if (!couponToDelete) return
     try {
       await deleteMutation.trigger({ couponId: couponToDelete.id })
-      onConfirmed(`Coupon ${couponToDelete.code} deleted`)
+      onConfirmed(`Cupón ${couponToDelete.code} eliminado`)
       setCouponToDelete(null)
     } catch {
       // The mutation error is displayed in the confirmation dialog.
@@ -95,9 +98,11 @@ export function WordpressCouponsSection({
       {errorMessage ? <ErrorBanner bordered>{errorMessage}</ErrorBanner> : null}
 
       {isLoading && coupons.length === 0 ? (
-        <EmptyState variant="card">Loading WordPress coupons...</EmptyState>
+        <EmptyState variant="card">Cargando cupones de WordPress...</EmptyState>
       ) : coupons.length === 0 ? (
-        <EmptyState variant="card">No coupons found for this page.</EmptyState>
+        <EmptyState variant="card">
+          No se encontraron cupones en esta página.
+        </EmptyState>
       ) : (
         <WordpressCouponsTable
           coupons={coupons}

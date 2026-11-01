@@ -39,16 +39,16 @@ export default function InvoicePaymentModal({
   }
 
   return (
-    <Modal isOpen onClose={onClose} title="Payment details" maxWidth="sm">
+    <Modal isOpen onClose={onClose} title="Detalles del pago" maxWidth="sm">
       {error ? (
-        <ErrorBanner>Failed to load payment details.</ErrorBanner>
+        <ErrorBanner>No se pudieron cargar los detalles del pago.</ErrorBanner>
       ) : (
         <p
           role="status"
           aria-live="polite"
           className="py-6 text-center text-sm text-zinc-500 dark:text-zinc-400"
         >
-          {isLoading ? "Loading payment..." : "Payment not found."}
+          {isLoading ? "Cargando pago..." : "No se encontró el pago."}
         </p>
       )}
     </Modal>

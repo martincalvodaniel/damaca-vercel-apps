@@ -53,8 +53,8 @@ export default function NewEventModal({
     <EventFormShell
       isOpen={isOpen}
       onClose={onClose}
-      title="New event"
-      submitLabel="Create event"
+      title="Nuevo evento"
+      submitLabel="Crear evento"
       maxWidth="xl"
       resetKey={resetKey ?? "create"}
       computeInitialValues={computeInitialValues}

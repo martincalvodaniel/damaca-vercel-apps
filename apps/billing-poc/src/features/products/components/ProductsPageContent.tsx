@@ -35,9 +35,9 @@ import {
 
 const TODAY = new Date().toISOString().split("T")[0]
 const SALE_PAYMENT_TITLES: Record<SalePaymentTag, string> = {
-  LocalSale: "New Local Sale Payment",
-  MarketSale: "New Market Sale Payment",
-  Cocción: "New Kiln Payment",
+  LocalSale: "Nuevo pago de venta local",
+  MarketSale: "Nuevo pago de venta en mercado",
+  Cocción: "Nuevo pago de cerámica",
 }
 
 export default function ProductsPageContent() {
@@ -165,7 +165,9 @@ export default function ProductsPageContent() {
     try {
       await deleteProduct({ id: deletingProductId })
     } catch (err) {
-      setDeleteError(extractProductApiError(err, "Failed to delete product"))
+      setDeleteError(
+        extractProductApiError(err, "No se pudo eliminar el producto")
+      )
       return
     }
     setSelectedProductIds((prev) =>
@@ -215,7 +217,7 @@ export default function ProductsPageContent() {
 
   return (
     <PageLayout
-      navigationSubtitle="Products"
+      navigationSubtitle="Productos"
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 border-b border-zinc-200 px-6 py-4 lg:flex-row lg:items-center lg:justify-between dark:border-zinc-800">
@@ -233,7 +235,7 @@ export default function ProductsPageContent() {
             <div className="flex flex-col gap-3 lg:min-w-0 lg:flex-row lg:items-center lg:justify-end">
               <div className="flex w-full flex-nowrap items-center gap-2 lg:w-auto">
                 <AddButton
-                  ariaLabel="Add product"
+                  ariaLabel="Añadir producto"
                   onClick={handleCreateProduct}
                 />
                 <div className="min-w-0 flex-1">
@@ -292,7 +294,7 @@ export default function ProductsPageContent() {
       <PaymentFormModal
         isOpen={saleTag !== null}
         onClose={closeSalePayment}
-        title={saleTag ? SALE_PAYMENT_TITLES[saleTag] : "New Payment"}
+        title={saleTag ? SALE_PAYMENT_TITLES[saleTag] : "Nuevo pago"}
         initialDate={TODAY}
         initialData={salePaymentInitialData}
         onPaymentSaved={handleSalePaymentSaved}
@@ -300,16 +302,16 @@ export default function ProductsPageContent() {
 
       <ConfirmDialog
         isOpen={deletingProductId !== null}
-        title="Delete Product"
-        confirmLabel="Delete"
-        pendingLabel="Deleting..."
+        title="Eliminar producto"
+        confirmLabel="Eliminar"
+        pendingLabel="Eliminando..."
         variant="danger"
         isPending={isDeletingProduct}
         error={deleteError}
         onCancel={handleCancelDeleteProduct}
         onConfirm={handleConfirmDeleteProduct}
       >
-        <p>Are you sure you want to delete this product?</p>
+        <p>¿Seguro que quieres eliminar este producto?</p>
         {deletingProduct ? (
           <div className="space-y-2 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800">
             <p>

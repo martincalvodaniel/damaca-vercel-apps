@@ -36,7 +36,7 @@ export default function ClientSelector({
   selectedClientName,
   onChange,
   onSelectClient,
-  label = "Client (Optional)",
+  label = "Cliente (opcional)",
   required = false,
   autoFocus = false,
   onCreateClient,
@@ -192,8 +192,8 @@ export default function ClientSelector({
               className="flex w-full items-center px-4 py-3 text-left text-sm text-zinc-700 hover:bg-zinc-100 disabled:opacity-60 dark:text-zinc-200 dark:hover:bg-zinc-700"
             >
               {isCreating
-                ? "Creating…"
-                : "No clients found. Press Enter to create a new client."}
+                ? "Creando…"
+                : "No se encontraron clientes. Pulsa Intro para crear uno."}
             </button>
           ) : (
             <div className="px-4 py-3 text-sm text-zinc-500 dark:text-zinc-400">
@@ -226,14 +226,14 @@ export default function ClientSelector({
       label={label}
       required={required}
       autoFocus={autoFocus}
-      clearAriaLabel="Clear selection"
+      clearAriaLabel="Borrar selección"
       rightAdornment={
         selectedClient && onEditClient ? (
           <button
             type="button"
             onClick={handleEditClient}
             className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-            aria-label="Edit selected client"
+            aria-label="Editar cliente seleccionado"
           >
             <PencilIcon className="h-4 w-4" />
           </button>

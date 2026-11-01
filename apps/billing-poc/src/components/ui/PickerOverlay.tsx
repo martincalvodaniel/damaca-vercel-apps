@@ -16,7 +16,7 @@ interface PickerOverlayProps {
 export default function PickerOverlay({
   children,
   onClose,
-  closeLabel = "Close",
+  closeLabel = "Cerrar",
   width = "w-72",
   className = "",
   desktopAlign = "right",

@@ -41,8 +41,8 @@ function InvoiceSeriesPanelComponent({
           </p>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
             {counter.lastNumber === 0
-              ? "No invoices issued"
-              : "Last assigned number"}
+              ? "Todavía no se han emitido facturas"
+              : "Último número asignado"}
           </p>
         </div>
         <button

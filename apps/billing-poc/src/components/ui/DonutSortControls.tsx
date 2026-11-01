@@ -18,7 +18,7 @@ export default function DonutSortControls({
       <button
         type="button"
         onClick={sortByPercentage}
-        aria-label={`Sort by percentage ${sortBy === "percentage" ? (sortOrder === "desc" ? "descending" : "ascending") : ""}`}
+        aria-label={`Ordenar por porcentaje ${sortBy === "percentage" ? (sortOrder === "desc" ? "descendente" : "ascendente") : ""}`}
         className={`rounded px-2 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900 ${
           sortBy === "percentage"
             ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700"
@@ -30,7 +30,7 @@ export default function DonutSortControls({
       <button
         type="button"
         onClick={sortByName}
-        aria-label={`Sort by name ${sortBy === "name" ? (sortOrder === "desc" ? "descending" : "ascending") : ""}`}
+        aria-label={`Ordenar por nombre ${sortBy === "name" ? (sortOrder === "desc" ? "descendente" : "ascendente") : ""}`}
         className={`rounded px-2 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900 ${
           sortBy === "name"
             ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700"

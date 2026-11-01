@@ -11,7 +11,7 @@ import DayDetailModal from "./DayDetailModal"
 import StudentDetailModal from "./StudentDetailModal"
 
 function formatMonthYear(date: Date): string {
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString("es-ES", {
     year: "numeric",
     month: "long",
   })
@@ -90,7 +90,7 @@ export default function AbsencesPageContent() {
 
   return (
     <PageLayout
-      navigationSubtitle="Absences"
+      navigationSubtitle="Ausencias"
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 border-b border-zinc-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800">

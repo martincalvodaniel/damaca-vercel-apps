@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires metadata export alongside layout component
 export const metadata: Metadata = {
-  title: "Billing",
-  description: "Billing application",
+  title: "Facturación",
+  description: "Aplicación de facturación",
 }
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="light dark">
+    <html lang="es" className="light dark">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="color-scheme" content="light dark" />

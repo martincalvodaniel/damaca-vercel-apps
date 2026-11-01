@@ -26,8 +26,8 @@ export function WordpressCouponsHeader({
       <div className="flex shrink-0 items-center gap-2">
         <IconButton
           onClick={onCreate}
-          ariaLabel="Create coupon"
-          title="Create coupon"
+          ariaLabel="Crear cupón"
+          title="Crear cupón"
           size="md"
           variant="info"
         >
@@ -35,8 +35,8 @@ export function WordpressCouponsHeader({
         </IconButton>
         <IconButton
           onClick={onReload}
-          ariaLabel="Reload coupons and go to page 1"
-          title="Reload"
+          ariaLabel="Recargar cupones e ir a la página 1"
+          title="Recargar"
           size="md"
           variant="info"
           disabled={isReloadDisabled}

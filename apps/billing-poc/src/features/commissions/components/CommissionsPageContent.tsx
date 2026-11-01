@@ -78,9 +78,9 @@ export default function CommissionsPageContent() {
     try {
       await remove.trigger({ id: deleting._id })
       setDeleting(null)
-      notify("Commission deleted. Its payment was preserved.")
+      notify("Se eliminó el encargo y se conservó su pago.")
     } catch (error) {
-      setError(extractErrorMessage(error, "Failed to delete commission"))
+      setError(extractErrorMessage(error, "No se pudo eliminar el encargo"))
     }
   }
   function openCreate() {
@@ -111,7 +111,7 @@ export default function CommissionsPageContent() {
   }
   function paymentDeleted() {
     setPaymentId(null)
-    notify("Payment deleted")
+    notify("Pago eliminado")
   }
   function renderCommission(commission: Commission) {
     return (
@@ -131,17 +131,17 @@ export default function CommissionsPageContent() {
   const displayError =
     error ??
     (listError
-      ? extractErrorMessage(listError, "Failed to load commissions")
+      ? extractErrorMessage(listError, "No se pudieron cargar los encargos")
       : detailError
-        ? extractErrorMessage(detailError, "Commission not found")
+        ? extractErrorMessage(detailError, "No se encontró el encargo")
         : paymentError
-          ? extractErrorMessage(paymentError, "Failed to load payment")
+          ? extractErrorMessage(paymentError, "No se pudo cargar el pago")
           : clientsError
-            ? "Client names could not be loaded"
+            ? "No se pudieron cargar los nombres de los clientes"
             : null)
   return (
     <PageLayout
-      navigationSubtitle="Commissions"
+      navigationSubtitle="Encargos"
       headerContent={
         <div className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between gap-4 px-6 py-4">
@@ -154,8 +154,8 @@ export default function CommissionsPageContent() {
               </h1>
             </div>
             <AddButton
-              ariaLabel="Add commission"
-              title="New commission"
+              ariaLabel="Añadir encargo"
+              title="Nuevo encargo"
               onClick={openCreate}
             />
           </div>
@@ -177,8 +177,8 @@ export default function CommissionsPageContent() {
       {!isLoading && withoutPayment.length === 0 ? (
         <EmptyState variant="card">
           {withPayment.length
-            ? "No commissions without payment."
-            : "No commissions yet. Create one to get started."}
+            ? "No hay encargos pendientes de pago."
+            : "Todavía no hay encargos. Crea uno para empezar."}
         </EmptyState>
       ) : null}
       <div className="space-y-3">{withoutPayment.map(renderCommission)}</div>
@@ -190,7 +190,7 @@ export default function CommissionsPageContent() {
           {withPayment.length ? (
             withPayment.map(renderCommission)
           ) : (
-            <EmptyState>No commissions with payment.</EmptyState>
+            <EmptyState>No hay encargos pagados.</EmptyState>
           )}
         </div>
       </details>
@@ -204,9 +204,9 @@ export default function CommissionsPageContent() {
       ) : null}
       <ConfirmDialog
         isOpen={Boolean(deleting)}
-        title="Delete commission"
-        confirmLabel="Delete"
-        pendingLabel="Deleting…"
+        title="Eliminar encargo"
+        confirmLabel="Eliminar"
+        pendingLabel="Eliminando…"
         variant="danger"
         isPending={remove.isMutating}
         error={error}

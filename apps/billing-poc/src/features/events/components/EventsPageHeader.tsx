@@ -35,7 +35,7 @@ export default function EventsPageHeader({
           </h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <AddButton ariaLabel="Add event" onClick={onAddEvent} />
+          <AddButton ariaLabel="Añadir evento" onClick={onAddEvent} />
           <MonthPicker
             selectedDate={selectedDate}
             onMonthChange={onMonthChange}

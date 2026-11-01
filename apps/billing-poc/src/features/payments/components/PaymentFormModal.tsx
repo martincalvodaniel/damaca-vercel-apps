@@ -27,8 +27,8 @@ export default function PaymentFormModal({
   initialClientQuery,
   autoFocusClient = false,
   onPaymentSaved,
-  saveLabel = "Save Payment",
-  pendingLabel = "Saving...",
+  saveLabel = "Guardar pago",
+  pendingLabel = "Guardando...",
 }: PaymentFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const formRef = useRef<{

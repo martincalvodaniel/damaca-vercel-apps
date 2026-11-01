@@ -10,7 +10,7 @@ import { filterProductSuggestions } from "./product-selector-utils"
 
 export default function ProductSelector({
   onSelect,
-  label = "Add a product",
+  label = "Añadir producto",
 }: {
   onSelect: (product: Product) => void
   label?: string
@@ -77,9 +77,9 @@ export default function ProductSelector({
       onChange={setQuery}
       onKeyDown={keyDown}
       label={label}
-      placeholder="Search products by name..."
-      ariaLabel="Search products by name"
-      clearAriaLabel="Clear product search"
+      placeholder="Buscar productos por nombre..."
+      ariaLabel="Buscar productos por nombre"
+      clearAriaLabel="Borrar búsqueda de productos"
       renderDropdown={dropdown}
     />
   )

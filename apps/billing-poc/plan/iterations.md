@@ -101,3 +101,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: valor presente copiable, confirmación coherente con email y clic que no activa la edición de la fila; valor vacío conserva el marcador actual.
 - Validación: Biome incremental, type-check y pruebas de billing pertinentes; revisión del manejo de propagación y `git diff --check`.
 - Evidencia: [BILL-10](iteration-log.md#bill-10--copiar-instagram-desde-el-listado).
+
+## BILL-11 — Traducción de la interfaz al español
+
+- Estado: `validated`.
+- Objetivo: traducir al español toda la interfaz visible de billing-poc, incluidos navegación, formularios, tablas, diálogos, estados, mensajes, accesibilidad y metadatos; usar localización española para fechas.
+- Rutas: `src/app/`, `src/components/`, `src/features/`, utilidades compartidas de formato de UI y planificación de billing.
+- Dependencias: componentes y flujos existentes; sin cambios de comportamiento ni nuevas dependencias. Nombre aprobado por el usuario: `Commissions` se presenta como `Encargos`.
+- Aceptación: ninguna cadena inglesa dirigida a usuarios permanece en la UI, salvo marcas, nombres propios, códigos/términos técnicos necesarios y contenido introducido por los usuarios; textos accesibles y errores visibles también traducidos; idioma del documento y formatos coherentes con `es-ES`.
+- Validación: inventario y búsqueda residual de cadenas UI inglesas; Biome en archivos editados, type-check y build de billing; diff check. No ejecutar pruebas salvo que el usuario las solicite.
+- Evidencia: [BILL-11](iteration-log.md#bill-11--traducción-de-la-interfaz-al-español).

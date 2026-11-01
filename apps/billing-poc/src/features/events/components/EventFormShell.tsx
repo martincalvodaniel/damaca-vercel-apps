@@ -187,7 +187,7 @@ export default function EventFormShell({
             aria-busy={isSubmitting}
             className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-offset-zinc-900"
           >
-            {String(isSubmitting ? "Saving…" : submitLabel)}
+            {String(isSubmitting ? "Guardando…" : submitLabel)}
           </button>
         </div>
       </form>

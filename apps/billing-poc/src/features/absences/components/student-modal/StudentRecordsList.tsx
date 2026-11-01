@@ -35,7 +35,7 @@ export default function StudentRecordsList({
     groups ?? (records ? groupStudentRecords(records) : [])
 
   if (resolved.length === 0) {
-    return <EmptyState>No records yet.</EmptyState>
+    return <EmptyState>Todavía no hay registros.</EmptyState>
   }
 
   return (
@@ -128,8 +128,8 @@ function StudentRecordItem({
       <RecordRowActions
         onEdit={handleEdit}
         onDelete={handleDelete}
-        editLabel={`Edit ${record.type} on ${formatDate(record.date)}`}
-        deleteLabel={`Delete ${record.type} on ${formatDate(record.date)}`}
+        editLabel={`Editar ${record.type === "absence" ? "ausencia" : "recuperación"} del ${formatDate(record.date)}`}
+        deleteLabel={`Eliminar ${record.type === "absence" ? "ausencia" : "recuperación"} del ${formatDate(record.date)}`}
       />
     </li>
   )

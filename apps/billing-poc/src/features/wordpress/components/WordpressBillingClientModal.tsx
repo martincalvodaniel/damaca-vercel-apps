@@ -113,19 +113,19 @@ export function WordpressBillingClientModal({
     const rows = [
       {
         field: "name" as const,
-        label: "Name",
+        label: "Nombre",
         currentValue: normalizeField(selectedClient.name),
         nextValue: normalizeField(billingPayload.name),
       },
       {
         field: "phone" as const,
-        label: "Phone",
+        label: "Teléfono",
         currentValue: normalizeField(selectedClient.phone),
         nextValue: normalizeField(billingPayload.phone),
       },
       {
         field: "email" as const,
-        label: "Email",
+        label: "Correo electrónico",
         currentValue: normalizeField(selectedClient.email),
         nextValue: normalizeField(billingPayload.email),
       },
@@ -150,9 +150,11 @@ export function WordpressBillingClientModal({
   ).length
   const isSubmitting = isCreatingClient || isUpdatingClient
   const confirmLabel = selectedClient
-    ? "Confirm update client"
-    : "Confirm create client"
-  const pendingLabel = selectedClient ? "Updating client…" : "Creating client…"
+    ? "Confirmar actualización del cliente"
+    : "Confirmar creación del cliente"
+  const pendingLabel = selectedClient
+    ? "Actualizando cliente…"
+    : "Creando cliente…"
   const handleConfirm = async () => {
     if (!order || !billingPayload) return
     setErrorMessage(null)
@@ -162,7 +164,7 @@ export function WordpressBillingClientModal({
           clientType: "individual",
           ...billingPayload,
         })
-        onConfirmed?.(`Client created from order #${order.id}`)
+        onConfirmed?.(`Cliente creado a partir del pedido n.º ${order.id}`)
         onClose()
         return
       }
@@ -182,14 +184,14 @@ export function WordpressBillingClientModal({
         updates.email = billingPayload.email
       }
       if (Object.keys(updates).length === 1) {
-        setErrorMessage("Select at least one field to update.")
+        setErrorMessage("Selecciona al menos un campo para actualizar.")
         return
       }
       await updateClient(updates)
-      onConfirmed?.(`Client updated from order #${order.id}`)
+      onConfirmed?.(`Cliente actualizado a partir del pedido n.º ${order.id}`)
       onClose()
     } catch (error) {
-      setErrorMessage(extractApiError(error, "Failed to save client"))
+      setErrorMessage(extractApiError(error, "No se pudo guardar el cliente"))
     }
   }
   const isConfirmDisabled =
@@ -201,8 +203,8 @@ export function WordpressBillingClientModal({
       onClose={onClose}
       title={
         order
-          ? `Import billing into clients - Order #${order.id}`
-          : "Import billing into clients"
+          ? `Importar datos de facturación a clientes - Pedido n.º ${order.id}`
+          : "Importar datos de facturación a clientes"
       }
       maxWidth="xl"
       footer={
@@ -226,7 +228,7 @@ export function WordpressBillingClientModal({
             selectedClientName={selectedClient?.name}
             onChange={handleClientChange}
             onSelectClient={handleSelectClient}
-            label="Select an existing client to update (optional)"
+            label="Selecciona un cliente existente para actualizarlo (opcional)"
           />
 
           {selectedClient && hasDiffChanges ? (

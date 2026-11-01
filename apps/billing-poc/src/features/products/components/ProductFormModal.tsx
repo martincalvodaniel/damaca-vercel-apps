@@ -35,7 +35,9 @@ export default function ProductFormModal({
         await createProduct(data)
       }
     } catch (err) {
-      throw new Error(extractProductApiError(err, "Failed to save product"))
+      throw new Error(
+        extractProductApiError(err, "No se pudo guardar el producto")
+      )
     }
     onClose()
     onSuccess?.()
@@ -45,7 +47,7 @@ export default function ProductFormModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={product ? "Edit Product" : "Create Product"}
+      title={product ? "Editar producto" : "Crear producto"}
       maxWidth="lg"
     >
       <ProductForm

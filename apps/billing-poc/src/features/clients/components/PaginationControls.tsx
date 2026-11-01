@@ -47,7 +47,7 @@ export default function PaginationControls({
           onClick={showPreviousPage}
           disabled={!hasPrevPage}
           className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
-          aria-label="Previous page"
+          aria-label="Página anterior"
         >
           Previous
         </button>
@@ -67,7 +67,7 @@ export default function PaginationControls({
           onClick={showNextPage}
           disabled={!hasNextPage}
           className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
-          aria-label="Next page"
+          aria-label="Página siguiente"
         >
           Next
         </button>

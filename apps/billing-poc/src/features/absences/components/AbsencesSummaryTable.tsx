@@ -21,11 +21,15 @@ interface AbsencesSummaryTableProps {
 }
 
 const COLUMNS: { key: SortKey; label: string; align: "left" | "right" }[] = [
-  { key: "studentName", label: "Student", align: "left" },
-  { key: "pending", label: "Pending", align: "right" },
-  { key: "totalAbsences", label: "Total absences", align: "right" },
-  { key: "totalRecoveries", label: "Total recoveries", align: "right" },
-  { key: "lastAbsenceDate", label: "Last absence date", align: "left" },
+  { key: "studentName", label: "Alumno/a", align: "left" },
+  { key: "pending", label: "Pendiente", align: "right" },
+  { key: "totalAbsences", label: "Total de ausencias", align: "right" },
+  { key: "totalRecoveries", label: "Total de recuperaciones", align: "right" },
+  {
+    key: "lastAbsenceDate",
+    label: "Fecha de la última ausencia",
+    align: "left",
+  },
 ]
 
 function compareValues(
@@ -96,9 +100,9 @@ export default function AbsencesSummaryTable({
       <div>
         <DebouncedSearchInput
           onSearch={handleFilterChange}
-          placeholder="Filter by student..."
-          ariaLabel="Filter by student"
-          clearAriaLabel="Clear student filter"
+          placeholder="Filtrar por alumno/a..."
+          ariaLabel="Filtrar por alumno/a"
+          clearAriaLabel="Borrar filtro de alumno/a"
           debounceMs={0}
           containerClassName="relative max-w-sm"
           inputClassName="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
@@ -126,7 +130,9 @@ export default function AbsencesSummaryTable({
               <tr className="bg-white dark:bg-zinc-900">
                 <td colSpan={COLUMNS.length} className="px-6 py-8">
                   <EmptyState>
-                    {trimmedFilter === "" ? "No students yet" : "No matches"}
+                    {trimmedFilter === ""
+                      ? "Todavía no hay alumnos"
+                      : "No hay coincidencias"}
                   </EmptyState>
                 </td>
               </tr>
@@ -172,7 +178,7 @@ function SummaryStudentRow({
       tabIndex={0}
       onClick={openStudent}
       onKeyDown={handleKeyDown}
-      aria-label={`View details for ${row.studentName}`}
+      aria-label={`Ver detalles de ${row.studentName}`}
       className={`border-b border-zinc-200 cursor-pointer transition-colors hover:bg-blue-50 focus:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:border-zinc-700 dark:hover:bg-blue-900/20 dark:focus:bg-blue-900/20 ${
         striped ? "bg-zinc-50 dark:bg-zinc-800/50" : "bg-white dark:bg-zinc-900"
       }`}

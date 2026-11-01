@@ -21,15 +21,15 @@ export default function DeleteClientModal({
   return (
     <ConfirmDialog
       isOpen={isOpen}
-      title="Delete Client"
+      title="Eliminar cliente"
       variant="danger"
-      confirmLabel="Delete"
-      pendingLabel="Deleting..."
+      confirmLabel="Eliminar"
+      pendingLabel="Eliminando..."
       isPending={isDeleting}
       onCancel={onCancel}
       onConfirm={onConfirm}
     >
-      <p>Are you sure you want to delete this client?</p>
+      <p>¿Seguro que quieres eliminar este cliente?</p>
       {client ? (
         <div className="space-y-2 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800">
           <p>

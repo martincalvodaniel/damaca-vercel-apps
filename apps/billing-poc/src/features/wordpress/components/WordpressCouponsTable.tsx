@@ -96,16 +96,16 @@ export function WordpressCouponsTable({
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    ariaLabel={`Open gift card PDF for coupon ${coupon.code}`}
-                    title="Open gift card PDF"
+                    ariaLabel={`Abrir PDF de tarjeta regalo del cupón ${coupon.code}`}
+                    title="Abrir PDF de la tarjeta regalo"
                     variant="info"
                   >
                     <DocumentIcon />
                   </IconLink>
                   <IconButton
                     onClick={handleDelete}
-                    ariaLabel={`Delete coupon ${coupon.code}`}
-                    title="Delete coupon"
+                    ariaLabel={`Eliminar cupón ${coupon.code}`}
+                    title="Eliminar cupón"
                     variant="danger"
                   >
                     <span data-coupon-id={coupon.id} className="contents">
@@ -172,13 +172,13 @@ export function WordpressCouponsTable({
           <thead className="bg-zinc-50 dark:bg-zinc-800/60">
             <tr>
               {[
-                "Code",
-                "Final price",
-                "Status",
-                "Description",
-                "Date expires",
-                "Usage",
-                "Used by",
+                "Código",
+                "Precio final",
+                "Estado",
+                "Descripción",
+                "Fecha de caducidad",
+                "Uso",
+                "Usado por",
               ].map((heading) => (
                 <th
                   key={heading}
@@ -188,7 +188,7 @@ export function WordpressCouponsTable({
                 </th>
               ))}
               <th className="px-4 py-3">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">Acciones</span>
               </th>
             </tr>
           </thead>
@@ -231,16 +231,16 @@ export function WordpressCouponsTable({
                         )}
                         target="_blank"
                         rel="noopener noreferrer"
-                        ariaLabel={`Open gift card PDF for coupon ${coupon.code}`}
-                        title="Open gift card PDF"
+                        ariaLabel={`Abrir PDF de tarjeta regalo del cupón ${coupon.code}`}
+                        title="Abrir PDF de la tarjeta regalo"
                         variant="info"
                       >
                         <DocumentIcon />
                       </IconLink>
                       <IconButton
                         onClick={handleDelete}
-                        ariaLabel={`Delete coupon ${coupon.code}`}
-                        title="Delete coupon"
+                        ariaLabel={`Eliminar cupón ${coupon.code}`}
+                        title="Eliminar cupón"
                         variant="danger"
                       >
                         <span data-coupon-id={coupon.id} className="contents">
@@ -265,7 +265,7 @@ export function WordpressCouponsTable({
       <PaymentFormModal
         isOpen={paymentDraft !== null}
         onClose={closePaymentModal}
-        title="New Gift Card Payment"
+        title="Nuevo pago de tarjeta regalo"
         initialDate={paymentDraft?.date}
         initialData={initialPaymentData}
         initialClientQuery={paymentDraft?.coupon.description}

@@ -57,7 +57,7 @@ export default function CommissionFormModal({
     setError(null)
     const parsed = createCommissionSchema.safeParse(fields)
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Invalid commission")
+      setError(parsed.error.issues[0]?.message ?? "Encargo no válido")
       return
     }
     try {
@@ -69,11 +69,11 @@ export default function CommissionFormModal({
         : await create.trigger(parsed.data)
       onSaved(
         result.paymentSync === "invoiced"
-          ? "Commission saved. The invoiced payment was preserved and was not synchronized."
-          : "Commission saved"
+          ? "Encargo guardado. Se conservó la factura del pago y no se sincronizó."
+          : "Encargo guardado"
       )
     } catch (error) {
-      setError(extractErrorMessage(error, "Failed to save commission"))
+      setError(extractErrorMessage(error, "No se pudo guardar el encargo"))
     }
   }
   const changeConcept = (
@@ -150,7 +150,7 @@ export default function CommissionFormModal({
     <Modal
       isOpen
       onClose={close}
-      title={commission ? "Edit Commission" : "New Commission"}
+      title={commission ? "Editar encargo" : "Nuevo encargo"}
       maxWidth="xl"
       stickyHeader
       stickyFooter
@@ -159,8 +159,8 @@ export default function CommissionFormModal({
           onConfirm={confirmSave}
           onCancel={onClose}
           isPending={pending}
-          confirmLabel="Save"
-          pendingLabel="Saving…"
+          confirmLabel="Guardar"
+          pendingLabel="Guardando…"
         />
       }
     >
@@ -170,7 +170,7 @@ export default function CommissionFormModal({
           disabled={pending}
           className="space-y-5 text-zinc-900 dark:text-zinc-100"
         >
-          <FormField id={`${id}-title`} label="Title" required>
+          <FormField id={`${id}-title`} label="Título" required>
             <input
               id={`${id}-title`}
               className={fieldClass}
@@ -182,11 +182,11 @@ export default function CommissionFormModal({
           <ClientSelectorField
             value={fields.clientId}
             onChange={changeClient}
-            label="Client (optional)"
+            label="Cliente (opcional)"
             onError={setError}
           />
           <div className="grid gap-4 sm:grid-cols-2">
-            <FormField id={`${id}-due`} label="Deadline (optional)">
+            <FormField id={`${id}-due`} label="Fecha límite (opcional)">
               <input
                 id={`${id}-due`}
                 type="date"
@@ -195,7 +195,7 @@ export default function CommissionFormModal({
                 onInput={changeDueDate}
               />
             </FormField>
-            <FormField id={`${id}-prepaid`} label="Prepaid (€)">
+            <FormField id={`${id}-prepaid`} label="Anticipo (€)">
               <NumberStepperInput
                 id={`${id}-prepaid`}
                 value={
@@ -207,11 +207,11 @@ export default function CommissionFormModal({
                 min={0}
                 step={5}
                 inputMode="decimal"
-                ariaLabel="Prepaid amount in euros"
+                ariaLabel="Anticipo en euros"
               />
             </FormField>
           </div>
-          <FormField id={`${id}-description`} label="Description (optional)">
+          <FormField id={`${id}-description`} label="Descripción (opcional)">
             <textarea
               id={`${id}-description`}
               className={fieldClass}
@@ -228,7 +228,7 @@ export default function CommissionFormModal({
             onRemoveConcept={removeConcept}
           />
           <ProductSelector onSelect={addProduct} />
-          <FormField id={`${id}-vat`} label="VAT (%)" required>
+          <FormField id={`${id}-vat`} label="IVA (%)" required>
             <NumberStepperInput
               id={`${id}-vat`}
               min={0}
@@ -237,7 +237,7 @@ export default function CommissionFormModal({
               required
               value={Number.isFinite(fields.vat) ? String(fields.vat) : ""}
               onValueChange={changeVat}
-              ariaLabel="VAT percentage"
+              ariaLabel="Porcentaje del IVA"
             />
           </FormField>
           <p className="text-sm text-zinc-600 dark:text-zinc-300">

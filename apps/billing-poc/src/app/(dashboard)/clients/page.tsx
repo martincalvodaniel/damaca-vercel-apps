@@ -55,7 +55,7 @@ export default function ClientsPage() {
     try {
       await createClient(formData)
     } catch (err) {
-      throw new Error(extractApiError(err, "Failed to create client"))
+      throw new Error(extractApiError(err, "No se pudo crear el cliente"))
     }
     setShowForm(false)
     setPage(1) // Reset to page 1 after create
@@ -64,10 +64,10 @@ export default function ClientsPage() {
     fetchError instanceof Error
       ? fetchError.message
       : fetchError
-        ? "Failed to fetch clients"
+        ? "No se pudieron cargar los clientes"
         : null
   return (
-    <PageLayout navigationSubtitle="Clients">
+    <PageLayout navigationSubtitle="Clientes">
       {errorMessage ? <ErrorBanner bordered>{errorMessage}</ErrorBanner> : null}
 
       <div className="space-y-4">
@@ -85,7 +85,7 @@ export default function ClientsPage() {
             onClick={toggleCreateForm}
             className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
           >
-            {showForm ? "Cancel" : "Add Client"}
+            {showForm ? "Cancelar" : "Añadir cliente"}
           </button>
         </div>
 
@@ -103,7 +103,7 @@ export default function ClientsPage() {
       </div>
 
       {isLoading && clients.length === 0 ? (
-        <EmptyState variant="card">Loading clients...</EmptyState>
+        <EmptyState variant="card">Cargando clientes...</EmptyState>
       ) : (
         <>
           <ClientList clients={clients} />

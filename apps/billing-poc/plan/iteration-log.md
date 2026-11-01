@@ -99,3 +99,13 @@
 - Implementado: posición sticky trasladada a una franja de PageLayout con fondo opaco claro/oscuro, padding superior e inferior y ancho completo del viewport. Barra centrada con el ancho máximo existente; contenido principal a continuación sin duplicar el espacio inferior. Menú y barra comparten la capa de navegación, por debajo de modales.
 - Validación: `bun run lint --staged` comprobó cinco archivos sin hallazgos; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 969 pruebas y 0 fallos; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto. `git diff --cached --check` correcto. La caché remota no estaba disponible; los comandos locales completaron correctamente.
 - Revisión estática de anchura, padding, fondos y capas en ambos temas; sin nuevos efectos, listeners ni dependencias. Sin comprobación visual en navegador. Commit, push y SHA remoto se verifican al cerrar.
+
+## BILL-11 — Traducción de la interfaz al español
+
+- Inicio: 2026-11-01, rama `int`, base `36ccd49`; árbol limpio. Capacidad inicial: 100 % en 5 h y 66 % en 7 d.
+- Aceptación: [BILL-11](iterations.md#bill-11--traducción-de-la-interfaz-al-español).
+- Decisión del usuario: mostrar `Commissions` como `Encargos`.
+- Implementado: navegación y las secciones de autenticación, clientes, encargos, eventos, facturas, pagos mensuales/anuales, productos, ausencias y WordPress traducidas. Incluidos formularios, tablas, botones, mensajes y errores, estados vacíos, placeholders, etiquetas accesibles y metadatos. Documento con `lang="es"`; fechas y meses con `es-ES`; marcas y valores internos de API conservan su identidad.
+- Validación: Biome explícito en los 122 archivos TSX modificados y `bun run lint --staged` (124 archivos): correcto. `bun run type-check --filter=@damaca/billing-poc`: correcto. `bun run build --filter=@damaca/billing-poc`: Turbopack no pudo enlazar un puerto interno (`Operation not permitted`); `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto, con todas las rutas compiladas. `git diff --check`: correcto. No se ejecutaron pruebas.
+- La opción semántica de “Commissions” fue confirmada como “Encargos”. Los valores de factura/recibo de la API se conservaron, traduciendo solo las etiquetas visibles.
+- Estado de publicación: pendiente de stage, commit, push a `int` y verificación del SHA remoto.

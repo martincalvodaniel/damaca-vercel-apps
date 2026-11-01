@@ -13,37 +13,37 @@ interface NavigationBarProps {
 const NAV_ITEMS: readonly NavItem[] = [
   {
     href: "/absences",
-    label: "Absences",
+    label: "Ausencias",
     matches: (p) => p === "/absences",
   },
   {
     href: "/clients",
-    label: "Clients",
+    label: "Clientes",
     matches: (p) => p === "/clients",
   },
   {
     href: "/commissions",
-    label: "Commissions",
+    label: "Encargos",
     matches: (p) => p === "/commissions",
   },
   {
     href: "/events",
-    label: "Events",
+    label: "Eventos",
     matches: (p) => p === "/events",
   },
   {
     href: "/invoices",
-    label: "Invoices",
+    label: "Facturas",
     matches: (p) => p === "/invoices",
   },
   {
     href: "/month",
-    label: "Month",
+    label: "Mes",
     matches: (p) => p === "/" || p === "/month",
   },
   {
     href: "/products",
-    label: "Products",
+    label: "Productos",
     matches: (p) => p === "/products",
   },
   {
@@ -53,7 +53,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   },
   {
     href: "/year",
-    label: "Year",
+    label: "Año",
     matches: (p) => p === "/year",
   },
 ]
@@ -115,7 +115,7 @@ export default function NavigationBar({ subtitle }: NavigationBarProps) {
               {session.user.image ? (
                 <Image
                   src={session.user.image}
-                  alt={session.user.name ?? "User avatar"}
+                  alt={session.user.name ?? "Avatar de usuario"}
                   width={28}
                   height={28}
                   className="h-7 w-7 rounded-full"
@@ -137,7 +137,7 @@ export default function NavigationBar({ subtitle }: NavigationBarProps) {
         <button
           type="button"
           onClick={handleMenuOpenChange}
-          aria-label="Open navigation menu"
+          aria-label="Abrir menú de navegación"
           className="min-h-11 min-w-11 rounded-md p-2 text-zinc-700 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 xl:hidden dark:text-zinc-200 dark:hover:bg-zinc-800"
         >
           <svg

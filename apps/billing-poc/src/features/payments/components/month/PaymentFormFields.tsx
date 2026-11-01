@@ -92,7 +92,7 @@ export default function PaymentFormFields({
           initialQuery={initialClientQuery}
           autoFocus={autoFocusClient}
           onChange={handleClientChange}
-          label="Client (Optional)"
+          label="Cliente (opcional)"
           required={false}
         />
         <PaymentMethodDropdown

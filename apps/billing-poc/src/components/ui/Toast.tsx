@@ -32,7 +32,7 @@ export default function Toast({ message, onClose }: ToastProps) {
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close notification"
+          aria-label="Cerrar notificación"
           className="ml-auto rounded-md p-1 text-green-600 hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 dark:text-green-400 dark:hover:text-green-300"
         >
           ✕

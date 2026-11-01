@@ -80,7 +80,7 @@ export default function DayDetailModal({
   const handleCancelForm = () => {
     mutations.clearFormError()
     setFormState({ mode: "create" })
-    inlineForm.hide('button[aria-label^="Add absence"]')
+    inlineForm.hide('button[aria-label^="Añadir ausencia"]')
   }
   handleCancelFormRef.current = handleCancelForm
 
@@ -166,11 +166,13 @@ export default function DayDetailModal({
                 }
                 title={
                   formState.mode === "edit"
-                    ? "Edit record"
-                    : `Add new ${formType === "recovery" ? "Recovery" : "Absence"} for ${formPartOfDay === "evening" ? "Evening" : "Morning"}`
+                    ? "Editar registro"
+                    : `Añadir ${formType === "recovery" ? "recuperación" : "ausencia"} para ${formPartOfDay === "evening" ? "la tarde" : "la mañana"}`
                 }
                 submitTooltip={
-                  formState.mode === "edit" ? "Save changes" : "Add record"
+                  formState.mode === "edit"
+                    ? "Guardar cambios"
+                    : "Añadir registro"
                 }
                 initialDate={date}
                 initialPartOfDay={formPartOfDay}
@@ -203,7 +205,7 @@ export default function DayDetailModal({
       {pendingDelete ? (
         <ConfirmDeleteModal
           isOpen
-          title="Delete Record"
+          title="Eliminar registro"
           isPending={isDeleting}
           errorMessage={deleteError}
           onCancel={handlePendingDeleteChange}

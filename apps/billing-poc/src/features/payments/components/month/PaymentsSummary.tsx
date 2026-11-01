@@ -61,7 +61,7 @@ export default function PaymentsSummary({
         </div>
       </SummaryCard>
       <SummaryCard
-        label="Net"
+        label="Neto"
         value={formatCurrency(totalNet)}
         valueClassName={
           totalNet >= 0
@@ -145,7 +145,7 @@ function SummaryFilterButton({
           ? "ring-1 ring-blue-500"
           : "hover:bg-zinc-50 dark:hover:bg-zinc-800"
       }`}
-      aria-label={`Filter table by ${type} payments`}
+      aria-label={`Filtrar tabla por pagos de tipo ${type}`}
     >
       {children}
     </button>
