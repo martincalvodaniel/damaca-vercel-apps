@@ -117,6 +117,32 @@ lockfile version 2. The versioned `bunx` invocation selects Bun 1.4.4 for that
 installation. This follows Vercel's
 [specific Bun version guidance](https://vercel.com/kb/guide/how-to-pin-a-specific-bun-version-for-vercel-builds).
 
+## Deployment quotas and automatically skipped projects
+
+The six monorepo projects were inspected on November 1, 2026: native unaffected-project
+skipping is enabled, their Root Directories point to the corresponding app, and
+none has an Ignored Build Step command. These are observed remote settings, not
+settings enforced by the checked-in `vercel.ts` files.
+
+Do not infer quota usage from the number of visible CANCELED records. Vercel's
+[October 21 announcement](https://vercel.com/changelog/skipped-monorepo-deployments-no-longer-count-against-limits)
+excludes automatic monorepo omissions from deployment rate limits. By contrast,
+[Ignored Build Step cancellations](https://vercel.com/docs/monorepos#ignoring-the-build-step)
+consume deployment quota. Classify cancellations by their actual API reason.
+
+When investigating `api-deployments-free-per-day`, inspect all team projects,
+environments and states with complete pagination and fixed UTC bounds. Separate
+READY, automatic omissions and other failures/cancellations; the visible list
+cannot reveal rejected requests without records or the internal quota counter.
+Avoid deployment retry loops as a diagnostic mechanism. Preserve the error time
+and payload if already available, without credentials or environment values.
+
+The [November 1 incident report](incidents/2026-11-01-vercel-deployment-limit.md)
+contains a reproducible audit, sanitized evidence and an unsent support request.
+Its 142 visible records comprise 32 READY and 110 automatic omissions; that total
+does not establish 142 quota-consuming deployments. Keep native skipping enabled
+and investigate the counter before replacing it with an Ignored Build Step.
+
 ## Deployment diagnostics
 
 | Symptom                                                    | Meaning and next check                                                                         |

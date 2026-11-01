@@ -2,6 +2,25 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-14 — Audit Vercel deployment quota discrepancy
+
+- Estado: `validated`.
+- Objetivo: capturar y clasificar todos los deployments de 24 horas del equipo, contrastar las omisiones con la política oficial y preparar una consulta a soporte sin enviarla.
+- Rutas: `docs/incidents/2026-11-01-vercel-deployment-limit.*`, `docs/deployment-and-caching.md` y planificación/archivo raíz.
+- Dependencias: CLI Vercel autenticada; acceso de solo lectura al equipo actual; plan aprobado por el usuario. Capacidad inicial (2026-11-01): 56% de 5h y 59% de 7d restantes; corte documental secuencial dentro de reservas.
+- Aceptación: captura con ventana UTC fija, paginación completa, IDs sin secretos, clasificación de cada cancelación y ajustes de los seis proyectos; informe con límites de la evidencia y borrador de soporte no enviado; guía distingue omisión automática de Ignored Build Step.
+- Validación prevista: reconciliar captura/recuentos/informe, revisar enlaces locales y anclas, formato JSON, `git diff --check`, revisión de secretos y publicación verificada en `origin/int`. Sin cambios de apps, builds ni tests de producto.
+- Evidencia: [registro AGW-14](iteration-log.md#agw-14-audit-vercel-deployment-quota-discrepancy).
+
+## AGW-15 — Verify Vercel Preview recovery
+
+- Estado: `pending`.
+- Objetivo: comprobar la recuperación mediante un único Preview de billing después del desbloqueo.
+- Dependencias: confirmación de desbloqueo de Vercel o evidencia equivalente; no asumir que un plazo anunciado demuestra recuperación.
+- Aceptación: verificar equipo/proyecto/commit `int` pendiente antes de la prueba; un único intento Preview termina `READY`; volver a consultar registros y documentar resultado. No reintentos periódicos ni promoción a producción.
+- Validación prevista: `vercel inspect` del Preview y listado de deployments del equipo. Si la prueba falla, registrar el error sin declarar recuperación ni repetir automáticamente.
+- Contexto: [informe AGW-14](../docs/incidents/2026-11-01-vercel-deployment-limit.md). No enviado ningún mensaje a soporte.
+
 ## AGW-13 — Restore independent Tasks authentication and suspend database refresh
 
 - Estado: `validated`.
@@ -120,7 +139,7 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Dependencias: AGW-02 validada.
 - Aceptación: `apps/*` ya no contiene esos workspaces; README, inventario raíz y lockfile reflejan solo apps activas; ambos modos siguen generándose; ninguna dependencia de las apps activas queda rota.
 - Validación: instalación Bun reproducible; pruebas del generador; lint, type-check y pruebas de todas las apps activas; enlaces y `git diff --check`.
-- Evidencia: [iteration-log.md#agw-03-retirar-workspaces-de-plantilla](iteration-log.md#agw-03-retirar-workspaces-de-plantilla).
+- Evidencia: [iteration-log.md#agw-03-retirar-workspaces-de-plantilla](archive/2026-11-01/iteration-log.md#agw-03-retirar-workspaces-de-plantilla).
 
 ## AGW-04 — Incorporar Card Wars al inventario
 
@@ -130,7 +149,7 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Dependencias: solicitud de crear Card Wars como app local PWA.
 - Aceptación: inventario y conteos incluyen las cinco apps; el plan raíz enlaza el master de Card Wars; el registro del producto queda en la app.
 - Validación: revisar enlaces y conteos; validaciones técnicas de Card Wars se registran en la iteración principal de la app.
-- Evidencia: [iteration-log.md#agw-04-incorporar-card-wars-al-inventario](iteration-log.md#agw-04-incorporar-card-wars-al-inventario).
+- Evidencia: [iteration-log.md#agw-04-incorporar-card-wars-al-inventario](archive/2026-11-01/iteration-log.md#agw-04-incorporar-card-wars-al-inventario).
 
 ## AGW-05 — Google identity and Hub access shared package
 

@@ -13,6 +13,10 @@ Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y f
 - Toda app bajo `apps/*` adopta `plan/master.md`, `plan/iterations.md` y `plan/iteration-log.md` antes de su primera implementación no trivial.
 - [Turborepo Generate](https://turborepo.dev/docs/reference/generate) crea apps desde dos bases: Google OAuth y MongoDB, o PWA local con IndexedDB. La configuración del generador vive fuera de `apps/*` y crea los tres documentos de planificación antes de cualquier trabajo de producto.
 
+## Diagnóstico de cuota Vercel
+
+[AGW-14](iterations.md#agw-14--audit-vercel-deployment-quota-discrepancy) conserva el [informe y borrador de soporte](../docs/incidents/2026-11-01-vercel-deployment-limit.md) del bloqueo Hobby: 32 READY y 110 omisiones automáticas en la ventana auditada. La selección nativa ya está activa en las seis apps; no sustituirla por Ignored Build Step ni deducir consumo del total CANCELED. La causa interna y el desbloqueo requieren evidencia de Vercel. [AGW-15](iterations.md#agw-15--verify-vercel-preview-recovery) separa la verificación Preview pendiente; soporte no se ha contactado.
+
 ## Aplicaciones
 
 El monorepo contiene `billing-poc`, `dalis-home-management`, `dalis-tasks-events`, `pocha-score`, `card-wars` y [Damaca Hub](../apps/damaca-hub/plan/master.md). Las bases `mongo-google` y `local-pwa` viven en `turbo/generators/templates/`, fuera de `apps/*`, y crean nuevos workspaces bajo demanda. La lista de apps activas puede cambiar; la obligación documental aplica a todas las apps futuras. El alcance y registro de producto se mantienen en cada plan de app.

@@ -1,8 +1,20 @@
 # Registro de entregas transversales
 
-Las evidencias AGW-01 y AGW-02 están en el [archivo del 31 de octubre](archive/2026-10-31/README.md).
+Las evidencias AGW-01 y AGW-02 están en el [archivo del 31 de octubre](archive/2026-10-31/README.md); AGW-03 y AGW-04, en el [archivo del 1 de noviembre](archive/2026-11-01/README.md).
 
 Los hechos de publicación se verifican en Git. El estado normativo está en [iterations.md](iterations.md); este registro conserva evidencia, límites e incidentes observados.
+
+<a id="agw-14-audit-vercel-deployment-quota-discrepancy"></a>
+## AGW-14 — Audit Vercel deployment quota discrepancy
+
+- Alcance: [aceptación AGW-14](iterations.md#agw-14--audit-vercel-deployment-quota-discrepancy). Informe, JSON saneado y borrador de soporte en [incidente del 1 de noviembre](../docs/incidents/2026-11-01-vercel-deployment-limit.md); guía de despliegue distingue omisiones nativas y cancelaciones mediante Ignored Build Step.
+- Captura: CLI 65.2.0, equipo Hobby actual verificado; GETs a `/v6/deployments` y `/v9/projects` con alcance explícito. Capturada 2026-11-01 22:38:26 UTC; ventana histórica fija `[2026-10-31T22:07:35.106Z, 2026-11-01T22:07:35.106Z)`. Dos páginas de 100; la segunda alcanza el 26 de octubre y cubre completamente el límite inferior; 142 IDs únicos en ventana. Se incluyen los siete proyectos del equipo; v0-utils no tiene registros en ventana.
+- Resultado: 32 READY y 110 CANCELED; cada cancelado declara que el commit no afectaba al proyecto. Las seis apps tienen raíces correctas, selección nativa activa y ningún Ignored Build Step. La inspección individual de `dpl_FtkqVYJiPegkHrc1R3TmcXoKEfRw` confirma el mismo motivo. Fuentes: 139 Git, 1 CLI y 2 redeploy; no equivalen al número de solicitudes internas.
+- Contraste: anuncio oficial Vercel del 21 de octubre excluye omisiones automáticas de la cuota. Retirada la inferencia previa de que 142 registros visibles explicaban el bloqueo. La API no permite confirmar solicitudes rechazadas sin registro, borrados, historial de ajustes ni contador interno. El error original fue comunicado por el usuario sin hora/payload; no se afirma persistencia actual del bloqueo ni causa interna confirmada.
+- Límites: no se envía el borrador a soporte, no se intenta un deployment ni se cambia configuración remota. AGW-15 conserva la recuperación pendiente hasta evidencia externa y un único Preview READY. Publicar documentación en int puede disparar la integración Git existente; un registro omitido no demuestra recuperación. La planificación raíz es el registro principal; no hay cambios de producto por app.
+- Archivo: AGW-03 y AGW-04 pasan al archivo del 1 de noviembre con enlaces de compatibilidad; quedan diez entregas en el registro activo.
+- Validación: JSON reconciliado (IDs únicos, ventana exacta de 24 h, límites de paginación, clasificación/recuentos por proyecto y ajustes); campos saneados revisados. El snippet del informe ejecutado literalmente vuelve a producir 142/32/110. `bun run lint docs/incidents/2026-11-01-vercel-deployment-limit.json` pasa; enlaces/anclas locales y `git diff --check` pasan. Se corrigen anclas AGW-04/08 al validar los enlaces. La primera comprobación staged detecta formato Markdown en informe/archivo; se corrigen solo esos dos archivos y se repite la validación. El primer staging fue denegado por el sandbox y se completó con permisos de escritura Git. Sin builds ni tests de aplicaciones por alcance documental. El cierre requiere commit/push a int y comprobación directa del SHA remoto; no se presupone su publicación.
+- Capacidad inicial: 56% de 5h y 59% de 7d restantes; entrega estimada dentro de reservas.
 
 <a id="agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh"></a>
 ## AGW-13 — Restore independent Tasks authentication and suspend database refresh
@@ -101,21 +113,8 @@ Los hechos de publicación se verifican en Git. El estado normativo está en [it
 
 
 
-<a id="agw-03-retirar-workspaces-de-plantilla"></a>
-## AGW-03 — Retirar workspaces de plantilla
-
-- Cambios: retirados los workspaces `my-next-template` y `my-next-local-template`; sus bases y pruebas permanecen bajo `turbo/generators/templates/`. Inventario actualizado a tres apps activas y lockfile sin dependencias workspace huérfanas. Se conserva el historial en `plan/archive/2026-10-24/`; los proyectos Vercel existentes no se modificaron.
-- Evidencia: `bun install` eliminó las entradas de los dos workspaces; `bun install --frozen-lockfile` pasó sin cambios; `bun run test:generator` pasó (6 tests, 37 expectativas); `bun run type-check` pasó en 3/3 apps; `bun run test` pasó en 3/3 (Tasks Events: 1,386 pass, 225 skip, 0 fail); `git diff --check` pasó.
-- Límites: `bun run lint` global informa diagnósticos previos en archivos no modificados (incluidos errores de formato/test style en Billing). Biome aplicado a los documentos modificados. Los builds de apps Next.js fallaron porque Turbopack intenta crear un proceso auxiliar/enlazar un puerto local (`Operation not permitted`); el build PWA generada y la prueba offline están documentadas en AGW-02.
-- Publicación: pendiente.
-
-## AGW-04 — Incorporar Card Wars al inventario
-
-- README y documentación arquitectónica actualizados para cinco apps y sus puertos, incluido `@damaca/card-wars` en 3004.
-- El plan raíz enlaza el master de producto Card Wars; las decisiones y evidencia de su implementación están en [su registro de app](../apps/card-wars/plan/iteration-log.md#01--mvp-de-partidas-y-marcador).
-- Enlaces locales de README y de los tres documentos de planificación de la app resuelven; `git diff --check` pasa.
-
 <a id="agw-05-google-identity-and-hub-access"></a>
+<a id="agw-08-public-games-and-hub-managed-oidc-clients"></a>
 # AGW-08 — Public games and Hub-managed OIDC clients
 
 - Cambios: Pocha Score y Card Wars recuperan exportación estática, caché offline, instalación y preview estático; se eliminan sus rutas, dependencias, configuración y controles de identidad sin tocar IndexedDB ni contratos de copias. Hub presenta los juegos como enlaces públicos y bloquea solicitudes, grants y clientes OIDC para ellos. Los administradores pueden mantener clientes por aplicación y entorno en MongoDB; secretos aleatorios se devuelven una vez y solo se persiste su hash; callback exacto, control de revisión, desactivación y rotación revocan tokens actuales. El proveedor resuelve clientes dinámicamente en cada operación. Se añadió helper de origen explícito o alias estable de Vercel para `int`/producción.
@@ -152,3 +151,7 @@ Los hechos de publicación se verifican en Git. El estado normativo está en [it
 <a id="agw-01-centralizar-el-flujo-y-el-contrato-documental"></a>
 <a id="agw-02-generación-de-apps-con-turborepo"></a>
 Evidencias históricas [AGW-01 y AGW-02](archive/2026-10-31/iteration-log.md) archivadas; estas anclas conservan los enlaces anteriores.
+
+<a id="agw-03-retirar-workspaces-de-plantilla"></a>
+<a id="agw-04-incorporar-card-wars-al-inventario"></a>
+Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) archivadas; estas anclas conservan los enlaces anteriores.
