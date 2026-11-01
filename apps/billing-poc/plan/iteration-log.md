@@ -6,7 +6,7 @@
 - Aceptación: [BILL-10](iterations.md#bill-10--copiar-instagram-desde-el-listado).
 - Implementado: Instagram usa `CopyToClipboardButton` con el mismo toast y confirmación que email; `stopPropagation` evita abrir la edición de la fila al copiar. Sin valor se conserva `—`.
 - Validación: `bunx biome check apps/billing-poc/src/features/clients/components/ClientTableRow.tsx`: correcto; `bun run type-check --filter=@damaca/billing-poc`: correcto; `bun run test --filter=@damaca/billing-poc`: 971 pruebas, 0 fallos; `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto; `git diff --check`: correcto. Sin prueba de navegador; el comportamiento reutiliza el componente de copia ya usado por email.
-- Commit, push y SHA remoto se verifican al cerrar.
+- Commit `d480743`; push a `origin/int` correcto y SHA remoto verificado (`d480743dfd30fbc60358768cd2c4b4e8f615b0e6`).
 
 ## BILL-09 — Instagram de clientes
 
