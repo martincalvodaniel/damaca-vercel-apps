@@ -1,13 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
-import {
-  getBadgeSizeClass,
-  getBadgeToneClass,
-} from "@/components/ui/badge-utils"
+import PaymentActions from "@/components/shared/PaymentActions"
 import { IconButton } from "@/components/ui/IconButton"
-import { BankTransferIcon } from "@/components/ui/icons/BankTransferIcon"
-import { CardIcon } from "@/components/ui/icons/CardIcon"
-import { CashIcon } from "@/components/ui/icons/CashIcon"
 import { TrashIcon } from "@/components/ui/icons/TrashIcon"
 import NumberStepperInput from "@/components/ui/NumberStepperInput"
 import type { EventAttendee } from "@/lib/domain/entities/event"
@@ -45,21 +39,12 @@ export default function AttendeeRow({
   onOpenPayment,
   onEditClient,
 }: AttendeeRowProps) {
-  function handleOpenPayment() {
-    if (attendee.paymentId) onOpenPayment(attendee.paymentId)
-  }
   function handleEditClient(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation()
     onEditClient(attendee.clientId)
   }
-  function handleGenerateCashPayment() {
-    return onGenerate(attendee.clientId, "cash")
-  }
-  function handleGenerateCardPayment() {
-    return onGenerate(attendee.clientId, "card")
-  }
-  function handleGenerateBankTransferPayment() {
-    return onGenerate(attendee.clientId, "bank_transfer")
+  function handleGeneratePayment(method: PaymentMethod) {
+    onGenerate(attendee.clientId, method)
   }
   function handleRemove() {
     return onRemove(attendee.clientId)
@@ -139,59 +124,16 @@ export default function AttendeeRow({
         </div>
       </div>
       <div className="flex items-center gap-1">
-        {hasPayment && !isSaving && attendee.paymentId ? (
-          <button
-            type="button"
-            onClick={handleOpenPayment}
-            disabled={isOpeningPayment}
-            aria-label={`Open payment for ${name}`}
-            className={`inline-flex items-center rounded-full font-medium transition-colors hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-green-900/50 ${getBadgeSizeClass("sm")} ${getBadgeToneClass("success")}`}
-          >
-            {isOpeningPayment ? "€ …" : "€ ✓"}
-          </button>
-        ) : null}
-        <IconButton
-          variant="success"
-          isPending={isGenerating}
-          disabled={hasPayment}
-          onClick={handleGenerateCashPayment}
-          ariaLabel={
-            hasPayment
-              ? `Payment already generated for ${name}`
-              : `Generate cash payment for ${name}`
-          }
-          title="Generate cash payment"
-        >
-          <CashIcon />
-        </IconButton>
-        <IconButton
-          variant="info"
-          isPending={isGenerating}
-          disabled={hasPayment}
-          onClick={handleGenerateCardPayment}
-          ariaLabel={
-            hasPayment
-              ? `Payment already generated for ${name}`
-              : `Generate card payment for ${name}`
-          }
-          title="Generate card payment"
-        >
-          <CardIcon />
-        </IconButton>
-        <IconButton
-          variant="neutral"
-          isPending={isGenerating}
-          disabled={hasPayment}
-          onClick={handleGenerateBankTransferPayment}
-          ariaLabel={
-            hasPayment
-              ? `Payment already generated for ${name}`
-              : `Generate bank transfer payment for ${name}`
-          }
-          title="Generate bank transfer payment"
-        >
-          <BankTransferIcon />
-        </IconButton>
+        <PaymentActions
+          name={name}
+          paymentId={attendee.paymentId}
+          hasPayment={hasPayment}
+          hideOpenPayment={isSaving}
+          isGenerating={isGenerating}
+          isOpeningPayment={isOpeningPayment}
+          onGenerate={handleGeneratePayment}
+          onOpen={onOpenPayment}
+        />
         <IconButton
           variant="danger"
           onClick={handleRemove}

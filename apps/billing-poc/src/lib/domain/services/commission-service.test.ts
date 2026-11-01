@@ -119,7 +119,7 @@ describe("commission payment generation", () => {
     const payment = deps.records.get(result.paymentId)
     expect(payment).toMatchObject({
       type: "income",
-      tag: "commission",
+      tag: "Encargo",
       paymentMethod: "card",
       vat: 21,
       total: 121,

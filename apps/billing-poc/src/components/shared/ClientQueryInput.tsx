@@ -1,6 +1,6 @@
 "use client"
 
-import type { ChangeEvent, KeyboardEvent, ReactNode } from "react"
+import type { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode } from "react"
 import { useEffect, useId, useRef, useState } from "react"
 import RequiredAsterisk from "@/components/ui/RequiredAsterisk"
 import { useClickOutside } from "@/hooks/useClickOutside"
@@ -94,11 +94,9 @@ export default function ClientQueryInput({
     }
   }
 
-  const handleBlur = () => {
-    if (!renderDropdown) return
-    setTimeout(() => {
-      setShowDropdown(false)
-    }, 200)
+  const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) return
+    closeDropdown()
   }
 
   const handleClear = () => {
@@ -117,7 +115,8 @@ export default function ClientQueryInput({
   useClickOutside(containerRef, closeDropdown, showDropdown)
 
   return (
-    <div ref={containerRef} className="relative space-y-2">
+    // biome-ignore lint/a11y/noStaticElementInteractions: track focus leaving the input and its suggestion buttons as one control
+    <div ref={containerRef} className="relative space-y-2" onBlur={handleBlur}>
       {label ? (
         <label
           htmlFor={id}
@@ -136,7 +135,6 @@ export default function ClientQueryInput({
           value={value}
           onChange={handleInputChange}
           onFocus={handleFocus}
-          onBlur={handleBlur}
           onKeyDown={onKeyDown}
           placeholder={placeholder}
           aria-label={ariaLabel}

@@ -1,20 +1,24 @@
 "use client"
 import { useId, useState } from "react"
 import ClientSelectorField from "@/components/shared/ClientSelectorField"
+import ProductSelector from "@/components/shared/ProductSelector"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
+import FormField from "@/components/ui/FormField"
 import { ConfirmFooter, Modal } from "@/components/ui/Modal"
+import NumberStepperInput from "@/components/ui/NumberStepperInput"
+import SegmentedControl from "@/components/ui/SegmentedControl"
 import {
   useCreateCommission,
   useUpdateCommission,
 } from "@/features/commissions/hooks/useCommissionMutations"
 import { extractErrorMessage } from "@/features/events/components/attendeesPanel-utils"
 import PaymentConceptsList from "@/features/payments/components/month/PaymentConceptsList"
-import { useProducts } from "@/features/products/hooks/useProducts"
 import type {
   Commission,
   CommissionFields,
   CommissionPaymentStatus,
 } from "@/lib/domain/entities/commission"
+import type { Product } from "@/lib/domain/entities/product"
 import { computePaymentFinancials } from "@/lib/domain/services/payment-calculator"
 import { formatCurrency } from "@/lib/utils/formatters"
 import { createCommissionSchema } from "@/schemas/commission-validator"
@@ -46,7 +50,6 @@ export default function CommissionFormModal({
   const [error, setError] = useState<string | null>(null)
   const create = useCreateCommission()
   const update = useUpdateCommission()
-  const { products, error: productsError } = useProducts()
   const pending = create.isMutating || update.isMutating
   const set = <K extends keyof CommissionFields>(
     key: K,
@@ -123,8 +126,8 @@ export default function CommissionFormModal({
   function changeDueDate(event: React.FormEvent<HTMLInputElement>) {
     set("dueDate", event.currentTarget.value)
   }
-  function changeStatus(event: React.ChangeEvent<HTMLSelectElement>) {
-    set("paymentStatus", Number(event.target.value) as CommissionPaymentStatus)
+  function changeStatus(value: CommissionPaymentStatus) {
+    set("paymentStatus", value)
   }
   function changeDescription(event: React.ChangeEvent<HTMLTextAreaElement>) {
     set("description", event.target.value)
@@ -138,16 +141,13 @@ export default function CommissionFormModal({
       fields.concepts.filter((_, position) => position !== index)
     )
   }
-  function changeProduct(event: React.ChangeEvent<HTMLSelectElement>) {
-    const product = products.find(
-      (product) => product._id === event.target.value
-    )
-    if (product)
-      set("concepts", [...fields.concepts, buildProductConcept(product)])
+  function addProduct(product: Product) {
+    set("concepts", [...fields.concepts, buildProductConcept(product)])
   }
-  function changeVat(event: React.ChangeEvent<HTMLInputElement>) {
-    set("vat", event.target.value ? Number(event.target.value) : Number.NaN)
+  function changeVat(value: string) {
+    set("vat", value.trim() ? Number(value) : Number.NaN)
   }
+
   return (
     <Modal
       isOpen
@@ -172,8 +172,7 @@ export default function CommissionFormModal({
           disabled={pending}
           className="space-y-5 text-zinc-900 dark:text-zinc-100"
         >
-          <label className="block space-y-1" htmlFor={`${id}-title`}>
-            <span>Title</span>
+          <FormField id={`${id}-title`} label="Title" required>
             <input
               id={`${id}-title`}
               className={fieldClass}
@@ -181,7 +180,7 @@ export default function CommissionFormModal({
               required
               onChange={changeTitle}
             />
-          </label>
+          </FormField>
           <ClientSelectorField
             value={fields.clientId}
             onChange={changeClient}
@@ -189,8 +188,7 @@ export default function CommissionFormModal({
             onError={setError}
           />
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block space-y-1" htmlFor={`${id}-due`}>
-              <span>Delivery deadline (optional)</span>
+            <FormField id={`${id}-due`} label="Delivery deadline (optional)">
               <input
                 id={`${id}-due`}
                 type="date"
@@ -198,23 +196,25 @@ export default function CommissionFormModal({
                 value={fields.dueDate ?? ""}
                 onInput={changeDueDate}
               />
-            </label>
-            <label className="block space-y-1" htmlFor={`${id}-status`}>
-              <span>Payment progress (manual)</span>
-              <select
-                id={`${id}-status`}
-                className={fieldClass}
+            </FormField>
+            <div className="space-y-1">
+              <p className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                Payment progress (manual)
+              </p>
+              <SegmentedControl<CommissionPaymentStatus>
                 value={fields.paymentStatus}
                 onChange={changeStatus}
-              >
-                <option value={0}>0%</option>
-                <option value={50}>50%</option>
-                <option value={100}>100%</option>
-              </select>
-            </label>
+                ariaLabel="Payment progress (manual)"
+                className="w-full"
+                options={[
+                  { value: 0, label: "0%" },
+                  { value: 50, label: "50%" },
+                  { value: 100, label: "100%" },
+                ]}
+              />
+            </div>
           </div>
-          <label className="block space-y-1" htmlFor={`${id}-description`}>
-            <span>Description (optional)</span>
+          <FormField id={`${id}-description`} label="Description (optional)">
             <textarea
               id={`${id}-description`}
               className={fieldClass}
@@ -222,7 +222,7 @@ export default function CommissionFormModal({
               value={fields.description ?? ""}
               onChange={changeDescription}
             />
-          </label>
+          </FormField>
           <PaymentConceptsList
             formData={fields}
             allowEmpty={!commission?.paymentId}
@@ -230,41 +230,19 @@ export default function CommissionFormModal({
             onAddConcept={addConcept}
             onRemoveConcept={removeConcept}
           />
-          <label className="block space-y-1" htmlFor={`${id}-product`}>
-            <span>Add a product (no stock change)</span>
-            <select
-              id={`${id}-product`}
-              className={fieldClass}
-              value=""
-              onChange={changeProduct}
-            >
-              <option value="">Select a product…</option>
-              {products.map((product) => (
-                <option key={product._id} value={product._id}>
-                  {product.name} · {formatCurrency(product.finalPrice)}
-                </option>
-              ))}
-            </select>
-          </label>
-          {productsError ? (
-            <ErrorBanner>
-              Products could not be loaded. You can still add free concepts.
-            </ErrorBanner>
-          ) : null}
-          <label className="block space-y-1" htmlFor={`${id}-vat`}>
-            <span>VAT (%)</span>
-            <input
+          <ProductSelector onSelect={addProduct} />
+          <FormField id={`${id}-vat`} label="VAT (%)" required>
+            <NumberStepperInput
               id={`${id}-vat`}
-              type="number"
-              className={fieldClass}
               min={0}
               max={100}
-              step="any"
+              step={1}
               required
-              value={Number.isFinite(fields.vat) ? fields.vat : ""}
-              onChange={changeVat}
+              value={Number.isFinite(fields.vat) ? String(fields.vat) : ""}
+              onValueChange={changeVat}
+              ariaLabel="VAT percentage"
             />
-          </label>
+          </FormField>
           <p className="text-sm text-zinc-600 dark:text-zinc-300">
             Prices include VAT. Total:{" "}
             {formatCurrency(

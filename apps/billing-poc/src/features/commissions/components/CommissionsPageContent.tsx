@@ -3,7 +3,9 @@ import dynamic from "next/dynamic"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useMemo, useState } from "react"
 import PageLayout from "@/components/shared/PageLayout"
+import AddButton from "@/components/ui/AddButton"
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog"
+import { EmptyState } from "@/components/ui/EmptyState"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import Toast from "@/components/ui/Toast"
 import { useClientsByIds } from "@/features/clients/hooks/useClientsByIds"
@@ -20,7 +22,6 @@ import {
 } from "@/lib/domain/entities/commission"
 import CommissionCard from "./CommissionCard"
 import CommissionFormModal from "./CommissionFormModal"
-import { commissionButtonClass } from "./commission-ui"
 
 const PaymentDetailModal = dynamic(
   () => import("@/features/payments/components/month/PaymentDetailModal"),
@@ -124,17 +125,22 @@ export default function CommissionsPageContent() {
     <PageLayout
       navigationSubtitle="Commissions"
       headerContent={
-        <div className="flex items-center justify-between gap-3 py-3">
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-            Commissions
-          </h1>
-          <button
-            type="button"
-            className={commissionButtonClass}
-            onClick={openCreate}
-          >
-            New commission
-          </button>
+        <div className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-center justify-between gap-4 px-6 py-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                Commissions
+              </p>
+              <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                Commission list
+              </h1>
+            </div>
+            <AddButton
+              ariaLabel="Add commission"
+              title="New commission"
+              onClick={openCreate}
+            />
+          </div>
         </div>
       }
     >
@@ -151,15 +157,18 @@ export default function CommissionsPageContent() {
         </p>
       ) : null}
       {!isLoading && ordered.length === 0 ? (
-        <p className="rounded-lg border border-zinc-200 p-6 text-zinc-600 dark:border-zinc-800 dark:text-zinc-300">
+        <EmptyState variant="card">
           No commissions yet. Create one to get started.
-        </p>
+        </EmptyState>
       ) : null}
       <div className="space-y-3">
         {ordered.map((commission) => (
           <CommissionCard
             key={commission._id}
             commission={commission}
+            isOpeningPayment={
+              paymentLoading && paymentId === commission.paymentId
+            }
             clientName={names.get(commission.clientId)}
             onEdit={setEditing}
             onDelete={openDelete}

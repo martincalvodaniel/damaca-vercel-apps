@@ -1,10 +1,12 @@
 "use client"
 import { memo } from "react"
+import { IconButton } from "@/components/ui/IconButton"
+import { PencilIcon } from "@/components/ui/icons/PencilIcon"
+import { TrashIcon } from "@/components/ui/icons/TrashIcon"
 import type { Commission } from "@/lib/domain/entities/commission"
 import { computePaymentFinancials } from "@/lib/domain/services/payment-calculator"
 import { formatCurrency, formatDate } from "@/lib/utils/formatters"
 import CommissionPaymentActions from "./CommissionPaymentActions"
-import { commissionButtonClass } from "./commission-ui"
 
 export default memo(function CommissionCard({
   commission,
@@ -14,6 +16,7 @@ export default memo(function CommissionCard({
   onOpenPayment,
   onError,
   onSuccess,
+  isOpeningPayment,
 }: {
   commission: Commission
   clientName?: string
@@ -22,6 +25,7 @@ export default memo(function CommissionCard({
   onOpenPayment: (id: string) => void
   onError: (message: string) => void
   onSuccess: (message: string) => void
+  isOpeningPayment?: boolean
 }) {
   function edit() {
     onEdit(commission)
@@ -78,22 +82,23 @@ export default memo(function CommissionCard({
           ) : null}
         </div>
         <div className="flex flex-wrap items-start gap-2">
-          <button
-            type="button"
-            className={commissionButtonClass}
+          <IconButton
             disabled={Boolean(commission.paymentGeneration)}
             onClick={edit}
+            ariaLabel={`Edit commission ${commission.title}`}
+            title="Edit commission"
           >
-            Edit
-          </button>
-          <button
-            type="button"
-            className={commissionButtonClass}
+            <PencilIcon className="h-3.5 w-3.5" />
+          </IconButton>
+          <IconButton
+            variant="danger"
             disabled={Boolean(commission.paymentGeneration)}
             onClick={remove}
+            ariaLabel={`Delete commission ${commission.title}`}
+            title="Delete commission"
           >
-            Delete
-          </button>
+            <TrashIcon className="h-3.5 w-3.5" />
+          </IconButton>
         </div>
       </div>
       <div className="mt-4">
@@ -102,6 +107,7 @@ export default memo(function CommissionCard({
           onOpen={onOpenPayment}
           onError={onError}
           onSuccess={onSuccess}
+          isOpeningPayment={isOpeningPayment}
         />
       </div>
     </article>

@@ -1,30 +1,25 @@
 "use client"
-import { useState } from "react"
+import PaymentActions from "@/components/shared/PaymentActions"
 import { useGenerateCommissionPayment } from "@/features/commissions/hooks/useCommissionMutations"
 import { extractErrorMessage } from "@/features/events/components/attendeesPanel-utils"
 import type { Commission } from "@/lib/domain/entities/commission"
-import {
-  PAYMENT_METHOD_LABELS,
-  PAYMENT_METHODS,
-  type PaymentMethod,
-} from "@/lib/domain/entities/payment"
-
-import { commissionButtonClass } from "./commission-ui"
+import type { PaymentMethod } from "@/lib/domain/entities/payment"
 
 export default function CommissionPaymentActions({
   commission,
   onOpen,
   onError,
   onSuccess,
+  isOpeningPayment,
 }: {
   commission: Commission
   onOpen: (id: string) => void
   onError: (message: string) => void
   onSuccess: (message: string) => void
+  isOpeningPayment?: boolean
 }) {
   const generate = useGenerateCommissionPayment()
-  const [method, setMethod] = useState<PaymentMethod>("cash")
-  const handleGenerate = async () => {
+  const handleGenerate = async (method: PaymentMethod) => {
     if (!commission._id || generate.isMutating) return
     try {
       const result = await generate.trigger({
@@ -44,57 +39,19 @@ export default function CommissionPaymentActions({
       )
     }
   }
-  function openPayment() {
-    if (commission.paymentId) onOpen(commission.paymentId)
+  function generatePayment(method: PaymentMethod) {
+    void handleGenerate(method)
   }
-  function changeMethod(event: React.ChangeEvent<HTMLSelectElement>) {
-    setMethod(event.target.value as PaymentMethod)
-  }
-  function generatePayment() {
-    void handleGenerate()
-  }
-  if (commission.paymentId)
-    return (
-      <button
-        type="button"
-        className={commissionButtonClass}
-        onClick={openPayment}
-      >
-        Open payment
-      </button>
-    )
   return (
-    <div className="flex flex-wrap gap-2">
-      <select
-        className={commissionButtonClass}
-        aria-label={`Payment method for ${commission.title}`}
-        value={commission.paymentGeneration?.paymentMethod ?? method}
-        disabled={generate.isMutating || Boolean(commission.paymentGeneration)}
-        onChange={changeMethod}
-      >
-        {PAYMENT_METHODS.map((method) => (
-          <option key={method} value={method}>
-            {PAYMENT_METHOD_LABELS[method]}
-          </option>
-        ))}
-      </select>
-      <button
-        type="button"
-        className={commissionButtonClass}
-        disabled={generate.isMutating || commission.concepts.length === 0}
-        onClick={generatePayment}
-        title={
-          commission.concepts.length === 0
-            ? "Add at least one concept to generate payment"
-            : undefined
-        }
-      >
-        {generate.isMutating
-          ? "Generating…"
-          : commission.paymentGeneration
-            ? "Retry payment"
-            : "Generate payment"}
-      </button>
-    </div>
+    <PaymentActions
+      name={commission.title}
+      paymentId={commission.paymentId}
+      isGenerating={generate.isMutating}
+      isOpeningPayment={isOpeningPayment}
+      generationDisabled={commission.concepts.length === 0}
+      reservedMethod={commission.paymentGeneration?.paymentMethod}
+      onGenerate={generatePayment}
+      onOpen={onOpen}
+    />
   )
 }

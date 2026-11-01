@@ -59,7 +59,7 @@ export async function generateCommissionPayment(
         {
           type: "income",
           date: generation.date,
-          tag: "commission",
+          tag: "Encargo",
           clientId: commission.clientId,
           concepts: commission.concepts,
           vat: commission.vat,
