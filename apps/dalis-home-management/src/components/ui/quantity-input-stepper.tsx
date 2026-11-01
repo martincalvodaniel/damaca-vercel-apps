@@ -1,6 +1,7 @@
 "use client"
 
-import { type FocusEvent, type KeyboardEvent, useRef } from "react"
+import type * as React from "react"
+import { type FocusEvent, type KeyboardEvent, useCallback, useRef } from "react"
 import {
   adjustQuantity,
   getQuantityStep,
@@ -16,6 +17,7 @@ interface QuantityInputStepperProps {
   label: string
   disabled?: boolean
   required?: boolean
+  compact?: boolean
   className?: string
   fieldClassName?: string
   buttonClassName?: string
@@ -42,6 +44,7 @@ export function QuantityInputStepper({
   label,
   disabled = false,
   required = false,
+  compact = false,
   className,
   fieldClassName,
   buttonClassName,
@@ -55,53 +58,83 @@ export function QuantityInputStepper({
   const canIncrease =
     parsedQuantity === null || parsedQuantity < maximumQuantity
 
-  function setQuantity(quantity: number, commit: boolean) {
-    const boundedQuantity = Math.min(
-      maximumQuantity,
-      Math.max(minimum, quantity)
-    )
-    onValueChange(String(boundedQuantity))
+  const setQuantity = useCallback(
+    (quantity: number, commit: boolean) => {
+      const boundedQuantity = Math.min(
+        maximumQuantity,
+        Math.max(minimum, quantity)
+      )
+      onValueChange(String(boundedQuantity))
 
-    if (commit) {
-      onValueCommit?.(boundedQuantity)
-    }
-  }
+      if (commit) {
+        onValueCommit?.(boundedQuantity)
+      }
+    },
+    [minimum, onValueChange, onValueCommit]
+  )
 
-  function stepQuantity(direction: "decrease" | "increase") {
-    const currentQuantity = parsedQuantity ?? minimum
-    skipNextBlurCommitRef.current = true
-    setQuantity(
-      adjustQuantity(currentQuantity, quantityStep, direction, minimum),
-      true
-    )
-  }
+  const stepQuantity = useCallback(
+    (direction: "decrease" | "increase") => {
+      const currentQuantity = parsedQuantity ?? minimum
+      skipNextBlurCommitRef.current = true
+      setQuantity(
+        adjustQuantity(currentQuantity, quantityStep, direction, minimum),
+        true
+      )
+    },
+    [parsedQuantity, minimum, setQuantity, quantityStep]
+  )
 
-  function commitValue() {
+  const commitValue = useCallback(() => {
     setQuantity(parsedQuantity ?? minimum, true)
-  }
+  }, [setQuantity, parsedQuantity, minimum])
 
-  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter") {
-      event.preventDefault()
-      event.currentTarget.blur()
-    }
-  }
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === "Enter") {
+        event.preventDefault()
+        event.currentTarget.blur()
+      }
+    },
+    []
+  )
 
-  function handleBlur(event: FocusEvent<HTMLFieldSetElement>) {
-    if (
-      event.relatedTarget instanceof Node &&
-      event.currentTarget.contains(event.relatedTarget)
-    ) {
-      return
-    }
+  const handleBlur = useCallback(
+    (event: FocusEvent<HTMLFieldSetElement>) => {
+      if (
+        event.relatedTarget instanceof Node &&
+        event.currentTarget.contains(event.relatedTarget)
+      ) {
+        return
+      }
 
-    if (skipNextBlurCommitRef.current) {
+      if (skipNextBlurCommitRef.current) {
+        skipNextBlurCommitRef.current = false
+        return
+      }
+
+      commitValue()
+    },
+    [commitValue]
+  )
+
+  const decreaseQuantity = useCallback(
+    () => stepQuantity("decrease"),
+    [stepQuantity]
+  )
+
+  const changeQuantity = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       skipNextBlurCommitRef.current = false
-      return
-    }
+      onValueChange(event.currentTarget.value)
+    },
+    [onValueChange]
+  )
 
-    commitValue()
-  }
+  const increaseQuantity = useCallback(
+    () => stepQuantity("increase"),
+    [stepQuantity]
+  )
 
   const defaultButtonClassName =
     "border-[#d0c69d] bg-white text-[#75611f] hover:bg-[#faf6e8] dark:border-white/15 dark:bg-[#10231c] dark:text-[#dccb8d] dark:hover:bg-white/5"
@@ -116,15 +149,15 @@ export function QuantityInputStepper({
     >
       <button
         type="button"
-        onClick={() => stepQuantity("decrease")}
+        onClick={decreaseQuantity}
         disabled={disabled || !canDecrease}
         aria-label={`Reducir cantidad de ${label}`}
-        className={`grid size-9 shrink-0 place-items-center rounded-xl border text-base font-bold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-not-allowed disabled:opacity-35 sm:size-10 ${buttonClassName ?? defaultButtonClassName}`}
+        className={`grid ${compact ? "size-8" : "size-9 sm:size-10"} shrink-0 place-items-center rounded-xl border text-base font-bold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-not-allowed disabled:opacity-35 ${buttonClassName ?? defaultButtonClassName}`}
       >
         −
       </button>
       <div
-        className={`flex h-9 min-w-0 flex-1 items-center rounded-xl border transition focus-within:ring-2 sm:h-10 ${fieldClassName ?? defaultFieldClassName}`}
+        className={`flex ${compact ? "h-8" : "h-9 sm:h-10"} min-w-0 flex-1 items-center rounded-xl border transition focus-within:ring-2 ${fieldClassName ?? defaultFieldClassName}`}
       >
         <input
           id={id}
@@ -135,10 +168,7 @@ export function QuantityInputStepper({
           required={required}
           value={value}
           disabled={disabled}
-          onChange={(event) => {
-            skipNextBlurCommitRef.current = false
-            onValueChange(event.currentTarget.value)
-          }}
+          onChange={changeQuantity}
           onKeyDown={handleKeyDown}
           aria-label={`Cantidad de ${label}`}
           className="h-full w-0 min-w-0 flex-1 bg-transparent px-2 text-right text-base font-semibold text-current tabular-nums outline-none disabled:opacity-65"
@@ -151,10 +181,10 @@ export function QuantityInputStepper({
       </div>
       <button
         type="button"
-        onClick={() => stepQuantity("increase")}
+        onClick={increaseQuantity}
         disabled={disabled || !canIncrease}
         aria-label={`Aumentar cantidad de ${label}`}
-        className={`grid size-9 shrink-0 place-items-center rounded-xl border text-base font-bold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-not-allowed disabled:opacity-35 sm:size-10 ${buttonClassName ?? defaultButtonClassName}`}
+        className={`grid ${compact ? "size-8" : "size-9 sm:size-10"} shrink-0 place-items-center rounded-xl border text-base font-bold transition focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-not-allowed disabled:opacity-35 ${buttonClassName ?? defaultButtonClassName}`}
       >
         +
       </button>

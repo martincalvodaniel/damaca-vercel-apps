@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useTransition } from "react"
+import { useCallback, useEffect, useState, useTransition } from "react"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { QuantityInputStepper } from "@/components/ui/quantity-input-stepper"
 import { deleteInventoryItemAction } from "@/features/inventory/actions"
@@ -33,18 +33,21 @@ export function InventoryItemCard({
     setQuantityDraft(String(item.quantity))
   }, [item.quantity])
 
-  function markOutOfStock() {
+  const updateQuantity = useCallback(
+    (quantity: number) => {
+      setError(null)
+      setNotice(null)
+      onQuantityChange(item, quantity)
+    },
+    [onQuantityChange, item]
+  )
+
+  const markOutOfStock = useCallback(() => {
     setQuantityDraft("0")
     updateQuantity(0)
-  }
+  }, [updateQuantity])
 
-  function updateQuantity(quantity: number) {
-    setError(null)
-    setNotice(null)
-    onQuantityChange(item, quantity)
-  }
-
-  function removeItem() {
+  const removeItem = useCallback(() => {
     setIsDeleteDialogOpen(false)
     setError(null)
     setNotice(null)
@@ -58,9 +61,9 @@ export function InventoryItemCard({
         setError("No se ha podido eliminar el producto.")
       }
     })
-  }
+  }, [item])
 
-  function addToShoppingList() {
+  const addToShoppingList = useCallback(() => {
     setError(null)
     setNotice(null)
     startTransition(async () => {
@@ -76,12 +79,18 @@ export function InventoryItemCard({
         setError("No se ha podido añadir el producto a la compra.")
       }
     })
-  }
+  }, [item])
+
+  const editItem = useCallback(() => onEdit(item), [onEdit, item])
+
+  const openDeleteDialog = useCallback(() => setIsDeleteDialogOpen(true), [])
+
+  const closeDeleteDialog = useCallback(() => setIsDeleteDialogOpen(false), [])
 
   return (
     <>
       <article
-        className={`min-w-0 max-w-full rounded-2xl border p-5 transition ${
+        className={`min-w-0 max-w-full rounded-2xl border px-4 py-2 transition ${
           isOutOfStock
             ? "border-[#ead6ca] bg-[#fbede5]/70 dark:border-[#704735] dark:bg-[#412d24]/80"
             : "border-[#dde1d8] bg-white/75 shadow-[0_10px_30px_rgba(50,72,60,0.05)] dark:border-white/10 dark:bg-[#182e26]/80"
@@ -92,6 +101,7 @@ export function InventoryItemCard({
             {item.name}
           </p>
           <QuantityInputStepper
+            compact
             value={quantityDraft}
             unit={item.unit}
             minimum={0}
@@ -116,26 +126,26 @@ export function InventoryItemCard({
         {error || quantityError ? (
           <p
             role="alert"
-            className="mt-3 text-xs font-medium text-red-700 dark:text-red-300"
+            className="mt-1.5 text-xs font-medium text-red-700 dark:text-red-300"
           >
             {error ?? quantityError}
           </p>
         ) : null}
         {notice ? (
           <p
-            className="mt-3 text-xs font-medium text-[#3e674b] dark:text-[#b9d4c0]"
+            className="mt-1.5 text-xs font-medium text-[#3e674b] dark:text-[#b9d4c0]"
             aria-live="polite"
           >
             {notice}
           </p>
         ) : null}
 
-        <div className="mt-5 flex flex-wrap gap-2 border-t border-[#e3e6df] pt-4 dark:border-white/10">
+        <div className="mt-2 flex flex-wrap gap-2 border-t border-[#e3e6df] pt-2 dark:border-white/10">
           <button
             type="button"
-            onClick={() => onEdit(item)}
+            onClick={editItem}
             disabled={isPending || isSavingQuantity}
-            className="rounded-full bg-[#edf0e9] px-3.5 py-2 text-xs font-semibold transition hover:bg-[#e1e7de] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:opacity-50 dark:bg-white/10 dark:hover:bg-white/15"
+            className="rounded-full bg-[#edf0e9] px-3.5 py-1 text-xs font-semibold transition hover:bg-[#e1e7de] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:opacity-50 dark:bg-white/10 dark:hover:bg-white/15"
           >
             Editar
           </button>
@@ -144,7 +154,7 @@ export function InventoryItemCard({
               type="button"
               onClick={addToShoppingList}
               disabled={isPending}
-              className="rounded-full bg-[#1d4f40] px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-[#173f34] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-wait disabled:opacity-50"
+              className="rounded-full bg-[#1d4f40] px-3.5 py-1 text-xs font-semibold text-white transition hover:bg-[#173f34] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] disabled:cursor-wait disabled:opacity-50"
             >
               {isPending ? "Añadiendo…" : "Añadir a compra"}
             </button>
@@ -154,16 +164,16 @@ export function InventoryItemCard({
               type="button"
               onClick={markOutOfStock}
               disabled={isPending || isSavingQuantity}
-              className="rounded-full border border-[#d8c5b8] px-3.5 py-2 text-xs font-semibold text-[#8b5138] transition hover:bg-[#fae8dd] focus:outline-none focus:ring-2 focus:ring-[#b76543] disabled:opacity-50 dark:border-[#704b39] dark:text-[#efb89e] dark:hover:bg-[#4a3025]"
+              className="rounded-full border border-[#d8c5b8] px-3.5 py-1 text-xs font-semibold text-[#8b5138] transition hover:bg-[#fae8dd] focus:outline-none focus:ring-2 focus:ring-[#b76543] disabled:opacity-50 dark:border-[#704b39] dark:text-[#efb89e] dark:hover:bg-[#4a3025]"
             >
               Marcar agotado
             </button>
           )}
           <button
             type="button"
-            onClick={() => setIsDeleteDialogOpen(true)}
+            onClick={openDeleteDialog}
             disabled={isPending || isSavingQuantity}
-            className="ml-auto rounded-full px-3 py-2 text-xs font-semibold text-[#8f5140] transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#e9a995] dark:hover:bg-red-950/30"
+            className="ml-auto rounded-full px-3 py-1 text-xs font-semibold text-[#8f5140] transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#e9a995] dark:hover:bg-red-950/30"
           >
             Eliminar
           </button>
@@ -176,7 +186,7 @@ export function InventoryItemCard({
         confirmLabel="Eliminar"
         tone="danger"
         onConfirm={removeItem}
-        onDismiss={() => setIsDeleteDialogOpen(false)}
+        onDismiss={closeDeleteDialog}
       />
     </>
   )

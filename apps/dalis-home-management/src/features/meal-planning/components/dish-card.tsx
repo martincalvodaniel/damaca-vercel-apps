@@ -42,7 +42,7 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
 
   return (
     <>
-      <article className="rounded-[1.5rem] border border-[#dedfcf] bg-white/75 p-5 shadow-[0_10px_30px_rgba(50,72,60,0.05)] dark:border-white/10 dark:bg-[#182e26]/80">
+      <article className="rounded-[1.5rem] border border-[#dedfcf] bg-white/75 px-4 py-2 shadow-[0_10px_30px_rgba(50,72,60,0.05)] dark:border-white/10 dark:bg-[#182e26]/80">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xl font-semibold tracking-[-0.035em]">
@@ -55,7 +55,7 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
           </span>
         </div>
 
-        <ul className="mt-5 space-y-2 text-sm text-[#5d6e64] dark:text-[#bac5bd]">
+        <ul className="mt-2 space-y-1 text-sm text-[#5d6e64] dark:text-[#bac5bd]">
           {dish.ingredients.map((ingredient) => (
             <li
               key={ingredient.id}
@@ -73,17 +73,17 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
         <DishNotes notes={dish.notes} />
 
         {error ? (
-          <p className="mt-3 text-xs font-medium text-red-700 dark:text-red-300">
+          <p className="mt-1.5 text-xs font-medium text-red-700 dark:text-red-300">
             {error}
           </p>
         ) : null}
 
-        <div className="mt-5 flex gap-2 border-t border-[#e3e6df] pt-4 dark:border-white/10">
+        <div className="mt-2 flex gap-2 border-t border-[#e3e6df] pt-2 dark:border-white/10">
           <button
             type="button"
             onClick={editDish}
             disabled={isPending}
-            className="rounded-full bg-[#edf0e9] px-3.5 py-2 text-xs font-semibold transition hover:bg-[#e1e7de] focus:outline-none focus:ring-2 focus:ring-[#75611f] disabled:opacity-50 dark:bg-white/10"
+            className="rounded-full bg-[#edf0e9] px-3.5 py-1 text-xs font-semibold transition hover:bg-[#e1e7de] focus:outline-none focus:ring-2 focus:ring-[#75611f] disabled:opacity-50 dark:bg-white/10"
           >
             Editar
           </button>
@@ -91,7 +91,7 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
             type="button"
             onClick={openDeleteDialog}
             disabled={isPending}
-            className="ml-auto rounded-full px-3 py-2 text-xs font-semibold text-[#8f5140] transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#e9a995] dark:hover:bg-red-950/30"
+            className="ml-auto rounded-full px-3 py-1 text-xs font-semibold text-[#8f5140] transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#e9a995] dark:hover:bg-red-950/30"
           >
             Eliminar
           </button>

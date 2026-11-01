@@ -1,6 +1,6 @@
 "use client"
 
-import { useOptimistic, useState, useTransition } from "react"
+import { useCallback, useOptimistic, useState, useTransition } from "react"
 import { moveWeeklyMealSlotAction } from "@/features/meal-planning/actions"
 import type { DishOption } from "@/features/meal-planning/dish-option"
 import {
@@ -64,62 +64,60 @@ export function WeeklyMealCalendar({
     optimisticSlots.map((slot) => [getMealSlotKey(slot), slot])
   )
 
-  function resetDragState() {
+  const resetDragState = useCallback(() => {
     setDraggedSlotKey(null)
     setDropTargetKey(null)
-  }
+  }, [])
 
-  function handleDragStart(source: MealSlotLocation) {
+  const handleDragStart = useCallback((source: MealSlotLocation) => {
     setError(null)
     setDraggedSlotKey(getMealSlotKey(source))
-  }
+  }, [])
 
-  function handleDragMove(
-    source: MealSlotLocation,
-    clientX: number,
-    clientY: number
-  ) {
-    const destination = findMealSlotAtPoint(clientX, clientY)
-    const destinationKey = destination ? getMealSlotKey(destination) : null
+  const handleDragMove = useCallback(
+    (source: MealSlotLocation, clientX: number, clientY: number) => {
+      const destination = findMealSlotAtPoint(clientX, clientY)
+      const destinationKey = destination ? getMealSlotKey(destination) : null
 
-    setDropTargetKey(
-      destinationKey === getMealSlotKey(source) ? null : destinationKey
-    )
-  }
+      setDropTargetKey(
+        destinationKey === getMealSlotKey(source) ? null : destinationKey
+      )
+    },
+    []
+  )
 
-  function handleDragEnd(
-    source: MealSlotLocation,
-    clientX: number,
-    clientY: number
-  ) {
-    const destination = findMealSlotAtPoint(clientX, clientY)
-    resetDragState()
+  const handleDragEnd = useCallback(
+    (source: MealSlotLocation, clientX: number, clientY: number) => {
+      const destination = findMealSlotAtPoint(clientX, clientY)
+      resetDragState()
 
-    if (
-      !destination ||
-      getMealSlotKey(destination) === getMealSlotKey(source)
-    ) {
-      return
-    }
-
-    setError(null)
-    startTransition(async () => {
-      moveOptimistically({ source, destination })
-      try {
-        const result = await moveWeeklyMealSlotAction({
-          weekStart,
-          source,
-          destination,
-        })
-
-        if (!result.success) {
-          setError(result.message)
-        }
-      } catch {
-        setError("No se ha podido guardar el movimiento. Inténtalo de nuevo.")
+      if (
+        !destination ||
+        getMealSlotKey(destination) === getMealSlotKey(source)
+      ) {
+        return
       }
-    })
-  }
+
+      setError(null)
+      startTransition(async () => {
+        moveOptimistically({ source, destination })
+        try {
+          const result = await moveWeeklyMealSlotAction({
+            weekStart,
+            source,
+            destination,
+          })
+
+          if (!result.success) {
+            setError(result.message)
+          }
+        } catch {
+          setError("No se ha podido guardar el movimiento. Inténtalo de nuevo.")
+        }
+      })
+    },
+    [resetDragState, moveOptimistically, weekStart]
+  )
 
   return (
     <div>
@@ -142,7 +140,7 @@ export function WeeklyMealCalendar({
           {error}
         </p>
       ) : null}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
         {getWeekDates(weekStart).map((date) => {
           const lunchSlot = slotsByKey.get(`${date}:lunch`)
           const dinnerSlot = slotsByKey.get(`${date}:dinner`)

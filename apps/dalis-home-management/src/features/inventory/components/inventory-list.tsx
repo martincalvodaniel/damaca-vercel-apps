@@ -1,6 +1,8 @@
 "use client"
 
-import { useDeferredValue, useId, useState } from "react"
+import type * as React from "react"
+import { useCallback, useDeferredValue, useId, useState } from "react"
+import { SearchInput } from "@/components/ui/search-input"
 import { PurchasePlaceFilter } from "@/features/catalog/components/purchase-place-filter"
 import {
   getPurchasePlaces,
@@ -58,14 +60,22 @@ export function InventoryList({
     return matchesPurchasePlace && matchesSearch
   })
 
+  const clearSearch = useCallback(() => onSearchChange(""), [onSearchChange])
+
+  const changeSearch = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      onSearchChange(event.target.value),
+    [onSearchChange]
+  )
+
   if (items.length === 0) {
     return (
-      <section className="grid min-h-72 place-items-center rounded-[1.75rem] border border-dashed border-[#cbd4ca] bg-white/35 p-8 text-center dark:border-white/15 dark:bg-white/[0.025]">
+      <section className="grid min-h-48 place-items-center rounded-[1.75rem] border border-dashed border-[#cbd4ca] bg-white/35 p-4 text-center dark:border-white/15 dark:bg-white/[0.025]">
         <div className="max-w-sm">
           <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#dfe9dc] text-2xl dark:bg-[#254338]">
             <span aria-hidden="true">⌂</span>
           </div>
-          <h2 className="mt-5 text-2xl font-semibold tracking-[-0.04em]">
+          <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
             La casa está por estrenar
           </h2>
           <p className="mt-2 text-sm leading-6 text-[#697970] dark:text-[#aebbb3]">
@@ -79,7 +89,7 @@ export function InventoryList({
 
   return (
     <section aria-labelledby={listTitleId}>
-      <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+      <div className="flex flex-col gap-2 xl:flex-row xl:items-end xl:justify-between">
         <div className="hidden sm:block">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7a8a81] dark:text-[#9baaa1]">
             En casa
@@ -95,13 +105,13 @@ export function InventoryList({
           <label className="sr-only" htmlFor={searchInputId}>
             Buscar productos
           </label>
-          <input
+          <SearchInput
             id={searchInputId}
-            type="search"
+            onClear={clearSearch}
             value={search}
-            onChange={(event) => onSearchChange(event.target.value)}
+            onChange={changeSearch}
             placeholder="Buscar productos"
-            className="min-h-11 w-full rounded-full border border-[#ccd5ca] bg-white/75 px-4 text-sm outline-none transition placeholder:text-[#8d9a92] focus:border-[#1d4f40] focus:ring-2 focus:ring-[#1d4f40]/15 dark:border-white/15 dark:bg-[#182e26]"
+            className="min-h-9 w-full rounded-full border border-[#ccd5ca] bg-white/75 px-4 text-sm outline-none transition placeholder:text-[#8d9a92] focus:border-[#1d4f40] focus:ring-2 focus:ring-[#1d4f40]/15 dark:border-white/15 dark:bg-[#182e26]"
           />
         </div>
       </div>
@@ -113,14 +123,14 @@ export function InventoryList({
       />
 
       {filteredItems.length === 0 ? (
-        <div className="mt-5 rounded-2xl border border-dashed border-[#cbd4ca] bg-white/35 px-5 py-10 text-center dark:border-white/15 dark:bg-white/[0.025]">
+        <div className="mt-3 rounded-2xl border border-dashed border-[#cbd4ca] bg-white/35 px-5 py-5 text-center dark:border-white/15 dark:bg-white/[0.025]">
           <p className="font-semibold">No hay productos que coincidan.</p>
           <p className="mt-1 text-sm text-[#697970] dark:text-[#aebbb3]">
             Prueba con otro nombre o lugar de compra.
           </p>
         </div>
       ) : (
-        <div className="mt-5 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-3 grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
           {filteredItems.map((item) => (
             <InventoryItemCard
               key={item.id}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useTransition } from "react"
+import { useCallback, useEffect, useState, useTransition } from "react"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { QuantityInputStepper } from "@/components/ui/quantity-input-stepper"
 import { deleteShoppingListItemAction } from "@/features/shopping-list/actions"
@@ -34,12 +34,12 @@ export function ShoppingListItemRow({
     setQuantityDraft(String(item.quantity))
   }, [item.quantity])
 
-  function togglePurchased() {
+  const togglePurchased = useCallback(() => {
     setError(null)
     onTogglePurchased(item)
-  }
+  }, [onTogglePurchased, item])
 
-  function removeItem() {
+  const removeItem = useCallback(() => {
     setIsDeleteDialogOpen(false)
     setError(null)
     startTransition(async () => {
@@ -52,22 +52,29 @@ export function ShoppingListItemRow({
         setError("No se ha podido eliminar el producto.")
       }
     })
-  }
+  }, [item])
 
-  function updateQuantity(quantity: number) {
-    setError(null)
-    onQuantityChange(item, quantity)
-  }
+  const updateQuantity = useCallback(
+    (quantity: number) => {
+      setError(null)
+      onQuantityChange(item, quantity)
+    },
+    [onQuantityChange, item]
+  )
+
+  const openDeleteDialog = useCallback(() => setIsDeleteDialogOpen(true), [])
+
+  const closeDeleteDialog = useCallback(() => setIsDeleteDialogOpen(false), [])
 
   return (
     <>
-      <article className="relative rounded-2xl border border-[#dde1d8] bg-white/75 p-4 shadow-[0_8px_25px_rgba(50,72,60,0.04)] dark:border-white/10 dark:bg-[#182e26]/80">
+      <article className="relative rounded-2xl border border-[#dde1d8] bg-white/75 px-4 py-2 shadow-[0_8px_25px_rgba(50,72,60,0.04)] dark:border-white/10 dark:bg-[#182e26]/80">
         <button
           type="button"
-          onClick={() => setIsDeleteDialogOpen(true)}
+          onClick={openDeleteDialog}
           disabled={isPending || isSavingPurchase || isSavingQuantity}
           aria-label={`Eliminar ${item.name}`}
-          className="absolute top-3 right-3 grid size-8 place-items-center rounded-full text-[#a75938] transition hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#ef9f86] dark:hover:bg-red-950/30 dark:hover:text-red-200"
+          className="absolute top-2 right-3 grid size-8 place-items-center rounded-full text-[#a75938] transition hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50 dark:text-[#ef9f86] dark:hover:bg-red-950/30 dark:hover:text-red-200"
         >
           <svg
             viewBox="0 0 24 24"
@@ -132,6 +139,7 @@ export function ShoppingListItemRow({
               ) : null}
             </div>
             <QuantityInputStepper
+              compact
               value={quantityDraft}
               unit={item.unit}
               minimum={0.01}
@@ -139,7 +147,7 @@ export function ShoppingListItemRow({
               disabled={isPending}
               onValueChange={setQuantityDraft}
               onValueCommit={updateQuantity}
-              className="mt-3 w-full text-[#41564b] sm:w-56 dark:text-[#d5ded8]"
+              className="mt-1.5 w-full text-[#41564b] sm:w-56 dark:text-[#d5ded8]"
               buttonClassName="border-[#d8dfd5] bg-[#edf0e9] text-[#5c6e64] hover:bg-[#e1e7de] dark:border-white/10 dark:bg-white/10 dark:text-[#c6d1ca] dark:hover:bg-white/15"
               fieldClassName="border-[#d8dfd5] bg-[#f7f8f5] text-[#41564b] focus-within:border-[#1d4f40] focus-within:ring-[#1d4f40]/15 dark:border-white/10 dark:bg-white/5 dark:text-[#d5ded8]"
             />
@@ -161,7 +169,7 @@ export function ShoppingListItemRow({
         confirmLabel="Eliminar"
         tone="danger"
         onConfirm={removeItem}
-        onDismiss={() => setIsDeleteDialogOpen(false)}
+        onDismiss={closeDeleteDialog}
       />
     </>
   )

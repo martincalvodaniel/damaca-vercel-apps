@@ -106,7 +106,7 @@ export function PlannedMealSlot({
         }
       />
       {dish ? (
-        <details className="group mt-2 rounded-lg bg-[#f2f4ef] px-2.5 py-2 dark:bg-white/5">
+        <details className="group mt-1 rounded-lg bg-[#f2f4ef] px-2.5 py-1 dark:bg-white/5">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-[0.7rem] font-semibold text-[#68776e] focus:outline-none focus:ring-2 focus:ring-[#1d4f40] dark:text-[#afbbb3]">
             <span>
               {dish.ingredients.length}{" "}
@@ -119,7 +119,7 @@ export function PlannedMealSlot({
               +
             </span>
           </summary>
-          <ul className="mt-2 space-y-1.5 border-t border-[#dce2da] pt-2 text-xs text-[#607067] dark:border-white/10 dark:text-[#bdc8c0]">
+          <ul className="mt-1 space-y-1 border-t border-[#dce2da] pt-1 text-xs text-[#607067] dark:border-white/10 dark:text-[#bdc8c0]">
             {dish.ingredients.map((ingredient) => (
               <li
                 key={ingredient.id}

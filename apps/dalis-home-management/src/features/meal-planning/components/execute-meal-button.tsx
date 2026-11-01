@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useState, useTransition } from "react"
+import { useCallback, useState, useTransition } from "react"
 import { ModalDialog } from "@/components/ui/modal-dialog"
 import {
   executeWeeklyMealSlotAction,
@@ -47,7 +47,7 @@ export function ExecuteMealButton({
   const [isLoading, setIsLoading] = useState(false)
   const [isPending, startTransition] = useTransition()
 
-  function openExecutionDialog() {
+  const openExecutionDialog = useCallback(() => {
     setIsOpen(true)
     setIsLoading(true)
     setItems([])
@@ -78,19 +78,22 @@ export function ExecuteMealButton({
         setIsLoading(false)
       }
     })
-  }
+  }, [date, weekStart, mealType])
 
-  function updateFinalQuantity(inventoryItemId: string, quantity: string) {
-    setItems((currentItems) =>
-      currentItems.map((item) =>
-        item.inventoryItemId === inventoryItemId
-          ? { ...item, finalQuantity: quantity }
-          : item
+  const updateFinalQuantity = useCallback(
+    (inventoryItemId: string, quantity: string) => {
+      setItems((currentItems) =>
+        currentItems.map((item) =>
+          item.inventoryItemId === inventoryItemId
+            ? { ...item, finalQuantity: quantity }
+            : item
+        )
       )
-    )
-  }
+    },
+    []
+  )
 
-  function executeMeal() {
+  const executeMeal = useCallback(() => {
     setError(null)
 
     startTransition(async () => {
@@ -116,7 +119,9 @@ export function ExecuteMealButton({
         setError("No se ha podido ejecutar esta comida. Inténtalo de nuevo.")
       }
     })
-  }
+  }, [items, router, mealType, weekStart, date])
+
+  const closeDialog = useCallback(() => setIsOpen(false), [])
 
   return (
     <>
@@ -126,7 +131,7 @@ export function ExecuteMealButton({
         disabled={disabled || isPending}
         aria-label={`Marcar ${mealLabels[mealType]} ${dishName} como ejecutada`}
         title="Marcar como ejecutada"
-        className="grid size-11 shrink-0 place-items-center rounded-xl border border-[#7ca687] bg-[#eff6ef] text-[#315847] transition hover:bg-[#dcebdd] focus:outline-none focus:ring-2 focus:ring-[#1d6b50] disabled:cursor-wait disabled:opacity-55 dark:border-[#47775a] dark:bg-[#203c2b] dark:text-[#bce3c5] dark:hover:bg-[#294b35]"
+        className="grid size-9 shrink-0 place-items-center rounded-xl border border-[#7ca687] bg-[#eff6ef] text-[#315847] transition hover:bg-[#dcebdd] focus:outline-none focus:ring-2 focus:ring-[#1d6b50] disabled:cursor-wait disabled:opacity-55 dark:border-[#47775a] dark:bg-[#203c2b] dark:text-[#bce3c5] dark:hover:bg-[#294b35]"
       >
         <svg
           viewBox="0 0 24 24"
@@ -142,7 +147,7 @@ export function ExecuteMealButton({
         ariaLabel={`Ejecutar ${mealLabels[mealType]} ${dishName}`}
         size="lg"
         scrollable={false}
-        onDismiss={() => setIsOpen(false)}
+        onDismiss={closeDialog}
       >
         <section className="flex h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-[1.75rem] border border-[#d8d7bd] bg-[#eeeddc] p-4 text-[#303b2d] sm:p-5 dark:border-[#59624e] dark:bg-[#2e382b] dark:text-[#f4f3e7]">
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
@@ -192,7 +197,7 @@ export function ExecuteMealButton({
             <div className={`flex gap-2 sm:justify-end ${error ? "mt-4" : ""}`}>
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={closeDialog}
                 disabled={isPending}
                 className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-[#c8cab1] px-5 text-sm font-semibold transition hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-[#74794f] disabled:opacity-60 sm:flex-none dark:border-white/15 dark:hover:bg-white/10"
               >

@@ -1,6 +1,15 @@
 "use client"
 
-import { useEffect, useId, useState } from "react"
+import type * as React from "react"
+import {
+  type MouseEvent,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react"
+import { SearchInput } from "@/components/ui/search-input"
 import { SelectField } from "@/components/ui/select-field"
 import { quantityUnitShortLabels } from "@/config/quantity-units"
 import type { CatalogProductOption } from "@/features/catalog/product-option"
@@ -39,6 +48,7 @@ export function ProductPicker({
   initialSearch = "",
   onSearchChange,
 }: ProductPickerProps) {
+  const rootRef = useRef<HTMLDivElement>(null)
   const resultListId = useId()
   const selectedProduct = products.find((product) => product.id === value)
   const [search, setSearch] = useState(selectedProduct?.name ?? initialSearch)
@@ -64,47 +74,84 @@ export function ProductPicker({
     })),
   ]
 
+  const selectProduct = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const product = products.find(
+        (product) => product.id === event.currentTarget.dataset.productId
+      )
+      if (!product) return
+      onValueChange(product.id)
+      setSearch(product.name)
+      setIsOpen(false)
+    },
+    [products, onValueChange]
+  )
+
+  const clearSearch = useCallback(() => {
+    setSearch("")
+    onSearchChange?.("")
+    onValueChange("")
+    setIsOpen(true)
+  }, [onSearchChange, onValueChange])
+
+  const openOptions = useCallback(() => setIsOpen(true), [])
+
+  const blurSearch = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) => {
+      const nextTarget = event.relatedTarget
+      if (
+        !(nextTarget instanceof Node) ||
+        !rootRef.current?.contains(nextTarget)
+      ) {
+        setIsOpen(false)
+      }
+    },
+    []
+  )
+
+  const changeSearch = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const nextSearch = event.target.value
+      setSearch(nextSearch)
+      onSearchChange?.(nextSearch)
+      setIsOpen(true)
+      if (value) {
+        onValueChange("")
+      }
+    },
+    [onSearchChange, value, onValueChange]
+  )
+
+  const handleSearchKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === "Enter" && visibleProducts[0]) {
+        event.preventDefault()
+        onValueChange(visibleProducts[0].id)
+        setSearch(visibleProducts[0].name)
+        setIsOpen(false)
+      }
+      if (event.key === "Escape") {
+        setIsOpen(false)
+      }
+    },
+    [visibleProducts, onValueChange]
+  )
+
   if (searchable) {
     return (
-      <div className="relative mt-2">
-        <input
+      <div ref={rootRef} className="relative mt-2">
+        <SearchInput
           id={id}
-          type="search"
+          onClear={clearSearch}
           role="combobox"
           aria-expanded={isOpen}
           aria-controls={resultListId}
           aria-autocomplete="list"
           value={search}
-          onFocus={() => setIsOpen(true)}
-          onBlur={(event) => {
-            const nextTarget = event.relatedTarget
-            if (
-              !(nextTarget instanceof Node) ||
-              !event.currentTarget.parentElement?.contains(nextTarget)
-            ) {
-              setIsOpen(false)
-            }
-          }}
-          onChange={(event) => {
-            const nextSearch = event.target.value
-            setSearch(nextSearch)
-            onSearchChange?.(nextSearch)
-            setIsOpen(true)
-            if (value) {
-              onValueChange("")
-            }
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && visibleProducts[0]) {
-              event.preventDefault()
-              onValueChange(visibleProducts[0].id)
-              setSearch(visibleProducts[0].name)
-              setIsOpen(false)
-            }
-            if (event.key === "Escape") {
-              setIsOpen(false)
-            }
-          }}
+          onFocus={openOptions}
+          onBlur={blurSearch}
+          onChange={changeSearch}
+          onKeyDown={handleSearchKeyDown}
           disabled={disabled}
           placeholder="Escribe para buscar producto"
           autoComplete="off"
@@ -120,11 +167,8 @@ export function ProductPicker({
                 <button
                   key={product.id}
                   type="button"
-                  onClick={() => {
-                    onValueChange(product.id)
-                    setSearch(product.name)
-                    setIsOpen(false)
-                  }}
+                  data-product-id={product.id}
+                  onClick={selectProduct}
                   className="flex min-h-10 w-full items-center justify-between gap-3 rounded-lg px-3 text-left text-sm font-medium transition hover:bg-[#f3e3d8] focus:bg-[#f3e3d8] focus:outline-none dark:hover:bg-white/10 dark:focus:bg-white/10"
                 >
                   <span className="truncate">{product.name}</span>

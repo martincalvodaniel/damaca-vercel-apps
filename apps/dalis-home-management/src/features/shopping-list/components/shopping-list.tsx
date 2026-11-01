@@ -1,6 +1,8 @@
 "use client"
 
-import { useDeferredValue, useId, useState } from "react"
+import type * as React from "react"
+import { useCallback, useDeferredValue, useId, useState } from "react"
+import { SearchInput } from "@/components/ui/search-input"
 import { PurchasePlaceFilter } from "@/features/catalog/components/purchase-place-filter"
 import type { CatalogProductOption } from "@/features/catalog/product-option"
 import {
@@ -84,14 +86,22 @@ export function ShoppingList({
   const pendingItems = filteredItems.filter((item) => !item.isPurchased)
   const purchasedItems = filteredItems.filter((item) => item.isPurchased)
 
+  const clearSearch = useCallback(() => onSearchChange(""), [onSearchChange])
+
+  const changeSearch = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      onSearchChange(event.target.value),
+    [onSearchChange]
+  )
+
   if (items.length === 0) {
     return (
-      <section className="grid min-h-72 place-items-center rounded-[1.75rem] border border-dashed border-[#d8c5b8] bg-white/35 p-8 text-center dark:border-white/15 dark:bg-white/[0.025]">
+      <section className="grid min-h-48 place-items-center rounded-[1.75rem] border border-dashed border-[#d8c5b8] bg-white/35 p-4 text-center dark:border-white/15 dark:bg-white/[0.025]">
         <div className="max-w-sm">
           <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#f5dfd2] text-2xl dark:bg-[#4a3025]">
             <span aria-hidden="true">✓</span>
           </div>
-          <h2 className="mt-5 text-2xl font-semibold tracking-[-0.04em]">
+          <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
             La lista está vacía
           </h2>
           <p className="mt-2 text-sm leading-6 text-[#697970] dark:text-[#aebbb3]">
@@ -104,7 +114,7 @@ export function ShoppingList({
 
   return (
     <section aria-labelledby={titleId}>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div className="hidden sm:block">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7a8a81] dark:text-[#9baaa1]">
             Por comprar
@@ -118,13 +128,13 @@ export function ShoppingList({
         </div>
         <label className="sm:w-64" htmlFor={searchInputId}>
           <span className="sr-only">Buscar productos en la lista</span>
-          <input
+          <SearchInput
             id={searchInputId}
-            type="search"
+            onClear={clearSearch}
             value={search}
-            onChange={(event) => onSearchChange(event.target.value)}
+            onChange={changeSearch}
             placeholder="Buscar producto"
-            className="min-h-11 w-full rounded-full border border-[#ccd5ca] bg-white/75 px-4 text-sm outline-none transition placeholder:text-[#8d9a92] focus:border-[#a75938] focus:ring-2 focus:ring-[#a75938]/15 dark:border-white/15 dark:bg-[#182e26]"
+            className="min-h-9 w-full rounded-full border border-[#ccd5ca] bg-white/75 px-4 text-sm outline-none transition placeholder:text-[#8d9a92] focus:border-[#a75938] focus:ring-2 focus:ring-[#a75938]/15 dark:border-white/15 dark:bg-[#182e26]"
           />
         </label>
       </div>
@@ -136,7 +146,7 @@ export function ShoppingList({
       />
 
       {filteredItems.length === 0 ? (
-        <div className="mt-4 rounded-2xl border border-dashed border-[#d8c5b8] bg-white/35 px-5 py-10 text-center dark:border-white/15 dark:bg-white/[0.025]">
+        <div className="mt-2 rounded-2xl border border-dashed border-[#d8c5b8] bg-white/35 px-5 py-5 text-center dark:border-white/15 dark:bg-white/[0.025]">
           <p className="font-semibold">No hay productos que coincidan.</p>
           <p className="mt-1 text-sm text-[#697970] dark:text-[#aebbb3]">
             Prueba con otro nombre o lugar de compra.
@@ -144,9 +154,9 @@ export function ShoppingList({
         </div>
       ) : (
         <>
-          <div className="mt-4 space-y-3">
+          <div className="mt-2 space-y-2">
             {pendingItems.length === 0 ? (
-              <div className="rounded-2xl border border-[#dce5d9] bg-[#e9f0e7]/65 px-5 py-8 text-center dark:border-[#345245] dark:bg-[#203b31]">
+              <div className="rounded-2xl border border-[#dce5d9] bg-[#e9f0e7]/65 px-5 py-4 text-center dark:border-[#345245] dark:bg-[#203b31]">
                 <p className="font-semibold">Todo comprado</p>
                 <p className="mt-1 text-sm text-[#627268] dark:text-[#b7c5bc]">
                   No queda nada pendiente en la lista.
@@ -171,7 +181,7 @@ export function ShoppingList({
           </div>
 
           {purchasedItems.length > 0 ? (
-            <div className="mt-8">
+            <div className="mt-4">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#89958e]">
                   Ya comprado
@@ -188,7 +198,7 @@ export function ShoppingList({
                   }
                 />
               </div>
-              <div className="mt-3 space-y-3 opacity-75">
+              <div className="mt-3 space-y-2 opacity-75">
                 {purchasedItems.map((item) => (
                   <ShoppingListItemRow
                     key={item.id}

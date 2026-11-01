@@ -4,6 +4,8 @@
 
 Los platos admiten una receta u observaciones opcionales como texto libre de hasta 10.000 caracteres. Se pueden añadir, editar, borrar y consultar desde el recetario y el menú semanal, conservando saltos de línea. Los platos existentes sin notas siguen siendo válidos; no se requiere migración.
 
+Las cuatro páginas (inventario, compra, recetario y menú semanal) usan listas compactas con menor espacio vertical. Todos los buscadores ofrecen una cruz roja para limpiar cuando contienen texto, visible también sin foco.
+
 ## Límites aceptados
 
 Conservar el comportamiento, arquitectura, seguridad, datos y límites de despliegue documentados en [AGENTS.md](../AGENTS.md). El [workflow común](../../../plan/workflow.md) define el proceso de entrega y el contrato documental.
