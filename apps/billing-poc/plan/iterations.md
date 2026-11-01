@@ -40,7 +40,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: controles compartidos existentes. Sin nuevas librerías.
 - Aceptación: Prepaid en EUR no negativo, con centavos e inicial 0; cambios de Prepaid no recalculan pagos, que siguen generándose por el total. Sin conversión automática del porcentaje antiguo; registros sin importe se muestran con 0. With payment cerrada por defecto agrupa por vínculo real; reservas pendientes fuera; orden y navegación conservados. Móvil en cuatro filas según la petición y etiqueta Deadline en lista/formulario.
 - Validación: tests de esquema, persistencia, separación/orden y pagos; Biome incremental, tipos, suite y build de billing; navegador para importe, agrupación y cuatro filas móviles.
-- Evidencia: [BILL-04](iteration-log.md#bill-04--prepaid-y-agrupación-por-pago).
+- Evidencia: [BILL-04](archive/2026-11-01/bill-04.md#bill-04--prepaid-y-agrupación-por-pago).
 
 ## BILL-05 — Etiquetas e importes en línea
 
@@ -133,3 +133,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: etiquetas de pago y fechas esperadas en español; calendarios accesibles completamente en español con singular/plural correcto; fechas recurrentes sin plurales inválidos para los siete días; ausencia de fecha en español; suite completa sin fallos conservando las comprobaciones de comportamiento.
 - Validación: reproducción inicial de 977 pruebas con 14 fallos; tests de regresión antes del arreglo, suite completa, lint incremental, type-check y build de billing; diff check y enlaces locales.
 - Evidencia: [BILL-13](iteration-log.md#bill-13--reparar-las-pruebas-de-localización).
+
+## BILL-14 — Cabeceras y acciones de modales
+
+- Estado: `validated`.
+- Objetivo: fijar todas las cabeceras de modales y concentrar confirmación/cierre en la parte superior.
+- Rutas: `src/components/ui`, formularios y modales de `src/features`, planificación de billing.
+- Dependencias: Modal, iconos, formularios y mutaciones existentes; sin nuevas dependencias.
+- Aceptación: cabecera siempre visible con scroll interno; sin aceptar/cancelar al pie; tick verde junto a papelera cuando exista y cruz roja arriba; conservar validación, envío nativo, estados pendientes, navegación y subformularios. Móvil y temas claro/oscuro.
+- Validación: inventario de modales, lint, tipos, suite y build de billing; revisión de accesibilidad y formularios; comprobación visual si el entorno lo permite.
+- Evidencia: [BILL-14](iteration-log.md#bill-14--cabeceras-y-acciones-de-modales).

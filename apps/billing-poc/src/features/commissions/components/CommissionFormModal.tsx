@@ -3,9 +3,10 @@ import { useId, useRef, useState } from "react"
 import ClientSelectorField from "@/components/shared/ClientSelectorField"
 import PaymentActions from "@/components/shared/PaymentActions"
 import ProductSelector from "@/components/shared/ProductSelector"
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import FormField from "@/components/ui/FormField"
-import { ConfirmFooter, Modal } from "@/components/ui/Modal"
+import { Modal } from "@/components/ui/Modal"
 import NumberStepperInput from "@/components/ui/NumberStepperInput"
 import {
   useCreateCommission,
@@ -229,14 +230,11 @@ export default function CommissionFormModal({
             : "Nuevo encargo"
       }
       maxWidth="xl"
-      stickyHeader
-      stickyFooter
-      footer={
-        <ConfirmFooter
-          onConfirm={confirmSave}
-          onCancel={close}
+      headerActions={
+        <ConfirmAction
+          onClick={confirmSave}
           isPending={pending}
-          confirmLabel="Guardar"
+          label="Guardar"
           pendingLabel="Guardando…"
         />
       }

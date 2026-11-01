@@ -1,8 +1,9 @@
 "use client"
 
 import { useId, useState } from "react"
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
-import { ConfirmFooter, Modal } from "@/components/ui/Modal"
+import { Modal } from "@/components/ui/Modal"
 import NumberStepperInput from "@/components/ui/NumberStepperInput"
 import { FetchError } from "@/lib/client/swr-fetcher"
 import {
@@ -115,28 +116,36 @@ export default function ReduceInvoiceCounterModal({
       onClose={handleClose}
       title={`Reducir ${counter.label} — ${year}`}
       maxWidth="xl"
-      stickyFooter
-      footer={
-        preview ? (
-          <ConfirmFooter
-            onCancel={handleBack}
-            onConfirm={handleConfirm}
-            isPending={isPending}
-            cancelLabel="Volver"
-            confirmLabel="Eliminar facturas y reducir"
-            pendingLabel="Reduciendo…"
-            variant="danger"
-          />
-        ) : (
-          <ConfirmFooter
-            onCancel={handleClose}
-            onConfirm={handleReview}
-            isPending={isPending}
-            confirmLabel="Revisar el impacto"
-            pendingLabel="Revisando…"
-            variant="primary"
-          />
-        )
+      headerActions={
+        <>
+          {preview ? (
+            <button
+              type="button"
+              onClick={handleBack}
+              disabled={isPending}
+              aria-label="Volver"
+              title="Volver"
+              className="rounded p-1.5 text-zinc-600 focus-visible:ring-2 dark:text-zinc-300"
+            >
+              ←
+            </button>
+          ) : null}
+          {preview ? (
+            <ConfirmAction
+              onClick={handleConfirm}
+              isPending={isPending}
+              label="Eliminar facturas y reducir"
+              pendingLabel="Reduciendo…"
+            />
+          ) : (
+            <ConfirmAction
+              onClick={handleReview}
+              isPending={isPending}
+              label="Revisar el impacto"
+              pendingLabel="Revisando…"
+            />
+          )}
+        </>
       }
     >
       <div className="space-y-4">

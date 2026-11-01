@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useId, useState } from "react"
-import { ConfirmFooter, Modal } from "@/components/ui/Modal"
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
+import { Modal } from "@/components/ui/Modal"
 import { useUpdateWordpressOrderStatus } from "@/features/wordpress/hooks/useWordpressOrderMutations"
 import { useStableCallback } from "@/hooks/useStableCallback"
 import {
@@ -70,12 +71,11 @@ export function WordpressOrderStatusModal({
       title={
         order ? `Cambiar estado del pedido n.º ${order.id}` : "Cambiar estado"
       }
-      footer={
-        <ConfirmFooter
-          onCancel={handleClose}
-          onConfirm={handleConfirmClick}
+      headerActions={
+        <ConfirmAction
+          onClick={handleConfirmClick}
           isPending={isMutating}
-          confirmLabel="Actualizar estado"
+          label="Actualizar estado"
           pendingLabel="Actualizando..."
         />
       }

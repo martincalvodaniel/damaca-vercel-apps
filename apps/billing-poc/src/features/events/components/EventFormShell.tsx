@@ -2,6 +2,7 @@
 import { useEffect, useId, useRef, useState } from "react"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import { Modal } from "@/components/ui/Modal"
+import { ModalFormActions } from "@/components/ui/ModalFormActions"
 import type { PartialDateValue } from "@/components/ui/PartialDatePicker"
 import EventBasicFields from "./EventBasicFields"
 import EventPricingFields from "./EventPricingFields"
@@ -139,6 +140,7 @@ export default function EventFormShell({
           arrows / spinner increments.
         */}
       <form
+        id={`${id}-form`}
         onSubmit={handleSubmit}
         onKeyDown={handleKeyDown}
         className="space-y-4"
@@ -172,24 +174,13 @@ export default function EventFormShell({
           onChangeValue={handleValueChange}
         />
 
-        <div className="flex items-center justify-end gap-2 pt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isSubmitting}
-            className="rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={!canSubmit}
-            aria-busy={isSubmitting}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-offset-zinc-900"
-          >
-            {String(isSubmitting ? "Guardando…" : submitLabel)}
-          </button>
-        </div>
+        <ModalFormActions
+          formId={`${id}-form`}
+          label={submitLabel}
+          isPending={isSubmitting}
+          disabled={!canSubmit}
+          onCancel={onClose}
+        />
       </form>
     </Modal>
   )

@@ -1,5 +1,6 @@
 "use client"
 
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
 import { Modal } from "@/components/ui/Modal"
 
 interface InvoiceGuardModalProps {
@@ -21,6 +22,7 @@ export default function InvoiceGuardModal({
       onClose={onClose}
       title="La factura ya se ha generado"
       maxWidth="md"
+      headerActions={<ConfirmAction onClick={onClose} label="Entendido" />}
     >
       <div className="space-y-4">
         <p className="text-sm text-zinc-700 dark:text-zinc-300">
@@ -28,15 +30,6 @@ export default function InvoiceGuardModal({
           Invoices cannot be modified once generated. To change the seat count,
           first delete the invoice from the payment, then retry.
         </p>
-        <div className="flex items-center justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
-          >
-            Got it
-          </button>
-        </div>
       </div>
     </Modal>
   )

@@ -1,6 +1,8 @@
+import { ModalHeaderActions } from "@/components/ui/ModalFormActions"
 import { CheckIcon, XIcon } from "../icons"
 
 interface FormHeaderProps {
+  formId: string
   title: string
   submitTooltip: string
   isSubmitting: boolean
@@ -9,6 +11,7 @@ interface FormHeaderProps {
 }
 
 export default function FormHeader({
+  formId,
   title,
   submitTooltip,
   isSubmitting,
@@ -20,30 +23,33 @@ export default function FormHeader({
       <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
         {title}
       </h3>
-      <div className="flex shrink-0 items-center gap-1">
-        {onCancel ? (
+      <ModalHeaderActions>
+        <div className="flex shrink-0 items-center gap-1">
           <button
-            type="button"
-            onClick={onCancel}
-            disabled={isSubmitting}
-            title="Cancelar"
-            aria-label="Cancelar"
-            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-rose-600 hover:bg-rose-50 hover:text-rose-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-rose-400 dark:hover:bg-rose-900/30 dark:hover:text-rose-300"
+            type="submit"
+            form={formId}
+            disabled={isSubmitting || !canSubmit}
+            aria-busy={isSubmitting}
+            title={submitTooltip}
+            aria-label={submitTooltip}
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-emerald-400 dark:hover:bg-emerald-900/30 dark:hover:text-emerald-300"
           >
-            <XIcon />
+            <CheckIcon />
           </button>
-        ) : null}
-        <button
-          type="submit"
-          disabled={isSubmitting || !canSubmit}
-          aria-busy={isSubmitting}
-          title={submitTooltip}
-          aria-label={submitTooltip}
-          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-emerald-400 dark:hover:bg-emerald-900/30 dark:hover:text-emerald-300"
-        >
-          <CheckIcon />
-        </button>
-      </div>
+          {onCancel ? (
+            <button
+              type="button"
+              onClick={onCancel}
+              disabled={isSubmitting}
+              title="Cancelar"
+              aria-label="Cancelar"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-rose-600 hover:bg-rose-50 hover:text-rose-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-rose-400 dark:hover:bg-rose-900/30 dark:hover:text-rose-300"
+            >
+              <XIcon />
+            </button>
+          ) : null}
+        </div>
+      </ModalHeaderActions>
     </div>
   )
 }

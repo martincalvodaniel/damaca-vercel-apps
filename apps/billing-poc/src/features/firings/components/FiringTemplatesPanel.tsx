@@ -1,6 +1,7 @@
 "use client"
 import { useId, useState } from "react"
 import AddButton from "@/components/ui/AddButton"
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog"
 import { EmptyState } from "@/components/ui/EmptyState"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
@@ -8,7 +9,7 @@ import FormField from "@/components/ui/FormField"
 import { IconButton } from "@/components/ui/IconButton"
 import { PencilIcon } from "@/components/ui/icons/PencilIcon"
 import { TrashIcon } from "@/components/ui/icons/TrashIcon"
-import { ConfirmFooter, Modal } from "@/components/ui/Modal"
+import { Modal } from "@/components/ui/Modal"
 import NumberStepperInput from "@/components/ui/NumberStepperInput"
 import { extractErrorMessage } from "@/features/events/components/attendeesPanel-utils"
 import { useStableCallback } from "@/hooks/useStableCallback"
@@ -149,11 +150,10 @@ export default function FiringTemplatesPanel({
         isOpen={Boolean(deleting)}
         title="Eliminar plantilla"
         confirmLabel="Eliminar"
+        onCancel={closeDelete}
         pendingLabel="Eliminando…"
-        variant="danger"
         isPending={remove.isMutating}
         error={error}
-        onCancel={closeDelete}
         onConfirm={submitDelete}
       >
         <p className="text-sm text-zinc-700 dark:text-zinc-300">
@@ -223,12 +223,11 @@ function FiringTemplateModal({
       onClose={close}
       title={template ? "Editar plantilla" : "Nueva plantilla"}
       maxWidth="lg"
-      footer={
-        <ConfirmFooter
-          onConfirm={confirmSave}
-          onCancel={close}
+      headerActions={
+        <ConfirmAction
+          onClick={confirmSave}
           isPending={pending}
-          confirmLabel="Guardar"
+          label="Guardar"
           pendingLabel="Guardando…"
         />
       }

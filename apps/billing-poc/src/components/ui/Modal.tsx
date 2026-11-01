@@ -1,9 +1,10 @@
 "use client"
-import { useEffect, useId, useRef } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { useFocusTrap } from "@/hooks/useFocusTrap"
 import { useStableCallback } from "@/hooks/useStableCallback"
 import CloseButton from "./CloseButton"
+import { ModalActionsContext } from "./modal-actions-context"
 
 let openModalCount = 0
 let previousBodyOverflow = ""
@@ -28,14 +29,11 @@ interface ModalProps {
   onClose: () => void
   title: string
   children: React.ReactNode
-  footer?: React.ReactNode
   headerCenter?: React.ReactNode
   headerActions?: React.ReactNode
   leftAction?: React.ReactNode
   rightAction?: React.ReactNode
   initialFocus?: "first" | "container"
-  stickyHeader?: boolean
-  stickyFooter?: boolean
   stableHeight?: boolean
   maxWidth?: "sm" | "md" | "lg" | "xl"
 }
@@ -44,17 +42,17 @@ export function Modal({
   onClose,
   title,
   children,
-  footer,
   headerCenter,
   headerActions,
   leftAction,
   rightAction,
   initialFocus = "first",
-  stickyHeader = false,
-  stickyFooter = false,
   stableHeight = false,
   maxWidth = "md",
 }: ModalProps) {
+  const [actionsTarget, setActionsTarget] = useState<HTMLDivElement | null>(
+    null
+  )
   const startedOnBackdropRef = useRef(false)
   const handleBackdropPointerDown = useStableCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
@@ -134,30 +132,21 @@ export function Modal({
     : "max-h-[90vh]"
   const panelHeightClass = stableHeight ? "h-full" : "max-h-[90vh]"
   const modalHeader = (
-    <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center border-b border-zinc-200 bg-white px-4 py-3 sm:px-6 sm:py-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="flex shrink-0 items-center gap-2 border-b border-zinc-200 bg-white px-4 py-3 sm:px-6 sm:py-4 dark:border-zinc-800 dark:bg-zinc-900">
       <h2
         id={`${id}-modal-title`}
-        className="col-start-1 min-w-0 truncate text-base font-semibold text-zinc-900 sm:text-lg dark:text-zinc-50"
+        className="min-w-0 flex-1 truncate text-base font-semibold text-zinc-900 sm:text-lg dark:text-zinc-50"
       >
         {title}
       </h2>
-      {headerCenter ? (
-        <div className="col-start-2 row-start-1 justify-self-center">
-          {headerCenter}
-        </div>
-      ) : null}
-      <div className="col-start-3 row-start-1 flex items-center justify-self-end gap-1 sm:gap-2">
+      {headerCenter ? <div className="shrink-0">{headerCenter}</div> : null}
+      <div className="flex shrink-0 items-center gap-1 sm:gap-2">
         {headerActions}
+        <div ref={setActionsTarget} className="flex items-center gap-1" />
         <CloseButton onClick={onClose} label="Cerrar diálogo" />
       </div>
     </div>
   )
-  const modalFooter = footer ? (
-    <div className="border-t border-zinc-200 bg-white px-6 py-4 dark:border-zinc-800 dark:bg-zinc-900">
-      {footer}
-    </div>
-  ) : null
-
   return createPortal(
     // biome-ignore lint/a11y/noStaticElementInteractions: backdrop click-to-close is a standard modal pattern
     <div
@@ -182,15 +171,13 @@ export function Modal({
         <div
           className={`${panelHeightClass} flex w-full flex-col overflow-hidden rounded-lg bg-white shadow-lg dark:bg-zinc-900`}
         >
-          {stickyHeader ? modalHeader : null}
+          {modalHeader}
 
           <div className="min-h-0 flex-1 overflow-y-auto [-webkit-overflow-scrolling:touch]">
-            {!stickyHeader ? modalHeader : null}
-            <div className="px-6 py-4">{children}</div>
-            {!stickyFooter ? modalFooter : null}
+            <ModalActionsContext value={{ target: actionsTarget }}>
+              <div className="px-6 py-4">{children}</div>
+            </ModalActionsContext>
           </div>
-
-          {stickyFooter ? modalFooter : null}
         </div>
 
         {rightAction ? (
@@ -201,49 +188,5 @@ export function Modal({
       </div>
     </div>,
     document.body
-  )
-}
-interface ConfirmFooterProps {
-  onConfirm: () => void
-  onCancel: () => void
-  isPending?: boolean
-  confirmLabel?: string
-  pendingLabel?: string
-  cancelLabel?: string
-  variant?: "danger" | "primary"
-}
-export function ConfirmFooter({
-  onConfirm,
-  onCancel,
-  isPending = false,
-  confirmLabel = "Confirmar",
-  pendingLabel = "Procesando…",
-  cancelLabel = "Cancelar",
-  variant = "primary",
-}: ConfirmFooterProps) {
-  const confirmClass =
-    variant === "danger"
-      ? "flex-1 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-offset-zinc-900"
-      : "flex-1 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-zinc-900"
-  return (
-    <div className="flex gap-2">
-      <button
-        type="button"
-        onClick={onCancel}
-        disabled={isPending}
-        className="flex-1 rounded bg-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600"
-      >
-        {cancelLabel}
-      </button>
-      <button
-        type="button"
-        onClick={onConfirm}
-        disabled={isPending}
-        aria-busy={isPending}
-        className={confirmClass}
-      >
-        {String(isPending ? pendingLabel : confirmLabel)}
-      </button>
-    </div>
   )
 }

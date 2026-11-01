@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
+import { ModalFormActions } from "@/components/ui/ModalFormActions"
 import type { Client, ClientFormData } from "@/lib/domain/entities/client"
 
 interface ClientFormProps {
@@ -64,7 +65,7 @@ export default function ClientForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form id={`${id}-form`} onSubmit={handleSubmit} className="space-y-4">
       {error ? <ErrorBanner bordered>{error}</ErrorBanner> : null}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -220,25 +221,12 @@ export default function ClientForm({
         />
       </div>
 
-      <div className="flex justify-end gap-2 pt-4">
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={isSubmitting}
-          className="rounded-md border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          aria-busy={isSubmitting}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:focus:ring-offset-zinc-900"
-        >
-          {isSubmitting ? "Guardando..." : client ? "Actualizar" : "Crear"}{" "}
-          cliente
-        </button>
-      </div>
+      <ModalFormActions
+        formId={`${id}-form`}
+        label={client ? "Actualizar cliente" : "Crear cliente"}
+        isPending={isSubmitting}
+        onCancel={onCancel}
+      />
     </form>
   )
 }

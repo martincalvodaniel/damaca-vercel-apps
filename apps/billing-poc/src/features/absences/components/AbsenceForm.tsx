@@ -95,12 +95,14 @@ export function AbsenceForm({
   return (
     <div key={shakeKey} className={shakeKey ? "animate-shake" : ""}>
       <form
+        id={`${idPrefix}-form`}
         ref={state.formRef}
         onSubmit={state.handleSubmit}
         onKeyDown={state.handleKeyDown}
         className="space-y-4"
       >
         <FormHeader
+          formId={`${idPrefix}-form`}
           title={title}
           submitTooltip={submitTooltip}
           isSubmitting={isSubmitting}

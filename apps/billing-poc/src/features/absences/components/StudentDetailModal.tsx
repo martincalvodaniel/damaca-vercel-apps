@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react"
 import { EmptyState } from "@/components/ui/EmptyState"
+import { IconButton } from "@/components/ui/IconButton"
 import { TrashIcon } from "@/components/ui/icons/TrashIcon"
 import { Modal } from "@/components/ui/Modal"
 import Toast from "@/components/ui/Toast"
@@ -151,7 +152,25 @@ export default function StudentDetailModal({
         <Toast message={toastMessage} onClose={clearToast} />
       ) : null}
 
-      <Modal isOpen onClose={onClose} title={studentName} maxWidth="lg">
+      <Modal
+        isOpen
+        onClose={onClose}
+        title={studentName}
+        maxWidth="lg"
+        headerActions={
+          records.length > 0 ? (
+            <IconButton
+              variant="danger"
+              onClick={openDeleteAllConfirm}
+              ariaLabel={`Eliminar todos los registros de ${studentName}`}
+              title="Eliminar todos los registros"
+              disabled={isSubmitting}
+            >
+              <TrashIcon />
+            </IconButton>
+          ) : null
+        }
+      >
         <div className="space-y-6">
           <section className="space-y-2">
             <div className="flex items-center justify-between gap-2">
@@ -167,17 +186,6 @@ export default function StudentDetailModal({
                   ariaLabel={`Añadir registro para ${studentName}`}
                   title={`Añadir registro para ${studentName}`}
                 />
-                {records.length > 0 ? (
-                  <button
-                    type="button"
-                    onClick={openDeleteAllConfirm}
-                    aria-label={`Eliminar todos los registros de ${studentName}`}
-                    className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-100 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-red-400 dark:hover:bg-red-900/30 dark:hover:text-red-300"
-                  >
-                    <TrashIcon />
-                    All
-                  </button>
-                ) : null}
               </div>
             </div>
             {groupedRecords.length === 0 ? (

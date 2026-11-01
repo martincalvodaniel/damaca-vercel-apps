@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import { IconButton } from "@/components/ui/IconButton"
@@ -114,8 +115,6 @@ export default function PaymentDetailModal({
   const {
     error,
     isSaving,
-    isCreating,
-    isUpdating,
     isDeleting,
     showDeleteConfirm,
     setShowDeleteConfirm,
@@ -159,8 +158,6 @@ export default function PaymentDetailModal({
         title={isDuplicate ? "Duplicar pago" : "Editar pago"}
         maxWidth="xl"
         initialFocus={navigation ? "container" : "first"}
-        stickyHeader={!!navigation}
-        stickyFooter={!!navigation}
         stableHeight={!!navigation}
         leftAction={
           !isDuplicate && navigation ? (
@@ -212,44 +209,26 @@ export default function PaymentDetailModal({
           ) : undefined
         }
         headerActions={
-          !isDuplicate ? (
-            <IconButton
-              variant="danger"
-              ariaLabel="Eliminar pago"
-              title="Eliminar pago"
-              disabled={isSaving || isDeleting}
-              onClick={handleDeleteErrorChange}
-            >
-              <TrashIcon />
-            </IconButton>
-          ) : undefined
-        }
-        footer={
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isSaving}
-              className="flex-1 rounded bg-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600 dark:focus:ring-offset-zinc-900"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
+          <>
+            {!isDuplicate ? (
+              <IconButton
+                variant="danger"
+                ariaLabel="Eliminar pago"
+                title="Eliminar pago"
+                disabled={isSaving || isDeleting}
+                onClick={handleDeleteErrorChange}
+              >
+                <TrashIcon />
+              </IconButton>
+            ) : null}
+            <ConfirmAction
               onClick={handleSave}
-              disabled={isSaving}
-              aria-busy={isSaving}
-              className="flex-1 rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-offset-zinc-900"
-            >
-              {isDuplicate
-                ? isCreating
-                  ? "Creando..."
-                  : "Crear pago"
-                : isUpdating
-                  ? "Guardando..."
-                  : "Guardar cambios"}
-            </button>
-          </div>
+              isPending={isSaving}
+              disabled={isDeleting}
+              label={isDuplicate ? "Crear pago" : "Guardar cambios"}
+              pendingLabel={isDuplicate ? "Creando…" : "Guardando…"}
+            />
+          </>
         }
       >
         <div className="space-y-4">

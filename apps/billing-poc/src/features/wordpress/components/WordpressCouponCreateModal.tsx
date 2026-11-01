@@ -4,6 +4,7 @@ import { useEffect, useId, useState } from "react"
 import ClientSelector from "@/components/shared/ClientSelector"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import { Modal } from "@/components/ui/Modal"
+import { ModalFormActions } from "@/components/ui/ModalFormActions"
 import NumberStepperInput from "@/components/ui/NumberStepperInput"
 import RequiredAsterisk from "@/components/ui/RequiredAsterisk"
 import { useCreateWordpressCoupon } from "@/features/wordpress/hooks/useWordpressCouponMutations"
@@ -95,7 +96,7 @@ export function WordpressCouponCreateModal({
       title="Crear cupón de WordPress"
       maxWidth="lg"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form id={`${id}-form`} onSubmit={handleSubmit} className="space-y-4">
         {error ? (
           <ErrorBanner bordered>
             {extractApiError(error, "No se pudo crear el cupón de WordPress")}
@@ -179,24 +180,12 @@ export function WordpressCouponCreateModal({
           </p>
         </div>
 
-        <div className="flex justify-end gap-2 pt-2">
-          <button
-            type="button"
-            onClick={handleClose}
-            disabled={isMutating}
-            className="rounded-md border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isMutating}
-            aria-busy={isMutating}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-zinc-900"
-          >
-            {isMutating ? "Creando..." : "Crear cupón"}
-          </button>
-        </div>
+        <ModalFormActions
+          formId={`${id}-form`}
+          label={"Crear cupón"}
+          isPending={isMutating}
+          onCancel={handleClose}
+        />
       </form>
     </Modal>
   )

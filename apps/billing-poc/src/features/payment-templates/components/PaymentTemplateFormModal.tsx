@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useId, useMemo, useState } from "react"
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import { Modal } from "@/components/ui/Modal"
 import PaymentFormFields from "@/features/payments/components/month/PaymentFormFields"
@@ -186,28 +187,14 @@ export default function PaymentTemplateFormModal({
         isEditMode ? "Editar plantilla de pago" : "Nueva plantilla de pago"
       }
       maxWidth="xl"
-      footer={
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isCreating || isUpdating}
-            className="flex-1 rounded bg-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600 dark:focus:ring-offset-zinc-900"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            form={formId}
-            disabled={isCreating || isUpdating}
-            aria-busy={isCreating || isUpdating}
-            className="flex-1 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-offset-zinc-900"
-          >
-            {String(
-              isCreating || isUpdating ? "Guardando..." : "Guardar plantilla"
-            )}
-          </button>
-        </div>
+      headerActions={
+        <ConfirmAction
+          type="submit"
+          form={formId}
+          isPending={isCreating || isUpdating}
+          label="Guardar plantilla"
+          pendingLabel="Guardando…"
+        />
       }
     >
       <PaymentTemplateForm

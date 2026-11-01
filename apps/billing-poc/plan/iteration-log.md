@@ -1,6 +1,6 @@
 # Registro de entregas
 
-Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md).
+Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md).
 
 ## BILL-10 — Copiar Instagram desde el listado
 
@@ -20,19 +20,6 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 
 
 
-
-## BILL-04 — Prepaid y agrupación por pago
-
-- Inicio: 2026-11-01, rama `int`, base `83bf72a`, árbol limpio. Capacidad inicial: 35 % en 5 h y 71 % en 7 d; margen estimado suficiente para el corte completo y las reservas.
-- Decisión del usuario: Prepaid informativo; generar el pago por el total, sin descontar el anticipo.
-- Aceptación: [BILL-04](iterations.md#bill-04--prepaid-y-agrupación-por-pago).
-- Implementado: `prepaidAmount` reemplaza el porcentaje en entidad, esquema, persistencia, formulario y tarjetas. Importe EUR finito no negativo, con un máximo de dos decimales e inicial 0. Los registros sin importe se muestran con 0; el porcentaje antiguo no se convierte ni se expone, y se elimina al editar. Prepaid no participa en cálculos ni sincronización de pagos.
-- Listado: separación por `paymentId`, conservando el orden por Deadline dentro de ambos grupos; las reservas pendientes permanecen en la lista principal. Sección nativa `details` With payment cerrada inicialmente, con contador y la misma tarjeta reutilizada; los enlaces siguen abriendo el detalle aunque el grupo esté cerrado.
-- Móvil: cabecera título + iconos; cliente a ancho completo; Deadline y Prepaid en dos columnas; Total y acciones en una última fila completa. Deadline también renombrado en el formulario. Controles monetarios compartidos, sin nuevas dependencias.
-- Validaciones: `bun run test --filter=@damaca/billing-poc`: 969 pruebas, 0 fallos, 93 archivos; tipos correctos. Biome explícito sobre los 12 archivos TypeScript nuevos/editados: sin hallazgos. Build final con `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto. `bun run lint --staged`: 16 archivos, sin hallazgos; `git diff --cached --check`: correcto.
-- Navegador/API reales: base desechable `billing_prepaid_qa_20261101`. Verificadas cuatro filas a 390×844 y escritorio a 1440×900, Prepaid con céntimos guardado desde formulario (35,75 €), generación por el total (121 €), traslado inmediato a With payment y apertura del pago, contador actualizado y sección cerrada tras recargar. Cambio posterior de Prepaid a 40,25 € por API devolvió `paymentSync: unchanged` y conservó total y timestamp del pago. Orden por fecha dentro de la sección expandida correcto. Consola sin warnings/errores. Base temporal eliminada y servidores detenidos.
-- Evidencia: [cuatro filas móviles y sección cerrada](evidence/commissions-prepaid-mobile.jpg), [grupos en escritorio](evidence/commissions-prepaid-groups.jpg). El bloque generado por Next se retiró del diff.
-- Capacidad antes del cierre: 24 % en 5 h y 69 % en 7 d. Commit, push y SHA remoto se verifican al cerrar y se comunican en el cierre; este registro no anticipa publicación.
 
 ## BILL-05 — Etiquetas e importes en línea
 
@@ -101,3 +88,13 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 - Implementado: expectativas de PaymentActions y formatos de fecha alineadas con español, conservando controles sobre botones deshabilitados, métodos reservados, apertura e importes. Fechas recurrentes con «los» y plurales correctos para los siete días; fallback «Sin fecha». Calendarios de ausencias/eventos con anuncios completos en español, incluyendo singular/plural de ausencia, recuperación y evento. Sin instrumentación temporal ni nuevas dependencias.
 - Validación final: `bun run test --filter=@damaca/billing-poc`: 984 pruebas correctas, 0 fallos, 95 archivos y 1761 assertions (564 ms). `bun run type-check --filter=@damaca/billing-poc`: correcto. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (14,425 s). La caché remota de Turbo no estaba disponible; comprobaciones locales completadas. Sin prueba de navegador: se verifican las cadenas exactas desde los helpers reales y el render estático de PaymentActions.
 - Cierre técnico: `bun run lint --staged` comprobó 12 archivos sin hallazgos; `git diff --cached --check` y enlaces locales correctos. Los 14 fallos originales quedan resueltos y hay siete casos adicionales de regresión. Publicación y SHA remoto se verifican al cerrar.
+
+## BILL-14 — Cabeceras y acciones de modales
+
+- Inicio: 2026-11-01, rama `int`, base `b6c2f69`, árbol limpio y sin commits pendientes. Capacidad: 69 % restante en 5 h y 61 % en 7 d; estimación suficiente para implementación, validación y publicación conservando reservas.
+- Aceptación: [BILL-14](iterations.md#bill-14--cabeceras-y-acciones-de-modales).
+- Implementado: Modal fija siempre la cabecera fuera del área con scroll y elimina las opciones de pie/cabecera móviles. ConfirmAction comparte el tick verde con etiqueta accesible y estado pendiente. Formularios anidados envían sus controles a la cabecera mediante portal y conservan asociación nativa `form`, validación y estado propio; fuera de modales mantienen acciones de texto. Migrados pagos, plantillas, clientes, productos, eventos, encargos/cocciones, WordPress, facturas y confirmaciones de borrado. El borrado global de registros de alumno pasa a la cabecera, junto al tick al editar; se conserva cancelar el subformulario y volver desde la revisión del contador.
+- Revisión React y accesibilidad: sin nuevas dependencias ni peticiones de datos; iconos decorativos, labels/title, disabled/aria-busy, IDs de formularios únicos y foco conservado en el diálogo. Cabecera flex no reducible y títulos truncados para reservar espacio de acciones; estilos claros/oscuros y scroll interno. Inventario residual sin `footer`, `ConfirmFooter`, `stickyHeader` ni `stickyFooter` en el código de billing.
+- Validación: suite de billing, 984 pruebas correctas, 0 fallos y 1761 assertions; type-check correcto. Primera comprobación detectó props residuales de la migración; corregidas y repetida correctamente. Biome explícito sobre todos los TS/TSX editados/nuevos sin hallazgos tras corregir los avisos. Enlaces locales de planificación correctos. Se archiva BILL-04 para conservar diez entregas recientes.
+- Limitación visual: el inventario de Computer Use informa «Local browser use is disabled in Work settings»; no se realizó verificación visual interactiva ni se modificó esa preferencia. La suite existente y la revisión estática no acreditan por sí solas la apariencia en un navegador.
+- Build final `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto; type-check final correcto. La caché remota de Turbo no estaba disponible y se completaron las comprobaciones localmente. El lint preparado detectó una línea vacía sobrante en el archivo histórico; corregida antes de repetirlo. Commit, push y SHA remoto se verifican al cerrar.

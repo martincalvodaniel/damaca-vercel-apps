@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useMemo, useState } from "react"
 import ClientSelector from "@/components/shared/ClientSelector"
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
 import { Modal } from "@/components/ui/Modal"
 import {
   useCreateClient,
@@ -10,7 +11,6 @@ import { useClients } from "@/features/clients/hooks/useClients"
 import { useStableCallback } from "@/hooks/useStableCallback"
 import type { Client } from "@/lib/domain/entities/client"
 import type { WordPressOrder } from "@/lib/domain/entities/wordpress-order"
-import { WordpressBillingClientModalFooter } from "./WordpressBillingClientModalFooter"
 import { WordpressBillingClientStatusMessages } from "./WordpressBillingClientStatusMessages"
 import { WordpressBillingDataCard } from "./WordpressBillingDataCard"
 import { WordpressClientDiffPanel } from "./WordpressClientDiffPanel"
@@ -207,13 +207,12 @@ export function WordpressBillingClientModal({
           : "Importar datos de facturación a clientes"
       }
       maxWidth="xl"
-      footer={
-        <WordpressBillingClientModalFooter
-          confirmLabel={confirmLabel}
-          isConfirmDisabled={isConfirmDisabled}
-          isSubmitting={isSubmitting}
-          onCancel={onClose}
-          onConfirm={handleConfirmClick}
+      headerActions={
+        <ConfirmAction
+          label={confirmLabel}
+          disabled={isConfirmDisabled}
+          isPending={isSubmitting}
+          onClick={handleConfirmClick}
           pendingLabel={pendingLabel}
         />
       }

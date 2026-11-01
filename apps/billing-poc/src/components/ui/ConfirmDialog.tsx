@@ -1,8 +1,9 @@
 "use client"
 import type { ReactNode } from "react"
+import { ConfirmAction } from "@/components/ui/ConfirmAction"
 import { useStableCallback } from "@/hooks/useStableCallback"
 import { ErrorBanner } from "./ErrorBanner"
-import { ConfirmFooter, Modal } from "./Modal"
+import { Modal } from "./Modal"
 
 interface ConfirmDialogProps {
   isOpen: boolean
@@ -22,8 +23,6 @@ export function ConfirmDialog({
   title,
   confirmLabel = "Confirmar",
   pendingLabel = "Procesando…",
-  cancelLabel = "Cancelar",
-  variant = "danger",
   isPending,
   error,
   onCancel,
@@ -39,15 +38,12 @@ export function ConfirmDialog({
       onClose={handleClose}
       title={title}
       maxWidth="sm"
-      footer={
-        <ConfirmFooter
-          onCancel={onCancel}
-          onConfirm={onConfirm}
+      headerActions={
+        <ConfirmAction
+          onClick={onConfirm}
           isPending={isPending}
-          confirmLabel={confirmLabel}
+          label={confirmLabel}
           pendingLabel={pendingLabel}
-          cancelLabel={cancelLabel}
-          variant={variant}
         />
       }
     >
