@@ -8,7 +8,7 @@ Un encargo genera un solo ingreso completo con etiqueta `Encargo`, sin modificar
 
 ## Cohesión de interfaz
 
-La navegación compartida permanece visible al hacer scroll vertical en todas las páginas, tanto en móvil como en escritorio. Conserva el ancho del contenido y el margen superior; menús y modales se muestran por encima.
+La navegación compartida permanece visible al hacer scroll vertical en todas las páginas, tanto en móvil como en escritorio. Conserva el ancho del contenido y una franja opaca con padding superior e inferior que oculta el contenido al pasar por detrás; menús y modales se muestran por encima.
 
 Commissions reutiliza los botones de alta/edición/borrado, las acciones de pago de Eventos, el campo de búsqueda de clientes para seleccionar productos y los controles monetarios compartidos. El catálogo permite búsqueda y adición sucesiva sin alterar stock. Cabecera, estados vacíos, etiquetas y control de IVA siguen los componentes compartidos de billing. Las tarjetas móviles tienen cuatro filas: título y edición/borrado; cliente; Deadline y Prepaid; Total y acciones de pago. Los encargos con `paymentId` aparecen en una sección Paid cerrada por defecto; las reservas pendientes permanecen en la lista principal. Los datos de cada tarjeta se presentan en formato «Etiqueta: valor», sin salto de línea entre etiqueta y contenido. Ambas listas conservan el orden por fecha límite. La etiqueta de los pagos generados es `Encargo`; no hay migración ni compatibilidad con la etiqueta anterior.
 

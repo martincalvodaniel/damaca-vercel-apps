@@ -71,3 +71,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: barra sticky en móvil y escritorio, conservando ancho, margen superior, colores y posición por debajo de menús y modales. El contenedor no debe interceptar el scroll sticky.
 - Validación: Biome incremental, tipos, suite y build de billing; revisión de ancestros, cobertura de páginas y capas CSS.
 - Evidencia: [BILL-07](iteration-log.md#bill-07--navegación-fija-al-hacer-scroll).
+
+## BILL-08 — Márgenes opacos de navegación
+
+- Estado: `validated`.
+- Objetivo: mantener opaco el espacio superior e inferior de la barra durante el scroll.
+- Rutas: `src/components/shared/PageLayout.tsx`, `src/components/shared/NavigationBar.tsx` y planificación de billing.
+- Dependencias: navegación sticky de BILL-07; sin nuevas librerías.
+- Aceptación: franja sticky con fondo de página en ambos temas y padding superior/inferior permanente; contenido oculto al pasar por detrás, ancho de barra conservado y overlays por encima.
+- Validación: lint staged, tipos, suite y build de billing; revisión de estructura y capas.
+- Evidencia: [BILL-08](iteration-log.md#bill-08--márgenes-opacos-de-navegación).

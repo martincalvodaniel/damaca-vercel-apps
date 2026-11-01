@@ -84,7 +84,7 @@ export default function NavigationBar({ subtitle }: NavigationBarProps) {
   useEscapeKey(closeMenu, menuOpen)
   return (
     <>
-      <nav className="sticky top-2 z-30 flex items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <nav className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
             Billing
