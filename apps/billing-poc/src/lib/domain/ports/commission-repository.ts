@@ -6,7 +6,7 @@ import type {
 import type { PaymentMethod } from "../entities/payment"
 
 export interface CommissionRepository {
-  findAll(): Promise<Commission[]>
+  findAll(clientId?: string): Promise<Commission[]>
   findById(id: string): Promise<Commission | null>
   findByPaymentId(paymentId: string): Promise<Commission | null>
   create(data: Omit<Commission, "_id">): Promise<string>

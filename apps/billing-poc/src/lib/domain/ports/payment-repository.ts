@@ -1,6 +1,7 @@
 import type { InvoiceMetadata, NewPayment, Payment } from "../entities/payment"
 
 export interface PaymentFilter {
+  clientId?: string
   year?: number
   month?: number
 }

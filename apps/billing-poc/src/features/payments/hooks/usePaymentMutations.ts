@@ -2,6 +2,7 @@
 
 import { useSWRConfig } from "swr"
 import useSWRMutation from "swr/mutation"
+import { isClientActivityKey } from "@/features/clients/hooks/useClientActivity"
 import { isCommissionByPaymentKey } from "@/features/commissions/hooks/useCommissionByPayment"
 import { isCommissionsKey } from "@/features/commissions/hooks/useCommissions"
 import { isInvoiceCountersKey } from "@/features/invoices/hooks/useInvoiceCounters"
@@ -131,6 +132,7 @@ function useInvalidatePayments() {
   const { mutate } = useSWRConfig()
   return () =>
     Promise.all([
+      mutate(isClientActivityKey, undefined, { revalidate: true }),
       mutate(isPaymentsKey),
       mutate(isPaymentKey),
       mutate(isInvoiceCountersKey),

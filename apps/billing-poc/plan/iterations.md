@@ -50,7 +50,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: estilos y componentes existentes.
 - Aceptación: etiquetas con dos puntos y valores en línea; conservar las cuatro filas móviles, iconos y sección de encargos con pago.
 - Validación: Biome incremental, tipos, suite y build de billing; revisión estática del marcado inline.
-- Evidencia: [BILL-05](iteration-log.md#bill-05--etiquetas-e-importes-en-línea).
+- Evidencia: [BILL-05](archive/2026-11-01/bill-05.md#bill-05--etiquetas-e-importes-en-línea).
 
 ## BILL-06 — Etiqueta de encargos pagados
 
@@ -143,3 +143,14 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: cabecera siempre visible con scroll interno; sin aceptar/cancelar al pie; tick verde junto a papelera cuando exista y cruz roja arriba; conservar validación, envío nativo, estados pendientes, navegación y subformularios. Móvil y temas claro/oscuro.
 - Validación: inventario de modales, lint, tipos, suite y build de billing; revisión de accesibilidad y formularios; comprobación visual si el entorno lo permite.
 - Evidencia: [BILL-14](iteration-log.md#bill-14--cabeceras-y-acciones-de-modales).
+
+## BILL-15 — Página de cliente
+
+- Estado: `validated`.
+- Objetivo: abrir una ficha de cliente desde los listados con datos, resumen histórico y actividad.
+- Rutas: página `/clients/[id]`, componentes/hooks/servidor de clientes, navegación desde clientes/pagos, filtros de repositorios e índices, invalidación de pagos/encargos y planificación de billing.
+- Dependencias: PageLayout, SummaryCard, DonutChart, calculador de totales, modal de cliente y repositorios existentes; sin nuevas dependencias.
+- Aceptación: datos completos y edición desde la ficha; ingresos/gastos/saldo históricos y desglose por etiqueta exclusivos del cliente; pagos, encargos y cocciones en tres secciones cerradas inicialmente con contador exacto, incluyendo registros pagados; navegación desde clientes y pagos; estados de carga/error/no encontrado/vacío, móvil y modo oscuro.
+- Contrato: GET autenticado `/api/clients/:id/activity` devuelve `{ client, payments, commissions, firings }` del cliente solicitado, sin filtro temporal; 400 para ID inválido, 404 si no existe, 500 ante error. Las mutaciones relacionadas invalidan la actividad.
+- Validación: pruebas de contrato/aislamiento, helpers SWR y navegación/render; lint incremental, tipos, suite y build de billing; revisión visual si el entorno lo permite.
+- Evidencia: [BILL-15](iteration-log.md#bill-15--página-de-cliente).

@@ -25,11 +25,18 @@ export class MongoCommissionRepository implements CommissionRepository {
   private async collection() {
     return (await getDatabase()).collection<MongoCommission>(this.resource)
   }
-  async findAll() {
+  async findAll(clientId?: string) {
+    if (clientId !== undefined && !isValidObjectId(clientId)) return []
     return sortCommissions(
-      (await (await this.collection()).find({}).toArray()).map(
-        commissionToDomain
-      )
+      (
+        await (
+          await this.collection()
+        )
+          .find(
+            clientId !== undefined ? { clientId: toObjectId(clientId) } : {}
+          )
+          .toArray()
+      ).map(commissionToDomain)
     )
   }
   async findById(id: string) {

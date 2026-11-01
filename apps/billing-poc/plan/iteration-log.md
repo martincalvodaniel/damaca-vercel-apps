@@ -1,6 +1,6 @@
 # Registro de entregas
 
-Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md).
+Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md).
 
 ## BILL-10 — Copiar Instagram desde el listado
 
@@ -20,14 +20,6 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 
 
 
-
-## BILL-05 — Etiquetas e importes en línea
-
-- Inicio: 2026-11-01, rama `int`, base `d0213cc`, árbol limpio. Capacidad inicial: 19 % en 5 h y 68 % en 7 d; margen suficiente para el ajuste completo conservando reservas.
-- Aceptación: [BILL-05](iterations.md#bill-05--etiquetas-e-importes-en-línea).
-- Implementado: Client, Deadline y Prepaid usan `dt`/`dd` inline con dos puntos y espacio; Total comparte contenedor flex con importe y botones. Se conserva la estructura de cuatro filas móviles y el grupo de acciones del título. La distribución de escritorio empieza en `lg` para evitar comprimir los valores en línea en anchuras intermedias.
-- Validaciones observadas: `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 969 pruebas, 0 fallos. Revisión estática del marcado semántico y de las clases responsive. Sin nuevos tests para reproducir este cambio de presentación. `bun run lint --staged`: 4 archivos, sin hallazgos; `git diff --cached --check` y enlaces locales correctos; `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (10,959 s).
-- Commit, push y SHA remoto se verifican al cerrar y se comunican en el cierre; este registro no anticipa publicación.
 
 ## BILL-06 — Etiqueta de encargos pagados
 
@@ -98,3 +90,15 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 - Validación: suite de billing, 984 pruebas correctas, 0 fallos y 1761 assertions; type-check correcto. Primera comprobación detectó props residuales de la migración; corregidas y repetida correctamente. Biome explícito sobre todos los TS/TSX editados/nuevos sin hallazgos tras corregir los avisos. Enlaces locales de planificación correctos. Se archiva BILL-04 para conservar diez entregas recientes.
 - Limitación visual: el inventario de Computer Use informa «Local browser use is disabled in Work settings»; no se realizó verificación visual interactiva ni se modificó esa preferencia. La suite existente y la revisión estática no acreditan por sí solas la apariencia en un navegador.
 - Build final `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto; type-check final correcto. La caché remota de Turbo no estaba disponible y se completaron las comprobaciones localmente. El lint preparado detectó una línea vacía sobrante en el archivo histórico; corregida antes de repetirlo. Commit, push y SHA remoto se verifican al cerrar.
+
+## BILL-15 — Página de cliente
+
+- Inicio: 2026-11-01, rama `int`, base `dfd86c2`, árbol limpio y sin commits locales pendientes. Capacidad: 49 % restante en 5 h y 58 % en 7 d; margen estimado suficiente para la entrega completa con reservas.
+- Aceptación: [BILL-15](iterations.md#bill-15--página-de-cliente).
+
+- Implementado: ficha `/clients/[id]` con datos y edición mediante el modal existente. Resumen histórico reutilizando el cálculo mensual, tarjetas y gráficos de etiquetas; no suma de nuevo los importes de encargos/cocciones. Tres secciones nativas `details` cerradas por defecto, contadores completos y vacíos; pagos abren su detalle, encargos/cocciones enlazan al editor existente. Navegación desde listado de clientes y pagos, conservando copiar contactos y borrar.
+- Datos: endpoint autenticado con validación de ID, 400/404/500 y consulta paralela de pagos/encargos/cocciones tras comprobar el cliente. Filtros Mongo por cliente e índices en las tres colecciones; sin límite temporal ni paginación parcial. SWR evita datos del cliente anterior e invalida actividad desde cambios de clientes, pagos, encargos/cocciones y facturas.
+- Validación: `bun run test --filter=@damaca/billing-poc`: 992 pruebas correctas, 0 fallos, 98 archivos y 1802 assertions. Ocho pruebas nuevas de servicio, helpers de caché y render estático cubren historial entre años, filtros por cliente, trabajos pagados/pendientes, error sin totales parciales, ausencia de cliente, contadores/cierre inicial y enlace accesible con copia de contactos. `bun run type-check --filter=@damaca/billing-poc`: correcto. El primer type-check detectó que la configuración no excluye pruebas `.test.tsx`; convertida la prueba de render a `.test.ts` con `createElement`, siguiendo el patrón existente. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (20,075 s); caché remota de Turbo no disponible.
+- Revisión React/accesibilidad: consultas por SWR, imports de dominio solo de tipo en cliente, gráficos/modal de pago dinámicos, memoización del resumen, enlaces nativos y foco claro/oscuro. Controles `details/summary` con semántica expandible nativa; columnas de datos adaptables y textos largos con ajuste. Se archiva BILL-05 para conservar diez entregas recientes.
+- Comprobación de navegador: el servidor no pudo escuchar en 3000/3100 dentro del entorno restringido (`EADDRINUSE`). El arranque autorizado fuera de ese entorno en 3100 fue correcto. La navegación a `/clients` redirigió a `/auth/signin`; sin sesión autenticada disponible, no se verifica visualmente la ficha con datos reales ni el flujo completo Mongo → navegador. No se modifica la autenticación. Pestaña temporal cerrada al terminar.
+- Cierre técnico: Biome sobre los TS/TSX editados/nuevos sin hallazgos; enlaces locales correctos. El primer lint preparado detectó una línea vacía sobrante al archivar BILL-05; corregida. `bun run lint --staged` y `git diff --cached --check` se repiten antes del commit. Commit, push y SHA remoto se verifican al publicar.

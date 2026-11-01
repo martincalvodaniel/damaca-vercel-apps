@@ -7,6 +7,11 @@ export interface IndexSpec {
 }
 
 export const INDEX_SPECS: IndexSpec[] = [
+  ...["payments", "commissions", "firings"].map((collection) => ({
+    collection,
+    keys: { clientId: 1 } as IndexSpecification,
+    options: { name: "clientId_asc" },
+  })),
   {
     collection: "firings",
     keys: { dueDate: 1, createdAt: -1, _id: 1 },

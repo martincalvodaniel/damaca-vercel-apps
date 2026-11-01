@@ -1,11 +1,10 @@
 "use client"
 import dynamic from "next/dynamic"
-import { useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useMemo } from "react"
 import Toast from "@/components/ui/Toast"
-import ClientFormModal from "@/features/clients/components/ClientFormModal"
 import { useClientsByIds } from "@/features/clients/hooks/useClientsByIds"
 import { usePayments } from "@/features/payments/hooks/usePayments"
-import type { Client } from "@/lib/domain/entities/client"
 import MonthlyPaymentsModals from "./MonthlyPaymentsModals"
 import { computePaymentTotals } from "./monthlyPaymentsView-totals"
 import PaymentsSummary from "./PaymentsSummary"
@@ -22,7 +21,9 @@ export default function MonthlyPaymentsView({
   selectedDate: Date
   showCharts?: boolean
 }) {
-  const handleEditingClientIdChange = () => setEditingClientId(null)
+  const router = useRouter()
+  const openClient = (id: string) =>
+    router.push(`/clients/${encodeURIComponent(id)}`)
   const year = selectedDate.getFullYear()
   const month = selectedDate.getMonth() + 1
   const {
@@ -42,7 +43,6 @@ export default function MonthlyPaymentsView({
     isLoading: areClientsLoading,
     error: clientFetchError,
   } = useClientsByIds(clientIds)
-  const [editingClientId, setEditingClientId] = useState<string | null>(null)
   const clientNameById = useMemo(() => {
     const map = new Map<string, string>()
     for (const client of clients) {
@@ -50,11 +50,6 @@ export default function MonthlyPaymentsView({
     }
     return map
   }, [clients])
-  const editingClient: Client | undefined = useMemo(() => {
-    return clients.find((client) => {
-      return client._id === editingClientId
-    })
-  }, [clients, editingClientId])
   const {
     sort,
     filters,
@@ -192,13 +187,7 @@ export default function MonthlyPaymentsView({
         onReceiptFilterToggle={handleReceiptFilterToggle}
         onTagFilterToggle={handleTagToggle}
         clientNameById={clientNameById}
-        onClientClick={setEditingClientId}
-      />
-
-      <ClientFormModal
-        client={editingClient}
-        isOpen={!!editingClient}
-        onClose={handleEditingClientIdChange}
+        onClientClick={openClient}
       />
 
       <MonthlyPaymentsModals

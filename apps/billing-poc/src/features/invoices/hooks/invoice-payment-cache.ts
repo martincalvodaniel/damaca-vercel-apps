@@ -1,6 +1,7 @@
 "use client"
 
 import type { ScopedMutator } from "swr"
+import { isClientActivityKey } from "@/features/clients/hooks/useClientActivity"
 import {
   isPaymentKey,
   isPaymentsKey,
@@ -36,5 +37,9 @@ export async function updateInvoicePaymentCaches(
     ),
   ])
 
-  await Promise.all([mutate(isPaymentsKey), mutate(isTargetPaymentKey)])
+  await Promise.all([
+    mutate(isPaymentsKey),
+    mutate(isTargetPaymentKey),
+    mutate(isClientActivityKey, undefined, { revalidate: true }),
+  ])
 }

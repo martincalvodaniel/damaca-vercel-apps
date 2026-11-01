@@ -1,6 +1,7 @@
 "use client"
 import { useSWRConfig } from "swr"
 import useSWRMutation from "swr/mutation"
+import { isClientActivityKey } from "@/features/clients/hooks/useClientActivity"
 import { runRequest } from "@/features/events/hooks/useEventMutations-runtime"
 import {
   isPaymentKey,
@@ -38,6 +39,7 @@ export function buildCommissionRequest(
 }
 export function isCommissionRelatedKey(key: unknown) {
   return (
+    isClientActivityKey(key) ||
     isCommissionsKey(key) ||
     isCommissionByPaymentKey(key) ||
     isPaymentsKey(key) ||

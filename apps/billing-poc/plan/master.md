@@ -35,3 +35,7 @@ La conversión genera un pago completo único con etiqueta `Cocción`, con las m
 ## Localización y pruebas
 
 La UI usa español y fechas `es-ES`. Los calendarios anuncian ausencias, recuperaciones y eventos en español, con singular/plural; las fechas recurrentes muestran «los lunes», «los martes», …, «los sábados» y «los domingos». Un evento sin fecha muestra «Sin fecha». Las pruebas deben verificar estas salidas sin volver a introducir textos ingleses. Reparación: [BILL-13](iterations.md#bill-13--reparar-las-pruebas-de-localización).
+
+## Ficha de cliente
+
+La ruta `/clients/[id]` muestra los datos del cliente y permite editarlos. Los listados de clientes y pagos navegan a esta ficha. Sobre tres secciones de actividad cerradas por defecto, con contadores de pagos, encargos y cocciones, se muestra el resumen financiero de todo el historial del cliente (ingresos, gastos, saldo y desglose por etiqueta). Los encargos y cocciones incluyen los ya pagados; sus importes no se suman de nuevo a los pagos. Alcance: [BILL-15](iterations.md#bill-15--página-de-cliente).

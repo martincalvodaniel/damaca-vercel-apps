@@ -1,12 +1,12 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useCallback, useState } from "react"
 import { EmptyState } from "@/components/ui/EmptyState"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import Toast from "@/components/ui/Toast"
 import { useDeleteClient } from "@/features/clients/hooks/useClientMutations"
 import type { Client } from "@/lib/domain/entities/client"
-import ClientFormModal from "./ClientFormModal"
 import ClientTableRow from "./ClientTableRow"
 import { extractClientApiError } from "./clientList-utils"
 import DeleteClientModal from "./DeleteClientModal"
@@ -18,22 +18,17 @@ interface ClientListProps {
 export default function ClientList({ clients }: ClientListProps) {
   const handleCopyToastChange = () => setCopyToast(null)
   const handleDeletingClientIdChange = () => setDeletingClientId(null)
-  const [editingClientId, setEditingClientId] = useState<string | null>(null)
+  const router = useRouter()
   const [deletingClientId, setDeletingClientId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [copyToast, setCopyToast] = useState<string | null>(null)
 
   const { trigger: deleteClient, isMutating: isDeleting } = useDeleteClient()
 
-  const handleEdit = (clientId: string) => {
-    setEditingClientId(clientId)
+  const handleOpen = (clientId: string) => {
+    router.push(`/clients/${encodeURIComponent(clientId)}`)
     setError(null)
   }
-
-  const handleCancelEdit = useCallback(() => {
-    setEditingClientId(null)
-    setError(null)
-  }, [])
 
   const handleDeleteClick = (clientId: string) => {
     setDeletingClientId(clientId)
@@ -55,7 +50,6 @@ export default function ClientList({ clients }: ClientListProps) {
     setTimeout(() => setCopyToast(null), 2000)
   }, [])
 
-  const editingClient = clients.find((c) => c._id === editingClientId)
   const deletingClient = clients.find((c) => c._id === deletingClientId)
 
   return (
@@ -65,12 +59,6 @@ export default function ClientList({ clients }: ClientListProps) {
       ) : null}
 
       {error ? <ErrorBanner bordered>{error}</ErrorBanner> : null}
-
-      <ClientFormModal
-        client={editingClient}
-        isOpen={!!editingClientId && !!editingClient}
-        onClose={handleCancelEdit}
-      />
 
       <DeleteClientModal
         client={deletingClient}
@@ -114,7 +102,7 @@ export default function ClientList({ clients }: ClientListProps) {
                     key={client._id}
                     client={client}
                     index={index}
-                    onEdit={handleEdit}
+                    onOpen={handleOpen}
                     onDelete={handleDeleteClick}
                     onCopy={handleCopy}
                   />

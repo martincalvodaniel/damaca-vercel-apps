@@ -40,8 +40,15 @@ export class MongoPaymentRepository implements PaymentRepository {
   }
 
   async findAll(filter: PaymentFilter): Promise<Payment[]> {
+    if (filter.clientId !== undefined && !isValidObjectId(filter.clientId))
+      return []
     const col = await this.collection()
-    const query = buildPaymentDateQuery(filter)
+    const query = {
+      ...buildPaymentDateQuery(filter),
+      ...(filter.clientId !== undefined
+        ? { clientId: toObjectId(filter.clientId) }
+        : {}),
+    }
 
     const docs = await col
       .find(query)

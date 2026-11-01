@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useCallback } from "react"
 import { CopyToClipboardButton } from "@/components/ui/CopyToClipboardButton"
 import { IconButton } from "@/components/ui/IconButton"
@@ -10,7 +11,7 @@ import type { Client } from "@/lib/domain/entities/client"
 interface ClientTableRowProps {
   client: Client
   index: number
-  onEdit: (clientId: string) => void
+  onOpen: (clientId: string) => void
   onDelete: (clientId: string) => void
   onCopy?: (field: string, value: string) => void
 }
@@ -18,11 +19,13 @@ interface ClientTableRowProps {
 export default function ClientTableRow({
   client,
   index,
-  onEdit,
+  onOpen,
   onDelete,
   onCopy,
 }: ClientTableRowProps) {
-  const handleEdit = () => onEdit(clientId)
+  const stopLinkPropagation = (event: React.MouseEvent) =>
+    event.stopPropagation()
+  const handleOpen = () => onOpen(clientId)
   const handleDelete = () => onDelete(clientId)
   const clientId = client._id ?? ""
   const stripe =
@@ -42,7 +45,7 @@ export default function ClientTableRow({
   }, [client.instagram, onCopy])
   return (
     <tr
-      onClick={handleEdit}
+      onClick={handleOpen}
       className={`border-b border-zinc-200 cursor-pointer transition-colors hover:bg-blue-50 dark:border-zinc-700 dark:hover:bg-blue-900/20 ${stripe}`}
     >
       <td className="px-6 py-4 text-sm text-zinc-900 dark:text-zinc-50">
@@ -51,7 +54,14 @@ export default function ClientTableRow({
             type={client.clientType}
             className="h-4 w-4 shrink-0 text-zinc-500 dark:text-zinc-400"
           />
-          <span title={typeLabel}>{client.name}</span>
+          <Link
+            href={`/clients/${encodeURIComponent(clientId)}`}
+            onClick={stopLinkPropagation}
+            title={typeLabel}
+            className="rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {client.name}
+          </Link>
         </span>
       </td>
       <td className="px-6 py-4 text-sm text-zinc-600 dark:text-zinc-400">
