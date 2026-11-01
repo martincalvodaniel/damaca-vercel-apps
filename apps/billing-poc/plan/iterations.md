@@ -61,3 +61,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: el encabezado muestra `Paid (n)` y conserva contador, contenido y comportamiento colapsable.
 - Validación: Biome incremental, tipos y suite existente de billing.
 - Evidencia: [BILL-06](iteration-log.md#bill-06--etiqueta-de-encargos-pagados).
+
+## BILL-07 — Navegación fija al hacer scroll
+
+- Estado: `validated`.
+- Objetivo: mantener visible la navegación compartida durante el scroll vertical de cualquier página.
+- Rutas: `src/components/shared/NavigationBar.tsx`, `src/components/shared/PageLayout.tsx` y planificación de billing.
+- Dependencias: layout y navegación existentes; sin nuevas librerías.
+- Aceptación: barra sticky en móvil y escritorio, conservando ancho, margen superior, colores y posición por debajo de menús y modales. El contenedor no debe interceptar el scroll sticky.
+- Validación: Biome incremental, tipos, suite y build de billing; revisión de ancestros, cobertura de páginas y capas CSS.
+- Evidencia: [BILL-07](iteration-log.md#bill-07--navegación-fija-al-hacer-scroll).
