@@ -50,3 +50,11 @@
 - Navegador/API reales: base desechable `billing_prepaid_qa_20261101`. Verificadas cuatro filas a 390×844 y escritorio a 1440×900, Prepaid con céntimos guardado desde formulario (35,75 €), generación por el total (121 €), traslado inmediato a With payment y apertura del pago, contador actualizado y sección cerrada tras recargar. Cambio posterior de Prepaid a 40,25 € por API devolvió `paymentSync: unchanged` y conservó total y timestamp del pago. Orden por fecha dentro de la sección expandida correcto. Consola sin warnings/errores. Base temporal eliminada y servidores detenidos.
 - Evidencia: [cuatro filas móviles y sección cerrada](evidence/commissions-prepaid-mobile.jpg), [grupos en escritorio](evidence/commissions-prepaid-groups.jpg). El bloque generado por Next se retiró del diff.
 - Capacidad antes del cierre: 24 % en 5 h y 69 % en 7 d. Commit, push y SHA remoto se verifican al cerrar y se comunican en el cierre; este registro no anticipa publicación.
+
+## BILL-05 — Etiquetas e importes en línea
+
+- Inicio: 2026-11-01, rama `int`, base `d0213cc`, árbol limpio. Capacidad inicial: 19 % en 5 h y 68 % en 7 d; margen suficiente para el ajuste completo conservando reservas.
+- Aceptación: [BILL-05](iterations.md#bill-05--etiquetas-e-importes-en-línea).
+- Implementado: Client, Deadline y Prepaid usan `dt`/`dd` inline con dos puntos y espacio; Total comparte contenedor flex con importe y botones. Se conserva la estructura de cuatro filas móviles y el grupo de acciones del título. La distribución de escritorio empieza en `lg` para evitar comprimir los valores en línea en anchuras intermedias.
+- Validaciones observadas: `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 969 pruebas, 0 fallos. Revisión estática del marcado semántico y de las clases responsive. Sin nuevos tests para reproducir este cambio de presentación. `bun run lint --staged`: 4 archivos, sin hallazgos; `git diff --cached --check` y enlaces locales correctos; `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (10,959 s).
+- Commit, push y SHA remoto se verifican al cerrar y se comunican en el cierre; este registro no anticipa publicación.

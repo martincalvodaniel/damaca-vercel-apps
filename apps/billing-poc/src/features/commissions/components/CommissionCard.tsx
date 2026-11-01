@@ -59,29 +59,29 @@ export default memo(function CommissionCard({
           </IconButton>
         </div>
       </div>
-      <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-zinc-600 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto] dark:text-zinc-300">
-        <div className="col-span-2 min-w-0 sm:col-span-1">
-          <dt className="font-medium">Client</dt>
-          <dd className="break-words">
+      <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-zinc-600 lg:grid-cols-[minmax(0,1fr)_auto_auto_auto] dark:text-zinc-300">
+        <div className="col-span-2 min-w-0 lg:col-span-1">
+          <dt className="inline font-medium">Client:</dt>{" "}
+          <dd className="inline break-words">
             {commission.clientId
               ? (clientName ?? "Unavailable client")
               : "No client"}
           </dd>
         </div>
         <div>
-          <dt className="font-medium">Deadline</dt>
-          <dd>
+          <dt className="inline font-medium">Deadline:</dt>{" "}
+          <dd className="inline">
             {commission.dueDate
               ? formatDate(commission.dueDate)
               : "No deadline"}
           </dd>
         </div>
         <div>
-          <dt className="font-medium">Prepaid</dt>
-          <dd>{formatCurrency(commission.prepaidAmount)}</dd>
+          <dt className="inline font-medium">Prepaid:</dt>{" "}
+          <dd className="inline">{formatCurrency(commission.prepaidAmount)}</dd>
         </div>
-        <div className="col-span-2 sm:col-span-1">
-          <dt className="font-medium">Total</dt>
+        <div className="col-span-2 flex items-center gap-1 lg:col-span-1">
+          <dt className="shrink-0 font-medium">Total:</dt>
           <dd className="flex items-center gap-3">
             <span className="shrink-0">
               {formatCurrency(
