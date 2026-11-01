@@ -8,7 +8,7 @@ Un encargo genera un solo ingreso completo con etiqueta `Encargo`, sin modificar
 
 ## Cohesión de interfaz
 
-Commissions reutiliza los botones de alta/edición/borrado, las acciones de pago de Eventos, el campo de búsqueda de clientes para seleccionar productos y el control segmentado de Show/Hide con tres estados visibles. El catálogo permite búsqueda y adición sucesiva sin alterar stock. Cabecera, estados vacíos, etiquetas y control de IVA siguen los componentes compartidos de billing. La etiqueta de los pagos generados es `Encargo`; no hay migración ni compatibilidad con la etiqueta anterior.
+Commissions reutiliza los botones de alta/edición/borrado, las acciones de pago de Eventos, el campo de búsqueda de clientes para seleccionar productos y el control segmentado de Show/Hide con tres estados visibles. El catálogo permite búsqueda y adición sucesiva sin alterar stock. Cabecera, estados vacíos, etiquetas y control de IVA siguen los componentes compartidos de billing. En las tarjetas, edición y borrado comparten fila con el título y las acciones de pago comparten fila con el importe. La etiqueta de los pagos generados es `Encargo`; no hay migración ni compatibilidad con la etiqueta anterior.
 
 ## Límites aceptados
 
@@ -16,7 +16,7 @@ Sin anticipos, pagos múltiples, reservas de stock ni estados de producción/ent
 
 ## Dudas abiertas
 
-Ninguna para BILL-02.
+Ninguna para BILL-03.
 
 ## Application icons
 

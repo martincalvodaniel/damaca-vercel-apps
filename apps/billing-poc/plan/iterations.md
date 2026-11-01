@@ -21,3 +21,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: alta/edición/borrado con iconos comunes; efectivo/tarjeta/transferencia y apertura del pago mediante un único componente compartido con Eventos; producto con búsqueda y elección inequívoca que añade conceptos sin stock; 0/50/100 visibles y seleccionables; tag `Encargo` en generación; cabecera/campos/estado vacío coherentes. Conservar eventos y todas las opciones del control binario, además de reservas/reintentos de pago.
 - Validación: pruebas pertinentes y suite de billing, Biome incremental, tipos y build; navegador para búsqueda, triestado e iconos en móvil/escritorio y comparación con Eventos.
 - Evidencia: [BILL-02](iteration-log.md#bill-02--cohesión-de-commissions).
+
+## BILL-03 — Alineación de acciones en tarjetas
+
+- Estado: `validated`.
+- Objetivo: edición/borrado en la fila del título y pagos en la fila del importe, también en móvil.
+- Rutas: `src/features/commissions/components/CommissionCard.tsx` y planificación de billing.
+- Dependencias: componentes de iconos y acciones de pago existentes.
+- Aceptación: ambos grupos comparten su fila correspondiente, sin cambiar interacciones ni crear componentes.
+- Validación: Biome incremental, tipos, suite existente y build de billing; revisión de la estructura y clases responsive.
+- Evidencia: [BILL-03](iteration-log.md#bill-03--alineación-de-acciones-en-tarjetas).
