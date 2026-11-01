@@ -18,7 +18,7 @@ import { extractErrorMessage } from "@/features/events/components/attendeesPanel
 import { usePayment } from "@/features/payments/hooks/usePayments"
 import {
   type Commission,
-  sortCommissions,
+  partitionCommissions,
 } from "@/lib/domain/entities/commission"
 import CommissionCard from "./CommissionCard"
 import CommissionFormModal from "./CommissionFormModal"
@@ -59,7 +59,10 @@ export default function CommissionsPageContent() {
     () => new Map(clients.map((client) => [client._id, client.name])),
     [clients]
   )
-  const ordered = useMemo(() => sortCommissions(commissions), [commissions])
+  const { withoutPayment, withPayment } = useMemo(
+    () => partitionCommissions(commissions),
+    [commissions]
+  )
   const current = editing ?? (requestedId ? requestedCommission : undefined)
   const closeEditor = () => {
     setEditing(null)
@@ -110,6 +113,21 @@ export default function CommissionsPageContent() {
     setPaymentId(null)
     notify("Payment deleted")
   }
+  function renderCommission(commission: Commission) {
+    return (
+      <CommissionCard
+        key={commission._id}
+        commission={commission}
+        isOpeningPayment={paymentLoading && paymentId === commission.paymentId}
+        clientName={names.get(commission.clientId)}
+        onEdit={setEditing}
+        onDelete={openDelete}
+        onOpenPayment={setPaymentId}
+        onError={setError}
+        onSuccess={notify}
+      />
+    )
+  }
   const displayError =
     error ??
     (listError
@@ -156,28 +174,26 @@ export default function CommissionsPageContent() {
           Opening payment…
         </p>
       ) : null}
-      {!isLoading && ordered.length === 0 ? (
+      {!isLoading && withoutPayment.length === 0 ? (
         <EmptyState variant="card">
-          No commissions yet. Create one to get started.
+          {withPayment.length
+            ? "No commissions without payment."
+            : "No commissions yet. Create one to get started."}
         </EmptyState>
       ) : null}
-      <div className="space-y-3">
-        {ordered.map((commission) => (
-          <CommissionCard
-            key={commission._id}
-            commission={commission}
-            isOpeningPayment={
-              paymentLoading && paymentId === commission.paymentId
-            }
-            clientName={names.get(commission.clientId)}
-            onEdit={setEditing}
-            onDelete={openDelete}
-            onOpenPayment={setPaymentId}
-            onError={setError}
-            onSuccess={notify}
-          />
-        ))}
-      </div>
+      <div className="space-y-3">{withoutPayment.map(renderCommission)}</div>
+      <details className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <summary className="cursor-pointer rounded-lg px-4 py-3 text-sm font-semibold text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-100">
+          With payment ({withPayment.length})
+        </summary>
+        <div className="space-y-3 border-t border-zinc-200 p-3 dark:border-zinc-800">
+          {withPayment.length ? (
+            withPayment.map(renderCommission)
+          ) : (
+            <EmptyState>No commissions with payment.</EmptyState>
+          )}
+        </div>
+      </details>
       {(creating || current) && !current?.paymentGeneration ? (
         <CommissionFormModal
           key={creating ? "new" : current?._id}

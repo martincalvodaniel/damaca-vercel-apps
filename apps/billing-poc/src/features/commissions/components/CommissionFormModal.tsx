@@ -6,7 +6,6 @@ import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import FormField from "@/components/ui/FormField"
 import { ConfirmFooter, Modal } from "@/components/ui/Modal"
 import NumberStepperInput from "@/components/ui/NumberStepperInput"
-import SegmentedControl from "@/components/ui/SegmentedControl"
 import {
   useCreateCommission,
   useUpdateCommission,
@@ -16,7 +15,6 @@ import PaymentConceptsList from "@/features/payments/components/month/PaymentCon
 import type {
   Commission,
   CommissionFields,
-  CommissionPaymentStatus,
 } from "@/lib/domain/entities/commission"
 import type { Product } from "@/lib/domain/entities/product"
 import { computePaymentFinancials } from "@/lib/domain/services/payment-calculator"
@@ -43,7 +41,7 @@ export default function CommissionFormModal({
     description: commission?.description ?? "",
     clientId: commission?.clientId ?? "",
     dueDate: commission?.dueDate ?? "",
-    paymentStatus: commission?.paymentStatus ?? 0,
+    prepaidAmount: commission?.prepaidAmount ?? 0,
     concepts: commission?.concepts.map((concept) => ({ ...concept })) ?? [],
     vat: commission?.vat ?? 21,
   }))
@@ -126,8 +124,8 @@ export default function CommissionFormModal({
   function changeDueDate(event: React.FormEvent<HTMLInputElement>) {
     set("dueDate", event.currentTarget.value)
   }
-  function changeStatus(value: CommissionPaymentStatus) {
-    set("paymentStatus", value)
+  function changePrepaid(value: string) {
+    set("prepaidAmount", value.trim() ? Number(value) : 0)
   }
   function changeDescription(event: React.ChangeEvent<HTMLTextAreaElement>) {
     set("description", event.target.value)
@@ -188,7 +186,7 @@ export default function CommissionFormModal({
             onError={setError}
           />
           <div className="grid gap-4 sm:grid-cols-2">
-            <FormField id={`${id}-due`} label="Delivery deadline (optional)">
+            <FormField id={`${id}-due`} label="Deadline (optional)">
               <input
                 id={`${id}-due`}
                 type="date"
@@ -197,22 +195,21 @@ export default function CommissionFormModal({
                 onInput={changeDueDate}
               />
             </FormField>
-            <div className="space-y-1">
-              <p className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                Payment progress (manual)
-              </p>
-              <SegmentedControl<CommissionPaymentStatus>
-                value={fields.paymentStatus}
-                onChange={changeStatus}
-                ariaLabel="Payment progress (manual)"
-                className="w-full"
-                options={[
-                  { value: 0, label: "0%" },
-                  { value: 50, label: "50%" },
-                  { value: 100, label: "100%" },
-                ]}
+            <FormField id={`${id}-prepaid`} label="Prepaid (€)">
+              <NumberStepperInput
+                id={`${id}-prepaid`}
+                value={
+                  Number.isFinite(fields.prepaidAmount)
+                    ? String(fields.prepaidAmount)
+                    : ""
+                }
+                onValueChange={changePrepaid}
+                min={0}
+                step={5}
+                inputMode="decimal"
+                ariaLabel="Prepaid amount in euros"
               />
-            </div>
+            </FormField>
           </div>
           <FormField id={`${id}-description`} label="Description (optional)">
             <textarea
@@ -248,7 +245,7 @@ export default function CommissionFormModal({
             {formatCurrency(
               computePaymentFinancials(fields.concepts, fields.vat).total
             )}
-            . Payment progress is independent of the generated payment.
+            . Prepaid is informational; payments use the full total.
           </p>
         </fieldset>
         <button

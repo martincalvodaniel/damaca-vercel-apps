@@ -24,12 +24,16 @@ const fields = z.object({
     .union([z.iso.date(), z.literal(""), z.null()])
     .optional()
     .transform((value) => value || undefined),
-  paymentStatus: z.union([z.literal(0), z.literal(50), z.literal(100)]),
+  prepaidAmount: z
+    .number()
+    .finite()
+    .nonnegative("Prepaid amount cannot be negative")
+    .multipleOf(0.01, "Use at most two decimal places"),
   concepts: z.array(commissionConceptSchema),
   vat: z.number().finite().min(0).max(100),
 })
 export const createCommissionSchema = fields.extend({
-  paymentStatus: fields.shape.paymentStatus.default(0),
+  prepaidAmount: fields.shape.prepaidAmount.default(0),
   concepts: fields.shape.concepts.default([]),
   vat: fields.shape.vat.default(21),
 })

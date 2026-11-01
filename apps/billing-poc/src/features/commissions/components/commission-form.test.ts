@@ -9,15 +9,15 @@ const original: Commission = {
   dueDate: "2026-11-01",
   vat: 21,
   concepts: [{ name: "Cup", amount: 25, quantity: 1 }],
-  paymentStatus: 0,
+  prepaidAmount: 0,
   createdAt: new Date(),
   updatedAt: new Date(),
 }
 
-it("a manual progress change sends only the status and never re-synchronizes payment fields", () => {
+it("a prepaid change sends only the amount and never re-synchronizes payment fields", () => {
   expect(
-    buildCommissionPatch(original, { ...original, paymentStatus: 50 })
-  ).toEqual({ paymentStatus: 50 })
+    buildCommissionPatch(original, { ...original, prepaidAmount: 25.5 })
+  ).toEqual({ prepaidAmount: 25.5 })
 })
 it("optional field removal survives JSON serialization to reach the server", () => {
   const patch = buildCommissionPatch(original, {

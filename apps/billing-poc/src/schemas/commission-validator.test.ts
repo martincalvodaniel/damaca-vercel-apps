@@ -11,7 +11,7 @@ describe("commission validation", () => {
   it("requires title only and applies defaults", () => {
     expect(createCommissionSchema.parse({ title: " Work " })).toMatchObject({
       title: "Work",
-      paymentStatus: 0,
+      prepaidAmount: 0,
       vat: 21,
       concepts: [],
     })
@@ -32,13 +32,13 @@ describe("commission validation", () => {
       dueDate: undefined,
     })
   })
-  it("a status-only patch does not clear omitted optional fields or reset defaults", () => {
-    expect(updateCommissionSchema.parse({ id, paymentStatus: 100 })).toEqual({
+  it("a prepaid-only patch does not clear omitted optional fields or reset defaults", () => {
+    expect(updateCommissionSchema.parse({ id, prepaidAmount: 100 })).toEqual({
       id,
-      paymentStatus: 100,
+      prepaidAmount: 100,
     })
   })
-  it("validates real calendar dates and tri-state values", () => {
+  it("validates real calendar dates and prepaid currency amounts", () => {
     for (const dueDate of [
       "2026-02-29",
       "2026-04-31",
@@ -52,14 +52,14 @@ describe("commission validation", () => {
       createCommissionSchema.safeParse({ title: "Work", dueDate: "2028-02-29" })
         .success
     ).toBe(true)
-    for (const paymentStatus of [0, 50, 100])
+    for (const prepaidAmount of [0, 12.34, 25, 150.5])
       expect(
-        createCommissionSchema.safeParse({ title: "Work", paymentStatus })
+        createCommissionSchema.safeParse({ title: "Work", prepaidAmount })
           .success
       ).toBe(true)
-    for (const paymentStatus of [25, -1, 101, "50"])
+    for (const prepaidAmount of [-1, 12.345, Number.NaN, Infinity, "50"])
       expect(
-        createCommissionSchema.safeParse({ title: "Work", paymentStatus })
+        createCommissionSchema.safeParse({ title: "Work", prepaidAmount })
           .success
       ).toBe(false)
   })

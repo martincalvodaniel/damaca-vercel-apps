@@ -13,7 +13,7 @@ function fixture(overrides: Partial<Commission> = {}) {
   let commission: Commission | null = {
     _id: "commission-1",
     title: "Custom cups",
-    paymentStatus: 50,
+    prepaidAmount: 35.5,
     concepts: [
       { name: "Cup", amount: 60.5, quantity: 2, productId: "product-1" },
     ],
@@ -113,7 +113,7 @@ function fixture(overrides: Partial<Commission> = {}) {
 }
 
 describe("commission payment generation", () => {
-  it("generates full income without a client, leaves progress manual, and copies product concepts without stock writes", async () => {
+  it("generates full income without a client, preserves the informational prepaid amount, and copies product concepts without stock writes", async () => {
     const deps = fixture()
     const result = await generateCommissionPayment("commission-1", "card", deps)
     const payment = deps.records.get(result.paymentId)
@@ -130,8 +130,8 @@ describe("commission payment generation", () => {
     expect(payment?.concepts[0]?.productId).toBe("product-1")
     expect(payment?.date).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     expect(
-      (await deps.commissions.findById("commission-1"))?.paymentStatus
-    ).toBe(50)
+      (await deps.commissions.findById("commission-1"))?.prepaidAmount
+    ).toBe(35.5)
     expect(
       (await deps.commissions.findById("commission-1"))?.paymentGeneration
     ).toBeUndefined()
@@ -229,17 +229,18 @@ describe("commission payment lifecycle", () => {
       netAmount: 191.74,
     })
   })
-  it("status-only changes do not update the payment", async () => {
+  it("prepaid-only changes do not update or reduce the payment", async () => {
     const deps = fixture()
     await generateCommissionPayment("commission-1", "cash", deps)
     expect(
-      (await updateCommission("commission-1", { paymentStatus: 100 }, deps))
+      (await updateCommission("commission-1", { prepaidAmount: 40.75 }, deps))
         .paymentSync
     ).toBe("unchanged")
     expect(deps.updates).toBe(0)
+    expect(deps.records.get("payment-1")?.total).toBe(121)
     expect(
-      (await deps.commissions.findById("commission-1"))?.paymentStatus
-    ).toBe(100)
+      (await deps.commissions.findById("commission-1"))?.prepaidAmount
+    ).toBe(40.75)
   })
   it.each([false, true])(
     "preserves generated invoices including legacy metadata (legacy: %s)",

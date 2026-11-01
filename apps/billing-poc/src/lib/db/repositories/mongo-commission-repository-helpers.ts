@@ -7,7 +7,14 @@ import { MongoUpdateBuilder, omitNullish, toObjectId } from "./mongo-utils"
 
 export function commissionToDomain(doc: MongoCommission): Commission {
   return {
-    ...doc,
+    title: doc.title,
+    description: doc.description,
+    dueDate: doc.dueDate,
+    prepaidAmount: doc.prepaidAmount ?? 0,
+    concepts: doc.concepts,
+    vat: doc.vat,
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt,
     _id: doc._id?.toString(),
     clientId: doc.clientId?.toString(),
     paymentId: doc.paymentId?.toString(),
@@ -43,7 +50,9 @@ export function commissionToMongo(
 }
 
 export function buildCommissionUpdate(fields: Partial<CommissionFields>) {
-  const builder = new MongoUpdateBuilder().set("updatedAt", new Date())
+  const builder = new MongoUpdateBuilder()
+    .set("updatedAt", new Date())
+    .setOrUnset("paymentStatus", undefined)
   if (fields.concepts !== undefined)
     builder.set(
       "concepts",
@@ -54,7 +63,7 @@ export function buildCommissionUpdate(fields: Partial<CommissionFields>) {
         ...(productId ? { productId } : {}),
       }))
     )
-  for (const key of ["title", "vat", "paymentStatus"] as const) {
+  for (const key of ["title", "vat", "prepaidAmount"] as const) {
     if (fields[key] !== undefined) builder.set(key, fields[key])
   }
   for (const key of ["description", "dueDate", "clientId"] as const) {

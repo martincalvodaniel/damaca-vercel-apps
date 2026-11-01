@@ -14,7 +14,7 @@ export function buildCommissionPatch(
     "description",
     "clientId",
     "dueDate",
-    "paymentStatus",
+    "prepaidAmount",
     "concepts",
     "vat",
   ] as const) {

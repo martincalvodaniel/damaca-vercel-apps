@@ -2,13 +2,13 @@
 
 ## Estado vigente
 
-Commissions gestiona encargos con título obligatorio, cliente/descripción/fecha límite opcionales, conceptos libres o de productos e IVA (21 % inicial). Estado de pago manual 0/50/100 %, independiente del pago generado. Listado por fecha límite ascendente, sin fecha al final y desempate por creación descendente e identificador.
+Commissions gestiona encargos con título obligatorio, cliente/descripción/fecha límite opcionales, conceptos libres o de productos e IVA (21 % inicial). Importe prepagado manual (`Prepaid`, EUR), inicial 0 e independiente del pago generado: no se descuenta del total. Listado por fecha límite ascendente, sin fecha al final y desempate por creación descendente e identificador.
 
 Un encargo genera un solo ingreso completo con etiqueta `Encargo`, sin modificar stock. Navegación encargo ↔ pago. Los cambios de cliente, conceptos o IVA sincronizan el pago sin factura generada; los pagos facturados se conservan y se avisa. Eliminar el pago limpia el vínculo; eliminar el encargo conserva el pago. La generación reserva un identificador de forma atómica y reutilizable; mientras está pendiente se permite reintentar pero no editar/eliminar el encargo, evitando carreras y pagos huérfanos. No se puede vaciar un encargo con pago vinculado.
 
 ## Cohesión de interfaz
 
-Commissions reutiliza los botones de alta/edición/borrado, las acciones de pago de Eventos, el campo de búsqueda de clientes para seleccionar productos y el control segmentado de Show/Hide con tres estados visibles. El catálogo permite búsqueda y adición sucesiva sin alterar stock. Cabecera, estados vacíos, etiquetas y control de IVA siguen los componentes compartidos de billing. En las tarjetas, edición y borrado comparten fila con el título y las acciones de pago comparten fila con el importe. La etiqueta de los pagos generados es `Encargo`; no hay migración ni compatibilidad con la etiqueta anterior.
+Commissions reutiliza los botones de alta/edición/borrado, las acciones de pago de Eventos, el campo de búsqueda de clientes para seleccionar productos y los controles monetarios compartidos. El catálogo permite búsqueda y adición sucesiva sin alterar stock. Cabecera, estados vacíos, etiquetas y control de IVA siguen los componentes compartidos de billing. Las tarjetas móviles tienen cuatro filas: título y edición/borrado; cliente; Deadline y Prepaid; Total y acciones de pago. Los encargos con `paymentId` aparecen en una sección With payment cerrada por defecto; las reservas pendientes permanecen en la lista principal. Ambas listas conservan el orden por fecha límite. La etiqueta de los pagos generados es `Encargo`; no hay migración ni compatibilidad con la etiqueta anterior.
 
 ## Límites aceptados
 
@@ -16,7 +16,7 @@ Sin anticipos, pagos múltiples, reservas de stock ni estados de producción/ent
 
 ## Dudas abiertas
 
-Ninguna para BILL-03.
+Ninguna para BILL-04.
 
 ## Application icons
 

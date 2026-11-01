@@ -1,7 +1,5 @@
 import type { PaymentConcept, PaymentMethod } from "./payment"
 
-export type CommissionPaymentStatus = 0 | 50 | 100
-
 export interface CommissionPaymentGeneration {
   paymentId: string
   date: string
@@ -14,7 +12,7 @@ export interface Commission {
   description?: string
   clientId?: string
   dueDate?: string
-  paymentStatus: CommissionPaymentStatus
+  prepaidAmount: number
   concepts: PaymentConcept[]
   vat: number
   paymentId?: string
@@ -30,7 +28,7 @@ export type CommissionFields = Pick<
   | "description"
   | "clientId"
   | "dueDate"
-  | "paymentStatus"
+  | "prepaidAmount"
   | "concepts"
   | "vat"
 >
@@ -44,4 +42,14 @@ export function sortCommissions(
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime() ||
       (a._id ?? "").localeCompare(b._id ?? "")
   )
+}
+
+export function partitionCommissions(commissions: readonly Commission[]) {
+  const withoutPayment: Commission[] = []
+  const withPayment: Commission[] = []
+  for (const commission of sortCommissions(commissions)) {
+    if (commission.paymentId) withPayment.push(commission)
+    else withoutPayment.push(commission)
+  }
+  return { withoutPayment, withPayment }
 }

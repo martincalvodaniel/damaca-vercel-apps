@@ -4,6 +4,7 @@ import {
   type Commission,
   sortCommissions,
 } from "@/lib/domain/entities/commission"
+import type { MongoCommission } from "../types"
 import {
   buildCommissionUpdate,
   commissionToDomain,
@@ -14,7 +15,7 @@ const base: Commission = {
   title: "Work",
   concepts: [],
   vat: 21,
-  paymentStatus: 0,
+  prepaidAmount: 0,
   createdAt: new Date("2026-01-01"),
   updatedAt: new Date("2026-01-01"),
 }
@@ -64,14 +65,31 @@ it("unsets optional fields but preserves legitimate zero values", () => {
     clientId: undefined,
     description: "",
     dueDate: undefined,
-    paymentStatus: 0,
+    prepaidAmount: 0,
     vat: 0,
   })
   expect(ops.$unset).toEqual({
+    paymentStatus: true,
     clientId: true,
     description: true,
     dueDate: true,
   })
-  expect(ops.$set).toMatchObject({ paymentStatus: 0, vat: 0 })
-  expect(buildCommissionUpdate({ title: "Work" }).$unset).toBeUndefined()
+  expect(ops.$set).toMatchObject({ prepaidAmount: 0, vat: 0 })
+  expect(buildCommissionUpdate({ title: "Work" }).$unset).toEqual({
+    paymentStatus: true,
+  })
+})
+
+it("defaults absent prepaid amounts to zero without converting or exposing the obsolete percentage", () => {
+  const { prepaidAmount: _prepaid, ...doc } = commissionToMongo(base)
+  const result = commissionToDomain({
+    ...doc,
+    paymentStatus: 50,
+  } as MongoCommission)
+  expect(result.prepaidAmount).toBe(0)
+  expect(Object.hasOwn(result, "paymentStatus")).toBe(false)
+  expect(
+    commissionToDomain(commissionToMongo({ ...base, prepaidAmount: 12.34 }))
+      .prepaidAmount
+  ).toBe(12.34)
 })

@@ -59,17 +59,17 @@ export default memo(function CommissionCard({
           </IconButton>
         </div>
       </div>
-      <dl className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-sm text-zinc-600 dark:text-zinc-300">
-        <div>
+      <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-zinc-600 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto] dark:text-zinc-300">
+        <div className="col-span-2 min-w-0 sm:col-span-1">
           <dt className="font-medium">Client</dt>
-          <dd>
+          <dd className="break-words">
             {commission.clientId
               ? (clientName ?? "Unavailable client")
               : "No client"}
           </dd>
         </div>
         <div>
-          <dt className="font-medium">Delivery deadline</dt>
+          <dt className="font-medium">Deadline</dt>
           <dd>
             {commission.dueDate
               ? formatDate(commission.dueDate)
@@ -77,10 +77,10 @@ export default memo(function CommissionCard({
           </dd>
         </div>
         <div>
-          <dt className="font-medium">Payment progress</dt>
-          <dd>{commission.paymentStatus}%</dd>
+          <dt className="font-medium">Prepaid</dt>
+          <dd>{formatCurrency(commission.prepaidAmount)}</dd>
         </div>
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <dt className="font-medium">Total</dt>
           <dd className="flex items-center gap-3">
             <span className="shrink-0">
