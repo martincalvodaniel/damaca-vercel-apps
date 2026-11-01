@@ -51,3 +51,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: etiquetas con dos puntos y valores en línea; conservar las cuatro filas móviles, iconos y sección de encargos con pago.
 - Validación: Biome incremental, tipos, suite y build de billing; revisión estática del marcado inline.
 - Evidencia: [BILL-05](iteration-log.md#bill-05--etiquetas-e-importes-en-línea).
+
+## BILL-06 — Etiqueta de encargos pagados
+
+- Estado: `validated`.
+- Objetivo: llamar Paid a la sección colapsada de encargos con un pago vinculado.
+- Rutas: `src/features/commissions/components/CommissionsPageContent.tsx` y planificación de billing.
+- Dependencias: agrupación existente por `paymentId`.
+- Aceptación: el encabezado muestra `Paid (n)` y conserva contador, contenido y comportamiento colapsable.
+- Validación: Biome incremental, tipos y suite existente de billing.
+- Evidencia: [BILL-06](iteration-log.md#bill-06--etiqueta-de-encargos-pagados).
