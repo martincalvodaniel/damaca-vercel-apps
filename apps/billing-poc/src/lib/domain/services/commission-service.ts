@@ -17,6 +17,7 @@ export class CommissionError extends Error {
 interface Dependencies {
   commissions: CommissionRepository
   payments: PaymentRepository
+  paymentTag?: "Encargo" | "Cocción"
 }
 
 async function requireCommission(
@@ -59,7 +60,7 @@ export async function generateCommissionPayment(
         {
           type: "income",
           date: generation.date,
-          tag: "Encargo",
+          tag: deps.paymentTag ?? "Encargo",
           clientId: commission.clientId,
           concepts: commission.concepts,
           vat: commission.vat,

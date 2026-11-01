@@ -1,0 +1,6 @@
+export {
+  DELETE,
+  GET,
+  POST,
+  PUT,
+} from "@/features/firings/server/templates-route"

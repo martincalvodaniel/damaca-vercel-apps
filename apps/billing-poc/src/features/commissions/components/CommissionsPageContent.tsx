@@ -15,6 +15,7 @@ import {
   useCommissions,
 } from "@/features/commissions/hooks/useCommissions"
 import { extractErrorMessage } from "@/features/events/components/attendeesPanel-utils"
+import FiringTemplatesPanel from "@/features/firings/components/FiringTemplatesPanel"
 import { usePayment } from "@/features/payments/hooks/usePayments"
 import {
   type Commission,
@@ -22,6 +23,7 @@ import {
 } from "@/lib/domain/entities/commission"
 import CommissionCard from "./CommissionCard"
 import CommissionFormModal from "./CommissionFormModal"
+import { useCommissionScope } from "./CommissionScope"
 
 const PaymentDetailModal = dynamic(
   () => import("@/features/payments/components/month/PaymentDetailModal"),
@@ -29,6 +31,7 @@ const PaymentDetailModal = dynamic(
 )
 
 export default function CommissionsPageContent() {
+  const { resource, isFiring, singular, plural, title } = useCommissionScope()
   const router = useRouter()
   const params = useSearchParams()
   const requestedId = params.get("commissionId")
@@ -67,7 +70,7 @@ export default function CommissionsPageContent() {
   const closeEditor = () => {
     setEditing(null)
     setCreating(false)
-    if (requestedId) router.replace("/commissions")
+    if (requestedId) router.replace(`/${resource}`)
   }
   const notify = (text: string) => {
     setError(null)
@@ -78,13 +81,20 @@ export default function CommissionsPageContent() {
     try {
       await remove.trigger({ id: deleting._id })
       setDeleting(null)
-      notify("Se eliminó el encargo y se conservó su pago.")
+      notify(
+        `Se eliminó ${isFiring ? "la cocción" : "el encargo"} y se conservó su pago.`
+      )
     } catch (error) {
-      setError(extractErrorMessage(error, "No se pudo eliminar el encargo"))
+      setError(
+        extractErrorMessage(
+          error,
+          `No se pudo eliminar ${isFiring ? "la cocción" : "el encargo"}`
+        )
+      )
     }
   }
   function openCreate() {
-    if (requestedId) router.replace("/commissions")
+    if (requestedId) router.replace(`/${resource}`)
     setCreating(true)
     setEditing(null)
   }
@@ -105,6 +115,10 @@ export default function CommissionsPageContent() {
   function openDelete(commission: Commission) {
     setError(null)
     setDeleting(commission)
+  }
+  function openEditorPayment(id: string) {
+    closeEditor()
+    setPaymentId(id)
   }
   function closePayment() {
     setPaymentId(null)
@@ -131,9 +145,15 @@ export default function CommissionsPageContent() {
   const displayError =
     error ??
     (listError
-      ? extractErrorMessage(listError, "No se pudieron cargar los encargos")
+      ? extractErrorMessage(
+          listError,
+          `No se pudieron cargar ${isFiring ? "las" : "los"} ${plural}`
+        )
       : detailError
-        ? extractErrorMessage(detailError, "No se encontró el encargo")
+        ? extractErrorMessage(
+            detailError,
+            `No se encontró ${isFiring ? "la cocción" : "el encargo"}`
+          )
         : paymentError
           ? extractErrorMessage(paymentError, "No se pudo cargar el pago")
           : clientsError
@@ -141,56 +161,59 @@ export default function CommissionsPageContent() {
             : null)
   return (
     <PageLayout
-      navigationSubtitle="Encargos"
+      navigationSubtitle={title}
       headerContent={
-        <div className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <div className="flex items-center justify-between gap-4 px-6 py-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                Commissions
-              </p>
-              <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                Commission list
-              </h1>
+        <>
+          {isFiring ? <FiringTemplatesPanel onSuccess={notify} /> : null}
+          <div className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+            <div className="flex items-center justify-between gap-4 px-6 py-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  {title}
+                </p>
+                <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                  Lista de {plural}
+                </h1>
+              </div>
+              <AddButton
+                ariaLabel={`Añadir ${singular}`}
+                title={isFiring ? "Nueva cocción" : "Nuevo encargo"}
+                onClick={openCreate}
+              />
             </div>
-            <AddButton
-              ariaLabel="Añadir encargo"
-              title="Nuevo encargo"
-              onClick={openCreate}
-            />
           </div>
-        </div>
+        </>
       }
     >
       {message ? <Toast message={message} onClose={dismissMessage} /> : null}
       {displayError ? <ErrorBanner>{displayError}</ErrorBanner> : null}
       {isLoading ? (
         <p role="status" className="p-4 text-zinc-600 dark:text-zinc-300">
-          Loading commissions…
+          Cargando {plural}…
         </p>
       ) : null}
       {paymentLoading ? (
         <p role="status" className="p-4 text-zinc-600 dark:text-zinc-300">
-          Opening payment…
+          Abriendo pago…
         </p>
       ) : null}
       {!isLoading && withoutPayment.length === 0 ? (
         <EmptyState variant="card">
           {withPayment.length
-            ? "No hay encargos pendientes de pago."
-            : "Todavía no hay encargos. Crea uno para empezar."}
+            ? `No hay ${plural} pendientes de pago.`
+            : `Todavía no hay ${plural}. Añade ${isFiring ? "una" : "uno"} para empezar.`}
         </EmptyState>
       ) : null}
       <div className="space-y-3">{withoutPayment.map(renderCommission)}</div>
       <details className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <summary className="cursor-pointer rounded-lg px-4 py-3 text-sm font-semibold text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-100">
-          Paid ({withPayment.length})
+          {isFiring ? "Pagadas" : "Pagados"} ({withPayment.length})
         </summary>
         <div className="space-y-3 border-t border-zinc-200 p-3 dark:border-zinc-800">
           {withPayment.length ? (
             withPayment.map(renderCommission)
           ) : (
-            <EmptyState>No hay encargos pagados.</EmptyState>
+            <EmptyState>No hay {plural} con pago.</EmptyState>
           )}
         </div>
       </details>
@@ -200,11 +223,12 @@ export default function CommissionsPageContent() {
           commission={creating ? undefined : current}
           onClose={closeEditor}
           onSaved={saved}
+          onOpenPayment={openEditorPayment}
         />
       ) : null}
       <ConfirmDialog
         isOpen={Boolean(deleting)}
-        title="Eliminar encargo"
+        title={`Eliminar ${singular}`}
         confirmLabel="Eliminar"
         pendingLabel="Eliminando…"
         variant="danger"
@@ -214,8 +238,8 @@ export default function CommissionsPageContent() {
         onConfirm={submitDelete}
       >
         <p className="text-sm text-zinc-700 dark:text-zinc-300">
-          Delete “{deleting?.title}”? This cannot be undone. Any linked payment
-          will be preserved.
+          ¿Eliminar «{deleting?.title}»? Esta acción no se puede deshacer. Se
+          conservará cualquier pago vinculado.
         </p>
       </ConfirmDialog>
       {paymentId && payment?._id === paymentId ? (

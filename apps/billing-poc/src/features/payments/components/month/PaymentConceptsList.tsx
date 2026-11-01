@@ -29,7 +29,7 @@ export default function PaymentConceptsList({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <span className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Payment Components
+          Conceptos
         </span>
         <button
           type="button"
@@ -109,7 +109,7 @@ function PaymentConceptRow({
       <ConceptNumberStepper
         id={`${idPrefix}-conceptAmount-${index}`}
         name="conceptAmount"
-        label="Amount (€)"
+        label="Importe (€)"
         value={Number.isFinite(concept.amount) ? String(concept.amount) : ""}
         onValueChange={handleAmountChange}
         placeholder="0.00"
@@ -122,7 +122,7 @@ function PaymentConceptRow({
       <ConceptNumberStepper
         id={`${idPrefix}-conceptQuantity-${index}`}
         name="conceptQuantity"
-        label="Quantity"
+        label="Cantidad"
         value={
           Number.isFinite(concept.quantity) ? String(concept.quantity) : ""
         }

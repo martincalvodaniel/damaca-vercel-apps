@@ -8,6 +8,21 @@ export interface IndexSpec {
 
 export const INDEX_SPECS: IndexSpec[] = [
   {
+    collection: "firings",
+    keys: { dueDate: 1, createdAt: -1, _id: 1 },
+    options: { name: "dueDate_asc_createdAt_desc" },
+  },
+  {
+    collection: "firings",
+    keys: { paymentId: 1 },
+    options: { name: "unique_payment", unique: true, sparse: true },
+  },
+  {
+    collection: "firingTemplates",
+    keys: { name: 1 },
+    options: { name: "name_asc" },
+  },
+  {
     collection: "commissions",
     keys: { dueDate: 1, createdAt: -1, _id: 1 },
     options: { name: "dueDate_asc_createdAt_desc" },

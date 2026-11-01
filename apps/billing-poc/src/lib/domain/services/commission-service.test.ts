@@ -304,3 +304,67 @@ describe("commission payment lifecycle", () => {
     expect(await deps.commissions.findByPaymentId("payment-1")).toBeNull()
   })
 })
+
+describe("firing payment lifecycle", () => {
+  it("reserves one Cocción payment across concurrent requests, syncs edits and protects invoices", async () => {
+    const data = fixture({
+      prepaidAmount: 0,
+      concepts: [{ name: "Kiln load", amount: 60.5, quantity: 2 }],
+    })
+    const deps = { ...data, paymentTag: "Cocción" as const }
+    const results = await Promise.all(
+      Array.from({ length: 8 }, () =>
+        generateCommissionPayment("commission-1", "card", deps)
+      )
+    )
+    expect(new Set(results.map((result) => result.paymentId)).size).toBe(1)
+    expect(data.inserts).toBe(1)
+    expect(data.records.get("payment-1")).toMatchObject({
+      tag: "Cocción",
+      total: 121,
+      netAmount: 100,
+      vatAmount: 21,
+      concepts: [{ name: "Kiln load", amount: 60.5, quantity: 2 }],
+    })
+    await updateCommission(
+      "commission-1",
+      { concepts: [{ name: "Updated load", amount: 30, quantity: 1 }], vat: 0 },
+      deps
+    )
+    expect(data.records.get("payment-1")).toMatchObject({
+      tag: "Cocción",
+      total: 30,
+      vat: 0,
+    })
+    const payment = data.records.get("payment-1") as Payment
+    data.records.set("payment-1", {
+      ...payment,
+      invoices: [{ type: "Invoice", id: "F26_001", generatedAt: new Date() }],
+    })
+    expect(
+      (await updateCommission("commission-1", { vat: 21 }, deps)).paymentSync
+    ).toBe("invoiced")
+    expect(data.records.get("payment-1")?.vat).toBe(0)
+    await deleteCommission("commission-1", deps)
+    expect(data.records.size).toBe(1)
+  })
+  it("retries a failed firing payment without duplicating it or changing its tag", async () => {
+    const data = fixture()
+    const deps = {
+      commissions: data.commissions,
+      payments: data.payments,
+      paymentTag: "Cocción" as const,
+    }
+    data.failLink = true
+    await expect(
+      generateCommissionPayment("commission-1", "cash", deps)
+    ).rejects.toThrow("Link unavailable")
+    data.failLink = false
+    await generateCommissionPayment("commission-1", "card", deps)
+    expect(data.inserts).toBe(1)
+    expect(data.records.get("payment-1")).toMatchObject({
+      tag: "Cocción",
+      paymentMethod: "cash",
+    })
+  })
+})

@@ -17,10 +17,15 @@ import type { Absence } from "@/lib/domain/entities/absence"
 import type { Client } from "@/lib/domain/entities/client"
 import type { Commission } from "@/lib/domain/entities/commission"
 import type { Event, EventAttendee } from "@/lib/domain/entities/event"
+import type { FiringTemplate } from "@/lib/domain/entities/firing-template"
 import type { InvoiceCounter } from "@/lib/domain/entities/invoice"
 import type { Payment } from "@/lib/domain/entities/payment"
 import type { PaymentTemplate } from "@/lib/domain/entities/payment-template"
 import type { Product } from "@/lib/domain/entities/product"
+
+export type MongoFiringTemplate = Omit<FiringTemplate, "_id"> & {
+  _id?: ObjectId
+}
 
 export type MongoPayment = Omit<Payment, "_id" | "clientId" | "hidden"> & {
   _id?: ObjectId

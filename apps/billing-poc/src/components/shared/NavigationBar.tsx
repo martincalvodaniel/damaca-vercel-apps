@@ -26,6 +26,7 @@ const NAV_ITEMS: readonly NavItem[] = [
     label: "Encargos",
     matches: (p) => p === "/commissions",
   },
+  { href: "/firings", label: "Cocciones", matches: (p) => p === "/firings" },
   {
     href: "/events",
     label: "Eventos",
@@ -127,7 +128,7 @@ export default function NavigationBar({ subtitle }: NavigationBarProps) {
                 onClick={handleSignOut}
                 className="rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:focus:ring-offset-zinc-900"
               >
-                Sign out
+                Cerrar sesión
               </button>
             </>
           ) : null}

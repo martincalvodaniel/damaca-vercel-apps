@@ -10,7 +10,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: clientes, productos, pagos y calculador financiero existentes; sin nuevas dependencias.
 - Aceptación: campos, orden, triestado independiente, conceptos opcionales, productos sin stock; generación sin cliente y con conceptos; reintentos/concurrencia y recuperación sin duplicados; sincronización con protección de facturas; navegación bidireccional y limpieza de vínculos; móvil, escritorio y modo oscuro.
 - Validación: tests herméticos de dominio, esquemas, repositorio y helpers SWR; lint incremental, tipos, tests y build de billing; comprobación visual cuando el entorno permita autenticación.
-- Evidencia: [registro BILL-01](iteration-log.md#bill-01--commissions).
+- Evidencia: [registro BILL-01](archive/2026-11-01/bill-01-02.md#bill-01--commissions).
 
 ## BILL-02 — Cohesión de Commissions
 
@@ -20,7 +20,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: `AddButton`, `IconButton`, iconos y badge de Eventos, `ClientQueryInput`, SWR de productos y `BinaryToggle` existentes; sin nuevas librerías.
 - Aceptación: alta/edición/borrado con iconos comunes; efectivo/tarjeta/transferencia y apertura del pago mediante un único componente compartido con Eventos; producto con búsqueda y elección inequívoca que añade conceptos sin stock; 0/50/100 visibles y seleccionables; tag `Encargo` en generación; cabecera/campos/estado vacío coherentes. Conservar eventos y todas las opciones del control binario, además de reservas/reintentos de pago.
 - Validación: pruebas pertinentes y suite de billing, Biome incremental, tipos y build; navegador para búsqueda, triestado e iconos en móvil/escritorio y comparación con Eventos.
-- Evidencia: [BILL-02](iteration-log.md#bill-02--cohesión-de-commissions).
+- Evidencia: [BILL-02](archive/2026-11-01/bill-01-02.md#bill-02--cohesión-de-commissions).
 
 ## BILL-03 — Alineación de acciones en tarjetas
 
@@ -111,3 +111,15 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: ninguna cadena inglesa dirigida a usuarios permanece en la UI, salvo marcas, nombres propios, códigos/términos técnicos necesarios y contenido introducido por los usuarios; textos accesibles y errores visibles también traducidos; idioma del documento y formatos coherentes con `es-ES`.
 - Validación: inventario y búsqueda residual de cadenas UI inglesas; Biome en archivos editados, type-check y build de billing; diff check. No ejecutar pruebas salvo que el usuario las solicite.
 - Evidencia: [BILL-11](iteration-log.md#bill-11--traducción-de-la-interfaz-al-español).
+
+## BILL-12 — Cocciones y plantillas
+
+- Estado: `validated`.
+- Objetivo: gestionar cocciones y sus plantillas desde una nueva página equivalente a Encargos.
+- Rutas: componentes/hooks/servidor de commissions compartidos, nueva página y API de firings, `features/firings`, entidad/puerto/adaptador/schema de plantillas; navegación, integración con pagos y planificación de billing.
+- Dependencias: CRUD de Encargos, acciones de pago, controles, selectores y SWR existentes; sin nuevas dependencias.
+- Aceptación: título obligatorio; cliente, fecha límite y descripción opcionales; conceptos libres o copiados de plantillas; IVA inicial 21 %. Sin anticipo en Cocciones. Plantillas con solo nombre/precio, CRUD al principio de la página cerrado por defecto. Listado y modal permiten generar/abrir pago con los botones compartidos; guardar cambios antes de convertir desde el modal. Pago único con tag `Cocción`, sincronización protegida de facturas, vínculo bidireccional y limpieza al eliminar pago; sin stock ni mezcla con encargos/productos. UI responsive y modo oscuro.
+- Contrato: `/api/firings` reutiliza los payloads de Encargos y su respuesta interna (`commissions`/`commission`); GET/POST/PUT/DELETE autenticados, detalle `/:id`, conversión `/:id/payment` y consulta inversa `/payment/:paymentId`. `/api/firing-templates`: GET devuelve `{ templates }`; POST `{ name, price }`, PUT `{ id, name, price }`, DELETE `{ id }`; nombres recortados no vacíos, precio finito no negativo, IDs Mongo válidos.
+- Validación: pruebas de dominio/reintentos/sincronización y contratos/helpers SWR/plantillas; Biome en archivos editados, tipos, suite y build de billing; revisión visual si hay sesión accesible.
+
+- Evidencia BILL-12: [registro y limitaciones de la suite previa](iteration-log.md#bill-12--cocciones-y-plantillas).

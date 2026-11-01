@@ -56,3 +56,32 @@ it("invalidates lists, details, linked commissions and payments, without product
   expect(isCommissionRelatedKey(["/api/products", "", ""])).toBe(false)
   expect(isCommissionRelatedKey(["/api/clients", "", 1, 10])).toBe(false)
 })
+
+it("isolates firing resources and invalidates firing links after payment changes", () => {
+  expect(buildCommissionsKey("firings")).toEqual(["/api/firings"])
+  expect(buildCommissionsUrl("firings")).toBe("/api/firings")
+  expect(buildCommissionKey("a", "firings")).toEqual(["/api/firings", "a"])
+  expect(buildCommissionUrl("a/b", "firings")).toBe("/api/firings/a%2Fb")
+  expect(buildCommissionByPaymentUrl("a/b", "firings")).toBe(
+    "/api/firings/payment/a%2Fb"
+  )
+  expect(
+    buildCommissionRequest("POST", { paymentMethod: "card" }, "a/b", "firings")
+      .url
+  ).toBe("/api/firings/a%2Fb/payment")
+  expect(
+    buildCommissionRequest(
+      "PUT",
+      { id: "a", clientId: "" },
+      undefined,
+      "firings"
+    ).url
+  ).toBe("/api/firings")
+  for (const key of [
+    buildCommissionsKey("firings"),
+    buildCommissionKey("a", "firings"),
+    buildCommissionByPaymentKey("p", "firings"),
+  ])
+    expect(isCommissionRelatedKey(key)).toBe(true)
+  expect(isCommissionsKey(["/api/firings", 1])).toBe(false)
+})

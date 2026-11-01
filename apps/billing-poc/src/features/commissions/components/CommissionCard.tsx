@@ -7,6 +7,7 @@ import type { Commission } from "@/lib/domain/entities/commission"
 import { computePaymentFinancials } from "@/lib/domain/services/payment-calculator"
 import { formatCurrency, formatDate } from "@/lib/utils/formatters"
 import CommissionPaymentActions from "./CommissionPaymentActions"
+import { useCommissionScope } from "./CommissionScope"
 
 export default memo(function CommissionCard({
   commission,
@@ -27,6 +28,7 @@ export default memo(function CommissionCard({
   onSuccess: (message: string) => void
   isOpeningPayment?: boolean
 }) {
+  const { isFiring, singular } = useCommissionScope()
   function edit() {
     onEdit(commission)
   }
@@ -43,8 +45,8 @@ export default memo(function CommissionCard({
           <IconButton
             disabled={Boolean(commission.paymentGeneration)}
             onClick={edit}
-            ariaLabel={`Editar encargo ${commission.title}`}
-            title="Editar encargo"
+            ariaLabel={`Editar ${singular} ${commission.title}`}
+            title={`Editar ${singular}`}
           >
             <PencilIcon className="h-3.5 w-3.5" />
           </IconButton>
@@ -52,14 +54,16 @@ export default memo(function CommissionCard({
             variant="danger"
             disabled={Boolean(commission.paymentGeneration)}
             onClick={remove}
-            ariaLabel={`Eliminar encargo ${commission.title}`}
-            title="Eliminar encargo"
+            ariaLabel={`Eliminar ${singular} ${commission.title}`}
+            title={`Eliminar ${singular}`}
           >
             <TrashIcon className="h-3.5 w-3.5" />
           </IconButton>
         </div>
       </div>
-      <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-zinc-600 lg:grid-cols-[minmax(0,1fr)_auto_auto_auto] dark:text-zinc-300">
+      <dl
+        className={`mt-2 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-zinc-600 dark:text-zinc-300 ${isFiring ? "lg:grid-cols-[minmax(0,1fr)_auto_auto]" : "lg:grid-cols-[minmax(0,1fr)_auto_auto_auto]"}`}
+      >
         <div className="col-span-2 min-w-0 lg:col-span-1">
           <dt className="inline font-medium">Cliente:</dt>{" "}
           <dd className="inline break-words">
@@ -76,10 +80,14 @@ export default memo(function CommissionCard({
               : "Sin fecha límite"}
           </dd>
         </div>
-        <div>
-          <dt className="inline font-medium">Anticipo:</dt>{" "}
-          <dd className="inline">{formatCurrency(commission.prepaidAmount)}</dd>
-        </div>
+        {!isFiring ? (
+          <div>
+            <dt className="inline font-medium">Anticipo:</dt>{" "}
+            <dd className="inline">
+              {formatCurrency(commission.prepaidAmount)}
+            </dd>
+          </div>
+        ) : null}
         <div className="col-span-2 flex items-center gap-1 lg:col-span-1">
           <dt className="shrink-0 font-medium">Total:</dt>
           <dd className="flex items-center gap-3">
@@ -101,8 +109,8 @@ export default memo(function CommissionCard({
       </dl>
       {commission.paymentGeneration ? (
         <p className="mt-2 text-sm text-amber-700 dark:text-amber-300">
-          Payment generation is pending. Retry to finish before editing or
-          deleting.
+          La generación del pago está pendiente. Reintenta para completarla
+          antes de editar o eliminar.
         </p>
       ) : null}
     </article>

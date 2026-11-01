@@ -10,6 +10,7 @@ import { deletePaymentSchema } from "@/schemas/payment-validator"
 const payments = new MongoPaymentRepository()
 const events = new MongoEventRepository()
 const commissions = new MongoCommissionRepository()
+const firings = new MongoCommissionRepository("firings")
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -26,7 +27,10 @@ export async function DELETE(request: NextRequest) {
     }
 
     const deleted = await payments.delete(parsed.data.id)
-    await commissions.unlinkPayment(parsed.data.id)
+    await Promise.all([
+      commissions.unlinkPayment(parsed.data.id),
+      firings.unlinkPayment(parsed.data.id),
+    ])
     if (!deleted) {
       return NextResponse.json({ error: "Payment not found" }, { status: 404 })
     }

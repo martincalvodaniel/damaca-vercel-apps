@@ -8,6 +8,10 @@ import {
 } from "@/features/payments/hooks/usePayments"
 import type { CommissionFields } from "@/lib/domain/entities/commission"
 import type { PaymentMethod } from "@/lib/domain/entities/payment"
+import {
+  type CommissionResource,
+  useCommissionScope,
+} from "../components/CommissionScope"
 import { isCommissionByPaymentKey } from "./useCommissionByPayment"
 import { isCommissionsKey } from "./useCommissions"
 
@@ -21,12 +25,13 @@ export interface CommissionMutationResponse {
 export function buildCommissionRequest(
   method: "POST" | "PUT" | "DELETE",
   body: unknown,
-  id?: string
+  id?: string,
+  resource: CommissionResource = "commissions"
 ) {
   return {
     url: id
-      ? `/api/commissions/${encodeURIComponent(id)}/payment`
-      : "/api/commissions",
+      ? `/api/${resource}/${encodeURIComponent(id)}/payment`
+      : `/api/${resource}`,
     method,
     body: JSON.stringify(body),
   }
@@ -48,6 +53,7 @@ function useCommissionMutation<T extends CommissionMutationInput>(
   method: "POST" | "PUT" | "DELETE",
   payment = false
 ) {
+  const { resource } = useCommissionScope()
   const { mutate } = useSWRConfig()
   const mutation = useSWRMutation<
     CommissionMutationResponse,
@@ -55,7 +61,7 @@ function useCommissionMutation<T extends CommissionMutationInput>(
     string,
     CommissionMutationInput
   >(
-    payment ? "/api/commissions/payment" : `/api/commissions:${method}`,
+    payment ? `/api/${resource}/payment` : `/api/${resource}:${method}`,
     (_key, { arg }) => {
       if (payment) {
         const input = arg as { id: string; paymentMethod: PaymentMethod }
@@ -63,11 +69,14 @@ function useCommissionMutation<T extends CommissionMutationInput>(
           buildCommissionRequest(
             "POST",
             { paymentMethod: input.paymentMethod },
-            input.id
+            input.id,
+            resource
           )
         )
       }
-      return runRequest(buildCommissionRequest(method, arg))
+      return runRequest(
+        buildCommissionRequest(method, arg, undefined, resource)
+      )
     }
   )
   return {

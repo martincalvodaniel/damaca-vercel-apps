@@ -18,8 +18,12 @@ import {
 import { isValidObjectId, toObjectId } from "./mongo-utils"
 
 export class MongoCommissionRepository implements CommissionRepository {
+  constructor(
+    private readonly resource: "commissions" | "firings" = "commissions"
+  ) {}
+
   private async collection() {
-    return (await getDatabase()).collection<MongoCommission>("commissions")
+    return (await getDatabase()).collection<MongoCommission>(this.resource)
   }
   async findAll() {
     return sortCommissions(

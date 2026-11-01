@@ -89,6 +89,10 @@ export default function PaymentDetailModal({
   const { commission: linkedCommission } = useCommissionByPayment(
     isDuplicate ? null : paymentId
   )
+  const { commission: linkedFiring } = useCommissionByPayment(
+    isDuplicate ? null : paymentId,
+    "firings"
+  )
   const initialFormData: PaymentFormData = isDuplicate
     ? buildDuplicateSeed(payment)
     : buildEditFormData(payment)
@@ -274,6 +278,15 @@ export default function PaymentDetailModal({
             </Link>
           ) : null}
 
+          {linkedFiring ? (
+            <Link
+              href={`/firings?commissionId=${encodeURIComponent(linkedFiring.id)}`}
+              onClick={onClose}
+              className="block rounded text-sm text-blue-700 underline focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-blue-300"
+            >
+              Cocción vinculada: {linkedFiring.title}
+            </Link>
+          ) : null}
           <PaymentFormFields
             formData={formData}
             availableTags={availableTags}
