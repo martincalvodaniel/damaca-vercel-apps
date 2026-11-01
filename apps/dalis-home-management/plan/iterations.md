@@ -41,3 +41,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: títulos y presentación visibles desde 640px y ocultos por debajo; conservar buscadores, contador, rango semanal y controles compactos; eliminar el texto de ayuda sobre arrastrar; mantener «Vaciar semana» visible y deshabilitado cuando no hay comidas planificadas.
 - Validación prevista: Biome, tipos, tests, build Webpack y verificación responsive en Chrome.
 - Evidencia: [HM-04](iteration-log.md#hm-04--corregir-visibilidad-responsive-de-títulos).
+
+## HM-05 — Acceso compacto para copiar semana anterior
+
+- Estado: `validated`.
+- Objetivo: sustituir el panel de copia de semana por un botón con el aspecto invertido del acceso a vista previa.
+- Rutas: `src/features/meal-planning/components/copy-previous-week-button.tsx` y `plan/`.
+- Dependencias: estilos compactos de vista previa y acción de copia existentes.
+- Aceptación: eliminar título, descripción y contenedor decorativo del panel; botón de ancho completo con mismos colores, altura y forma que vista previa; flecha a la izquierda y texto alineado a la derecha; conservar copia, estado de carga y errores; accesos de copia y vista previa mutuamente excluyentes.
+- Validación prevista: Biome, tipos, tests, build Webpack y revisión responsive aislada.
+- Evidencia: [HM-05](iteration-log.md#hm-05--acceso-compacto-para-copiar-semana-anterior).

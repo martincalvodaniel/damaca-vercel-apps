@@ -62,3 +62,15 @@ No hay entregas de producto registradas en este ámbito. Añadir evidencia obser
 - Repetida la prueba de Chrome sobre la versión final: ausencia del texto de ayuda y botón de vaciado visible y deshabilitado con semana vacía; resto de comprobaciones responsive correctas.
 - `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto sobre la versión final, sin cambiar configuración. `bun run lint --staged`: 12 archivos sin hallazgos; enlaces locales de planificación y `git diff --cached --check`: correctos.
 - Capacidad antes del cierre: 80% de 5h y 90% de 7d. Revisados diff y alcance: sin credenciales ni cambios ajenos. Base remota de `int` comprobada: `d48c7dc298f9c841c14ace8fa3a1d886558b6086`, igual a la base local; la coincidencia del commit publicado se verifica al cierre.
+
+## HM-05 — Acceso compacto para copiar semana anterior
+
+- Inicio: 2026-11-01. Rama `int`, árbol limpio. Capacidad inicial: 78% de 5h y 90% de 7d. Estimación conservadora inferior a 3 y 1 puntos; respeta reservas.
+- Alcance y aceptación: [HM-05](iterations.md#hm-05--acceso-compacto-para-copiar-semana-anterior).
+- Eliminados el contenedor decorativo, el título y la descripción del panel de copia. Queda el botón de ancho completo con los colores, borde, radio, sombra y altura de vista previa, con flecha a la izquierda y texto a la derecha. Los errores siguen mostrándose como aviso independiente y se conserva el estado «Copiando…».
+- Conservadas las condiciones existentes: copia en semanas vacías con platos disponibles y vista previa cuando hay comidas planificadas. Ambos accesos son mutuamente excluyentes. Sin cambios en la acción de copia ni nuevas dependencias.
+- Biome del componente, `bun run type-check --filter=@damaca/dalis-home-management` y `bun run test --filter=@damaca/dalis-home-management`: correctos, 101 tests y 0 fallos. Callback estabilizado para cumplir Biome.
+- Chrome con componentes reales, datos ficticios y acciones aisladas en 320/390/768/1440px: coincidencia exacta de altura, ancho, colores, borde, radio y sombra entre copia y vista previa; flecha izquierda, alineación derecha, ausencia del panel anterior, exclusión mutua y ningún desbordamiento. Clic de copia aislado sin errores. Captura móvil inspeccionada. Sin escrituras sobre datos reales.
+- `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto. Enlaces locales de planificación y `git diff --check`: correctos.
+- Capacidad previa al cierre: 76% de 5h y 90% de 7d. Base remota de `int` comprobada: `d593476ae0c3fe5317ea5da85d580e044a20e016`, igual a la base local. Revisado diff: solo componente y planificación de esta app, sin credenciales ni cambios ajenos; publicación se verifica al cierre.
+- Validación final: `bun run lint --staged` comprobó 4 archivos sin hallazgos; `git diff --cached --check` correcto.
