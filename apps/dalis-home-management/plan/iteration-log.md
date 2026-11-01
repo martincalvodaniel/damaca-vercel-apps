@@ -74,3 +74,13 @@ No hay entregas de producto registradas en este ámbito. Añadir evidencia obser
 - `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto. Enlaces locales de planificación y `git diff --check`: correctos.
 - Capacidad previa al cierre: 76% de 5h y 90% de 7d. Base remota de `int` comprobada: `d593476ae0c3fe5317ea5da85d580e044a20e016`, igual a la base local. Revisado diff: solo componente y planificación de esta app, sin credenciales ni cambios ajenos; publicación se verifica al cierre.
 - Validación final: `bun run lint --staged` comprobó 4 archivos sin hallazgos; `git diff --cached --check` correcto.
+
+## HM-06 — Contador semanal compacto
+
+- Inicio: 2026-11-01. Rama `int`, árbol limpio. Capacidad inicial: 74% de 5h y 89% de 7d. Estimación conservadora inferior a 3 y 1 puntos; respeta reservas.
+- Alcance y aceptación: [HM-06](iterations.md#hm-06--contador-semanal-compacto).
+- Sustituida la frase visible por una etiqueta redondeada `X/14` junto al rango semanal. La descripción completa permanece solo para lectores de pantalla. Sin cambios en el cálculo ni en datos.
+- Biome del componente, `bun run type-check --filter=@damaca/dalis-home-management` y `bun run test --filter=@damaca/dalis-home-management`: correctos, 101 tests y 0 fallos.
+- Chrome con datos ficticios en 320/390/768/1440px: etiquetas `0/14` y `1/14` visibles, descripción accesible fuera de la presentación visual y ningún desbordamiento. Se conserva disposición y comportamiento de los accesos de copia/vista previa. Captura móvil inspeccionada; sin escrituras sobre datos reales.
+- `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto. `bun run lint --staged`: 4 archivos sin hallazgos. `git diff --cached --check` y enlaces locales de planificación correctos.
+- Base remota de `int` comprobada: `e0cef10cf2b66364fbf20502877c13376ed0d5f1`, igual a la base local. Revisado diff: solo componente y planificación de esta app, sin credenciales ni cambios ajenos; publicación se verifica al cierre.

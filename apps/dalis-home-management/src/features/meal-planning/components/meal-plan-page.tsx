@@ -58,9 +58,14 @@ export function MealPlanPage({
               <h1 className="mt-2 hidden text-2xl font-semibold tracking-[-0.05em] sm:block sm:text-5xl">
                 Menú semanal
               </h1>
-              <p className="mt-1 text-xs text-[#63736a] sm:mt-3 sm:text-base dark:text-[#b4c0b8]">
-                {formatWeekRange(weekStart)} · {slots.length} de 14 comidas
-                planificadas
+              <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[#63736a] sm:mt-3 sm:text-base dark:text-[#b4c0b8]">
+                <span>{formatWeekRange(weekStart)}</span>
+                <span className="inline-flex shrink-0 items-center rounded-full border border-[#d6ddd3] bg-white/65 px-2 py-0.5 text-xs font-semibold tabular-nums text-[#53675c] dark:border-white/10 dark:bg-white/5 dark:text-[#c4d0c8]">
+                  <span aria-hidden="true">{slots.length}/14</span>
+                  <span className="sr-only">
+                    {slots.length} de 14 comidas planificadas
+                  </span>
+                </span>
               </p>
             </div>
 

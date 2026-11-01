@@ -51,3 +51,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: eliminar título, descripción y contenedor decorativo del panel; botón de ancho completo con mismos colores, altura y forma que vista previa; flecha a la izquierda y texto alineado a la derecha; conservar copia, estado de carga y errores; accesos de copia y vista previa mutuamente excluyentes.
 - Validación prevista: Biome, tipos, tests, build Webpack y revisión responsive aislada.
 - Evidencia: [HM-05](iteration-log.md#hm-05--acceso-compacto-para-copiar-semana-anterior).
+
+## HM-06 — Contador semanal compacto
+
+- Estado: `validated`.
+- Objetivo: sustituir la frase de comidas planificadas por una etiqueta visual `X/Y`.
+- Rutas: `src/features/meal-planning/components/meal-plan-page.tsx` y `plan/`.
+- Dependencias: número actual de comidas planificadas, sin cambios de datos.
+- Aceptación: mostrar únicamente `X/14` dentro de una etiqueta compacta junto al rango semanal, conservando descripción accesible y adaptación a móvil/escritorio.
+- Validación prevista: Biome, tipos, tests, build Webpack y revisión visual aislada.
+- Evidencia: [HM-06](iteration-log.md#hm-06--contador-semanal-compacto).
