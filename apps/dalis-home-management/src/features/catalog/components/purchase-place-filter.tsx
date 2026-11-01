@@ -39,7 +39,7 @@ export function PurchasePlaceFilter({
 
   return (
     <nav
-      className="mt-2 flex gap-2 overflow-x-auto pb-1"
+      className="mt-2 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       aria-label="Filtrar por lugar de compra"
     >
       <button

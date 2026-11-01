@@ -84,3 +84,13 @@ No hay entregas de producto registradas en este ámbito. Añadir evidencia obser
 - Chrome con datos ficticios en 320/390/768/1440px: etiquetas `0/14` y `1/14` visibles, descripción accesible fuera de la presentación visual y ningún desbordamiento. Se conserva disposición y comportamiento de los accesos de copia/vista previa. Captura móvil inspeccionada; sin escrituras sobre datos reales.
 - `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto. `bun run lint --staged`: 4 archivos sin hallazgos. `git diff --cached --check` y enlaces locales de planificación correctos.
 - Base remota de `int` comprobada: `e0cef10cf2b66364fbf20502877c13376ed0d5f1`, igual a la base local. Revisado diff: solo componente y planificación de esta app, sin credenciales ni cambios ajenos; publicación se verifica al cierre.
+
+## HM-07 — Ocultar barra horizontal de filtros
+
+- Inicio: 2026-11-01. Rama `int`, árbol limpio. Capacidad inicial: 71% de 5h y 89% de 7d. Estimación conservadora inferior a 3 y 1 puntos; respeta reservas.
+- Alcance y aceptación: [HM-07](iterations.md#hm-07--ocultar-barra-horizontal-de-filtros).
+- Ocultada la barra del filtro compartido de lugares de compra mediante `scrollbar-width: none` y `::-webkit-scrollbar`, conservando `overflow-x: auto`. Sin cambios de lógica ni dependencias.
+- Biome del componente, `bun run type-check --filter=@damaca/dalis-home-management`, `bun run test --filter=@damaca/dalis-home-management` y `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correctos; 101 tests y 0 fallos.
+- Chrome con componentes reales, datos ficticios y 24 lugares de compra: en ambas páginas a 320/390/1440px, reglas estándar y WebKit ocultan la barra; rueda horizontal y navegación con Tab desplazan el filtro; Space mantiene la selección y no hay desbordamiento de página ni errores. Sin escrituras sobre datos reales.
+- Enlaces locales de planificación y `git diff --check`: correctos. Base remota de `int` comprobada: `3cdd63ea6aeb024478adbeef3bde195cdf599b43`, igual a la base local. Revisado diff: componente compartido de esta app y sus planes, sin credenciales ni cambios ajenos; publicación se verifica al cierre.
+- Validación final: `bun run lint --staged` comprobó 4 archivos sin hallazgos; `git diff --cached --check` correcto.

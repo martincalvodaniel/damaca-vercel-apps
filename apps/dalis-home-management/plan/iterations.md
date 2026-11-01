@@ -61,3 +61,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: mostrar únicamente `X/14` dentro de una etiqueta compacta junto al rango semanal, conservando descripción accesible y adaptación a móvil/escritorio.
 - Validación prevista: Biome, tipos, tests, build Webpack y revisión visual aislada.
 - Evidencia: [HM-06](iteration-log.md#hm-06--contador-semanal-compacto).
+
+## HM-07 — Ocultar barra horizontal de filtros
+
+- Estado: `validated`.
+- Objetivo: ocultar la barra horizontal en Compra e Inventario conservando el desplazamiento.
+- Rutas: `src/features/catalog/components/purchase-place-filter.tsx` y `plan/`.
+- Dependencias: filtro compartido de lugares de compra, sin cambios funcionales ni dependencias nuevas.
+- Aceptación: barra invisible con soporte estándar y WebKit; contenido horizontal desplazable y filtros accesibles mediante teclado.
+- Validación prevista: Biome, tipos, tests, build Webpack y comprobación de scroll en Chrome.
+- Evidencia: [HM-07](iteration-log.md#hm-07--ocultar-barra-horizontal-de-filtros).
