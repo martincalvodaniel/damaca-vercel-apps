@@ -91,3 +91,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: creación/edición aceptan y recortan Instagram, un valor vacío lo omite y permite borrar uno existente; Mongo no guarda nullish; los clientes existentes siguen cargando; el formulario y la tabla muestran el campo.
 - Validación: pruebas de esquema pertinentes, type-check, suite de billing, lint incremental y diff check.
 - Evidencia: [BILL-09](iteration-log.md#bill-09--instagram-de-clientes).
+
+## BILL-10 — Copiar Instagram desde el listado
+
+- Estado: `validated`.
+- Objetivo: copiar Instagram al portapapeles al hacer clic en el valor de la tabla de clientes.
+- Rutas: `src/features/clients/components/ClientTableRow.tsx` y planificación de billing.
+- Dependencias: `CopyToClipboardButton` y toast de copia existentes.
+- Aceptación: valor presente copiable, confirmación coherente con email y clic que no activa la edición de la fila; valor vacío conserva el marcador actual.
+- Validación: Biome incremental, type-check y pruebas de billing pertinentes; revisión del manejo de propagación y `git diff --check`.
+- Evidencia: [BILL-10](iteration-log.md#bill-10--copiar-instagram-desde-el-listado).

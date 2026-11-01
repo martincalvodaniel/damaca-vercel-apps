@@ -37,6 +37,9 @@ export default function ClientTableRow({
   const handleEmailCopied = useCallback(() => {
     onCopy?.("email", client.email ?? "")
   }, [client.email, onCopy])
+  const handleInstagramCopied = useCallback(() => {
+    onCopy?.("instagram", client.instagram ?? "")
+  }, [client.instagram, onCopy])
   return (
     <tr
       onClick={handleEdit}
@@ -89,7 +92,21 @@ export default function ClientTableRow({
         )}
       </td>
       <td className="px-6 py-4 text-sm text-zinc-600 dark:text-zinc-400">
-        {client.instagram || "—"}
+        {client.instagram ? (
+          <CopyToClipboardButton
+            value={client.instagram}
+            title={client.instagram}
+            ariaLabel={`Copy Instagram ${client.instagram}`}
+            className="rounded px-1 py-0.5 text-left hover:bg-zinc-200/60 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:bg-zinc-700/60"
+            showIcon={false}
+            stopPropagation
+            onCopied={handleInstagramCopied}
+          >
+            {client.instagram}
+          </CopyToClipboardButton>
+        ) : (
+          "—"
+        )}
       </td>
       <td className="px-6 py-4 text-right">
         <IconButton
