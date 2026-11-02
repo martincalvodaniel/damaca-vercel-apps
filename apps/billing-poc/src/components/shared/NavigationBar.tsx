@@ -143,7 +143,9 @@ export default function NavigationBar({
         </div>
 
         {actions ? (
-          <div className="min-w-0 flex-1 xl:basis-full xl:flex-none">
+          <div
+            className={`min-w-0 flex-1 ${hasDesktopHeader ? "xl:hidden" : "xl:basis-full xl:flex-none"}`}
+          >
             {actions}
           </div>
         ) : null}

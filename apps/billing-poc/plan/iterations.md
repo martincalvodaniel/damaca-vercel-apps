@@ -100,7 +100,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: `CopyToClipboardButton` y toast de copia existentes.
 - Aceptación: valor presente copiable, confirmación coherente con email y clic que no activa la edición de la fila; valor vacío conserva el marcador actual.
 - Validación: Biome incremental, type-check y pruebas de billing pertinentes; revisión del manejo de propagación y `git diff --check`.
-- Evidencia: [BILL-10](iteration-log.md#bill-10--copiar-instagram-desde-el-listado).
+- Evidencia: [BILL-10](archive/2026-11-02/bill-10.md#bill-10--copiar-instagram-desde-el-listado).
 
 ## BILL-11 — Traducción de la interfaz al español
 
@@ -194,3 +194,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: buscadores, selectores de periodo/gráficos/plantillas, filtros y acciones de cabecera integrados bajo el menú y fijos en escritorio; móvil conserva ubicación y scroll actuales; un único árbol de controles sin duplicar estado/IDs ni remontar al cambiar anchura; otras páginas conservadas.
 - Validación: Biome, tipos, suite y build de billing; revisión responsive y del árbol de componentes.
 - Evidencia: [BILL-19](iteration-log.md#bill-19--controles-de-cabecera-en-navegación-de-escritorio).
+
+## BILL-20 — Una fila de controles en escritorio
+
+- Estado: `validated`.
+- Objetivo: alinear altas y controles de cabecera en la misma fila de escritorio, sin cambiar móvil.
+- Rutas: NavigationBar, cabeceras de Eventos/Productos, planificación de billing.
+- Dependencias: cabeceras de escritorio y AddButton existentes.
+- Aceptación: + de Eventos/Productos junto a periodo/búsqueda/acciones; Mes usa solo el + de su fila de controles en escritorio; móvil conserva + superior y controles actuales, incluidos los dos + de Mes; filtros de Productos en la misma banda; sin cambios de estado, datos ni acciones.
+- Validación: Biome, tipos, suite y build de billing; revisión de visibilidad responsive y callbacks.
+- Evidencia: [BILL-20](iteration-log.md#bill-20--una-fila-de-controles-en-escritorio).

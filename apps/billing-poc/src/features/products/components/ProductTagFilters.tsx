@@ -20,7 +20,7 @@ export default function ProductTagFilters({
   if (tagOptions.length === 0) return null
 
   return (
-    <div className="flex flex-col gap-2 px-6 pb-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-2 px-6 pb-4 sm:flex-row sm:items-center sm:justify-between xl:min-w-0 xl:flex-1 xl:py-4 xl:pl-0">
       <div className="flex min-w-0 flex-wrap items-center gap-2">
         <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
           Tags

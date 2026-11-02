@@ -158,6 +158,7 @@ export default function EventsPageContent() {
       }
       headerContent={
         <EventsPageHeader
+          onAddEvent={openNewEvent}
           selectedDate={selectedDate}
           showCalendar={showCalendar}
           onShowCalendarChange={setShowCalendar}
