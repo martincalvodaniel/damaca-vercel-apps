@@ -149,6 +149,21 @@
         "typescript": "catalog:",
       },
     },
+    "apps/lbdp": {
+      "name": "@damaca/lbdp",
+      "version": "0.1.0",
+      "dependencies": {
+        "next": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+      },
+      "devDependencies": {
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "typescript": "catalog:",
+      },
+    },
     "apps/pocha-score": {
       "name": "@damaca/pocha-score",
       "version": "0.1.0",
@@ -294,6 +309,8 @@
     "@damaca/database-refresh": ["@damaca/database-refresh@workspace:packages/database-refresh"],
 
     "@damaca/identity": ["@damaca/identity@workspace:packages/identity"],
+
+    "@damaca/lbdp": ["@damaca/lbdp@workspace:apps/lbdp"],
 
     "@damaca/pocha-score": ["@damaca/pocha-score@workspace:apps/pocha-score"],
 

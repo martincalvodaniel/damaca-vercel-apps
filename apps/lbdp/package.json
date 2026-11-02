@@ -1,0 +1,22 @@
+{
+  "name": "@damaca/lbdp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --bun next dev --port 3006",
+    "build": "bun run --bun next build --webpack",
+    "start": "bun run --bun next start --port 3006",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
+  }
+}

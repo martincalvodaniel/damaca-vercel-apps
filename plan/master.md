@@ -48,3 +48,7 @@ El catálogo y las fichas de administración del Hub muestran los iconos de las 
 ## Investigación de La Bottega di Pali
 
 [AGW-16](iterations.md#agw-16--investigación-de-la-bottega-y-su-integración-con-billing) documenta la web pública y las alternativas de sustitución de WordPress/WooCommerce e integración con billing en [el dossier de investigación](../docs/research/la-bottega-di-pali/README.md). Las recomendaciones son propuestas para discutir; esta entrega no aprueba arquitectura, crea una aplicación ni inicia implementación.
+
+## Esqueleto público LBDP
+
+La nueva app [lbdp](../apps/lbdp/plan/master.md) desarrolla únicamente el escaparate público autorizado, con registro principal [LBDP-01](../apps/lbdp/plan/iterations.md). Las demás webapps permanecen fuera del alcance; la integración comercial del dossier sigue pendiente.

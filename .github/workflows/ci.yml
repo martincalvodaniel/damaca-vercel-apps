@@ -22,6 +22,7 @@ jobs:
           - "@damaca/dalis-tasks-events"
           - "@damaca/damaca-hub"
           - "@damaca/pocha-score"
+          - "@damaca/lbdp"
     env:
       APP_WORKSPACE: ${{ matrix.workspace }}
     steps:
