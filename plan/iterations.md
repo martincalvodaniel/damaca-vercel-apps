@@ -197,3 +197,10 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Objetivo/rutas: `.agents/skills/vercel-deployment-report/**`, script determinista de ventana móvil y registro raíz.
 - Aceptación: ventana fija inclusiva/exclusiva, paginación, deduplicación, estados completos y desglose por proyecto; consulta de solo lectura.
 - Validación: ejecución real del script, reconciliación de totales, revisión del frontmatter, formato y diff check.
+
+## AGW-20 — Branch deployment environments
+
+- Estado: `validated`.
+- Objetivo/rutas: skill vercel-deploy-alias y registros raíz.
+- Aceptación: main siempre Production e int siempre Preview; invocar main autoriza producción y dominios.
+- Validación: revisión de coherencia, Biome staged y diff check. Sin deployment.

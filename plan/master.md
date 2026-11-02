@@ -60,3 +60,5 @@ La nueva app [lbdp](../apps/lbdp/plan/master.md) desarrolla únicamente el escap
 La skill local [vercel-deploy-alias](../.agents/skills/vercel-deploy-alias/SKILL.md) ofrece selección de aplicación y rama para despliegue manual y movimiento de alias; entrega AGW-18.
 
 La skill [vercel-deployment-report](../.agents/skills/vercel-deployment-report/SKILL.md) cuenta deployments de las últimas 24 horas por estado y aplicación (AGW-19).
+
+La rama seleccionada en vercel-deploy-alias fija el entorno: `main` siempre Production e `int` siempre Preview (AGW-20).
