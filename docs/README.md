@@ -12,3 +12,7 @@ The linked source files are authoritative when configuration changes.
 The tools have separate responsibilities: **Bun** installs dependencies and runs
 scripts, **Turborepo** schedules and caches tasks, and **Turbopack** bundles the
 Next.js applications. Vercel deploys each application as an independent project.
+
+## Investigación de producto
+
+[La Bottega di Pali: web, alternativas de arquitectura e integración con billing](research/la-bottega-di-pali/README.md), investigación en español del 2 de noviembre de 2026. Recomendaciones pendientes de decisión; no constituye un plan de implementación aprobado.

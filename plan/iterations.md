@@ -2,6 +2,17 @@
 
 Este archivo es la única fuente de estado de cada iteración transversal. `validated` indica que se cumplieron los criterios documentados; publicación y SHA se verifican en Git y se evidencian en el registro.
 
+## AGW-16 — Investigación de La Bottega y su integración con billing
+
+- Estado: `validated`.
+- Objetivo: auditar la navegación pública de La Bottega di Pali, contrastar billing con su código y comparar alternativas de sustitución de WordPress/WooCommerce e integración, sin implementar ni adoptar una arquitectura definitiva.
+- Rutas: `docs/research/la-bottega-di-pali/**`, `docs/README.md`, planificación raíz y referencia desde `apps/billing-poc/plan/master.md`.
+- Dependencias: acceso público de solo lectura a la web y documentación oficial; código local de billing. Trabajo secuencial, sin delegación ni acceso a datos de clientes o secretos.
+- Aceptación: inventario trazable de páginas descubiertas por navegación y límites explícitos; análisis funcional, UX/SEO y dependencias; capacidades reales de billing; comparación de despliegues/API/base compartida, bases de datos y modelo de reservas/productos; riesgos, migración, costes y preguntas para planificar después. Documentos en español con fuentes y separación entre observaciones y propuestas.
+- Validación prevista: revisar cobertura del inventario y fuentes, enlaces Markdown locales, coherencia con código y restricciones, `git diff --check`, revisión del diff, commit documental y publicación verificada en `origin/int`. Sin builds ni pruebas de producto por alcance documental.
+- Capacidad inicial (2026-11-02, 11:22 CET aprox.): 63% de 5h y 49% de 7d restantes; estimación conservadora de entrega documental dentro de reservas de 7%/2%. Revisar antes de fases costosas y al cierre.
+- Registro principal: [AGW-16](iteration-log.md#agw-16-investigación-de-la-bottega-y-su-integración-con-billing).
+
 ## AGW-14 — Audit Vercel deployment quota discrepancy
 
 - Estado: `validated`.

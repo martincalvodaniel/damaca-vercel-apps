@@ -57,3 +57,7 @@ En escritorio, las altas de Eventos y Productos comparten fila con sus controles
 Ausencias usa los encabezados «Ausencias», «Recuperaciones» y «Última ausencia». Los calendarios de Ausencias/Eventos muestran lun/mar/mié/jue/vie/sáb/dom. Los modales de ausencias aprovechan la altura disponible; editar no enfoca el nombre del alumno ni solicita el teclado. Campos, franjas y confirmaciones en español.
 
 El listado de clientes ofrece edición mediante lápiz antes de la papelera. La ficha reutiliza la tabla de pagos mensual sobre todo el historial del cliente: fecha completa, mismas columnas, filtros, orden y acciones; la exportación incluye ese historial completo. Las secciones de actividad siguen cerradas inicialmente. Alcance: [BILL-21](iterations.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).
+
+## Investigación de integración con La Bottega
+
+La investigación de la web pública, la integración WooCommerce existente y las alternativas futuras se registra de forma transversal en [AGW-16](../../../plan/iterations.md#agw-16--investigación-de-la-bottega-y-su-integración-con-billing). Consultar [el dossier](../../../docs/research/la-bottega-di-pali/README.md) antes de definir alcance de implementación. No modifica las decisiones aceptadas ni las capacidades actuales de billing.
