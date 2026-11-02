@@ -13,7 +13,7 @@ export const householdDateSchema = z
 const id = z.uuid()
 const taskFields = {
   name: z.string().trim().min(1).max(120),
-  intervalDays: z.number().int().positive().max(36500),
+  intervalDays: z.number().int().positive().max(36500).nullable(),
 }
 
 export const householdTaskCommandSchema = z.discriminatedUnion("kind", [
@@ -51,6 +51,7 @@ export const householdTaskCommandSchema = z.discriminatedUnion("kind", [
   z
     .object({
       kind: z.literal("complete"),
+      completedBy: z.enum(["Dani", "Pali", "Ambos"]).optional(),
       taskId: id,
       occurrenceId: id,
       completedDate: householdDateSchema,
@@ -59,6 +60,7 @@ export const householdTaskCommandSchema = z.discriminatedUnion("kind", [
   z
     .object({
       kind: z.literal("record"),
+      completedBy: z.enum(["Dani", "Pali", "Ambos"]).optional(),
       taskId: id,
       occurrenceId: id,
       completedDate: householdDateSchema,

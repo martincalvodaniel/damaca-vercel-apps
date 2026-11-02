@@ -94,7 +94,9 @@ export function TaskDialog({
       const date = String(data.get("date") ?? "")
       const fields = {
         name: String(data.get("name") ?? ""),
-        intervalDays: Number(data.get("intervalDays")),
+        intervalDays: data.get("intervalDays")
+          ? Number(data.get("intervalDays"))
+          : null,
       }
       const initialDate = String(data.get("initialDate") ?? "")
       switch (state.kind) {
@@ -121,6 +123,7 @@ export function TaskDialog({
         case "record":
           onSubmit({
             kind: "record",
+            completedBy: data.get("completedBy") as "Dani" | "Pali" | "Ambos",
             taskId,
             occurrenceId,
             completedDate: date,
@@ -129,6 +132,7 @@ export function TaskDialog({
         case "complete":
           onSubmit({
             kind: "complete",
+            completedBy: data.get("completedBy") as "Dani" | "Pali" | "Ambos",
             taskId,
             occurrenceId,
             completedDate: date,
@@ -219,6 +223,7 @@ export function TaskDialog({
                     <div className="flex items-center gap-2">
                       <p className="font-semibold text-success">
                         ✓ {formatTaskDate(entry.completedDate ?? entry.date)}
+                        {entry.completedBy ? ` · ${entry.completedBy}` : ""}
                       </p>
                       <div className="ml-auto flex gap-1">
                         <TaskActionButton
@@ -286,11 +291,11 @@ export function TaskDialog({
                         id={`${fieldId}-interval`}
                         name="intervalDays"
                         type="number"
-                        required
                         min={1}
                         max={36500}
                         step={1}
-                        defaultValue={state.task?.intervalDays ?? 7}
+                        defaultValue={state.task?.intervalDays ?? ""}
+                        placeholder="Sin periodicidad"
                         className={fieldClass}
                       />
                       <p className="mt-1 text-sm text-muted">
@@ -352,6 +357,24 @@ export function TaskDialog({
                       </p>
                     ) : null}
                   </div>
+                ) : null}
+                {state.kind === "complete" || state.kind === "record" ? (
+                  <label className="block text-sm font-semibold">
+                    ¿Quién la ha completado?
+                    <select
+                      name="completedBy"
+                      required
+                      defaultValue=""
+                      className={fieldClass}
+                    >
+                      <option value="" disabled>
+                        Selecciona una persona
+                      </option>
+                      <option>Dani</option>
+                      <option>Pali</option>
+                      <option>Ambos</option>
+                    </select>
+                  </label>
                 ) : null}
                 {state.kind === "archive" ? (
                   <p className="text-sm text-danger">

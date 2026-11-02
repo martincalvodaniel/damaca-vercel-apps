@@ -140,6 +140,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: añadir antes del filtro; restaurar vuelve a activas; eventos completados solo muestran el check; asas del catálogo y eventos pendientes al extremo derecho; conservar acciones de histórico y reprogramación.
 - Evidencia: [HM-14](iteration-log.md#hm-14--estados-de-check-y-orden-de-controles).
 
+## HM-16 — Catálogo horizontal y planificación sugerida
+
+- Estado: `validated`.
+- Alcance: periodicidad opcional; búsqueda reutilizando SearchInput; catálogo de una ficha con scroll horizontal; gesto mensual; sugerencias amarillas al límite confirmables o arrastrables; autoría Dani/Pali/Ambos en ejecución, día e histórico.
+- Rutas: feature household-tasks, tipos, esquema, repositorio y planificación de Home Management.
+- Validación: Biome, tipos, tests, build y revisión de interacción.
+
 ## HM-15 — Check pendiente y asa alineada
 
 - Estado: `validated`.

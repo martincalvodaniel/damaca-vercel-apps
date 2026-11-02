@@ -171,3 +171,11 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 
 - Añadido icono circular vacío para eventos pendientes; el check verde se reserva para eventos completados.
 - El asa de las fichas padre se agrupa con `margin-left: auto`, dejando el resto de acciones alineadas a la izquierda y el arrastre al borde derecho.
+
+## HM-16 — Catálogo horizontal y planificación sugerida
+
+- Implementación dentro de Home Management. Fechas fantasma derivadas del último histórico y plazo; confirmar o arrastrar usa la acción existente de programación, sin persistir sugerencias. El calendario muestra el indicador amarillo y el día seleccionado ofrece confirmación y asa de arrastre.
+- Periodicidad opcional representada por null; autoría opcional en documentos históricos para compatibilidad, solicitada en el formulario de completar/registrar y visible en el día e histórico. Correcciones conservan autoría y desmarcar la elimina junto con la ejecución.
+- SearchInput existente reutilizado; catálogo de una ficha con scroll horizontal y snap. Deslizamiento táctil horizontal del calendario cambia el mes, conservando los botones de teclado.
+- Tipos y build Webpack filtrados correctos; 185 tests correctos y 0 fallos, incluyendo ausencia de plazo, autores válidos/inválidos y persistencia/eliminación de autoría. Biome incremental y diff revisados.
+- Chrome headless con componentes reales y servicios aislados: búsqueda/limpieza, carrusel, confirmación de fantasma, formulario de autor, creación sin periodicidad, ausencia de desbordamiento a 320/390/1440px en temas claro/oscuro y gesto mensual simulado correctos, sin errores de ejecución. Sin dispositivo físico. Script local `/private/tmp/hm16-check.cjs`; el primer arranque requirió permisos de Chrome y se corrigió la construcción del evento táctil de QA.

@@ -59,10 +59,13 @@ export function TaskCard({
         </h3>
         <span className="shrink-0 rounded-full bg-field px-2 py-0.5 text-[0.6875rem] font-semibold text-muted">
           <span aria-hidden="true">
-            {task.intervalDays}d{task.archived ? " · Archivada" : ""}
+            {task.intervalDays ? `${task.intervalDays}d` : "Sin periodicidad"}
+            {task.archived ? " · Archivada" : ""}
           </span>
           <span className="sr-only">
-            Cada {task.intervalDays} {task.intervalDays === 1 ? "día" : "días"}
+            {task.intervalDays
+              ? `Cada ${task.intervalDays} ${task.intervalDays === 1 ? "día" : "días"}`
+              : "Sin periodicidad"}
             {task.archived ? ", archivada" : ""}
           </span>
         </span>

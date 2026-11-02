@@ -1,7 +1,7 @@
 export interface HouseholdTask {
   id: string
   name: string
-  intervalDays: number
+  intervalDays: number | null
   archived: boolean
 }
 
@@ -10,6 +10,7 @@ export interface HouseholdTaskOccurrence {
   taskId: string
   date: string
   completedDate?: string
+  completedBy?: "Dani" | "Pali" | "Ambos"
   wasScheduled: boolean
 }
 

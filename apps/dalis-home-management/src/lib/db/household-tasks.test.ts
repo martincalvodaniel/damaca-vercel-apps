@@ -355,6 +355,29 @@ describe("household task repository with conditional document store", () => {
     await mutate(schedule)
     expect((await loadHouseholdTasks()).occurrences).toHaveLength(1)
   })
+  it("persists execution authors and removes them when unchecking", async () => {
+    await mutate({ ...create, intervalDays: null })
+    await mutate(schedule)
+    await mutate({
+      kind: "complete",
+      taskId,
+      occurrenceId,
+      completedDate: "2026-11-02",
+      completedBy: "Ambos",
+    })
+    expect((await loadHouseholdTasks()).occurrences[0].completedBy).toBe(
+      "Ambos"
+    )
+    await mutate({
+      kind: "delete-execution",
+      taskId,
+      occurrenceId,
+      expectedCompletedDate: "2026-11-02",
+    })
+    expect(
+      (await loadHouseholdTasks()).occurrences[0].completedBy
+    ).toBeUndefined()
+  })
   it("rejects unknown tasks and cross-task occurrence references", async () => {
     await expect(mutate(schedule)).rejects.toBeInstanceOf(HouseholdTaskConflict)
     await mutate(create)

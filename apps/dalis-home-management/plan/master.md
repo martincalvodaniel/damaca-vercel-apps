@@ -2,6 +2,8 @@
 
 ## Estado vigente
 
+HM-16 amplía Tareas con periodicidad opcional, catálogo horizontal filtrable, navegación mensual por gesto, sugerencias de programación al límite y autoría de ejecuciones (Dani, Pali o Ambos). Las tareas sin periodicidad no generan avisos ni sugerencias; las ejecuciones antiguas conservan su autoría desconocida.
+
 La página de Tareas incorpora catálogo compartido, calendario mensual e histórico de ejecuciones; su aceptación y evidencia se registran en HM-11.
 
 Los platos admiten una receta u observaciones opcionales como texto libre de hasta 10.000 caracteres. Se pueden añadir, editar, borrar y consultar desde el recetario y el menú semanal, conservando saltos de línea. Los platos existentes sin notas siguen siendo válidos; no se requiere migración.

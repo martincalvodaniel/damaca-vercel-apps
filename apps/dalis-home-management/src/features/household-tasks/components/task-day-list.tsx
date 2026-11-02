@@ -103,6 +103,9 @@ export function TaskDayList({
                 <h3 className="wrap-anywhere text-sm font-semibold tracking-tight">
                   {task.name}
                 </h3>
+                {entry.completedBy ? (
+                  <p className="text-xs text-muted">{entry.completedBy}</p>
+                ) : null}
               </div>
               <div className="ml-auto flex items-center gap-1">
                 {!entry.completedDate ? (

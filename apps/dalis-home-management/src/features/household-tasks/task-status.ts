@@ -10,7 +10,7 @@ export function addDays(date: string, days: number): string {
 }
 
 export function taskStatus(
-  intervalDays: number,
+  intervalDays: number | null,
   occurrences: readonly TaskOccurrence[],
   today: string
 ) {
@@ -22,7 +22,7 @@ export function taskStatus(
     .filter((entry) => !entry.completedDate && entry.date >= today)
     .map((entry) => entry.date)
     .sort()[0]
-  if (!lastExecution)
+  if (!lastExecution || !intervalDays)
     return {
       lastExecution,
       nextScheduled,

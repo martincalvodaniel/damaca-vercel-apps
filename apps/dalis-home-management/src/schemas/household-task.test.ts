@@ -9,6 +9,40 @@ const occurrenceId = "758ab084-3523-40f0-9a32-2a55cdbf44e3"
 const today = "2026-11-02"
 
 describe("household task validation", () => {
+  it("accepts no periodicity and validates execution authors", () => {
+    expect(
+      parseHouseholdTaskCommand(
+        { kind: "create", taskId, name: "Laundry", intervalDays: null },
+        today
+      ).success
+    ).toBe(true)
+    for (const completedBy of ["Dani", "Pali", "Ambos"]) {
+      expect(
+        parseHouseholdTaskCommand(
+          {
+            kind: "complete",
+            taskId,
+            occurrenceId,
+            completedDate: today,
+            completedBy,
+          },
+          today
+        ).success
+      ).toBe(true)
+    }
+    expect(
+      parseHouseholdTaskCommand(
+        {
+          kind: "complete",
+          taskId,
+          occurrenceId,
+          completedDate: today,
+          completedBy: "Unknown",
+        },
+        today
+      ).success
+    ).toBe(false)
+  })
   it("rejects malformed and impossible dates", () => {
     for (const date of [
       "2026-02-29",

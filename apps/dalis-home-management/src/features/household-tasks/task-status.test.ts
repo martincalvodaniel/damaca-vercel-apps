@@ -2,6 +2,16 @@ import { describe, expect, test as it } from "bun:test"
 import { addDays, dayStatus, monthDays, taskStatus } from "./task-status"
 
 describe("household task dates and status", () => {
+  it("keeps history without deadlines for tasks without periodicity", () => {
+    const status = taskStatus(
+      null,
+      [{ date: "2026-01-01", completedDate: "2026-01-01" }],
+      "2026-11-02"
+    )
+    expect(status.lastExecution).toBe("2026-01-01")
+    expect(status.dueDate).toBeUndefined()
+    expect(status.state).toBe("unknown")
+  })
   it("does not warn before the first execution", () => {
     expect(taskStatus(10, [], "2026-11-02").state).toBe("unknown")
   })

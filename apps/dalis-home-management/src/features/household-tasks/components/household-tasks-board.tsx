@@ -1,8 +1,16 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect, useState, useTransition } from "react"
+import {
+  type ChangeEvent,
+  type MouseEvent,
+  useCallback,
+  useEffect,
+  useState,
+  useTransition,
+} from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
+import { SearchInput } from "@/components/ui/search-input"
 import { householdTaskAction } from "@/features/household-tasks/actions"
 import { getMadridIsoDate } from "@/features/meal-planning/week-utils"
 import type { HouseholdTaskCommand } from "@/schemas/household-task"
@@ -11,13 +19,14 @@ import type {
   HouseholdTaskOccurrence,
   HouseholdTasksData,
 } from "@/types/household-task"
+import { taskStatus } from "../task-status"
 import { TaskActionIcon } from "./task-action-icon"
 import { TaskCard, type TaskIntent } from "./task-card"
 import { type OccurrenceIntent, TaskDayList } from "./task-day-list"
 import { TaskDialog, type TaskDialogState } from "./task-dialog"
-import type { TaskDragPayload } from "./task-drag-handle"
+import { TaskDragHandle, type TaskDragPayload } from "./task-drag-handle"
 import { TaskMonthCalendar } from "./task-month-calendar"
-import { controlClass, primaryClass } from "./task-ui"
+import { controlClass, fieldClass, primaryClass } from "./task-ui"
 
 export function HouseholdTasksBoard({
   data,
@@ -30,6 +39,12 @@ export function HouseholdTasksBoard({
   const [today, setToday] = useState(initialToday)
   const [selectedDate, setSelectedDate] = useState(initialToday)
   const [showArchived, setShowArchived] = useState(false)
+  const [search, setSearch] = useState("")
+  const changeSearch = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => setSearch(event.target.value),
+    []
+  )
+  const clearSearch = useCallback(() => setSearch(""), [])
   const [dialog, setDialog] = useState<TaskDialogState | null>(null)
   const [returnHistory, setReturnHistory] = useState<HouseholdTask | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -102,6 +117,15 @@ export function HouseholdTasksBoard({
   )
   const toggleOccurrence = useCallback(
     (task: HouseholdTask, entry: HouseholdTaskOccurrence) => {
+      if (!entry.completedDate) {
+        setDialog({
+          kind: "complete",
+          task,
+          entry,
+          requestId: crypto.randomUUID(),
+        })
+        return
+      }
       run(
         entry.completedDate
           ? {
@@ -151,6 +175,16 @@ export function HouseholdTasksBoard({
     },
     [selectedDate]
   )
+  const confirmGhost = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const task = data.tasks.find(
+        (candidate) => candidate.id === event.currentTarget.dataset.task
+      )
+      const date = event.currentTarget.dataset.date
+      if (task && date) drop({ task }, date)
+    },
+    [data.tasks, drop]
+  )
   const openCreate = useCallback(() => {
     setError(null)
     setDialog({ kind: "create", requestId: crypto.randomUUID() })
@@ -185,7 +219,26 @@ export function HouseholdTasksBoard({
     },
     [dialog?.task]
   )
-  const tasks = data.tasks.filter((task) => task.archived === showArchived)
+  const tasks = data.tasks.filter(
+    (task) =>
+      task.archived === showArchived &&
+      task.name.toLocaleLowerCase("es").includes(search.toLocaleLowerCase("es"))
+  )
+  const ghosts = data.tasks.flatMap((task) => {
+    if (task.archived) return []
+    const entries = data.occurrences.filter((entry) => entry.taskId === task.id)
+    const status = taskStatus(task.intervalDays, entries, today)
+    const dueDate = status.dueDate
+    if (
+      !dueDate ||
+      entries.some(
+        (entry) =>
+          !entry.completedDate && entry.date <= dueDate && entry.date >= today
+      )
+    )
+      return []
+    return [{ task, date: dueDate }]
+  })
   const occurrencesByTask = new Map<string, typeof data.occurrences>()
   for (const entry of data.occurrences) {
     const entries = occurrencesByTask.get(entry.taskId) ?? []
@@ -251,6 +304,14 @@ export function HouseholdTasksBoard({
           aria-label="Catálogo de tareas"
           className="min-w-0 space-y-1.5"
         >
+          <SearchInput
+            aria-label="Buscar tareas"
+            placeholder="Buscar tareas"
+            value={search}
+            onChange={changeSearch}
+            onClear={clearSearch}
+            className={fieldClass}
+          />
           <h2 className="sr-only">
             {showArchived ? "Tareas archivadas" : "Tareas activas"}
           </h2>
@@ -261,18 +322,25 @@ export function HouseholdTasksBoard({
                 : "Crea tu primera tarea para empezar a planificar."}
             </p>
           ) : null}
-          {tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              occurrences={occurrencesByTask.get(task.id) ?? []}
-              today={today}
-              disabled={pending}
-              onIntent={openTask}
-              onDrop={drop}
-              onHover={setHoverDate}
-            />
-          ))}
+          <section
+            aria-label="Tareas: desplaza horizontalmente para cambiar de ficha"
+            className="flex snap-x snap-mandatory gap-2 overflow-x-auto"
+          >
+            {tasks.map((task) => (
+              <div key={task.id} className="w-full shrink-0 snap-start">
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  occurrences={occurrencesByTask.get(task.id) ?? []}
+                  today={today}
+                  disabled={pending}
+                  onIntent={openTask}
+                  onDrop={drop}
+                  onHover={setHoverDate}
+                />
+              </div>
+            ))}
+          </section>
         </section>
         <div className="min-w-0">
           <TaskMonthCalendar
@@ -282,7 +350,34 @@ export function HouseholdTasksBoard({
             hoverDate={hoverDate}
             onSelect={setSelectedDate}
             onMonth={changeMonth}
+            ghosts={ghosts}
           />
+          {ghosts
+            .filter((ghost) => ghost.date === selectedDate)
+            .map(({ task, date }) => (
+              <div
+                key={task.id}
+                className="mt-2 flex items-center gap-2 rounded-xl border border-warning bg-warning-soft p-2 text-warning"
+              >
+                <span className="flex-1">⚠ {task.name}</span>
+                <button
+                  type="button"
+                  className={controlClass}
+                  disabled={pending}
+                  data-task={task.id}
+                  data-date={date}
+                  onClick={confirmGhost}
+                >
+                  Programar
+                </button>
+                <TaskDragHandle
+                  payload={{ task }}
+                  disabled={pending}
+                  onDrop={drop}
+                  onHover={setHoverDate}
+                />
+              </div>
+            ))}
           <TaskDayList
             date={selectedDate}
             tasks={data.tasks}

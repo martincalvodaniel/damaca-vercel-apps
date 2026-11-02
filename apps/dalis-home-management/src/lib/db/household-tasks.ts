@@ -158,7 +158,9 @@ export async function mutateHouseholdTask(
           taskId: task._id,
           date,
           wasScheduled: command.kind === "schedule",
-          ...(command.kind === "record" ? { completedDate: date } : {}),
+          ...(command.kind === "record"
+            ? { completedDate: date, completedBy: command.completedBy }
+            : {}),
         })
       }
     } else {
@@ -185,7 +187,10 @@ export async function mutateHouseholdTask(
               "La tarea ya está completada. Corrige su fecha desde el histórico."
             )
           const result = await occurrences.updateOne(pendingFilter, {
-            $set: { completedDate: command.completedDate },
+            $set: {
+              completedDate: command.completedDate,
+              completedBy: command.completedBy,
+            },
           })
           if (!result.matchedCount) {
             const latest = await occurrences.findOne({
@@ -244,7 +249,7 @@ export async function mutateHouseholdTask(
             if (!result.matchedCount) throw changed()
           } else if (entry.wasScheduled && !task.archived) {
             const result = await occurrences.updateOne(filter, {
-              $unset: { completedDate: "" },
+              $unset: { completedDate: "", completedBy: "" },
             })
             if (!result.matchedCount) throw changed()
           } else {
