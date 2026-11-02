@@ -175,3 +175,11 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Decisión: Google OAuth y proveedor OIDC centralizados en Hub mediante Better Auth. Google solo se configura en Hub; consumidores usan código de autorización, S256 PKCE, state/nonce y validación de firma, emisor y audiencia. UserInfo comprueba el permiso vigente por cliente registrado; no se aceptan emails afirmados por consumidores. Hub adopta persistencia de identidad en MongoDB y rotación de claves.
 - Validación prevista: contrato de API, tests de aislamiento, autenticación, rechazo, revocación, fallos y cliente HTTP; lint incremental, tipos/tests/build de las tres apps y paquete; navegación autenticada/no autenticada, móvil/escritorio y migración del worker según entorno disponible; diff, commit/push a int y SHA remoto.
 - Evidencia: [registro](iteration-log.md#agw-05-google-identity-and-hub-access).
+
+## AGW-17 — Manual Vercel deployments
+
+- Estado: `validated`.
+- Objetivo: desactivar deployments automáticos por Git en las seis apps restantes, como en LBDP-04.
+- Rutas: `apps/*/vercel.ts` salvo LBDP y planes raíz; referencias en planes de las apps afectadas.
+- Aceptación: `git.deploymentEnabled: false` en las siete apps; conservar comandos, regiones y reglas existentes. Publicación en int sin promoción ni deployment manual. Las ramas que no contienen este cambio conservan su configuración anterior.
+- Validación: Biome incremental, tipos filtrados, inspección de las siete configuraciones y diff check. Cambio de configuración Git sin lógica de producto; no requiere pruebas de aplicación ni builds de producto.

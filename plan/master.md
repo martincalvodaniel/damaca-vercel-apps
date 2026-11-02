@@ -52,3 +52,7 @@ El catálogo y las fichas de administración del Hub muestran los iconos de las 
 ## Esqueleto público LBDP
 
 La nueva app [lbdp](../apps/lbdp/plan/master.md) desarrolla únicamente el escaparate público autorizado, con registro principal [LBDP-01](../apps/lbdp/plan/iterations.md). Las demás webapps permanecen fuera del alcance; la integración comercial del dossier sigue pendiente.
+
+## Publicación manual de Vercel
+
+[AGW-17](iterations.md#agw-17--manual-vercel-deployments) establece `git.deploymentEnabled: false` en las siete apps. Los deployments se realizan manualmente bajo petición; los pushes que contienen esta configuración no solicitan deployments automáticos de Git. Cada rama debe incorporar la configuración para adoptar esta política.

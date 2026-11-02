@@ -167,3 +167,10 @@ Evidencias históricas [AGW-01 y AGW-02](archive/2026-10-31/iteration-log.md) ar
 <a id="agw-03-retirar-workspaces-de-plantilla"></a>
 <a id="agw-04-incorporar-card-wars-al-inventario"></a>
 Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) archivadas; estas anclas conservan los enlaces anteriores.
+
+## AGW-17 — Manual Vercel deployments
+
+- [Aceptación](iterations.md#agw-17--manual-vercel-deployments): se añade `git.deploymentEnabled: false` a billing-poc, card-wars, dalis-home-management, dalis-tasks-events, damaca-hub y pocha-score. LBDP ya lo incorpora en 3bbb3aa. Comandos, regiones y reglas conservados; referencia de política en cada plan maestro afectado.
+- Validación: tipos filtrados de las seis apps correctos (8 tareas incluyendo dependencias); inspección de las siete configuraciones y diff check. El lint `--changed --since=HEAD` no examinó archivos sin staging; se utiliza lint staged antes de publicar. No hay lógica de producto modificada ni nuevas pruebas/builds; el cambio solo controla el disparador Git.
+- Límite: configuración publicada en int; otras ramas deben incorporar el commit. No se pausa tráfico, cambia main ni ejecuta deployment manual. La presencia de la opción en código no acredita una prueba alojada de todos los disparadores.
+- Publicación: commit/push a int y coincidencia del SHA remoto comprobados al cierre. Capacidad inicial: 94% de 5h y 39% de 7d, dentro de reservas.

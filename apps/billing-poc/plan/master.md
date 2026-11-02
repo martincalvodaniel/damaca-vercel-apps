@@ -61,3 +61,5 @@ El listado de clientes ofrece edición mediante lápiz antes de la papelera. La 
 ## Investigación de integración con La Bottega
 
 La investigación de la web pública, la integración WooCommerce existente y las alternativas futuras se registra de forma transversal en [AGW-16](../../../plan/iterations.md#agw-16--investigación-de-la-bottega-y-su-integración-con-billing). Consultar [el dossier](../../../docs/research/la-bottega-di-pali/README.md) antes de definir alcance de implementación. No modifica las decisiones aceptadas ni las capacidades actuales de billing.
+
+La publicación Vercel pasa a ser manual bajo petición mediante `git.deploymentEnabled: false`. Registro transversal: [AGW-17](../../../plan/iterations.md#agw-17--manual-vercel-deployments).
