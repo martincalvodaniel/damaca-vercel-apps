@@ -166,3 +166,8 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - Ajustado el orden de la cabecera para mostrar `Añadir` antes de activar la vista de archivadas/activas y del contador.
 - Al restaurar una tarea archivada se vuelve automáticamente a la vista de activas. Las entradas completadas del día conservan únicamente el check verde; corrección y borrado siguen disponibles desde el histórico.
 - Las asas de arrastre de las fichas padre se desplazan al extremo derecho, y se conserva la reprogramación junto al borrado en pendientes.
+
+## HM-15 — Check pendiente y asa alineada
+
+- Añadido icono circular vacío para eventos pendientes; el check verde se reserva para eventos completados.
+- El asa de las fichas padre se agrupa con `margin-left: auto`, dejando el resto de acciones alineadas a la izquierda y el arrastre al borde derecho.

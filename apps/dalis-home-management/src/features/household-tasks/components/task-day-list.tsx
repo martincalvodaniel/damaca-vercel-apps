@@ -90,7 +90,7 @@ export function TaskDayList({
           >
             <div className="flex items-center gap-2">
               <TaskActionButton
-                icon="complete"
+                icon={entry.completedDate ? "complete" : "pending"}
                 label={entry.completedDate ? "Marcar pendiente" : "Completar"}
                 intent="toggle-complete"
                 entryId={entry.id}

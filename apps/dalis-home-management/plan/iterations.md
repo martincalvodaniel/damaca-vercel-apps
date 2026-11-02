@@ -139,3 +139,11 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Rutas: `src/features/household-tasks/components/` y `plan/`.
 - Aceptación: añadir antes del filtro; restaurar vuelve a activas; eventos completados solo muestran el check; asas del catálogo y eventos pendientes al extremo derecho; conservar acciones de histórico y reprogramación.
 - Evidencia: [HM-14](iteration-log.md#hm-14--estados-de-check-y-orden-de-controles).
+
+## HM-15 — Check pendiente y asa alineada
+
+- Estado: `validated`.
+- Objetivo: hacer explícito el estado pendiente y fijar el asa de las tareas padre al borde derecho.
+- Rutas: `src/features/household-tasks/components/` y `plan/`.
+- Aceptación: círculo vacío para pendientes, check verde solo al completar y asa alineada a la derecha con el resto de acciones a la izquierda.
+- Evidencia: [HM-15](iteration-log.md#hm-15--check-pendiente-y-asa-alineada).

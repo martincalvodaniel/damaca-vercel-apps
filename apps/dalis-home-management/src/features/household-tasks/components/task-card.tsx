@@ -138,12 +138,14 @@ export function TaskCard({
           />
         ) : null}
         {!task.archived ? (
-          <TaskDragHandle
-            payload={{ task }}
-            disabled={disabled}
-            onDrop={onDrop}
-            onHover={onHover}
-          />
+          <span className="ml-auto">
+            <TaskDragHandle
+              payload={{ task }}
+              disabled={disabled}
+              onDrop={onDrop}
+              onHover={onHover}
+            />
+          </span>
         ) : null}
       </div>
     </article>

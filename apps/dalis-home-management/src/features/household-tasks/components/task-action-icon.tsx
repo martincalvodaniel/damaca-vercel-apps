@@ -9,6 +9,7 @@ const iconPaths = {
   restore: "M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6",
   active: "m4 6 2 2 3-4m3 2h8M4 14l2 2 3-4m3 2h8M4 21h16",
   complete: "m5 12 4 4L19 6",
+  pending: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z",
   move: "M4 7h15m-4-4 4 4-4 4M20 17H5m4-4-4 4 4 4",
   cancel: "m6 6 12 12M18 6 6 18",
   "edit-execution": "m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15v5Z",
