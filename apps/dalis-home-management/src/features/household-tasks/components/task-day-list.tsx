@@ -6,7 +6,6 @@ import type {
   HouseholdTaskOccurrence,
 } from "@/types/household-task"
 import { TaskActionButton } from "./task-action-button"
-import { TaskDate } from "./task-date"
 import { TaskDragHandle, type TaskDragPayload } from "./task-drag-handle"
 import { formatTaskDate } from "./task-ui"
 
@@ -23,6 +22,7 @@ export function TaskDayList({
   occurrences,
   disabled,
   onIntent,
+  onToggleComplete,
   onDrop,
   onHover,
 }: {
@@ -34,6 +34,10 @@ export function TaskDayList({
     task: HouseholdTask,
     entry: HouseholdTaskOccurrence,
     intent: OccurrenceIntent
+  ) => void
+  onToggleComplete: (
+    task: HouseholdTask,
+    entry: HouseholdTaskOccurrence
   ) => void
   onDrop: (payload: TaskDragPayload, date: string) => void
   onHover: (date: string | null) => void
@@ -52,6 +56,16 @@ export function TaskDayList({
         )
     },
     [occurrences, tasks, onIntent]
+  )
+  const handleToggleComplete = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const entry = occurrences.find(
+        (candidate) => candidate.id === event.currentTarget.dataset.entry
+      )
+      const task = tasks.find((candidate) => candidate.id === entry?.taskId)
+      if (entry && task) onToggleComplete(task, entry)
+    },
+    [occurrences, onToggleComplete, tasks]
   )
   const entries = occurrences.filter((entry) => entry.date === date)
   return (
@@ -75,82 +89,72 @@ export function TaskDayList({
             className="rounded-[1.5rem] border border-border bg-surface px-3 py-2 shadow-soft"
           >
             <div className="flex items-center gap-2">
-              {!entry.completedDate && !task.archived ? (
-                <TaskDragHandle
-                  payload={{ task, occurrence: entry }}
-                  disabled={disabled}
-                  onDrop={onDrop}
-                  onHover={onHover}
-                />
-              ) : null}
+              <TaskActionButton
+                icon="complete"
+                label={entry.completedDate ? "Marcar pendiente" : "Completar"}
+                intent="toggle-complete"
+                entryId={entry.id}
+                disabled={disabled || task.archived}
+                onClick={handleToggleComplete}
+                pressed={Boolean(entry.completedDate)}
+                tone={entry.completedDate ? "success" : "default"}
+              />
               <div className="min-w-0 flex-1">
                 <h3 className="wrap-anywhere text-sm font-semibold tracking-tight">
                   {task.name}
                 </h3>
-                <p
-                  className={`text-xs ${entry.completedDate ? "text-success" : "text-danger"}`}
-                >
-                  {entry.completedDate ? (
-                    <>
-                      ✓ Ejecutada <TaskDate date={entry.completedDate} />
-                    </>
-                  ) : (
-                    "! Pendiente"
-                  )}
-                </p>
               </div>
-            </div>
-            <div className="mt-1 flex flex-wrap gap-1">
-              {entry.completedDate ? (
-                <>
-                  <TaskActionButton
-                    icon="edit-execution"
-                    label="Corregir ejecución"
-                    intent="edit-execution"
-                    entryId={entry.id}
+              <div className="ml-auto flex items-center gap-1">
+                {entry.completedDate ? (
+                  <>
+                    <TaskActionButton
+                      icon="edit-execution"
+                      label="Corregir ejecución"
+                      intent="edit-execution"
+                      entryId={entry.id}
+                      disabled={disabled}
+                      onClick={handleIntent}
+                    />
+                    <TaskActionButton
+                      icon="delete-execution"
+                      label="Eliminar ejecución"
+                      intent="delete-execution"
+                      entryId={entry.id}
+                      disabled={disabled}
+                      onClick={handleIntent}
+                      tone="danger"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <TaskActionButton
+                      icon="move"
+                      label="Reprogramar"
+                      intent="move"
+                      entryId={entry.id}
+                      disabled={disabled}
+                      onClick={handleIntent}
+                    />
+                    <TaskActionButton
+                      icon="delete-execution"
+                      label="Cancelar programación"
+                      intent="cancel"
+                      entryId={entry.id}
+                      disabled={disabled}
+                      onClick={handleIntent}
+                      tone="danger"
+                    />
+                  </>
+                )}
+                {!entry.completedDate && !task.archived ? (
+                  <TaskDragHandle
+                    payload={{ task, occurrence: entry }}
                     disabled={disabled}
-                    onClick={handleIntent}
+                    onDrop={onDrop}
+                    onHover={onHover}
                   />
-                  <TaskActionButton
-                    icon="delete-execution"
-                    label="Eliminar ejecución"
-                    intent="delete-execution"
-                    entryId={entry.id}
-                    disabled={disabled}
-                    onClick={handleIntent}
-                    tone="danger"
-                  />
-                </>
-              ) : (
-                <>
-                  <TaskActionButton
-                    icon="complete"
-                    label="Completar"
-                    intent="complete"
-                    entryId={entry.id}
-                    disabled={disabled}
-                    onClick={handleIntent}
-                    tone="success"
-                  />
-                  <TaskActionButton
-                    icon="move"
-                    label="Reprogramar"
-                    intent="move"
-                    entryId={entry.id}
-                    disabled={disabled}
-                    onClick={handleIntent}
-                  />
-                  <TaskActionButton
-                    icon="cancel"
-                    label="Cancelar programación"
-                    intent="cancel"
-                    entryId={entry.id}
-                    disabled={disabled}
-                    onClick={handleIntent}
-                    tone="danger"
-                  />
-                </>
-              )}
+                ) : null}
+              </div>
             </div>
           </article>
         )

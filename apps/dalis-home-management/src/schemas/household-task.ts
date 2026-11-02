@@ -27,6 +27,7 @@ export const householdTaskCommandSchema = z.discriminatedUnion("kind", [
     .strict(),
   z.object({ kind: z.literal("update"), taskId: id, ...taskFields }).strict(),
   z.object({ kind: z.literal("archive"), taskId: id }).strict(),
+  z.object({ kind: z.literal("restore"), taskId: id }).strict(),
   z
     .object({
       kind: z.literal("schedule"),

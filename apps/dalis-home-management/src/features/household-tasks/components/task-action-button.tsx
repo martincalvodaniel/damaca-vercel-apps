@@ -9,6 +9,7 @@ export function TaskActionButton({
   entryId,
   disabled,
   onClick,
+  pressed,
   tone = "default",
 }: {
   icon: TaskActionIconName
@@ -17,6 +18,7 @@ export function TaskActionButton({
   entryId?: string
   disabled: boolean
   onClick: MouseEventHandler<HTMLButtonElement>
+  pressed?: boolean
   tone?: "default" | "success" | "danger"
 }) {
   return (
@@ -27,6 +29,7 @@ export function TaskActionButton({
       title={label}
       data-intent={intent}
       data-entry={entryId}
+      aria-pressed={pressed}
       onClick={onClick}
       className={`${controlClass} w-8 px-0 sm:w-auto sm:px-2 ${tone === "danger" ? "text-danger" : tone === "success" ? "text-success" : ""}`}
     >

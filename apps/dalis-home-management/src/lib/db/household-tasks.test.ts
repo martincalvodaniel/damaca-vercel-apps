@@ -346,6 +346,15 @@ describe("household task repository with conditional document store", () => {
     })
     expect((await loadHouseholdTasks()).occurrences).toHaveLength(0)
   })
+  it("restores archived tasks idempotently", async () => {
+    await mutate(create)
+    await mutate({ kind: "archive", taskId })
+    await mutate({ kind: "restore", taskId })
+    await mutate({ kind: "restore", taskId })
+    expect((await loadHouseholdTasks()).tasks[0].archived).toBe(false)
+    await mutate(schedule)
+    expect((await loadHouseholdTasks()).occurrences).toHaveLength(1)
+  })
   it("rejects unknown tasks and cross-task occurrence references", async () => {
     await expect(mutate(schedule)).rejects.toBeInstanceOf(HouseholdTaskConflict)
     await mutate(create)

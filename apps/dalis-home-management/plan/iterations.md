@@ -121,3 +121,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: cabecera de página y presentación ocultas en móvil; barra compacta; acciones por iconos donde aportan espacio, con nombres accesibles; fechas, periodicidad, avisos y acciones conservados; calendario y listas con separación reducida; verificación de densidad y legibilidad a 320/390px y escritorio en ambos temas. Contrato de diseño enlazado y exigible para nuevas páginas y revisiones.
 - Validación prevista: Biome incremental, tipos, tests existentes, build y Chrome con comparación de alturas, interacción, teclado, contraste y ausencia de desbordamiento.
 - Evidencia: [HM-12](iteration-log.md#hm-12--densidad-móvil-coherente-en-tareas).
+
+## HM-13 — Controles compactos y restauración de tareas
+
+- Estado: `validated`.
+- Objetivo: simplificar los controles de Tareas y permitir restaurar tareas archivadas.
+- Rutas: `src/features/household-tasks/components/`, `src/lib/db/household-tasks.ts`, `src/schemas/household-task.ts`, `plan/`.
+- Dependencias: controles compactos y acciones autenticadas de HM-11/HM-12; sin dependencias nuevas ni cambios fuera de Home Management.
+- Aceptación: filtro y añadir antes del contador; restauración idempotente de archivadas; acciones del histórico en la misma fila de fecha; check reversible sin confirmación que crea/elimina el histórico; evento pendiente con borrar y asa al extremo derecho; eliminar estados redundantes.
+- Validación prevista: Biome incremental, tipos, tests, build Webpack y revisión del diff/documentación.
+- Evidencia: [HM-13](iteration-log.md#hm-13--controles-compactos-y-restauración-de-tareas).

@@ -16,6 +16,7 @@ export type TaskIntent =
   | "schedule"
   | "record"
   | "history"
+  | "restore"
 
 export function TaskCard({
   task,
@@ -83,6 +84,16 @@ export function TaskCard({
         </p>
       ) : null}
       <div className="mt-1 flex flex-wrap gap-1 border-t border-border pt-1">
+        {task.archived ? (
+          <TaskActionButton
+            icon="restore"
+            label="Restaurar tarea"
+            intent="restore"
+            disabled={disabled}
+            onClick={handleIntent}
+            tone="success"
+          />
+        ) : null}
         {!task.archived ? (
           <TaskDragHandle
             payload={{ task }}

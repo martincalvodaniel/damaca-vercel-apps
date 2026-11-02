@@ -6,6 +6,7 @@ const iconPaths = {
   update: "m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15v5Z",
   history: "M12 7v5l3 2M21 12a9 9 0 1 1-9-9 9 9 0 0 1 9 9Z",
   archive: "M4 8h16v12H4V8ZM3 4h18v4H3V4Zm6 8h6",
+  restore: "M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6",
   active: "m4 6 2 2 3-4m3 2h8M4 14l2 2 3-4m3 2h8M4 21h16",
   complete: "m5 12 4 4L19 6",
   move: "M4 7h15m-4-4 4 4-4 4M20 17H5m4-4-4 4 4 4",

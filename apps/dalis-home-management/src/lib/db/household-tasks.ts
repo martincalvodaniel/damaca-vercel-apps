@@ -99,7 +99,12 @@ export async function mutateHouseholdTask(
     if (!task) throw new HouseholdTaskConflict("No se ha encontrado la tarea.")
     const historicalChange =
       command.kind === "edit-execution" || command.kind === "delete-execution"
-    if (task.archived && command.kind !== "archive" && !historicalChange) {
+    if (
+      task.archived &&
+      command.kind !== "archive" &&
+      command.kind !== "restore" &&
+      !historicalChange
+    ) {
       throw new HouseholdTaskConflict(
         "Esta tarea está archivada. Recarga la página."
       )
@@ -108,6 +113,14 @@ export async function mutateHouseholdTask(
       const result = await tasks.updateOne(
         { _id: task._id, archived: false },
         { $set: { name: command.name, intervalDays: command.intervalDays } }
+      )
+      if (!result.matchedCount) throw changed()
+      return
+    }
+    if (command.kind === "restore") {
+      const result = await tasks.updateOne(
+        { _id: task._id },
+        { $set: { archived: false } }
       )
       if (!result.matchedCount) throw changed()
       return

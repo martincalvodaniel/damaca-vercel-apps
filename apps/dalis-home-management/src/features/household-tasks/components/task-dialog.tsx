@@ -32,6 +32,7 @@ const titles: Record<TaskDialogState["kind"], string> = {
   cancel: "Cancelar programación",
   "edit-execution": "Corregir ejecución",
   "delete-execution": "Eliminar ejecución",
+  restore: "Restaurar tarea",
 }
 
 export function TaskDialog({
@@ -110,6 +111,9 @@ export function TaskDialog({
           break
         case "archive":
           onSubmit({ kind: "archive", taskId })
+          break
+        case "restore":
+          onSubmit({ kind: "restore", taskId })
           break
         case "schedule":
           onSubmit({ kind: "schedule", taskId, occurrenceId, date })
@@ -212,33 +216,35 @@ export function TaskDialog({
                     key={entry.id}
                     className="rounded-[1.5rem] border border-border bg-surface px-3 py-2"
                   >
-                    <p className="font-semibold text-success">
-                      ✓ {formatTaskDate(entry.completedDate ?? entry.date)}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-success">
+                        ✓ {formatTaskDate(entry.completedDate ?? entry.date)}
+                      </p>
+                      <div className="ml-auto flex gap-1">
+                        <TaskActionButton
+                          icon="edit-execution"
+                          label="Corregir fecha"
+                          intent="edit-execution"
+                          entryId={entry.id}
+                          disabled={pending}
+                          onClick={handleHistoryAction}
+                        />
+                        <TaskActionButton
+                          icon="delete-execution"
+                          label="Eliminar ejecución"
+                          intent="delete-execution"
+                          entryId={entry.id}
+                          disabled={pending}
+                          onClick={handleHistoryAction}
+                          tone="danger"
+                        />
+                      </div>
+                    </div>
                     <p className="mt-1 text-sm text-muted">
                       {entry.wasScheduled
                         ? `Fecha prevista: ${formatTaskDate(entry.date)}`
                         : "Ejecución sin programación previa"}
                     </p>
-                    <div className="mt-1 flex flex-wrap gap-1">
-                      <TaskActionButton
-                        icon="edit-execution"
-                        label="Corregir fecha"
-                        intent="edit-execution"
-                        entryId={entry.id}
-                        disabled={pending}
-                        onClick={handleHistoryAction}
-                      />
-                      <TaskActionButton
-                        icon="delete-execution"
-                        label="Eliminar ejecución"
-                        intent="delete-execution"
-                        entryId={entry.id}
-                        disabled={pending}
-                        onClick={handleHistoryAction}
-                        tone="danger"
-                      />
-                    </div>
                   </li>
                 ))}
               </ul>

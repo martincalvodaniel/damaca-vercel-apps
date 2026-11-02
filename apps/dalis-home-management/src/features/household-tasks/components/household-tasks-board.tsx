@@ -88,10 +88,38 @@ export function HouseholdTasksBoard({
     },
     [pending, returnHistory, router]
   )
-  const openTask = useCallback((task: HouseholdTask, kind: TaskIntent) => {
-    setError(null)
-    setDialog({ kind, task, requestId: crypto.randomUUID() })
-  }, [])
+  const openTask = useCallback(
+    (task: HouseholdTask, kind: TaskIntent) => {
+      setError(null)
+      if (kind === "restore") {
+        run({ kind: "restore", taskId: task.id })
+        return
+      }
+      setDialog({ kind, task, requestId: crypto.randomUUID() })
+    },
+    [run]
+  )
+  const toggleOccurrence = useCallback(
+    (task: HouseholdTask, entry: HouseholdTaskOccurrence) => {
+      run(
+        entry.completedDate
+          ? {
+              kind: "delete-execution",
+              taskId: task.id,
+              occurrenceId: entry.id,
+              expectedCompletedDate: entry.completedDate,
+            }
+          : {
+              kind: "complete",
+              taskId: task.id,
+              occurrenceId: entry.id,
+              completedDate: today,
+            },
+        false
+      )
+    },
+    [run, today]
+  )
   const drop = useCallback(
     (payload: TaskDragPayload, date: string) => {
       setSelectedDate(date)
@@ -175,29 +203,6 @@ export function HouseholdTasksBoard({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="inline-flex min-h-8 items-center gap-2 rounded-full border border-border bg-field px-2.5 py-1 text-xs font-semibold text-muted">
-            <span
-              aria-hidden="true"
-              className="size-2 rounded-full bg-primary"
-            />
-            {tasks.length}{" "}
-            {showArchived
-              ? "archivadas"
-              : tasks.length === 1
-                ? "tarea"
-                : "tareas"}
-          </span>
-          <button
-            type="button"
-            className={primaryClass}
-            disabled={pending}
-            onClick={openCreate}
-            aria-label="Nueva tarea"
-            title="Nueva tarea"
-          >
-            <TaskActionIcon name="add" />
-            <span className="hidden sm:inline">Añadir</span>
-          </button>
           <button
             type="button"
             className={`${controlClass} min-w-8 px-2`}
@@ -211,6 +216,29 @@ export function HouseholdTasksBoard({
               {showArchived ? "Ver activas" : "Ver archivadas"}
             </span>
           </button>
+          <button
+            type="button"
+            className={primaryClass}
+            disabled={pending}
+            onClick={openCreate}
+            aria-label="Nueva tarea"
+            title="Nueva tarea"
+          >
+            <TaskActionIcon name="add" />
+            <span className="hidden sm:inline">Añadir</span>
+          </button>
+          <span className="inline-flex min-h-8 items-center gap-2 rounded-full border border-border bg-field px-2.5 py-1 text-xs font-semibold text-muted">
+            <span
+              aria-hidden="true"
+              className="size-2 rounded-full bg-primary"
+            />
+            {tasks.length}{" "}
+            {showArchived
+              ? "archivadas"
+              : tasks.length === 1
+                ? "tarea"
+                : "tareas"}
+          </span>
         </div>
       </header>
       {error && !dialog ? <ErrorBanner>{error}</ErrorBanner> : null}
@@ -260,6 +288,7 @@ export function HouseholdTasksBoard({
             occurrences={data.occurrences}
             disabled={pending}
             onIntent={openOccurrence}
+            onToggleComplete={toggleOccurrence}
             onDrop={drop}
             onHover={setHoverDate}
           />
