@@ -21,3 +21,13 @@
 - Capacidad inicial (02/11/2026): 23% de 5h y 43% de 7d restantes; corte acotado con reserva mínima 7%/2%.
 
 - Bloqueo observado: creación del Preview rechazada por Vercel con HTTP 402, código `api-deployments-free-per-day`, mensaje «more than 100, try again in 1 day». Proyecto/Git configurados; falta crear el deployment y validar URL/HTTP. No se realizan reintentos ni cambios de plan.
+
+## LBDP-03 — Reparar el lanzador de instalación de Vercel
+
+- Estado: `blocked`.
+- Objetivo/rutas: aislar el fallo de bootstrap Bun y corregir solo comandos del proyecto lbdp y su documentación. Sin cambios de producto ni otras apps.
+- Evidencia: build remoto 996618a falla antes de iniciar Bun; el mismo install filtrado pasa en copia limpia local (29 paquetes), descartando lockfile inconsistente en esa reproducción.
+- Aceptación/validación: probar lanzador alternativo fijado a Bun 1.4.4, inspeccionar proyecto; un Preview explícito de int confirma instalación/build/HTTP. Registrar limitaciones sin atribuir causa interna no probada. Sin producción, cambios de plan ni reintentos periódicos.
+- Capacidad: 12% de 5h y 41% de 7d al comienzo; margen acotado con reserva 7%/2%.
+
+- Bloqueo LBDP-03: comandos cambiados a npx manteniendo Bun 1.4.4; Preview de validación rechazado con HTTP 402 por cuota. Mitigación local comprobada, resultado alojado pendiente; no declarar resuelto el error de build.

@@ -28,7 +28,7 @@ Las páginas legales y de financiación enlazan al sitio vigente. Robots y metad
 
 ## Vercel
 
-Proyecto [lbdp](https://vercel.com/martincalvodaniels-projects/lbdp) creado en el equipo existente, conectado a este repositorio con raíz `apps/lbdp`. Next.js, Node 24, instalación `bunx bun@1.4.4 install --frozen-lockfile --filter @damaca/lbdp` y build `bunx bun@1.4.4 run build` desde la raíz de la app. Producción permanece en `main`; selección nativa de cambios y protección de despliegue activas.
+Proyecto [lbdp](https://vercel.com/martincalvodaniels-projects/lbdp) creado en el equipo existente, conectado a este repositorio con raíz `apps/lbdp`. Next.js, Node 24, instalación `npx --yes --package=bun@1.4.4 bun install --frozen-lockfile --filter @damaca/lbdp` y build `npx --yes --package=bun@1.4.4 bun run build` desde la raíz de la app. Producción permanece en `main`; selección nativa de cambios y protección de despliegue activas.
 
 El primer Preview de `int` fue rechazado el 02/11/2026 por cuota Vercel (`402`, `api-deployments-free-per-day`). No hay URL READY ni comprobación HTTP alojada. Tras el desbloqueo, comprobar primero deployments de lbdp y reutilizar el pendiente si existe; crear un único Preview del SHA vigente de `origin/int` solo si no existe uno equivalente. No deducir del tiempo transcurrido que la cuota se haya renovado. Evidencia y pasos pendientes en [LBDP-02](plan/iteration-log.md#lbdp-02--proyecto-vercel-y-preview-de-int).
 
@@ -37,3 +37,5 @@ No hay dominio personalizado, variables de negocio ni producción desplegada por
 ## Plan y decisiones pendientes
 
 [Plan maestro](plan/master.md), [iteraciones](plan/iterations.md) y [evidencia](plan/iteration-log.md). La integración y reglas de comercio siguen en el [dossier](../../docs/research/la-bottega-di-pali/README.md).
+
+Validación pendiente en [LBDP-03](plan/iterations.md#lbdp-03--reparar-el-lanzador-de-instalación-de-vercel): la instalación del intento 996618a falló en Vercel antes de iniciar Bun; se cambió el bootstrap de bunx a npx y el Preview de comprobación sigue bloqueado por cuota.
