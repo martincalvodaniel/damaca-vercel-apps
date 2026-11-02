@@ -183,3 +183,10 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Rutas: `apps/*/vercel.ts` salvo LBDP y planes raíz; referencias en planes de las apps afectadas.
 - Aceptación: `git.deploymentEnabled: false` en las siete apps; conservar comandos, regiones y reglas existentes. Publicación en int sin promoción ni deployment manual. Las ramas que no contienen este cambio conservan su configuración anterior.
 - Validación: Biome incremental, tipos filtrados, inspección de las siete configuraciones y diff check. Cambio de configuración Git sin lógica de producto; no requiere pruebas de aplicación ni builds de producto.
+
+## AGW-18 — Vercel deployment and alias skill
+
+- Estado: `validated`.
+- Objetivo/rutas: skill local `.agents/skills/vercel-deploy-alias/SKILL.md`, con selección de app/rama y despliegue manual seguido de alias verificado.
+- Aceptación: opciones explícitas, SHA remoto, entorno separado de rama, READY previo al alias, parada por cuota y preservación de tráfico ante fallos.
+- Validación: frontmatter y revisión de procedimiento contra CLI/API usada en esta sesión; diff y Biome staged. Sin deployment real para validar documentación.

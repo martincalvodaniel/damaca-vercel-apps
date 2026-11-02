@@ -56,3 +56,5 @@ La nueva app [lbdp](../apps/lbdp/plan/master.md) desarrolla únicamente el escap
 ## Publicación manual de Vercel
 
 [AGW-17](iterations.md#agw-17--manual-vercel-deployments) establece `git.deploymentEnabled: false` en las siete apps. Los deployments se realizan manualmente bajo petición; los pushes que contienen esta configuración no solicitan deployments automáticos de Git. Cada rama debe incorporar la configuración para adoptar esta política.
+
+La skill local [vercel-deploy-alias](../.agents/skills/vercel-deploy-alias/SKILL.md) ofrece selección de aplicación y rama para despliegue manual y movimiento de alias; entrega AGW-18.

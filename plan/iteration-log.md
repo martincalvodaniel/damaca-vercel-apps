@@ -174,3 +174,9 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 - Validación: tipos filtrados de las seis apps correctos (8 tareas incluyendo dependencias); inspección de las siete configuraciones y diff check. El lint `--changed --since=HEAD` no examinó archivos sin staging; se utiliza lint staged antes de publicar. No hay lógica de producto modificada ni nuevas pruebas/builds; el cambio solo controla el disparador Git.
 - Límite: configuración publicada en int; otras ramas deben incorporar el commit. No se pausa tráfico, cambia main ni ejecuta deployment manual. La presencia de la opción en código no acredita una prueba alojada de todos los disparadores.
 - Publicación: commit/push a int y coincidencia del SHA remoto comprobados al cierre. Capacidad inicial: 94% de 5h y 39% de 7d, dentro de reservas.
+
+## AGW-18 — Vercel deployment and alias skill
+
+- Se crea la skill local con selección de app y rama, resolución del SHA remoto y proyecto, despliegue manual por CLI/API, espera READY y verificación final del alias.
+- Se documentan los parámetros reales: name obligatorio y target omitido para Preview. Cuota 402 detiene la ejecución sin mover alias. Producción requiere petición explícita.
+- Revisión estática de frontmatter/procedimiento, diff check y lint staged; sin despliegue ni movimiento de alias durante esta entrega documental. Publicación y SHA remoto comprobados al cierre.
