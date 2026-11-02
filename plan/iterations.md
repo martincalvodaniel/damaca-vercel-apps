@@ -190,3 +190,10 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Objetivo/rutas: skill local `.agents/skills/vercel-deploy-alias/SKILL.md`, con selección de app/rama y despliegue manual seguido de alias verificado.
 - Aceptación: opciones explícitas, SHA remoto, entorno separado de rama, READY previo al alias, parada por cuota y preservación de tráfico ante fallos.
 - Validación: frontmatter y revisión de procedimiento contra CLI/API usada en esta sesión; diff y Biome staged. Sin deployment real para validar documentación.
+
+## AGW-19 — Vercel deployment count skill
+
+- Estado: `validated`.
+- Objetivo/rutas: `.agents/skills/vercel-deployment-report/**`, script determinista de ventana móvil y registro raíz.
+- Aceptación: ventana fija inclusiva/exclusiva, paginación, deduplicación, estados completos y desglose por proyecto; consulta de solo lectura.
+- Validación: ejecución real del script, reconciliación de totales, revisión del frontmatter, formato y diff check.

@@ -180,3 +180,9 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 - Se crea la skill local con selección de app y rama, resolución del SHA remoto y proyecto, despliegue manual por CLI/API, espera READY y verificación final del alias.
 - Se documentan los parámetros reales: name obligatorio y target omitido para Preview. Cuota 402 detiene la ejecución sin mover alias. Producción requiere petición explícita.
 - Revisión estática de frontmatter/procedimiento, diff check y lint staged; sin despliegue ni movimiento de alias durante esta entrega documental. Publicación y SHA remoto comprobados al cierre.
+
+## AGW-19 — Vercel deployment count skill
+
+- Script Python sin dependencias externas: consulta CLI paginada, ventana fija de creación [inicio, fin), deduplicación y totales por estado/proyecto; admite end ISO con zona y duración configurada.
+- Ejecución real: 2026-11-01T19:22:34.038Z a 2026-11-02T19:22:34.038Z, 94 registros: 59 CANCELED, 34 READY, 1 ERROR; una página cubre el límite inferior. Corrige el recuento conversacional anterior que usó un epoch mal convertido y omitió el límite superior.
+- Revisión de campos, suma de estados, formato, diff check y publicación en int comprobados al cierre. No se muta Vercel; no se infiere fuente del trigger ni cuota interna.
