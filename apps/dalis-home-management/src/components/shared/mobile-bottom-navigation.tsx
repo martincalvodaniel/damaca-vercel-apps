@@ -12,7 +12,7 @@ export function MobileBottomNavigation() {
       aria-label="Navegación principal"
       className="fixed inset-x-0 bottom-0 z-40 w-full max-w-[100vw] overflow-x-clip border-t border-border bg-surface/95 shadow-soft backdrop-blur-lg sm:hidden"
     >
-      <div className="mx-auto grid w-full min-w-0 max-w-lg grid-cols-4 gap-1 px-2 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
+      <div className="mx-auto grid w-full min-w-0 max-w-lg grid-cols-5 gap-1 px-2 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
         {primaryNavigationItems.map((item) => {
           const isActive = item.paths.some((path) => pathname === path)
 

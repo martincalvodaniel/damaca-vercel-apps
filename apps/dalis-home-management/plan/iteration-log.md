@@ -2,20 +2,9 @@
 
 Evidencia observada por entrega. El estado de cada iteración se consulta en `iterations.md`.
 
-## HM-01 — Receta y observaciones opcionales
+## Archivo
 
-- Inicio: 2026-10-31. Capacidad consultada: 84% restante de 5h y 97% de 7d. Estimación conservadora: menos de 10 puntos de 5h y 3 de 7d para implementación, validación y publicación; respeta las reservas.
-- Alcance y aceptación: [HM-01](iterations.md#hm-01--receta-y-observaciones-opcionales).
-- Implementado `notes` opcional en esquema, Server Actions y lectura/escritura MongoDB. Vaciar el campo reemplaza las notas previas por texto vacío. Sin nuevas consultas o índices y sin migración.
-- Formulario con etiqueta y textarea; consulta plegable reutilizada en recetario y menú semanal. Texto escapado por React, con saltos de línea y ajuste de palabras largas.
-- Corregidos todos los avisos de Biome en archivos editados: callbacks estables y convención `it` en tests. Revisión adicional con `vercel-react-best-practices` y `vercel:react-best-practices`: sin nuevas dependencias, peticiones, efectos o estado para las notas; marcado nativo accesible.
-- `bun run lint --staged`: 11 archivos, sin hallazgos. La comprobación inicial con `--changed` no cubría cambios sin preparar; se sustituyó por esta validación sobre todos los archivos preparados.
-- `bun run type-check --filter=@damaca/dalis-home-management`: correcto.
-- `bun run test --filter=@damaca/dalis-home-management`: 101 tests correctos, 0 fallos; incluye notas ausentes/vacías, saltos de línea, longitud máxima y entradas inválidas.
-- El primer build Turbopack pasó antes de corregir callbacks. El build final con Turbopack falló al abrir un puerto de PostCSS (`Operation not permitted`), también tras solicitar ejecución fuera del sandbox. `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto sobre la versión final, sin cambiar configuración del proyecto.
-- `git diff --check` y enlaces locales de los planes: correctos. Sin prueba interactiva autenticada ni escrituras en la base de datos real.
-- Capacidad refrescada antes del cierre: 81% de 5h y 97% de 7d, por encima de reservas.
-- Rama `int`, sin cambios previos ajenos ni commits locales pendientes al inicio. Referencia remota comprobada antes de publicar: `ecda84c748e56552a64a4287a06dadb0899a3b47`. Preparada para commit y publicación; la coincidencia del SHA remoto se comprueba al cierre.
+- [HM-01 — Receta y observaciones opcionales](archive/2026-11-02/iteration-log.md#hm-01--receta-y-observaciones-opcionales).
 
 ## HM-02 — Listas compactas y limpieza de búsquedas
 
@@ -143,3 +132,25 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - Capacidad consultada en cada fase: 36→35→33→32→30→29→28→27→25→24→23% de 5h, con saldo semanal de 83→81%. Todas las fases mantienen margen para cierre y reservas.
 - Enlaces locales entre AGENTS, contrato de diseño, plan y prueba de paleta correctos; `git diff --check` correcto. Revisión final: cambios limitados a Home Management y sus instrucciones, sin secretos ni cambios de datos. El estado final de `main`/`int` y la publicación se verifican antes del cierre.
 - Referencias remotas previas al commit verificadas: `main` e `int` en `c94856cb6b52dd413001ff746fc34e81fc8443ce`. La paleta se publica solo en `int`. Validación final preparada: `bun run lint --staged` comprobó 52 archivos sin hallazgos; `git diff --cached --check` correcto. Capacidad antes de commit/publicación: 21% de 5h y 81% de 7d, por encima de reservas.
+
+## HM-11 — Tareas recurrentes del hogar
+
+- Inicio de HM-11: plan aprobado registrado e implementación parcial inicial, todavía sin validar ni publicar.
+- Añadidas funciones puras de fechas civiles, estados de periodicidad y agregación diaria, con seis pruebas.
+- `bun run test --filter=@damaca/dalis-home-management`: 165 pruebas correctas, cero fallos. Biome aplicado únicamente al nuevo módulo; `git diff --check` correcto.
+- En la primera pausa quedaban pendientes: persistencia, esquemas y acciones autenticadas, página, calendario, histórico, navegación y validación/cierre; completados durante la reanudación descrita a continuación.
+- Capacidad inicial observada: 90% restante de 5h y 38% de 7d. Sin modificaciones fuera de Home Management ni cambios en páginas existentes.
+- Reanudación 2026-11-02: rama `int`, base `ec6be6372259a8952efb3ff14075749b68cada4e`, sin commits locales pendientes; solo cambios parciales propios de HM-11. Capacidad: 89% de 5h y 38% de 7d. Estimación conservadora de la entrega restante: hasta 35/12 puntos respectivamente, manteniendo reservas. Persistencia: dos colecciones nuevas, transacciones MongoDB y revisión de tarea para serializar archivo, programación y ejecución concurrentes. Sin cambio en conexiones, consultas ni documentos de páginas existentes.
+
+- Comprobación de compatibilidad: `hello` contra MongoDB informó instancia standalone con sesiones y sin replica set. Se sustituyó la estrategia inicial de transacciones por operaciones condicionales atómicas por documento, índices únicos y limpieza convergente al archivar, sin modificar infraestructura ni conexión compartida. No se ejecutaron transacciones en la base del hogar.
+- Implementada ruta protegida, catálogo activo/archivado, calendario mensual, arrastre por puntero y alternativa por fecha, histórico corregible y modales completas con confirmación. Revalidación limitada a `/household-tasks`. La navegación conserva orden y funciones previas y añade Tareas al final; cinco columnas en móvil.
+- Prueba real del repositorio con MongoDB standalone en base temporal exclusiva: creación e histórico inicial idempotentes, ocho completados concurrentes sin duplicados, unicidad tarea/día, correcciones, eliminación, cancelación y doce carreras de archivo contra programación/completado: correctos. Base temporal eliminada al terminar; sin escrituras en la base del hogar. Script de QA local: `/private/tmp/hm11-qa/persistence.ts`.
+- Chrome headless con componentes reales y servicios aislados: programar, completar con fecha real distinta de la prevista, corregir/eliminar desde histórico y restaurar pendientes, arrastrar desde catálogo y mover una programación, puntero táctil simulado, registrar sin programación, editar, cancelar, archivar y consultar archivadas: correctos. Validación nativa, error recuperable conservando formulario, bloqueo durante guardado y Escape: correctos.
+- QA visual en 320/390/1440px, claro/oscuro: cinco enlaces de navegación, sin desbordamiento horizontal, modales completas y texto visible con contraste mínimo aplicable. Capturas revisadas. La fixture requirió restringir selectores a botones y resolver colores CSS modernos mediante Canvas; la comprobación final no detecta errores de ejecución ni de contraste. Capturas y script: `/private/tmp/hm11-qa/`. Sin prueba en dispositivo táctil físico.
+- Pruebas añadidas para fechas inválidas/futuras, intervalos, umbral del 80%, avisos cubiertos y vencidos, meses/años/bisiestos/cambio horario, recálculo de histórico, referencias, idempotencia, fallos parciales de creación y limpieza, autenticación, mensajes de error y revalidación exclusiva. `bun run test --filter=@damaca/dalis-home-management`: 181 tests correctos, 0 fallos, 488 aserciones. Tipos correctos con `bun run type-check --filter=@damaca/dalis-home-management`.
+- Revisión React según `vercel-react-best-practices` y `vercel:react-best-practices`: componentes separados y locales, consultas paralelas, tipos compartidos sin runtime del servidor, callbacks estables y límites cliente/servidor conservados. Sin nuevas dependencias, variables de entorno persistidas, migraciones ni despliegue.
+- Archivo documental: HM-01 movida a `archive/2026-11-02/iteration-log.md` y referencias actualizadas, manteniendo las diez entregas recientes en este registro.
+- Build final `bun run build --filter=@damaca/dalis-home-management -- --webpack`: correcto, sin fugas cliente/servidor; nueva ruta dinámica protegida incluida. La caché remota de Turbo no estuvo disponible; los checks se ejecutaron localmente.
+- Biome inicial sobre archivos preparados detectó únicamente una línea vacía final en el archivo histórico trasladado; corregida antes de repetir la comprobación. Enlaces locales y `git diff --check` correctos. Revisión del alcance: solo Home Management, navegación autorizada y registros de persistencia nuevos; sin cambios en Tasks ni otras aplicaciones, secretos, credenciales o páginas de negocio existentes. Publicación en `int` pendiente de verificar al cierre.
+- Referencias remotas comprobadas antes del commit: `int` en `ec6be6372259a8952efb3ff14075749b68cada4e`, coincidente con la base local; `main` no se modifica. Capacidad antes del cierre: 71% restante de 5h y 35% de 7d, manteniendo reservas.
+- Validación final preparada: `bun run lint --staged` comprobó 26 archivos sin hallazgos; `git diff --cached --check` correcto. Revisados los 26 archivos exactos de entrega, todos dentro de Home Management.

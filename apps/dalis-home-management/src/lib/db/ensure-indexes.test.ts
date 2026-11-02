@@ -1,6 +1,6 @@
 import "server-only"
 
-import { describe, expect, test } from "bun:test"
+import { describe, expect, test as it } from "bun:test"
 import type { IndexSpec } from "./ensure-indexes"
 import {
   ensureIndexes,
@@ -11,11 +11,29 @@ import {
 } from "./ensure-indexes"
 
 describe("MongoDB index specifications", () => {
-  test("the application index registry is valid", () => {
+  it("the application index registry is valid", () => {
     expect(() => validateIndexSpecs(INDEX_SPECS)).not.toThrow()
   })
 
-  test("registers the dish name sort index", () => {
+  it("registers household task list and calendar indexes", () => {
+    expect(INDEX_SPECS).toContainEqual({
+      collection: "household_tasks",
+      keys: { name: 1 },
+      options: { name: "name_asc", collation: { locale: "es", strength: 1 } },
+    })
+    expect(INDEX_SPECS).toContainEqual({
+      collection: "household_task_occurrences",
+      keys: { date: 1 },
+      options: { name: "date_asc" },
+    })
+    expect(INDEX_SPECS).toContainEqual({
+      collection: "household_task_occurrences",
+      keys: { taskId: 1, date: 1 },
+      options: { name: "task_id_date_unique", unique: true },
+    })
+  })
+
+  it("registers the dish name sort index", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "dishes",
       keys: { name: 1 },
@@ -26,7 +44,7 @@ describe("MongoDB index specifications", () => {
     })
   })
 
-  test("registers the dish inventory link lookup index", () => {
+  it("registers the dish inventory link lookup index", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "dishes",
       keys: { "ingredients.inventoryItemId": 1 },
@@ -34,7 +52,7 @@ describe("MongoDB index specifications", () => {
     })
   })
 
-  test("registers the inventory list sort index", () => {
+  it("registers the inventory list sort index", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "inventory_items",
       keys: { name: 1 },
@@ -45,7 +63,7 @@ describe("MongoDB index specifications", () => {
     })
   })
 
-  test("registers the canonical product lookup index", () => {
+  it("registers the canonical product lookup index", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "inventory_items",
       keys: { normalizedName: 1, unit: 1 },
@@ -57,7 +75,7 @@ describe("MongoDB index specifications", () => {
     })
   })
 
-  test("registers the shopping list sort index", () => {
+  it("registers the shopping list sort index", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "shopping_list_items",
       keys: { isPurchased: 1, createdAt: 1 },
@@ -65,7 +83,7 @@ describe("MongoDB index specifications", () => {
     })
   })
 
-  test("registers the unique inventory shopping-list link", () => {
+  it("registers the unique inventory shopping-list link", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "shopping_list_items",
       keys: { inventoryItemId: 1 },
@@ -77,7 +95,7 @@ describe("MongoDB index specifications", () => {
     })
   })
 
-  test("registers obsolete catalog indexes for removal", () => {
+  it("registers obsolete catalog indexes for removal", () => {
     expect(OBSOLETE_INDEX_SPECS).toEqual([
       {
         collection: "inventory_items",
@@ -98,7 +116,7 @@ describe("MongoDB index specifications", () => {
     ])
   })
 
-  test("registers one meal plan per week", () => {
+  it("registers one meal plan per week", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "weekly_meal_plans",
       keys: { weekStart: 1 },
@@ -106,7 +124,7 @@ describe("MongoDB index specifications", () => {
     })
   })
 
-  test("registers the planned dish lookup index", () => {
+  it("registers the planned dish lookup index", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "weekly_meal_plans",
       keys: { "slots.dishId": 1 },
@@ -114,7 +132,7 @@ describe("MongoDB index specifications", () => {
     })
   })
 
-  test("rejects duplicate names within a collection", () => {
+  it("rejects duplicate names within a collection", () => {
     const specs: IndexSpec[] = [
       {
         collection: "items",
@@ -133,7 +151,7 @@ describe("MongoDB index specifications", () => {
     )
   })
 
-  test("allows the same index name in different collections", () => {
+  it("allows the same index name in different collections", () => {
     const specs: IndexSpec[] = [
       {
         collection: "items",
@@ -150,7 +168,7 @@ describe("MongoDB index specifications", () => {
     expect(() => validateIndexSpecs(specs)).not.toThrow()
   })
 
-  test("creates registered indexes and removes obsolete indexes", async () => {
+  it("creates registered indexes and removes obsolete indexes", async () => {
     const calls: Array<{ collection: string; name: string }> = []
     const drops: Array<{ collection: string; name: string }> = []
     const database: IndexDatabase = {

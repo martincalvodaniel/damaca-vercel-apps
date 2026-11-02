@@ -10,7 +10,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: flujo actual de platos, sin nuevas dependencias, consultas ni índices.
 - Aceptación: crear y editar con o sin notas; recuperar y borrar notas; conservar saltos de línea; consulta en recetario y menú; compatibilidad con documentos existentes; validar límite de 10.000 caracteres en cliente y servidor.
 - Validación prevista: Biome incremental, tipos, tests de la app, build y revisión del diff.
-- Evidencia: [HM-01](iteration-log.md#hm-01--receta-y-observaciones-opcionales).
+- Evidencia: [HM-01](archive/2026-11-02/iteration-log.md#hm-01--receta-y-observaciones-opcionales).
 
 ## HM-02 — Listas compactas y limpieza de búsquedas
 
@@ -101,3 +101,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: superficies comunes y opacas en modales/tarjetas; acciones principales y foco uniformes; estados semánticos separados de acentos de sección; textos pequeños con contraste AA; productos comprados legibles sin atenuar todo el bloque; capas oscuras y controles nativos coherentes; colores centralizados y componentes migrados; reglas accesibles desde AGENTS; conservar comportamiento, modales completas y teclado.
 - Validación prevista: Biome de todos los archivos tocados, tipos, tests, build Webpack, revisión visual clara/oscura y contraste calculado sobre colores compuestos, prueba de interacción de formularios y comprobación de referencias documentales.
 - Evidencia: [HM-10](iteration-log.md#hm-10--sistema-de-color-cohesionado-y-accesible).
+
+## HM-11 — Tareas recurrentes del hogar
+
+- Estado: `validated`.
+- Objetivo: catálogo compartido, calendario mensual con arrastre e histórico de ejecuciones en `/household-tasks`.
+- Rutas: nueva feature, esquemas y repositorios de tareas; registros de colecciones e índices; navegación autorizada; `plan/`.
+- Dependencias: arquitectura existente, sin nuevas dependencias.
+- Aceptación: plan aprobado en esta conversación; periodicidad máxima, aviso al 80%, sin avisos antes de la primera ejecución, histórico corregible y calendario rojo/verde/neutro.
+- Validación prevista: Biome, tipos, tests, build y QA visual/interactiva.
+- Evidencia: [HM-11](iteration-log.md#hm-11--tareas-recurrentes-del-hogar).

@@ -25,4 +25,10 @@ export const primaryNavigationItems = [
     paths: ["/meals"],
     iconPath: "M4 13a8 8 0 0 1 16 0H4Zm-1 0h18M12 5V3.5M6 17h12",
   },
+  {
+    href: "/household-tasks",
+    label: "Tareas",
+    paths: ["/household-tasks"],
+    iconPath: "m4 6 2 2 3-4m3 2h8M4 14l2 2 3-4m3 2h8M4 21h16",
+  },
 ] as const

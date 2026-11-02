@@ -6,6 +6,8 @@ import { getDatabase } from "@/lib/db/client"
 // Register collection names here alongside the feature that introduces them.
 export const COLLECTION_NAMES = {
   dishes: "dishes",
+  householdTasks: "household_tasks",
+  householdTaskOccurrences: "household_task_occurrences",
   inventoryItems: "inventory_items",
   shoppingListItems: "shopping_list_items",
   weeklyMealPlans: "weekly_meal_plans",

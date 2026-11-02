@@ -45,6 +45,21 @@ export const OBSOLETE_INDEX_SPECS: readonly ObsoleteIndexSpec[] = [
 // collection or query pattern. Do not add speculative indexes.
 export const INDEX_SPECS: readonly IndexSpec[] = [
   {
+    collection: "household_tasks",
+    keys: { name: 1 },
+    options: { name: "name_asc", collation: { locale: "es", strength: 1 } },
+  },
+  {
+    collection: "household_task_occurrences",
+    keys: { date: 1 },
+    options: { name: "date_asc" },
+  },
+  {
+    collection: "household_task_occurrences",
+    keys: { taskId: 1, date: 1 },
+    options: { name: "task_id_date_unique", unique: true },
+  },
+  {
     collection: "dishes",
     keys: { name: 1 },
     options: {

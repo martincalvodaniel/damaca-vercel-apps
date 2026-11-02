@@ -2,6 +2,8 @@
 
 ## Estado vigente
 
+La página de Tareas incorpora catálogo compartido, calendario mensual e histórico de ejecuciones; su aceptación y evidencia se registran en HM-11.
+
 Los platos admiten una receta u observaciones opcionales como texto libre de hasta 10.000 caracteres. Se pueden añadir, editar, borrar y consultar desde el recetario y el menú semanal, conservando saltos de línea. Los platos existentes sin notas siguen siendo válidos; no se requiere migración.
 
 ## Interfaz vigente
@@ -28,3 +30,9 @@ No hay dudas abiertas para el alcance actual.
 Browser and home-screen icons use local SVG sources, a 16/32/48-pixel ICO fallback, installation PNGs and an Apple Touch Icon. Existing PWA manifests also declare an opaque maskable variant. Regenerate with `bun run icons:generate` from the repository root. Shared status and evidence: [AGW-10](../../../plan/iterations.md#agw-10--application-favicons) and [delivery log](../../../plan/iteration-log.md#agw-10-application-favicons).
 
 La publicación Vercel pasa a ser manual bajo petición mediante `git.deploymentEnabled: false`. Registro transversal: [AGW-17](../../../plan/iterations.md#agw-17--manual-vercel-deployments).
+
+## Tareas recurrentes del hogar (HM-11)
+
+Nueva página independiente `/household-tasks`, con datos compartidos y acceso autorizado en navegación. Periodicidad máxima en días, aviso desde el 80% sin programación a tiempo, vencimiento persistente y ausencia de avisos antes de la primera ejecución. Calendario mensual con arrastre y alternativa por fecha; rojo si queda alguna pendiente, verde si todas se completan y neutro sin tareas. Histórico con fecha real independiente de la prevista, corrección y eliminación. Archivo conserva histórico y retira pendientes con confirmación. Sin cambios fuera de esta app ni cambios funcionales de otras páginas.
+
+La persistencia de HM-11 es compatible con MongoDB standalone: escrituras condicionales por documento, unicidad tarea/día y archivo previo a la limpieza de pendientes. Las lecturas ocultan pendientes archivadas incluso si falla la limpieza; reintentar el archivo la completa. La fecha real corregida conserva la fecha prevista si existía programación; para ejecuciones no programadas mueve también el registro del calendario. Eliminar una ejecución de una tarea archivada retira el registro sin reabrir pendientes. Fechas admitidas de 1900 a 2199; periodicidad de 1 a 36.500 días.
