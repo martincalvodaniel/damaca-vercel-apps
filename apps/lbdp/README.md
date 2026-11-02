@@ -28,7 +28,11 @@ Las páginas legales y de financiación enlazan al sitio vigente. Robots y metad
 
 ## Vercel
 
-No hay proyecto remoto creado, credenciales ni dominio configurados. Cuando se autorice, la raíz del proyecto será `apps/lbdp`, manteniendo el workspace/lockfile raíz y los comandos filtrados del monorepo. No importar credenciales/configuración de otras aplicaciones. La elección de plan y el lanzamiento comercial siguen pendientes.
+Proyecto [lbdp](https://vercel.com/martincalvodaniels-projects/lbdp) creado en el equipo existente, conectado a este repositorio con raíz `apps/lbdp`. Next.js, Node 24, instalación `bunx bun@1.4.4 install --frozen-lockfile --filter @damaca/lbdp` y build `bunx bun@1.4.4 run build` desde la raíz de la app. Producción permanece en `main`; selección nativa de cambios y protección de despliegue activas.
+
+El primer Preview de `int` fue rechazado el 02/11/2026 por cuota Vercel (`402`, `api-deployments-free-per-day`). No hay URL READY ni comprobación HTTP alojada. Tras el desbloqueo, comprobar primero deployments de lbdp y reutilizar el pendiente si existe; crear un único Preview del SHA vigente de `origin/int` solo si no existe uno equivalente. No deducir del tiempo transcurrido que la cuota se haya renovado. Evidencia y pasos pendientes en [LBDP-02](plan/iteration-log.md#lbdp-02--proyecto-vercel-y-preview-de-int).
+
+No hay dominio personalizado, variables de negocio ni producción desplegada por esta entrega. La vinculación local `.vercel` está ignorada. No importar credenciales/configuración de otras aplicaciones. El lanzamiento comercial y la elección de plan siguen pendientes.
 
 ## Plan y decisiones pendientes
 
