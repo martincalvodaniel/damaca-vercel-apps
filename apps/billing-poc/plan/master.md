@@ -51,3 +51,9 @@ En escritorio (`xl`), la navegación oculta Billing y el título de página y mu
 Ausencias, Eventos, Mes, Productos y Año integran sus controles iniciales en el bloque fijo de navegación en escritorio (`xl`), debajo del menú y las altas. Incluye filtros/acciones de productos, selector de plantillas de Mes y controles de periodos/gráficos. En móvil, esos controles permanecen bajo la navegación y se desplazan con el contenido. Se mantiene una sola instancia de cada control. Alcance: [BILL-19](iterations.md#bill-19--controles-de-cabecera-en-navegación-de-escritorio).
 
 En escritorio, las altas de Eventos y Productos comparten fila con sus controles iniciales; los filtros de Productos se integran en esa misma banda. Mes muestra solo el + de su fila de controles en escritorio. Las altas superiores permanecen visibles en móvil y el + local de Mes se conserva, manteniendo los dos botones móviles. Alcance: [BILL-20](iterations.md#bill-20--una-fila-de-controles-en-escritorio).
+
+## Ausencias y actividad de cliente
+
+Ausencias usa los encabezados «Ausencias», «Recuperaciones» y «Última ausencia». Los calendarios de Ausencias/Eventos muestran lun/mar/mié/jue/vie/sáb/dom. Los modales de ausencias aprovechan la altura disponible; editar no enfoca el nombre del alumno ni solicita el teclado. Campos, franjas y confirmaciones en español.
+
+El listado de clientes ofrece edición mediante lápiz antes de la papelera. La ficha reutiliza la tabla de pagos mensual sobre todo el historial del cliente: fecha completa, mismas columnas, filtros, orden y acciones; la exportación incluye ese historial completo. Las secciones de actividad siguen cerradas inicialmente. Alcance: [BILL-21](iterations.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).

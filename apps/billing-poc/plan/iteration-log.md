@@ -1,17 +1,6 @@
 # Registro de entregas
 
-Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md), [BILL-09](archive/2026-11-02/bill-09.md), [BILL-10](archive/2026-11-02/bill-10.md).
-
-## BILL-11 — Traducción de la interfaz al español
-
-- Inicio: 2026-11-01, rama `int`, base `36ccd49`; árbol limpio. Capacidad inicial: 100 % en 5 h y 66 % en 7 d.
-- Aceptación: [BILL-11](iterations.md#bill-11--traducción-de-la-interfaz-al-español).
-- Decisión del usuario: mostrar `Commissions` como `Encargos`.
-- Implementado: navegación y las secciones de autenticación, clientes, encargos, eventos, facturas, pagos mensuales/anuales, productos, ausencias y WordPress traducidas. Incluidos formularios, tablas, botones, mensajes y errores, estados vacíos, placeholders, etiquetas accesibles y metadatos. Documento con `lang="es"`; fechas y meses con `es-ES`; marcas y valores internos de API conservan su identidad.
-- Validación: Biome explícito en los 122 archivos TSX modificados y `bun run lint --staged` (124 archivos): correcto. `bun run type-check --filter=@damaca/billing-poc`: correcto. `bun run build --filter=@damaca/billing-poc`: Turbopack no pudo enlazar un puerto interno (`Operation not permitted`); `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto, con todas las rutas compiladas. `git diff --check`: correcto. No se ejecutaron pruebas.
-- La opción semántica de “Commissions” fue confirmada como “Encargos”. Los valores de factura/recibo de la API se conservaron, traduciendo solo las etiquetas visibles.
-- Publicación: commit `ccab1a73340fe1bdb5537ddf4c9bfdcd20a58960` en `int`; `git ls-remote origin refs/heads/int` confirmó el mismo SHA.
-- Capacidad al cierre: 97 % restante en 5 h y 66 % en 7 d.
+Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md), [BILL-09](archive/2026-11-02/bill-09.md), [BILL-10](archive/2026-11-02/bill-10.md), [BILL-11](archive/2026-11-02/bill-11.md).
 
 ## BILL-12 — Cocciones y plantillas
 
@@ -110,3 +99,15 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 - Móvil: las altas superiores mantienen visibilidad y los botones adicionales de las cabeceras de Eventos/Productos se ocultan. Mes conserva sus dos +. Los controles con estado no se duplican; los botones de alta sin estado comparten exactamente sus callbacks. Sin cambios de datos, dependencias ni efectos.
 - Revisión estática de clases responsive, árbol, labels y callbacks; no se realizó verificación visual interactiva en navegador. Se archiva BILL-10 para mantener diez entregas recientes.
 - Validación: Biome sobre cinco TSX editados sin hallazgos; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 992 correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto (10,676 s). Caché remota de Turbo no disponible; comprobaciones locales completas. Enlaces locales comprobados. Lint preparado, diff check, commit, push y SHA remoto se verifican al cerrar.
+
+## BILL-21 — Ausencias localizadas y tabla de pagos del cliente
+
+- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits pendientes. Capacidad: 72 % en 5 h y 50 % en 7 d; estimación suficiente para implementación, validación y publicación con reservas.
+- Aceptación: [BILL-21](iterations.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).
+
+- Ausencias: columnas reducidas a Ausencias/Recuperaciones/Última ausencia; Mañana/Tarde, Alumno/a y Fecha, tipos y vacíos traducidos. Modales de día y alumno con stableHeight (100dvh menos márgenes), scroll interno y foco inicial en el contenedor; el controlador inline omite foco en el nombre al editar y conserva scroll/restauración de foco. Confirmaciones de estos modales en español.
+- Calendarios: constantes compartidas lun/mar/mié/jue/vie/sáb/dom, orden lunes→domingo, reutilizadas por Ausencias y Eventos.
+- Clientes: botón de lápiz antes de papelera, con stopPropagation y ClientFormModal existente; conserva enlace a ficha y copia de contactos. Actividad usa PaymentsView extraída de la vista mensual, sin nueva consulta mensual. Misma tabla/filtros/orden/columnas compacto-todo, exportación y modales de detalle/duplicado/borrado; fecha completa en modo historial y limpieza de deep links sin añadir parámetros de mes. Excel incluye todo el historial y nombre de archivo por cliente. Las mutaciones existentes invalidan actividad automáticamente.
+- Regresiones: render de tabla con fechas de dos años, controles/filtros/acciones, fecha corta conservada en Mes, siete encabezados españoles y orden editar→borrar en clientes. Expectativas de etiquetas de ausencia actualizadas al español. Se archiva BILL-11 para mantener diez entregas recientes.
+- Revisión React: SWR existente, sin fetch ni efectos de datos nuevos; modales de pago continúan diferidos; callbacks estables, fechas y moneda compartidas, foco de teclado y estilos claros/oscuros conservados. No hay verificación visual interactiva ni prueba del teclado virtual en dispositivo; el foco se revisa en la implementación y la traducción/tabla mediante render estático.
+- Validación final: `bun run type-check --filter=@damaca/billing-poc`, correcto; `bun run test --filter=@damaca/billing-poc`: 995 correctas, 0 fallos, 100 archivos y 1824 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack`, correcto (9,474 s). Biome de todos los TS/TSX editados/nuevos sin hallazgos después de corregir imports y estabilizar un callback. Caché remota de Turbo no disponible; comprobaciones locales completas. Enlaces y diff check correctos; lint preparado, commit, push y SHA remoto se verifican al cierre.

@@ -1,9 +1,9 @@
 export const WEEKDAY_HEADERS = [
-  "Mon",
-  "Tue",
-  "Wed",
-  "Thu",
-  "Fri",
-  "Sat",
-  "Sun",
+  "lun",
+  "mar",
+  "mié",
+  "jue",
+  "vie",
+  "sáb",
+  "dom",
 ] as const

@@ -5,6 +5,7 @@ import { useCallback } from "react"
 import { CopyToClipboardButton } from "@/components/ui/CopyToClipboardButton"
 import { IconButton } from "@/components/ui/IconButton"
 import { ClientTypeIcon } from "@/components/ui/icons/ClientTypeIcon"
+import { PencilIcon } from "@/components/ui/icons/PencilIcon"
 import { TrashIcon } from "@/components/ui/icons/TrashIcon"
 import type { Client } from "@/lib/domain/entities/client"
 
@@ -13,6 +14,7 @@ interface ClientTableRowProps {
   index: number
   onOpen: (clientId: string) => void
   onDelete: (clientId: string) => void
+  onEdit: (clientId: string) => void
   onCopy?: (field: string, value: string) => void
 }
 
@@ -21,11 +23,13 @@ export default function ClientTableRow({
   index,
   onOpen,
   onDelete,
+  onEdit,
   onCopy,
 }: ClientTableRowProps) {
   const stopLinkPropagation = (event: React.MouseEvent) =>
     event.stopPropagation()
   const handleOpen = () => onOpen(clientId)
+  const handleEdit = () => onEdit(clientId)
   const handleDelete = () => onDelete(clientId)
   const clientId = client._id ?? ""
   const stripe =
@@ -119,14 +123,23 @@ export default function ClientTableRow({
         )}
       </td>
       <td className="px-6 py-4 text-right">
-        <IconButton
-          variant="danger"
-          stopPropagation
-          onClick={handleDelete}
-          ariaLabel={`Eliminar cliente ${client.name}`}
-        >
-          <TrashIcon />
-        </IconButton>
+        <div className="inline-flex items-center gap-2">
+          <IconButton
+            stopPropagation
+            onClick={handleEdit}
+            ariaLabel={`Editar cliente ${client.name}`}
+          >
+            <PencilIcon />
+          </IconButton>
+          <IconButton
+            variant="danger"
+            stopPropagation
+            onClick={handleDelete}
+            ariaLabel={`Eliminar cliente ${client.name}`}
+          >
+            <TrashIcon />
+          </IconButton>
+        </div>
       </td>
     </tr>
   )

@@ -17,11 +17,13 @@ export function useMonthlyPaymentsActions({
   isLoading,
   year,
   month,
+  syncMonthQuery = true,
 }: {
   payments: Payment[]
   isLoading: boolean
   year: number
   month: number
+  syncMonthQuery?: boolean
 }) {
   const { trigger: deletePayment, isMutating: isDeleting } = useDeletePayment()
 
@@ -54,10 +56,22 @@ export function useMonthlyPaymentsActions({
       setEditPaymentId(target)
     }
     consumedPaymentRef.current = target
-    router.replace(`${pathname}?year=${year}&month=${month}`, {
-      scroll: false,
-    })
-  }, [payments, isLoading, searchParams, year, month, pathname, router])
+    router.replace(
+      syncMonthQuery ? `${pathname}?year=${year}&month=${month}` : pathname,
+      {
+        scroll: false,
+      }
+    )
+  }, [
+    payments,
+    isLoading,
+    searchParams,
+    year,
+    month,
+    pathname,
+    router,
+    syncMonthQuery,
+  ])
 
   const handleRowClick = (paymentId: string) => {
     setEditPaymentId(paymentId)

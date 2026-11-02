@@ -103,6 +103,7 @@ export function buildPaymentsExportRows(
 }
 
 interface ExportPaymentsToXlsxArgs {
+  filename?: string
   payments: Payment[]
   year: number
   month: number
@@ -110,6 +111,7 @@ interface ExportPaymentsToXlsxArgs {
 
 export async function exportPaymentsToXlsx({
   payments,
+  filename,
   year,
   month,
 }: ExportPaymentsToXlsxArgs): Promise<void> {
@@ -137,7 +139,11 @@ export async function exportPaymentsToXlsx({
 
   const workbook = xlsx.utils.book_new()
   xlsx.utils.book_append_sheet(workbook, worksheet, "Payments")
-  xlsx.writeFileXLSX(workbook, buildPaymentsExportFilename(year, month), {
-    compression: true,
-  })
+  xlsx.writeFileXLSX(
+    workbook,
+    filename ?? buildPaymentsExportFilename(year, month),
+    {
+      compression: true,
+    }
+  )
 }

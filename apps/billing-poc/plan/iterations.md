@@ -110,7 +110,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: componentes y flujos existentes; sin cambios de comportamiento ni nuevas dependencias. Nombre aprobado por el usuario: `Commissions` se presenta como `Encargos`.
 - Aceptación: ninguna cadena inglesa dirigida a usuarios permanece en la UI, salvo marcas, nombres propios, códigos/términos técnicos necesarios y contenido introducido por los usuarios; textos accesibles y errores visibles también traducidos; idioma del documento y formatos coherentes con `es-ES`.
 - Validación: inventario y búsqueda residual de cadenas UI inglesas; Biome en archivos editados, type-check y build de billing; diff check. No ejecutar pruebas salvo que el usuario las solicite.
-- Evidencia: [BILL-11](iteration-log.md#bill-11--traducción-de-la-interfaz-al-español).
+- Evidencia: [BILL-11](archive/2026-11-02/bill-11.md#bill-11--traducción-de-la-interfaz-al-español).
 
 ## BILL-12 — Cocciones y plantillas
 
@@ -204,3 +204,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: + de Eventos/Productos junto a periodo/búsqueda/acciones; Mes usa solo el + de su fila de controles en escritorio; móvil conserva + superior y controles actuales, incluidos los dos + de Mes; filtros de Productos en la misma banda; sin cambios de estado, datos ni acciones.
 - Validación: Biome, tipos, suite y build de billing; revisión de visibilidad responsive y callbacks.
 - Evidencia: [BILL-20](iteration-log.md#bill-20--una-fila-de-controles-en-escritorio).
+
+## BILL-21 — Ausencias localizadas y tabla de pagos del cliente
+
+- Estado: `validated`.
+- Objetivo: pulir ausencias/calendarios y reutilizar la tabla mensual en la ficha de cliente.
+- Rutas: resumen/formularios/modales de ausencias y foco inline; MonthCalendarGrid; listado/ficha/actividad de clientes; vista/tabla/fila de pagos y exportación; planificación de billing.
+- Dependencias: Modal stableHeight, tabla/filtros/acciones de pagos y modal de cliente existentes; sin nuevas dependencias.
+- Aceptación: encabezados Ausencias/Recuperaciones/Última ausencia; Mañana/Tarde/Alumno/a/Fecha; modales de día/edición a altura disponible sin foco automático en nombre al editar; calendarios lun/mar/mié/jue/vie/sáb/dom; lápiz antes de papelera abre edición sin navegar; pagos del cliente usan tabla mensual con fecha completa y mismas columnas/filtros/orden/acciones/exportación, sin filtrar por mes ni perder actividad histórica.
+- Validación: regresiones de etiquetas/calendario, fecha completa y acciones de cliente; Biome, tipos, suite y build de billing; revisión de foco y accesibilidad.
+- Evidencia: [BILL-21](iteration-log.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).

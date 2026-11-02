@@ -1,10 +1,11 @@
 "use client"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import Toast from "@/components/ui/Toast"
 import { useClientsByIds } from "@/features/clients/hooks/useClientsByIds"
 import { usePayments } from "@/features/payments/hooks/usePayments"
+import type { Payment } from "@/lib/domain/entities/payment"
 import MonthlyPaymentsModals from "./MonthlyPaymentsModals"
 import { computePaymentTotals } from "./monthlyPaymentsView-totals"
 import PaymentsSummary from "./PaymentsSummary"
@@ -21,9 +22,6 @@ export default function MonthlyPaymentsView({
   selectedDate: Date
   showCharts?: boolean
 }) {
-  const router = useRouter()
-  const openClient = (id: string) =>
-    router.push(`/clients/${encodeURIComponent(id)}`)
   const year = selectedDate.getFullYear()
   const month = selectedDate.getMonth() + 1
   const {
@@ -50,6 +48,47 @@ export default function MonthlyPaymentsView({
     }
     return map
   }, [clients])
+  return (
+    <PaymentsView
+      selectedDate={selectedDate}
+      showCharts={showCharts}
+      payments={payments}
+      clientNameById={clientNameById}
+      isLoading={arePaymentsLoading || areClientsLoading}
+      fetchError={fetchError ?? clientFetchError}
+    />
+  )
+}
+
+export function PaymentsView({
+  selectedDate,
+  showCharts = false,
+  payments,
+  clientNameById,
+  isLoading = false,
+  fetchError,
+  dateDisplay = "day",
+  exportFilename,
+}: {
+  selectedDate: Date
+  showCharts?: boolean
+  payments: Payment[]
+  clientNameById: Map<string, string>
+  isLoading?: boolean
+  fetchError?: unknown
+  dateDisplay?: "day" | "full"
+  exportFilename?: string
+}) {
+  const router = useRouter()
+  const openClient = useCallback(
+    (id: string) => {
+      router.push(`/clients/${encodeURIComponent(id)}`)
+    },
+    [router]
+  )
+  const year = selectedDate.getFullYear()
+  const month = selectedDate.getMonth() + 1
+  const arePaymentsLoading = isLoading
   const {
     sort,
     filters,
@@ -85,6 +124,7 @@ export default function MonthlyPaymentsView({
     isLoading: arePaymentsLoading,
     year,
     month,
+    syncMonthQuery: dateDisplay === "day",
   })
   // Combine iterations: compute totals, counts, and tag breakdowns in a single pass (js-combine-iterations)
   const {
@@ -102,7 +142,7 @@ export default function MonthlyPaymentsView({
     outcomeByTag,
   } = useMemo(() => computePaymentTotals(payments), [payments])
 
-  if (arePaymentsLoading || areClientsLoading) {
+  if (isLoading) {
     return (
       <div className="w-full space-y-4">
         <div className="animate-pulse space-y-4">
@@ -114,16 +154,7 @@ export default function MonthlyPaymentsView({
     )
   }
   const displayError =
-    actionError ??
-    (fetchError instanceof Error
-      ? fetchError.message
-      : fetchError
-        ? "No se pudieron cargar los pagos"
-        : clientFetchError instanceof Error
-          ? clientFetchError.message
-          : clientFetchError
-            ? "No se pudieron cargar los clientes"
-            : null)
+    actionError ?? (fetchError ? "No se pudieron cargar los pagos" : null)
   return (
     <div className="w-full space-y-2">
       {showSuccess ? (
@@ -172,6 +203,8 @@ export default function MonthlyPaymentsView({
         payments={payments}
         filteredPayments={filteredPayments}
         selectedDate={selectedDate}
+        dateDisplay={dateDisplay}
+        exportFilename={exportFilename}
         error={displayError}
         onRowClick={handleRowClick}
         onDeleteClick={handleDeleteClick}

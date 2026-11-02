@@ -23,11 +23,11 @@ interface AbsencesSummaryTableProps {
 const COLUMNS: { key: SortKey; label: string; align: "left" | "right" }[] = [
   { key: "studentName", label: "Alumno/a", align: "left" },
   { key: "pending", label: "Pendiente", align: "right" },
-  { key: "totalAbsences", label: "Total de ausencias", align: "right" },
-  { key: "totalRecoveries", label: "Total de recuperaciones", align: "right" },
+  { key: "totalAbsences", label: "Ausencias", align: "right" },
+  { key: "totalRecoveries", label: "Recuperaciones", align: "right" },
   {
     key: "lastAbsenceDate",
-    label: "Fecha de la última ausencia",
+    label: "Última ausencia",
     align: "left",
   },
 ]

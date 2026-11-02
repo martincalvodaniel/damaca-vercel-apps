@@ -21,7 +21,7 @@ const noop = () => {}
 
 it("all three sections start collapsed and display exact empty counts", () => {
   const html = renderToStaticMarkup(
-    createElement(ClientActivitySections, { activity, onOpenPayment: noop })
+    createElement(ClientActivitySections, { activity })
   )
   expect(html.match(/<details/g)).toHaveLength(3)
   expect(html).not.toMatch(/<details[^>]*\sopen/)
@@ -50,7 +50,6 @@ it("counts include paid work and links keep commission/firing resources separate
   const html = renderToStaticMarkup(
     createElement(ClientActivitySections, {
       activity: data,
-      onOpenPayment: noop,
     })
   )
   expect(html).toContain("Encargos (2)")
@@ -77,6 +76,7 @@ it("client name is a keyboard-accessible detail link while contact copy buttons 
           index: 0,
           onOpen: noop,
           onDelete: noop,
+          onEdit: noop,
         })
       )
     )
@@ -85,4 +85,7 @@ it("client name is a keyboard-accessible detail link while contact copy buttons 
   expect(html).toContain("Copiar teléfono 123")
   expect(html).toContain("Copiar correo electrónico client@example.com")
   expect(html).toContain("Copiar Instagram @client")
+  expect(html.indexOf('aria-label="Editar cliente Client A"')).toBeLessThan(
+    html.indexOf('aria-label="Eliminar cliente Client A"')
+  )
 })

@@ -44,7 +44,9 @@ export default function RecordSection({
         />
       </div>
       {records.length === 0 ? (
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">None.</p>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          Sin registros.
+        </p>
       ) : (
         <ul className="space-y-2">
           {records.map((record) => (

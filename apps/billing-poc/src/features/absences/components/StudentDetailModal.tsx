@@ -78,7 +78,7 @@ export default function StudentDetailModal({
   // iter14: inline form is hidden by default; revealed via the new
   // `+` button next to "Records (N)" or via the row-pencil edit
   // action. Owns visibility, focus capture, and focus-restore.
-  const inlineForm = useInlineFormController()
+  const inlineForm = useInlineFormController(formState.mode !== "edit")
   // Forward ref so `useAbsenceMutationHandlers` callbacks can reach
   // `handleCloseEditForm` defined below without a TDZ error.
   const handleCloseEditFormRef = useRef<() => void>(() => {})
@@ -153,6 +153,8 @@ export default function StudentDetailModal({
       ) : null}
 
       <Modal
+        stableHeight
+        initialFocus="container"
         isOpen
         onClose={onClose}
         title={studentName}
@@ -254,14 +256,18 @@ export default function StudentDetailModal({
           onConfirm={handleConfirmDelete}
         >
           <p className="text-sm text-zinc-700 dark:text-zinc-300">
-            Are you sure you want to delete this {pendingDelete.type} for{" "}
+            ¿Quieres eliminar{" "}
+            {pendingDelete.type === "absence"
+              ? "esta ausencia"
+              : "esta recuperación"}{" "}
+            de{" "}
             <span className="font-medium text-zinc-900 dark:text-zinc-100">
               {pendingDelete.studentName}
             </span>{" "}
-            on {formatDate(pendingDelete.date)}?
+            del {formatDate(pendingDelete.date)}?
           </p>
           <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            This action cannot be undone.
+            Esta acción no se puede deshacer.
           </p>
         </ConfirmDeleteModal>
       ) : null}
@@ -276,12 +282,12 @@ export default function StudentDetailModal({
           onConfirm={handleConfirmDeleteAll}
         >
           <p className="text-sm text-zinc-700 dark:text-zinc-300">
-            Delete {records.length} records ({absenceCount} absences,{" "}
-            {recoveryCount} recoveries) for{" "}
+            Eliminar {records.length} registros ({absenceCount} ausencias,{" "}
+            {recoveryCount} recuperaciones) de{" "}
             <span className="font-medium text-zinc-900 dark:text-zinc-100">
               &quot;{studentName}&quot;
             </span>
-            ? This cannot be undone.
+            ? Esta acción no se puede deshacer.
           </p>
         </ConfirmDeleteModal>
       ) : null}

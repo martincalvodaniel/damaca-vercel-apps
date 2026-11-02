@@ -63,7 +63,7 @@ export default function DayDetailModal({
   const [formPartOfDay, setFormPartOfDay] = useState<PartOfDay>("morning")
   const [formType, setFormType] = useState<AbsenceType>("absence")
 
-  const inlineForm = useInlineFormController()
+  const inlineForm = useInlineFormController(formState.mode !== "edit")
   // Forward ref so `useAbsenceMutationHandlers` callbacks can reach
   // `handleCancelForm` defined below without a TDZ error.
   const handleCancelFormRef = useRef<() => void>(() => {})
@@ -133,7 +133,14 @@ export default function DayDetailModal({
         <Toast message={toastMessage} onClose={clearToast} />
       ) : null}
 
-      <Modal isOpen onClose={onClose} title={formatDate(date)} maxWidth="xl">
+      <Modal
+        isOpen
+        stableHeight
+        initialFocus="container"
+        onClose={onClose}
+        title={formatDate(date)}
+        maxWidth="xl"
+      >
         <div className="space-y-6">
           <PartSection
             part="morning"
@@ -212,14 +219,18 @@ export default function DayDetailModal({
           onConfirm={handleConfirmDelete}
         >
           <p className="text-sm text-zinc-700 dark:text-zinc-300">
-            Are you sure you want to delete this {pendingDelete.type} for{" "}
+            ¿Quieres eliminar{" "}
+            {pendingDelete.type === "absence"
+              ? "esta ausencia"
+              : "esta recuperación"}{" "}
+            de{" "}
             <span className="font-medium text-zinc-900 dark:text-zinc-100">
               {pendingDelete.studentName}
             </span>{" "}
-            on {formatDate(pendingDelete.date)}?
+            del {formatDate(pendingDelete.date)}?
           </p>
           <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            This action cannot be undone.
+            Esta acción no se puede deshacer.
           </p>
         </ConfirmDeleteModal>
       ) : null}

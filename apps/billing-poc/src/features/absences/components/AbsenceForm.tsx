@@ -156,7 +156,7 @@ export function DateField() {
         htmlFor={`${idPrefix}-date`}
         className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
       >
-        Date
+        Fecha
       </label>
       <input
         type="date"

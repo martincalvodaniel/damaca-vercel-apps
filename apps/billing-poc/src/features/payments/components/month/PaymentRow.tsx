@@ -4,7 +4,7 @@ import { DuplicateIcon } from "@/components/ui/icons/DuplicateIcon"
 import { TrashIcon } from "@/components/ui/icons/TrashIcon"
 import { buildOpenInvoiceUrl } from "@/features/invoices/hooks/useInvoiceMutations"
 import { getPaymentInvoices, type Payment } from "@/lib/domain/entities/payment"
-import { formatCurrency } from "@/lib/utils/formatters"
+import { formatCurrency, formatDate } from "@/lib/utils/formatters"
 import {
   type PaymentInvoiceFilter,
   type PaymentTypeFilter,
@@ -27,6 +27,7 @@ function compactClientName(name: string): string {
 
 export default function PaymentRow({
   payment,
+  dateDisplay = "day",
   showAllMoneyColumns,
   onRowClick,
   onDeleteClick,
@@ -43,6 +44,7 @@ export default function PaymentRow({
   onClientClick,
 }: {
   payment: Payment
+  dateDisplay?: "day" | "full"
   showAllMoneyColumns: boolean
   onRowClick: (paymentId: string) => void
   onDeleteClick: (e: React.MouseEvent, paymentId: string) => void
@@ -179,8 +181,12 @@ export default function PaymentRow({
         )}
       </td>
       <td className="px-1 py-1 text-zinc-900 dark:text-zinc-100">
-        <span className="inline-block w-5 text-right tabular-nums">
-          {new Date(payment.date).getDate()}
+        <span
+          className={`inline-block whitespace-nowrap text-right tabular-nums ${dateDisplay === "day" ? "w-5" : ""}`}
+        >
+          {dateDisplay === "full"
+            ? formatDate(payment.date)
+            : new Date(payment.date).getDate()}
         </span>
       </td>
       <td className="px-1 py-1">

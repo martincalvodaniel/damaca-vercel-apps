@@ -7,6 +7,7 @@ import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import Toast from "@/components/ui/Toast"
 import { useDeleteClient } from "@/features/clients/hooks/useClientMutations"
 import type { Client } from "@/lib/domain/entities/client"
+import ClientFormModal from "./ClientFormModal"
 import ClientTableRow from "./ClientTableRow"
 import { extractClientApiError } from "./clientList-utils"
 import DeleteClientModal from "./DeleteClientModal"
@@ -20,6 +21,8 @@ export default function ClientList({ clients }: ClientListProps) {
   const handleDeletingClientIdChange = () => setDeletingClientId(null)
   const router = useRouter()
   const [deletingClientId, setDeletingClientId] = useState<string | null>(null)
+  const [editingClientId, setEditingClientId] = useState<string | null>(null)
+  const closeEditor = () => setEditingClientId(null)
   const [error, setError] = useState<string | null>(null)
   const [copyToast, setCopyToast] = useState<string | null>(null)
 
@@ -60,6 +63,11 @@ export default function ClientList({ clients }: ClientListProps) {
 
       {error ? <ErrorBanner bordered>{error}</ErrorBanner> : null}
 
+      <ClientFormModal
+        client={clients.find((client) => client._id === editingClientId)}
+        isOpen={Boolean(editingClientId)}
+        onClose={closeEditor}
+      />
       <DeleteClientModal
         client={deletingClient}
         isOpen={!!deletingClientId && !!deletingClient}
@@ -104,6 +112,7 @@ export default function ClientList({ clients }: ClientListProps) {
                     index={index}
                     onOpen={handleOpen}
                     onDelete={handleDeleteClick}
+                    onEdit={setEditingClientId}
                     onCopy={handleCopy}
                   />
                 ))}

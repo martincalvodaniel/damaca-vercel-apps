@@ -33,15 +33,17 @@ interface UseInlineFormControllerResult {
 /**
  * Owns the show/hide visibility, scroll-into-view + focus effect, and
  * focus restoration for the inline `<AbsenceForm>` rendered inside
- * `DayDetailModal`. Logic preserved byte-for-byte from iter9-12.
+ * absence dialogs. Editing can disable input focus to avoid mobile keyboards.
  */
-export default function useInlineFormController(): UseInlineFormControllerResult {
+export default function useInlineFormController(
+  focusStudentName = true
+): UseInlineFormControllerResult {
   const [visible, setVisible] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const lastTriggerRef = useRef<HTMLElement | null>(null)
 
   // When the form becomes visible, scroll it into view and focus the
-  // student-name input as a best-effort accessibility nicety.
+  // student-name input only when requested (never while editing).
   useEffect(() => {
     if (!visible) return
     const container = containerRef.current
@@ -50,8 +52,8 @@ export default function useInlineFormController(): UseInlineFormControllerResult
     const input = container.querySelector<HTMLInputElement>(
       'input[name="studentName"]'
     )
-    input?.focus()
-  }, [visible])
+    if (focusStudentName) input?.focus()
+  }, [visible, focusStudentName])
 
   const captureTrigger = () => {
     lastTriggerRef.current =

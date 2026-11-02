@@ -1,5 +1,4 @@
 "use client"
-import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useState } from "react"
 import PageLayout from "@/components/shared/PageLayout"
@@ -13,19 +12,11 @@ import ClientActivitySections from "./ClientActivitySections"
 import ClientFinancialSummary from "./ClientFinancialSummary"
 import ClientFormModal from "./ClientFormModal"
 
-const PaymentDetailModal = dynamic(
-  () => import("@/features/payments/components/month/PaymentDetailModal"),
-  { ssr: false }
-)
-
 export default function ClientDetail({ id }: { id: string }) {
   const { data, error, isLoading } = useClientActivity(id)
   const [isEditing, setIsEditing] = useState(false)
-  const [paymentId, setPaymentId] = useState<string | null>(null)
   const openEditor = () => setIsEditing(true)
   const closeEditor = () => setIsEditing(false)
-  const closePayment = () => setPaymentId(null)
-  const payment = data?.payments.find((item) => item._id === paymentId)
   return (
     <PageLayout navigationSubtitle={data?.client.name ?? "Cliente"}>
       <Link
@@ -91,23 +82,12 @@ export default function ClientDetail({ id }: { id: string }) {
           {!data.payments.length ? (
             <EmptyState>Este cliente todavía no tiene pagos.</EmptyState>
           ) : null}
-          <ClientActivitySections
-            activity={data}
-            onOpenPayment={setPaymentId}
-          />
+          <ClientActivitySections activity={data} />
           <ClientFormModal
             client={data.client}
             isOpen={isEditing}
             onClose={closeEditor}
           />
-          {payment ? (
-            <PaymentDetailModal
-              key={payment._id}
-              payment={payment}
-              onClose={closePayment}
-              onDelete={closePayment}
-            />
-          ) : null}
         </>
       ) : null}
     </PageLayout>

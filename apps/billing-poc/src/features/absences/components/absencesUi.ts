@@ -2,13 +2,13 @@ import { FetchError } from "@/lib/client/swr-fetcher"
 import type { AbsenceType, PartOfDay } from "@/lib/domain/entities/absence"
 
 export const PART_OF_DAY_LABEL: Record<PartOfDay, string> = {
-  morning: "Morning",
-  evening: "Evening",
+  morning: "Mañana",
+  evening: "Tarde",
 }
 
 export const TYPE_LABEL: Record<AbsenceType, string> = {
-  absence: "Absence",
-  recovery: "Recovery",
+  absence: "Ausencia",
+  recovery: "Recuperación",
 }
 
 export const TYPE_DOT_CLASS: Record<AbsenceType, string> = {

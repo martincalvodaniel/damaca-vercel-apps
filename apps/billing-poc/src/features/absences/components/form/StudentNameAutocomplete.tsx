@@ -30,7 +30,7 @@ export default function StudentNameAutocomplete({
         htmlFor={id}
         className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
       >
-        Student name
+        Alumno/a
       </label>
       <input
         type="text"

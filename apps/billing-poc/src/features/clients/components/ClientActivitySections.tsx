@@ -1,9 +1,8 @@
 import Link from "next/link"
 import type { ReactNode } from "react"
 import { EmptyState } from "@/components/ui/EmptyState"
-import { useStableCallback } from "@/hooks/useStableCallback"
+import { PaymentsView } from "@/features/payments/components/month/MonthlyPaymentsView"
 import type { Commission } from "@/lib/domain/entities/commission"
-import type { Payment } from "@/lib/domain/entities/payment"
 import type { ClientActivity } from "@/lib/domain/services/client-activity"
 import { computePaymentFinancials } from "@/lib/domain/services/payment-calculator"
 import { formatCurrency, formatDate } from "@/lib/utils/formatters"
@@ -65,21 +64,21 @@ function CommissionEntries({
 
 export default function ClientActivitySections({
   activity,
-  onOpenPayment,
 }: {
   activity: ClientActivity
-  onOpenPayment: (id: string) => void
 }) {
   return (
     <div className="space-y-4">
       <ActivitySection title="Pagos" count={activity.payments.length}>
-        {activity.payments.map((payment) => (
-          <ClientPaymentEntry
-            key={payment._id}
-            payment={payment}
-            onOpen={onOpenPayment}
-          />
-        ))}
+        <PaymentsView
+          payments={activity.payments}
+          clientNameById={
+            new Map([[activity.client._id ?? "", activity.client.name]])
+          }
+          selectedDate={new Date()}
+          dateDisplay="full"
+          exportFilename={`client-${activity.client._id}-payments.xlsx`}
+        />
       </ActivitySection>
       <ActivitySection title="Encargos" count={activity.commissions.length}>
         <CommissionEntries
@@ -91,28 +90,5 @@ export default function ClientActivitySections({
         <CommissionEntries items={activity.firings} resource="firings" />
       </ActivitySection>
     </div>
-  )
-}
-
-function ClientPaymentEntry({
-  payment,
-  onOpen,
-}: {
-  payment: Payment
-  onOpen: (id: string) => void
-}) {
-  const openPayment = useStableCallback(() => onOpen(payment._id ?? ""))
-  return (
-    <button type="button" onClick={openPayment} className={itemClassName}>
-      <span>{formatDate(payment.date)}</span>
-      <span>{payment.type === "income" ? "Ingreso" : "Gasto"}</span>
-      <span className="min-w-0 break-words">
-        {payment.tag || "Sin etiqueta"}
-      </span>
-      <span className="min-w-0 break-words">
-        {payment.concepts.map((concept) => concept.name).join(", ")}
-      </span>
-      <span className="font-semibold">{formatCurrency(payment.total)}</span>
-    </button>
   )
 }

@@ -16,6 +16,8 @@ export default function PaymentsTable({
   payments,
   filteredPayments,
   selectedDate,
+  dateDisplay = "day",
+  exportFilename,
   error,
   onRowClick,
   onDeleteClick,
@@ -36,6 +38,8 @@ export default function PaymentsTable({
   payments: Payment[]
   filteredPayments: Payment[]
   selectedDate: Date
+  dateDisplay?: "day" | "full"
+  exportFilename?: string
   error: string | null
   onRowClick: (paymentId: string) => void
   onDeleteClick: (e: React.MouseEvent, paymentId: string) => void
@@ -66,6 +70,7 @@ export default function PaymentsTable({
         payments,
         year: selectedDate.getFullYear(),
         month: selectedDate.getMonth() + 1,
+        filename: exportFilename,
       })
     } catch (exportFailure) {
       console.error(`Error exporting monthly payments: ${exportFailure}`)
@@ -84,11 +89,13 @@ export default function PaymentsTable({
 
       {payments.length === 0 ? (
         <EmptyState variant="inline" className="px-6 py-12">
-          No payments yet
+          Todavía no hay pagos
         </EmptyState>
       ) : filteredPayments.length === 0 ? (
         <EmptyState variant="inline" className="px-6 py-12">
-          No hay pagos en {formatMonthYear(selectedDate)}
+          {dateDisplay === "full"
+            ? "No hay pagos que coincidan con los filtros"
+            : `No hay pagos en ${formatMonthYear(selectedDate)}`}
         </EmptyState>
       ) : (
         <>
@@ -98,7 +105,11 @@ export default function PaymentsTable({
                 type="button"
                 onClick={handleExport}
                 disabled={isExporting}
-                aria-label="Exportar pagos mensuales a Excel"
+                aria-label={
+                  dateDisplay === "full"
+                    ? "Exportar pagos del cliente a Excel"
+                    : "Exportar pagos mensuales a Excel"
+                }
                 className="h-9 rounded-md border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:focus:ring-offset-zinc-900"
               >
                 {isExporting ? "Exportando..." : "Exportar"}
@@ -151,7 +162,7 @@ export default function PaymentsTable({
                     align="left"
                   />
                   <SortableHeader
-                    label="Día"
+                    label={dateDisplay === "full" ? "Fecha" : "Día"}
                     sortKey="day"
                     sort={sort}
                     onSortChange={onSortChange}
@@ -215,6 +226,7 @@ export default function PaymentsTable({
                     <PaymentRow
                       key={payment._id}
                       payment={payment}
+                      dateDisplay={dateDisplay}
                       showAllMoneyColumns={showAllMoneyColumns}
                       onRowClick={onRowClick}
                       onDeleteClick={onDeleteClick}
