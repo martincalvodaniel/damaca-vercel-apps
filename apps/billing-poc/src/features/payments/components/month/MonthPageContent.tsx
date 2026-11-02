@@ -223,6 +223,7 @@ export default function MonthPageContent() {
   }
   return (
     <PageLayout
+      headerInDesktopNavigation
       navigationSubtitle="Resumen mensual"
       navigationActions={
         <AddButton ariaLabel="Añadir pago" onClick={handleAddPaymentClick} />

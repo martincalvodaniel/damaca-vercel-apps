@@ -1,6 +1,6 @@
 # Registro de entregas
 
-Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md).
+Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md), [BILL-09](archive/2026-11-02/bill-09.md).
 
 ## BILL-10 — Copiar Instagram desde el listado
 
@@ -9,17 +9,6 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 - Implementado: Instagram usa `CopyToClipboardButton` con el mismo toast y confirmación que email; `stopPropagation` evita abrir la edición de la fila al copiar. Sin valor se conserva `—`.
 - Validación: `bunx biome check apps/billing-poc/src/features/clients/components/ClientTableRow.tsx`: correcto; `bun run type-check --filter=@damaca/billing-poc`: correcto; `bun run test --filter=@damaca/billing-poc`: 971 pruebas, 0 fallos; `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto; `git diff --check`: correcto. Sin prueba de navegador; el comportamiento reutiliza el componente de copia ya usado por email.
 - Commit `d480743`; push a `origin/int` correcto y SHA remoto verificado (`d480743dfd30fbc60358768cd2c4b4e8f615b0e6`).
-
-## BILL-09 — Instagram de clientes
-
-- Inicio: 2026-11-01, rama `int`, base `a697800`, árbol limpio. Capacidad inicial: 10 % en 5 h y 67 % en 7 d.
-- Aceptación: [BILL-09](iterations.md#bill-09--instagram-de-clientes).
-- Implementado: `instagram` opcional en entidad/formulario, validación, puerto y adaptador Mongo. Formulario de alta/edición y tabla muestran Instagram; los registros antiguos sin el campo siguen siendo válidos. En creación el texto se recorta y vacío se omite; en actualización el campo ausente no cambia y el vacío recortado se traduce a `$unset`.
-- Validaciones: `bun run test --filter=@damaca/billing-poc`: 971 pruebas, 0 fallos; tras la limpieza de estilo, el test de schema ejecutó 33 pruebas, 0 fallos. `bun run type-check --filter=@damaca/billing-poc`: correcto. Build Turbopack estándar falló porque el entorno denegó abrir un puerto interno; `bun run build --filter=@damaca/billing-poc -- --webpack` completó correctamente. `bun run lint --staged`: 10 archivos, sin hallazgos; `git diff --cached --check`: correcto. Cache remota de Turbo no disponible.
-- Sin migración ni dependencias nuevas. Commit `2ac52e8`; push a `origin/int` correcto y SHA remoto verificado (`2ac52e823891143c76baa9526763486f44b9290c`).
-
-
-
 
 ## BILL-11 — Traducción de la interfaz al español
 
@@ -109,3 +98,13 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 - Revisión React/accesibilidad: cambio limitado a estructura y clases responsive, sin hooks/efectos nuevos, elementos duplicados ni cambios de callbacks. Orden de tabulación de escritorio alineado con menú → controles. No se realizó comprobación visual interactiva; revisión estática.
 - Se archiva BILL-08 para mantener diez entregas recientes.
 - Validación: Biome del componente sin hallazgos; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 992 correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto (10,044 s). Caché remota de Turbo no disponible; comprobaciones locales completas. Enlaces locales de planificación y diff check correctos. Lint preparado, commit, push y SHA remoto se verifican al cierre.
+
+## BILL-19 — Controles de cabecera en navegación de escritorio
+
+- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits pendientes. Capacidad: 78 % en 5 h y 51 % en 7 d; estimación suficiente para entrega completa con reservas.
+- Aceptación: [BILL-19](iterations.md#bill-19--controles-de-cabecera-en-navegación-de-escritorio).
+
+- Implementado: opción compartida de PageLayout para integrar la cabecera en el bloque fijo de escritorio. Activada en Ausencias, Eventos, Mes, Productos y Año. Navegación y controles comparten bordes continuos en escritorio; el bloque completo conserva franja opaca y posición fija.
+- Móvil: contenedores de agrupación con `display: contents`; solo la navegación continúa fija y los controles siguen en el flujo de la página, con separación equivalente. CSS determina el layout: sin listeners de tamaño, portales, duplicación de controles ni remontajes al redimensionar. Los otros layouts no activan la opción. Los dos + de Mes se conservan.
+- Revisión React/accesibilidad: solo composición y clases responsive; mismos hooks/callbacks, IDs, orden de controles y estado de formulario. Sin nuevas dependencias. Se archiva BILL-09 para mantener diez entregas recientes. Sin comprobación visual interactiva en navegador; revisión estática del árbol y clases.
+- Validación: `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 992 pruebas correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto (16,48 s). Biome sobre los siete TSX editados sin hallazgos tras corregir un aviso de ternario; caché remota de Turbo no disponible y comprobaciones locales completas. Enlaces y diff check verificados. Lint preparado, commit, push y SHA remoto se verifican al cierre.

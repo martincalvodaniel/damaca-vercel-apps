@@ -102,6 +102,7 @@ export default function YearSummaryPage() {
 
   return (
     <PageLayout
+      headerInDesktopNavigation
       navigationSubtitle="Resumen anual"
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">

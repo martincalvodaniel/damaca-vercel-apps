@@ -10,6 +10,7 @@ import MobileMenuOverlay, { type NavItem } from "./MobileMenuOverlay"
 interface NavigationBarProps {
   subtitle: string
   actions?: React.ReactNode
+  hasDesktopHeader?: boolean
 }
 const NAV_ITEMS: readonly NavItem[] = [
   {
@@ -62,6 +63,7 @@ const NAV_ITEMS: readonly NavItem[] = [
 export default function NavigationBar({
   subtitle,
   actions,
+  hasDesktopHeader = false,
 }: NavigationBarProps) {
   const handleMenuOpenChange = () => setMenuOpen(true)
   const pathname = usePathname()
@@ -89,7 +91,9 @@ export default function NavigationBar({
   useEscapeKey(closeMenu, menuOpen)
   return (
     <>
-      <nav className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <nav
+        className={`flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${hasDesktopHeader ? "xl:rounded-b-none xl:border-b-0 xl:shadow-none" : ""}`}
+      >
         <div className="xl:hidden">
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
             Billing

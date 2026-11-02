@@ -151,6 +151,7 @@ export default function EventsPageContent() {
   } = useEventsPageState()
   return (
     <PageLayout
+      headerInDesktopNavigation
       navigationSubtitle="Eventos"
       navigationActions={
         <AddButton ariaLabel="Añadir evento" onClick={openNewEvent} />

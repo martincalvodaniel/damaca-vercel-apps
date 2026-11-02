@@ -217,6 +217,7 @@ export default function ProductsPageContent() {
 
   return (
     <PageLayout
+      headerInDesktopNavigation
       navigationSubtitle="Productos"
       navigationActions={
         <AddButton ariaLabel="Añadir producto" onClick={handleCreateProduct} />

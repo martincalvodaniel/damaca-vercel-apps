@@ -90,7 +90,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: patrones actuales para campos opcionales de Client; sin nuevas dependencias ni migración.
 - Aceptación: creación/edición aceptan y recortan Instagram, un valor vacío lo omite y permite borrar uno existente; Mongo no guarda nullish; los clientes existentes siguen cargando; el formulario y la tabla muestran el campo.
 - Validación: pruebas de esquema pertinentes, type-check, suite de billing, lint incremental y diff check.
-- Evidencia: [BILL-09](iteration-log.md#bill-09--instagram-de-clientes).
+- Evidencia: [BILL-09](archive/2026-11-02/bill-09.md#bill-09--instagram-de-clientes).
 
 ## BILL-10 — Copiar Instagram desde el listado
 
@@ -184,3 +184,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: escritorio sin Billing/título de página; menú antes de acciones/buscador, con orden de foco coherente; móvil conserva título, acciones y menú actuales; todas las páginas y ambos temas.
 - Validación: Biome, tipos, suite y build de billing; revisión de clases responsive y DOM.
 - Evidencia: [BILL-18](iteration-log.md#bill-18--navegación-de-escritorio).
+
+## BILL-19 — Controles de cabecera en navegación de escritorio
+
+- Estado: `validated`.
+- Objetivo: integrar en navegación los controles de Ausencias, Eventos, Mes, Productos y Año solo en escritorio.
+- Rutas: PageLayout/NavigationBar y las cinco páginas indicadas; planificación de billing.
+- Dependencias: slot de cabecera, acciones y breakpoint `xl` existentes; sin nuevas dependencias.
+- Aceptación: buscadores, selectores de periodo/gráficos/plantillas, filtros y acciones de cabecera integrados bajo el menú y fijos en escritorio; móvil conserva ubicación y scroll actuales; un único árbol de controles sin duplicar estado/IDs ni remontar al cambiar anchura; otras páginas conservadas.
+- Validación: Biome, tipos, suite y build de billing; revisión responsive y del árbol de componentes.
+- Evidencia: [BILL-19](iteration-log.md#bill-19--controles-de-cabecera-en-navegación-de-escritorio).
