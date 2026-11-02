@@ -159,6 +159,20 @@ export default function CommissionsPageContent() {
           : clientsError
             ? "No se pudieron cargar los nombres de los clientes"
             : null)
+  const paidSection = (
+    <details className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <summary className="cursor-pointer rounded-lg px-4 py-3 text-sm font-semibold text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-100">
+        {isFiring ? "Pagadas" : "Pagados"} ({withPayment.length})
+      </summary>
+      <div className="space-y-3 border-t border-zinc-200 p-3 dark:border-zinc-800">
+        {withPayment.length ? (
+          withPayment.map(renderCommission)
+        ) : (
+          <EmptyState>No hay {plural} con pago.</EmptyState>
+        )}
+      </div>
+    </details>
+  )
   return (
     <PageLayout
       navigationSubtitle={title}
@@ -185,6 +199,7 @@ export default function CommissionsPageContent() {
           Abriendo pago…
         </p>
       ) : null}
+      {isFiring ? paidSection : null}
       {!isLoading && withoutPayment.length === 0 ? (
         <EmptyState variant="card">
           {withPayment.length
@@ -193,18 +208,7 @@ export default function CommissionsPageContent() {
         </EmptyState>
       ) : null}
       <div className="space-y-3">{withoutPayment.map(renderCommission)}</div>
-      <details className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <summary className="cursor-pointer rounded-lg px-4 py-3 text-sm font-semibold text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-100">
-          {isFiring ? "Pagadas" : "Pagados"} ({withPayment.length})
-        </summary>
-        <div className="space-y-3 border-t border-zinc-200 p-3 dark:border-zinc-800">
-          {withPayment.length ? (
-            withPayment.map(renderCommission)
-          ) : (
-            <EmptyState>No hay {plural} con pago.</EmptyState>
-          )}
-        </div>
-      </details>
+      {!isFiring ? paidSection : null}
       {(creating || current) && !current?.paymentGeneration ? (
         <CommissionFormModal
           key={creating ? "new" : current?._id}

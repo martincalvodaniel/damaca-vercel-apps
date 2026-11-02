@@ -25,17 +25,17 @@ const SERIES_DETAILS: Record<
   NumberedInvoiceSeries,
   { label: string; prefix: string }
 > = {
-  Invoice: { label: "Invoice", prefix: getInvoiceSeriesPrefix("Invoice") },
+  Invoice: { label: "Factura", prefix: getInvoiceSeriesPrefix("Invoice") },
   SimpleInvoice: {
-    label: "Simplified invoice",
+    label: "Factura simplificada",
     prefix: getInvoiceSeriesPrefix("SimpleInvoice"),
   },
   RectificativeInvoice: {
-    label: "Corrective invoice",
+    label: "Factura rectificativa",
     prefix: getInvoiceSeriesPrefix("RectificativeInvoice"),
   },
   RectificativeSimpleInvoice: {
-    label: "Corrective simplified invoice",
+    label: "Factura simplificada rectificativa",
     prefix: getInvoiceSeriesPrefix("RectificativeSimpleInvoice"),
   },
 }

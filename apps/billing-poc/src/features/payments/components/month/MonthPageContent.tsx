@@ -224,6 +224,9 @@ export default function MonthPageContent() {
   return (
     <PageLayout
       navigationSubtitle="Resumen mensual"
+      navigationActions={
+        <AddButton ariaLabel="Añadir pago" onClick={handleAddPaymentClick} />
+      }
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 border-b border-zinc-200 px-6 py-4 lg:flex-row lg:items-center lg:justify-between dark:border-zinc-800">

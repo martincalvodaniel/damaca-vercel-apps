@@ -1,6 +1,6 @@
 # Registro de entregas
 
-Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md).
+Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md).
 
 ## BILL-10 — Copiar Instagram desde el listado
 
@@ -20,15 +20,6 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 
 
 
-
-## BILL-07 — Navegación fija al hacer scroll
-
-- Inicio: 2026-11-01, rama `int`, base `51617ca`, árbol limpio y sin commits locales pendientes. Capacidad inicial: 12 % en 5 h y 67 % en 7 d; cambio CSS acotado con margen estimado suficiente para validación y cierre conservando reservas.
-- Aceptación: [BILL-07](iterations.md#bill-07--navegación-fija-al-hacer-scroll).
-- Implementado: `sticky top-2 z-30` en la barra compartida y `overflow-x-clip` en PageLayout para conservar el recorte horizontal sin crear un ancestro de scroll que impida sticky. Conservados colores, ancho y margen superior; overlays y modales existentes usan `z-50`.
-- Validación: `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 969 pruebas, 0 fallos; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto. `bun run lint --changed --since=51617ca` no seleccionó archivos sin preparar; `bun run lint --staged` comprobó los cinco archivos sin hallazgos. `git diff --cached --check` correcto.
-- Revisión estática: páginas bajo PageLayout comparten el ajuste; sticky conserva espacio en el flujo y queda bajo los overlays. Revisión React sin lógica adicional, efectos ni dependencias. Sin prueba visual en navegador ni nuevos tests que reproduzcan clases CSS.
-- La preparación inicial encontró la restricción de escritura de `.git`; repetida con permisos ampliados correctamente. Commit, push y SHA remoto se verifican al cerrar.
 
 ## BILL-08 — Márgenes opacos de navegación
 
@@ -105,3 +96,14 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 - Revisión React/accesibilidad: mismos callbacks y hooks SWR, sin efectos ni dependencias nuevos; + con aria-label; controles y estilos de foco/modo oscuro preservados. No se hizo comprobación visual interactiva en navegador; la revisión responsive es estática.
 - Validación: `bun run test --filter=@damaca/billing-poc`: 992 pruebas correctas, 0 fallos, 1802 assertions. `bun run type-check --filter=@damaca/billing-poc`: correcto tras corregir un error temporal de edición de JSX detectado por Biome/tipos. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (16,519 s). Caché remota de Turbo no disponible; comprobaciones locales completas. Biome explícito sobre los 14 TSX editados sin hallazgos; lint preparado y diff check se verifican al cerrar.
 - Archivo de BILL-06 para conservar diez entregas recientes; enlaces nuevos de planificación comprobados. Capacidad antes de publicar: 96 % en 5 h y 54 % en 7 d. Commit, push y SHA remoto se verifican al cierre.
+
+## BILL-17 — Alta mensual, orden de cocciones y traducción de facturas
+
+- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits pendientes de publicación. Capacidad: 87 % restante en 5 h y 53 % en 7 d; estimación suficiente para implementar, validar y publicar manteniendo reservas.
+- Aceptación: [BILL-17](iterations.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).
+
+- Implementado: Mes mantiene el + junto a plantillas y añade otro en navegación con el mismo callback. Cocciones sitúa Pagadas antes de las vigentes, preservando cierre inicial, contador, tarjetas y el orden de Encargos.
+- Facturas: traducidos estado vacío, nombres de las cuatro series, numeración, listado, fecha del pago y todos los textos de revisión/reducción. Errores de carga en español; las cuatro causas de rechazo de reducción conservan su significado mediante mensajes españoles, sin mostrar mensajes internos ingleses. Fallbacks de mutación también en español; valores internos y prefijos sin cambios.
+- Revisión React: slot compartido de navegación, callbacks y SWR existentes, sin dependencias ni efectos nuevos. La misma sección de pagadas se renderiza una sola vez según el contexto. Iconos etiquetados y estilos claros/oscuros conservados. Sin verificación visual interactiva; revisión estática de orden y callbacks.
+- Se archiva BILL-07 para conservar diez entregas recientes. Validación y publicación se registran al cerrar.
+- Validación final: `bun run type-check --filter=@damaca/billing-poc`, correcto; `bun run test --filter=@damaca/billing-poc`, 992 correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack`, correcto (9,566 s). Biome explícito sobre los ocho TS/TSX editados sin hallazgos tras formato. Caché remota de Turbo no disponible; comprobaciones locales completas. Lint preparado, diff check, commit, push y SHA remoto se verifican al cierre.

@@ -85,7 +85,10 @@ export async function previewInvoiceCounterFetcher(
     body: JSON.stringify(buildInvoiceCounterTargetBody(arg)),
   })
   if (!response.ok) {
-    await parseError(response, "Failed to preview invoice counter reduction")
+    await parseError(
+      response,
+      "No se pudo previsualizar la reducción de la numeración de facturas"
+    )
   }
   return (await response.json()) as PreviewInvoiceCounterResult
 }
@@ -101,7 +104,7 @@ export async function reduceInvoiceCounterFetcher(
     body: JSON.stringify(buildReduceInvoiceCounterBody(arg)),
   })
   if (!response.ok) {
-    await parseError(response, "Failed to reduce invoice counter")
+    await parseError(response, "No se pudo reducir la numeración de facturas")
   }
   return (await response.json()) as ReduceInvoiceCounterResult
 }

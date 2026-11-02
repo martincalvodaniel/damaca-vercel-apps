@@ -70,7 +70,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: layout y navegación existentes; sin nuevas librerías.
 - Aceptación: barra sticky en móvil y escritorio, conservando ancho, margen superior, colores y posición por debajo de menús y modales. El contenedor no debe interceptar el scroll sticky.
 - Validación: Biome incremental, tipos, suite y build de billing; revisión de ancestros, cobertura de páginas y capas CSS.
-- Evidencia: [BILL-07](iteration-log.md#bill-07--navegación-fija-al-hacer-scroll).
+- Evidencia: [BILL-07](archive/2026-11-02/bill-07.md#bill-07--navegación-fija-al-hacer-scroll).
 
 ## BILL-08 — Márgenes opacos de navegación
 
@@ -164,3 +164,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: Clientes usa + a la izquierda del buscador en navegación; altas principales de Productos, Eventos y Encargos/Cocciones en navegación; Mes conserva su + y elimina Monthly Filter/Overview; Compacto/Todo; se eliminan títulos/subtítulos redundantes de las páginas indicadas; Año sin cabecera textual y UI en español. Conservar controles de periodos, formularios, acciones contextuales, temas y accesibilidad.
 - Validación: Biome incremental, tipos, suite y build de billing; revisión responsive y visual si existe sesión accesible.
 - Evidencia: [BILL-16](iteration-log.md#bill-16--simplificar-cabeceras-y-altas).
+
+## BILL-17 — Alta mensual, orden de cocciones y traducción de facturas
+
+- Estado: `validated`.
+- Objetivo: duplicar el alta mensual en navegación, adelantar cocciones pagadas y completar el español de Facturas.
+- Rutas: MonthPageContent, CommissionsPageContent, componentes de Facturas y planificación de billing.
+- Dependencias: controles, agrupación y callbacks existentes; sin nuevas dependencias.
+- Aceptación: ambos + de Mes abren el mismo formulario; Cocciones muestra Pagadas cerrada por defecto antes de las vigentes, sin cambiar Encargos; textos visibles de Facturas y reducción de numeración en español, conservando valores internos y comportamiento.
+- Validación: Biome, tipos, suite y build de billing; revisión estática de orden, callbacks y textos.
+- Evidencia: [BILL-17](iteration-log.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).

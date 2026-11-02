@@ -33,12 +33,9 @@ export default function InvoicesPageContent() {
     () => groupInvoiceCountersByYear(counters, invoices),
     [counters, invoices]
   )
-  const errorMessage =
-    error instanceof Error
-      ? error.message
-      : error
-        ? "No se pudo cargar la numeración de facturas"
-        : null
+  const errorMessage = error
+    ? "No se pudo cargar la numeración de facturas"
+    : null
   const handleSelectCounter = useCallback(
     (year: number, counter: InvoiceSeriesCounter) => {
       setSelectedCounter({ year, counter })
@@ -83,7 +80,7 @@ export default function InvoicesPageContent() {
         </EmptyState>
       ) : yearGroups.length === 0 ? (
         <EmptyState variant="card">
-          No numbered invoices have been generated yet.
+          Todavía no se han generado facturas numeradas.
         </EmptyState>
       ) : (
         <div className="space-y-4">

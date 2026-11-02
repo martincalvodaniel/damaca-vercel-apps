@@ -26,7 +26,24 @@ interface ReduceInvoiceCounterModalProps {
 }
 
 function getErrorMessage(error: unknown, fallback: string): string {
-  return error instanceof Error ? error.message : fallback
+  if (
+    error instanceof FetchError &&
+    error.info &&
+    typeof error.info === "object" &&
+    "reason" in error.info
+  ) {
+    switch (error.info.reason) {
+      case "counter-not-found":
+        return "No existe un contador de facturas para esta serie y año."
+      case "not-a-reduction":
+        return "El nuevo número debe ser inferior al número actual."
+      case "stale-preview":
+        return "La numeración de facturas ha cambiado. Revisa el impacto de nuevo."
+      case "payments-changed":
+        return "Los pagos afectados han cambiado. Revisa el impacto de nuevo."
+    }
+  }
+  return fallback
 }
 
 export default function ReduceInvoiceCounterModal({
@@ -154,13 +171,14 @@ export default function ReduceInvoiceCounterModal({
         {preview ? (
           <>
             <div className="rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
-              This action permanently removes the invoice references listed
-              below. The affected payments remain in place.
+              Esta acción elimina de forma permanente las referencias de
+              facturas indicadas a continuación. Los pagos afectados se
+              conservan.
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-md bg-zinc-100 p-3 dark:bg-zinc-800">
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  New number
+                  Nuevo número
                 </p>
                 <p className="mt-1 font-mono text-xl font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
                   {formatInvoiceCounter(preview.newLastNumber)}
@@ -168,7 +186,7 @@ export default function ReduceInvoiceCounterModal({
               </div>
               <div className="rounded-md bg-zinc-100 p-3 dark:bg-zinc-800">
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  Invoices deleted
+                  Facturas eliminadas
                 </p>
                 <p className="mt-1 text-xl font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
                   {preview.invoices.length}
@@ -176,7 +194,7 @@ export default function ReduceInvoiceCounterModal({
               </div>
               <div className="rounded-md bg-zinc-100 p-3 dark:bg-zinc-800">
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  Payments affected
+                  Pagos afectados
                 </p>
                 <p className="mt-1 text-xl font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
                   {preview.affectedPaymentCount}
@@ -194,9 +212,9 @@ export default function ReduceInvoiceCounterModal({
         ) : (
           <div className="space-y-3">
             <p className="text-sm text-zinc-600 dark:text-zinc-300">
-              The current number is {formatInvoiceCounter(counter.lastNumber)}.
-              Choose a lower value to review exactly which invoices and payments
-              will be affected before confirming.
+              El número actual es {formatInvoiceCounter(counter.lastNumber)}.
+              Elige un valor inferior para revisar qué facturas y pagos se verán
+              afectados antes de confirmar.
             </p>
             <div>
               <label

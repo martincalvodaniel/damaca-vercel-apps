@@ -42,4 +42,6 @@ La ruta `/clients/[id]` muestra los datos del cliente y permite editarlos. Los l
 
 ## Cabeceras y altas de página
 
-Las altas principales se presentan mediante el botón + compartido en la navegación. Clientes coloca el + a la izquierda de su buscador, también en navegación. Mes conserva el + junto a sus controles. Las páginas no repiten títulos/subtítulos descriptivos bajo la navegación; mantienen selectores y filtros. Los controles mensuales usan «Compacto» y «Todo», y Año se presenta en español. Las altas contextuales de modales y plantillas conservan su ubicación. Alcance: [BILL-16](iterations.md#bill-16--simplificar-cabeceras-y-altas).
+Las altas principales se presentan mediante el botón + compartido en la navegación. Clientes coloca el + a la izquierda de su buscador, también en navegación. Mes conserva el + junto a sus controles y también lo ofrece en la navegación; ambos abren el mismo formulario. Las páginas no repiten títulos/subtítulos descriptivos bajo la navegación; mantienen selectores y filtros. Los controles mensuales usan «Compacto» y «Todo», y Año se presenta en español. Las altas contextuales de modales y plantillas conservan su ubicación. Alcance: [BILL-16](iterations.md#bill-16--simplificar-cabeceras-y-altas).
+
+En Cocciones, la sección Pagadas permanece cerrada por defecto y se sitúa antes de las vigentes. Encargos conserva su orden. Facturas presenta sus listados y el flujo de reducción de numeración en español. Alcance: [BILL-17](iterations.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).

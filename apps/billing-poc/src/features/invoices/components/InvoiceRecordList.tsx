@@ -83,7 +83,7 @@ function InvoiceRecordListComponent({
               {formatCurrency(invoice.paymentTotal)}
             </p>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              Payment {formatDate(invoice.paymentDate)}
+              Pago del {formatDate(invoice.paymentDate)}
             </p>
           </div>
         </li>
