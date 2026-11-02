@@ -60,7 +60,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: agrupación existente por `paymentId`.
 - Aceptación: el encabezado muestra `Paid (n)` y conserva contador, contenido y comportamiento colapsable.
 - Validación: Biome incremental, tipos y suite existente de billing.
-- Evidencia: [BILL-06](iteration-log.md#bill-06--etiqueta-de-encargos-pagados).
+- Evidencia: [BILL-06](archive/2026-11-02/bill-06.md#bill-06--etiqueta-de-encargos-pagados).
 
 ## BILL-07 — Navegación fija al hacer scroll
 
@@ -154,3 +154,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Contrato: GET autenticado `/api/clients/:id/activity` devuelve `{ client, payments, commissions, firings }` del cliente solicitado, sin filtro temporal; 400 para ID inválido, 404 si no existe, 500 ante error. Las mutaciones relacionadas invalidan la actividad.
 - Validación: pruebas de contrato/aislamiento, helpers SWR y navegación/render; lint incremental, tipos, suite y build de billing; revisión visual si el entorno lo permite.
 - Evidencia: [BILL-15](iteration-log.md#bill-15--página-de-cliente).
+
+## BILL-16 — Simplificar cabeceras y altas
+
+- Estado: `validated`.
+- Objetivo: eliminar cabeceras redundantes, completar traducción de Año y llevar altas principales a la navegación.
+- Rutas: PageLayout/NavigationBar, página de clientes y año; cabeceras de ausencias, productos, facturas, eventos, encargos/cocciones y Mes; tabla mensual; planificación de billing.
+- Dependencias: AddButton, buscador y callbacks existentes; sin nuevas dependencias.
+- Aceptación: Clientes usa + a la izquierda del buscador en navegación; altas principales de Productos, Eventos y Encargos/Cocciones en navegación; Mes conserva su + y elimina Monthly Filter/Overview; Compacto/Todo; se eliminan títulos/subtítulos redundantes de las páginas indicadas; Año sin cabecera textual y UI en español. Conservar controles de periodos, formularios, acciones contextuales, temas y accesibilidad.
+- Validación: Biome incremental, tipos, suite y build de billing; revisión responsive y visual si existe sesión accesible.
+- Evidencia: [BILL-16](iteration-log.md#bill-16--simplificar-cabeceras-y-altas).

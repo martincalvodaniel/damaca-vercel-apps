@@ -2,6 +2,7 @@
 import { useCallback, useState } from "react"
 import ClientQueryInput from "@/components/shared/ClientQueryInput"
 import PageLayout from "@/components/shared/PageLayout"
+import AddButton from "@/components/ui/AddButton"
 import { EmptyState } from "@/components/ui/EmptyState"
 import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import ClientForm from "@/features/clients/components/ClientForm"
@@ -67,12 +68,12 @@ export default function ClientsPage() {
         ? "No se pudieron cargar los clientes"
         : null
   return (
-    <PageLayout navigationSubtitle="Clientes">
-      {errorMessage ? <ErrorBanner bordered>{errorMessage}</ErrorBanner> : null}
-
-      <div className="space-y-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex-1">
+    <PageLayout
+      navigationSubtitle="Clientes"
+      navigationActions={
+        <div className="flex items-center gap-2">
+          <AddButton ariaLabel="Añadir cliente" onClick={toggleCreateForm} />
+          <div className="min-w-0 flex-1">
             <ClientQueryInput
               value={searchInputValue}
               onChange={setSearchInputValue}
@@ -80,19 +81,16 @@ export default function ClientsPage() {
               skipInitialDebouncedChange
             />
           </div>
-          <button
-            type="button"
-            onClick={toggleCreateForm}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
-          >
-            {showForm ? "Cancelar" : "Añadir cliente"}
-          </button>
         </div>
+      }
+    >
+      {errorMessage ? <ErrorBanner bordered>{errorMessage}</ErrorBanner> : null}
 
+      <div className="space-y-4">
         {showForm ? (
           <div className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-              Create New Client
+              Nuevo cliente
             </h3>
             <ClientForm
               onSubmit={handleCreateClient}

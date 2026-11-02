@@ -106,14 +106,6 @@ export default function YearSummaryPage() {
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                Yearly Filter
-              </p>
-              <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                Overview for {selectedYear}
-              </h3>
-            </div>
             <div className="flex flex-wrap items-center gap-2">
               <ChartsToggle showCharts={showCharts} onToggle={setShowCharts} />
               <YearPicker
@@ -154,7 +146,7 @@ export default function YearSummaryPage() {
 
         {payments.length === 0 ? (
           <EmptyState variant="card">
-            No payments recorded in {selectedYear}.
+            No hay pagos registrados en {selectedYear}.
           </EmptyState>
         ) : (
           <div className="space-y-2">

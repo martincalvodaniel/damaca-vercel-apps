@@ -105,12 +105,6 @@ export default function MonthPageContent() {
     if (!selectedPaymentTemplate) return undefined
     return buildPaymentTemplateFormData(selectedPaymentTemplate, initialDate)
   }, [initialDate, selectedPaymentTemplate])
-  const formatMonthYear = (date: Date) => {
-    return date.toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "long",
-    })
-  }
   const handleAddPaymentClick = () => {
     setShowPaymentModal(true)
   }
@@ -233,14 +227,6 @@ export default function MonthPageContent() {
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 border-b border-zinc-200 px-6 py-4 lg:flex-row lg:items-center lg:justify-between dark:border-zinc-800">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                Monthly Filter
-              </p>
-              <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                Overview for {formatMonthYear(selectedDate)}
-              </h3>
-            </div>
             <div className="flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:flex-wrap lg:items-end lg:justify-end">
               <div className="flex min-w-0 flex-nowrap items-end gap-2 lg:min-w-[20rem] lg:flex-1">
                 <AddButton

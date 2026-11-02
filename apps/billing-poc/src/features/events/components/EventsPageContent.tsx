@@ -1,6 +1,7 @@
 "use client"
 import dynamic from "next/dynamic"
 import PageLayout from "@/components/shared/PageLayout"
+import AddButton from "@/components/ui/AddButton"
 import Toast from "@/components/ui/Toast"
 import EventDeleteDialog from "./EventDeleteDialog"
 import EventsListTable from "./EventsListTable"
@@ -151,6 +152,9 @@ export default function EventsPageContent() {
   return (
     <PageLayout
       navigationSubtitle="Eventos"
+      navigationActions={
+        <AddButton ariaLabel="Añadir evento" onClick={openNewEvent} />
+      }
       headerContent={
         <EventsPageHeader
           selectedDate={selectedDate}
@@ -159,7 +163,6 @@ export default function EventsPageContent() {
           isViewingCurrentMonth={isViewingCurrentMonth}
           onGoToCurrentMonth={handleGoToCurrentMonth}
           onMonthChange={handleMonthChange}
-          onAddEvent={openNewEvent}
         />
       }
     >

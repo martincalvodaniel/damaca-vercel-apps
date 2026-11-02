@@ -9,6 +9,7 @@ import MobileMenuOverlay, { type NavItem } from "./MobileMenuOverlay"
 
 interface NavigationBarProps {
   subtitle: string
+  actions?: React.ReactNode
 }
 const NAV_ITEMS: readonly NavItem[] = [
   {
@@ -58,7 +59,10 @@ const NAV_ITEMS: readonly NavItem[] = [
     matches: (p) => p === "/year",
   },
 ]
-export default function NavigationBar({ subtitle }: NavigationBarProps) {
+export default function NavigationBar({
+  subtitle,
+  actions,
+}: NavigationBarProps) {
   const handleMenuOpenChange = () => setMenuOpen(true)
   const pathname = usePathname()
   const router = useRouter()
@@ -85,7 +89,7 @@ export default function NavigationBar({ subtitle }: NavigationBarProps) {
   useEscapeKey(closeMenu, menuOpen)
   return (
     <>
-      <nav className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <nav className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
             Billing
@@ -95,8 +99,10 @@ export default function NavigationBar({ subtitle }: NavigationBarProps) {
           </p>
         </div>
 
+        {actions ? <div className="min-w-0 flex-1">{actions}</div> : null}
+
         {/* Desktop nav links */}
-        <div className="hidden items-center gap-2 xl:flex">
+        <div className="order-last hidden w-full flex-wrap items-center justify-end gap-2 xl:flex">
           {NAV_ITEMS.map((item) => {
             const isActive = item.matches(pathname)
             return (

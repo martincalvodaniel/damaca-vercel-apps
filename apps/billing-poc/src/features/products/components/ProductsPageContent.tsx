@@ -218,26 +218,14 @@ export default function ProductsPageContent() {
   return (
     <PageLayout
       navigationSubtitle="Productos"
+      navigationActions={
+        <AddButton ariaLabel="Añadir producto" onClick={handleCreateProduct} />
+      }
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 border-b border-zinc-200 px-6 py-4 lg:flex-row lg:items-center lg:justify-between dark:border-zinc-800">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                Inventory
-              </p>
-              <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                Product catalog
-              </h3>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Keep product prices and stock in sync.
-              </p>
-            </div>
             <div className="flex flex-col gap-3 lg:min-w-0 lg:flex-row lg:items-center lg:justify-end">
               <div className="flex w-full flex-nowrap items-center gap-2 lg:w-auto">
-                <AddButton
-                  ariaLabel="Añadir producto"
-                  onClick={handleCreateProduct}
-                />
                 <div className="min-w-0 flex-1">
                   <ProductsSearch onSearch={handleSearch} />
                 </div>

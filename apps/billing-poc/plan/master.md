@@ -39,3 +39,7 @@ La UI usa español y fechas `es-ES`. Los calendarios anuncian ausencias, recuper
 ## Ficha de cliente
 
 La ruta `/clients/[id]` muestra los datos del cliente y permite editarlos. Los listados de clientes y pagos navegan a esta ficha. Sobre tres secciones de actividad cerradas por defecto, con contadores de pagos, encargos y cocciones, se muestra el resumen financiero de todo el historial del cliente (ingresos, gastos, saldo y desglose por etiqueta). Los encargos y cocciones incluyen los ya pagados; sus importes no se suman de nuevo a los pagos. Alcance: [BILL-15](iterations.md#bill-15--página-de-cliente).
+
+## Cabeceras y altas de página
+
+Las altas principales se presentan mediante el botón + compartido en la navegación. Clientes coloca el + a la izquierda de su buscador, también en navegación. Mes conserva el + junto a sus controles. Las páginas no repiten títulos/subtítulos descriptivos bajo la navegación; mantienen selectores y filtros. Los controles mensuales usan «Compacto» y «Todo», y Año se presenta en español. Las altas contextuales de modales y plantillas conservan su ubicación. Alcance: [BILL-16](iterations.md#bill-16--simplificar-cabeceras-y-altas).

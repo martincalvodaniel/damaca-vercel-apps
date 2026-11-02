@@ -103,7 +103,7 @@ export default function YearPicker({
                   htmlFor={`${id}-year-input`}
                   className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400"
                 >
-                  Year
+                  Año
                 </label>
                 <input
                   id={`${id}-year-input`}
@@ -120,7 +120,7 @@ export default function YearPicker({
                   onClick={submitYearInput}
                   className="rounded-md bg-blue-600 px-2 py-1 text-xs font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-offset-zinc-900"
                 >
-                  Go
+                  Ir
                 </button>
               </div>
 

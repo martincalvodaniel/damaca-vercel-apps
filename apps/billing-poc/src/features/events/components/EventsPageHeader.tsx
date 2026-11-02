@@ -1,8 +1,6 @@
 "use client"
 
-import AddButton from "@/components/ui/AddButton"
 import MonthPicker from "@/features/payments/components/month/MonthPicker"
-import { formatMonthYear } from "@/lib/utils/formatters"
 
 interface EventsPageHeaderProps {
   selectedDate: Date
@@ -11,7 +9,6 @@ interface EventsPageHeaderProps {
   isViewingCurrentMonth: boolean
   onGoToCurrentMonth: () => void
   onMonthChange: (year: number, month: number) => void
-  onAddEvent: () => void
 }
 
 export default function EventsPageHeader({
@@ -21,21 +18,11 @@ export default function EventsPageHeader({
   isViewingCurrentMonth,
   onGoToCurrentMonth,
   onMonthChange,
-  onAddEvent,
 }: EventsPageHeaderProps) {
   return (
     <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex flex-col gap-4 border-b border-zinc-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-            Events
-          </p>
-          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-            {formatMonthYear(selectedDate)}
-          </h3>
-        </div>
         <div className="flex flex-wrap items-center gap-2">
-          <AddButton ariaLabel="Añadir evento" onClick={onAddEvent} />
           <MonthPicker
             selectedDate={selectedDate}
             onMonthChange={onMonthChange}

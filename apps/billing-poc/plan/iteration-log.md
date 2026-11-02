@@ -1,6 +1,6 @@
 # Registro de entregas
 
-Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md).
+Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md).
 
 ## BILL-10 — Copiar Instagram desde el listado
 
@@ -20,14 +20,6 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 
 
 
-
-## BILL-06 — Etiqueta de encargos pagados
-
-- Inicio: 2026-11-01, rama `int`, base `3887644`, árbol limpio. Capacidad inicial: 13 % en 5 h y 67 % en 7 d; cambio acotado a una etiqueta y su planificación.
-- Aceptación: [BILL-06](iterations.md#bill-06--etiqueta-de-encargos-pagados).
-- Implementado: el encabezado de la sección pasa de `With payment (n)` a `Paid (n)`; se conserva el conteo de pagos vinculados y el comportamiento cerrado por defecto.
-- Validación: Biome sobre los cuatro archivos modificados correcto; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 969 pruebas, 0 fallos. `git diff --check` correcto. Se verificó por inspección que el contador y el `<details>` permanecen intactos.
-- Commit/push y SHA remoto se verifican al cerrar.
 
 ## BILL-07 — Navegación fija al hacer scroll
 
@@ -102,3 +94,14 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 - Revisión React/accesibilidad: consultas por SWR, imports de dominio solo de tipo en cliente, gráficos/modal de pago dinámicos, memoización del resumen, enlaces nativos y foco claro/oscuro. Controles `details/summary` con semántica expandible nativa; columnas de datos adaptables y textos largos con ajuste. Se archiva BILL-05 para conservar diez entregas recientes.
 - Comprobación de navegador: el servidor no pudo escuchar en 3000/3100 dentro del entorno restringido (`EADDRINUSE`). El arranque autorizado fuera de ese entorno en 3100 fue correcto. La navegación a `/clients` redirigió a `/auth/signin`; sin sesión autenticada disponible, no se verifica visualmente la ficha con datos reales ni el flujo completo Mongo → navegador. No se modifica la autenticación. Pestaña temporal cerrada al terminar.
 - Cierre técnico: Biome sobre los TS/TSX editados/nuevos sin hallazgos; enlaces locales correctos. El primer lint preparado detectó una línea vacía sobrante al archivar BILL-05; corregida. `bun run lint --staged` y `git diff --cached --check` se repiten antes del commit. Commit, push y SHA remoto se verifican al publicar.
+
+## BILL-16 — Simplificar cabeceras y altas
+
+- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits locales pendientes. Capacidad inicial: 98 % restante en 5 h y 54 % en 7 d; estimación suficiente para entrega completa conservando reservas.
+- Aceptación: [BILL-16](iterations.md#bill-16--simplificar-cabeceras-y-altas).
+- Alcance: altas de página en navegación; las altas contextuales dentro de modales y plantillas conservan su contexto. Mes conserva su alta local.
+
+- Implementado: slot explícito de acciones PageLayout → NavigationBar; + principal en Clientes, Productos, Eventos, Encargos y Cocciones. Clientes comparte la barra con el buscador a su derecha. Navegación permite envolver enlaces en escritorio y conserva menú móvil. Eliminados títulos/subtítulos redundantes; controles de periodo y filtros conservados; Mes mantiene su + y usa Compacto/Todo. Año traduce desglose, saldo mensual, selector Año/Ir y estado vacío.
+- Revisión React/accesibilidad: mismos callbacks y hooks SWR, sin efectos ni dependencias nuevos; + con aria-label; controles y estilos de foco/modo oscuro preservados. No se hizo comprobación visual interactiva en navegador; la revisión responsive es estática.
+- Validación: `bun run test --filter=@damaca/billing-poc`: 992 pruebas correctas, 0 fallos, 1802 assertions. `bun run type-check --filter=@damaca/billing-poc`: correcto tras corregir un error temporal de edición de JSX detectado por Biome/tipos. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (16,519 s). Caché remota de Turbo no disponible; comprobaciones locales completas. Biome explícito sobre los 14 TSX editados sin hallazgos; lint preparado y diff check se verifican al cerrar.
+- Archivo de BILL-06 para conservar diez entregas recientes; enlaces nuevos de planificación comprobados. Capacidad antes de publicar: 96 % en 5 h y 54 % en 7 d. Commit, push y SHA remoto se verifican al cierre.

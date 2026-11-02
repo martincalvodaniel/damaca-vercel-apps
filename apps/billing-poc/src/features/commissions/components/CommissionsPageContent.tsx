@@ -162,27 +162,15 @@ export default function CommissionsPageContent() {
   return (
     <PageLayout
       navigationSubtitle={title}
+      navigationActions={
+        <AddButton
+          ariaLabel={`Añadir ${singular}`}
+          title={isFiring ? "Nueva cocción" : "Nuevo encargo"}
+          onClick={openCreate}
+        />
+      }
       headerContent={
-        <>
-          {isFiring ? <FiringTemplatesPanel onSuccess={notify} /> : null}
-          <div className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-            <div className="flex items-center justify-between gap-4 px-6 py-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                  {title}
-                </p>
-                <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                  Lista de {plural}
-                </h1>
-              </div>
-              <AddButton
-                ariaLabel={`Añadir ${singular}`}
-                title={isFiring ? "Nueva cocción" : "Nuevo encargo"}
-                onClick={openCreate}
-              />
-            </div>
-          </div>
-        </>
+        isFiring ? <FiringTemplatesPanel onSuccess={notify} /> : null
       }
     >
       {message ? <Toast message={message} onClose={dismissMessage} /> : null}

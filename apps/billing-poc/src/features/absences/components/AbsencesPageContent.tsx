@@ -10,13 +10,6 @@ import AbsencesSummaryTable from "./AbsencesSummaryTable"
 import DayDetailModal from "./DayDetailModal"
 import StudentDetailModal from "./StudentDetailModal"
 
-function formatMonthYear(date: Date): string {
-  return date.toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "long",
-  })
-}
-
 interface StudentModalContainerProps {
   studentName: string
   onClose: () => void
@@ -94,14 +87,6 @@ export default function AbsencesPageContent() {
       headerContent={
         <div className="space-y-2 rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 border-b border-zinc-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                Absences
-              </p>
-              <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                {formatMonthYear(selectedDate)}
-              </h3>
-            </div>
             <div className="flex flex-wrap items-center gap-2">
               <MonthPicker
                 selectedDate={selectedDate}
