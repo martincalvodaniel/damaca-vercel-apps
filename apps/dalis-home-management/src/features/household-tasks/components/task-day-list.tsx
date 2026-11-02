@@ -1,13 +1,14 @@
 "use client"
 
 import { type MouseEvent, useCallback } from "react"
-
 import type {
   HouseholdTask,
   HouseholdTaskOccurrence,
 } from "@/types/household-task"
+import { TaskActionButton } from "./task-action-button"
+import { TaskDate } from "./task-date"
 import { TaskDragHandle, type TaskDragPayload } from "./task-drag-handle"
-import { controlClass, formatTaskDate } from "./task-ui"
+import { formatTaskDate } from "./task-ui"
 
 export type OccurrenceIntent =
   | "complete"
@@ -57,13 +58,12 @@ export function TaskDayList({
     <section
       aria-label="Tareas del día"
       data-household-drop-date={date}
-      className="mt-4 space-y-3"
+      className="mt-2 space-y-1.5"
     >
-      <h2 className="font-semibold">{formatTaskDate(date)}</h2>
+      <h2 className="text-xs font-semibold">{formatTaskDate(date)}</h2>
       {!entries.length ? (
-        <p className="rounded-2xl border border-dashed border-border p-5 text-sm text-muted">
-          No hay tareas para este día. Arrastra una tarea aquí o usa
-          «Programar».
+        <p className="rounded-[1.5rem] border border-dashed border-border px-3 py-2 text-xs text-muted">
+          No hay tareas para este día.
         </p>
       ) : null}
       {entries.map((entry) => {
@@ -72,9 +72,9 @@ export function TaskDayList({
         return (
           <article
             key={entry.id}
-            className="rounded-2xl border border-border bg-surface p-3"
+            className="rounded-[1.5rem] border border-border bg-surface px-3 py-2 shadow-soft"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {!entry.completedDate && !task.archived ? (
                 <TaskDragHandle
                   payload={{ task, occurrence: entry }}
@@ -83,73 +83,72 @@ export function TaskDayList({
                   onHover={onHover}
                 />
               ) : null}
-              <div className="min-w-0">
-                <h3 className="wrap-anywhere font-semibold">{task.name}</h3>
+              <div className="min-w-0 flex-1">
+                <h3 className="wrap-anywhere text-sm font-semibold tracking-tight">
+                  {task.name}
+                </h3>
                 <p
-                  className={`text-sm ${entry.completedDate ? "text-success" : "text-danger"}`}
+                  className={`text-xs ${entry.completedDate ? "text-success" : "text-danger"}`}
                 >
-                  {entry.completedDate
-                    ? `✓ Ejecutada el ${formatTaskDate(entry.completedDate)}`
-                    : "! Pendiente"}
+                  {entry.completedDate ? (
+                    <>
+                      ✓ Ejecutada <TaskDate date={entry.completedDate} />
+                    </>
+                  ) : (
+                    "! Pendiente"
+                  )}
                 </p>
               </div>
             </div>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-1 flex flex-wrap gap-1">
               {entry.completedDate ? (
                 <>
-                  <button
-                    type="button"
-                    className={controlClass}
+                  <TaskActionButton
+                    icon="edit-execution"
+                    label="Corregir ejecución"
+                    intent="edit-execution"
+                    entryId={entry.id}
                     disabled={disabled}
-                    data-entry={entry.id}
-                    data-intent="edit-execution"
                     onClick={handleIntent}
-                  >
-                    Corregir ejecución
-                  </button>
-                  <button
-                    type="button"
-                    className={`${controlClass} text-danger`}
+                  />
+                  <TaskActionButton
+                    icon="delete-execution"
+                    label="Eliminar ejecución"
+                    intent="delete-execution"
+                    entryId={entry.id}
                     disabled={disabled}
-                    data-entry={entry.id}
-                    data-intent="delete-execution"
                     onClick={handleIntent}
-                  >
-                    Eliminar ejecución
-                  </button>
+                    tone="danger"
+                  />
                 </>
               ) : (
                 <>
-                  <button
-                    type="button"
-                    className={`${controlClass} text-success`}
+                  <TaskActionButton
+                    icon="complete"
+                    label="Completar"
+                    intent="complete"
+                    entryId={entry.id}
                     disabled={disabled}
-                    data-entry={entry.id}
-                    data-intent="complete"
                     onClick={handleIntent}
-                  >
-                    Completar
-                  </button>
-                  <button
-                    type="button"
-                    className={controlClass}
+                    tone="success"
+                  />
+                  <TaskActionButton
+                    icon="move"
+                    label="Reprogramar"
+                    intent="move"
+                    entryId={entry.id}
                     disabled={disabled}
-                    data-entry={entry.id}
-                    data-intent="move"
                     onClick={handleIntent}
-                  >
-                    Reprogramar
-                  </button>
-                  <button
-                    type="button"
-                    className={`${controlClass} text-danger`}
+                  />
+                  <TaskActionButton
+                    icon="cancel"
+                    label="Cancelar programación"
+                    intent="cancel"
+                    entryId={entry.id}
                     disabled={disabled}
-                    data-entry={entry.id}
-                    data-intent="cancel"
                     onClick={handleIntent}
-                  >
-                    Cancelar programación
-                  </button>
+                    tone="danger"
+                  />
                 </>
               )}
             </div>

@@ -20,7 +20,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: componentes existentes; sin nuevas dependencias ni cambios de datos.
 - Aceptación: reducir padding, márgenes y separaciones verticales en inventario, compra, recetario y menú; conservar acciones y legibilidad; cruz roja visible con texto, oculta sin texto y accesible con teclado en búsquedas y selectores con búsqueda.
 - Validación prevista: Biome incremental, tipos, tests de la app, build y revisión del diff.
-- Evidencia: [HM-02](iteration-log.md#hm-02--listas-compactas-y-limpieza-de-búsquedas).
+- Evidencia: [HM-02](archive/2026-11-02/iteration-log.md#hm-02--listas-compactas-y-limpieza-de-búsquedas).
 
 ## HM-03 — Cabeceras y vista previa compactas
 
@@ -111,3 +111,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: plan aprobado en esta conversación; periodicidad máxima, aviso al 80%, sin avisos antes de la primera ejecución, histórico corregible y calendario rojo/verde/neutro.
 - Validación prevista: Biome, tipos, tests, build y QA visual/interactiva.
 - Evidencia: [HM-11](iteration-log.md#hm-11--tareas-recurrentes-del-hogar).
+
+## HM-12 — Densidad móvil coherente en Tareas
+
+- Estado: `validated`.
+- Objetivo: alinear Tareas con las vistas compactas existentes y fijar la densidad móvil como criterio obligatorio de futuras iteraciones visuales.
+- Rutas: `src/features/household-tasks/components/`, `docs/design-system.md`, referencia de `AGENTS.md` y `plan/`.
+- Dependencias: componentes y tokens actuales, sin cambios de negocio, datos, dependencias o páginas ajenas.
+- Aceptación: cabecera de página y presentación ocultas en móvil; barra compacta; acciones por iconos donde aportan espacio, con nombres accesibles; fechas, periodicidad, avisos y acciones conservados; calendario y listas con separación reducida; verificación de densidad y legibilidad a 320/390px y escritorio en ambos temas. Contrato de diseño enlazado y exigible para nuevas páginas y revisiones.
+- Validación prevista: Biome incremental, tipos, tests existentes, build y Chrome con comparación de alturas, interacción, teclado, contraste y ausencia de desbordamiento.
+- Evidencia: [HM-12](iteration-log.md#hm-12--densidad-móvil-coherente-en-tareas).

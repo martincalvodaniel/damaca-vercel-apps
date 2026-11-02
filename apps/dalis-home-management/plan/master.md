@@ -8,7 +8,9 @@ Los platos admiten una receta u observaciones opcionales como texto libre de has
 
 ## Interfaz vigente
 
-- Listas compactas en Inventario, Compra, Platos y Menú, con padding superior de 8px. Títulos de escritorio visibles y títulos móviles ocultos.
+- Densidad móvil obligatoria para páginas nuevas e iteraciones visuales según el [contrato de diseño](../docs/design-system.md#densidad-móvil-obligatoria), con controles compactos y acciones por iconos accesibles.
+- Listas compactas en Inventario, Compra, Platos, Menú y Tareas, con padding superior de 8px. Títulos de escritorio visibles y títulos móviles ocultos.
+- Tareas utiliza barra móvil sin presentación, fechas compactas con valor completo accesible y acciones por iconos; fichas y calendario densos, manteniendo datos y avisos.
 - Menú con rango semanal y etiqueta `X/14`, selector y vaciado en una fila. «Vaciar semana» siempre visible y deshabilitado si está vacía. Copia y vista previa son accesos compactos excluyentes; copia lleva flecha izquierda y texto derecho.
 - Filtros de compra desplazables horizontalmente sin barra visible. Buscadores con cruz roja siempre visible cuando hay texto.
 - Modales de pantalla completa con cruz roja, título y tick verde en cabecera independiente del scroll; contenido desde arriba, adaptación al viewport visual y zonas seguras.

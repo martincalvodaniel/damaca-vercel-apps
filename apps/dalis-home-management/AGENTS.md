@@ -117,4 +117,4 @@ Run Bun installation and all project commands from the monorepo root. This works
 
 ## Visual Design Contract
 
-Before creating or editing pages, components, forms, dialogs, or visual states, read [the design system](docs/design-system.md). Use the semantic color tokens in `src/app/globals.css` and validate light/dark contrast. This document owns color roles, section accents, surfaces, focus, and state conventions for this app.
+Before creating or editing pages, components, forms, dialogs, or visual states, read [the design system](docs/design-system.md). Use the semantic color tokens in `src/app/globals.css` and validate light/dark contrast. This document owns color roles, section accents, surfaces, focus, states, and mandatory mobile density for this app. Apply its mobile density rules to every new page and visual iteration; compare with the existing compact list and menu screens before editing.

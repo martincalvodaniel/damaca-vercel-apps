@@ -9,9 +9,10 @@ import type {
   HouseholdTask,
   HouseholdTaskOccurrence,
 } from "@/types/household-task"
+import { TaskActionButton } from "./task-action-button"
 import type { TaskIntent } from "./task-card"
 import type { OccurrenceIntent } from "./task-day-list"
-import { controlClass, fieldClass, formatTaskDate } from "./task-ui"
+import { fieldClass, formatTaskDate } from "./task-ui"
 
 export interface TaskDialogState {
   kind: "create" | TaskIntent | OccurrenceIntent
@@ -205,11 +206,11 @@ export function TaskDialog({
                   Sin ejecuciones registradas.
                 </p>
               ) : null}
-              <ul className="space-y-3">
+              <ul className="space-y-1.5">
                 {history.map((entry) => (
                   <li
                     key={entry.id}
-                    className="rounded-xl border border-border bg-surface p-3"
+                    className="rounded-[1.5rem] border border-border bg-surface px-3 py-2"
                   >
                     <p className="font-semibold text-success">
                       ✓ {formatTaskDate(entry.completedDate ?? entry.date)}
@@ -219,25 +220,24 @@ export function TaskDialog({
                         ? `Fecha prevista: ${formatTaskDate(entry.date)}`
                         : "Ejecución sin programación previa"}
                     </p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        className={controlClass}
-                        data-entry={entry.id}
-                        data-intent="edit-execution"
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      <TaskActionButton
+                        icon="edit-execution"
+                        label="Corregir fecha"
+                        intent="edit-execution"
+                        entryId={entry.id}
+                        disabled={pending}
                         onClick={handleHistoryAction}
-                      >
-                        Corregir fecha
-                      </button>
-                      <button
-                        type="button"
-                        className={`${controlClass} text-danger`}
-                        data-entry={entry.id}
-                        data-intent="delete-execution"
+                      />
+                      <TaskActionButton
+                        icon="delete-execution"
+                        label="Eliminar ejecución"
+                        intent="delete-execution"
+                        entryId={entry.id}
+                        disabled={pending}
                         onClick={handleHistoryAction}
-                      >
-                        Eliminar ejecución
-                      </button>
+                        tone="danger"
+                      />
                     </div>
                   </li>
                 ))}

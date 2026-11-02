@@ -48,27 +48,34 @@ export function TaskMonthCalendar({
   return (
     <section
       aria-label="Calendario de tareas"
-      className="rounded-2xl border border-border bg-surface p-3 sm:p-5"
+      className="rounded-[1.5rem] border border-border bg-surface p-2 sm:p-3"
     >
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h2 aria-live="polite" className="font-semibold first-letter:uppercase">
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <h2
+          aria-live="polite"
+          className="text-sm font-semibold first-letter:uppercase"
+        >
           {monthFormatter.format(new Date(`${month}-01T00:00:00Z`))}
         </h2>
         <div className="flex gap-1">
           <button
             type="button"
-            className={controlClass}
+            className={`${controlClass} min-w-8 px-2`}
             aria-label="Mes anterior"
             onClick={previousMonth}
           >
             ‹
           </button>
-          <button type="button" className={controlClass} onClick={selectToday}>
+          <button
+            type="button"
+            className={`${controlClass} min-w-8 px-2`}
+            onClick={selectToday}
+          >
             Hoy
           </button>
           <button
             type="button"
-            className={controlClass}
+            className={`${controlClass} min-w-8 px-2`}
             aria-label="Mes siguiente"
             onClick={nextMonth}
           >
@@ -104,7 +111,7 @@ export function TaskMonthCalendar({
               aria-pressed={date === selectedDate}
               aria-current={date === today ? "date" : undefined}
               aria-label={`${formatTaskDate(date)}. ${description}${date === today ? ". Hoy" : ""}`}
-              className={`flex min-h-14 min-w-0 flex-col items-center justify-center rounded-xl border text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${status === "pending" ? "border-danger bg-danger-soft text-danger" : status === "completed" ? "border-success bg-success-soft text-success" : "border-border bg-field text-ink"} ${date === selectedDate ? "ring-2 ring-ring ring-offset-1 ring-offset-surface" : ""} ${date === hoverDate ? "outline-4 outline-dashed outline-ring" : ""}`}
+              className={`flex min-h-9 min-w-0 flex-col items-center justify-center rounded-lg border text-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${status === "pending" ? "border-danger bg-danger-soft text-danger" : status === "completed" ? "border-success bg-success-soft text-success" : "border-border bg-field text-ink"} ${date === selectedDate ? "ring-2 ring-ring ring-offset-1 ring-offset-surface" : ""} ${date === hoverDate ? "outline-4 outline-dashed outline-ring" : ""}`}
             >
               <span className="font-semibold">{Number(date.slice(-2))}</span>
               <span aria-hidden="true" className="text-[0.625rem]">
@@ -116,7 +123,7 @@ export function TaskMonthCalendar({
           )
         })}
       </div>
-      <p className="mt-3 text-xs text-muted">
+      <p className="sr-only text-xs text-muted sm:not-sr-only sm:mt-2">
         ✓ Verde: todas completas · ! Rojo: alguna pendiente · Sin marca: sin
         tareas
       </p>

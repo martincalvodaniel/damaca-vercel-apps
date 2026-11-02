@@ -11,6 +11,7 @@ import type {
   HouseholdTaskOccurrence,
   HouseholdTasksData,
 } from "@/types/household-task"
+import { TaskActionIcon } from "./task-action-icon"
 import { TaskCard, type TaskIntent } from "./task-card"
 import { type OccurrenceIntent, TaskDayList } from "./task-day-list"
 import { TaskDialog, type TaskDialogState } from "./task-dialog"
@@ -163,44 +164,69 @@ export function HouseholdTasksBoard({
     occurrencesByTask.set(entry.taskId, entries)
   }
   return (
-    <main className="mx-auto w-full max-w-[96rem] px-3 pt-2 text-ink sm:px-8">
-      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold">Tareas del hogar</h1>
-          <p className="mt-1 text-sm text-muted">
+    <main className="mx-auto min-h-screen w-full max-w-[96rem] overflow-x-clip px-4 pt-5 text-ink sm:px-8 sm:pt-8">
+      <header className="mb-2 flex flex-col gap-2 border-b border-border pb-2 sm:flex-row sm:items-end sm:justify-between sm:gap-5">
+        <div className="contents sm:block">
+          <h1 className="sr-only font-semibold tracking-[-0.05em] sm:not-sr-only sm:text-5xl">
+            Tareas del hogar
+          </h1>
+          <p className="mt-3 hidden text-base leading-6 text-muted sm:block">
             Planifica las tareas recurrentes y consulta cuándo se han hecho.
           </p>
         </div>
-        <button
-          type="button"
-          className={primaryClass}
-          disabled={pending}
-          onClick={openCreate}
-        >
-          Nueva tarea
-        </button>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex min-h-8 items-center gap-2 rounded-full border border-border bg-field px-2.5 py-1 text-xs font-semibold text-muted">
+            <span
+              aria-hidden="true"
+              className="size-2 rounded-full bg-primary"
+            />
+            {tasks.length}{" "}
+            {showArchived
+              ? "archivadas"
+              : tasks.length === 1
+                ? "tarea"
+                : "tareas"}
+          </span>
+          <button
+            type="button"
+            className={primaryClass}
+            disabled={pending}
+            onClick={openCreate}
+            aria-label="Nueva tarea"
+            title="Nueva tarea"
+          >
+            <TaskActionIcon name="add" />
+            <span className="hidden sm:inline">Añadir</span>
+          </button>
+          <button
+            type="button"
+            className={`${controlClass} min-w-8 px-2`}
+            aria-label={showArchived ? "Ver activas" : "Ver archivadas"}
+            title={showArchived ? "Ver activas" : "Ver archivadas"}
+            aria-pressed={showArchived}
+            onClick={toggleArchived}
+          >
+            <TaskActionIcon name={showArchived ? "active" : "archive"} />
+            <span className="hidden sm:inline">
+              {showArchived ? "Ver activas" : "Ver archivadas"}
+            </span>
+          </button>
+        </div>
       </header>
       {error && !dialog ? <ErrorBanner>{error}</ErrorBanner> : null}
       <div role="status" className="sr-only">
         {pending ? "Guardando cambios…" : ""}
       </div>
-      <div className="grid items-start gap-5 lg:grid-cols-[minmax(18rem,0.85fr)_minmax(0,1.15fr)]">
-        <section aria-label="Catálogo de tareas" className="min-w-0 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="font-semibold">
-              {showArchived ? "Archivadas" : "Tareas activas"} ({tasks.length})
-            </h2>
-            <button
-              type="button"
-              className={controlClass}
-              aria-pressed={showArchived}
-              onClick={toggleArchived}
-            >
-              {showArchived ? "Ver activas" : "Ver archivadas"}
-            </button>
-          </div>
+      <div className="grid items-start gap-2 lg:gap-4 lg:grid-cols-[minmax(18rem,0.85fr)_minmax(0,1.15fr)]">
+        <section
+          aria-label="Catálogo de tareas"
+          className="min-w-0 space-y-1.5"
+        >
+          <h2 className="sr-only">
+            {showArchived ? "Tareas archivadas" : "Tareas activas"}
+          </h2>
           {!tasks.length ? (
-            <p className="rounded-2xl border border-dashed border-border p-5 text-sm text-muted">
+            <p className="rounded-[1.5rem] border border-dashed border-border px-3 py-2 text-xs text-muted">
               {showArchived
                 ? "No hay tareas archivadas."
                 : "Crea tu primera tarea para empezar a planificar."}

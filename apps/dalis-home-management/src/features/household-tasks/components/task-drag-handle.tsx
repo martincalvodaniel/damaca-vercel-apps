@@ -83,7 +83,7 @@ export function TaskDragHandle({
     <span
       aria-hidden="true"
       title={`Arrastrar ${payload.task.name}`}
-      className={`grid size-11 shrink-0 touch-none select-none place-items-center rounded-xl border border-control-border bg-field text-lg text-muted ${disabled ? "opacity-50" : dragging ? "cursor-grabbing ring-2 ring-ring" : "cursor-grab"}`}
+      className={`grid size-8 shrink-0 touch-none select-none place-items-center rounded-full border border-control-border bg-field text-base text-muted ${disabled ? "opacity-50" : dragging ? "cursor-grabbing ring-2 ring-ring" : "cursor-grab"}`}
       onPointerDown={handleDown}
       onPointerMove={handleMove}
       onPointerUp={handleUp}
