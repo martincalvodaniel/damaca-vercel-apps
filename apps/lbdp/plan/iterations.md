@@ -31,3 +31,12 @@
 - Capacidad: 12% de 5h y 41% de 7d al comienzo; margen acotado con reserva 7%/2%.
 
 - Bloqueo LBDP-03: comandos cambiados a npx manteniendo Bun 1.4.4; Preview de validación rechazado con HTTP 402 por cuota. Mitigación local comprobada, resultado alojado pendiente; no declarar resuelto el error de build.
+
+## LBDP-04 — Desactivar deployments automáticos de Git
+
+- Estado: `validated`.
+- Objetivo: impedir que pushes a cualquier rama creen deployments automáticos para el proyecto LBDP, conservando deployments manuales por CLI.
+- Rutas: `apps/lbdp/vercel.ts` y planificación/evidencia de LBDP.
+- Dependencias: configuración `VercelConfig` existente y compatibilidad documentada de `git.deploymentEnabled`.
+- Aceptación: `git.deploymentEnabled` es `false`; build e instalación conservan la configuración actual; no se pausa el tráfico ni se despliega producción.
+- Validación: Biome del archivo, validación de configuración/tipos disponible, `git diff --check`, publicación y SHA remoto conforme al flujo raíz. La configuración se publica en int; no se inicia un deployment manual en esta iteración ni se acredita el comportamiento de otras ramas con configuraciones anteriores.

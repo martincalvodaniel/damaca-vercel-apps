@@ -23,3 +23,5 @@ Confirmar domicilio/local y condiciones comerciales; alcance editorial, integrac
 Proyecto `lbdp` del equipo `martincalvodaniels-projects`, raíz `apps/lbdp`, Next.js, Node 24, Bun 1.4.4 en instalación/build. Repositorio conectado, producción `main`, selección nativa de proyectos afectados activa y protección de acceso conservada. [LBDP-02](iterations.md#lbdp-02--proyecto-vercel-y-preview-de-int) registra el intento Preview de `int` rechazado por cuota; no hay URL READY acreditada. La vinculación local permanece ignorada en Git.
 
 [LBDP-03](iterations.md#lbdp-03--reparar-el-lanzador-de-instalación-de-vercel) sustituye el bootstrap de bunx por npx. El fallo alojado no está confirmado como resuelto: el Preview de validación fue rechazado por cuota.
+
+[LBDP-04](iterations.md#lbdp-04--desactivar-deployments-automáticos-de-git) incorpora `vercel.ts` con `git.deploymentEnabled: false` y dependencia de configuración del catálogo; publicación manual bajo petición.

@@ -161,6 +161,7 @@
         "@types/node": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
+        "@vercel/config": "catalog:",
         "typescript": "catalog:",
       },
     },

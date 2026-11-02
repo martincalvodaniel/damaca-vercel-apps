@@ -33,3 +33,10 @@
 - Validación alojada pendiente: POST de Preview para SHA 996618a/int rechazado HTTP 402, `api-deployments-free-per-day`, «try again in 24 hours». Sin deployment nuevo ni reintentos periódicos; no se declara corregido el build. Tras desbloqueo, crear un Preview explícito del SHA vigente y revisar instalación, build y HTTP antes de cerrar LBDP-03.
 - No hay un test unitario local que replique el entorno Vercel: la regresión definitiva requiere build remoto. Código del producto intacto; validación documental, diff y publicación en int al cierre. Los pushes pueden activar la integración Git existente.
 - Capacidad inicial 12%/41%; lectura de seguimiento 10%/41%. Se conserva el estado de reanudación por cuota y margen de capacidad; no se amplía el corte.
+
+## LBDP-04 — Desactivar deployments automáticos de Git
+
+- Cambio: se crea `apps/lbdp/vercel.ts`, homólogo a las configuraciones Vercel de las otras apps. Conserva el build e install de LBDP y fija `git.deploymentEnabled: false` para todas las ramas.
+- Configuración versionada: Git deployments desactivados para los commits que incluyen este archivo; otras ramas con configuración anterior no quedan modificadas por este commit. No se pausa el proyecto ni se cambia el tráfico actual.
+- Validación: instalación offline completa, type-check filtrado de LBDP, Biome y diff check correctos. El primer intento usó solo `--lockfile-only`, que no instala enlaces locales; `bun install --offline` resuelve la dependencia. No se ejecutan pruebas de producto ni un deployment. Publicación en int y SHA remoto comprobados al cierre.
+- Limitación: no se ha podido actualizar la opción remota mediante `vercel api`; el endpoint de proyecto rechazó `gitProviderOptions` en el intento anterior. El push de este cambio podría activar el Git deployment existente de LBDP antes de que la configuración entre en vigor.
