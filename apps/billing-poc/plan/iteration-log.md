@@ -1,6 +1,6 @@
 # Registro de entregas
 
-Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md).
+Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md).
 
 ## BILL-10 — Copiar Instagram desde el listado
 
@@ -20,14 +20,6 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 
 
 
-
-## BILL-08 — Márgenes opacos de navegación
-
-- Inicio: 2026-11-01, rama `int`, base `e1ffcb2`, árbol limpio. Capacidad inicial: 11 % en 5 h y 67 % en 7 d; margen estimado suficiente para este ajuste CSS y cierre conservando reservas.
-- Aceptación: [BILL-08](iterations.md#bill-08--márgenes-opacos-de-navegación).
-- Implementado: posición sticky trasladada a una franja de PageLayout con fondo opaco claro/oscuro, padding superior e inferior y ancho completo del viewport. Barra centrada con el ancho máximo existente; contenido principal a continuación sin duplicar el espacio inferior. Menú y barra comparten la capa de navegación, por debajo de modales.
-- Validación: `bun run lint --staged` comprobó cinco archivos sin hallazgos; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 969 pruebas y 0 fallos; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto. `git diff --cached --check` correcto. La caché remota no estaba disponible; los comandos locales completaron correctamente.
-- Revisión estática de anchura, padding, fondos y capas en ambos temas; sin nuevos efectos, listeners ni dependencias. Sin comprobación visual en navegador. Commit, push y SHA remoto se verifican al cerrar.
 
 ## BILL-11 — Traducción de la interfaz al español
 
@@ -107,3 +99,13 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 - Revisión React: slot compartido de navegación, callbacks y SWR existentes, sin dependencias ni efectos nuevos. La misma sección de pagadas se renderiza una sola vez según el contexto. Iconos etiquetados y estilos claros/oscuros conservados. Sin verificación visual interactiva; revisión estática de orden y callbacks.
 - Se archiva BILL-07 para conservar diez entregas recientes. Validación y publicación se registran al cerrar.
 - Validación final: `bun run type-check --filter=@damaca/billing-poc`, correcto; `bun run test --filter=@damaca/billing-poc`, 992 correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack`, correcto (9,566 s). Biome explícito sobre los ocho TS/TSX editados sin hallazgos tras formato. Caché remota de Turbo no disponible; comprobaciones locales completas. Lint preparado, diff check, commit, push y SHA remoto se verifican al cierre.
+
+## BILL-18 — Navegación de escritorio
+
+- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits locales pendientes. Capacidad inicial: 81 % en 5 h y 52 % en 7 d; estimación suficiente para completar y publicar con reservas.
+- Aceptación: [BILL-18](iterations.md#bill-18--navegación-de-escritorio).
+
+- Implementado: identificación Billing/título con `xl:hidden`; menú de escritorio antes del slot de acciones en el DOM y controles en una fila inferior de ancho completo. En móvil, el menú de escritorio sigue oculto y se mantiene título → acciones → botón de menú. Se conservan eventos, sesión, estilos, navegación fija y breakpoints.
+- Revisión React/accesibilidad: cambio limitado a estructura y clases responsive, sin hooks/efectos nuevos, elementos duplicados ni cambios de callbacks. Orden de tabulación de escritorio alineado con menú → controles. No se realizó comprobación visual interactiva; revisión estática.
+- Se archiva BILL-08 para mantener diez entregas recientes.
+- Validación: Biome del componente sin hallazgos; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 992 correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto (10,044 s). Caché remota de Turbo no disponible; comprobaciones locales completas. Enlaces locales de planificación y diff check correctos. Lint preparado, commit, push y SHA remoto se verifican al cierre.

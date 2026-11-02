@@ -80,7 +80,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: navegación sticky de BILL-07; sin nuevas librerías.
 - Aceptación: franja sticky con fondo de página en ambos temas y padding superior/inferior permanente; contenido oculto al pasar por detrás, ancho de barra conservado y overlays por encima.
 - Validación: lint staged, tipos, suite y build de billing; revisión de estructura y capas.
-- Evidencia: [BILL-08](iteration-log.md#bill-08--márgenes-opacos-de-navegación).
+- Evidencia: [BILL-08](archive/2026-11-02/bill-08.md#bill-08--márgenes-opacos-de-navegación).
 
 ## BILL-09 — Instagram de clientes
 
@@ -174,3 +174,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: ambos + de Mes abren el mismo formulario; Cocciones muestra Pagadas cerrada por defecto antes de las vigentes, sin cambiar Encargos; textos visibles de Facturas y reducción de numeración en español, conservando valores internos y comportamiento.
 - Validación: Biome, tipos, suite y build de billing; revisión estática de orden, callbacks y textos.
 - Evidencia: [BILL-17](iteration-log.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).
+
+## BILL-18 — Navegación de escritorio
+
+- Estado: `validated`.
+- Objetivo: eliminar identificación redundante y colocar los controles de página debajo del menú solo en escritorio.
+- Rutas: `src/components/shared/NavigationBar.tsx` y planificación de billing.
+- Dependencias: breakpoint `xl` y slot de acciones existentes.
+- Aceptación: escritorio sin Billing/título de página; menú antes de acciones/buscador, con orden de foco coherente; móvil conserva título, acciones y menú actuales; todas las páginas y ambos temas.
+- Validación: Biome, tipos, suite y build de billing; revisión de clases responsive y DOM.
+- Evidencia: [BILL-18](iteration-log.md#bill-18--navegación-de-escritorio).

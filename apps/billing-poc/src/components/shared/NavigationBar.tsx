@@ -90,7 +90,7 @@ export default function NavigationBar({
   return (
     <>
       <nav className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <div>
+        <div className="xl:hidden">
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
             Billing
           </p>
@@ -99,10 +99,8 @@ export default function NavigationBar({
           </p>
         </div>
 
-        {actions ? <div className="min-w-0 flex-1">{actions}</div> : null}
-
         {/* Desktop nav links */}
-        <div className="order-last hidden w-full flex-wrap items-center justify-end gap-2 xl:flex">
+        <div className="hidden w-full flex-wrap items-center justify-end gap-2 xl:flex">
           {NAV_ITEMS.map((item) => {
             const isActive = item.matches(pathname)
             return (
@@ -139,6 +137,12 @@ export default function NavigationBar({
             </>
           ) : null}
         </div>
+
+        {actions ? (
+          <div className="min-w-0 flex-1 xl:basis-full xl:flex-none">
+            {actions}
+          </div>
+        ) : null}
 
         {/* Mobile hamburger button */}
         <button
