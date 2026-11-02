@@ -95,14 +95,6 @@ export function TaskCard({
           />
         ) : null}
         {!task.archived ? (
-          <TaskDragHandle
-            payload={{ task }}
-            disabled={disabled}
-            onDrop={onDrop}
-            onHover={onHover}
-          />
-        ) : null}
-        {!task.archived ? (
           <>
             <TaskActionButton
               icon="schedule"
@@ -143,6 +135,14 @@ export function TaskCard({
             disabled={disabled}
             onClick={handleIntent}
             tone="danger"
+          />
+        ) : null}
+        {!task.archived ? (
+          <TaskDragHandle
+            payload={{ task }}
+            disabled={disabled}
+            onDrop={onDrop}
+            onHover={onHover}
           />
         ) : null}
       </div>

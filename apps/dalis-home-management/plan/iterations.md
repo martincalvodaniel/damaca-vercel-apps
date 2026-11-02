@@ -131,3 +131,11 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Aceptación: filtro y añadir antes del contador; restauración idempotente de archivadas; acciones del histórico en la misma fila de fecha; check reversible sin confirmación que crea/elimina el histórico; evento pendiente con borrar y asa al extremo derecho; eliminar estados redundantes.
 - Validación prevista: Biome incremental, tipos, tests, build Webpack y revisión del diff/documentación.
 - Evidencia: [HM-13](iteration-log.md#hm-13--controles-compactos-y-restauración-de-tareas).
+
+## HM-14 — Estados de check y orden de controles
+
+- Estado: `validated`.
+- Objetivo: ajustar la lectura de completado y el orden espacial de las acciones de Tareas.
+- Rutas: `src/features/household-tasks/components/` y `plan/`.
+- Aceptación: añadir antes del filtro; restaurar vuelve a activas; eventos completados solo muestran el check; asas del catálogo y eventos pendientes al extremo derecho; conservar acciones de histórico y reprogramación.
+- Evidencia: [HM-14](iteration-log.md#hm-14--estados-de-check-y-orden-de-controles).

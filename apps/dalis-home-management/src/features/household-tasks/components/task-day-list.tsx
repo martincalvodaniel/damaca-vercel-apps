@@ -105,27 +105,7 @@ export function TaskDayList({
                 </h3>
               </div>
               <div className="ml-auto flex items-center gap-1">
-                {entry.completedDate ? (
-                  <>
-                    <TaskActionButton
-                      icon="edit-execution"
-                      label="Corregir ejecución"
-                      intent="edit-execution"
-                      entryId={entry.id}
-                      disabled={disabled}
-                      onClick={handleIntent}
-                    />
-                    <TaskActionButton
-                      icon="delete-execution"
-                      label="Eliminar ejecución"
-                      intent="delete-execution"
-                      entryId={entry.id}
-                      disabled={disabled}
-                      onClick={handleIntent}
-                      tone="danger"
-                    />
-                  </>
-                ) : (
+                {!entry.completedDate ? (
                   <>
                     <TaskActionButton
                       icon="move"
@@ -145,7 +125,7 @@ export function TaskDayList({
                       tone="danger"
                     />
                   </>
-                )}
+                ) : null}
                 {!entry.completedDate && !task.archived ? (
                   <TaskDragHandle
                     payload={{ task, occurrence: entry }}

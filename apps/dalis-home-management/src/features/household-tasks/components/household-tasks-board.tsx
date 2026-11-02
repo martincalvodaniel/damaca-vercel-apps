@@ -92,6 +92,7 @@ export function HouseholdTasksBoard({
     (task: HouseholdTask, kind: TaskIntent) => {
       setError(null)
       if (kind === "restore") {
+        setShowArchived(false)
         run({ kind: "restore", taskId: task.id })
         return
       }
@@ -205,6 +206,17 @@ export function HouseholdTasksBoard({
         <div className="flex items-center gap-2">
           <button
             type="button"
+            className={primaryClass}
+            disabled={pending}
+            onClick={openCreate}
+            aria-label="Nueva tarea"
+            title="Nueva tarea"
+          >
+            <TaskActionIcon name="add" />
+            <span className="hidden sm:inline">Añadir</span>
+          </button>
+          <button
+            type="button"
             className={`${controlClass} min-w-8 px-2`}
             aria-label={showArchived ? "Ver activas" : "Ver archivadas"}
             title={showArchived ? "Ver activas" : "Ver archivadas"}
@@ -215,17 +227,6 @@ export function HouseholdTasksBoard({
             <span className="hidden sm:inline">
               {showArchived ? "Ver activas" : "Ver archivadas"}
             </span>
-          </button>
-          <button
-            type="button"
-            className={primaryClass}
-            disabled={pending}
-            onClick={openCreate}
-            aria-label="Nueva tarea"
-            title="Nueva tarea"
-          >
-            <TaskActionIcon name="add" />
-            <span className="hidden sm:inline">Añadir</span>
           </button>
           <span className="inline-flex min-h-8 items-center gap-2 rounded-full border border-border bg-field px-2.5 py-1 text-xs font-semibold text-muted">
             <span
