@@ -74,18 +74,30 @@ export function TaskCard({
         {dates.map(({ label, date, empty }) => (
           <div key={label} className="min-w-0">
             <dt className="text-muted">{label}</dt>
-            <dd>{date ? <TaskDate date={date} /> : <span>{empty}</span>}</dd>
+            <dd>
+              {date ? <TaskDate date={date} /> : <span>{empty}</span>}
+              {label === "Límite" && warning ? (
+                <span
+                  className="ml-1 text-warning"
+                  role="img"
+                  aria-label={
+                    status.state === "overdue"
+                      ? "Periodicidad vencida"
+                      : "Límite próximo sin programación a tiempo"
+                  }
+                  title={
+                    status.state === "overdue"
+                      ? "Periodicidad vencida"
+                      : "Límite próximo sin programación a tiempo"
+                  }
+                >
+                  ⚠
+                </span>
+              ) : null}
+            </dd>
           </div>
         ))}
       </dl>
-      {warning ? (
-        <p className="mt-1 text-xs font-semibold text-warning">
-          ⚠{" "}
-          {status.state === "overdue"
-            ? "Periodicidad vencida"
-            : "Límite próximo sin programación a tiempo"}
-        </p>
-      ) : null}
       <div className="mt-1 flex flex-wrap gap-1 border-t border-border pt-1">
         {task.archived ? (
           <TaskActionButton

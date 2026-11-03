@@ -10,6 +10,8 @@ Los platos admiten una receta u observaciones opcionales como texto libre de has
 
 ## Interfaz vigente
 
+- Carrusel de Tareas con contención de layout/pintado para evitar expansión del viewport móvil; advertencias de periodicidad mediante icono junto a la fecha límite.
+
 - Densidad móvil obligatoria para páginas nuevas e iteraciones visuales según el [contrato de diseño](../docs/design-system.md#densidad-móvil-obligatoria), con controles compactos y acciones por iconos accesibles.
 - Listas compactas en Inventario, Compra, Platos, Menú y Tareas, con padding superior de 8px. Títulos de escritorio visibles y títulos móviles ocultos.
 - Tareas utiliza barra móvil sin presentación, fechas compactas con valor completo accesible y acciones por iconos; fichas y calendario densos, manteniendo datos y avisos.

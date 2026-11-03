@@ -172,6 +172,16 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - Añadido icono circular vacío para eventos pendientes; el check verde se reserva para eventos completados.
 - El asa de las fichas padre se agrupa con `margin-left: auto`, dejando el resto de acciones alineadas a la izquierda y el arrastre al borde derecho.
 
+## HM-17 — Contención del carrusel en móvil
+
+- Inicio 2026-11-03 en int con árbol limpio. Capacidad: 98% de 5h y 26% semanal, suficiente para corrección y validación acotadas.
+- Reproducción con componentes reales y viewport móvil/meta viewport: documentElement.scrollWidth=390 pero layoutViewport=1085; al solicitar escala 0,5 el área visible crecía a 780px. La comprobación previa basada solo en scrollWidth no detectaba este desbordamiento de layout móvil.
+- Prueba aislada de contención inline-size/layout/paint en el carrusel: layoutViewport=390 y escala mínima efectiva=1, sin cambiar la configuración global del zoom. Corrección limitada al carrusel de Tareas.
+- Chrome móvil con componentes reales: ancho de layout correcto a 320/390/412px; zoom-in hasta escala 2 conservado; carrusel desplazable. Flujo aislado HM-16 de búsqueda, programación sugerida, autoría y navegación mensual correcto. Script de reproducción `/private/tmp/hm17-check.cjs` falla antes y pasa después. Sin prueba física en Android.
+- Petición adicional incorporada: se elimina la línea del aviso de periodicidad y se añade un icono con nombre accesible y tooltip a la derecha de la fecha límite.
+- Buscador conectado a datalist nativo con nombres únicos de las tareas de la vista activa/archivada. Mantiene el filtro y la limpieza existentes, usando sugerencias del navegador sin dependencias nuevas.
+- Biome incremental, tipos, 185 tests y build Webpack filtrado correctos. Verificación final en Chrome: icono dentro de la fecha límite sin párrafo redundante, datalist con tres sugerencias y filtro/limpieza correctos, arrastre al calendario conservado. Diff limitado a componentes de Tareas y planificación de la app, sin cambios globales de viewport ni otras páginas.
+
 ## HM-16 — Catálogo horizontal y planificación sugerida
 
 - Implementación dentro de Home Management. Fechas fantasma derivadas del último histórico y plazo; confirmar o arrastrar usa la acción existente de programación, sin persistir sugerencias. El calendario muestra el indicador amarillo y el día seleccionado ofrece confirmación y asa de arrastre.

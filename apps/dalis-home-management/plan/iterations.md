@@ -147,6 +147,16 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Rutas: feature household-tasks, tipos, esquema, repositorio y planificación de Home Management.
 - Validación: Biome, tipos, tests, build y revisión de interacción.
 
+## HM-17 — Contención del carrusel en móvil
+
+- Estado: `validated`.
+- Objetivo: evitar que las fichas fuera de pantalla amplíen el viewport móvil y permitan alejar la página.
+- Rutas: componente household-tasks-board y planificación de esta app.
+- Aceptación: viewport igual al dispositivo, zoom-out limitado al ancho natural; conservar zoom-in, scroll del carrusel y arrastre; sin modificar otras páginas.
+- Ajuste adicional solicitado: aviso de periodicidad reducido a icono accesible junto a la fecha límite, sin línea independiente.
+- Buscador con sugerencias nativas de autocompletado de tareas de la vista activa/archivada, sin nombres duplicados.
+- Validación: reproducción móvil con métricas CDP antes/después, Biome, tipos, tests y build filtrados.
+
 ## HM-15 — Check pendiente y asa alineada
 
 - Estado: `validated`.
