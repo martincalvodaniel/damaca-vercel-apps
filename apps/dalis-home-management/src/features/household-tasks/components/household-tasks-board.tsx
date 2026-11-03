@@ -209,7 +209,7 @@ export function HouseholdTasksBoard({
   const openHistoryAction = useCallback(
     (
       entry: HouseholdTaskOccurrence,
-      kind: "edit-execution" | "delete-execution"
+      kind: "edit-execution" | "delete-execution" | "move" | "cancel"
     ) => {
       setReturnHistory(dialog?.task ?? null)
       setDialog({

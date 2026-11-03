@@ -10,6 +10,7 @@ import type {
   HouseholdTaskOccurrence,
 } from "@/types/household-task"
 import { TaskActionButton } from "./task-action-button"
+import { type TaskAuthor, taskAuthorClasses } from "./task-author"
 import type { TaskIntent } from "./task-card"
 import type { OccurrenceIntent } from "./task-day-list"
 import { fieldClass, formatTaskDate } from "./task-ui"
@@ -56,7 +57,7 @@ export function TaskDialog({
   onSubmit: (command: HouseholdTaskCommand) => void
   onHistoryAction: (
     entry: HouseholdTaskOccurrence,
-    kind: "edit-execution" | "delete-execution"
+    kind: "edit-execution" | "delete-execution" | "move" | "cancel"
   ) => void
 }) {
   const formId = useId()
@@ -153,6 +154,7 @@ export function TaskDialog({
           if (state.entry?.completedDate)
             onSubmit({
               kind: "edit-execution",
+              completedBy: data.get("completedBy") as TaskAuthor,
               taskId,
               occurrenceId,
               expectedCompletedDate: state.entry.completedDate,
@@ -183,6 +185,8 @@ export function TaskDialog({
           event.currentTarget.dataset.intent as
             | "edit-execution"
             | "delete-execution"
+            | "move"
+            | "cancel"
         )
     },
     [occurrences, onHistoryAction]
@@ -224,7 +228,13 @@ export function TaskDialog({
                       >
                         {entry.completedDate ? "✓" : "◯"}{" "}
                         {formatTaskDate(entry.completedDate ?? entry.date)}
-                        {entry.completedBy ? ` · ${entry.completedBy}` : ""}
+                        {entry.completedBy ? (
+                          <span
+                            className={`ml-1 inline-flex rounded-full border px-2 py-0.5 text-xs ${taskAuthorClasses[entry.completedBy]}`}
+                          >
+                            {entry.completedBy}
+                          </span>
+                        ) : null}
                       </p>
                       {entry.completedDate ? (
                         <div className="ml-auto flex gap-1">
@@ -247,9 +257,26 @@ export function TaskDialog({
                           />
                         </div>
                       ) : (
-                        <span className="ml-auto text-xs text-muted">
-                          Programada
-                        </span>
+                        <div className="ml-auto flex items-center gap-1">
+                          <span className="text-xs text-muted">Programada</span>
+                          <TaskActionButton
+                            icon="edit-execution"
+                            label="Editar programación"
+                            intent="move"
+                            entryId={entry.id}
+                            disabled={pending}
+                            onClick={handleHistoryAction}
+                          />
+                          <TaskActionButton
+                            icon="delete-execution"
+                            label="Eliminar programación"
+                            intent="cancel"
+                            entryId={entry.id}
+                            disabled={pending}
+                            onClick={handleHistoryAction}
+                            tone="danger"
+                          />
+                        </div>
                       )}
                     </div>
                     <p className="mt-1 text-sm text-muted">
@@ -365,23 +392,27 @@ export function TaskDialog({
                     ) : null}
                   </div>
                 ) : null}
-                {state.kind === "complete" || state.kind === "record" ? (
+                {isExecution ? (
                   <fieldset className="space-y-2">
                     <legend className="text-sm font-semibold">
                       ¿Quién la ha completado?
                     </legend>
                     <div className="grid grid-cols-3 gap-1">
-                      {["Ambos", "Dani", "Pali"].map((person) => (
+                      {(["Ambos", "Dani", "Pali"] as const).map((person) => (
                         <label
                           key={person}
-                          className="flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-full border border-control-border bg-field px-2 py-1 text-sm font-semibold has-checked:border-primary has-checked:bg-primary has-checked:text-on-primary has-focus-visible:outline-2 has-focus-visible:outline-ring"
+                          className={`flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-full border px-2 py-1 text-sm font-semibold has-checked:ring-2 has-checked:ring-ring has-focus-visible:outline-2 has-focus-visible:outline-ring ${taskAuthorClasses[person]}`}
                         >
                           <input
                             type="radio"
                             name="completedBy"
                             value={person}
+                            defaultChecked={
+                              state.kind === "edit-execution" &&
+                              state.entry?.completedBy === person
+                            }
                             required
-                            className="accent-primary"
+                            className="accent-current"
                           />
                           {person}
                         </label>

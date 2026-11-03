@@ -69,6 +69,7 @@ export const householdTaskCommandSchema = z.discriminatedUnion("kind", [
   z
     .object({
       kind: z.literal("edit-execution"),
+      completedBy: z.enum(["Dani", "Pali", "Ambos"]).optional(),
       taskId: id,
       occurrenceId: id,
       expectedCompletedDate: householdDateSchema,

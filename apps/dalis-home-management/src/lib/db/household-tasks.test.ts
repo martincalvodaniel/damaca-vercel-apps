@@ -378,6 +378,30 @@ describe("household task repository with conditional document store", () => {
       (await loadHouseholdTasks()).occurrences[0].completedBy
     ).toBeUndefined()
   })
+  it("corrects the author without changing the execution date and retries safely", async () => {
+    await mutate(create)
+    await mutate(schedule)
+    await mutate({
+      kind: "complete",
+      taskId,
+      occurrenceId,
+      completedDate: "2026-11-02",
+      completedBy: "Dani",
+    })
+    const correction = {
+      kind: "edit-execution" as const,
+      taskId,
+      occurrenceId,
+      expectedCompletedDate: "2026-11-02",
+      completedDate: "2026-11-02",
+      completedBy: "Pali" as const,
+    }
+    await mutate(correction)
+    await mutate(correction)
+    const entry = (await loadHouseholdTasks()).occurrences[0]
+    expect(entry.completedBy).toBe("Pali")
+    expect(entry.completedDate).toBe("2026-11-02")
+  })
   it("rejects unknown tasks and cross-task occurrence references", async () => {
     await expect(mutate(schedule)).rejects.toBeInstanceOf(HouseholdTaskConflict)
     await mutate(create)

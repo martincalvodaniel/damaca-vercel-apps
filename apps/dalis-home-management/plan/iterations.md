@@ -147,6 +147,14 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Rutas: feature household-tasks, tipos, esquema, repositorio y planificación de Home Management.
 - Validación: Biome, tipos, tests, build y revisión de interacción.
 
+## HM-19 — Autoría editable y colores por persona
+
+- Estado: `validated`.
+- Alcance: colores diferenciados de Ambos/Dani/Pali en selector e histórico; autor editable al corregir ejecución, incluida corrección sin cambio de fecha; conservar compatibilidad con registros antiguos.
+- Histórico pendiente con lápiz para reprogramar y papelera para cancelar con confirmación, regresando al histórico tras cada acción.
+- Rutas: componentes de Tareas, esquema, repositorio y planificación de la app.
+- Validación: Biome, tipos, tests de persistencia, build y navegador.
+
 ## HM-18 — Histórico con programaciones y sugerencias cubiertas
 
 - Estado: `validated`.

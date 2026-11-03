@@ -172,6 +172,14 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - Añadido icono circular vacío para eventos pendientes; el check verde se reserva para eventos completados.
 - El asa de las fichas padre se agrupa con `margin-left: auto`, dejando el resto de acciones alineadas a la izquierda y el arrastre al borde derecho.
 
+## HM-19 — Autoría editable y colores por persona
+
+- Implementación local: Ambos neutro, Dani verde primario y Pali terracota de acento, reutilizando tokens claros/oscuros. Nombres visibles y selección mediante radio/ring para no depender solo del color.
+- Corrección permite editar autor con valor actual preseleccionado; servidor actualiza autor aunque la fecha se conserve y admite reintento idempotente.
+- Petición adicional: lápiz y papelera en pendientes del histórico conectados a reprogramación/cancelación existentes y retorno al histórico. Primer build coincidió con ampliación de tipos del callback a estas acciones; versión final se valida después de integrar ambos extremos.
+- 186 tests correctos, 0 fallos, incluido cambio de autor sin cambiar fecha y reintento idempotente. Tipos y Biome correctos. Chrome con componentes reales y datos aislados verifica tres colores distintos, cambio de autor desde histórico, preselección al reabrir, reprogramación y cancelación con retorno al histórico (`/private/tmp/hm19-check.cjs`).
+- Build Webpack final correcto. Tokens existentes conservan contraste claro/oscuro; sin nuevas dependencias ni cambios fuera de Home Management. Biome staged verifica los nueve archivos de entrega y diff sin errores.
+
 ## HM-18 — Histórico con programaciones y sugerencias cubiertas
 
 - Histórico incluye todas las ocurrencias, ordenadas por fecha real o prevista descendente; pendientes con círculo y etiqueta Programada, ejecuciones con check/autor y acciones de corrección existentes.

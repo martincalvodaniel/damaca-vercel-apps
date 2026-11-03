@@ -228,7 +228,8 @@ export async function mutateHouseholdTask(
         if (
           !(
             command.kind === "edit-execution" &&
-            entry.completedDate === command.completedDate
+            entry.completedDate === command.completedDate &&
+            (!command.completedBy || entry.completedBy === command.completedBy)
           ) &&
           !(command.kind === "delete-execution" && !entry.completedDate)
         ) {
@@ -243,6 +244,9 @@ export async function mutateHouseholdTask(
             const result = await occurrences.updateOne(filter, {
               $set: {
                 completedDate: command.completedDate,
+                ...(command.completedBy
+                  ? { completedBy: command.completedBy }
+                  : {}),
                 ...(!entry.wasScheduled ? { date: command.completedDate } : {}),
               },
             })
