@@ -2,6 +2,8 @@
 
 ## Estado vigente
 
+El histórico de Tareas incluye ejecuciones y ocurrencias pendientes con sus fechas previstas. Las sugerencias fantasma desaparecen al existir una programación pendiente desde hoy, aunque sea posterior al límite; los avisos de periodicidad mantienen su cálculo independiente.
+
 HM-16 amplía Tareas con periodicidad opcional, catálogo horizontal filtrable, navegación mensual por gesto, sugerencias de programación al límite y autoría de ejecuciones (Dani, Pali o Ambos). Las tareas sin periodicidad no generan avisos ni sugerencias; las ejecuciones antiguas conservan su autoría desconocida.
 
 La página de Tareas incorpora catálogo compartido, calendario mensual e histórico de ejecuciones; su aceptación y evidencia se registran en HM-11.

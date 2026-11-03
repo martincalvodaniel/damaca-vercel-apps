@@ -172,6 +172,15 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - Añadido icono circular vacío para eventos pendientes; el check verde se reserva para eventos completados.
 - El asa de las fichas padre se agrupa con `margin-left: auto`, dejando el resto de acciones alineadas a la izquierda y el arrastre al borde derecho.
 
+## HM-18 — Histórico con programaciones y sugerencias cubiertas
+
+- Histórico incluye todas las ocurrencias, ordenadas por fecha real o prevista descendente; pendientes con círculo y etiqueta Programada, ejecuciones con check/autor y acciones de corrección existentes.
+- Sugerencias fantasma ocultas ante cualquier programación pendiente desde hoy; los avisos de periodicidad conservan las reglas originales del plazo.
+- Petición adicional: selector de autor sustituido por grupo de tres radios visibles en orden alfabético Ambos/Dani/Pali, con selección excluyente, teclado y validación obligatoria.
+- Chrome a 320px verifica las tres opciones visibles en ese orden, rechazo de envío sin autor, exclusividad y envío de Ambos correcto (`/private/tmp/hm18-author.cjs`). Primer intento de build final detectó el build anterior todavía activo; se esperó a su cierre y se repitió secuencialmente.
+- Chrome con componentes reales y datos aislados: histórico con ejecución y programación futura, acciones de corrección solo en ejecuciones y fantasma oculto tras programar después del límite correctos. Script local `/private/tmp/hm18-check.cjs`. Tipos, Biome y 185 tests correctos; build filtrado verificado al cierre.
+- Build Webpack final correcto; diff limitado a Tareas y planificación de Home Management. Sin cambios de datos, dependencias o páginas ajenas.
+
 ## HM-17 — Contención del carrusel en móvil
 
 - Inicio 2026-11-03 en int con árbol limpio. Capacidad: 98% de 5h y 26% semanal, suficiente para corrección y validación acotadas.

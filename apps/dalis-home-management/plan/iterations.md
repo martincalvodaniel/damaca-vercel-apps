@@ -147,6 +147,14 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Rutas: feature household-tasks, tipos, esquema, repositorio y planificación de Home Management.
 - Validación: Biome, tipos, tests, build y revisión de interacción.
 
+## HM-18 — Histórico con programaciones y sugerencias cubiertas
+
+- Estado: `validated`.
+- Alcance: mostrar pendientes y ejecuciones en el histórico; ocultar sugerencias fantasma cuando existe programación pendiente desde hoy, incluso fuera de plazo. Conservar avisos de vencimiento.
+- Selector de autor con tres opciones visibles y excluyentes en orden Ambos, Dani, Pali; validación nativa obligatoria.
+- Rutas: componentes de Tareas y planificación de la app.
+- Validación: Biome, tipos, tests, build y navegador con datos aislados.
+
 ## HM-17 — Contención del carrusel en móvil
 
 - Estado: `validated`.

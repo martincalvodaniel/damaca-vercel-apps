@@ -233,10 +233,7 @@ export function HouseholdTasksBoard({
     const dueDate = status.dueDate
     if (
       !dueDate ||
-      entries.some(
-        (entry) =>
-          !entry.completedDate && entry.date <= dueDate && entry.date >= today
-      )
+      entries.some((entry) => !entry.completedDate && entry.date >= today)
     )
       return []
     return [{ task, date: dueDate }]

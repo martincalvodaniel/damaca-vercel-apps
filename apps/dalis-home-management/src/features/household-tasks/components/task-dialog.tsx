@@ -26,7 +26,7 @@ const titles: Record<TaskDialogState["kind"], string> = {
   archive: "Archivar tarea",
   schedule: "Programar tarea",
   record: "Registrar ejecución",
-  history: "Histórico de ejecuciones",
+  history: "Histórico y programaciones",
   complete: "Completar tarea",
   move: "Reprogramar tarea",
   cancel: "Cancelar programación",
@@ -68,11 +68,9 @@ export function TaskDialog({
     state.kind === "edit-execution"
   const isDateForm =
     isExecution || state.kind === "schedule" || state.kind === "move"
-  const history = occurrences
-    .filter((entry) => entry.completedDate)
-    .sort((a, b) =>
-      (b.completedDate ?? "").localeCompare(a.completedDate ?? "")
-    )
+  const history = [...occurrences].sort((a, b) =>
+    (b.completedDate ?? b.date).localeCompare(a.completedDate ?? a.date)
+  )
   const confirmLabel =
     state.kind === "archive"
       ? "Confirmar archivo"
@@ -211,7 +209,7 @@ export function TaskDialog({
             <>
               {!history.length ? (
                 <p className="text-sm text-muted">
-                  Sin ejecuciones registradas.
+                  Sin ejecuciones ni programaciones registradas.
                 </p>
               ) : null}
               <ul className="space-y-1.5">
@@ -221,29 +219,38 @@ export function TaskDialog({
                     className="rounded-[1.5rem] border border-border bg-surface px-3 py-2"
                   >
                     <div className="flex items-center gap-2">
-                      <p className="font-semibold text-success">
-                        ✓ {formatTaskDate(entry.completedDate ?? entry.date)}
+                      <p
+                        className={`font-semibold ${entry.completedDate ? "text-success" : "text-muted"}`}
+                      >
+                        {entry.completedDate ? "✓" : "◯"}{" "}
+                        {formatTaskDate(entry.completedDate ?? entry.date)}
                         {entry.completedBy ? ` · ${entry.completedBy}` : ""}
                       </p>
-                      <div className="ml-auto flex gap-1">
-                        <TaskActionButton
-                          icon="edit-execution"
-                          label="Corregir fecha"
-                          intent="edit-execution"
-                          entryId={entry.id}
-                          disabled={pending}
-                          onClick={handleHistoryAction}
-                        />
-                        <TaskActionButton
-                          icon="delete-execution"
-                          label="Eliminar ejecución"
-                          intent="delete-execution"
-                          entryId={entry.id}
-                          disabled={pending}
-                          onClick={handleHistoryAction}
-                          tone="danger"
-                        />
-                      </div>
+                      {entry.completedDate ? (
+                        <div className="ml-auto flex gap-1">
+                          <TaskActionButton
+                            icon="edit-execution"
+                            label="Corregir fecha"
+                            intent="edit-execution"
+                            entryId={entry.id}
+                            disabled={pending}
+                            onClick={handleHistoryAction}
+                          />
+                          <TaskActionButton
+                            icon="delete-execution"
+                            label="Eliminar ejecución"
+                            intent="delete-execution"
+                            entryId={entry.id}
+                            disabled={pending}
+                            onClick={handleHistoryAction}
+                            tone="danger"
+                          />
+                        </div>
+                      ) : (
+                        <span className="ml-auto text-xs text-muted">
+                          Programada
+                        </span>
+                      )}
                     </div>
                     <p className="mt-1 text-sm text-muted">
                       {entry.wasScheduled
@@ -359,22 +366,28 @@ export function TaskDialog({
                   </div>
                 ) : null}
                 {state.kind === "complete" || state.kind === "record" ? (
-                  <label className="block text-sm font-semibold">
-                    ¿Quién la ha completado?
-                    <select
-                      name="completedBy"
-                      required
-                      defaultValue=""
-                      className={fieldClass}
-                    >
-                      <option value="" disabled>
-                        Selecciona una persona
-                      </option>
-                      <option>Dani</option>
-                      <option>Pali</option>
-                      <option>Ambos</option>
-                    </select>
-                  </label>
+                  <fieldset className="space-y-2">
+                    <legend className="text-sm font-semibold">
+                      ¿Quién la ha completado?
+                    </legend>
+                    <div className="grid grid-cols-3 gap-1">
+                      {["Ambos", "Dani", "Pali"].map((person) => (
+                        <label
+                          key={person}
+                          className="flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-full border border-control-border bg-field px-2 py-1 text-sm font-semibold has-checked:border-primary has-checked:bg-primary has-checked:text-on-primary has-focus-visible:outline-2 has-focus-visible:outline-ring"
+                        >
+                          <input
+                            type="radio"
+                            name="completedBy"
+                            value={person}
+                            required
+                            className="accent-primary"
+                          />
+                          {person}
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
                 ) : null}
                 {state.kind === "archive" ? (
                   <p className="text-sm text-danger">
