@@ -172,6 +172,14 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - Añadido icono circular vacío para eventos pendientes; el check verde se reserva para eventos completados.
 - El asa de las fichas padre se agrupa con `margin-left: auto`, dejando el resto de acciones alineadas a la izquierda y el arrastre al borde derecho.
 
+## HM-20 — Acciones diarias y búsqueda sin acentos
+
+- Se añaden editar/eliminar a completadas del día, reutilizando diálogos y confirmaciones existentes. Autor como etiqueta con los colores comunes del selector e histórico.
+- Búsqueda normalizada mediante NFD, eliminación de marcas Unicode y minúsculas españolas; prueba cubre entradas con acentos compuestos/descompuestos y mayúsculas.
+- Existe archivo ajeno sin seguimiento `apps/damaca-hub/delete.json`; se preserva fuera de esta entrega.
+- 187 tests correctos, sin fallos; tipos y Biome correctos. Chrome con componentes reales/servicios aislados verifica SABANAS→Cambiar sábanas, autor coloreado, corrección desde el día y borrado con confirmación devolviendo la programación a pendiente. Script local `/private/tmp/hm20-check.cjs`.
+- Build Webpack filtrado correcto. Diff revisado y limitado a Home Management; archivo ajeno preservado.
+
 ## HM-19 — Autoría editable y colores por persona
 
 - Implementación local: Ambos neutro, Dani verde primario y Pali terracota de acento, reutilizando tokens claros/oscuros. Nombres visibles y selección mediante radio/ring para no depender solo del color.

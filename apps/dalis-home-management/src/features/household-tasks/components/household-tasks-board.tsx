@@ -20,6 +20,7 @@ import type {
   HouseholdTaskOccurrence,
   HouseholdTasksData,
 } from "@/types/household-task"
+import { normalizeTaskSearch } from "../task-search"
 import { taskStatus } from "../task-status"
 import { TaskActionIcon } from "./task-action-icon"
 import { TaskCard, type TaskIntent } from "./task-card"
@@ -224,7 +225,7 @@ export function HouseholdTasksBoard({
   const tasks = data.tasks.filter(
     (task) =>
       task.archived === showArchived &&
-      task.name.toLocaleLowerCase("es").includes(search.toLocaleLowerCase("es"))
+      normalizeTaskSearch(task.name).includes(normalizeTaskSearch(search))
   )
   const ghosts = data.tasks.flatMap((task) => {
     if (task.archived) return []

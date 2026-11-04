@@ -147,6 +147,13 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Rutas: feature household-tasks, tipos, esquema, repositorio y planificación de Home Management.
 - Validación: Biome, tipos, tests, build y revisión de interacción.
 
+## HM-20 — Acciones diarias y búsqueda sin acentos
+
+- Estado: `validated`.
+- Alcance: lápiz y papelera en completadas del día; etiqueta de autor con colores comunes; búsqueda normalizada sin mayúsculas ni diacríticos.
+- Rutas: feature household-tasks y planificación de la app.
+- Validación: Biome, tipos, tests, build y navegador aislado.
+
 ## HM-19 — Autoría editable y colores por persona
 
 - Estado: `validated`.

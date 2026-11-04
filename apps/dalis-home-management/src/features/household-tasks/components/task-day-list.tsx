@@ -6,6 +6,7 @@ import type {
   HouseholdTaskOccurrence,
 } from "@/types/household-task"
 import { TaskActionButton } from "./task-action-button"
+import { taskAuthorClasses } from "./task-author"
 import { TaskDragHandle, type TaskDragPayload } from "./task-drag-handle"
 import { formatTaskDate } from "./task-ui"
 
@@ -104,7 +105,11 @@ export function TaskDayList({
                   {task.name}
                 </h3>
                 {entry.completedBy ? (
-                  <p className="text-xs text-muted">{entry.completedBy}</p>
+                  <span
+                    className={`inline-flex rounded-full border px-2 py-0.5 text-xs font-semibold ${taskAuthorClasses[entry.completedBy]}`}
+                  >
+                    {entry.completedBy}
+                  </span>
                 ) : null}
               </div>
               <div className="ml-auto flex items-center gap-1">
@@ -128,7 +133,27 @@ export function TaskDayList({
                       tone="danger"
                     />
                   </>
-                ) : null}
+                ) : (
+                  <>
+                    <TaskActionButton
+                      icon="edit-execution"
+                      label="Corregir ejecución"
+                      intent="edit-execution"
+                      entryId={entry.id}
+                      disabled={disabled}
+                      onClick={handleIntent}
+                    />
+                    <TaskActionButton
+                      icon="delete-execution"
+                      label="Eliminar ejecución"
+                      intent="delete-execution"
+                      entryId={entry.id}
+                      disabled={disabled}
+                      onClick={handleIntent}
+                      tone="danger"
+                    />
+                  </>
+                )}
                 {!entry.completedDate && !task.archived ? (
                   <TaskDragHandle
                     payload={{ task, occurrence: entry }}
