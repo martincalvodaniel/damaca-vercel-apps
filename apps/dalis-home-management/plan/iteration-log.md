@@ -172,6 +172,14 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - Añadido icono circular vacío para eventos pendientes; el check verde se reserva para eventos completados.
 - El asa de las fichas padre se agrupa con `margin-left: auto`, dejando el resto de acciones alineadas a la izquierda y el arrastre al borde derecho.
 
+## HM-21 — Autoría uniforme y filtro sin sugerencias
+
+- Ambos, Dani y Pali reutilizan el mismo verde primario con fondo suave en selector, lista diaria e histórico. Retiradas conexión list/datalist y useId del buscador; filtro normalizado y limpieza conservados.
+- Archivo ajeno `apps/damaca-hub/delete.json` preservado.
+- Chrome con componentes reales y servicios aislados confirma un único color para los tres radios, buscador con rol searchbox sin datalist y filtro SABANAS→Cambiar sábanas, edición y borrado desde día/histórico conservados. Reutilizadas las comprobaciones HM-19/HM-20 adaptadas al color y rol actuales.
+- Biome, tipos y 187 tests correctos; sin nuevas pruebas unitarias para este cambio visual reversible. Build filtrado se verifica antes de publicar.
+- Build Webpack filtrado correcto y cinco archivos staged verificados por Biome/diff. Entrega limitada a Home Management.
+
 ## HM-20 — Acciones diarias y búsqueda sin acentos
 
 - Se añaden editar/eliminar a completadas del día, reutilizando diálogos y confirmaciones existentes. Autor como etiqueta con los colores comunes del selector e histórico.

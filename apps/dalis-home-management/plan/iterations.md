@@ -1,5 +1,12 @@
 # Iteraciones
 
+## HM-21 — Autoría uniforme y filtro sin sugerencias
+
+- Estado: `validated`.
+- Alcance: todos los autores usan el verde primario anterior de Dani en selector/día/histórico; buscador solo filtra fichas padre, sin datalist y conservando normalización de acentos/mayúsculas.
+- Rutas: componentes de Tareas y planificación de Home Management.
+- Validación: Biome, tipos, tests, build y navegador aislado.
+
 El contrato común de planificación para esta app se estableció en la entrega transversal [AGW-01](../../../plan/iteration-log.md#agw-01-centralizar-el-flujo-y-el-contrato-documental). El [workflow raíz](../../../plan/workflow.md) es el único protocolo.
 
 ## HM-01 — Receta y observaciones opcionales

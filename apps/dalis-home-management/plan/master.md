@@ -4,7 +4,7 @@
 
 Las completadas del día ofrecen corrección/eliminación y etiqueta de autor con sus colores comunes. El buscador de Tareas ignora mayúsculas y diacríticos.
 
-Autoría de Tareas: Ambos neutro, Dani verde primario y Pali terracota de acento, con nombres visibles en selector e histórico. La corrección permite cambiar persona y fecha; las programaciones pendientes del histórico se pueden reprogramar o cancelar.
+Autoría de Tareas: Ambos, Dani y Pali comparten verde primario con nombres visibles en selector, día e histórico. La corrección permite cambiar persona y fecha; las programaciones pendientes del histórico se pueden reprogramar o cancelar. El buscador solo filtra las fichas padre, sin sugerencias y sin distinguir mayúsculas ni acentos.
 
 El histórico de Tareas incluye ejecuciones y ocurrencias pendientes con sus fechas previstas. Las sugerencias fantasma desaparecen al existir una programación pendiente desde hoy, aunque sea posterior al límite; los avisos de periodicidad mantienen su cálculo independiente.
 

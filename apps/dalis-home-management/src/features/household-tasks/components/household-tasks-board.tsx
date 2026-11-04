@@ -6,7 +6,6 @@ import {
   type MouseEvent,
   useCallback,
   useEffect,
-  useId,
   useState,
   useTransition,
 } from "react"
@@ -38,7 +37,6 @@ export function HouseholdTasksBoard({
   initialToday: string
 }) {
   const router = useRouter()
-  const suggestionsId = useId()
   const [today, setToday] = useState(initialToday)
   const [selectedDate, setSelectedDate] = useState(initialToday)
   const [showArchived, setShowArchived] = useState(false)
@@ -307,24 +305,12 @@ export function HouseholdTasksBoard({
           <SearchInput
             aria-label="Buscar tareas"
             placeholder="Buscar tareas"
-            list={suggestionsId}
             autoComplete="off"
             value={search}
             onChange={changeSearch}
             onClear={clearSearch}
             className={fieldClass}
           />
-          <datalist id={suggestionsId}>
-            {[
-              ...new Set(
-                data.tasks
-                  .filter((task) => task.archived === showArchived)
-                  .map((task) => task.name)
-              ),
-            ].map((name) => (
-              <option key={name} value={name} />
-            ))}
-          </datalist>
           <h2 className="sr-only">
             {showArchived ? "Tareas archivadas" : "Tareas activas"}
           </h2>
