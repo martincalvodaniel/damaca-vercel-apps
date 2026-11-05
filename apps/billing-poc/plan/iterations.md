@@ -132,7 +132,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: localización española aceptada en BILL-11 y pruebas existentes; sin nuevas dependencias.
 - Aceptación: etiquetas de pago y fechas esperadas en español; calendarios accesibles completamente en español con singular/plural correcto; fechas recurrentes sin plurales inválidos para los siete días; ausencia de fecha en español; suite completa sin fallos conservando las comprobaciones de comportamiento.
 - Validación: reproducción inicial de 977 pruebas con 14 fallos; tests de regresión antes del arreglo, suite completa, lint incremental, type-check y build de billing; diff check y enlaces locales.
-- Evidencia: [BILL-13](iteration-log.md#bill-13--reparar-las-pruebas-de-localización).
+- Evidencia: [BILL-13](archive/2026-11-05/bill-13.md#bill-13--reparar-las-pruebas-de-localización).
 
 ## BILL-14 — Cabeceras y acciones de modales
 
@@ -224,3 +224,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: recurrentes «mar nov», puntuales «vie 13 nov» con día inferido del año real, sin año; Hora HH:mm independiente; fechas parciales conservadas sin inventar datos; favicon original sin icono SVG competidor.
 - Validación: regresiones de fechas, Biome, tipos, suite y build de billing; verificación del icono recuperado.
 - Evidencia: [BILL-22](iteration-log.md#bill-22--fecha-y-hora-de-eventos-y-favicon-original).
+
+## BILL-23 — Menú de navegación en anchuras intermedias
+
+- Estado: `validated`.
+- Objetivo: mostrar el menú abierto siempre que esté disponible el botón hamburguesa.
+- Rutas: MobileMenuOverlay y planificación de billing.
+- Dependencias: breakpoint xl de NavigationBar, foco y cierre existentes.
+- Aceptación: botón y overlay disponibles por debajo de xl, incluidos 640–1279 px; navegación de escritorio desde xl; sin cambios de enlaces ni acciones.
+- Validación: comparación de visibilidad responsive en 390/800/1100/1280 px, Biome, tipos, suite y build.
+- Evidencia: [BILL-23](iteration-log.md#bill-23--menú-de-navegación-en-anchuras-intermedias).

@@ -34,7 +34,7 @@ export default function MobileMenuOverlay({
   const panelRef = useRef<HTMLDivElement>(null)
   useFocusTrap(panelRef, true)
   return (
-    <div className="fixed inset-0 z-50 sm:hidden">
+    <div className="fixed inset-0 z-50 xl:hidden">
       <button
         type="button"
         onClick={onClose}

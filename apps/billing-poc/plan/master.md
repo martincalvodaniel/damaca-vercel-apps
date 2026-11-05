@@ -67,3 +67,5 @@ La publicación Vercel pasa a ser manual bajo petición mediante `git.deployment
 ## Fechas de eventos y favicon
 
 El listado de eventos separa Fecha y Hora (HH:mm). Fecha usa tres letras del día semanal y mes, con día numérico solo para eventos puntuales; el día semanal se calcula con el año real, que no se muestra. Los recurrentes ignoran su fecha de anclaje. Los datos parciales no inventan día semanal. Billing recupera el sello rojo original de La Bottega di Pali desde Git; la fuente SVG incorpora el original recuperado para conservarlo al regenerar iconos. Alcance: [BILL-22](iterations.md#bill-22--fecha-y-hora-de-eventos-y-favicon-original).
+
+El menú desplegable usa el mismo breakpoint `xl` que su botón: disponible también en tablet/escritorio estrecho, por debajo de 1280 px. Alcance: [BILL-23](iterations.md#bill-23--menú-de-navegación-en-anchuras-intermedias).

@@ -2,17 +2,7 @@
 
 Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md), [BILL-09](archive/2026-11-02/bill-09.md), [BILL-10](archive/2026-11-02/bill-10.md), [BILL-11](archive/2026-11-02/bill-11.md).
 
-Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md).
-
-## BILL-13 — Reparar las pruebas de localización
-
-- Inicio: 2026-11-01, 21:26 UTC, rama `int`, base `115a8b2`, árbol limpio y sin commits pendientes de publicar. Capacidad inicial: 77 % restante en 5 h y 62 % en 7 d; margen estimado suficiente para reparación, validación y publicación conservando reservas.
-- Aceptación: [BILL-13](iterations.md#bill-13--reparar-las-pruebas-de-localización).
-- Reproducción: `bun run test --filter=@damaca/billing-poc`: 977 pruebas, 963 correctas y 14 fallidas (2,51 s). Los asserts fallidos muestran expectativas en inglés frente a fechas/etiquetas españolas. La revisión identifica además el sufijo inglés de plural añadido a días españoles (`martess`) y textos accesibles que mezclan ambos idiomas. La señal es directa y determinista; no se necesita instrumentación adicional ni bisección.
-- Regresión antes del arreglo: las expectativas de salida españolas y los siete casos de días recurrentes se ejecutaron contra la implementación anterior: 68 pruebas, 55 correctas y 13 fallidas. El fallo exacto de pluralización y los textos accesibles mixtos quedan cubiertos por estas pruebas.
-- Implementado: expectativas de PaymentActions y formatos de fecha alineadas con español, conservando controles sobre botones deshabilitados, métodos reservados, apertura e importes. Fechas recurrentes con «los» y plurales correctos para los siete días; fallback «Sin fecha». Calendarios de ausencias/eventos con anuncios completos en español, incluyendo singular/plural de ausencia, recuperación y evento. Sin instrumentación temporal ni nuevas dependencias.
-- Validación final: `bun run test --filter=@damaca/billing-poc`: 984 pruebas correctas, 0 fallos, 95 archivos y 1761 assertions (564 ms). `bun run type-check --filter=@damaca/billing-poc`: correcto. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (14,425 s). La caché remota de Turbo no estaba disponible; comprobaciones locales completadas. Sin prueba de navegador: se verifican las cadenas exactas desde los helpers reales y el render estático de PaymentActions.
-- Cierre técnico: `bun run lint --staged` comprobó 12 archivos sin hallazgos; `git diff --cached --check` y enlaces locales correctos. Los 14 fallos originales quedan resueltos y hay siete casos adicionales de regresión. Publicación y SHA remoto se verifican al cerrar.
+Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2026-11-05/bill-13.md).
 
 ## BILL-14 — Cabeceras y acciones de modales
 
@@ -109,3 +99,13 @@ Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md).
 - Favicon: ICO original recuperado de `6e9d659^`, verificado visualmente como sello rojo de La Bottega di Pali. SVG incorpora el PNG original de 48 px; regeneradas variantes Apple/instalación con la fuente recuperada. El ICO coincide byte a byte con el original. La resolución disponible del original limita la nitidez de las variantes grandes. Catálogo del hub fuera del alcance de esta entrega.
 - Validación: tipos correctos; 998 pruebas correctas, 0 fallos, 1835 assertions; build webpack correcto (18,001 s). Biome explícito sobre los tres archivos de código correcto tras formato; el lint incremental sin preparar no seleccionó archivos, por lo que se valida además con lint preparado. Caché remota de Turbo no disponible; comprobaciones locales completas. No se realizó verificación interactiva de navegador.
 - Se archiva BILL-12 para conservar diez entregas recientes. Capacidad antes de cierre: 96 % en 5 h y 21 % en 7 d. Publicación y SHA remoto se verifican al cerrar.
+
+## BILL-23 — Menú de navegación en anchuras intermedias
+
+- Inicio: 2026-11-05, rama `int`, base `0d524d0`, árbol limpio. Capacidad: 92 % en 5 h y 20 % en 7 d; margen suficiente para una entrega pequeña completa.
+- Aceptación: [BILL-23](iterations.md#bill-23--menú-de-navegación-en-anchuras-intermedias).
+- Reproducción estática antes del arreglo: el botón con `xl:hidden` está visible a 800/1100 px mientras el overlay con `sm:hidden` está oculto; a 390 px ambos visibles y a 1280 px ambos ocultos. Esto coincide con el síntoma aportado. No se añade una prueba que solo replique clases de implementación.
+
+- Fix: `MobileMenuOverlay` cambia `sm:hidden` por `xl:hidden`, alineado con NavigationBar. Comparación posterior a 390/800/1100/1280 px correcta: ambos visibles por debajo de xl y ocultos desde xl. Sin cambios de hooks, foco, cierre, acciones ni datos; revisión React del cambio de CSS.
+- Validación: Biome del componente correcto; tipos correctos; 998 pruebas correctas, 0 fallos; build webpack correcto (17,847 s). Caché remota no disponible; validación local completa. No se realizó comprobación interactiva en navegador. Se archiva BILL-13 para conservar diez entregas recientes.
+- Prueba Vercel asociada: consulta previa al push confirma `enableAffectedProjectsDeployments: false` en card-wars y ningún Ignored Build Step configurado. No se modifica configuración remota. Los registros posteriores se consultan tras publicar; la ausencia de un registro no prueba por sí sola el contador interno de cuota.

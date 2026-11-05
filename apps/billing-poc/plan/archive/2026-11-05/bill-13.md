@@ -1,0 +1,11 @@
+# Registro archivado
+
+## BILL-13 — Reparar las pruebas de localización
+
+- Inicio: 2026-11-01, 21:26 UTC, rama `int`, base `115a8b2`, árbol limpio y sin commits pendientes de publicar. Capacidad inicial: 77 % restante en 5 h y 62 % en 7 d; margen estimado suficiente para reparación, validación y publicación conservando reservas.
+- Aceptación: [BILL-13](iterations.md#bill-13--reparar-las-pruebas-de-localización).
+- Reproducción: `bun run test --filter=@damaca/billing-poc`: 977 pruebas, 963 correctas y 14 fallidas (2,51 s). Los asserts fallidos muestran expectativas en inglés frente a fechas/etiquetas españolas. La revisión identifica además el sufijo inglés de plural añadido a días españoles (`martess`) y textos accesibles que mezclan ambos idiomas. La señal es directa y determinista; no se necesita instrumentación adicional ni bisección.
+- Regresión antes del arreglo: las expectativas de salida españolas y los siete casos de días recurrentes se ejecutaron contra la implementación anterior: 68 pruebas, 55 correctas y 13 fallidas. El fallo exacto de pluralización y los textos accesibles mixtos quedan cubiertos por estas pruebas.
+- Implementado: expectativas de PaymentActions y formatos de fecha alineadas con español, conservando controles sobre botones deshabilitados, métodos reservados, apertura e importes. Fechas recurrentes con «los» y plurales correctos para los siete días; fallback «Sin fecha». Calendarios de ausencias/eventos con anuncios completos en español, incluyendo singular/plural de ausencia, recuperación y evento. Sin instrumentación temporal ni nuevas dependencias.
+- Validación final: `bun run test --filter=@damaca/billing-poc`: 984 pruebas correctas, 0 fallos, 95 archivos y 1761 assertions (564 ms). `bun run type-check --filter=@damaca/billing-poc`: correcto. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (14,425 s). La caché remota de Turbo no estaba disponible; comprobaciones locales completadas. Sin prueba de navegador: se verifican las cadenas exactas desde los helpers reales y el render estático de PaymentActions.
+- Cierre técnico: `bun run lint --staged` comprobó 12 archivos sin hallazgos; `git diff --cached --check` y enlaces locales correctos. Los 14 fallos originales quedan resueltos y hay siete casos adicionales de regresión. Publicación y SHA remoto se verifican al cerrar.
