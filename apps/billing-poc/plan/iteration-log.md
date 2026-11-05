@@ -2,17 +2,7 @@
 
 Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md), [BILL-09](archive/2026-11-02/bill-09.md), [BILL-10](archive/2026-11-02/bill-10.md), [BILL-11](archive/2026-11-02/bill-11.md).
 
-Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2026-11-05/bill-13.md).
-
-## BILL-14 — Cabeceras y acciones de modales
-
-- Inicio: 2026-11-01, rama `int`, base `b6c2f69`, árbol limpio y sin commits pendientes. Capacidad: 69 % restante en 5 h y 61 % en 7 d; estimación suficiente para implementación, validación y publicación conservando reservas.
-- Aceptación: [BILL-14](iterations.md#bill-14--cabeceras-y-acciones-de-modales).
-- Implementado: Modal fija siempre la cabecera fuera del área con scroll y elimina las opciones de pie/cabecera móviles. ConfirmAction comparte el tick verde con etiqueta accesible y estado pendiente. Formularios anidados envían sus controles a la cabecera mediante portal y conservan asociación nativa `form`, validación y estado propio; fuera de modales mantienen acciones de texto. Migrados pagos, plantillas, clientes, productos, eventos, encargos/cocciones, WordPress, facturas y confirmaciones de borrado. El borrado global de registros de alumno pasa a la cabecera, junto al tick al editar; se conserva cancelar el subformulario y volver desde la revisión del contador.
-- Revisión React y accesibilidad: sin nuevas dependencias ni peticiones de datos; iconos decorativos, labels/title, disabled/aria-busy, IDs de formularios únicos y foco conservado en el diálogo. Cabecera flex no reducible y títulos truncados para reservar espacio de acciones; estilos claros/oscuros y scroll interno. Inventario residual sin `footer`, `ConfirmFooter`, `stickyHeader` ni `stickyFooter` en el código de billing.
-- Validación: suite de billing, 984 pruebas correctas, 0 fallos y 1761 assertions; type-check correcto. Primera comprobación detectó props residuales de la migración; corregidas y repetida correctamente. Biome explícito sobre todos los TS/TSX editados/nuevos sin hallazgos tras corregir los avisos. Enlaces locales de planificación correctos. Se archiva BILL-04 para conservar diez entregas recientes.
-- Limitación visual: el inventario de Computer Use informa «Local browser use is disabled in Work settings»; no se realizó verificación visual interactiva ni se modificó esa preferencia. La suite existente y la revisión estática no acreditan por sí solas la apariencia en un navegador.
-- Build final `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto; type-check final correcto. La caché remota de Turbo no estaba disponible y se completaron las comprobaciones localmente. El lint preparado detectó una línea vacía sobrante en el archivo histórico; corregida antes de repetirlo. Commit, push y SHA remoto se verifican al cerrar.
+Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2026-11-05/bill-13.md), [BILL-14](archive/2026-11-05/bill-14.md).
 
 ## BILL-15 — Página de cliente
 
@@ -109,3 +99,12 @@ Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2
 - Fix: `MobileMenuOverlay` cambia `sm:hidden` por `xl:hidden`, alineado con NavigationBar. Comparación posterior a 390/800/1100/1280 px correcta: ambos visibles por debajo de xl y ocultos desde xl. Sin cambios de hooks, foco, cierre, acciones ni datos; revisión React del cambio de CSS.
 - Validación: Biome del componente correcto; tipos correctos; 998 pruebas correctas, 0 fallos; build webpack correcto (17,847 s). Caché remota no disponible; validación local completa. No se realizó comprobación interactiva en navegador. Se archiva BILL-13 para conservar diez entregas recientes.
 - Prueba Vercel asociada: consulta previa al push confirma `enableAffectedProjectsDeployments: false` en card-wars y ningún Ignored Build Step configurado. No se modifica configuración remota. Los registros posteriores se consultan tras publicar; la ausencia de un registro no prueba por sí sola el contador interno de cuota.
+
+## BILL-24 — Paleta oliva y terracota
+
+- Inicio: 2026-11-05, rama `int`, base `11a5f3e`, árbol limpio, sin commits locales pendientes. Capacidad: 87 % en 5 h y 19 % en 7 d; estimación suficiente para completar con reservas.
+- Aceptación: [BILL-24](iterations.md#bill-24--paleta-oliva-y-terracota).
+- Implementación: las familias Tailwind existentes se mapean globalmente a oliva (acciones/ingresos), terracota (gastos/errores/borrado) y tonos cálidos (advertencias), con superficies crema y neutros oliva. Se mantienen las clases para cubrir también variantes responsive, dark, hover, focus y transparencias sin duplicar CSS por pantalla. Modo oscuro con fondos derivados y texto secundario aclarado. Colores de gráficos compartidos actualizados y selección de productos con anillo del tema en lugar del azul RGBA fijo. Marca Google y PDFs conservados.
+- Contraste calculado: texto de botones principales 5,94:1, acciones destructivas 5,71:1, texto secundario claro 4,89:1 y oscuro 6,23:1. El tono 500 oliva se oscurece ligeramente respecto a la referencia para superar 4,5:1 con texto claro. No se afirma conformidad de todas las combinaciones, especialmente transparencias.
+- Revisión React: solo clases de selección, sin cambios de estado, hooks, datos, dependencias ni comportamiento. Cobertura estática de colores de UI y constantes de gráficos revisada. No se realizó validación visual interactiva de las pantallas autenticadas; inventario de navegador disponible, sin sesión de billing verificada.
+- Validación: Biome explícito de los tres archivos de código correcto; tipos correctos; 998 pruebas correctas, 0 fallos y 1835 assertions. Build webpack final correcto tras ajustar contraste (16,242 s). La caché remota no está disponible para tipos/tests, que se ejecutan localmente. El lint incremental sin preparar seleccionó cero archivos; se utiliza lint preparado al cierre. Se archiva BILL-14 para mantener diez entregas.

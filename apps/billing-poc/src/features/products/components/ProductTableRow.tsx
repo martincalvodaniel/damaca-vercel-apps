@@ -30,7 +30,7 @@ export default function ProductTableRow({
       ? "bg-white dark:bg-zinc-900"
       : "bg-zinc-50 dark:bg-zinc-800/50"
   const selectedRowClass = selected
-    ? "bg-blue-200/90 shadow-[inset_0_0_0_2px_rgba(37,99,235,0.85)] dark:bg-blue-900/45 dark:shadow-[inset_0_0_0_2px_rgba(96,165,250,0.85)]"
+    ? "bg-blue-200/90 ring-2 ring-inset ring-blue-600 dark:bg-blue-900/45 dark:ring-blue-400"
     : ""
 
   const handleRowClick = useCallback(

@@ -142,7 +142,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: Modal, iconos, formularios y mutaciones existentes; sin nuevas dependencias.
 - Aceptación: cabecera siempre visible con scroll interno; sin aceptar/cancelar al pie; tick verde junto a papelera cuando exista y cruz roja arriba; conservar validación, envío nativo, estados pendientes, navegación y subformularios. Móvil y temas claro/oscuro.
 - Validación: inventario de modales, lint, tipos, suite y build de billing; revisión de accesibilidad y formularios; comprobación visual si el entorno lo permite.
-- Evidencia: [BILL-14](iteration-log.md#bill-14--cabeceras-y-acciones-de-modales).
+- Evidencia: [BILL-14](archive/2026-11-05/bill-14.md#bill-14--cabeceras-y-acciones-de-modales).
 
 ## BILL-15 — Página de cliente
 
@@ -234,3 +234,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: botón y overlay disponibles por debajo de xl, incluidos 640–1279 px; navegación de escritorio desde xl; sin cambios de enlaces ni acciones.
 - Validación: comparación de visibilidad responsive en 390/800/1100/1280 px, Biome, tipos, suite y build.
 - Evidencia: [BILL-23](iteration-log.md#bill-23--menú-de-navegación-en-anchuras-intermedias).
+
+## BILL-24 — Paleta oliva y terracota
+
+- Estado: `validated`.
+- Objetivo: aplicar la paleta facilitada a toda la UI con jerarquía y semántica coherentes.
+- Rutas: tema global, colores de gráficos, selección de productos y planificación de billing.
+- Dependencias: tokens Tailwind y componentes existentes, sin dependencias nuevas.
+- Aceptación: superficies crema, acciones/ingresos oliva, gastos/errores terracota; tema oscuro cálido; gráficos armonizados; conservar marca de Google, documentos PDF y comportamiento.
+- Validación: contraste de pares principales, cobertura de tokens, Biome, tipos, suite y build; inspección visual si el navegador está disponible.
+- Evidencia: [BILL-24](iteration-log.md#bill-24--paleta-oliva-y-terracota).

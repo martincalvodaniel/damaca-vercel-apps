@@ -1,8 +1,134 @@
 @import "tailwindcss";
 
+/* Existing utility families are mapped centrally so every shared and page-specific
+   component inherits the palette, including hover, focus, opacity and dark states. */
+@theme {
+  --color-white: #f9f5f0;
+
+  --color-zinc-50: #f5faed;
+  --color-zinc-100: #e4e8cf;
+  --color-zinc-200: #dae0be;
+  --color-zinc-300: #c5d0a8;
+  --color-zinc-400: #a8b683;
+  --color-zinc-500: #67705a;
+  --color-zinc-600: #546047;
+  --color-zinc-700: #404c2a;
+  --color-zinc-800: #333c29;
+  --color-zinc-900: #29311f;
+  --color-zinc-950: #1f2419;
+
+  --color-blue-50: #f5faed;
+  --color-blue-100: #e4e8cf;
+  --color-blue-200: #dae0be;
+  --color-blue-300: #c5d0a8;
+  --color-blue-400: #a8b683;
+  --color-blue-500: #637440;
+  --color-blue-600: #546437;
+  --color-blue-700: #404c2a;
+  --color-blue-800: #343e24;
+  --color-blue-900: #29311e;
+  --color-blue-950: #1f2419;
+
+  --color-green-50: #f5faed;
+  --color-green-100: #e4e8cf;
+  --color-green-200: #dae0be;
+  --color-green-300: #c5d0a8;
+  --color-green-400: #a8b683;
+  --color-green-500: #637440;
+  --color-green-600: #546437;
+  --color-green-700: #404c2a;
+  --color-green-800: #343e24;
+  --color-green-900: #29311e;
+  --color-green-950: #1f2419;
+
+  --color-emerald-50: #f5faed;
+  --color-emerald-100: #e4e8cf;
+  --color-emerald-200: #dae0be;
+  --color-emerald-300: #c5d0a8;
+  --color-emerald-400: #a8b683;
+  --color-emerald-500: #637440;
+  --color-emerald-600: #546437;
+  --color-emerald-700: #404c2a;
+  --color-emerald-800: #343e24;
+  --color-emerald-900: #29311e;
+  --color-emerald-950: #1f2419;
+
+  --color-red-50: #f9f5f0;
+  --color-red-100: #f9e6db;
+  --color-red-200: #edc6b4;
+  --color-red-300: #e8b49a;
+  --color-red-400: #df926e;
+  --color-red-500: #b15631;
+  --color-red-600: #9e472a;
+  --color-red-700: #5c2e1e;
+  --color-red-800: #422115;
+  --color-red-900: #321b14;
+  --color-red-950: #241610;
+
+  --color-rose-50: #f9f5f0;
+  --color-rose-100: #f9e6db;
+  --color-rose-200: #edc6b4;
+  --color-rose-300: #e8b49a;
+  --color-rose-400: #df926e;
+  --color-rose-500: #b15631;
+  --color-rose-600: #9e472a;
+  --color-rose-700: #5c2e1e;
+  --color-rose-800: #422115;
+  --color-rose-900: #321b14;
+  --color-rose-950: #241610;
+
+  --color-purple-50: #f9f5f0;
+  --color-purple-100: #f9e6db;
+  --color-purple-200: #edc6b4;
+  --color-purple-300: #e8b49a;
+  --color-purple-400: #df926e;
+  --color-purple-500: #b15631;
+  --color-purple-600: #9e472a;
+  --color-purple-700: #5c2e1e;
+  --color-purple-800: #422115;
+  --color-purple-900: #321b14;
+  --color-purple-950: #241610;
+
+  --color-amber-50: #f9f5f0;
+  --color-amber-100: #f2d0a4;
+  --color-amber-200: #edc6b4;
+  --color-amber-300: #df926e;
+  --color-amber-400: #c86b45;
+  --color-amber-500: #b15631;
+  --color-amber-600: #9e472a;
+  --color-amber-700: #5c2e1e;
+  --color-amber-800: #422115;
+  --color-amber-900: #321b14;
+  --color-amber-950: #241610;
+
+  --color-orange-50: #f9f5f0;
+  --color-orange-100: #f2d0a4;
+  --color-orange-200: #edc6b4;
+  --color-orange-300: #df926e;
+  --color-orange-400: #c86b45;
+  --color-orange-500: #b15631;
+  --color-orange-600: #9e472a;
+  --color-orange-700: #5c2e1e;
+  --color-orange-800: #422115;
+  --color-orange-900: #321b14;
+  --color-orange-950: #241610;
+
+  --color-yellow-50: #f9f5f0;
+  --color-yellow-100: #f2d0a4;
+  --color-yellow-200: #edc6b4;
+  --color-yellow-300: #df926e;
+  --color-yellow-400: #c86b45;
+  --color-yellow-500: #b15631;
+  --color-yellow-600: #9e472a;
+  --color-yellow-700: #5c2e1e;
+  --color-yellow-800: #422115;
+  --color-yellow-900: #321b14;
+  --color-yellow-950: #241610;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5faed;
+  --foreground: #404c2a;
 }
 
 @theme inline {
@@ -14,12 +140,14 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-zinc-500: #a8b683;
+    --background: #1f2419;
+    --foreground: #e4e8cf;
   }
 }
 
 body {
+  accent-color: var(--color-blue-600);
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
