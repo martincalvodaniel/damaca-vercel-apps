@@ -1,11 +1,11 @@
 "use client"
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useState } from "react"
 import { useEscapeKey } from "@/hooks/useEscapeKey"
 import { signOut, useSession } from "@/lib/auth/auth-client"
 import MobileMenuOverlay, { type NavItem } from "./MobileMenuOverlay"
+import UserSettingsLink from "./UserSettingsLink"
 
 interface NavigationBarProps {
   subtitle: string
@@ -121,16 +121,10 @@ export default function NavigationBar({
           {session?.user ? (
             <>
               <div className="mx-1 h-6 w-px bg-zinc-200 dark:bg-zinc-700" />
-              {session.user.image ? (
-                <Image
-                  src={session.user.image}
-                  alt={session.user.name ?? "Avatar de usuario"}
-                  width={28}
-                  height={28}
-                  className="h-7 w-7 rounded-full"
-                  referrerPolicy="no-referrer"
-                />
-              ) : null}
+              <UserSettingsLink
+                user={session.user}
+                active={pathname === "/settings"}
+              />
               <button
                 type="button"
                 onClick={handleSignOut}

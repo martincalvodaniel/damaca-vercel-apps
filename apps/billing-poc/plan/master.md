@@ -70,6 +70,10 @@ El listado de eventos separa Fecha y Hora (HH:mm). Fecha usa tres letras del dí
 
 El menú desplegable usa el mismo breakpoint `xl` que su botón: disponible también en tablet/escritorio estrecho, por debajo de 1280 px. Alcance: [BILL-23](iterations.md#bill-23--menú-de-navegación-en-anchuras-intermedias).
 
-## Paleta de interfaz
+## Paletas y configuración de usuario
 
-Billing usa superficies blancas y neutros cálidos de baja saturación para fondos, bordes y texto, también en oscuro. Oliva se reserva para acciones principales y resultados positivos; terracota para gastos y acciones destructivas. Los gráficos donut recuperan su paleta multicolor original para distinguir categorías. Se conservan los colores oficiales de Google y los documentos PDF existentes. La revisión [BILL-25](iterations.md#bill-25--superficies-neutras-y-donuts-originales) sustituye el tratamiento generalizado de oliva de [BILL-24](iterations.md#bill-24--paleta-oliva-y-terracota).
+La identidad del menú (nombre/correo) y la navegación de escritorio enlazan a `/settings`, que contiene el selector de tema. Ofrece Original, con los colores fijados de `main` en `11a5f3e`, y Oliva y terracota, con las superficies neutras de BILL-25. Original es la opción por defecto para cuentas sin preferencia. Claro/oscuro sigue el sistema y los donuts conservan siempre sus colores multicolor originales.
+
+La preferencia se guarda en la colección MongoDB `userPreferences`, identificada por el correo normalizado de la sesión Better Auth. Se utiliza correo porque la autenticación actual es sin persistencia de usuarios: no se presupone que su identificador generado sobreviva a una nueva sesión. El cliente no elige la identidad del registro. El índice único `_id` garantiza un documento por cuenta y el guardado usa upsert atómico. No hay configuración global ni almacenamiento local como fuente de verdad; una nueva carga recupera la preferencia en cualquier dispositivo.
+
+El layout autenticado carga la preferencia antes del HTML inicial. SWR separa cachés por cuenta, aplica el cambio tras confirmarse el guardado y revalida solo esa cuenta. Los errores de guardado conservan el tema anterior. Los tokens de paleta usan roles semánticos y un adaptador para las utilidades existentes; el tema se aplica también a diálogos portaleados sin duplicar componentes. Marca Google y PDFs no cambian. Alcance: [BILL-26](iterations.md#bill-26--temas-y-configuración-por-usuario), que amplía [BILL-25](iterations.md#bill-25--superficies-neutras-y-donuts-originales).

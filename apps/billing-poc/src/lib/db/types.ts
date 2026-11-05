@@ -22,6 +22,7 @@ import type { InvoiceCounter } from "@/lib/domain/entities/invoice"
 import type { Payment } from "@/lib/domain/entities/payment"
 import type { PaymentTemplate } from "@/lib/domain/entities/payment-template"
 import type { Product } from "@/lib/domain/entities/product"
+import type { UserPreferences } from "@/lib/domain/entities/user-preferences"
 
 export type MongoFiringTemplate = Omit<FiringTemplate, "_id"> & {
   _id?: ObjectId
@@ -83,4 +84,8 @@ export type MongoCommission = Omit<
     date: string
     paymentMethod: NonNullable<Commission["paymentGeneration"]>["paymentMethod"]
   }
+}
+
+export type MongoUserPreferences = UserPreferences & {
+  _id: string
 }

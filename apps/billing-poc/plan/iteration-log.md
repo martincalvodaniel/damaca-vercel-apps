@@ -2,18 +2,7 @@
 
 Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md), [BILL-09](archive/2026-11-02/bill-09.md), [BILL-10](archive/2026-11-02/bill-10.md), [BILL-11](archive/2026-11-02/bill-11.md).
 
-Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2026-11-05/bill-13.md), [BILL-14](archive/2026-11-05/bill-14.md), [BILL-15](archive/2026-11-05/bill-15.md).
-
-## BILL-16 — Simplificar cabeceras y altas
-
-- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits locales pendientes. Capacidad inicial: 98 % restante en 5 h y 54 % en 7 d; estimación suficiente para entrega completa conservando reservas.
-- Aceptación: [BILL-16](iterations.md#bill-16--simplificar-cabeceras-y-altas).
-- Alcance: altas de página en navegación; las altas contextuales dentro de modales y plantillas conservan su contexto. Mes conserva su alta local.
-
-- Implementado: slot explícito de acciones PageLayout → NavigationBar; + principal en Clientes, Productos, Eventos, Encargos y Cocciones. Clientes comparte la barra con el buscador a su derecha. Navegación permite envolver enlaces en escritorio y conserva menú móvil. Eliminados títulos/subtítulos redundantes; controles de periodo y filtros conservados; Mes mantiene su + y usa Compacto/Todo. Año traduce desglose, saldo mensual, selector Año/Ir y estado vacío.
-- Revisión React/accesibilidad: mismos callbacks y hooks SWR, sin efectos ni dependencias nuevos; + con aria-label; controles y estilos de foco/modo oscuro preservados. No se hizo comprobación visual interactiva en navegador; la revisión responsive es estática.
-- Validación: `bun run test --filter=@damaca/billing-poc`: 992 pruebas correctas, 0 fallos, 1802 assertions. `bun run type-check --filter=@damaca/billing-poc`: correcto tras corregir un error temporal de edición de JSX detectado por Biome/tipos. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (16,519 s). Caché remota de Turbo no disponible; comprobaciones locales completas. Biome explícito sobre los 14 TSX editados sin hallazgos; lint preparado y diff check se verifican al cerrar.
-- Archivo de BILL-06 para conservar diez entregas recientes; enlaces nuevos de planificación comprobados. Capacidad antes de publicar: 96 % en 5 h y 54 % en 7 d. Commit, push y SHA remoto se verifican al cierre.
+Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2026-11-05/bill-13.md), [BILL-14](archive/2026-11-05/bill-14.md), [BILL-15](archive/2026-11-05/bill-15.md), [BILL-16](archive/2026-11-05/bill-16.md).
 
 ## BILL-17 — Alta mensual, orden de cocciones y traducción de facturas
 
@@ -106,3 +95,16 @@ Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2
 - Contraste calculado: texto secundario sobre blanco 4,99:1; secundario oscuro sobre tarjeta 6,19:1; principal sobre blanco 6,45:1; destructivo sobre blanco 6,20:1. No equivale a una auditoría de todas las combinaciones.
 - Validación: Biome explícito correcto, tipos correctos, 998 pruebas correctas y 0 fallos (1835 assertions), build webpack correcto. Caché remota no disponible; validaciones locales completas. Sin comprobación visual interactiva autenticada. Se archiva BILL-15 para conservar diez entregas recientes. Enlaces, diff y lint preparado se comprueban al cierre.
 - Publicación Git prevista en `int` conforme al workflow; este corte no solicita un nuevo despliegue Vercel.
+
+## BILL-26 — Temas y configuración por usuario
+
+- Inicio: 2026-11-05, `int`, base `7e9fff7`, árbol limpio y sin commits pendientes. Capacidad inicial: 99 % de 5 h y 18 % de 7 d; estimación suficiente para implementar, validar y publicar con reservas.
+- Aceptación y contrato: [BILL-26](iterations.md#bill-26--temas-y-configuración-por-usuario).
+- Implementación: `/settings` usa PageLayout y selector etiquetado con Original/Oliva y terracota. Nombre/correo/avatar enlazan desde menú y escritorio; el menú se cierra al navegar. Confirmación compartida Toast, estado guardando y error con posibilidad de reintentar; sin cambio optimista que pudiera presentar como guardado un fallo.
+- Persistencia: entidad/puerto/repositorio separados. Correo de sesión normalizado como `_id` de `userPreferences` (índice único automático), upsert por cuenta y Zod estricto. No se admite identidad en el cuerpo; parámetros de identidad en URL no tienen efecto. Guard requireAuth inyectado al handler, con sesión comprobada antes de persistir. GET/PUT privados sin caché HTTP compartida. No se modifica autenticación ni hay nuevas dependencias.
+- Tema: roles semánticos centralizados con compatibilidad para utilidades existentes. Original fija valores Tailwind de la versión original de main (`11a5f3e`); Oliva conserva BILL-25. Root scope mediante `:has([data-palette])` cubre portales y fondo, incluidas variantes oscuras. El layout carga Mongo antes de renderizar; fallback SSR de SWR evita la consulta inicial duplicada y separa caché por cuenta. No hay localStorage. Donuts y PDFs sin cambios.
+- Pruebas: 27 nuevas sobre default, aislamiento de dos cuentas, correo estable entre sesiones, rechazo 401/403 e identidad ausente, JSON inválido, esquema estricto e intento de cambiar otra cuenta, fallos de lectura/escritura, headers privados, helpers SWR y HTML inicial/enlace. Primer pase detectó un timeout por un caso vacío de `it.each` interpretado como callback done; corregido usando casos con cierre sin parámetros. Resultado final: 1025 pruebas correctas, 0 fallos y 1906 assertions (103 archivos).
+- Navegador: banco temporal con componentes reales, CSS del build y handlers reales con usuarios ficticios/repositorio en memoria. Se comprobó guardar Oliva, toast, recarga que mantiene la selección, segunda cuenta en Original, regreso a la primera sin perder Oliva y apertura/cierre de Modal portaleado con la misma paleta. Estilo computado del botón: Original `oklch(0.546 0.245 262.881)`, Oliva `rgb(84, 100, 55)`. Consola sin avisos/errores. No demuestra persistencia contra Mongo real ni OAuth real; el adaptador y su filtro `_id` se revisan estáticamente. Banco detenido al terminar, sin cambios de datos reales.
+- Validación: Biome de los 20 archivos de código/pruebas editados y nuevos, correcto; tipos correctos; build webpack correcto (18,09 s), incluidas `/settings` y `/api/user-preferences`. Caché remota no disponible, comprobaciones locales completas. Revisión React: SWR sin efectos de fetch, callbacks estables, identidad compartida, carga SSR, labels/foco/pending, sin listeners ni dependencias nuevas. Se archiva BILL-16 para mantener diez entregas. Enlaces locales, diff y lint preparado se comprueban al cierre; commit/push/SHA remoto se verifican al publicar.
+- Herramientas: el CLI Postman instalado no admite `postman status` (`unknown command`); no se inicializa ni publica un workspace. El contrato queda en la iteración y las comprobaciones ejecutables usan los handlers locales con Bun.
+- Sin despliegue Vercel en esta entrega.

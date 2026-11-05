@@ -163,7 +163,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: AddButton, buscador y callbacks existentes; sin nuevas dependencias.
 - Aceptación: Clientes usa + a la izquierda del buscador en navegación; altas principales de Productos, Eventos y Encargos/Cocciones en navegación; Mes conserva su + y elimina Monthly Filter/Overview; Compacto/Todo; se eliminan títulos/subtítulos redundantes de las páginas indicadas; Año sin cabecera textual y UI en español. Conservar controles de periodos, formularios, acciones contextuales, temas y accesibilidad.
 - Validación: Biome incremental, tipos, suite y build de billing; revisión responsive y visual si existe sesión accesible.
-- Evidencia: [BILL-16](iteration-log.md#bill-16--simplificar-cabeceras-y-altas).
+- Evidencia: [BILL-16](archive/2026-11-05/bill-16.md#bill-16--simplificar-cabeceras-y-altas).
 
 ## BILL-17 — Alta mensual, orden de cocciones y traducción de facturas
 
@@ -254,3 +254,14 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: fondos, tarjetas, bordes y texto neutros en claro/oscuro; oliva/terracota como acentos; colores originales de CHART_COLORS restaurados exactamente.
 - Validación: comparación con constantes originales en Git, contraste de pares principales, lint preparado, tipos, suite y build.
 - Evidencia: [BILL-25](iteration-log.md#bill-25--superficies-neutras-y-donuts-originales).
+
+## BILL-26 — Temas y configuración por usuario
+
+- Estado: `validated`.
+- Objetivo: elegir Original u Oliva y terracota desde la configuración propia.
+- Rutas: tema global, layouts/navegación, `features/settings`, API de preferencias, entidad/puerto/repositorio y documentación de billing.
+- Dependencias: sesión Better Auth, MongoDB, SWR y componentes existentes; sin nuevas dependencias.
+- Aceptación: enlace desde identidad del menú y escritorio a `/settings`; selector accesible, guardado/error/pending; elección aislada por correo autenticado, persistente entre dispositivos; Original por defecto, variante actual opcional, claro/oscuro del sistema y donuts independientes; HTML inicial con paleta persistida.
+- Contrato: GET/PUT `/api/user-preferences` usan exclusivamente identidad de sesión; cuerpo PUT estricto `{theme: original|olive}`; 401/403 sin autorización, 400 inválido, 500 error de persistencia; respuestas privadas sin caché HTTP compartida.
+- Validación: pruebas herméticas de aislamiento, validación, fallos, render inicial/enlaces, helpers SWR y paletas; lint incremental/preparado, tipos, suite y build. Verificación autenticada cuando el entorno lo permita.
+- Evidencia: [BILL-26](iteration-log.md#bill-26--temas-y-configuración-por-usuario).

@@ -1,8 +1,8 @@
 "use client"
-import Image from "next/image"
 import Link from "next/link"
 import { useRef } from "react"
 import { useFocusTrap } from "@/hooks/useFocusTrap"
+import UserSettingsLink from "./UserSettingsLink"
 export interface NavItem {
   href: string
   label: string
@@ -94,25 +94,12 @@ export default function MobileMenuOverlay({
 
         {session?.user ? (
           <div className="mt-6 border-t border-zinc-200 pt-4 dark:border-zinc-700">
-            <div className="mb-3 flex items-center gap-3">
-              {session.user.image ? (
-                <Image
-                  src={session.user.image}
-                  alt={session.user.name ?? "Avatar de usuario"}
-                  width={32}
-                  height={32}
-                  className="h-8 w-8 rounded-full"
-                  referrerPolicy="no-referrer"
-                />
-              ) : null}
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                  {session.user.name}
-                </p>
-                <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
-                  {session.user.email}
-                </p>
-              </div>
+            <div className="mb-3">
+              <UserSettingsLink
+                user={session.user}
+                onNavigate={onClose}
+                active={pathname === "/settings"}
+              />
             </div>
             <button
               type="button"
