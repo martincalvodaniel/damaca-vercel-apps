@@ -122,7 +122,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Contrato: `/api/firings` reutiliza los payloads de Encargos y su respuesta interna (`commissions`/`commission`); GET/POST/PUT/DELETE autenticados, detalle `/:id`, conversión `/:id/payment` y consulta inversa `/payment/:paymentId`. `/api/firing-templates`: GET devuelve `{ templates }`; POST `{ name, price }`, PUT `{ id, name, price }`, DELETE `{ id }`; nombres recortados no vacíos, precio finito no negativo, IDs Mongo válidos.
 - Validación: pruebas de dominio/reintentos/sincronización y contratos/helpers SWR/plantillas; Biome en archivos editados, tipos, suite y build de billing; revisión visual si hay sesión accesible.
 
-- Evidencia BILL-12: [registro y limitaciones de la suite previa](iteration-log.md#bill-12--cocciones-y-plantillas).
+- Evidencia BILL-12: [registro y limitaciones de la suite previa](archive/2026-11-05/bill-12.md#bill-12--cocciones-y-plantillas).
 
 ## BILL-13 — Reparar las pruebas de localización
 
@@ -214,3 +214,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: encabezados Ausencias/Recuperaciones/Última ausencia; Mañana/Tarde/Alumno/a/Fecha; modales de día/edición a altura disponible sin foco automático en nombre al editar; calendarios lun/mar/mié/jue/vie/sáb/dom; lápiz antes de papelera abre edición sin navegar; pagos del cliente usan tabla mensual con fecha completa y mismas columnas/filtros/orden/acciones/exportación, sin filtrar por mes ni perder actividad histórica.
 - Validación: regresiones de etiquetas/calendario, fecha completa y acciones de cliente; Biome, tipos, suite y build de billing; revisión de foco y accesibilidad.
 - Evidencia: [BILL-21](iteration-log.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).
+
+## BILL-22 — Fecha y hora de eventos y favicon original
+
+- Estado: `validated`.
+- Objetivo: separar Fecha y Hora en eventos y recuperar el sello original de billing.
+- Rutas: tabla/helpers/pruebas de eventos, iconos de billing y planificación.
+- Dependencias: formateadores e historial Git existentes; sin dependencias nuevas.
+- Aceptación: recurrentes «mar nov», puntuales «vie 13 nov» con día inferido del año real, sin año; Hora HH:mm independiente; fechas parciales conservadas sin inventar datos; favicon original sin icono SVG competidor.
+- Validación: regresiones de fechas, Biome, tipos, suite y build de billing; verificación del icono recuperado.
+- Evidencia: [BILL-22](iteration-log.md#bill-22--fecha-y-hora-de-eventos-y-favicon-original).

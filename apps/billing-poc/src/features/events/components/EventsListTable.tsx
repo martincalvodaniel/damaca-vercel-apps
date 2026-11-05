@@ -12,7 +12,8 @@ import { formatCurrency } from "@/lib/utils/formatters"
 import {
   compareEventsChronologicalAsc,
   formatDuration,
-  formatEventDateTime,
+  formatEventListDate,
+  formatEventTime,
   totalSeats,
 } from "./eventsUi"
 
@@ -55,7 +56,8 @@ export default function EventsListTable({
         <thead className="bg-zinc-50 dark:bg-zinc-800/50">
           <tr>
             <Th>Título</Th>
-            <Th>Fecha y hora</Th>
+            <Th>Fecha</Th>
+            <Th>Hora</Th>
             <Th>Duración</Th>
             <Th>Ocupación</Th>
             <Th>Precio</Th>
@@ -133,7 +135,10 @@ function EventTableRow({
         </span>
       </td>
       <td className="px-3 py-2 text-zinc-700 dark:text-zinc-300">
-        {formatEventDateTime(event)}
+        {formatEventListDate(event)}
+      </td>
+      <td className="whitespace-nowrap px-3 py-2 text-zinc-700 dark:text-zinc-300">
+        {formatEventTime(event) ?? "—"}
       </td>
       <td className="px-3 py-2 text-zinc-700 dark:text-zinc-300">
         {formatDuration(event.durationMinutes)}

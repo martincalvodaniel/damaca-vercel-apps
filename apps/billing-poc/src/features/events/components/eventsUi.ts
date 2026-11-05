@@ -56,6 +56,35 @@ export function formatEventDateTime(
   return `${baseDate} ${timePart}`
 }
 
+/** Format the list date without a year, keeping recurrence separate from its anchor. */
+export function formatEventListDate(
+  event: Pick<Event, "date" | "year" | "month" | "day" | "dayOfWeek">
+): string {
+  const dateParts = event.date?.split("-").map(Number)
+  const year = event.year ?? dateParts?.[0]
+  const month = event.month ?? dateParts?.[1]
+  const day = event.day ?? dateParts?.[2]
+  const recurring = event.dayOfWeek !== undefined
+  const weekday = recurring
+    ? formatEventWeekday(event).slice(0, 3)
+    : year !== undefined && month !== undefined && day !== undefined
+      ? new Intl.DateTimeFormat("es-ES", { weekday: "long", timeZone: "UTC" })
+          .format(new Date(Date.UTC(year, month - 1, day)))
+          .slice(0, 3)
+      : ""
+  const monthLabel =
+    month !== undefined
+      ? new Intl.DateTimeFormat("es-ES", { month: "long", timeZone: "UTC" })
+          .format(new Date(Date.UTC(2026, month - 1, 1)))
+          .slice(0, 3)
+      : ""
+  return (
+    [weekday, recurring ? undefined : day, monthLabel]
+      .filter((part) => part !== undefined && part !== "")
+      .join(" ") || "Sin fecha"
+  )
+}
+
 function formatEventWeekday(event: Pick<Event, "dayOfWeek">): string {
   if (
     event.dayOfWeek === undefined ||
@@ -93,7 +122,7 @@ function formatEventDate(
   return ""
 }
 
-function formatEventTime(
+export function formatEventTime(
   event: Pick<Event, "hour" | "minute">
 ): string | undefined {
   if (event.hour === undefined || event.hour === null) return undefined

@@ -5,6 +5,8 @@ import {
   eventIsPlottable,
   formatDuration,
   formatEventDateTime,
+  formatEventListDate,
+  formatEventTime,
   formatTimeOfDay,
   parseTimeOfDay,
   totalSeats,
@@ -306,5 +308,34 @@ describe("compareEventsChronologicalAsc", () => {
       [2024, 1, 1, 10],
       [2024, 2, 1, undefined],
     ])
+  })
+})
+
+describe("event list columns", () => {
+  it("formats recurring dates without the anchor day or year", () => {
+    expect(
+      formatEventListDate({
+        year: 2026,
+        month: 11,
+        dayOfWeek: 2,
+        date: "2026-11-03",
+      })
+    ).toBe("mar nov")
+  })
+  it("infers the weekday from the actual year", () => {
+    expect(formatEventListDate({ year: 2026, month: 11, day: 13 })).toBe(
+      "vie 13 nov"
+    )
+    expect(formatEventListDate({ date: "2029-11-13" })).toBe("mar 13 nov")
+    expect(formatEventListDate({ date: "2026-11-08" })).toBe("dom 8 nov")
+    expect(formatEventListDate({ date: "2024-02-29" })).toBe("jue 29 feb")
+  })
+  it("keeps partial dates and absent times explicit", () => {
+    expect(formatEventListDate({ month: 11, day: 13 })).toBe("13 nov")
+    expect(formatEventListDate({ month: 11 })).toBe("nov")
+    expect(formatEventListDate({ year: 2026 })).toBe("Sin fecha")
+    expect(formatEventTime({ hour: 0 })).toBe("00:00")
+    expect(formatEventTime({ hour: 17, minute: 30 })).toBe("17:30")
+    expect(formatEventTime({})).toBeUndefined()
   })
 })

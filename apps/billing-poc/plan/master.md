@@ -63,3 +63,7 @@ El listado de clientes ofrece edición mediante lápiz antes de la papelera. La 
 La investigación de la web pública, la integración WooCommerce existente y las alternativas futuras se registra de forma transversal en [AGW-16](../../../plan/iterations.md#agw-16--investigación-de-la-bottega-y-su-integración-con-billing). Consultar [el dossier](../../../docs/research/la-bottega-di-pali/README.md) antes de definir alcance de implementación. No modifica las decisiones aceptadas ni las capacidades actuales de billing.
 
 La publicación Vercel pasa a ser manual bajo petición mediante `git.deploymentEnabled: false`. Registro transversal: [AGW-17](../../../plan/iterations.md#agw-17--manual-vercel-deployments).
+
+## Fechas de eventos y favicon
+
+El listado de eventos separa Fecha y Hora (HH:mm). Fecha usa tres letras del día semanal y mes, con día numérico solo para eventos puntuales; el día semanal se calcula con el año real, que no se muestra. Los recurrentes ignoran su fecha de anclaje. Los datos parciales no inventan día semanal. Billing recupera el sello rojo original de La Bottega di Pali desde Git; la fuente SVG incorpora el original recuperado para conservarlo al regenerar iconos. Alcance: [BILL-22](iterations.md#bill-22--fecha-y-hora-de-eventos-y-favicon-original).
