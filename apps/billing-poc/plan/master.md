@@ -72,4 +72,4 @@ El menú desplegable usa el mismo breakpoint `xl` que su botón: disponible tamb
 
 ## Paleta de interfaz
 
-Billing adopta la paleta oliva y terracota facilitada: superficies crema, acciones principales y resultados positivos oliva, gastos y acciones destructivas terracota. El modo oscuro utiliza neutros cálidos derivados. Los tokens globales cubren navegación, formularios, tablas, modales, estados y gráficos. Se conservan los colores oficiales de Google y los documentos PDF existentes. Alcance: [BILL-24](iterations.md#bill-24--paleta-oliva-y-terracota).
+Billing usa superficies blancas y neutros cálidos de baja saturación para fondos, bordes y texto, también en oscuro. Oliva se reserva para acciones principales y resultados positivos; terracota para gastos y acciones destructivas. Los gráficos donut recuperan su paleta multicolor original para distinguir categorías. Se conservan los colores oficiales de Google y los documentos PDF existentes. La revisión [BILL-25](iterations.md#bill-25--superficies-neutras-y-donuts-originales) sustituye el tratamiento generalizado de oliva de [BILL-24](iterations.md#bill-24--paleta-oliva-y-terracota).

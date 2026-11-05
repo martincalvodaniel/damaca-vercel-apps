@@ -2,19 +2,7 @@
 
 Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL-03](archive/2026-11-01/bill-03.md), [BILL-04](archive/2026-11-01/bill-04.md), [BILL-05](archive/2026-11-01/bill-05.md), [BILL-06](archive/2026-11-02/bill-06.md), [BILL-07](archive/2026-11-02/bill-07.md), [BILL-08](archive/2026-11-02/bill-08.md), [BILL-09](archive/2026-11-02/bill-09.md), [BILL-10](archive/2026-11-02/bill-10.md), [BILL-11](archive/2026-11-02/bill-11.md).
 
-Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2026-11-05/bill-13.md), [BILL-14](archive/2026-11-05/bill-14.md).
-
-## BILL-15 — Página de cliente
-
-- Inicio: 2026-11-01, rama `int`, base `dfd86c2`, árbol limpio y sin commits locales pendientes. Capacidad: 49 % restante en 5 h y 58 % en 7 d; margen estimado suficiente para la entrega completa con reservas.
-- Aceptación: [BILL-15](iterations.md#bill-15--página-de-cliente).
-
-- Implementado: ficha `/clients/[id]` con datos y edición mediante el modal existente. Resumen histórico reutilizando el cálculo mensual, tarjetas y gráficos de etiquetas; no suma de nuevo los importes de encargos/cocciones. Tres secciones nativas `details` cerradas por defecto, contadores completos y vacíos; pagos abren su detalle, encargos/cocciones enlazan al editor existente. Navegación desde listado de clientes y pagos, conservando copiar contactos y borrar.
-- Datos: endpoint autenticado con validación de ID, 400/404/500 y consulta paralela de pagos/encargos/cocciones tras comprobar el cliente. Filtros Mongo por cliente e índices en las tres colecciones; sin límite temporal ni paginación parcial. SWR evita datos del cliente anterior e invalida actividad desde cambios de clientes, pagos, encargos/cocciones y facturas.
-- Validación: `bun run test --filter=@damaca/billing-poc`: 992 pruebas correctas, 0 fallos, 98 archivos y 1802 assertions. Ocho pruebas nuevas de servicio, helpers de caché y render estático cubren historial entre años, filtros por cliente, trabajos pagados/pendientes, error sin totales parciales, ausencia de cliente, contadores/cierre inicial y enlace accesible con copia de contactos. `bun run type-check --filter=@damaca/billing-poc`: correcto. El primer type-check detectó que la configuración no excluye pruebas `.test.tsx`; convertida la prueba de render a `.test.ts` con `createElement`, siguiendo el patrón existente. `bun run build --filter=@damaca/billing-poc -- --webpack`: correcto (20,075 s); caché remota de Turbo no disponible.
-- Revisión React/accesibilidad: consultas por SWR, imports de dominio solo de tipo en cliente, gráficos/modal de pago dinámicos, memoización del resumen, enlaces nativos y foco claro/oscuro. Controles `details/summary` con semántica expandible nativa; columnas de datos adaptables y textos largos con ajuste. Se archiva BILL-05 para conservar diez entregas recientes.
-- Comprobación de navegador: el servidor no pudo escuchar en 3000/3100 dentro del entorno restringido (`EADDRINUSE`). El arranque autorizado fuera de ese entorno en 3100 fue correcto. La navegación a `/clients` redirigió a `/auth/signin`; sin sesión autenticada disponible, no se verifica visualmente la ficha con datos reales ni el flujo completo Mongo → navegador. No se modifica la autenticación. Pestaña temporal cerrada al terminar.
-- Cierre técnico: Biome sobre los TS/TSX editados/nuevos sin hallazgos; enlaces locales correctos. El primer lint preparado detectó una línea vacía sobrante al archivar BILL-05; corregida. `bun run lint --staged` y `git diff --cached --check` se repiten antes del commit. Commit, push y SHA remoto se verifican al publicar.
+Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2026-11-05/bill-13.md), [BILL-14](archive/2026-11-05/bill-14.md), [BILL-15](archive/2026-11-05/bill-15.md).
 
 ## BILL-16 — Simplificar cabeceras y altas
 
@@ -108,3 +96,13 @@ Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2
 - Contraste calculado: texto de botones principales 5,94:1, acciones destructivas 5,71:1, texto secundario claro 4,89:1 y oscuro 6,23:1. El tono 500 oliva se oscurece ligeramente respecto a la referencia para superar 4,5:1 con texto claro. No se afirma conformidad de todas las combinaciones, especialmente transparencias.
 - Revisión React: solo clases de selección, sin cambios de estado, hooks, datos, dependencias ni comportamiento. Cobertura estática de colores de UI y constantes de gráficos revisada. No se realizó validación visual interactiva de las pantallas autenticadas; inventario de navegador disponible, sin sesión de billing verificada.
 - Validación: Biome explícito de los tres archivos de código correcto; tipos correctos; 998 pruebas correctas, 0 fallos y 1835 assertions. Build webpack final correcto tras ajustar contraste (16,242 s). La caché remota no está disponible para tipos/tests, que se ejecutan localmente. El lint incremental sin preparar seleccionó cero archivos; se utiliza lint preparado al cierre. Se archiva BILL-14 para mantener diez entregas.
+
+## BILL-25 — Superficies neutras y donuts originales
+
+- Inicio: 2026-11-05, `int`, base `a306d74`, árbol limpio y sin commits pendientes. Capacidad: 81 % de 5 h y 18 % de 7 d; margen estimado suficiente con reservas.
+- Aceptación: [BILL-25](iterations.md#bill-25--superficies-neutras-y-donuts-originales).
+- Se identifica el tinte generalizado en la escala zinc sustituida por verdes, incluido texto y bordes. Ahora zinc usa grises cálidos poco saturados, tarjetas blancas y fondo marfil suave; el modo oscuro usa carbón cálido con texto neutro. Oliva/terracota quedan en acentos y estados existentes. No se modifican componentes ni comportamiento.
+- CHART_COLORS restaurado byte a byte desde `11a5f3e`, comprobado con Git. Los diez colores multicolor originales vuelven a los donuts y sus leyendas.
+- Contraste calculado: texto secundario sobre blanco 4,99:1; secundario oscuro sobre tarjeta 6,19:1; principal sobre blanco 6,45:1; destructivo sobre blanco 6,20:1. No equivale a una auditoría de todas las combinaciones.
+- Validación: Biome explícito correcto, tipos correctos, 998 pruebas correctas y 0 fallos (1835 assertions), build webpack correcto. Caché remota no disponible; validaciones locales completas. Sin comprobación visual interactiva autenticada. Se archiva BILL-15 para conservar diez entregas recientes. Enlaces, diff y lint preparado se comprueban al cierre.
+- Publicación Git prevista en `int` conforme al workflow; este corte no solicita un nuevo despliegue Vercel.

@@ -153,7 +153,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: datos completos y edición desde la ficha; ingresos/gastos/saldo históricos y desglose por etiqueta exclusivos del cliente; pagos, encargos y cocciones en tres secciones cerradas inicialmente con contador exacto, incluyendo registros pagados; navegación desde clientes y pagos; estados de carga/error/no encontrado/vacío, móvil y modo oscuro.
 - Contrato: GET autenticado `/api/clients/:id/activity` devuelve `{ client, payments, commissions, firings }` del cliente solicitado, sin filtro temporal; 400 para ID inválido, 404 si no existe, 500 ante error. Las mutaciones relacionadas invalidan la actividad.
 - Validación: pruebas de contrato/aislamiento, helpers SWR y navegación/render; lint incremental, tipos, suite y build de billing; revisión visual si el entorno lo permite.
-- Evidencia: [BILL-15](iteration-log.md#bill-15--página-de-cliente).
+- Evidencia: [BILL-15](archive/2026-11-05/bill-15.md#bill-15--página-de-cliente).
 
 ## BILL-16 — Simplificar cabeceras y altas
 
@@ -244,3 +244,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: superficies crema, acciones/ingresos oliva, gastos/errores terracota; tema oscuro cálido; gráficos armonizados; conservar marca de Google, documentos PDF y comportamiento.
 - Validación: contraste de pares principales, cobertura de tokens, Biome, tipos, suite y build; inspección visual si el navegador está disponible.
 - Evidencia: [BILL-24](iteration-log.md#bill-24--paleta-oliva-y-terracota).
+
+## BILL-25 — Superficies neutras y donuts originales
+
+- Estado: `validated`.
+- Objetivo: eliminar el efecto de filtro verde y recuperar la diferenciación de categorías de los donuts.
+- Rutas: tema global, constantes de gráficos y planificación de billing.
+- Dependencias: tema y gráficos existentes.
+- Aceptación: fondos, tarjetas, bordes y texto neutros en claro/oscuro; oliva/terracota como acentos; colores originales de CHART_COLORS restaurados exactamente.
+- Validación: comparación con constantes originales en Git, contraste de pares principales, lint preparado, tipos, suite y build.
+- Evidencia: [BILL-25](iteration-log.md#bill-25--superficies-neutras-y-donuts-originales).

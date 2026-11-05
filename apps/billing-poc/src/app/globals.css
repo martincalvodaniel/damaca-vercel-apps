@@ -3,19 +3,19 @@
 /* Existing utility families are mapped centrally so every shared and page-specific
    component inherits the palette, including hover, focus, opacity and dark states. */
 @theme {
-  --color-white: #f9f5f0;
+  --color-white: #ffffff;
 
-  --color-zinc-50: #f5faed;
-  --color-zinc-100: #e4e8cf;
-  --color-zinc-200: #dae0be;
-  --color-zinc-300: #c5d0a8;
-  --color-zinc-400: #a8b683;
-  --color-zinc-500: #67705a;
-  --color-zinc-600: #546047;
-  --color-zinc-700: #404c2a;
-  --color-zinc-800: #333c29;
-  --color-zinc-900: #29311f;
-  --color-zinc-950: #1f2419;
+  --color-zinc-50: #faf9f6;
+  --color-zinc-100: #f3f1ed;
+  --color-zinc-200: #e4e1db;
+  --color-zinc-300: #d3cfc7;
+  --color-zinc-400: #a5a097;
+  --color-zinc-500: #746f66;
+  --color-zinc-600: #5e5a53;
+  --color-zinc-700: #47443f;
+  --color-zinc-800: #302e2a;
+  --color-zinc-900: #22211f;
+  --color-zinc-950: #171614;
 
   --color-blue-50: #f5faed;
   --color-blue-100: #e4e8cf;
@@ -127,8 +127,8 @@
 }
 
 :root {
-  --background: #f5faed;
-  --foreground: #404c2a;
+  --background: #faf9f6;
+  --foreground: #22211f;
 }
 
 @theme inline {
@@ -140,9 +140,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-zinc-500: #a8b683;
-    --background: #1f2419;
-    --foreground: #e4e8cf;
+    --color-zinc-500: #a5a097;
+    --background: #171614;
+    --foreground: #f3f1ed;
   }
 }
 
