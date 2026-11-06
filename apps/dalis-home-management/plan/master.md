@@ -50,3 +50,5 @@ Nueva página independiente `/household-tasks`, con datos compartidos y acceso a
 La persistencia de HM-11 es compatible con MongoDB standalone: escrituras condicionales por documento, unicidad tarea/día y archivo previo a la limpieza de pendientes. Las lecturas ocultan pendientes archivadas incluso si falla la limpieza; reintentar el archivo la completa. La fecha real corregida conserva la fecha prevista si existía programación; para ejecuciones no programadas mueve también el registro del calendario. Eliminar una ejecución de una tarea archivada retira el registro sin reabrir pendientes. Fechas admitidas de 1900 a 2199; periodicidad de 1 a 36.500 días.
 
 Los controles de Tareas se mantienen compactos y accesibles según HM-12/HM-13: restauración de archivadas, histórico alineado y check reversible directo para completar o deshacer eventos diarios.
+
+La instalación web en modo independiente se documenta en [AGW-21](../../../plan/iterations.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).

@@ -191,3 +191,10 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 
 - Actualizada la skill: main autoriza Production y sus dominios; int usa Preview. Ajustadas selección, target API y asignación de alias para coherencia.
 - Revisión documental y diff check; Biome staged al cierre. Sin deployment real. Capacidad inicial: 79% de 5h y 29% semanal.
+
+## AGW-21 — Manifiestos de instalación para Billing y Home Management
+
+- Capacidad inicial disponible: 99% de 5 h y 14% de 7 d.
+- Ambos manifiestos usan los PNG existentes, incluida la variante maskable. Inicio y alcance en la raíz, con apertura en modo independiente.
+- Biome en ambos archivos nuevos, comprobación de tipos y 1.212 pruebas superadas. El build normal encontró restricciones de acceso a Google Fonts y de apertura de puertos de Turbopack en este entorno. El build con `-- --webpack` pasó en ambas apps.
+- Verificados el JSON generado en `/manifest.webmanifest`, el enlace en el HTML compilado y las dimensiones reales de los PNG. Pendiente comprobar la instalación en Chrome Android tras desplegar.

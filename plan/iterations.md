@@ -204,3 +204,11 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Objetivo/rutas: skill vercel-deploy-alias y registros raíz.
 - Aceptación: main siempre Production e int siempre Preview; invocar main autoriza producción y dominios.
 - Validación: revisión de coherencia, Biome staged y diff check. Sin deployment.
+
+## AGW-21 — Manifiestos de instalación para Billing y Home Management
+
+- Estado: `validated`.
+- Rutas: `apps/{billing-poc,dalis-home-management}/src/app/manifest.ts` y planes vinculados.
+- Dependencias: convención de metadatos de Next.js e iconos existentes de AGW-10.
+- Aceptación: ambas apps publican un manifiesto con inicio en la raíz, modo independiente e iconos de 192 y 512 píxeles.
+- Validación: Biome, tipos, pruebas, compilación y comprobación del manifiesto generado en ambas apps. Evidencia en el [registro](iteration-log.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).

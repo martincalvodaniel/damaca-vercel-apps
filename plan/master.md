@@ -62,3 +62,5 @@ La skill local [vercel-deploy-alias](../.agents/skills/vercel-deploy-alias/SKILL
 La skill [vercel-deployment-report](../.agents/skills/vercel-deployment-report/SKILL.md) cuenta deployments de las últimas 24 horas por estado y aplicación (AGW-19).
 
 La rama seleccionada en vercel-deploy-alias fija el entorno: `main` siempre Production e `int` siempre Preview (AGW-20).
+
+Billing y Home Management incorporan manifiestos web propios con los iconos existentes y apertura en modo independiente. Entrega [AGW-21](iterations.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).
