@@ -11,6 +11,33 @@
         "turbo": "2.11.10",
       },
     },
+    "apps/alexa-poc": {
+      "name": "@damaca/alexa-poc",
+      "version": "0.1.0",
+      "dependencies": {
+        "@vercel/config": "catalog:",
+        "better-auth": "catalog:",
+        "mongodb": "catalog:",
+        "next": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "server-only": "catalog:",
+        "swr": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "@tailwindcss/postcss": "catalog:",
+        "@types/bun": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "knip": "catalog:",
+        "tailwindcss": "catalog:",
+        "turbo": "2.11.10",
+        "typescript": "catalog:",
+      },
+    },
     "apps/billing-poc": {
       "name": "@damaca/billing-poc",
       "version": "0.1.0",
@@ -296,6 +323,8 @@
     "@biomejs/cli-win32-arm64": ["@biomejs/cli-win32-arm64@2.6.2", "", { "os": "win32", "cpu": "arm64" }, "sha512-/PEOo6evlgrQOfKhMNtC/4Gk8ai3hySXXEtjUzCqZe/4iAbMdqelpp7qvZEDyLxlZS+BjOMQFpq2gXI/BPaAqw=="],
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.6.2", "", { "os": "win32", "cpu": "x64" }, "sha512-FVlWD+mDDz8nN5LWKRWUhhb7wKIK0VE3oXQvQBX7Fwwj00CvqMVhMyiz1iz8O5aZGmnkhFlKSwJPrUvMh5prQw=="],
+
+    "@damaca/alexa-poc": ["@damaca/alexa-poc@workspace:apps/alexa-poc"],
 
     "@damaca/billing-poc": ["@damaca/billing-poc@workspace:apps/billing-poc"],
 
