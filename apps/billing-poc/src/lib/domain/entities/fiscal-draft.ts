@@ -27,6 +27,7 @@ export interface FiscalDocument {
   id: string
   references: string[]
   paymentDate: string
+  paymentTotal: number
   fingerprint: string
   direction: "income" | "outcome"
   rate: number

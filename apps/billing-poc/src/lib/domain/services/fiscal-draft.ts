@@ -112,6 +112,7 @@ export function fiscalDocuments(
       id: payment._id,
       references,
       paymentDate: payment.date,
+      paymentTotal: payment.total,
       fingerprint,
       direction: payment.type,
       rate: payment.vat,

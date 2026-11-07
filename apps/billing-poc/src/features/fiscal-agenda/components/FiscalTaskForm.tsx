@@ -1,14 +1,18 @@
 // biome-ignore-all lint/performance/noJsxPropsBind: Native form handlers do not participate in memoized component boundaries.
-import type { FormEvent } from "react"
+import { type FormEvent, useId } from "react"
+import { ErrorBanner } from "@/components/ui/ErrorBanner"
+import { Modal } from "@/components/ui/Modal"
+import { ModalFormActions } from "@/components/ui/ModalFormActions"
 import type { FiscalTask } from "@/lib/domain/entities/fiscal-task"
 import type { FiscalMutation } from "../hooks/useFiscalAgenda"
 
-import { buttonClass, controlClass } from "./styles"
+import { controlClass, labelClass } from "./styles"
 
 interface Props {
   task?: FiscalTask
   today: string
   pending: boolean
+  problem: string
   onCancel: () => void
   onSave: (action: FiscalMutation, dueYear?: number) => void
 }
@@ -17,9 +21,16 @@ export function FiscalTaskForm({
   task,
   today,
   pending,
+  problem,
   onCancel,
   onSave,
 }: Props) {
+  const formId = useId()
+
+  function close() {
+    if (!pending) onCancel()
+  }
+
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const fields = new FormData(event.currentTarget)
@@ -78,159 +89,158 @@ export function FiscalTaskForm({
   }
 
   return (
-    <form className="space-y-3 rounded-lg border p-4" onSubmit={submit}>
-      <h2 className="font-semibold">
-        {task ? `Editar ${task.title}` : "Añadir trámite manual"}
-      </h2>
-      <fieldset disabled={pending} className="grid gap-3 sm:grid-cols-2">
-        {!task?.source && (
-          <>
-            <label>
-              Título
+    <Modal
+      isOpen
+      onClose={close}
+      title={task ? `Editar ${task.title}` : "Añadir trámite manual"}
+      maxWidth="lg"
+    >
+      <form id={formId} className="space-y-4" onSubmit={submit}>
+        {problem ? <ErrorBanner>{problem}</ErrorBanner> : null}
+        <fieldset disabled={pending} className="grid gap-3 sm:grid-cols-2">
+          {!task?.source && (
+            <>
+              <label className={labelClass}>
+                Título
+                <input
+                  className={controlClass}
+                  name="title"
+                  required
+                  maxLength={120}
+                  defaultValue={task?.title}
+                />
+              </label>
+              <label className={labelClass}>
+                Modelo
+                <input
+                  className={controlClass}
+                  name="model"
+                  maxLength={20}
+                  defaultValue={task?.model}
+                />
+              </label>
+              <label className={labelClass}>
+                Ejercicio
+                <input
+                  className={controlClass}
+                  name="exercise"
+                  type="number"
+                  min={2000}
+                  max={2100}
+                  defaultValue={task?.exercise}
+                />
+              </label>
+              <label className={labelClass}>
+                Período
+                <input
+                  className={controlClass}
+                  name="period"
+                  maxLength={40}
+                  defaultValue={task?.period}
+                />
+              </label>
+              <label className={labelClass}>
+                Vencimiento de presentación
+                <input
+                  className={controlClass}
+                  name="filingDue"
+                  type="date"
+                  min="2000-01-01"
+                  max="2100-12-31"
+                  defaultValue={task?.filingDue}
+                  onChange={(event) =>
+                    event.currentTarget.setCustomValidity("")
+                  }
+                />
+              </label>
+              <label className={labelClass}>
+                Límite de domiciliación
+                <input
+                  className={controlClass}
+                  name="debitDue"
+                  type="date"
+                  min="2000-01-01"
+                  max="2100-12-31"
+                  defaultValue={task?.debitDue}
+                />
+              </label>
+              <label className={labelClass}>
+                Vencimiento de pago
+                <input
+                  className={controlClass}
+                  name="paymentDue"
+                  type="date"
+                  min="2000-01-01"
+                  max="2100-12-31"
+                  defaultValue={task?.paymentDue}
+                  onChange={(event) => {
+                    const filingInput =
+                      event.currentTarget.form?.elements.namedItem("filingDue")
+                    if (filingInput instanceof HTMLInputElement)
+                      filingInput.setCustomValidity("")
+                  }}
+                />
+              </label>
+            </>
+          )}
+          {task?.source !== undefined && task.paymentDue === undefined && (
+            <label className={labelClass}>
+              Vencimiento de pago, si corresponde
               <input
                 className={controlClass}
-                name="title"
-                required
-                maxLength={120}
-                defaultValue={task?.title}
-              />
-            </label>
-            <label>
-              Modelo
-              <input
-                className={controlClass}
-                name="model"
-                maxLength={20}
-                defaultValue={task?.model}
-              />
-            </label>
-            <label>
-              Ejercicio
-              <input
-                className={controlClass}
-                name="exercise"
-                type="number"
-                min={2000}
-                max={2100}
-                defaultValue={task?.exercise}
-              />
-            </label>
-            <label>
-              Período
-              <input
-                className={controlClass}
-                name="period"
-                maxLength={40}
-                defaultValue={task?.period}
-              />
-            </label>
-            <label>
-              Vencimiento de presentación
-              <input
-                className={controlClass}
-                name="filingDue"
+                name="paymentDueOverride"
                 type="date"
                 min="2000-01-01"
                 max="2100-12-31"
-                defaultValue={task?.filingDue}
-                onChange={(event) => event.currentTarget.setCustomValidity("")}
+                defaultValue={task.paymentDueOverride}
               />
             </label>
-            <label>
-              Límite de domiciliación
-              <input
-                className={controlClass}
-                name="debitDue"
-                type="date"
-                min="2000-01-01"
-                max="2100-12-31"
-                defaultValue={task?.debitDue}
-              />
-            </label>
-            <label>
-              Vencimiento de pago
-              <input
-                className={controlClass}
-                name="paymentDue"
-                type="date"
-                min="2000-01-01"
-                max="2100-12-31"
-                defaultValue={task?.paymentDue}
-                onChange={(event) => {
-                  const filingInput =
-                    event.currentTarget.form?.elements.namedItem("filingDue")
-                  if (filingInput instanceof HTMLInputElement)
-                    filingInput.setCustomValidity("")
-                }}
-              />
-            </label>
-          </>
-        )}
-        {task?.source !== undefined && task.paymentDue === undefined && (
-          <label>
-            Vencimiento de pago, si corresponde
+          )}
+          <label className={labelClass}>
+            Presentado el
             <input
               className={controlClass}
-              name="paymentDueOverride"
+              name="filedOn"
               type="date"
-              min="2000-01-01"
-              max="2100-12-31"
-              defaultValue={task.paymentDueOverride}
+              max={today}
+              defaultValue={task?.filedOn}
             />
           </label>
-        )}
-        <label>
-          Presentado el
-          <input
-            className={controlClass}
-            name="filedOn"
-            type="date"
-            max={today}
-            defaultValue={task?.filedOn}
-          />
-        </label>
-        <label>
-          Pagado el
-          <input
-            className={controlClass}
-            name="paidOn"
-            type="date"
-            max={today}
-            defaultValue={task?.paidOn}
-          />
-        </label>
-        <label>
-          Referencia o enlace privado del justificante
-          <input
-            className={controlClass}
-            name="receipt"
-            maxLength={500}
-            defaultValue={task?.receipt}
-          />
-        </label>
-        <label>
-          Notas
-          <textarea
-            className={controlClass}
-            name="notes"
-            maxLength={2000}
-            defaultValue={task?.notes}
-          />
-        </label>
-      </fieldset>
-      <div className="flex flex-wrap gap-2">
-        <button className={buttonClass} type="submit" disabled={pending}>
-          Guardar
-        </button>
-        <button
-          className={buttonClass}
-          type="button"
-          onClick={onCancel}
-          disabled={pending}
-        >
-          Cerrar
-        </button>
-      </div>
-    </form>
+          <label className={labelClass}>
+            Pagado el
+            <input
+              className={controlClass}
+              name="paidOn"
+              type="date"
+              max={today}
+              defaultValue={task?.paidOn}
+            />
+          </label>
+          <label className={labelClass}>
+            Referencia o enlace privado del justificante
+            <input
+              className={controlClass}
+              name="receipt"
+              maxLength={500}
+              defaultValue={task?.receipt}
+            />
+          </label>
+          <label className={labelClass}>
+            Notas
+            <textarea
+              className={controlClass}
+              name="notes"
+              maxLength={2000}
+              defaultValue={task?.notes}
+            />
+          </label>
+        </fieldset>
+      </form>
+      <ModalFormActions
+        formId={formId}
+        label="Guardar trámite"
+        isPending={pending}
+      />
+    </Modal>
   )
 }

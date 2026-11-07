@@ -223,7 +223,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: formateadores e historial Git existentes; sin dependencias nuevas.
 - Aceptación: recurrentes «mar nov», puntuales «vie 13 nov» con día inferido del año real, sin año; Hora HH:mm independiente; fechas parciales conservadas sin inventar datos; favicon original sin icono SVG competidor.
 - Validación: regresiones de fechas, Biome, tipos, suite y build de billing; verificación del icono recuperado.
-- Evidencia: [BILL-22](iteration-log.md#bill-22--fecha-y-hora-de-eventos-y-favicon-original).
+- Evidencia: [BILL-22](archive/2026-11-07/bill-22.md#bill-22--fecha-y-hora-de-eventos-y-favicon-original).
 
 ## BILL-23 — Menú de navegación en anchuras intermedias
 
@@ -315,3 +315,12 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: enlaces externos HTTP(S), PDF por identificador y modal de pago sin salir del borrador.
 - Validación: Biome, tipos, suite y build.
 - Evidencia: [BILL-31](iteration-log.md#bill-31--acceso-a-facturas-y-pagos-desde-borradores).
+
+## BILL-32 — Cohesión de la interfaz fiscal
+
+- Estado: `validated`.
+- Objetivo: alinear Agenda y Borradores con Billing y abrir el pago desde IVA y total.
+- Rutas: componentes fiscales, proyección del total de pago y planificación.
+- Aceptación: enlaces visuales sobre ambos importes, sin botón separado; tarjetas, controles, estados y modal coherentes en claro y oscuro.
+- Validación: Biome, tipos, pruebas y build.
+- Evidencia: [BILL-32](iteration-log.md#bill-32--cohesión-de-la-interfaz-fiscal).

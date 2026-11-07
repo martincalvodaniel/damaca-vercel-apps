@@ -14,15 +14,7 @@ Archivo adicional: [BILL-20](archive/2026-11-07/bill-20.md).
 
 Archivo adicional: [BILL-21](archive/2026-11-07/bill-21.md).
 
-## BILL-22 — Fecha y hora de eventos y favicon original
-
-- Inicio: 2026-11-05, rama `int`, base `3f6fd27`, árbol limpio y sin commits pendientes. Capacidad: 98 % en 5 h y 21 % en 7 d; estimación suficiente para una entrega pequeña completa con reservas.
-- Aceptación: [BILL-22](iterations.md#bill-22--fecha-y-hora-de-eventos-y-favicon-original).
-
-- Implementado: columnas Fecha y Hora independientes; recurrentes sin día de anclaje, puntuales con día semanal calculado en UTC y sin año visible, fechas parciales sin completar y hora ausente «—». Sin cambios de acciones, orden, estado ni consultas. Revisión React: reutiliza callbacks/memoización existentes; sin efectos ni dependencias nuevas.
-- Favicon: ICO original recuperado de `6e9d659^`, verificado visualmente como sello rojo de La Bottega di Pali. SVG incorpora el PNG original de 48 px; regeneradas variantes Apple/instalación con la fuente recuperada. El ICO coincide byte a byte con el original. La resolución disponible del original limita la nitidez de las variantes grandes. Catálogo del hub fuera del alcance de esta entrega.
-- Validación: tipos correctos; 998 pruebas correctas, 0 fallos, 1835 assertions; build webpack correcto (18,001 s). Biome explícito sobre los tres archivos de código correcto tras formato; el lint incremental sin preparar no seleccionó archivos, por lo que se valida además con lint preparado. Caché remota de Turbo no disponible; comprobaciones locales completas. No se realizó verificación interactiva de navegador.
-- Se archiva BILL-12 para conservar diez entregas recientes. Capacidad antes de cierre: 96 % en 5 h y 21 % en 7 d. Publicación y SHA remoto se verifican al cerrar.
+Archivo adicional: [BILL-22](archive/2026-11-07/bill-22.md).
 
 ## BILL-23 — Menú de navegación en anchuras intermedias
 
@@ -106,3 +98,11 @@ Archivo adicional: [BILL-21](archive/2026-11-07/bill-21.md).
 - Entrega: enlaces HTTP(S) y PDFs en otra pestaña. Modal existente desde la factura y el desglose por casilla. El borrador se consulta de nuevo al actualizar, eliminar o cerrar el pago.
 - Validación: Biome, tipos, 1.040 pruebas y build webpack correctos. Sin comprobación en navegador autenticado.
 - Se archiva BILL-21 para conservar diez entregas recientes.
+
+## BILL-32 — Cohesión de la interfaz fiscal
+
+- Inicio: rama `int`, árbol limpio. Capacidad inicial del 68 % en 5 h y 9 % en 7 d.
+- Aceptación: [BILL-32](iterations.md#bill-32--cohesión-de-la-interfaz-fiscal).
+- Entrega: IVA y total del pago abren la modal desde el documento. El desglose vuelve a enlazar al documento y se elimina la acción separada. Agenda y Borradores usan superficies, controles, colores y estados de Billing, y Agenda reutiliza la modal y la confirmación de cabecera.
+- Validación: Biome, tipos, 1.040 pruebas y build webpack correctos. Revisión estática de temas claro y oscuro; sin comprobación visual autenticada.
+- Se archiva BILL-22 para conservar diez entregas recientes.

@@ -3,6 +3,8 @@
 
 import dynamic from "next/dynamic"
 import { type FormEvent, useId, useState } from "react"
+import { Badge } from "@/components/ui/Badge"
+import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import { buildOpenInvoiceUrl } from "@/features/invoices/hooks/useInvoiceMutations"
 import { FetchError } from "@/lib/client/swr-fetcher"
 import {
@@ -21,8 +23,12 @@ import {
 import { formatCurrency } from "@/lib/utils/formatters"
 import type { DraftUpdate } from "@/schemas/fiscal-draft-validator"
 import {
-  buttonClass,
+  cardClass,
   controlClass,
+  labelClass,
+  linkClass,
+  mutedClass,
+  primaryButtonClass,
 } from "../../fiscal-agenda/components/styles"
 import { useFiscalDraft, useUpdateFiscalDraft } from "../hooks/useFiscalDraft"
 
@@ -91,16 +97,29 @@ function DocumentReview({
   return (
     <details
       id={`document-${document.id}`}
-      className="space-y-2 rounded border p-3"
+      className={`${cardClass} space-y-3 p-4`}
     >
-      <summary className="cursor-pointer">
+      <summary className="cursor-pointer rounded-sm text-sm font-semibold text-zinc-900 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-100">
         {document.direction === "income" ? "Ingreso" : "Gasto"} ·{" "}
         {document.paymentDate} · {formatCurrency(document.base)} ·{" "}
         {document.review ? "Revisada" : "Pendiente"}
       </summary>
-      <p>
-        IVA {document.rate} % · {formatCurrency(document.vat)}
-      </p>
+      <div className={`${mutedClass} flex flex-wrap gap-x-4 gap-y-2`}>
+        <button
+          type="button"
+          className={linkClass}
+          onClick={() => openPayment(document.id)}
+        >
+          IVA {document.rate} % · {formatCurrency(document.vat)}
+        </button>
+        <button
+          type="button"
+          className={linkClass}
+          onClick={() => openPayment(document.id)}
+        >
+          Total · {formatCurrency(document.paymentTotal)}
+        </button>
+      </div>
       <ul className="break-all">
         {document.references.map((reference) => {
           const { href, label } = invoiceLink(document.id, reference)
@@ -108,7 +127,7 @@ function DocumentReview({
             <li key={reference}>
               {href ? (
                 <a
-                  className="underline"
+                  className={linkClass}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -122,17 +141,10 @@ function DocumentReview({
           )
         })}
       </ul>
-      <button
-        type="button"
-        className={buttonClass}
-        onClick={() => openPayment(document.id)}
-      >
-        Abrir pago
-      </button>
       {document.issue !== undefined && <p>{document.issue}</p>}
       <form onSubmit={submit}>
         <fieldset disabled={pending} className="grid gap-2 sm:grid-cols-2">
-          <label>
+          <label className={labelClass}>
             Fecha fiscal
             <input
               className={controlClass}
@@ -143,7 +155,7 @@ function DocumentReview({
               required
             />
           </label>
-          <label>
+          <label className={labelClass}>
             Tratamiento
             <select
               className={controlClass}
@@ -168,7 +180,7 @@ function DocumentReview({
           </label>
           {document.references.length > 1 && (
             <>
-              <label>
+              <label className={labelClass}>
                 Factura aplicable
                 <select
                   name="reference"
@@ -181,7 +193,7 @@ function DocumentReview({
                   ))}
                 </select>
               </label>
-              <label>
+              <label className={labelClass}>
                 Base de la factura
                 <input
                   name="base"
@@ -192,7 +204,7 @@ function DocumentReview({
                   defaultValue={document.review?.base}
                 />
               </label>
-              <label>
+              <label className={labelClass}>
                 Cuota de IVA de la factura
                 <input
                   name="vat"
@@ -207,7 +219,7 @@ function DocumentReview({
           )}
           {document.direction === "outcome" && (
             <>
-              <label>
+              <label className={labelClass}>
                 <input
                   type="checkbox"
                   name="vatDeductible"
@@ -215,7 +227,7 @@ function DocumentReview({
                 />{" "}
                 IVA deducible
               </label>
-              <label>
+              <label className={labelClass}>
                 <input
                   type="checkbox"
                   name="incomeTaxDeductible"
@@ -225,7 +237,7 @@ function DocumentReview({
               </label>
             </>
           )}
-          <label>
+          <label className={labelClass}>
             Motivo o comprobación
             <input
               className={controlClass}
@@ -235,7 +247,7 @@ function DocumentReview({
               defaultValue={document.review?.reason}
             />
           </label>
-          <button type="submit" className={buttonClass}>
+          <button type="submit" className={primaryButtonClass}>
             Guardar revisión
           </button>
         </fieldset>
@@ -267,9 +279,9 @@ function InputReview({
     })
   }
   return (
-    <form onSubmit={submit} className="rounded border p-3">
+    <form onSubmit={submit} className={`${cardClass} p-4`}>
       <fieldset disabled={pending} className="grid gap-2 sm:grid-cols-2">
-        <label htmlFor={amountId}>
+        <label className={labelClass} htmlFor={amountId}>
           {FISCAL_INPUT_LABELS[name]}
           {name === "obligation" ? (
             <select
@@ -295,7 +307,7 @@ function InputReview({
             />
           )}
         </label>
-        <label>
+        <label className={labelClass}>
           Motivo o referencia
           <input
             name="reason"
@@ -305,7 +317,7 @@ function InputReview({
             defaultValue={input?.reason}
           />
         </label>
-        <button type="submit" className={buttonClass}>
+        <button type="submit" className={primaryButtonClass}>
           Guardar dato
         </button>
       </fieldset>
@@ -360,14 +372,16 @@ export function FiscalDraftView({
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-xl font-semibold">Borradores fiscales · 2026</h1>
-      <p>
+    <div className="space-y-6">
+      <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+        Borradores fiscales · 2026
+      </h1>
+      <p className={mutedClass}>
         IVA trimestral en régimen general e IRPF en estimación directa. Revisa
         el borrador antes de trasladar los importes a la AEAT.
       </p>
-      <div className="flex flex-wrap gap-3">
-        <label>
+      <div className={`${cardClass} flex flex-wrap items-end gap-3 p-4`}>
+        <label className={labelClass}>
           Modelo
           <select
             value={model}
@@ -386,7 +400,7 @@ export function FiscalDraftView({
           </select>
         </label>
         {model !== "390" && (
-          <label>
+          <label className={labelClass}>
             Trimestre
             <select
               value={quarter}
@@ -403,8 +417,10 @@ export function FiscalDraftView({
           </label>
         )}
       </div>
-      {Boolean(problem) && <p role="alert">{problem}</p>}
-      {Boolean(error) && <p role="alert">No se pudo cargar el borrador.</p>}
+      {Boolean(problem) && <ErrorBanner>{problem}</ErrorBanner>}
+      {Boolean(error) && (
+        <ErrorBanner>No se pudo cargar el borrador.</ErrorBanner>
+      )}
       {Boolean(isLoading) && <p role="status">Calculando…</p>}
       {data !== undefined && (
         <>
@@ -412,10 +428,12 @@ export function FiscalDraftView({
             Pagos sin factura o solo con recibo excluidos del histórico
             consultado: {data.ignored}.
           </p>
-          <h2 className="font-semibold">
-            {data.pending.length
-              ? "Borrador parcial"
-              : "Borrador de operaciones interiores revisadas"}
+          <h2>
+            <Badge tone={data.pending.length ? "warning" : "success"}>
+              {data.pending.length
+                ? "Borrador parcial"
+                : "Borrador de operaciones interiores revisadas"}
+            </Badge>
           </h2>
           <ul>
             {data.pending.map((item) => (
@@ -424,21 +442,17 @@ export function FiscalDraftView({
           </ul>
           <section className="grid gap-2" aria-label="Casillas">
             {data.cells.map((cell) => (
-              <details key={cell.label} className="rounded border p-3">
-                <summary className="cursor-pointer">
+              <details key={cell.label} className={`${cardClass} p-4`}>
+                <summary className="cursor-pointer rounded-sm text-sm font-semibold text-zinc-900 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-100">
                   {cell.code} · {cell.label} · {formatCurrency(cell.amount)}
                   {cell.pending ? " · subtotal conocido" : ""}
                 </summary>
                 <ul>
                   {cell.documentIds.map((id) => (
                     <li key={id}>
-                      <button
-                        type="button"
-                        className="underline"
-                        onClick={() => setPaymentId(id)}
-                      >
+                      <a className={linkClass} href={`#document-${id}`}>
                         Pago {id}
-                      </button>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -446,7 +460,9 @@ export function FiscalDraftView({
             ))}
           </section>
           <section className="space-y-2" aria-label="Datos adicionales">
-            <h2 className="font-semibold">Datos adicionales</h2>
+            <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">
+              Datos adicionales
+            </h2>
             {fiscalInputs(model).map((name) => {
               const key = fiscalInputKey(name, quarter)
               return (
@@ -461,7 +477,9 @@ export function FiscalDraftView({
             })}
           </section>
           <section className="space-y-2" aria-label="Facturas">
-            <h2 className="font-semibold">Facturas del período</h2>
+            <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">
+              Facturas del período
+            </h2>
             {data.documents.map((document) => (
               <DocumentReview
                 key={`${document.id}:${document.fingerprint}`}

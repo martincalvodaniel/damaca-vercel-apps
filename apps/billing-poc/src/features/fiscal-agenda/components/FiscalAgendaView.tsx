@@ -3,6 +3,10 @@
 
 import Link from "next/link"
 import { useState } from "react"
+import AddButton from "@/components/ui/AddButton"
+import { Badge } from "@/components/ui/Badge"
+import { EmptyState } from "@/components/ui/EmptyState"
+import { ErrorBanner } from "@/components/ui/ErrorBanner"
 import { FetchError } from "@/lib/client/swr-fetcher"
 import type { FiscalTask } from "@/lib/domain/entities/fiscal-task"
 import {
@@ -19,7 +23,15 @@ import {
   useFiscalAgendaMutation,
 } from "../hooks/useFiscalAgenda"
 import { FiscalTaskForm } from "./FiscalTaskForm"
-import { buttonClass, controlClass } from "./styles"
+import {
+  buttonClass,
+  cardClass,
+  controlClass,
+  labelClass,
+  linkClass,
+  mutedClass,
+  primaryButtonClass,
+} from "./styles"
 
 function deadlines(task: FiscalTask) {
   const paymentDue = fiscalPaymentDue(task)
@@ -113,12 +125,12 @@ export function FiscalAgendaView({
   }
 
   return (
-    <div className="space-y-5">
-      <Link className="underline" href="/fiscal-agenda/drafts">
+    <div className="space-y-6">
+      <Link className={linkClass} href="/fiscal-agenda/drafts">
         Ver borradores 303, 130 y 390
       </Link>
-      <div className="flex flex-wrap items-end gap-3">
-        <label>
+      <div className={`${cardClass} flex flex-wrap items-end gap-3 p-4`}>
+        <label className={labelClass}>
           Año de vencimiento
           <select
             className={controlClass}
@@ -142,7 +154,7 @@ export function FiscalAgendaView({
             )}
           </select>
         </label>
-        <label>
+        <label className={labelClass}>
           Estado
           <select
             className={controlClass}
@@ -155,7 +167,7 @@ export function FiscalAgendaView({
             <option>Completado</option>
           </select>
         </label>
-        <label>
+        <label className={labelClass}>
           Modelo
           <select
             className={controlClass}
@@ -168,20 +180,18 @@ export function FiscalAgendaView({
             ))}
           </select>
         </label>
-        <button
-          className={buttonClass}
-          type="button"
+        <AddButton
+          ariaLabel="Añadir trámite"
+          title="Añadir trámite"
           disabled={isMutating}
           onClick={() => setEditing("new")}
-        >
-          Añadir trámite
-        </button>
+        />
       </div>
-      {Boolean(problem) && <p role="alert">{problem}</p>}
+      {Boolean(problem) && <ErrorBanner>{problem}</ErrorBanner>}
       {Boolean(message) && <p role="status">{message}</p>}
       {Boolean(isLoading) && <p role="status">Cargando agenda…</p>}
       {Boolean(error) && (
-        <p role="alert">No se pudo cargar la agenda fiscal.</p>
+        <ErrorBanner>No se pudo cargar la agenda fiscal.</ErrorBanner>
       )}
       {editing !== null && (
         <FiscalTaskForm
@@ -189,19 +199,24 @@ export function FiscalAgendaView({
           task={editing === "new" ? undefined : editing}
           today={today}
           pending={isMutating}
+          problem={problem}
           onCancel={() => setEditing(null)}
           onSave={(action, nextYear) => void save(action, nextYear)}
         />
       )}
       {next !== undefined && (
-        <p className="rounded-md border p-3">
+        <p className={`${cardClass} ${mutedClass} p-4`}>
           <strong>Próximo vencimiento</strong> · {next.title} ·{" "}
           {formatDate(fiscalDue(next))}
         </p>
       )}
       {data !== undefined && (
         <section className="space-y-3" aria-label="Trámites incorporados">
-          {shown.length === 0 && <p>No hay trámites para estos filtros.</p>}
+          {shown.length === 0 && (
+            <EmptyState variant="card">
+              No hay trámites para estos filtros.
+            </EmptyState>
+          )}
           <ul className="space-y-3">
             {shown.map((task) => {
               const latest = official.get(task.id)
@@ -211,15 +226,31 @@ export function FiscalAgendaView({
                 !task.paidOn &&
                 fiscalDatesChanged(task, latest)
               return (
-                <li key={task.id} className="space-y-2 rounded-lg border p-4">
-                  <h2 className="font-semibold">
-                    {task.title} · {fiscalStatus(task, today)}
-                  </h2>
+                <li
+                  key={task.id}
+                  className={`${cardClass} ${mutedClass} space-y-3 p-4`}
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">
+                      {task.title}
+                    </h2>
+                    <Badge
+                      tone={
+                        fiscalStatus(task, today) === "Vencido"
+                          ? "danger"
+                          : fiscalStatus(task, today) === "Completado"
+                            ? "success"
+                            : "info"
+                      }
+                    >
+                      {fiscalStatus(task, today)}
+                    </Badge>
+                  </div>
                   <p>{taskPeriod(task)}</p>
                   {task.exercise === 2026 &&
                     ["303", "130", "390"].includes(task.model) && (
                       <Link
-                        className="underline"
+                        className={linkClass}
                         href={`/fiscal-agenda/drafts?model=${task.model}&quarter=${task.model === "390" ? "4" : task.period[0]}`}
                       >
                         Ver borrador
@@ -237,7 +268,7 @@ export function FiscalAgendaView({
                       Justificante{" "}
                       {receiptLink(task.receipt) ? (
                         <a
-                          className="underline"
+                          className={linkClass}
                           href={receiptLink(task.receipt)}
                           rel="noreferrer"
                         >
@@ -254,7 +285,7 @@ export function FiscalAgendaView({
                     </p>
                   )}
                   {task.source !== undefined && (
-                    <a className="underline" href={task.source}>
+                    <a className={linkClass} href={task.source}>
                       Fuente oficial AEAT
                     </a>
                   )}
@@ -330,8 +361,8 @@ export function FiscalAgendaView({
         </p>
       )}
       {suggestions.length > 0 && (
-        <details className="space-y-3 rounded-lg border p-4">
-          <summary className="cursor-pointer font-semibold">
+        <details className={`${cardClass} space-y-3 p-4`}>
+          <summary className="cursor-pointer rounded-sm font-semibold text-zinc-900 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-100">
             Sugerencias oficiales
           </summary>
           <p>
@@ -339,7 +370,7 @@ export function FiscalAgendaView({
             fiscal.
           </p>
           <button
-            className={buttonClass}
+            className={primaryButtonClass}
             type="button"
             disabled={isMutating || selected.length === 0}
             onClick={() => incorporate(selected)}
@@ -365,7 +396,7 @@ export function FiscalAgendaView({
                   />
                   {task.title} · {taskPeriod(task)} · {deadlines(task)}
                 </label>
-                <a className="underline" href={task.source}>
+                <a className={linkClass} href={task.source}>
                   AEAT
                 </a>
                 <button
