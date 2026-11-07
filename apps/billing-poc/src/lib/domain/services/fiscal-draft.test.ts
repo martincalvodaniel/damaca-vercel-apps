@@ -211,3 +211,19 @@ it("includes ordinary invoiced sales and expenses without manual review", () => 
   const annual = calculateFiscalDraft(records, settings, "390", 2026, 4, TODAY)
   expect(annual.cells.find((cell) => cell.code === "49")?.amount).toBe(10.5)
 })
+
+it("treats full and simplified invoices alike and reports the actual tax issue", () => {
+  const records = [
+    payment("full", { invoice: invoice("A") }),
+    payment("simple", { invoice: { ...invoice("B"), type: "SimpleInvoice" } }),
+    payment("zero", { invoice: invoice("C"), vat: 0, vatAmount: 0 }),
+  ]
+  const draft = calculateFiscalDraft(records, empty(), "303", 2026, 1, TODAY)
+  expect(draft.cells.find((cell) => cell.code === "09")?.documentIds).toEqual([
+    "full",
+    "simple",
+  ])
+  expect(
+    draft.documents.find((document) => document.id === "zero")?.issue
+  ).toContain("Tipo de IVA del 0 %")
+})

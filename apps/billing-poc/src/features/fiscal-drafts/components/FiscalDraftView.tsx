@@ -342,6 +342,7 @@ export function FiscalDraftView({
 }) {
   const [model, setModel] = useState(initialModel)
   const [quarter, setQuarter] = useState(initialQuarter)
+  const [incidentsOnly, setIncidentsOnly] = useState(false)
   const [problem, setProblem] = useState("")
   const [paymentId, setPaymentId] = useState<string | null>(null)
   const { data, error, isLoading, mutate } = useFiscalDraft(
@@ -350,6 +351,11 @@ export function FiscalDraftView({
     quarter
   )
   const { trigger, isMutating } = useUpdateFiscalDraft(owner, model, quarter)
+
+  const visibleDocuments =
+    data?.documents.filter(
+      (document) => !incidentsOnly || Boolean(document.issue)
+    ) ?? []
 
   function closePayment() {
     setPaymentId(null)
@@ -458,7 +464,11 @@ export function FiscalDraftView({
                 <ul>
                   {cell.documentIds.map((id) => (
                     <li key={id}>
-                      <a className={linkClass} href={`#document-${id}`}>
+                      <a
+                        className={linkClass}
+                        href={`#document-${id}`}
+                        onClick={() => setIncidentsOnly(false)}
+                      >
                         Pago {id}
                       </a>
                     </li>
@@ -488,7 +498,27 @@ export function FiscalDraftView({
             <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">
               Facturas del período
             </h2>
-            {data.documents.map((document) => (
+            <label className={labelClass}>
+              Estado de la factura
+              <select
+                className={controlClass}
+                value={incidentsOnly ? "issues" : "all"}
+                onChange={(event) =>
+                  setIncidentsOnly(event.target.value === "issues")
+                }
+              >
+                <option value="all">Todas</option>
+                <option value="issues">Con incidencia</option>
+              </select>
+            </label>
+            {visibleDocuments.length === 0 && (
+              <p className={mutedClass}>
+                {incidentsOnly
+                  ? "No hay facturas con incidencia."
+                  : "No hay facturas en este período."}
+              </p>
+            )}
+            {visibleDocuments.map((document) => (
               <DocumentReview
                 key={`${document.id}:${document.fingerprint}`}
                 document={document}

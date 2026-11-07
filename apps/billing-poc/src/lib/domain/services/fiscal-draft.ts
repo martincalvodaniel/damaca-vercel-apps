@@ -72,12 +72,15 @@ export function fiscalDocuments(
         )
       ),
     ].sort()
-    const special =
-      invoices.some((invoice) => invoice.type.startsWith("Rectificative")) ||
-      !!payment.surcharge ||
-      ![4, 10, 21].includes(payment.vat) ||
-      payment.netAmount < 0 ||
-      payment.vatAmount < 0
+    const issues = [
+      invoices.some((invoice) => invoice.type.startsWith("Rectificative")) &&
+        "Factura rectificativa vinculada al pago.",
+      Boolean(payment.surcharge) && "El pago tiene recargo de equivalencia.",
+      ![4, 10, 21].includes(payment.vat) &&
+        `Tipo de IVA del ${payment.vat} % fuera del cálculo ordinario.`,
+      (payment.netAmount < 0 || payment.vatAmount < 0) &&
+        "La base o la cuota de IVA es negativa.",
+    ].filter(Boolean)
     const fingerprint = JSON.stringify([
       payment.date,
       payment.type,
@@ -118,11 +121,15 @@ export function fiscalDocuments(
       rate: payment.vat,
       base: resolved ? (review?.base ?? payment.netAmount) : payment.netAmount,
       vat: resolved ? (review?.vat ?? payment.vatAmount) : payment.vatAmount,
-      issue: special
-        ? "Operación especial o rectificativa pendiente de tratamiento fiscal."
-        : references.length > 1 && !resolved
-          ? "Varias facturas vinculadas al mismo pago."
-          : undefined,
+      issue:
+        [
+          ...issues,
+          references.length > 1 &&
+            !resolved &&
+            "Varias facturas vinculadas al mismo pago.",
+        ]
+          .filter(Boolean)
+          .join(" ") || undefined,
       review,
     })
   }
@@ -135,7 +142,9 @@ export function fiscalDocuments(
       document.review?.classification !== "excluded" &&
       references.some((ref) => (occurrences.get(ref) ?? 0) > 1)
     ) {
-      document.issue = "Factura vinculada a varios pagos."
+      document.issue = [document.issue, "Factura vinculada a varios pagos."]
+        .filter(Boolean)
+        .join(" ")
     }
   }
   return { documents, ignored }

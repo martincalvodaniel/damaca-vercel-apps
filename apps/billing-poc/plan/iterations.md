@@ -243,7 +243,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: tokens Tailwind y componentes existentes, sin dependencias nuevas.
 - Aceptación: superficies crema, acciones/ingresos oliva, gastos/errores terracota; tema oscuro cálido; gráficos armonizados; conservar marca de Google, documentos PDF y comportamiento.
 - Validación: contraste de pares principales, cobertura de tokens, Biome, tipos, suite y build; inspección visual si el navegador está disponible.
-- Evidencia: [BILL-24](iteration-log.md#bill-24--paleta-oliva-y-terracota).
+- Evidencia: [BILL-24](archive/2026-11-07/bill-24.md#bill-24--paleta-oliva-y-terracota).
 
 ## BILL-25 — Superficies neutras y donuts originales
 
@@ -334,3 +334,12 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: inclusión automática, respeto a ajustes explícitos y detección de incidencias.
 - Validación: lint, tipos, pruebas y build.
 - Evidencia: [BILL-33](iteration-log.md#bill-33--inclusión-automática-de-pagos-facturados).
+
+## BILL-34 — Filtro de incidencias fiscales
+
+- Estado: `validated`.
+- Objetivo: filtrar facturas por incidencia y mostrar su causa concreta.
+- Rutas: vista y cálculo fiscal, pruebas y planificación.
+- Aceptación: filtro solo visual y mismo tratamiento de factura completa y simplificada con datos equivalentes.
+- Validación: lint, tipos, pruebas y build.
+- Evidencia: [BILL-34](iteration-log.md#bill-34--filtro-de-incidencias-fiscales).
