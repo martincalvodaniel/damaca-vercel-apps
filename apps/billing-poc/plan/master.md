@@ -83,3 +83,7 @@ La instalación web en modo independiente se documenta en [AGW-21](../../../plan
 ## Investigación fiscal
 
 El [estudio de obligaciones fiscales del autónomo](fiscalidad-autonomos.md) recoge calendario, condiciones, evidencias y casos de aceptación para futuras funcionalidades. El alcance fiscal de producto queda pendiente de decisión.
+
+## Agenda fiscal
+
+`/fiscal-agenda` permite incorporar sugerencias AEAT por modelo y período y crear trámites manuales. El catálogo inicial cubre vencimientos de 2026 en territorio común. Presentación, domiciliación y pago se consultan por separado y el justificante se registra como referencia o enlace. Los datos se aíslan por usuario en la colección `fiscalTasks`. El catálogo y los trámites se consultan por año de vencimiento. [Alcance y validación](iterations.md#bill-29--agenda-fiscal).

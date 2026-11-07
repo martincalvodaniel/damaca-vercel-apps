@@ -35,6 +35,11 @@ const NAV_ITEMS: readonly NavItem[] = [
     matches: (p) => p === "/events",
   },
   {
+    href: "/fiscal-agenda",
+    label: "Agenda fiscal",
+    matches: (p) => p === "/fiscal-agenda",
+  },
+  {
     href: "/invoices",
     label: "Facturas",
     matches: (p) => p === "/invoices",

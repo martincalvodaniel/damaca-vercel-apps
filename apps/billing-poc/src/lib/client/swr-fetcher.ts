@@ -10,8 +10,8 @@ export class FetchError extends Error {
   }
 }
 
-export async function fetcher<T>(url: string): Promise<T> {
-  const response = await fetch(url, { credentials: "same-origin" })
+export async function fetcher<T>(url: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(url, { credentials: "same-origin", ...init })
 
   if (!response.ok) {
     const contentType = response.headers.get("content-type") ?? ""

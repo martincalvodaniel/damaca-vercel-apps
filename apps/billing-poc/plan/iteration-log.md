@@ -8,15 +8,7 @@ Archivo adicional: [BILL-17](archive/2026-11-07/bill-17.md).
 
 Archivo adicional: [BILL-18](archive/2026-11-07/bill-18.md).
 
-## BILL-19 — Controles de cabecera en navegación de escritorio
-
-- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits pendientes. Capacidad: 78 % en 5 h y 51 % en 7 d; estimación suficiente para entrega completa con reservas.
-- Aceptación: [BILL-19](iterations.md#bill-19--controles-de-cabecera-en-navegación-de-escritorio).
-
-- Implementado: opción compartida de PageLayout para integrar la cabecera en el bloque fijo de escritorio. Activada en Ausencias, Eventos, Mes, Productos y Año. Navegación y controles comparten bordes continuos en escritorio; el bloque completo conserva franja opaca y posición fija.
-- Móvil: contenedores de agrupación con `display: contents`; solo la navegación continúa fija y los controles siguen en el flujo de la página, con separación equivalente. CSS determina el layout: sin listeners de tamaño, portales, duplicación de controles ni remontajes al redimensionar. Los otros layouts no activan la opción. Los dos + de Mes se conservan.
-- Revisión React/accesibilidad: solo composición y clases responsive; mismos hooks/callbacks, IDs, orden de controles y estado de formulario. Sin nuevas dependencias. Se archiva BILL-09 para mantener diez entregas recientes. Sin comprobación visual interactiva en navegador; revisión estática del árbol y clases.
-- Validación: `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 992 pruebas correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto (16,48 s). Biome sobre los siete TSX editados sin hallazgos tras corregir un aviso de ternario; caché remota de Turbo no disponible y comprobaciones locales completas. Enlaces y diff check verificados. Lint preparado, commit, push y SHA remoto se verifican al cierre.
+Archivo adicional: [BILL-19](archive/2026-11-07/bill-19.md).
 
 ## BILL-20 — Una fila de controles en escritorio
 
@@ -107,3 +99,12 @@ Archivo adicional: [BILL-18](archive/2026-11-07/bill-18.md).
 - Entrega: reglas autonómicas y circuito estatal, matriz de beneficio y regresión basada en las entidades existentes y primer corte propuesto de agenda y exportación.
 - Validación: fuentes oficiales de Aragón, AEAT y BOA, revisión estática de Payment e Invoice, enlaces locales y diff. Entrega documental.
 - Se archiva BILL-18 para conservar diez entregas recientes.
+
+## BILL-29 — Agenda fiscal
+
+- Inicio: rama `int`, árbol limpio. Capacidad inicial del 94 % en 5 h y 13 % en 7 d.
+- Aceptación: [BILL-29](iterations.md#bill-29--agenda-fiscal).
+- Entrega: página y API autenticada, catálogo AEAT 2026, sugerencias idempotentes y trámites manuales con seguimiento de presentación, pago y justificante. Fechas ajustadas a Madrid, catálogo corregible de forma explícita para trámites pendientes y persistencia aislada por cuenta.
+- Validación: Biome sin hallazgos en los archivos editados, tipos y 1.033 pruebas correctas. Build webpack correcto tras repetir con acceso a Google Fonts. Las pruebas de contratos ejercitan aislamiento, altas, duplicados, actualización de fechas y fechas inválidas.
+- Navegador: incorporación de 303 y alta de un trámite manual a 390 y 1440 px con Chrome y API simulada. No se ejercitaron OAuth ni MongoDB real. Los flujos de Mes, Año, facturas, encargos y cocciones se revisaron mediante la suite existente y el diff de las rutas y repositorios.
+- Se archiva BILL-19 para conservar diez entregas recientes.

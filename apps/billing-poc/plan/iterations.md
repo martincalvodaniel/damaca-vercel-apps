@@ -193,7 +193,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: slot de cabecera, acciones y breakpoint `xl` existentes; sin nuevas dependencias.
 - Aceptación: buscadores, selectores de periodo/gráficos/plantillas, filtros y acciones de cabecera integrados bajo el menú y fijos en escritorio; móvil conserva ubicación y scroll actuales; un único árbol de controles sin duplicar estado/IDs ni remontar al cambiar anchura; otras páginas conservadas.
 - Validación: Biome, tipos, suite y build de billing; revisión responsive y del árbol de componentes.
-- Evidencia: [BILL-19](iteration-log.md#bill-19--controles-de-cabecera-en-navegación-de-escritorio).
+- Evidencia: [BILL-19](archive/2026-11-07/bill-19.md#bill-19--controles-de-cabecera-en-navegación-de-escritorio).
 
 ## BILL-20 — Una fila de controles en escritorio
 
@@ -285,3 +285,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: distinguir obligaciones estatales y autonómicas, proponer un orden de entrega y vincular cada riesgo a una comprobación.
 - Validación: contraste de fuentes oficiales, revisión del código afectado por las propuestas, enlaces locales y `git diff --check`.
 - Evidencia: [BILL-28](iteration-log.md#bill-28--particularidades-de-aragón-y-priorización-fiscal).
+
+## BILL-29 — Agenda fiscal
+
+- Estado: `validated`.
+- Objetivo: incorporar vencimientos oficiales y manuales y registrar presentación, pago y justificante.
+- Rutas: módulo fiscal, API, repositorio, navegación y planificación de Billing.
+- Dependencias: calendario AEAT 2026, sesión, MongoDB y SWR.
+- Aceptación: agenda aislada por usuario, importación idempotente, edición manual y actualización explícita de sugerencias pendientes; sin cambios en la exportación existente.
+- Validación: catálogo, estados y contratos, lint incremental, tipos, pruebas y build.
+- Evidencia: [BILL-29](iteration-log.md#bill-29--agenda-fiscal).

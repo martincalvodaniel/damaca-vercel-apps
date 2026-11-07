@@ -89,3 +89,10 @@ export type MongoCommission = Omit<
 export type MongoUserPreferences = UserPreferences & {
   _id: string
 }
+
+export type MongoFiscalTask =
+  import("@/lib/domain/entities/fiscal-task").FiscalTask & {
+    _id: string
+    owner: string
+    revision: string
+  }
