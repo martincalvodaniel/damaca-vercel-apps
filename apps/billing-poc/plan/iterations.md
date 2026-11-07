@@ -173,7 +173,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: controles, agrupación y callbacks existentes; sin nuevas dependencias.
 - Aceptación: ambos + de Mes abren el mismo formulario; Cocciones muestra Pagadas cerrada por defecto antes de las vigentes, sin cambiar Encargos; textos visibles de Facturas y reducción de numeración en español, conservando valores internos y comportamiento.
 - Validación: Biome, tipos, suite y build de billing; revisión estática de orden, callbacks y textos.
-- Evidencia: [BILL-17](iteration-log.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).
+- Evidencia: [BILL-17](archive/2026-11-07/bill-17.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).
 
 ## BILL-18 — Navegación de escritorio
 
@@ -265,3 +265,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Contrato: GET/PUT `/api/user-preferences` usan exclusivamente identidad de sesión; cuerpo PUT estricto `{theme: original|olive}`; 401/403 sin autorización, 400 inválido, 500 error de persistencia; respuestas privadas sin caché HTTP compartida.
 - Validación: pruebas herméticas de aislamiento, validación, fallos, render inicial/enlaces, helpers SWR y paletas; lint incremental/preparado, tipos, suite y build. Verificación autenticada cuando el entorno lo permita.
 - Evidencia: [BILL-26](iteration-log.md#bill-26--temas-y-configuración-por-usuario).
+
+## BILL-27 — Identidad de instalación
+
+- Estado: `validated`.
+- Objetivo: distinguir la instalación de integración y corregir el fondo azul del sello.
+- Rutas: manifiesto de Billing, configuración de caché de su build, PNG de instalación y entrada de Billing en el generador de iconos.
+- Dependencias: referencia Git de Vercel y generador existente.
+- Aceptación: `billing-int` en `int`, `billing` por defecto, sello rojo sobre fondo neutro en las variantes opacas.
+- Validación: manifiesto en ambas ramas simuladas, píxeles de fondo, lint, tipos, pruebas y build.
+- Evidencia: [BILL-27](iteration-log.md#bill-27--identidad-de-instalación).

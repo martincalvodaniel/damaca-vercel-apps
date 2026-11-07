@@ -26,6 +26,8 @@ Ninguna para BILL-14.
 
 Browser and home-screen icons use local SVG sources, a 16/32/48-pixel ICO fallback, installation PNGs and an Apple Touch Icon. Existing PWA manifests also declare an opaque maskable variant. Regenerate with `bun run icons:generate` from the repository root. Shared status and evidence: [AGW-10](../../../plan/iterations.md#agw-10--application-favicons) and [delivery log](../../../plan/iteration-log.md#agw-10-application-favicons).
 
+La app instalada se llama `billing-int` cuando Vercel expone la rama `int` durante el build y `billing` por defecto. Las variantes opacas del sello usan un fondo neutro.
+
 ## Cocciones
 
 Cocciones (`/firings`) comparte los patrones de Encargos con datos separados: título, cliente/fecha límite/descripción opcionales, conceptos e IVA (21 % inicial). No muestra anticipo. Plantillas independientes con nombre y precio en EUR (IVA incluido), gestionadas en una sección al inicio cerrada por defecto. Los conceptos copian los valores de la plantilla sin referencia a productos ni efectos de stock. Editar/eliminar plantillas no modifica cocciones previas.

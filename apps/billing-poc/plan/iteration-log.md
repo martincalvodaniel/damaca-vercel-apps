@@ -4,16 +4,7 @@ Archivo histórico: [BILL-01 y BILL-02](archive/2026-11-01/bill-01-02.md), [BILL
 
 Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2026-11-05/bill-13.md), [BILL-14](archive/2026-11-05/bill-14.md), [BILL-15](archive/2026-11-05/bill-15.md), [BILL-16](archive/2026-11-05/bill-16.md).
 
-## BILL-17 — Alta mensual, orden de cocciones y traducción de facturas
-
-- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits pendientes de publicación. Capacidad: 87 % restante en 5 h y 53 % en 7 d; estimación suficiente para implementar, validar y publicar manteniendo reservas.
-- Aceptación: [BILL-17](iterations.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).
-
-- Implementado: Mes mantiene el + junto a plantillas y añade otro en navegación con el mismo callback. Cocciones sitúa Pagadas antes de las vigentes, preservando cierre inicial, contador, tarjetas y el orden de Encargos.
-- Facturas: traducidos estado vacío, nombres de las cuatro series, numeración, listado, fecha del pago y todos los textos de revisión/reducción. Errores de carga en español; las cuatro causas de rechazo de reducción conservan su significado mediante mensajes españoles, sin mostrar mensajes internos ingleses. Fallbacks de mutación también en español; valores internos y prefijos sin cambios.
-- Revisión React: slot compartido de navegación, callbacks y SWR existentes, sin dependencias ni efectos nuevos. La misma sección de pagadas se renderiza una sola vez según el contexto. Iconos etiquetados y estilos claros/oscuros conservados. Sin verificación visual interactiva; revisión estática de orden y callbacks.
-- Se archiva BILL-07 para conservar diez entregas recientes. Validación y publicación se registran al cerrar.
-- Validación final: `bun run type-check --filter=@damaca/billing-poc`, correcto; `bun run test --filter=@damaca/billing-poc`, 992 correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack`, correcto (9,566 s). Biome explícito sobre los ocho TS/TSX editados sin hallazgos tras formato. Caché remota de Turbo no disponible; comprobaciones locales completas. Lint preparado, diff check, commit, push y SHA remoto se verifican al cierre.
+Archivo reciente: [BILL-17](archive/2026-11-07/bill-17.md).
 
 ## BILL-18 — Navegación de escritorio
 
@@ -108,3 +99,10 @@ Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2
 - Validación: Biome de los 20 archivos de código/pruebas editados y nuevos, correcto; tipos correctos; build webpack correcto (18,09 s), incluidas `/settings` y `/api/user-preferences`. Caché remota no disponible, comprobaciones locales completas. Revisión React: SWR sin efectos de fetch, callbacks estables, identidad compartida, carga SSR, labels/foco/pending, sin listeners ni dependencias nuevas. Se archiva BILL-16 para mantener diez entregas. Enlaces locales, diff y lint preparado se comprueban al cierre; commit/push/SHA remoto se verifican al publicar.
 - Herramientas: el CLI Postman instalado no admite `postman status` (`unknown command`); no se inicializa ni publica un workspace. El contrato queda en la iteración y las comprobaciones ejecutables usan los handlers locales con Bun.
 - Sin despliegue Vercel en esta entrega.
+
+## BILL-27 — Identidad de instalación
+
+- Inicio: 2026-11-07, rama `int` limpia. Capacidad restante: 89 % en 5 h y 5 % en 7 d.
+- Aceptación: [BILL-27](iterations.md#bill-27--identidad-de-instalación).
+- El manifiesto estático usa la referencia Git expuesta por Vercel. La caché de build de Billing distingue dicha referencia. El icono Apple y la variante recortable conservan el sello rojo sobre fondo neutro. Se archiva BILL-17.
+- Verificado: nombre y nombre corto con `int`, `main` y valor vacío; píxel de esquina opaco RGBA 250/250/250/255 en ambos PNG; build webpack con `int` y manifiesto prerenderizado `billing-int`; tipos correctos, 1025 pruebas correctas, Biome explícito y diff check correctos. Sin instalación en dispositivo ni despliegue como parte de esta entrega.
