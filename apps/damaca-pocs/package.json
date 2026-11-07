@@ -1,0 +1,28 @@
+{
+  "name": "@damaca/damaca-pocs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "bun run --bun next build",
+    "dev": "bun run --bun next dev --port 3008",
+    "start": "bun run --bun next start",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vercel/config": "catalog:",
+    "better-auth": "catalog:",
+    "mongodb": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "server-only": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "turbo": "2.11.10",
+    "typescript": "catalog:"
+  }
+}

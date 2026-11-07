@@ -176,6 +176,27 @@
         "typescript": "catalog:",
       },
     },
+    "apps/damaca-pocs": {
+      "name": "@damaca/damaca-pocs",
+      "version": "0.1.0",
+      "dependencies": {
+        "@vercel/config": "catalog:",
+        "better-auth": "catalog:",
+        "mongodb": "catalog:",
+        "next": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "server-only": "catalog:",
+      },
+      "devDependencies": {
+        "@types/bun": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "turbo": "2.11.10",
+        "typescript": "catalog:",
+      },
+    },
     "apps/lbdp": {
       "name": "@damaca/lbdp",
       "version": "0.1.0",
@@ -335,6 +356,8 @@
     "@damaca/dalis-tasks-events": ["@damaca/dalis-tasks-events@workspace:apps/dalis-tasks-events"],
 
     "@damaca/damaca-hub": ["@damaca/damaca-hub@workspace:apps/damaca-hub"],
+
+    "@damaca/damaca-pocs": ["@damaca/damaca-pocs@workspace:apps/damaca-pocs"],
 
     "@damaca/database-refresh": ["@damaca/database-refresh@workspace:packages/database-refresh"],
 
