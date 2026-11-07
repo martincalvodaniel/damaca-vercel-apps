@@ -16,15 +16,7 @@ Archivo adicional: [BILL-21](archive/2026-11-07/bill-21.md).
 
 Archivo adicional: [BILL-22](archive/2026-11-07/bill-22.md).
 
-## BILL-23 — Menú de navegación en anchuras intermedias
-
-- Inicio: 2026-11-05, rama `int`, base `0d524d0`, árbol limpio. Capacidad: 92 % en 5 h y 20 % en 7 d; margen suficiente para una entrega pequeña completa.
-- Aceptación: [BILL-23](iterations.md#bill-23--menú-de-navegación-en-anchuras-intermedias).
-- Reproducción estática antes del arreglo: el botón con `xl:hidden` está visible a 800/1100 px mientras el overlay con `sm:hidden` está oculto; a 390 px ambos visibles y a 1280 px ambos ocultos. Esto coincide con el síntoma aportado. No se añade una prueba que solo replique clases de implementación.
-
-- Fix: `MobileMenuOverlay` cambia `sm:hidden` por `xl:hidden`, alineado con NavigationBar. Comparación posterior a 390/800/1100/1280 px correcta: ambos visibles por debajo de xl y ocultos desde xl. Sin cambios de hooks, foco, cierre, acciones ni datos; revisión React del cambio de CSS.
-- Validación: Biome del componente correcto; tipos correctos; 998 pruebas correctas, 0 fallos; build webpack correcto (17,847 s). Caché remota no disponible; validación local completa. No se realizó comprobación interactiva en navegador. Se archiva BILL-13 para conservar diez entregas recientes.
-- Prueba Vercel asociada: consulta previa al push confirma `enableAffectedProjectsDeployments: false` en card-wars y ningún Ignored Build Step configurado. No se modifica configuración remota. Los registros posteriores se consultan tras publicar; la ausencia de un registro no prueba por sí sola el contador interno de cuota.
+Archivo adicional: [BILL-23](archive/2026-11-07/bill-23.md).
 
 ## BILL-24 — Paleta oliva y terracota
 
@@ -106,3 +98,11 @@ Archivo adicional: [BILL-22](archive/2026-11-07/bill-22.md).
 - Entrega: IVA y total del pago abren la modal desde el documento. El desglose vuelve a enlazar al documento y se elimina la acción separada. Agenda y Borradores usan superficies, controles, colores y estados de Billing, y Agenda reutiliza la modal y la confirmación de cabecera.
 - Validación: Biome, tipos, 1.040 pruebas y build webpack correctos. Revisión estática de temas claro y oscuro; sin comprobación visual autenticada.
 - Se archiva BILL-22 para conservar diez entregas recientes.
+
+## BILL-33 — Inclusión automática de pagos facturados
+
+- Inicio: rama `int`, árbol limpio. Capacidad inicial del 62 % en 5 h y 8 % en 7 d.
+- Aceptación: [BILL-33](iterations.md#bill-33--inclusión-automática-de-pagos-facturados).
+- Entrega: los tres borradores incluyen automáticamente las facturas ordinarias por fecha del pago y con deducción íntegra del gasto por defecto. Conservan los ajustes explícitos válidos y las incidencias de operaciones no clasificables.
+- Validación: Biome, tipos, 1.041 pruebas y build webpack. Prueba de inclusión sin ajuste en los tres modelos y de recálculo tras cambiar un importe. Sin contraste de declaraciones reales.
+- Se archiva BILL-23 para conservar diez entregas recientes.

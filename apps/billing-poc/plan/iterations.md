@@ -233,7 +233,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: breakpoint xl de NavigationBar, foco y cierre existentes.
 - Aceptación: botón y overlay disponibles por debajo de xl, incluidos 640–1279 px; navegación de escritorio desde xl; sin cambios de enlaces ni acciones.
 - Validación: comparación de visibilidad responsive en 390/800/1100/1280 px, Biome, tipos, suite y build.
-- Evidencia: [BILL-23](iteration-log.md#bill-23--menú-de-navegación-en-anchuras-intermedias).
+- Evidencia: [BILL-23](archive/2026-11-07/bill-23.md#bill-23--menú-de-navegación-en-anchuras-intermedias).
 
 ## BILL-24 — Paleta oliva y terracota
 
@@ -324,3 +324,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: enlaces visuales sobre ambos importes, sin botón separado; tarjetas, controles, estados y modal coherentes en claro y oscuro.
 - Validación: Biome, tipos, pruebas y build.
 - Evidencia: [BILL-32](iteration-log.md#bill-32--cohesión-de-la-interfaz-fiscal).
+
+## BILL-33 — Inclusión automática de pagos facturados
+
+- Estado: `validated`.
+- Objetivo: incorporar pagos facturados ordinarios sin confirmación individual.
+- Rutas: cálculo fiscal, vista, pruebas y planificación de Billing.
+- Dependencias: datos de pago y revisiones fiscales existentes.
+- Aceptación: inclusión automática, respeto a ajustes explícitos y detección de incidencias.
+- Validación: lint, tipos, pruebas y build.
+- Evidencia: [BILL-33](iteration-log.md#bill-33--inclusión-automática-de-pagos-facturados).

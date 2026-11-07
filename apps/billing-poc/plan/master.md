@@ -90,4 +90,4 @@ El [estudio de obligaciones fiscales del autónomo](fiscalidad-autonomos.md) rec
 
 ## Borradores fiscales de 2026
 
-La agenda enlaza borradores para IVA trimestral ordinario (303), IRPF en estimación directa (130) y resumen anual de IVA (390). Solo se incluyen pagos con factura aplicable y datos fiscales confirmados. Las revisiones y los ajustes se guardan aparte por cuenta. Los borradores indican qué partidas necesitan revisión y se usan como apoyo para la gestoría o la AEAT. [Alcance y validación](iterations.md#bill-30--borradores-fiscales-303-130-y-390).
+La agenda enlaza borradores para IVA trimestral ordinario (303), IRPF en estimación directa (130) y resumen anual de IVA (390). Los pagos facturados ordinarios se incluyen automáticamente por fecha de pago, con deducción íntegra por defecto para gastos y ajustes opcionales. Las revisiones y los ajustes se guardan aparte por cuenta. Los borradores indican qué partidas necesitan revisión y se usan como apoyo para la gestoría o la AEAT. [Alcance y validación](iterations.md#bill-30--borradores-fiscales-303-130-y-390).

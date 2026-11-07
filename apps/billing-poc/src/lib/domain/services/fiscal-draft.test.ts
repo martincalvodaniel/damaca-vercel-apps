@@ -106,9 +106,16 @@ it("moves an invoice to its confirmed quarter and invalidates changed amounts", 
     )?.amount
   ).toBe(21)
   const modified = { ...sale, vatAmount: 20 }
-  expect(
-    calculateFiscalDraft([modified], settings, "303", 2026, 1, TODAY).pending
-  ).toContain("1 facturas requieren revisión.")
+  const recalculated = calculateFiscalDraft(
+    [modified],
+    settings,
+    "303",
+    2026,
+    1,
+    TODAY
+  )
+  expect(recalculated.documents[0]?.review).toBeUndefined()
+  expect(recalculated.cells.find((cell) => cell.code === "09")?.amount).toBe(20)
 })
 
 it("accumulates the 130 and subtracts prior installments without deducting VAT twice", () => {
@@ -182,4 +189,25 @@ it("can resolve a duplicated link or select an invoice with confirmed amounts", 
     amount: 31.5,
     documentIds: ["first", "multiple"],
   })
+})
+
+it("includes ordinary invoiced sales and expenses without manual review", () => {
+  const records = [
+    payment("sale", { invoice: invoice("A") }),
+    payment("expense", {
+      type: "outcome",
+      netAmount: 50,
+      vatAmount: 10.5,
+      invoice: invoice("B"),
+    }),
+    payment("unbilled"),
+  ]
+  const settings = empty()
+  const vat = calculateFiscalDraft(records, settings, "303", 2026, 1, TODAY)
+  expect(vat.cells.find((cell) => cell.code === "46")?.amount).toBe(10.5)
+  expect(vat.ignored).toBe(1)
+  const income = calculateFiscalDraft(records, settings, "130", 2026, 1, TODAY)
+  expect(income.cells.find((cell) => cell.code === "02")?.amount).toBe(50)
+  const annual = calculateFiscalDraft(records, settings, "390", 2026, 4, TODAY)
+  expect(annual.cells.find((cell) => cell.code === "49")?.amount).toBe(10.5)
 })

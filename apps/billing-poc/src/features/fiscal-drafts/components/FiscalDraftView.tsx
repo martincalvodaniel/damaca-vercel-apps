@@ -102,7 +102,13 @@ function DocumentReview({
       <summary className="cursor-pointer rounded-sm text-sm font-semibold text-zinc-900 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-100">
         {document.direction === "income" ? "Ingreso" : "Gasto"} ·{" "}
         {document.paymentDate} · {formatCurrency(document.base)} ·{" "}
-        {document.review ? "Revisada" : "Pendiente"}
+        {document.issue
+          ? "Con incidencia"
+          : document.review?.classification === "excluded"
+            ? "Excluida"
+            : document.review
+              ? "Con ajuste"
+              : "Incluida automáticamente"}
       </summary>
       <div className={`${mutedClass} flex flex-wrap gap-x-4 gap-y-2`}>
         <button
@@ -223,7 +229,7 @@ function DocumentReview({
                 <input
                   type="checkbox"
                   name="vatDeductible"
-                  defaultChecked={document.review?.vatDeductible}
+                  defaultChecked={document.review?.vatDeductible ?? true}
                 />{" "}
                 IVA deducible
               </label>
@@ -231,7 +237,7 @@ function DocumentReview({
                 <input
                   type="checkbox"
                   name="incomeTaxDeductible"
-                  defaultChecked={document.review?.incomeTaxDeductible}
+                  defaultChecked={document.review?.incomeTaxDeductible ?? true}
                 />{" "}
                 Gasto deducible en IRPF
               </label>
@@ -248,7 +254,7 @@ function DocumentReview({
             />
           </label>
           <button type="submit" className={primaryButtonClass}>
-            Guardar revisión
+            Guardar ajuste
           </button>
         </fieldset>
       </form>
@@ -377,8 +383,10 @@ export function FiscalDraftView({
         Borradores fiscales · 2026
       </h1>
       <p className={mutedClass}>
-        IVA trimestral en régimen general e IRPF en estimación directa. Revisa
-        el borrador antes de trasladar los importes a la AEAT.
+        IVA trimestral en régimen general e IRPF en estimación directa. Los
+        pagos facturados ordinarios se incluyen automáticamente con la fecha del
+        pago y, en gastos, con deducción íntegra por defecto. Ajusta las
+        excepciones antes de trasladar los importes a la AEAT.
       </p>
       <div className={`${cardClass} flex flex-wrap items-end gap-3 p-4`}>
         <label className={labelClass}>
@@ -432,7 +440,7 @@ export function FiscalDraftView({
             <Badge tone={data.pending.length ? "warning" : "success"}>
               {data.pending.length
                 ? "Borrador parcial"
-                : "Borrador de operaciones interiores revisadas"}
+                : "Borrador de operaciones interiores"}
             </Badge>
           </h2>
           <ul>

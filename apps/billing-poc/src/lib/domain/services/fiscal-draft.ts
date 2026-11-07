@@ -166,15 +166,15 @@ export function calculateFiscalDraft(
   const relevant = documents.filter((doc) =>
     inScope(doc.review?.date ?? doc.paymentDate)
   )
-  const unresolved = relevant.filter((doc) => !doc.review || Boolean(doc.issue))
+  const unresolved = relevant.filter((doc) => Boolean(doc.issue))
   if (unresolved.length)
     pending.push(`${unresolved.length} facturas requieren revisión.`)
-  const confirmed = relevant.filter(
-    (doc) => !doc.issue && doc.review?.classification === "ordinary"
+  const included = relevant.filter(
+    (doc) => !doc.issue && doc.review?.classification !== "excluded"
   )
-  const income = confirmed.filter((doc) => doc.direction === "income")
-  const expenses = confirmed.filter((doc) => doc.direction === "outcome")
-  const deductible = expenses.filter((doc) => doc.review?.vatDeductible)
+  const income = included.filter((doc) => doc.direction === "income")
+  const expenses = included.filter((doc) => doc.direction === "outcome")
+  const deductible = expenses.filter((doc) => doc.review?.vatDeductible ?? true)
 
   function total(
     code: string,
@@ -209,7 +209,7 @@ export function calculateFiscalDraft(
       code,
       label,
       amount: euros(value),
-      documentIds: confirmed.map((doc) => doc.id),
+      documentIds: included.map((doc) => doc.id),
       pending: blocked || unresolved.length > 0,
     })
   }
@@ -229,9 +229,10 @@ export function calculateFiscalDraft(
     const costs = total(
       "02",
       "Gastos deducibles",
-      expenses.filter((doc) => doc.review?.incomeTaxDeductible),
+      expenses.filter((doc) => doc.review?.incomeTaxDeductible ?? true),
       (doc) =>
-        cents(doc.base) + (doc.review?.vatDeductible ? 0 : cents(doc.vat)),
+        cents(doc.base) +
+        ((doc.review?.vatDeductible ?? true) ? 0 : cents(doc.vat)),
       cents(extraExpenses?.amount ?? 0),
       !extraExpenses
     )
@@ -339,7 +340,7 @@ export function calculateFiscalDraft(
         pending.push("Exoneración de presentar el 390 confirmada.")
       for (const index of [1, 2, 3, 4] as const) {
         const declared = input(`declared${index}`)
-        const docs = confirmed.filter(
+        const docs = included.filter(
           (doc) => doc.review && quarterOf(doc.review.date) === index
         )
         const subtotal = docs.reduce(
@@ -347,7 +348,7 @@ export function calculateFiscalDraft(
             sum +
             (doc.direction === "income"
               ? cents(doc.vat)
-              : doc.review?.vatDeductible
+              : (doc.review?.vatDeductible ?? true)
                 ? -cents(doc.vat)
                 : 0),
           0
