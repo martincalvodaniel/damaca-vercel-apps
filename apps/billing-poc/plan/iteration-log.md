@@ -10,15 +10,7 @@ Archivo adicional: [BILL-18](archive/2026-11-07/bill-18.md).
 
 Archivo adicional: [BILL-19](archive/2026-11-07/bill-19.md).
 
-## BILL-20 — Una fila de controles en escritorio
-
-- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits locales pendientes. Capacidad: 75 % en 5 h y 51 % en 7 d; estimación suficiente para completar y publicar con reservas.
-- Aceptación: [BILL-20](iterations.md#bill-20--una-fila-de-controles-en-escritorio).
-
-- Implementado: NavigationBar oculta en escritorio la fila de altas separada cuando hay cabecera integrada. Eventos incorpora su + junto al selector mensual; Productos junto al buscador y acciones, con filtros en la misma banda horizontal. Mes reutiliza el + ya existente junto a plantillas y oculta el superior solo en escritorio.
-- Móvil: las altas superiores mantienen visibilidad y los botones adicionales de las cabeceras de Eventos/Productos se ocultan. Mes conserva sus dos +. Los controles con estado no se duplican; los botones de alta sin estado comparten exactamente sus callbacks. Sin cambios de datos, dependencias ni efectos.
-- Revisión estática de clases responsive, árbol, labels y callbacks; no se realizó verificación visual interactiva en navegador. Se archiva BILL-10 para mantener diez entregas recientes.
-- Validación: Biome sobre cinco TSX editados sin hallazgos; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 992 correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto (10,676 s). Caché remota de Turbo no disponible; comprobaciones locales completas. Enlaces locales comprobados. Lint preparado, diff check, commit, push y SHA remoto se verifican al cerrar.
+Archivo adicional: [BILL-20](archive/2026-11-07/bill-20.md).
 
 ## BILL-21 — Ausencias localizadas y tabla de pagos del cliente
 
@@ -108,3 +100,11 @@ Archivo adicional: [BILL-19](archive/2026-11-07/bill-19.md).
 - Validación: Biome sin hallazgos en los archivos editados, tipos y 1.033 pruebas correctas. Build webpack correcto tras repetir con acceso a Google Fonts. Las pruebas de contratos ejercitan aislamiento, altas, duplicados, actualización de fechas y fechas inválidas.
 - Navegador: incorporación de 303 y alta de un trámite manual a 390 y 1440 px con Chrome y API simulada. No se ejercitaron OAuth ni MongoDB real. Los flujos de Mes, Año, facturas, encargos y cocciones se revisaron mediante la suite existente y el diff de las rutas y repositorios.
 - Se archiva BILL-19 para conservar diez entregas recientes.
+
+## BILL-30 — Borradores fiscales 303, 130 y 390
+
+- Inicio: rama `int`, árbol limpio. Capacidad inicial del 82 % en 5 h y 11 % en 7 d.
+- Aceptación: [BILL-30](iterations.md#bill-30--borradores-fiscales-303-130-y-390).
+- Entrega: vista de borradores enlazada desde agenda, confirmación de facturas y datos adicionales por cuenta, subtotales por casilla y conciliación anual. Los casos especiales, incluidos rectificativas, quedan fuera del cálculo ordinario y visibles como incidencias.
+- Validación: Biome, tipos, 1.040 pruebas y build webpack correctos. Casos de referencia sintéticos de exclusión de recibos, enlaces repetidos, facturas múltiples, devengo, invalidación, acumulado del 130 y conciliación del 390. Chrome con API simulada confirmó la revisión de una factura y el cambio entre 303, 130 y 390. Pendiente contraste autenticado en Preview con declaraciones reales de referencia.
+- Se archiva BILL-20 para conservar diez entregas recientes.

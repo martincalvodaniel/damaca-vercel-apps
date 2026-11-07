@@ -87,3 +87,7 @@ El [estudio de obligaciones fiscales del autónomo](fiscalidad-autonomos.md) rec
 ## Agenda fiscal
 
 `/fiscal-agenda` permite incorporar sugerencias AEAT por modelo y período y crear trámites manuales. El catálogo inicial cubre vencimientos de 2026 en territorio común. Presentación, domiciliación y pago se consultan por separado y el justificante se registra como referencia o enlace. Los datos se aíslan por usuario en la colección `fiscalTasks`. El catálogo y los trámites se consultan por año de vencimiento. [Alcance y validación](iterations.md#bill-29--agenda-fiscal).
+
+## Borradores fiscales de 2026
+
+La agenda enlaza borradores para IVA trimestral ordinario (303), IRPF en estimación directa (130) y resumen anual de IVA (390). Solo se incluyen pagos con factura aplicable y datos fiscales confirmados. Las revisiones y los ajustes se guardan aparte por cuenta. Los borradores indican qué partidas necesitan revisión y se usan como apoyo para la gestoría o la AEAT. [Alcance y validación](iterations.md#bill-30--borradores-fiscales-303-130-y-390).

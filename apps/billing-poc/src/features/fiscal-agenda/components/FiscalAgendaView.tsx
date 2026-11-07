@@ -1,6 +1,7 @@
 // biome-ignore-all lint/performance/noJsxPropsBind: Agenda row handlers capture the current task and render native controls.
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
 import { FetchError } from "@/lib/client/swr-fetcher"
 import type { FiscalTask } from "@/lib/domain/entities/fiscal-task"
@@ -113,6 +114,9 @@ export function FiscalAgendaView({
 
   return (
     <div className="space-y-5">
+      <Link className="underline" href="/fiscal-agenda/drafts">
+        Ver borradores 303, 130 y 390
+      </Link>
       <div className="flex flex-wrap items-end gap-3">
         <label>
           Año de vencimiento
@@ -212,6 +216,15 @@ export function FiscalAgendaView({
                     {task.title} · {fiscalStatus(task, today)}
                   </h2>
                   <p>{taskPeriod(task)}</p>
+                  {task.exercise === 2026 &&
+                    ["303", "130", "390"].includes(task.model) && (
+                      <Link
+                        className="underline"
+                        href={`/fiscal-agenda/drafts?model=${task.model}&quarter=${task.model === "390" ? "4" : task.period[0]}`}
+                      >
+                        Ver borrador
+                      </Link>
+                    )}
                   <p>{deadlines(task)}</p>
                   {task.filedOn !== undefined && (
                     <p>Presentado el {formatDate(task.filedOn)}</p>

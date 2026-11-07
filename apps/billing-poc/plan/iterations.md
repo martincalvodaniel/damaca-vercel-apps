@@ -203,7 +203,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: cabeceras de escritorio y AddButton existentes.
 - Aceptación: + de Eventos/Productos junto a periodo/búsqueda/acciones; Mes usa solo el + de su fila de controles en escritorio; móvil conserva + superior y controles actuales, incluidos los dos + de Mes; filtros de Productos en la misma banda; sin cambios de estado, datos ni acciones.
 - Validación: Biome, tipos, suite y build de billing; revisión de visibilidad responsive y callbacks.
-- Evidencia: [BILL-20](iteration-log.md#bill-20--una-fila-de-controles-en-escritorio).
+- Evidencia: [BILL-20](archive/2026-11-07/bill-20.md#bill-20--una-fila-de-controles-en-escritorio).
 
 ## BILL-21 — Ausencias localizadas y tabla de pagos del cliente
 
@@ -295,3 +295,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: agenda aislada por usuario, importación idempotente, edición manual y actualización explícita de sugerencias pendientes; sin cambios en la exportación existente.
 - Validación: catálogo, estados y contratos, lint incremental, tipos, pruebas y build.
 - Evidencia: [BILL-29](iteration-log.md#bill-29--agenda-fiscal).
+
+## BILL-30 — Borradores fiscales 303, 130 y 390
+
+- Estado: `validated`.
+- Objetivo: calcular borradores parciales desde pagos con factura y confirmaciones separadas.
+- Rutas: módulo de borradores, agenda, API, adaptador Mongo y planificación.
+- Dependencias: pagos existentes, catálogo de casillas AEAT 2026 y sesión.
+- Aceptación: exclusión de pagos sin factura, trazabilidad, conciliación y detección de datos pendientes.
+- Validación: pruebas de reglas y regresión, Biome, tipos y build.
+- Evidencia: [BILL-30](iteration-log.md#bill-30--borradores-fiscales-303-130-y-390).

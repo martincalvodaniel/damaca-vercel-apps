@@ -96,3 +96,8 @@ export type MongoFiscalTask =
     owner: string
     revision: string
   }
+
+export type MongoFiscalDraft =
+  import("@/lib/domain/entities/fiscal-draft").FiscalDraftSettings & {
+    _id: string
+  }
