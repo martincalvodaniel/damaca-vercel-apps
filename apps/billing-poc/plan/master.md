@@ -79,3 +79,7 @@ La preferencia se guarda en la colección MongoDB `userPreferences`, identificad
 El layout autenticado carga la preferencia antes del HTML inicial. SWR separa cachés por cuenta, aplica el cambio tras confirmarse el guardado y revalida solo esa cuenta. Los errores de guardado conservan el tema anterior. Los tokens de paleta usan roles semánticos y un adaptador para las utilidades existentes; el tema se aplica también a diálogos portaleados sin duplicar componentes. Marca Google y PDFs no cambian. Alcance: [BILL-26](iterations.md#bill-26--temas-y-configuración-por-usuario), que amplía [BILL-25](iterations.md#bill-25--superficies-neutras-y-donuts-originales).
 
 La instalación web en modo independiente se documenta en [AGW-21](../../../plan/iterations.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).
+
+## Investigación fiscal
+
+El [estudio de obligaciones fiscales del autónomo](fiscalidad-autonomos.md) recoge calendario, condiciones, evidencias y casos de aceptación para futuras funcionalidades. El alcance fiscal de producto queda pendiente de decisión.

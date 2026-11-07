@@ -173,7 +173,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: controles, agrupación y callbacks existentes; sin nuevas dependencias.
 - Aceptación: ambos + de Mes abren el mismo formulario; Cocciones muestra Pagadas cerrada por defecto antes de las vigentes, sin cambiar Encargos; textos visibles de Facturas y reducción de numeración en español, conservando valores internos y comportamiento.
 - Validación: Biome, tipos, suite y build de billing; revisión estática de orden, callbacks y textos.
-- Evidencia: [BILL-17](iteration-log.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).
+- Evidencia: [BILL-17](archive/2026-11-07/bill-17.md#bill-17--alta-mensual-orden-de-cocciones-y-traducción-de-facturas).
 
 ## BILL-18 — Navegación de escritorio
 
@@ -265,3 +265,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Contrato: GET/PUT `/api/user-preferences` usan exclusivamente identidad de sesión; cuerpo PUT estricto `{theme: original|olive}`; 401/403 sin autorización, 400 inválido, 500 error de persistencia; respuestas privadas sin caché HTTP compartida.
 - Validación: pruebas herméticas de aislamiento, validación, fallos, render inicial/enlaces, helpers SWR y paletas; lint incremental/preparado, tipos, suite y build. Verificación autenticada cuando el entorno lo permita.
 - Evidencia: [BILL-26](iteration-log.md#bill-26--temas-y-configuración-por-usuario).
+
+## BILL-27 — Estudio de obligaciones fiscales del autónomo
+
+- Estado: `validated`.
+- Objetivo: documentar el ciclo fiscal del autónomo y su aplicación futura en Billing.
+- Rutas: `plan/fiscalidad-autonomos.md` y planificación de Billing.
+- Dependencias: AEAT y normativa publicada en el BOE.
+- Aceptación: calendario, modelos y condiciones, gestiones no periódicas, casos especiales y criterios para futuras funcionalidades.
+- Validación: contraste de fuentes oficiales, enlaces locales y `git diff --check`.
+- Evidencia: [BILL-27](iteration-log.md#bill-27--estudio-de-obligaciones-fiscales-del-autónomo).
