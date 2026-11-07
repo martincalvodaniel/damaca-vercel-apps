@@ -213,7 +213,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: Modal stableHeight, tabla/filtros/acciones de pagos y modal de cliente existentes; sin nuevas dependencias.
 - Aceptación: encabezados Ausencias/Recuperaciones/Última ausencia; Mañana/Tarde/Alumno/a/Fecha; modales de día/edición a altura disponible sin foco automático en nombre al editar; calendarios lun/mar/mié/jue/vie/sáb/dom; lápiz antes de papelera abre edición sin navegar; pagos del cliente usan tabla mensual con fecha completa y mismas columnas/filtros/orden/acciones/exportación, sin filtrar por mes ni perder actividad histórica.
 - Validación: regresiones de etiquetas/calendario, fecha completa y acciones de cliente; Biome, tipos, suite y build de billing; revisión de foco y accesibilidad.
-- Evidencia: [BILL-21](iteration-log.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).
+- Evidencia: [BILL-21](archive/2026-11-07/bill-21.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).
 
 ## BILL-22 — Fecha y hora de eventos y favicon original
 
@@ -305,3 +305,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: exclusión de pagos sin factura, trazabilidad, conciliación y detección de datos pendientes.
 - Validación: pruebas de reglas y regresión, Biome, tipos y build.
 - Evidencia: [BILL-30](iteration-log.md#bill-30--borradores-fiscales-303-130-y-390).
+
+## BILL-31 — Acceso a facturas y pagos desde borradores
+
+- Estado: `validated`.
+- Objetivo: abrir facturas y la modal de pago desde el borrador fiscal.
+- Rutas: vista de borradores y planificación de Billing.
+- Dependencias: modal y ruta de facturas existentes.
+- Aceptación: enlaces externos HTTP(S), PDF por identificador y modal de pago sin salir del borrador.
+- Validación: Biome, tipos, suite y build.
+- Evidencia: [BILL-31](iteration-log.md#bill-31--acceso-a-facturas-y-pagos-desde-borradores).

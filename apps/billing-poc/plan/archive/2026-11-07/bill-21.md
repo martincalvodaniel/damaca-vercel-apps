@@ -1,0 +1,13 @@
+# Registro histórico de Billing
+
+## BILL-21 — Ausencias localizadas y tabla de pagos del cliente
+
+- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits pendientes. Capacidad: 72 % en 5 h y 50 % en 7 d; estimación suficiente para implementación, validación y publicación con reservas.
+- Aceptación: [BILL-21](../../iterations.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).
+
+- Ausencias: columnas reducidas a Ausencias/Recuperaciones/Última ausencia; Mañana/Tarde, Alumno/a y Fecha, tipos y vacíos traducidos. Modales de día y alumno con stableHeight (100dvh menos márgenes), scroll interno y foco inicial en el contenedor; el controlador inline omite foco en el nombre al editar y conserva scroll/restauración de foco. Confirmaciones de estos modales en español.
+- Calendarios: constantes compartidas lun/mar/mié/jue/vie/sáb/dom, orden lunes→domingo, reutilizadas por Ausencias y Eventos.
+- Clientes: botón de lápiz antes de papelera, con stopPropagation y ClientFormModal existente; conserva enlace a ficha y copia de contactos. Actividad usa PaymentsView extraída de la vista mensual, sin nueva consulta mensual. Misma tabla/filtros/orden/columnas compacto-todo, exportación y modales de detalle/duplicado/borrado; fecha completa en modo historial y limpieza de deep links sin añadir parámetros de mes. Excel incluye todo el historial y nombre de archivo por cliente. Las mutaciones existentes invalidan actividad automáticamente.
+- Regresiones: render de tabla con fechas de dos años, controles/filtros/acciones, fecha corta conservada en Mes, siete encabezados españoles y orden editar→borrar en clientes. Expectativas de etiquetas de ausencia actualizadas al español. Se archiva BILL-11 para mantener diez entregas recientes.
+- Revisión React: SWR existente, sin fetch ni efectos de datos nuevos; modales de pago continúan diferidos; callbacks estables, fechas y moneda compartidas, foco de teclado y estilos claros/oscuros conservados. No hay verificación visual interactiva ni prueba del teclado virtual en dispositivo; el foco se revisa en la implementación y la traducción/tabla mediante render estático.
+- Validación final: `bun run type-check --filter=@damaca/billing-poc`, correcto; `bun run test --filter=@damaca/billing-poc`: 995 correctas, 0 fallos, 100 archivos y 1824 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack`, correcto (9,474 s). Biome de todos los TS/TSX editados/nuevos sin hallazgos después de corregir imports y estabilizar un callback. Caché remota de Turbo no disponible; comprobaciones locales completas. Enlaces y diff check correctos; lint preparado, commit, push y SHA remoto se verifican al cierre.

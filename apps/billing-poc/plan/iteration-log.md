@@ -12,17 +12,7 @@ Archivo adicional: [BILL-19](archive/2026-11-07/bill-19.md).
 
 Archivo adicional: [BILL-20](archive/2026-11-07/bill-20.md).
 
-## BILL-21 — Ausencias localizadas y tabla de pagos del cliente
-
-- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits pendientes. Capacidad: 72 % en 5 h y 50 % en 7 d; estimación suficiente para implementación, validación y publicación con reservas.
-- Aceptación: [BILL-21](iterations.md#bill-21--ausencias-localizadas-y-tabla-de-pagos-del-cliente).
-
-- Ausencias: columnas reducidas a Ausencias/Recuperaciones/Última ausencia; Mañana/Tarde, Alumno/a y Fecha, tipos y vacíos traducidos. Modales de día y alumno con stableHeight (100dvh menos márgenes), scroll interno y foco inicial en el contenedor; el controlador inline omite foco en el nombre al editar y conserva scroll/restauración de foco. Confirmaciones de estos modales en español.
-- Calendarios: constantes compartidas lun/mar/mié/jue/vie/sáb/dom, orden lunes→domingo, reutilizadas por Ausencias y Eventos.
-- Clientes: botón de lápiz antes de papelera, con stopPropagation y ClientFormModal existente; conserva enlace a ficha y copia de contactos. Actividad usa PaymentsView extraída de la vista mensual, sin nueva consulta mensual. Misma tabla/filtros/orden/columnas compacto-todo, exportación y modales de detalle/duplicado/borrado; fecha completa en modo historial y limpieza de deep links sin añadir parámetros de mes. Excel incluye todo el historial y nombre de archivo por cliente. Las mutaciones existentes invalidan actividad automáticamente.
-- Regresiones: render de tabla con fechas de dos años, controles/filtros/acciones, fecha corta conservada en Mes, siete encabezados españoles y orden editar→borrar en clientes. Expectativas de etiquetas de ausencia actualizadas al español. Se archiva BILL-11 para mantener diez entregas recientes.
-- Revisión React: SWR existente, sin fetch ni efectos de datos nuevos; modales de pago continúan diferidos; callbacks estables, fechas y moneda compartidas, foco de teclado y estilos claros/oscuros conservados. No hay verificación visual interactiva ni prueba del teclado virtual en dispositivo; el foco se revisa en la implementación y la traducción/tabla mediante render estático.
-- Validación final: `bun run type-check --filter=@damaca/billing-poc`, correcto; `bun run test --filter=@damaca/billing-poc`: 995 correctas, 0 fallos, 100 archivos y 1824 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack`, correcto (9,474 s). Biome de todos los TS/TSX editados/nuevos sin hallazgos después de corregir imports y estabilizar un callback. Caché remota de Turbo no disponible; comprobaciones locales completas. Enlaces y diff check correctos; lint preparado, commit, push y SHA remoto se verifican al cierre.
+Archivo adicional: [BILL-21](archive/2026-11-07/bill-21.md).
 
 ## BILL-22 — Fecha y hora de eventos y favicon original
 
@@ -108,3 +98,11 @@ Archivo adicional: [BILL-20](archive/2026-11-07/bill-20.md).
 - Entrega: vista de borradores enlazada desde agenda, confirmación de facturas y datos adicionales por cuenta, subtotales por casilla y conciliación anual. Los casos especiales, incluidos rectificativas, quedan fuera del cálculo ordinario y visibles como incidencias.
 - Validación: Biome, tipos, 1.040 pruebas y build webpack correctos. Casos de referencia sintéticos de exclusión de recibos, enlaces repetidos, facturas múltiples, devengo, invalidación, acumulado del 130 y conciliación del 390. Chrome con API simulada confirmó la revisión de una factura y el cambio entre 303, 130 y 390. Pendiente contraste autenticado en Preview con declaraciones reales de referencia.
 - Se archiva BILL-20 para conservar diez entregas recientes.
+
+## BILL-31 — Acceso a facturas y pagos desde borradores
+
+- Inicio: rama `int`, árbol limpio. Capacidad inicial del 73 % en 5 h y 9 % en 7 d.
+- Aceptación: [BILL-31](iterations.md#bill-31--acceso-a-facturas-y-pagos-desde-borradores).
+- Entrega: enlaces HTTP(S) y PDFs en otra pestaña. Modal existente desde la factura y el desglose por casilla. El borrador se consulta de nuevo al actualizar, eliminar o cerrar el pago.
+- Validación: Biome, tipos, 1.040 pruebas y build webpack correctos. Sin comprobación en navegador autenticado.
+- Se archiva BILL-21 para conservar diez entregas recientes.

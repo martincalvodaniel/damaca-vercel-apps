@@ -1,7 +1,9 @@
 // biome-ignore-all lint/performance/noJsxPropsBind: Native controls capture the current form and have no memoized boundary.
 "use client"
 
+import dynamic from "next/dynamic"
 import { type FormEvent, useId, useState } from "react"
+import { buildOpenInvoiceUrl } from "@/features/invoices/hooks/useInvoiceMutations"
 import { FetchError } from "@/lib/client/swr-fetcher"
 import {
   FISCAL_MODELS,
@@ -24,6 +26,30 @@ import {
 } from "../../fiscal-agenda/components/styles"
 import { useFiscalDraft, useUpdateFiscalDraft } from "../hooks/useFiscalDraft"
 
+const InvoicePaymentModal = dynamic(
+  () => import("@/features/invoices/components/InvoicePaymentModal"),
+  { ssr: false }
+)
+
+function invoiceLink(paymentId: string, reference: string) {
+  if (reference.startsWith("id:")) {
+    const id = reference.slice(3)
+    return {
+      label: id,
+      href: id ? buildOpenInvoiceUrl(paymentId, id) : undefined,
+    }
+  }
+  const label = reference.startsWith("url:") ? reference.slice(4) : reference
+  const url = URL.parse(label)
+  return {
+    label,
+    href:
+      url && (url.protocol === "https:" || url.protocol === "http:")
+        ? url.href
+        : undefined,
+  }
+}
+
 function submitFields(event: FormEvent<HTMLFormElement>) {
   event.preventDefault()
   return new FormData(event.currentTarget)
@@ -33,8 +59,10 @@ function DocumentReview({
   document,
   pending,
   save,
+  openPayment,
 }: {
   document: FiscalDocument
+  openPayment: (id: string) => void
   pending: boolean
   save: (update: DraftUpdate) => void
 }) {
@@ -74,10 +102,33 @@ function DocumentReview({
         IVA {document.rate} % · {formatCurrency(document.vat)}
       </p>
       <ul className="break-all">
-        {document.references.map((ref) => (
-          <li key={ref}>{ref}</li>
-        ))}
+        {document.references.map((reference) => {
+          const { href, label } = invoiceLink(document.id, reference)
+          return (
+            <li key={reference}>
+              {href ? (
+                <a
+                  className="underline"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {label}
+                </a>
+              ) : (
+                label
+              )}
+            </li>
+          )
+        })}
       </ul>
+      <button
+        type="button"
+        className={buttonClass}
+        onClick={() => openPayment(document.id)}
+      >
+        Abrir pago
+      </button>
       {document.issue !== undefined && <p>{document.issue}</p>}
       <form onSubmit={submit}>
         <fieldset disabled={pending} className="grid gap-2 sm:grid-cols-2">
@@ -274,8 +325,22 @@ export function FiscalDraftView({
   const [model, setModel] = useState(initialModel)
   const [quarter, setQuarter] = useState(initialQuarter)
   const [problem, setProblem] = useState("")
-  const { data, error, isLoading } = useFiscalDraft(owner, model, quarter)
+  const [paymentId, setPaymentId] = useState<string | null>(null)
+  const { data, error, isLoading, mutate } = useFiscalDraft(
+    owner,
+    model,
+    quarter
+  )
   const { trigger, isMutating } = useUpdateFiscalDraft(owner, model, quarter)
+
+  function closePayment() {
+    setPaymentId(null)
+    void mutate()
+  }
+
+  function refreshDraft() {
+    void mutate()
+  }
 
   async function save(update: DraftUpdate) {
     setProblem("")
@@ -367,9 +432,13 @@ export function FiscalDraftView({
                 <ul>
                   {cell.documentIds.map((id) => (
                     <li key={id}>
-                      <a className="underline" href={`#document-${id}`}>
+                      <button
+                        type="button"
+                        className="underline"
+                        onClick={() => setPaymentId(id)}
+                      >
                         Pago {id}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -399,10 +468,20 @@ export function FiscalDraftView({
                 document={document}
                 pending={isMutating}
                 save={save}
+                openPayment={setPaymentId}
               />
             ))}
           </section>
         </>
+      )}
+      {paymentId !== null && (
+        <InvoicePaymentModal
+          key={paymentId}
+          paymentId={paymentId}
+          onClose={closePayment}
+          onUpdate={refreshDraft}
+          onDelete={closePayment}
+        />
       )}
     </div>
   )
