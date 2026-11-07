@@ -183,7 +183,7 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Dependencias: breakpoint `xl` y slot de acciones existentes.
 - Aceptación: escritorio sin Billing/título de página; menú antes de acciones/buscador, con orden de foco coherente; móvil conserva título, acciones y menú actuales; todas las páginas y ambos temas.
 - Validación: Biome, tipos, suite y build de billing; revisión de clases responsive y DOM.
-- Evidencia: [BILL-18](iteration-log.md#bill-18--navegación-de-escritorio).
+- Evidencia: [BILL-18](archive/2026-11-07/bill-18.md#bill-18--navegación-de-escritorio).
 
 ## BILL-19 — Controles de cabecera en navegación de escritorio
 
@@ -275,3 +275,13 @@ El [workflow raíz](../../../plan/workflow.md) es el único protocolo. El contra
 - Aceptación: calendario, modelos y condiciones, gestiones no periódicas, casos especiales y criterios para futuras funcionalidades.
 - Validación: contraste de fuentes oficiales, enlaces locales y `git diff --check`.
 - Evidencia: [BILL-27](iteration-log.md#bill-27--estudio-de-obligaciones-fiscales-del-autónomo).
+
+## BILL-28 — Particularidades de Aragón y priorización fiscal
+
+- Estado: `validated`.
+- Objetivo: documentar la fiscalidad aragonesa aplicable y valorar las funcionalidades fiscales por beneficio y riesgo de regresión.
+- Rutas: `plan/fiscalidad-autonomos.md` y planificación de Billing.
+- Dependencias: AEAT, Gobierno de Aragón, BOA y modelos actuales de pagos y facturas.
+- Aceptación: distinguir obligaciones estatales y autonómicas, proponer un orden de entrega y vincular cada riesgo a una comprobación.
+- Validación: contraste de fuentes oficiales, revisión del código afectado por las propuestas, enlaces locales y `git diff --check`.
+- Evidencia: [BILL-28](iteration-log.md#bill-28--particularidades-de-aragón-y-priorización-fiscal).

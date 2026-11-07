@@ -6,15 +6,7 @@ Archivo adicional: [BILL-12](archive/2026-11-05/bill-12.md), [BILL-13](archive/2
 
 Archivo adicional: [BILL-17](archive/2026-11-07/bill-17.md).
 
-## BILL-18 — Navegación de escritorio
-
-- Inicio: 2026-11-02, rama `int`, árbol limpio y sin commits locales pendientes. Capacidad inicial: 81 % en 5 h y 52 % en 7 d; estimación suficiente para completar y publicar con reservas.
-- Aceptación: [BILL-18](iterations.md#bill-18--navegación-de-escritorio).
-
-- Implementado: identificación Billing/título con `xl:hidden`; menú de escritorio antes del slot de acciones en el DOM y controles en una fila inferior de ancho completo. En móvil, el menú de escritorio sigue oculto y se mantiene título → acciones → botón de menú. Se conservan eventos, sesión, estilos, navegación fija y breakpoints.
-- Revisión React/accesibilidad: cambio limitado a estructura y clases responsive, sin hooks/efectos nuevos, elementos duplicados ni cambios de callbacks. Orden de tabulación de escritorio alineado con menú → controles. No se realizó comprobación visual interactiva; revisión estática.
-- Se archiva BILL-08 para mantener diez entregas recientes.
-- Validación: Biome del componente sin hallazgos; `bun run type-check --filter=@damaca/billing-poc` correcto; `bun run test --filter=@damaca/billing-poc`: 992 correctas, 0 fallos y 1802 assertions; `bun run build --filter=@damaca/billing-poc -- --webpack` correcto (10,044 s). Caché remota de Turbo no disponible; comprobaciones locales completas. Enlaces locales de planificación y diff check correctos. Lint preparado, commit, push y SHA remoto se verifican al cierre.
+Archivo adicional: [BILL-18](archive/2026-11-07/bill-18.md).
 
 ## BILL-19 — Controles de cabecera en navegación de escritorio
 
@@ -107,3 +99,11 @@ Archivo adicional: [BILL-17](archive/2026-11-07/bill-17.md).
 - Entrega: [estudio fiscal](fiscalidad-autonomos.md) con calendario, condiciones por perfil, fuentes oficiales y casos de aceptación para futuras implementaciones. El foco es la persona física en territorio común. Los casos sectoriales y territoriales se identifican para evaluación específica.
 - Validación: fechas de ejemplo contrastadas con el calendario AEAT, normativa de facturación contrastada con BOE y AEAT, destinos de enlaces locales comprobados y `git diff --check` correcto. Entrega documental.
 - Se archiva BILL-17 para conservar diez entregas recientes.
+
+## BILL-28 — Particularidades de Aragón y priorización fiscal
+
+- Inicio: 2026-11-07, rama `int`, árbol limpio y sin commits pendientes. Capacidad inicial: 96 % restante en 5 h y 13 % en 7 d.
+- Aceptación: [BILL-28](iterations.md#bill-28--particularidades-de-aragón-y-priorización-fiscal).
+- Entrega: reglas autonómicas y circuito estatal, matriz de beneficio y regresión basada en las entidades existentes y primer corte propuesto de agenda y exportación.
+- Validación: fuentes oficiales de Aragón, AEAT y BOA, revisión estática de Payment e Invoice, enlaces locales y diff. Entrega documental.
+- Se archiva BILL-18 para conservar diez entregas recientes.
