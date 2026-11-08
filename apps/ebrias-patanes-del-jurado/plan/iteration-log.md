@@ -105,3 +105,7 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 ## EPJ-25
 
 - El reparto reutiliza los bloques y el arrastre de asistencia. Los coches y las asignaciones se guardan en colecciones propias del evento. Pendiente la revisión visual y del arrastre en navegador.
+
+## EPJ-26
+
+- Se preparó una migración con vista previa y transacción por miembro. Pendiente aplicar en las bases de destino.

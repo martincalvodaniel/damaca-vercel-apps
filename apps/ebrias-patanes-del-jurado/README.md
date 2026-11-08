@@ -33,3 +33,7 @@ Review the database name and counts, then append `--apply` to remove unlinked le
 ### Admission push notifications
 
 Generate a VAPID key pair with the Web Push CLI. Set `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` (a contact mailto URL) in the app environment before deploying. Administrators enable alerts on each device from Settings. On iPhone, open Ebrias from its Home Screen icon before enabling alerts.
+
+### Legacy member IDs
+
+Run `scripts/migrate-member-ids.ts` with the same Bun conditions and environment selection as the cleanup script. Preview the database and count first. Run with `--apply` during a maintenance window with writes paused. This preserves the members and updates their references in admissions, attendance, cars and costume ownership. If removing old unlinked roster entries is also desired, run the legacy cleanup before migrating the IDs.

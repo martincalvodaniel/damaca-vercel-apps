@@ -183,3 +183,8 @@
 
 - Estado: `in_progress`.
 - Aceptación: sección con «Sin asignar», creación de coches y traslado de asistentes mediante arrastre. Las asignaciones persisten por evento.
+
+## EPJ-26 — Identificadores globales de miembros
+
+- Estado: `in_progress`.
+- Aceptación: migrar identificadores heredados de Letux a UUID y conservar las referencias del club y de los eventos.
