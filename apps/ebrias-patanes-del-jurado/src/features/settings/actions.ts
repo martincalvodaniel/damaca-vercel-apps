@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { deleteMember } from "@/features/members/delete-member"
 import { saveDisplayAlias, saveMemberAlias } from "@/features/members/directory"
 import {
   admitEmail,
@@ -131,4 +132,22 @@ export async function changeMemberEmail(_previous: string, form: FormData) {
   revalidatePath("/settings")
   revalidatePath("/eventos", "layout")
   return "Correo actualizado."
+}
+
+export async function removeMember(_previous: string, form: FormData) {
+  if ((await getAuthorizedUser())?.role !== "admin") {
+    return "Solo los administradores pueden eliminar miembros."
+  }
+  const id = form.get("memberId")
+  if (typeof id !== "string" || !id || id.length > 100) {
+    return "El miembro no es válido."
+  }
+  try {
+    if (!(await deleteMember(id))) return "El miembro ya no existe."
+  } catch {
+    return "No se pudo eliminar el miembro."
+  }
+  revalidatePath("/settings")
+  revalidatePath("/eventos", "layout")
+  return "Miembro eliminado."
 }

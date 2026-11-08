@@ -168,3 +168,8 @@
 - Estado: `in_progress`.
 - Aceptación: acciones de admisión en la misma fila y aviso Web Push por solicitud nueva en dispositivos suscritos de administradores.
 - Validación: Biome, tipos y entrega real desde Preview a un dispositivo suscrito.
+
+## EPJ-23 — Eliminar miembros
+
+- Estado: `in_progress`.
+- Aceptación: la acción administrativa elimina el miembro y sus datos vinculados de asistencia, disfraces y acceso.

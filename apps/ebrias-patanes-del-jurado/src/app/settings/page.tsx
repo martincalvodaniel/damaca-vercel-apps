@@ -8,6 +8,7 @@ import { AdmissionForm } from "@/features/settings/admission-form"
 import { AdmissionPushToggle } from "@/features/settings/admission-push-toggle"
 import { AliasForm } from "@/features/settings/alias-form"
 import { EmailChangeForm } from "@/features/settings/email-change-form"
+import { RemoveMemberForm } from "@/features/settings/remove-member-form"
 import { listPendingAdmissions, normalizeEmail } from "@/lib/admission"
 import { getAuthorizedUser } from "@/lib/session"
 
@@ -85,7 +86,13 @@ export default async function Settings() {
             <ul className="management-list">
               {members.map(({ id, alias, email }) => (
                 <li key={id}>
-                  <strong>{alias}</strong> · {email ?? "Sin correo asociado"}
+                  <div className="member-row">
+                    <span>
+                      <strong>{alias}</strong> ·{" "}
+                      {email ?? "Sin correo asociado"}
+                    </span>
+                    <RemoveMemberForm id={id} alias={alias} />
+                  </div>
                   <details>
                     <summary>Editar alias</summary>
                     <AliasForm key={alias} alias={alias} memberId={id} />

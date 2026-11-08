@@ -93,3 +93,7 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 ## EPJ-22
 
 - Biome y tipos correctos. Pendiente configurar VAPID, desplegar y comprobar la entrega en un dispositivo real.
+
+## EPJ-23
+
+- Se añadió la acción de borrado con confirmación y transacción MongoDB. Pendiente comprobar el flujo con una cuenta desechable y revisar la pantalla en móvil y escritorio.

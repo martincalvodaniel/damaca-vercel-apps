@@ -397,3 +397,20 @@ body:has(.club-nav) {
 .management-list > li > .admission-form + details {
   margin-top: 0.5rem;
 }
+
+.member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.remove-member {
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: #a21832;
+  font: 700 1.4rem system-ui;
+  cursor: pointer;
+}
