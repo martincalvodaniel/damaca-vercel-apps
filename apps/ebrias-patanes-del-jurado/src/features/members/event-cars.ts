@@ -41,6 +41,14 @@ export async function createCar(event: string, label: string) {
   return result.upsertedCount === 1
 }
 
+export async function deleteCar(event: string, carId: string) {
+  if (!carId.startsWith("car:") || carId === unassignedCar) return false
+  const result = await cars(event).deleteOne({ _id: carId })
+  if (!result.deletedCount) return false
+  await assignments(event).deleteMany({ carId })
+  return true
+}
+
 export async function assignCar(
   event: string,
   attendeeId: string,
@@ -64,4 +72,29 @@ export async function assignCar(
     )
   }
   return true
+}
+
+export async function renameCar(event: string, id: string, label: string) {
+  if (!id.startsWith("car:")) return false
+  const collection = cars(event)
+  const duplicate = await collection.findOne(
+    { _id: { $ne: id }, label },
+    { collation: { locale: "es", strength: 2 } }
+  )
+  if (duplicate) return false
+  return (
+    (await collection.updateOne({ _id: id }, { $set: { label } }))
+      .matchedCount === 1
+  )
+}
+
+export async function unassignCar(
+  event: string,
+  attendeeId: string,
+  carId: string
+) {
+  return (
+    (await assignments(event).deleteOne({ _id: attendeeId, carId }))
+      .deletedCount === 1
+  )
 }

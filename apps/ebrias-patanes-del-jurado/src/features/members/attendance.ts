@@ -5,12 +5,7 @@ import { getMemberDirectory, memberCollection } from "./directory"
 
 export const letuxEvent = "261230"
 
-const attendanceLabels = {
-  overnight: "Estancia",
-  day: "Comida y día del 31",
-  pending: "Pendiente",
-  absent: "No va",
-} as const
+const unassignedAttendance = "unassigned"
 
 function attendanceBlockCollection(event: string) {
   return getDatabaseConnection().db.collection<{
@@ -24,20 +19,11 @@ export async function getAttendanceBlocks(event: string) {
     .find()
     .sort({ _id: 1 })
     .toArray()
-  return [
-    ...Object.entries(attendanceLabels).map(([id, label]) => ({ id, label })),
-    ...custom.map(({ _id: id, label }) => ({ id, label })),
-  ]
+  return custom.map(({ _id: id, label }) => ({ id, label }))
 }
 
 export async function createAttendanceBlock(event: string, label: string) {
   const normalized = label.normalize("NFC").toLowerCase()
-  if (
-    Object.values(attendanceLabels).some(
-      (existing) => existing.toLowerCase() === normalized
-    )
-  )
-    return false
 
   const result = await attendanceBlockCollection(event).updateOne(
     { _id: `custom:${normalized}` },
@@ -45,6 +31,17 @@ export async function createAttendanceBlock(event: string, label: string) {
     { upsert: true }
   )
   return result.upsertedCount === 1
+}
+
+export async function deleteAttendanceBlock(event: string, id: string) {
+  if (!id.startsWith("custom:")) return false
+  const result = await attendanceBlockCollection(event).deleteOne({ _id: id })
+  if (!result.deletedCount) return false
+  await attendees(event).updateMany(
+    { status: id },
+    { $set: { status: unassignedAttendance } }
+  )
+  return true
 }
 
 function attendees(event: string) {
@@ -101,5 +98,44 @@ export async function setAttendance(event: string, id: string, status: string) {
   return (
     (await attendees(event).updateOne({ _id: id }, { $set: { status } }))
       .matchedCount === 1
+  )
+}
+
+export async function renameAttendanceBlock(
+  event: string,
+  id: string,
+  label: string
+) {
+  if (!id.startsWith("custom:")) return false
+  const collection = attendanceBlockCollection(event)
+  const duplicate = await collection.findOne(
+    { _id: { $ne: id }, label },
+    { collation: { locale: "es", strength: 2 } }
+  )
+  if (duplicate) return false
+  return (
+    (await collection.updateOne({ _id: id }, { $set: { label } }))
+      .matchedCount === 1
+  )
+}
+
+export async function removeAttendee(
+  event: string,
+  id: string,
+  status: string
+) {
+  const { client, db } = getDatabaseConnection()
+  return client.withSession((session) =>
+    session.withTransaction(async () => {
+      const result = await attendees(event).deleteOne(
+        { _id: id, status },
+        { session }
+      )
+      if (!result.deletedCount) return false
+      await db
+        .collection<{ _id: string }>(`${event}-car-assignments`)
+        .deleteOne({ _id: id }, { session })
+      return true
+    })
   )
 }

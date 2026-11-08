@@ -11,8 +11,12 @@ import {
   useState,
 } from "react"
 import {
+  addAttendanceBlock,
   addEventCar,
   createAttendee,
+  removeEventAttendee,
+  removeEventBlock,
+  renameEventBlock,
   updateAttendance,
   updateEventCar,
 } from "./actions"
@@ -149,22 +153,46 @@ function AttendanceSection({
         <h2>
           {block.label} ({guests.length})
         </h2>
-        {canManage && mode === "attendance" ? (
-          <button
-            className={styles.addAttendee}
-            type="button"
-            onClick={openPicker}
-            aria-haspopup="dialog"
-            aria-label={`Añadir a ${block.label}`}
-          >
-            +
-          </button>
+        {canManage ? (
+          <div className={styles.blockActions}>
+            {block.id.startsWith("custom:") ||
+            (mode === "cars" && block.id.startsWith("car:")) ? (
+              <>
+                <EditBlock mode={mode} block={block} />
+                <RemoveEntry mode={mode} id={block.id} label={block.label} />
+              </>
+            ) : null}
+            {mode === "attendance" ? (
+              <button
+                className={styles.addAttendee}
+                type="button"
+                onClick={openPicker}
+                aria-haspopup="dialog"
+                aria-label={`Añadir a ${block.label}`}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </button>
+            ) : null}
+          </div>
         ) : null}
       </div>
       {canManage && mode === "attendance" ? (
         <dialog
+          closedby="any"
           ref={dialog}
-          className={styles.attendeeDialog}
+          className={styles.carDialog}
           aria-labelledby={titleId}
         >
           <div className={styles.blockHeader}>
@@ -175,10 +203,22 @@ function AttendanceSection({
               onClick={closePicker}
               aria-label="Cerrar"
             >
-              ×
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m6 6 12 12M18 6 6 18" />
+              </svg>
             </button>
           </div>
-          <form action={action} className="account admission-form">
+          <form action={action} className={styles.picker}>
             <input type="hidden" name="status" value={block.id} />
             <label>
               Buscar miembro o escribir un nombre
@@ -224,6 +264,7 @@ function AttendanceSection({
               guest={guest}
               canManage={canManage}
               dragType={dragType}
+              mode={mode}
             />
           ))}
         </ul>
@@ -236,10 +277,12 @@ function AttendeeRow({
   guest,
   canManage,
   dragType,
+  mode,
 }: {
   guest: Attendee
   canManage: boolean
   dragType: string
+  mode: "attendance" | "cars"
 }) {
   const drag = useCallback(
     (event: DragEvent) => {
@@ -255,7 +298,15 @@ function AttendeeRow({
       onDragStart={canManage ? drag : undefined}
     >
       {canManage ? <span aria-hidden="true">⠿</span> : null}
-      {guest.alias}
+      <span className={styles.attendeeName}>{guest.alias}</span>
+      {canManage && (mode === "attendance" || guest.status !== "unassigned") ? (
+        <RemoveEntry
+          mode={mode}
+          id={guest.id}
+          label={guest.alias}
+          status={guest.status}
+        />
+      ) : null}
     </li>
   )
 }
@@ -303,6 +354,7 @@ export function CarSection({
       {children}
       {canManage ? (
         <dialog
+          closedby="any"
           ref={dialog}
           className={styles.carDialog}
           aria-labelledby={titleId}
@@ -328,5 +380,243 @@ export function CarSection({
         </dialog>
       ) : null}
     </details>
+  )
+}
+
+export function AttendanceBlocksSection({
+  canManage,
+  children,
+}: {
+  canManage: boolean
+  children: ReactNode
+}) {
+  const dialog = useRef<HTMLDialogElement>(null)
+  const titleId = useId()
+  const openDialog = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    dialog.current?.showModal()
+    dialog.current?.querySelector("input")?.focus()
+  }, [])
+  const closeDialog = useCallback(() => dialog.current?.close(), [])
+  const [message, action, pending] = useActionState(
+    async (previous: string, form: FormData) => {
+      const result = await addAttendanceBlock(previous, form)
+      if (!result) dialog.current?.close()
+      return result
+    },
+    ""
+  )
+  return (
+    <details name="letux-sections" className={styles.attendees}>
+      <summary className={styles.carSummary}>
+        ¿Quién viene?
+        {canManage ? (
+          <button
+            type="button"
+            className={styles.addCar}
+            aria-label="Añadir bloque"
+            aria-haspopup="dialog"
+            onClick={openDialog}
+          >
+            +
+          </button>
+        ) : null}
+      </summary>
+      {children}
+      {canManage ? (
+        <dialog
+          closedby="any"
+          ref={dialog}
+          className={styles.carDialog}
+          aria-labelledby={titleId}
+        >
+          <h2 id={titleId}>Añadir bloque</h2>
+          <form action={action} className={styles.picker}>
+            <label>
+              Nombre del bloque
+              <input name="name" required maxLength={60} />
+            </label>
+            <p role="status" hidden={!message}>
+              {message}
+            </p>
+            <div className={styles.carDialogActions}>
+              <button type="button" onClick={closeDialog}>
+                Cancelar
+              </button>
+              <button type="submit" disabled={pending}>
+                Crear bloque
+              </button>
+            </div>
+          </form>
+        </dialog>
+      ) : null}
+    </details>
+  )
+}
+
+function RemoveEntry({
+  mode,
+  id,
+  label,
+  status,
+}: {
+  mode: "attendance" | "cars"
+  id: string
+  label: string
+  status?: string
+}) {
+  const dialog = useRef<HTMLDialogElement>(null)
+  const openDialog = useCallback(() => dialog.current?.showModal(), [])
+  const closeDialog = useCallback(() => dialog.current?.close(), [])
+  const titleId = useId()
+  const [message, action, pending] = useActionState(
+    async (previous: string, form: FormData) => {
+      if (status === undefined) return removeEventBlock(previous, form)
+      const result = await removeEventAttendee(previous, form)
+      if (!result) closeDialog()
+      return result
+    },
+    ""
+  )
+  const title =
+    status === undefined ? `Eliminar «${label}»` : `Quitar a «${label}»`
+  const description =
+    status === undefined
+      ? "¿Seguro que quieres eliminar este bloque?"
+      : mode === "cars"
+        ? "Dejará de estar en este coche y pasará a Sin asignar."
+        : "Se quitará de la lista de asistencia y del coche que tenga asignado."
+  return (
+    <>
+      <button
+        className={styles.removeBlock}
+        type="button"
+        onClick={openDialog}
+        aria-label={title}
+        aria-haspopup="dialog"
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12M18 6 6 18" />
+        </svg>
+      </button>
+      <dialog
+        closedby="any"
+        ref={dialog}
+        className={styles.carDialog}
+        aria-labelledby={titleId}
+      >
+        <h2 id={titleId}>{title}</h2>
+        <p>{description}</p>
+        <form
+          action={action}
+          className={`${styles.carDialogActions} ${styles.picker}`}
+        >
+          <input type="hidden" name="mode" value={mode} />
+          <input type="hidden" name="id" value={id} />
+          {status !== undefined ? (
+            <input type="hidden" name="status" value={status} />
+          ) : null}
+          <button type="button" onClick={closeDialog}>
+            Cancelar
+          </button>
+          <button type="submit" disabled={pending}>
+            {status === undefined ? "Eliminar" : "Quitar"}
+          </button>
+        </form>
+        <p role="status">{message}</p>
+      </dialog>
+    </>
+  )
+}
+
+function EditBlock({
+  mode,
+  block,
+}: {
+  mode: "attendance" | "cars"
+  block: Block
+}) {
+  const dialog = useRef<HTMLDialogElement>(null)
+  const titleId = useId()
+  const openDialog = useCallback(() => {
+    dialog.current?.querySelector("form")?.reset()
+    dialog.current?.showModal()
+  }, [])
+  const closeDialog = useCallback(() => dialog.current?.close(), [])
+  const [message, action, pending] = useActionState(
+    async (previous: string, form: FormData) => {
+      const result = await renameEventBlock(previous, form)
+      if (!result) closeDialog()
+      return result
+    },
+    ""
+  )
+
+  return (
+    <>
+      <button
+        type="button"
+        className={styles.addAttendee}
+        aria-label={`Editar ${block.label}`}
+        aria-haspopup="dialog"
+        onClick={openDialog}
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m4 20 4-1 11-11-3-3L5 16zM14 7l3 3" />
+        </svg>
+      </button>
+      <dialog
+        closedby="any"
+        ref={dialog}
+        className={styles.carDialog}
+        aria-labelledby={titleId}
+      >
+        <h2 id={titleId}>Editar «{block.label}»</h2>
+        <form action={action} className={styles.picker}>
+          <input type="hidden" name="id" value={block.id} />
+          <input type="hidden" name="mode" value={mode} />
+          <label>
+            Nombre
+            <input
+              name="name"
+              defaultValue={block.label}
+              required
+              maxLength={60}
+            />
+          </label>
+          <p role="status" hidden={!message}>
+            {message}
+          </p>
+          <div className={styles.carDialogActions}>
+            <button type="button" onClick={closeDialog}>
+              Cancelar
+            </button>
+            <button type="submit" disabled={pending}>
+              Guardar
+            </button>
+          </div>
+        </form>
+      </dialog>
+    </>
   )
 }

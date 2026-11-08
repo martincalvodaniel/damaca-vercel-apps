@@ -4,11 +4,20 @@ import { revalidatePath } from "next/cache"
 import {
   addAttendee,
   createAttendanceBlock,
+  deleteAttendanceBlock,
   getAttendanceBlocks,
   letuxEvent,
+  removeAttendee,
+  renameAttendanceBlock,
   setAttendance,
 } from "@/features/members/attendance"
-import { assignCar, createCar } from "@/features/members/event-cars"
+import {
+  assignCar,
+  createCar,
+  deleteCar,
+  renameCar,
+  unassignCar,
+} from "@/features/members/event-cars"
 import { canManageAttendance } from "@/lib/session"
 
 export async function updateAttendance(_previous: string, form: FormData) {
@@ -40,7 +49,7 @@ export async function updateAttendance(_previous: string, form: FormData) {
   }
 
   revalidatePath("/eventos/26-12-30-nochevieja-letux")
-  return "Asistencia guardada."
+  return ""
 }
 
 export async function addAttendanceBlock(_previous: string, form: FormData) {
@@ -105,6 +114,27 @@ export async function addEventCar(_previous: string, form: FormData) {
   return ""
 }
 
+export async function removeEventBlock(_previous: string, form: FormData) {
+  if (!(await canManageAttendance()))
+    return "No tienes permiso para eliminar bloques."
+  const id = form.get("id")
+  const mode = form.get("mode")
+  if (typeof id !== "string" || id.length > 150) return "Bloque no válido."
+  try {
+    const removed =
+      mode === "cars"
+        ? await deleteCar(letuxEvent, id)
+        : mode === "attendance"
+          ? await deleteAttendanceBlock(letuxEvent, id)
+          : false
+    if (!removed) return "No se pudo eliminar el bloque."
+  } catch {
+    return "No se pudo eliminar el bloque."
+  }
+  revalidatePath("/eventos/26-12-30-nochevieja-letux")
+  return "Bloque eliminado."
+}
+
 export async function updateEventCar(_previous: string, form: FormData) {
   if (!(await canManageAttendance()))
     return "No tienes permiso para repartir coches."
@@ -119,6 +149,59 @@ export async function updateEventCar(_previous: string, form: FormData) {
     return "Comprueba el asistente y el coche."
   if (!(await assignCar(letuxEvent, id, car)))
     return "No se encontró el asistente o el coche."
+  revalidatePath("/eventos/26-12-30-nochevieja-letux")
+  return ""
+}
+
+export async function renameEventBlock(_previous: string, form: FormData) {
+  if (!(await canManageAttendance()))
+    return "No tienes permiso para editar bloques."
+  const id = form.get("id")
+  const mode = form.get("mode")
+  const name = form.get("name")
+  const label =
+    typeof name === "string"
+      ? name.trim().replace(/\s+/gu, " ").normalize("NFC")
+      : ""
+  if (typeof id !== "string" || id.length > 150 || !label || label.length > 60)
+    return "Comprueba el nombre del bloque."
+  if (mode !== "cars" && mode !== "attendance") return "Bloque no válido."
+  if (mode === "cars" && label.toLocaleLowerCase("es") === "sin asignar")
+    return "Ese nombre está reservado."
+  try {
+    const rename = mode === "cars" ? renameCar : renameAttendanceBlock
+    if (!(await rename(letuxEvent, id, label)))
+      return "El bloque no existe o ya hay otro con ese nombre."
+  } catch {
+    return "No se pudo guardar el nombre."
+  }
+  revalidatePath("/eventos/26-12-30-nochevieja-letux")
+  return ""
+}
+
+export async function removeEventAttendee(_previous: string, form: FormData) {
+  if (!(await canManageAttendance()))
+    return "No tienes permiso para quitar asistentes."
+  const id = form.get("id")
+  const status = form.get("status")
+  const mode = form.get("mode")
+  if (
+    typeof id !== "string" ||
+    id.length > 100 ||
+    typeof status !== "string" ||
+    status.length > 150 ||
+    (mode !== "attendance" && mode !== "cars")
+  )
+    return "Comprueba el asistente y su asignación."
+  try {
+    const removed =
+      mode === "cars"
+        ? await unassignCar(letuxEvent, id, status)
+        : await removeAttendee(letuxEvent, id, status)
+    if (!removed) return "La asignación ha cambiado. Recarga la página."
+  } catch {
+    return "No se pudo quitar al asistente."
+  }
   revalidatePath("/eventos/26-12-30-nochevieja-letux")
   return ""
 }

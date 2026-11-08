@@ -324,11 +324,38 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  flex-wrap: wrap;
 }
 
 .blockHeader {
   justify-content: space-between;
+}
+
+.blockActions {
+  display: flex;
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.blockActions > button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+
+.removeBlock {
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  color: #a01824;
+  background: transparent;
+  font:
+    700 1.4rem Georgia,
+    serif;
+  cursor: pointer;
 }
 
 .addAttendee {
@@ -340,21 +367,6 @@
   color: inherit;
   font-size: 1.4rem;
   cursor: pointer;
-}
-
-.attendeeDialog {
-  box-sizing: border-box;
-  width: min(28rem, calc(100% - 1rem));
-  max-height: 85dvh;
-  padding: 0.75rem;
-  border: 2px solid #967044;
-  border-radius: 0.75rem;
-  background: #fff8db;
-  color: #2d1d15;
-}
-
-.attendeeDialog::backdrop {
-  background: #100c19bb;
 }
 
 .memberResults {
@@ -375,8 +387,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 36px;
-  margin-block: 0.3rem;
+  min-height: 34px;
   padding-inline: 0.5rem;
   border: 1px solid #967044;
   border-radius: 0.4rem;
@@ -450,4 +461,16 @@
 .carDialogActions button {
   min-height: 44px;
   cursor: pointer;
+}
+
+.attendeeName {
+  flex: 1;
+  min-width: 0;
+}
+
+.movableAttendee > .removeBlock {
+  display: grid;
+  place-items: center;
+  min-height: 32px;
+  padding: 0;
 }

@@ -9,7 +9,11 @@ import {
 import { getMemberDirectory } from "@/features/members/directory"
 import { getCarBoard, unassignedCar } from "@/features/members/event-cars"
 import { canManageAttendance, getAuthorizedUser } from "@/lib/session"
-import { AttendanceBoard, CarSection } from "./attendance-form"
+import {
+  AttendanceBlocksSection,
+  AttendanceBoard,
+  CarSection,
+} from "./attendance-form"
 import { LumosGate } from "./lumos-gate"
 import styles from "./page.module.css"
 
@@ -55,15 +59,14 @@ export default async function NewYearsEve() {
           >
             Elegir disfraz →
           </Link>
-          <details name="letux-sections" className={styles.attendees}>
-            <summary>¿Quién viene?</summary>
+          <AttendanceBlocksSection canManage={canManage}>
             <AttendanceBoard
               blocks={blocks}
               roster={roster}
               members={members}
               canManage={canManage}
             />
-          </details>
+          </AttendanceBlocksSection>
           <CarSection canManage={canManage}>
             <AttendanceBoard
               mode="cars"
