@@ -1,32 +1,28 @@
-import { headers } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { CostumePicker } from "@/features/costumes/costume-picker"
 import {
   getAddedCharacters,
   getCostumeState,
 } from "@/features/costumes/reservations"
-import { AccountControl } from "@/features/landing/account-control"
-import { getAuth } from "@/lib/auth"
+import { getAuthorizedUser } from "@/lib/session"
 import styles from "../page.module.css"
 
 export default async function Costumes() {
-  const requestHeaders = await headers()
-  const session = await Promise.resolve()
-    .then(() => getAuth().api.getSession({ headers: requestHeaders }))
+  const user = await getAuthorizedUser()
+  if (!user) redirect("/")
+
+  const initial = await Promise.all([
+    getCostumeState(user.id),
+    getAddedCharacters(),
+  ])
+    .then(([choice, added]) => ({
+      current: choice.current,
+      blocked: choice.remaining === 0,
+      added,
+    }))
     .catch(() => null)
-  const initial = session?.user.emailVerified
-    ? await Promise.all([
-        getCostumeState(session.user.id),
-        getAddedCharacters(),
-      ])
-        .then(([choice, added]) => ({
-          current: choice.current,
-          blocked: choice.remaining === 0,
-          added,
-        }))
-        .catch(() => null)
-    : null
 
   return (
     <main className={styles.event}>
@@ -51,17 +47,7 @@ export default async function Costumes() {
           <CostumePicker initial={initial} />
         ) : (
           <section className={styles.card}>
-            {session?.user.emailVerified ? (
-              <p>No se pudo cargar la elección. Recarga la página.</p>
-            ) : (
-              <>
-                <p>Inicia sesión para elegir tu personaje.</p>
-                <AccountControl
-                  callbackFailed={false}
-                  callbackPath="/eventos/nochevieja-2026/disfraces"
-                />
-              </>
-            )}
+            <p>No se pudo cargar la elección. Recarga la página.</p>
           </section>
         )}
       </div>

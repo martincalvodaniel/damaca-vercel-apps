@@ -10,4 +10,6 @@ La primera ficha de evento es Nochevieja en Letux, del 30 de diciembre de 2026 a
 
 Cada evento que necesite persistencia usa nombres de colección MongoDB con formato `YYMMDD-<purpose>`, con la fecha local de inicio del evento. Para Nochevieja en Letux el prefijo es `261230-`. La elección usa `261230-costume-choices` y `261230-costume-characters`. Cada solicitud válida de un personaje distinto al actual consume un intento, incluso si está ocupado. Un cambio fallido conserva el disfraz anterior. El contador es interno y la página solo avisa cuando se agotan los intentos. El administrador puede conceder un cuarto intento una sola vez.
 
+La portada pública ofrece únicamente el acceso con Google. Solo los administradores configurados y los correos admitidos previamente pueden acceder al área privada. Inicio y Ajustes forman la navegación privada. Ajustes muestra la cuenta y permite a los administradores admitir nuevos correos.
+
 [Iteraciones](iterations.md) · [Registro](iteration-log.md) · [Flujo](../../../plan/workflow.md)

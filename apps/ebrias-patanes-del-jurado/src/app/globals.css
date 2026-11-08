@@ -164,3 +164,120 @@ h1 em {
     box-shadow: 6px 7px var(--ink);
   }
 }
+
+.club-nav {
+  position: fixed;
+  z-index: 10;
+  inset: auto 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem calc(0.25rem + env(safe-area-inset-bottom));
+  border-top: 2px solid var(--ink);
+  background: #fff8db;
+}
+
+.club-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 48px;
+  min-width: 5rem;
+  border-radius: 0.5rem;
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.club-nav a[aria-current="page"] {
+  background: var(--yellow);
+}
+
+.club-nav svg,
+.club-nav img {
+  width: 24px;
+  height: 24px;
+}
+
+.club-nav img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+body:has(.club-nav) {
+  padding-bottom: calc(58px + env(safe-area-inset-bottom));
+}
+
+.settings {
+  max-width: 34rem;
+  margin-inline: auto;
+  padding: 1rem 0.875rem;
+}
+
+.settings-card {
+  margin-top: 0.875rem;
+  padding: 0.875rem;
+  border: 2px solid var(--ink);
+  border-radius: 0.65rem;
+  background: #fff8db;
+  overflow-wrap: anywhere;
+}
+
+.settings-card h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.settings-card p {
+  margin: 0.35rem 0 0.65rem;
+}
+
+.admission-form {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.admission-form input {
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.5rem;
+  border: 2px solid var(--ink);
+  border-radius: 0.5rem;
+  font: inherit;
+}
+
+.admission-form button {
+  justify-self: start;
+}
+
+.admission-form p:empty {
+  margin: 0;
+}
+
+@media (min-width: 48rem) {
+  .club-nav {
+    position: sticky;
+    top: 0;
+    justify-content: flex-end;
+    padding: 0.25rem 2rem;
+    border-top: 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .club-nav a {
+    flex-direction: row;
+    gap: 0.4rem;
+    padding-inline: 0.75rem;
+  }
+
+  body:has(.club-nav) {
+    padding-bottom: 0;
+  }
+
+  .club-nav + .landing {
+    min-height: calc(100svh - 58px);
+  }
+}

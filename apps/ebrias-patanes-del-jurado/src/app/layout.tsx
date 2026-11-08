@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next"
 import type { ReactNode } from "react"
 import { installName } from "@/config/runtime"
+import { Navigation } from "@/features/landing/navigation"
+import { getAuthorizedUser } from "@/lib/session"
 import "./globals.css"
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this layout export.
@@ -18,10 +20,18 @@ export const metadata: Metadata = {
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this layout export.
 export const viewport: Viewport = { themeColor: "#73caff" }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode
+}) {
+  const user = await getAuthorizedUser()
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        {user ? <Navigation image={user.image} /> : null}
+        {children}
+      </body>
     </html>
   )
 }

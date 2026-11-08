@@ -48,3 +48,11 @@
 - Validación: Biome, tipos, build, catálogo y comprobaciones del acceso y las reservas.
 
 [Alcance](master.md) · [Evidencia](iteration-log.md)
+
+## EPJ-07 — Admisión y ajustes
+
+- Estado: `validated`.
+- Rutas: `src/`, `.env.example`, `README.md` y `plan/` de la app.
+- Dependencias: Google OAuth, MongoDB y lista inicial de administradores por entorno.
+- Aceptación: sin permiso previo no se crea sesión ni se accede con una anterior. Portada pública con Google como única acción, navegación privada Inicio y Ajustes, identidad visible y admisión reservada a administradores.
+- Validación: Biome, tipos, build, casos de acceso y comprobación visual en móvil y escritorio.

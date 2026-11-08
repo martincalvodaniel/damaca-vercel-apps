@@ -1,13 +1,17 @@
 import Image from "next/image"
 import Link from "next/link"
 import { AccountControl } from "@/features/landing/account-control"
+import { getAuthorizedUser } from "@/lib/session"
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string | string[] }>
 }) {
-  const { error } = await searchParams
+  const [{ error }, user] = await Promise.all([
+    searchParams,
+    getAuthorizedUser(),
+  ])
 
   return (
     <main className="landing">
@@ -18,10 +22,16 @@ export default async function Home({
             Ebrias <em>Patanes</em> del Jurado
           </h1>
           <p className="lede">Nuestro punto de encuentro</p>
-          <Link className="event-link" href="/eventos/nochevieja-2026">
-            Nochevieja en Letux <span aria-hidden="true">↗</span>
-          </Link>
-          <AccountControl callbackFailed={Boolean(error)} />
+          {user ? (
+            <Link className="event-link" href="/eventos/nochevieja-2026">
+              Nochevieja en Letux <span aria-hidden="true">↗</span>
+            </Link>
+          ) : (
+            <AccountControl
+              callbackFailed={Boolean(error)}
+              admissionRequired={error === "admission_required"}
+            />
+          )}
         </div>
 
         <div className="poster">

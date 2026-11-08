@@ -1,7 +1,6 @@
 "use server"
 
-import { headers } from "next/headers"
-import { getAuth } from "@/lib/auth"
+import { getAuthorizedUser } from "@/lib/session"
 import {
   canonicalCharacter,
   characterCatalog,
@@ -33,12 +32,12 @@ export async function submitCostume(
   form: FormData
 ): Promise<PickerState> {
   try {
-    const session = await getAuth().api.getSession({ headers: await headers() })
-    if (!session?.user.emailVerified) {
+    const user = await getAuthorizedUser()
+    if (!user) {
       return { current: null, blocked: true, added: [], result: "signed-out" }
     }
 
-    const userId = session.user.id
+    const userId = user.id
     const [choice, added] = await Promise.all([
       getCostumeState(userId),
       getAddedCharacters(),

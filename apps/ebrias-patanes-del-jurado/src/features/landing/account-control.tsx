@@ -6,59 +6,54 @@ import { useCallback, useState } from "react"
 const authClient = createAuthClient()
 
 export function AccountControl({
-  callbackFailed,
-  callbackPath = "/",
+  callbackFailed = false,
+  admissionRequired = false,
+  signedIn = false,
 }: {
-  callbackFailed: boolean
-  callbackPath?:
-    | "/"
-    | "/eventos/nochevieja-2026"
-    | "/eventos/nochevieja-2026/disfraces"
+  callbackFailed?: boolean
+  admissionRequired?: boolean
+  signedIn?: boolean
 }) {
-  const session = authClient.useSession()
   const [busy, setBusy] = useState(false)
-  const [failed, setFailed] = useState(callbackFailed)
-  const user = session.data?.user
+  const [error, setError] = useState(
+    admissionRequired
+      ? "Un administrador debe autorizar tu correo antes de que puedas entrar."
+      : callbackFailed
+        ? "No se ha podido completar el acceso. Inténtalo de nuevo."
+        : null
+  )
 
   const updateSession = useCallback(async () => {
     setBusy(true)
-    setFailed(false)
+    setError(null)
 
     try {
-      const result = user
+      const result = signedIn
         ? await authClient.signOut()
         : await authClient.signIn.social({
             provider: "google",
-            callbackURL: callbackPath,
+            callbackURL: "/",
           })
 
-      if (result.error) setFailed(true)
+      if (result.error) throw result.error
+      if (signedIn) window.location.assign("/")
     } catch {
-      setFailed(true)
+      setError("No se ha podido completar la operación. Inténtalo de nuevo.")
     } finally {
       setBusy(false)
     }
-  }, [callbackPath, user])
+  }, [signedIn])
 
   return (
     <div className="account">
-      {user ? <p className="welcome">Hola, {user.name}.</p> : null}
-      <button
-        type="button"
-        disabled={busy || session.isPending}
-        onClick={updateSession}
-      >
-        {session.isPending || busy
+      <button type="button" disabled={busy} onClick={updateSession}>
+        {busy
           ? "Un momento…"
-          : user
+          : signedIn
             ? "Cerrar sesión"
             : "Continuar con Google"}
       </button>
-      {(failed || Boolean(session.error)) && (
-        <p role="alert">
-          No se ha podido completar el acceso. Inténtalo de nuevo.
-        </p>
-      )}
+      {error ? <p role="alert">{error}</p> : null}
     </div>
   )
 }

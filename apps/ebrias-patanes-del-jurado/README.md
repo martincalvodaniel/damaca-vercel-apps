@@ -17,3 +17,5 @@ bun --conditions=react-server --env-file=/path/to/target.env apps/ebrias-patanes
 ```
 
 Para la base de integración, el entorno del comando debe incluir `VERCEL_GIT_COMMIT_REF=int` y `NODE_ENV=production`. Para la base local, usa `NODE_ENV=development`. El comando solo concede la prórroga y no lee ni imprime el personaje.
+
+Configura `ALLOWED_EMAILS` con los correos de Google de los administradores separados por comas, en cada entorno antes de publicar el cambio. Los administradores pueden entrar directamente y admitir otros correos desde Ajustes. La admisión se guarda en la base de ese entorno y se exige también a las cuentas con sesiones anteriores.

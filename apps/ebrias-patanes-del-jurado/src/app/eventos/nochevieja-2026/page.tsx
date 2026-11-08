@@ -1,8 +1,7 @@
 import type { Metadata } from "next"
-import { headers } from "next/headers"
 import Link from "next/link"
-import { AccountControl } from "@/features/landing/account-control"
-import { getAuth } from "@/lib/auth"
+import { redirect } from "next/navigation"
+import { getAuthorizedUser } from "@/lib/session"
 import styles from "./page.module.css"
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this page export.
@@ -25,10 +24,8 @@ const overnightGuests = [
 const dayGuests = ["Lu", "La", "Ma", "Bebé2"]
 
 export default async function NewYearsEve() {
-  const requestHeaders = await headers()
-  const session = await Promise.resolve()
-    .then(() => getAuth().api.getSession({ headers: requestHeaders }))
-    .catch(() => null)
+  const user = await getAuthorizedUser()
+  if (!user) redirect("/")
 
   return (
     <main className={styles.event}>
@@ -55,38 +52,27 @@ export default async function NewYearsEve() {
           Elegir disfraz →
         </Link>
 
-        {session ? (
-          <div className={styles.roster}>
-            <section className={styles.card}>
-              <h2>Estancia</h2>
-              <ul>
-                {overnightGuests.map((name) => (
-                  <li key={name}>{name}</li>
-                ))}
-                <li>
-                  Diana <span className={styles.pending}>Pendiente</span>
-                </li>
-              </ul>
-            </section>
-            <section className={styles.card}>
-              <h2>Comida y día del 31</h2>
-              <ul>
-                {dayGuests.map((name) => (
-                  <li key={name}>{name}</li>
-                ))}
-              </ul>
-            </section>
-          </div>
-        ) : (
+        <div className={styles.roster}>
           <section className={styles.card}>
-            <h2>Lista de asistentes</h2>
-            <p>Inicia sesión para ver quién viene.</p>
-            <AccountControl
-              callbackFailed={false}
-              callbackPath="/eventos/nochevieja-2026"
-            />
+            <h2>Estancia</h2>
+            <ul>
+              {overnightGuests.map((name) => (
+                <li key={name}>{name}</li>
+              ))}
+              <li>
+                Diana <span className={styles.pending}>Pendiente</span>
+              </li>
+            </ul>
           </section>
-        )}
+          <section className={styles.card}>
+            <h2>Comida y día del 31</h2>
+            <ul>
+              {dayGuests.map((name) => (
+                <li key={name}>{name}</li>
+              ))}
+            </ul>
+          </section>
+        </div>
       </div>
     </main>
   )
