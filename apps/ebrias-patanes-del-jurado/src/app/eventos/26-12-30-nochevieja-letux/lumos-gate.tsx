@@ -108,7 +108,7 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
           aria-live="polite"
         >
           <div className={styles.mist} aria-hidden="true" />
-          <div className={styles.storm} aria-hidden="true" />
+          <LightningStorm active={!casting} />
           <div className={styles.light} aria-hidden="true" />
           <div className={styles.prompt}>
             <p>
@@ -151,4 +151,46 @@ interface SpeechRecognition extends EventTarget {
   onresult: ((event: { results: SpeechRecognitionResultList }) => void) | null
   start: () => void
   stop: () => void
+}
+
+function LightningStorm({ active }: { active: boolean }) {
+  const storm = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const layer = storm.current
+    if (!layer || !active) return
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+    let timer: number
+
+    function strike() {
+      if (!layer) return
+      layer.replaceChildren()
+      if (!reducedMotion.matches) {
+        const count =
+          Math.random() < 0.55 ? 1 : 2 + Math.floor(Math.random() * 3)
+        for (let index = 0; index < count; index++) {
+          const bolt = document.createElement("span")
+          bolt.className = styles.bolt
+          bolt.style.left = `${((index + Math.random()) * 100) / count}%`
+          bolt.style.top = `${Math.random() * 24 - 10}%`
+          bolt.style.height = `${28 + Math.random() * 28}%`
+          bolt.style.filter =
+            Math.random() < 0.5 ? "none" : "hue-rotate(216deg)"
+          bolt.style.scale = Math.random() < 0.5 ? "-1 1" : "1 1"
+          bolt.style.animationDelay = `${Math.random() < 0.5 ? 0 : Math.random() * 240}ms`
+          layer.append(bolt)
+        }
+      }
+      timer = window.setTimeout(strike, 850 + Math.random() * 1650)
+    }
+
+    timer = window.setTimeout(strike, 350)
+    return () => {
+      window.clearTimeout(timer)
+      layer.replaceChildren()
+    }
+  }, [active])
+
+  return <div ref={storm} className={styles.storm} aria-hidden="true" />
 }

@@ -328,27 +328,13 @@
   pointer-events: none;
 }
 
-.storm::before,
-.storm::after {
+.bolt {
   position: absolute;
-  top: -2rem;
   width: min(38vw, 22rem);
-  height: 48vh;
-  content: "";
+  translate: -50% 0;
   opacity: 0;
   background: url("/images/letux-lightning.svg") top center / contain no-repeat;
-  animation: distant-lightning 12s linear infinite;
-}
-
-.storm::before {
-  left: 1vw;
-}
-
-.storm::after {
-  right: 1vw;
-  transform: scaleX(-1);
-  filter: hue-rotate(216deg);
-  animation-delay: 5s;
+  animation: distant-lightning 600ms linear both;
 }
 
 .storm {
@@ -379,16 +365,14 @@
 
 @keyframes distant-lightning {
   0%,
-  23%,
-  34%,
   100% {
     opacity: 0;
   }
-  25% {
+  8% {
     opacity: 1;
   }
-  30% {
-    opacity: 0.25;
+  60% {
+    opacity: 0.78;
   }
 }
 
@@ -407,8 +391,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .storm::before,
-  .storm::after,
+  .bolt,
   .gate.casting,
   .casting .light {
     animation: none;
