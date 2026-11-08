@@ -8,7 +8,13 @@ import {
   useRef,
   useState,
 } from "react"
-import { addAttendanceBlock, createAttendee, updateAttendance } from "./actions"
+import {
+  addAttendanceBlock,
+  addEventCar,
+  createAttendee,
+  updateAttendance,
+  updateEventCar,
+} from "./actions"
 import styles from "./page.module.css"
 
 type Block = { id: string; label: string }
@@ -20,23 +26,30 @@ export function AttendanceBoard({
   roster,
   members,
   canManage,
+  mode = "attendance",
 }: {
   blocks: Block[]
   roster: Attendee[]
   members: Member[]
   canManage: boolean
+  mode?: "attendance" | "cars"
 }) {
   const [message, setMessage] = useState("")
-  const move = useCallback(async (id: string, status: string) => {
-    const form = new FormData()
-    form.set("member", id)
-    form.set("status", status)
-    try {
-      setMessage(await updateAttendance("", form))
-    } catch {
-      setMessage("No se pudo mover el asistente.")
-    }
-  }, [])
+  const move = useCallback(
+    async (id: string, status: string) => {
+      const form = new FormData()
+      form.set("member", id)
+      form.set("status", status)
+      try {
+        setMessage(
+          await (mode === "cars" ? updateEventCar : updateAttendance)("", form)
+        )
+      } catch {
+        setMessage("No se pudo mover el asistente.")
+      }
+    },
+    [mode]
+  )
   return (
     <div className={styles.roster}>
       {blocks
@@ -49,9 +62,10 @@ export function AttendanceBoard({
             members={members}
             canManage={canManage}
             move={move}
+            mode={mode}
           />
         ))}
-      {canManage ? <BlockForm /> : null}
+      {canManage ? <BlockForm mode={mode} /> : null}
       <p role="status" hidden={!message}>
         {message}
       </p>
@@ -65,11 +79,13 @@ function AttendanceSection({
   members,
   canManage,
   move,
+  mode,
 }: {
   block: Block
   roster: Attendee[]
   members: Member[]
   canManage: boolean
+  mode: "attendance" | "cars"
   move: (id: string, status: string) => Promise<void>
 }) {
   const guests = roster.filter(({ status }) => status === block.id)
@@ -102,26 +118,24 @@ function AttendanceSection({
   const matches = available.filter(({ alias }) =>
     normalize(alias).includes(normalize(name))
   )
+  const dragType = `application/x-ebrias-${mode}`
   const dragOver = useCallback(
     (event: DragEvent) => {
-      if (
-        canManage &&
-        event.dataTransfer.types.includes("application/x-ebrias-attendee")
-      )
+      if (canManage && event.dataTransfer.types.includes(dragType))
         event.preventDefault()
     },
-    [canManage]
+    [canManage, dragType]
   )
   const drop = useCallback(
     (event: DragEvent) => {
       if (!canManage) return
-      const id = event.dataTransfer.getData("application/x-ebrias-attendee")
+      const id = event.dataTransfer.getData(dragType)
       if (!id) return
       event.preventDefault()
       if (roster.some((guest) => guest.id === id && guest.status !== block.id))
         void move(id, block.id)
     },
-    [block.id, canManage, move, roster]
+    [block.id, canManage, dragType, move, roster]
   )
 
   return (
@@ -135,7 +149,7 @@ function AttendanceSection({
         <h2>
           {block.label} ({guests.length})
         </h2>
-        {canManage ? (
+        {canManage && mode === "attendance" ? (
           <button
             className={styles.addAttendee}
             type="button"
@@ -147,7 +161,7 @@ function AttendanceSection({
           </button>
         ) : null}
       </div>
-      {canManage ? (
+      {canManage && mode === "attendance" ? (
         <dialog
           ref={dialog}
           className={styles.attendeeDialog}
@@ -205,7 +219,12 @@ function AttendanceSection({
       {guests.length ? (
         <ul>
           {guests.map((guest) => (
-            <AttendeeRow key={guest.id} guest={guest} canManage={canManage} />
+            <AttendeeRow
+              key={guest.id}
+              guest={guest}
+              canManage={canManage}
+              dragType={dragType}
+            />
           ))}
         </ul>
       ) : null}
@@ -216,16 +235,18 @@ function AttendanceSection({
 function AttendeeRow({
   guest,
   canManage,
+  dragType,
 }: {
   guest: Attendee
   canManage: boolean
+  dragType: string
 }) {
   const drag = useCallback(
     (event: DragEvent) => {
-      event.dataTransfer.setData("application/x-ebrias-attendee", guest.id)
+      event.dataTransfer.setData(dragType, guest.id)
       event.dataTransfer.effectAllowed = "move"
     },
-    [guest.id]
+    [guest.id, dragType]
   )
   return (
     <li
@@ -239,18 +260,22 @@ function AttendeeRow({
   )
 }
 
-function BlockForm() {
-  const [message, action, pending] = useActionState(addAttendanceBlock, "")
+function BlockForm({ mode }: { mode: "attendance" | "cars" }) {
+  const isCars = mode === "cars"
+  const [message, action, pending] = useActionState(
+    isCars ? addEventCar : addAttendanceBlock,
+    ""
+  )
   return (
     <details>
-      <summary>Añadir bloque</summary>
+      <summary>{isCars ? "Añadir coche" : "Añadir bloque"}</summary>
       <form action={action} className="account admission-form">
         <label>
-          Nombre del bloque
+          {isCars ? "Nombre del coche" : "Nombre del bloque"}
           <input name="name" required maxLength={60} />
         </label>
         <button type="submit" disabled={pending}>
-          Crear bloque
+          {isCars ? "Crear coche" : "Crear bloque"}
         </button>
         <p role="status">{message}</p>
       </form>

@@ -7,6 +7,7 @@ import {
   letuxEvent,
 } from "@/features/members/attendance"
 import { getMemberDirectory } from "@/features/members/directory"
+import { getCarBoard, unassignedCar } from "@/features/members/event-cars"
 import { canManageAttendance, getAuthorizedUser } from "@/lib/session"
 import { AttendanceBoard } from "./attendance-form"
 import { LumosGate } from "./lumos-gate"
@@ -19,9 +20,10 @@ export default async function NewYearsEve() {
   const user = await getAuthorizedUser()
   if (!user) redirect("/")
 
-  const [roster, blocks] = await Promise.all([
+  const [roster, blocks, cars] = await Promise.all([
     getEventRoster(letuxEvent),
     getAttendanceBlocks(letuxEvent),
+    getCarBoard(letuxEvent),
   ])
 
   const canManage = await canManageAttendance()
@@ -53,6 +55,19 @@ export default async function NewYearsEve() {
               blocks={blocks}
               roster={roster}
               members={members}
+              canManage={canManage}
+            />
+          </details>
+          <details className={styles.attendees}>
+            <summary>Reparto de coches</summary>
+            <AttendanceBoard
+              mode="cars"
+              blocks={cars.blocks}
+              roster={roster.map((guest) => ({
+                ...guest,
+                status: cars.assigned.get(guest.id) ?? unassignedCar,
+              }))}
+              members={[]}
               canManage={canManage}
             />
           </details>

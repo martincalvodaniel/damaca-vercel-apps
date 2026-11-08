@@ -8,6 +8,7 @@ import {
   letuxEvent,
   setAttendance,
 } from "@/features/members/attendance"
+import { assignCar, createCar } from "@/features/members/event-cars"
 import { canManageAttendance } from "@/lib/session"
 
 export async function updateAttendance(_previous: string, form: FormData) {
@@ -82,6 +83,42 @@ export async function createAttendee(_previous: string, form: FormData) {
   } catch {
     return "No se pudo añadir el asistente."
   }
+  revalidatePath("/eventos/26-12-30-nochevieja-letux")
+  return ""
+}
+
+export async function addEventCar(_previous: string, form: FormData) {
+  if (!(await canManageAttendance()))
+    return "No tienes permiso para crear coches."
+  const value = form.get("name")
+  const name =
+    typeof value === "string" ? value.trim().replace(/\s+/gu, " ") : ""
+  if (!name || name.length > 60)
+    return "Introduce un nombre de hasta 60 caracteres."
+  try {
+    if (!(await createCar(letuxEvent, name)))
+      return "Ya existe un bloque con ese nombre."
+  } catch {
+    return "No se pudo crear el coche."
+  }
+  revalidatePath("/eventos/26-12-30-nochevieja-letux")
+  return ""
+}
+
+export async function updateEventCar(_previous: string, form: FormData) {
+  if (!(await canManageAttendance()))
+    return "No tienes permiso para repartir coches."
+  const id = form.get("member")
+  const car = form.get("status")
+  if (
+    typeof id !== "string" ||
+    id.length > 100 ||
+    typeof car !== "string" ||
+    car.length > 150
+  )
+    return "Comprueba el asistente y el coche."
+  if (!(await assignCar(letuxEvent, id, car)))
+    return "No se encontró el asistente o el coche."
   revalidatePath("/eventos/26-12-30-nochevieja-letux")
   return ""
 }

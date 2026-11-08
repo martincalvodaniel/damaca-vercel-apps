@@ -178,3 +178,8 @@
 
 - Estado: `in_progress`.
 - Aceptación: alta desde cada bloque, traslado mediante arrastre o selector y acciones dentro de la lista.
+
+## EPJ-25 — Reparto de coches en Letux
+
+- Estado: `in_progress`.
+- Aceptación: sección con «Sin asignar», creación de coches y traslado de asistentes mediante arrastre. Las asignaciones persisten por evento.

@@ -43,6 +43,17 @@ export async function deleteMember(memberId: string) {
         }
       }
 
+      for (const { name } of collections) {
+        if (/^\d{6}-car-assignments$/u.test(name)) {
+          await db
+            .collection<{ _id: string }>(name)
+            .deleteMany(
+              { _id: { $in: [memberId, `member:${memberId}`] } },
+              { session }
+            )
+        }
+      }
+
       const eventPrefixes = new Set(
         collections.flatMap(({ name }) =>
           /^\d{6}-costume-(choices|owners)$/u.test(name)
