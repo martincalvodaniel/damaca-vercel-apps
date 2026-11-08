@@ -316,8 +316,7 @@
   font-weight: 700;
 }
 
-.blockHeader,
-.attendeeActions {
+.blockHeader {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -337,8 +336,4 @@
   color: inherit;
   font-size: 1.4rem;
   cursor: pointer;
-}
-
-.attendeeActions select {
-  max-width: 100%;
 }

@@ -6,7 +6,6 @@ import {
   createAttendanceBlock,
   getAttendanceBlocks,
   letuxEvent,
-  removeAttendee,
   setAttendance,
 } from "@/features/members/attendance"
 import { canManageAttendance } from "@/lib/session"
@@ -28,12 +27,6 @@ export async function updateAttendance(_previous: string, form: FormData) {
   }
 
   try {
-    if (form.get("intent") === "remove") {
-      if (!(await removeAttendee(letuxEvent, member)))
-        return "No se encontró ese asistente."
-      revalidatePath("/eventos/26-12-30-nochevieja-letux")
-      return "Asistente eliminado."
-    }
     const blocks = await getAttendanceBlocks(letuxEvent)
     if (!blocks.some(({ id }) => id === status)) {
       return "Comprueba el bloque de asistencia."

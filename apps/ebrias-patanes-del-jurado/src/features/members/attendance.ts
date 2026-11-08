@@ -97,10 +97,6 @@ export async function addAttendee(
   return result.upsertedCount === 1 || result.matchedCount === 1
 }
 
-export async function removeAttendee(event: string, id: string) {
-  return (await attendees(event).deleteOne({ _id: id })).deletedCount === 1
-}
-
 export async function setAttendance(event: string, id: string, status: string) {
   return (
     (await attendees(event).updateOne({ _id: id }, { $set: { status } }))

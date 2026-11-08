@@ -38,7 +38,6 @@ export function AttendanceBoard({
           <AttendanceSection
             key={block.id}
             block={block}
-            blocks={blocks}
             roster={roster}
             members={members}
             canManage={canManage}
@@ -55,14 +54,12 @@ export function AttendanceBoard({
 
 function AttendanceSection({
   block,
-  blocks,
   roster,
   members,
   canManage,
   move,
 }: {
   block: Block
-  blocks: Block[]
   roster: Attendee[]
   members: Member[]
   canManage: boolean
@@ -147,12 +144,7 @@ function AttendanceSection({
       {guests.length ? (
         <ul>
           {guests.map((guest) => (
-            <AttendeeRow
-              key={guest.id}
-              guest={guest}
-              blocks={blocks}
-              canManage={canManage}
-            />
+            <AttendeeRow key={guest.id} guest={guest} canManage={canManage} />
           ))}
         </ul>
       ) : null}
@@ -162,11 +154,9 @@ function AttendanceSection({
 
 function AttendeeRow({
   guest,
-  blocks,
   canManage,
 }: {
   guest: Attendee
-  blocks: Block[]
   canManage: boolean
 }) {
   const drag = useCallback(
@@ -176,42 +166,9 @@ function AttendeeRow({
     },
     [guest.id]
   )
-  const [message, remove, pending] = useActionState(updateAttendance, "")
   return (
     <li draggable={canManage} onDragStart={canManage ? drag : undefined}>
       {guest.alias}
-      {canManage ? (
-        <details>
-          <summary>Opciones</summary>
-          <form action={remove} className={styles.attendeeActions}>
-            <input type="hidden" name="member" value={guest.id} />
-            <select
-              name="status"
-              defaultValue={guest.status}
-              aria-label={`Bloque de ${guest.alias}`}
-            >
-              {blocks.map(({ id, label }) => (
-                <option key={id} value={id}>
-                  {label}
-                </option>
-              ))}
-            </select>
-            <button type="submit" disabled={pending}>
-              Mover
-            </button>
-            <button
-              type="submit"
-              name="intent"
-              value="remove"
-              aria-label={`Quitar a ${guest.alias}`}
-              disabled={pending}
-            >
-              ×
-            </button>
-            <span role="status">{message}</span>
-          </form>
-        </details>
-      ) : null}
     </li>
   )
 }
