@@ -1,0 +1,27 @@
+{
+  "name": "@damaca/ebrias-patanes-del-jurado",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "bun run --bun next dev --port 3020",
+    "build": "bun run --bun next build",
+    "start": "bun run --bun next start --port 3020",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vercel/config": "catalog:",
+    "better-auth": "catalog:",
+    "mongodb": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "server-only": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
+  }
+}

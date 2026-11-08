@@ -197,6 +197,26 @@
         "typescript": "catalog:",
       },
     },
+    "apps/ebrias-patanes-del-jurado": {
+      "name": "@damaca/ebrias-patanes-del-jurado",
+      "version": "0.1.0",
+      "dependencies": {
+        "@vercel/config": "catalog:",
+        "better-auth": "catalog:",
+        "mongodb": "catalog:",
+        "next": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "server-only": "catalog:",
+      },
+      "devDependencies": {
+        "@types/bun": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "typescript": "catalog:",
+      },
+    },
     "apps/lbdp": {
       "name": "@damaca/lbdp",
       "version": "0.1.0",
@@ -360,6 +380,8 @@
     "@damaca/damaca-pocs": ["@damaca/damaca-pocs@workspace:apps/damaca-pocs"],
 
     "@damaca/database-refresh": ["@damaca/database-refresh@workspace:packages/database-refresh"],
+
+    "@damaca/ebrias-patanes-del-jurado": ["@damaca/ebrias-patanes-del-jurado@workspace:apps/ebrias-patanes-del-jurado"],
 
     "@damaca/identity": ["@damaca/identity@workspace:packages/identity"],
 
