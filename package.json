@@ -31,7 +31,9 @@
       "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
       "zod": "4.6.7",
       "sharp": "0.35.5",
-      "@better-auth/oauth-provider": "1.7.12"
+      "@better-auth/oauth-provider": "1.7.12",
+      "web-push": "3.6.7",
+      "@types/web-push": "3.6.4"
     }
   },
   "scripts": {

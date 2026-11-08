@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState } from "react"
-import { approveEmail } from "./actions"
+import { approveEmail, deleteAdmissionRequest } from "./actions"
 
 export function AdmissionForm({
   members,
@@ -11,6 +11,11 @@ export function AdmissionForm({
   request?: { email: string; name?: string }
 }) {
   const [message, action, pending] = useActionState(approveEmail, "")
+
+  const [deleteMessage, deleteAction, deleting] = useActionState(
+    deleteAdmissionRequest,
+    ""
+  )
 
   return (
     <form action={action} className="account admission-form">
@@ -40,10 +45,22 @@ export function AdmissionForm({
           ))}
         </select>
       </label>
-      <button type="submit" disabled={pending}>
-        {pending ? "Guardando…" : request ? "Admitir" : "Guardar acceso"}
-      </button>
-      <p role="status">{message}</p>
+      <div className="settings-actions">
+        <button type="submit" disabled={pending || deleting}>
+          {pending ? "Guardando…" : request ? "Admitir" : "Guardar acceso"}
+        </button>
+        {request ? (
+          <button
+            type="submit"
+            formAction={deleteAction}
+            className="delete-request"
+            disabled={pending || deleting}
+          >
+            Eliminar
+          </button>
+        ) : null}
+      </div>
+      <p role="status">{deleteMessage || message}</p>
     </form>
   )
 }

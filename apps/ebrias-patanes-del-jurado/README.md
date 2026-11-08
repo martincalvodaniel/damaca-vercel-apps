@@ -29,3 +29,7 @@ NODE_ENV=development bun --conditions=react-server --env-file=/path/to/local.env
 ```
 
 Review the database name and counts, then append `--apply` to remove unlinked legacy Letux entries and move old costume ownership links. The roster starts empty. The old attendance collection can be removed independently. To clear the entire event later, remove the collections with the `261230-` prefix.
+
+### Admission push notifications
+
+Generate a VAPID key pair with the Web Push CLI. Set `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` (a contact mailto URL) in the app environment before deploying. Administrators enable alerts on each device from Settings. On iPhone, open Ebrias from its Home Screen icon before enabling alerts.

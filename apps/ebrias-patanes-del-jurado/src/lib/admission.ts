@@ -3,6 +3,7 @@ import "server-only"
 import { MongoServerError } from "mongodb"
 import { aliases, memberCollection } from "@/features/members/directory"
 import { getDatabaseConnection } from "@/lib/database"
+import { notifyAdmission } from "./admission-push"
 
 interface Identity {
   email: string
@@ -51,7 +52,7 @@ export async function requestAdmission(user: Identity & { name: string }) {
   if (!user.emailVerified || !email) return
 
   try {
-    await admissions().updateOne(
+    const result = await admissions().updateOne(
       { _id: email },
       {
         $setOnInsert: {
@@ -62,6 +63,10 @@ export async function requestAdmission(user: Identity & { name: string }) {
       },
       { upsert: true }
     )
+    if (result.upsertedCount)
+      await notifyAdmission().catch(() => {
+        console.error("Admission push delivery failed")
+      })
   } catch (error) {
     if (!(error instanceof MongoServerError && error.code === 11000))
       throw error
@@ -210,4 +215,8 @@ export async function replaceMemberEmail(
       return true
     })
   )
+}
+
+export function countPendingAdmissions() {
+  return admissions().countDocuments({ pending: true })
 }

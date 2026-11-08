@@ -2,8 +2,15 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { AdmissionAlert } from "./admission-alert"
 
-export function Navigation({ image }: { image?: string | null }) {
+export function Navigation({
+  image,
+  showAdmissionAlerts,
+}: {
+  image?: string | null
+  showAdmissionAlerts: boolean
+}) {
   const pathname = usePathname()
 
   return (
@@ -65,6 +72,7 @@ export function Navigation({ image }: { image?: string | null }) {
           </svg>
         )}
         Ajustes
+        {showAdmissionAlerts ? <AdmissionAlert /> : null}
       </Link>
     </nav>
   )

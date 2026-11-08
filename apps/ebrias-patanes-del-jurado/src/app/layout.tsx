@@ -29,7 +29,12 @@ export default async function RootLayout({
   return (
     <html lang="es">
       <body>
-        {user ? <Navigation image={user.image} /> : null}
+        {user ? (
+          <Navigation
+            image={user.image}
+            showAdmissionAlerts={user.role === "admin"}
+          />
+        ) : null}
         {children}
       </body>
     </html>

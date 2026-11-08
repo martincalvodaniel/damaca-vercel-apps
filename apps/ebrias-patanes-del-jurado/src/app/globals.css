@@ -298,7 +298,7 @@ body:has(.club-nav) {
   padding: 0.25rem 0.4rem;
 }
 
-.settings-card .request-delete-form button {
+.settings-card .account .delete-request {
   border-color: #8d2634;
   background: #ffe1e3;
   color: #65152f;

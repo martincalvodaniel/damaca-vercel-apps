@@ -89,3 +89,7 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - Se separaron los asistentes del directorio y se retiró la siembra automática. La gestión exige administrador o miembro vinculado.
 - La limpieza heredada tiene vista previa. Pendientes la comprobación con sesiones reales, la revisión responsive y la ejecución de la limpieza.
+
+## EPJ-22
+
+- Biome y tipos correctos. Pendiente configurar VAPID, desplegar y comprobar la entrega en un dispositivo real.

@@ -5,8 +5,8 @@ import {
   getMemberDirectory,
 } from "@/features/members/directory"
 import { AdmissionForm } from "@/features/settings/admission-form"
+import { AdmissionPushToggle } from "@/features/settings/admission-push-toggle"
 import { AliasForm } from "@/features/settings/alias-form"
-import { DeleteAdmissionForm } from "@/features/settings/delete-admission-form"
 import { EmailChangeForm } from "@/features/settings/email-change-form"
 import { listPendingAdmissions, normalizeEmail } from "@/lib/admission"
 import { getAuthorizedUser } from "@/lib/session"
@@ -55,6 +55,11 @@ export default async function Settings() {
         <>
           <section className="settings-card">
             <h2>Solicitudes de acceso ({requests.length})</h2>
+            {process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ? (
+              <AdmissionPushToggle
+                publicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY}
+              />
+            ) : null}
             {requests.length === 0 ? (
               <p>No hay solicitudes pendientes.</p>
             ) : (
@@ -66,7 +71,6 @@ export default async function Settings() {
                       request={{ email: _id, name }}
                     />
                     <EmailChangeForm email={_id} members={members} />
-                    <DeleteAdmissionForm email={_id} />
                   </li>
                 ))}
               </ul>

@@ -162,3 +162,9 @@
 - Estado: `in_progress`.
 - Rutas: asistencia, disfraces, Ajustes y limpieza de Letux.
 - Aceptación: invitados independientes, gestión por miembros y administradores, y persistencia de evento aislada por prefijo.
+
+## EPJ-22 — Avisos de admisión
+
+- Estado: `in_progress`.
+- Aceptación: acciones de admisión en la misma fila y aviso Web Push por solicitud nueva en dispositivos suscritos de administradores.
+- Validación: Biome, tipos y entrega real desde Preview a un dispositivo suscrito.
