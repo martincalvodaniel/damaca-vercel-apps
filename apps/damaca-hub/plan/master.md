@@ -46,3 +46,5 @@ Browser and home-screen icons use local SVG sources, a 16/32/48-pixel ICO fallba
 The production-to-int refresh implementation from AGW-12 is retained but suspended by owner decision in [AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). There is no cron schedule; the former endpoint returns 410 without database access, retained refresh/restore functions reject execution, and normal Mongo startup does not read a refresh manifest. Environment variables cannot reactivate it. Tasks uses its own Google authentication and allowlist; its Hub catalog grants do not authorize Tasks.
 
 La publicación Vercel pasa a ser manual bajo petición mediante `git.deploymentEnabled: false`. Registro transversal: [AGW-17](../../../plan/iterations.md#agw-17--manual-vercel-deployments).
+
+La configuración de despliegue y acceso geográfico se rige por [AGW-22](../../../plan/iterations.md#agw-22--align-vercel-configuration).

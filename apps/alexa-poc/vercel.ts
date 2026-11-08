@@ -4,6 +4,9 @@ export const config: VercelConfig = {
   buildCommand:
     "TURBO_TELEMETRY_DISABLED=1 turbo run build --filter @damaca/alexa-poc",
   bunVersion: "1.4.x",
+  git: {
+    deploymentEnabled: false,
+  },
   installCommand:
     '[ "$VERCEL_INSTALL_COMPLETED" = "1" ] || bunx bun@1.4.4 install --frozen-lockfile --filter @damaca/alexa-poc',
   regions: ["cdg1"],

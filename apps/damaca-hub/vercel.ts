@@ -12,7 +12,7 @@ export const config: VercelConfig = {
   regions: ["cdg1"],
   routes: [
     {
-      src: "/((?!api/auth/(?:oauth2/(?:token|userinfo|introspect|revoke)|jwks|\\.well-known/(?:openid-configuration|oauth-authorization-server))(?:/|$)).*)",
+      src: "/(.*)",
       missing: [
         {
           type: "header",

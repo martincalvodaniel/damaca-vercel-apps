@@ -25,3 +25,5 @@ Proyecto `lbdp` del equipo `martincalvodaniels-projects`, raíz `apps/lbdp`, Nex
 [LBDP-03](iterations.md#lbdp-03--reparar-el-lanzador-de-instalación-de-vercel) sustituye el bootstrap de bunx por npx. El fallo alojado no está confirmado como resuelto: el Preview de validación fue rechazado por cuota.
 
 [LBDP-04](iterations.md#lbdp-04--desactivar-deployments-automáticos-de-git) incorpora `vercel.ts` con `git.deploymentEnabled: false` y dependencia de configuración del catálogo; publicación manual bajo petición.
+
+La configuración de despliegue y acceso geográfico se rige por [AGW-22](../../../plan/iterations.md#agw-22--align-vercel-configuration).

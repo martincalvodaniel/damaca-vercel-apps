@@ -212,3 +212,12 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Dependencias: convención de metadatos de Next.js e iconos existentes de AGW-10.
 - Aceptación: ambas apps publican un manifiesto con inicio en la raíz, modo independiente e iconos de 192 y 512 píxeles.
 - Validación: Biome, tipos, pruebas, compilación y comprobación del manifiesto generado en ambas apps. Evidencia en el [registro](iteration-log.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).
+
+## AGW-22 — Align Vercel configuration
+
+- Estado: validated.
+- Objetivo y rutas: aplicar una política uniforme en `apps/*/vercel.ts` y `turbo/generators/templates/*/vercel.ts`.
+- Dependencias: Bun y dependencias locales del monorepo. Capacidad inicial: 99% de 5h y 98% de 7d restantes.
+- Aceptación: los once archivos desactivan despliegues Git, deniegan solicitudes cuyo país no sea ES en todas las rutas y usan la instalación condicional con bunx.
+- Validación prevista: comparación normalizada, Biome incremental, tipos, pruebas y builds de las apps modificadas, pruebas del generador y diff check.
+- Evidencia: [registro AGW-22](iteration-log.md#agw-22--align-vercel-configuration).

@@ -198,3 +198,10 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 - Ambos manifiestos usan los PNG existentes, incluida la variante maskable. Inicio y alcance en la raíz, con apertura en modo independiente.
 - Biome en ambos archivos nuevos, comprobación de tipos y 1.212 pruebas superadas. El build normal encontró restricciones de acceso a Google Fonts y de apertura de puertos de Turbopack en este entorno. El build con `-- --webpack` pasó en ambas apps.
 - Verificados el JSON generado en `/manifest.webmanifest`, el enlace en el HTML compilado y las dimensiones reales de los PNG. Pendiente comprobar la instalación en Chrome Android tras desplegar.
+
+## AGW-22 — Align Vercel configuration
+
+- [Aceptación](iterations.md#agw-22--align-vercel-configuration). Los once archivos coinciden al normalizar el nombre del paquete. Las dos ramas del comando de instalación se verificaron con un sustituto local de bunx.
+- Biome comprobó explícitamente los once archivos y la prueba actualizada del Hub. Pasaron los tipos, las suites disponibles de Alexa y Hub, las seis pruebas del generador y `git diff --check`.
+- Builds de Hub, Damaca POCs y LBDP completados. Alexa compiló con Webpack y variables ficticias de build. Turbopack no pudo abrir un puerto local en el entorno.
+- La regla geográfica incluye los endpoints OAuth/OIDC del Hub. Las llamadas servidor a servidor clasificadas fuera de España o sin país quedan bloqueadas. Sin verificación de tráfico en Vercel.

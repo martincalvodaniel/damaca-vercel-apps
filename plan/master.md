@@ -64,3 +64,5 @@ La skill [vercel-deployment-report](../.agents/skills/vercel-deployment-report/S
 La rama seleccionada en vercel-deploy-alias fija el entorno: `main` siempre Production e `int` siempre Preview (AGW-20).
 
 Billing y Home Management incorporan manifiestos web propios con los iconos existentes y apertura en modo independiente. Entrega [AGW-21](iterations.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).
+
+[AGW-22](iterations.md#agw-22--align-vercel-configuration) unifica las apps y las dos plantillas: despliegue Git desactivado, acceso limitado a España en todas las rutas e instalación condicional con bunx. El filtro también se aplica a los endpoints OAuth/OIDC del Hub.
