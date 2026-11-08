@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { ThemeBootstrap } from "@/components/shared/theme-bootstrap"
+import { installName } from "@/config/install-name"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -13,10 +14,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
+// biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires metadata exports in the layout module
 export const metadata: Metadata = {
   title: "Dalis Tasks & Events",
   description: "Tus tareas y fechas importantes, también sin conexión",
-  appleWebApp: { capable: true, title: "Dalis" },
+  appleWebApp: { capable: true, title: installName },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     apple: "/apple-touch-icon.png",

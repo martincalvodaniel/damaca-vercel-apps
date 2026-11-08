@@ -52,3 +52,5 @@ La persistencia de HM-11 es compatible con MongoDB standalone: escrituras condic
 Los controles de Tareas se mantienen compactos y accesibles según HM-12/HM-13: restauración de archivadas, histórico alineado y check reversible directo para completar o deshacer eventos diarios.
 
 La instalación web en modo independiente se documenta en [AGW-21](../../../plan/iterations.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).
+
+Los nombres de instalación por rama se documentan en [AGW-23](../../../plan/iterations.md#agw-23--nombres-de-instalación-de-dalis).

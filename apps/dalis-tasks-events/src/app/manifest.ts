@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next"
+import { installName } from "@/config/install-name"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Dalis Tasks & Events",
-    short_name: "Dalis",
+    name: installName,
+    short_name: installName,
     description: "Tus tareas y fechas importantes, también sin conexión",
     start_url: "/workspace",
     scope: "/",

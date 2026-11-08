@@ -28,3 +28,5 @@ Las diez entregas recientes son `23q`–`23h` en [iteraciones](iterations.md) y 
 Browser and home-screen icons use local SVG sources, a 16/32/48-pixel ICO fallback, installation PNGs and an Apple Touch Icon. Existing PWA manifests also declare an opaque maskable variant. Regenerate with `bun run icons:generate` from the repository root. Shared status and evidence: [AGW-10](../../../plan/iterations.md#agw-10--application-favicons) and [delivery log](../../../plan/iteration-log.md#agw-10-application-favicons).
 
 La publicación Vercel pasa a ser manual bajo petición mediante `git.deploymentEnabled: false`. Registro transversal: [AGW-17](../../../plan/iterations.md#agw-17--manual-vercel-deployments).
+
+Los nombres de instalación por rama se documentan en [AGW-23](../../../plan/iterations.md#agw-23--nombres-de-instalación-de-dalis).

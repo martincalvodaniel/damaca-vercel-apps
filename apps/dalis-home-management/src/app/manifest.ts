@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next"
+import { installName } from "@/config/install-name"
 
 export const dynamic = "force-static"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "Dali — Nuestro hogar, más fácil",
-    short_name: "Dali",
+    name: installName,
+    short_name: installName,
     description: "Utilidades para organizar y gestionar el hogar.",
     lang: "es",
     start_url: "/",

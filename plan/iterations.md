@@ -221,3 +221,12 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Aceptación: los once archivos desactivan despliegues Git, deniegan solicitudes cuyo país no sea ES en todas las rutas y usan la instalación condicional con bunx.
 - Validación prevista: comparación normalizada, Biome incremental, tipos, pruebas y builds de las apps modificadas, pruebas del generador y diff check.
 - Evidencia: [registro AGW-22](iteration-log.md#agw-22--align-vercel-configuration).
+
+## AGW-23 — Nombres de instalación de Dalis
+
+- Estado: `validated`.
+- Rutas: manifiestos, metadatos de Apple, configuración de nombre y caché de build de Home Management y Tasks.
+- Dependencias: referencia Git de Vercel, siguiendo BILL-27.
+- Aceptación: `dalis-home` y `dalis-tasks`, con sufijo `-int` exclusivamente en esa rama.
+- Validación: Biome, tipos, pruebas, compilación y comprobación de nombres generados.
+- Evidencia: [registro AGW-23](iteration-log.md#agw-23--nombres-de-instalación-de-dalis).

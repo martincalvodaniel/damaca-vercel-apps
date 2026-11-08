@@ -205,3 +205,10 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 - Biome comprobó explícitamente los once archivos y la prueba actualizada del Hub. Pasaron los tipos, las suites disponibles de Alexa y Hub, las seis pruebas del generador y `git diff --check`.
 - Builds de Hub, Damaca POCs y LBDP completados. Alexa compiló con Webpack y variables ficticias de build. Turbopack no pudo abrir un puerto local en el entorno.
 - La regla geográfica incluye los endpoints OAuth/OIDC del Hub. Las llamadas servidor a servidor clasificadas fuera de España o sin país quedan bloqueadas. Sin verificación de tráfico en Vercel.
+
+## AGW-23 — Nombres de instalación de Dalis
+
+- Inicio: 2026-11-08, rama `int` limpia, 94 % de 5 h y 98 % de 7 d restantes. [Aceptación](iterations.md#agw-23--nombres-de-instalación-de-dalis).
+- Ambos manifiestos y títulos de Apple usan el nombre configurado por rama. Turbo separa la caché por referencia Git en cada app.
+- Verificados ambos manifiestos con `int`, `main` y valor vacío. La compilación webpack de `int` produjo los dos manifiestos y títulos Apple esperados. El primer intento local falló al descargar Geist y Geist Mono; la compilación con acceso a red pasó.
+- Biome y tipos correctos. Home Management: 187 pruebas correctas. Tasks: 1392 correctas y 225 omitidas por su configuración de pruebas. Cero fallos. Sin instalación en dispositivo ni despliegue.

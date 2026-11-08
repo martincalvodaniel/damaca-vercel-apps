@@ -66,3 +66,7 @@ La rama seleccionada en vercel-deploy-alias fija el entorno: `main` siempre Prod
 Billing y Home Management incorporan manifiestos web propios con los iconos existentes y apertura en modo independiente. Entrega [AGW-21](iterations.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).
 
 [AGW-22](iterations.md#agw-22--align-vercel-configuration) unifica las apps y las dos plantillas: despliegue Git desactivado, acceso limitado a España por defecto e instalación condicional con bunx. El Hub conserva las excepciones para endpoints OAuth/OIDC de máquina recogidas en su [entrega 05](../apps/damaca-hub/plan/iterations.md#05--restore-oidc-routing-exceptions).
+
+## Instalación de Dalis
+
+Home Management y Tasks se instalan como `dalis-home` y `dalis-tasks`. Los despliegues de la rama `int` añaden `-int`. La misma configuración se aplica al manifiesto y al título de instalación de Apple. [AGW-23](iterations.md#agw-23--nombres-de-instalación-de-dalis).
