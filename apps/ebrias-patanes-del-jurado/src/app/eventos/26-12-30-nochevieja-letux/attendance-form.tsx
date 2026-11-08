@@ -112,14 +112,18 @@ function AttendanceSection({
     dialog.current?.querySelector("input")?.focus()
   }, [])
   const closePicker = useCallback(() => dialog.current?.close(), [])
-  const submit = useCallback(
-    async (previous: string, form: FormData) => {
-      const result = await createAttendee(previous, form)
-      if (!result) closePicker()
-      return result
-    },
-    [closePicker]
-  )
+  const submit = useCallback(async (previous: string, form: FormData) => {
+    const result = await createAttendee(previous, form)
+    if (!result) {
+      if (!form.get("member")) setQuery("")
+      if (dialog.current?.open) {
+        dialog.current
+          .querySelector<HTMLInputElement>('input[type="search"]')
+          ?.focus()
+      }
+    }
+    return result
+  }, [])
   const [message, action, pending] = useActionState(submit, "")
   const name = query.trim()
   const normalize = (value: string) =>
