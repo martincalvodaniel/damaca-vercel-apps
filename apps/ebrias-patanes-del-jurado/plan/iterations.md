@@ -16,4 +16,12 @@
 - Aceptación: las dos fotos se muestran completas en la portada y un recorte de la primera identifica la pestaña y la app instalada.
 - Validación: Biome, tipos, build y comprobación de referencias y dimensiones de las imágenes e iconos.
 
+## EPJ-03 — Portada con el dibujo sin marco
+
+- Estado: `validated`.
+- Rutas: `src/app/` y `plan/` de la app.
+- Dependencias: las dos versiones del dibujo guardadas en EPJ-02.
+- Aceptación: la portada muestra solo la versión sin marco. La versión con marco queda disponible para otras pantallas.
+- Validación: Biome, tipos, build y revisión de las referencias a las imágenes.
+
 [Alcance](master.md) · [Evidencia](iteration-log.md)

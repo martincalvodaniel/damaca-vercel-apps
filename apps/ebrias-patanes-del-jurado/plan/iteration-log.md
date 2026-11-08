@@ -13,4 +13,10 @@ Inicio: 82% de 5 h y 96% de 7 d disponibles (09:54 CET).
 - Biome, tipos y build de integración correctos.
 - Comprobadas las dimensiones de ambas fotos y de todos los iconos. El manifiesto del build conserva `ebrias-int` y enlaza el icono adaptable propio.
 
+## EPJ-03
+
+Inicio: 79% de 5 h y 95% de 7 d disponibles (10:01 CET).
+- Biome, tipos y build de integración correctos.
+- La portada solo referencia la imagen sin marco. La foto con marco sigue guardada en la app.
+
 [Iteraciones](iterations.md) · [Alcance](master.md)

@@ -33,14 +33,6 @@ export default async function Home({
             height={911}
             sizes="(min-width: 76rem) 30rem, (min-width: 48rem) 42vw, 100vw"
           />
-          <Image
-            className="framed-photo"
-            src="/images/jury-framed.jpg"
-            alt="El dibujo del jurado en su marco azul de nubes"
-            width={1280}
-            height={960}
-            sizes="(min-width: 76rem) 23rem, (min-width: 48rem) 32vw, 75vw"
-          />
           <figcaption className="poster-caption">
             Quórum: quien se apunte
           </figcaption>

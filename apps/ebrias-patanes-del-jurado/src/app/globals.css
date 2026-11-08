@@ -121,11 +121,6 @@ button:disabled {
   border-radius: 0.25rem;
 }
 
-.poster .framed-photo {
-  width: 75%;
-  justify-self: end;
-}
-
 .poster-caption {
   font-family: Georgia, serif;
   font-size: clamp(1rem, 2.5vw, 1.4rem);
