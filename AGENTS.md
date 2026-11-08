@@ -10,6 +10,11 @@
 - Preserve per-app environment variable boundaries and never copy secrets or local Vercel credentials into the repository.
 - Keep Vercel projects scoped to their app directory and keep `main` human-managed.
 
+## Responsive UI
+
+- Design for narrow phones first. Fit as much useful information as possible in the initial viewport with compact margins, padding and gaps, simple layouts, and no repeated labels or copy. Keep text readable, controls easy to tap and content free of horizontal scrolling.
+- Check changed screens on a narrow phone and on desktop. Desktop layouts may use more spacing when it improves readability or grouping.
+
 ## Agent workflow
 
 - The root [agent workflow](plan/workflow.md) is authoritative for branch selection,

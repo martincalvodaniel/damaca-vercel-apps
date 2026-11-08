@@ -10,14 +10,9 @@ export default async function Home({
 
   return (
     <main className="landing">
-      <header className="masthead">
-        <span>Club de quedadas</span>
-        <span>El jurado se reúne</span>
-      </header>
-
       <section className="hero">
         <div className="intro">
-          <p className="eyebrow">Acta nº 01 · Se abre la sesión</p>
+          <p className="eyebrow">Club de quedadas</p>
           <h1>
             Ebrias <em>Patanes</em> del Jurado
           </h1>
@@ -25,7 +20,7 @@ export default async function Home({
           <AccountControl callbackFailed={Boolean(error)} />
         </div>
 
-        <figure className="poster">
+        <div className="poster">
           <Image
             src="/images/jury-portrait.jpg"
             alt="Dibujo coloreado del jurado reunido en el estrado"
@@ -33,13 +28,8 @@ export default async function Home({
             height={911}
             sizes="(min-width: 76rem) 30rem, (min-width: 48rem) 42vw, 100vw"
           />
-          <figcaption className="poster-caption">
-            Quórum: quien se apunte
-          </figcaption>
-        </figure>
+        </div>
       </section>
-
-      <footer>Que conste en acta: nos vemos pronto.</footer>
     </main>
   )
 }

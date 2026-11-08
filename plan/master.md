@@ -70,3 +70,7 @@ Billing y Home Management incorporan manifiestos web propios con los iconos exis
 ## Instalación de Dalis
 
 Home Management y Tasks se instalan como `dalis-home` y `dalis-tasks`. Los despliegues de la rama `int` añaden `-int`. La misma configuración se aplica al manifiesto y al título de instalación de Apple. [AGW-23](iterations.md#agw-23--nombres-de-instalación-de-dalis).
+
+## Diseño adaptable
+
+La interfaz de las aplicaciones prioriza el contenido útil y la densidad en móvil. La regla para agentes vive en [AGENTS.md](../AGENTS.md). Ebrias aplica este criterio en su portada inspirada en Los Simpson.

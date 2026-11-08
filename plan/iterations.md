@@ -230,3 +230,12 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Aceptación: `dalis-home` y `dalis-tasks`, con sufijo `-int` exclusivamente en esa rama.
 - Validación: Biome, tipos, pruebas, compilación y comprobación de nombres generados.
 - Evidencia: [registro AGW-23](iteration-log.md#agw-23--nombres-de-instalación-de-dalis).
+
+
+## AGW-24 — Diseño compacto en móvil
+
+- Estado: `validated`.
+- Rutas: `AGENTS.md`, `plan/` y `apps/ebrias-patanes-del-jurado/src/app/`.
+- Dependencias: portada y dibujo sin marco de Ebrias.
+- Aceptación: regla de diseño adaptable para todas las apps y portada de Ebrias con estética de dibujo animado, título, acceso y dibujo visibles en móvil.
+- Validación: Biome, tipos, build y revisión en móvil y escritorio.

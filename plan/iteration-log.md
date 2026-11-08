@@ -212,3 +212,10 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 - Ambos manifiestos y títulos de Apple usan el nombre configurado por rama. Turbo separa la caché por referencia Git en cada app.
 - Verificados ambos manifiestos con `int`, `main` y valor vacío. La compilación webpack de `int` produjo los dos manifiestos y títulos Apple esperados. El primer intento local falló al descargar Geist y Geist Mono; la compilación con acceso a red pasó.
 - Biome y tipos correctos. Home Management: 187 pruebas correctas. Tasks: 1392 correctas y 225 omitidas por su configuración de pruebas. Cero fallos. Sin instalación en dispositivo ni despliegue.
+
+
+## AGW-24 — Diseño compacto en móvil
+
+Inicio: 75% de 5 h y 95% de 7 d disponibles (10:10 CET).
+- Biome, tipos y build de Ebrias correctos.
+- En Chrome a 320 × 568, 390 × 844 y 1440 × 900, el título, el botón y el dibujo completo se ven sin desplazamiento horizontal ni vertical para alcanzarlos.

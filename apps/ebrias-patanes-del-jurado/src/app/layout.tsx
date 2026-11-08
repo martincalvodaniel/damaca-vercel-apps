@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 }
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this layout export.
-export const viewport: Viewport = { themeColor: "#25152e" }
+export const viewport: Viewport = { themeColor: "#73caff" }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
