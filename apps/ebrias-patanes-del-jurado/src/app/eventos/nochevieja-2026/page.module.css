@@ -124,3 +124,47 @@
     padding: 1rem;
   }
 }
+
+.picker {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.picker input,
+.picker button {
+  min-height: 44px;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #705038;
+  border-radius: 0.35rem;
+  font: inherit;
+}
+
+.picker input {
+  width: 100%;
+  color: #302238;
+  background: #fff9e9;
+}
+
+.picker button {
+  color: #fff0cf;
+  background: #482546;
+  cursor: pointer;
+}
+
+.picker button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.suggestions button {
+  color: #302238;
+  background: #fff9e9;
+  overflow-wrap: anywhere;
+}

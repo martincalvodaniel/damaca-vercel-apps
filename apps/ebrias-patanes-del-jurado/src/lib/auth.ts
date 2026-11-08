@@ -2,20 +2,18 @@ import "server-only"
 
 import { betterAuth } from "better-auth"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
-import { MongoClient } from "mongodb"
 import { getAuthEnvironment } from "@/config/auth-env"
+import { getDatabaseConnection } from "@/lib/database"
 
 function createAuth() {
   const env = getAuthEnvironment()
-  const client = new MongoClient(env.mongoUri, {
-    serverSelectionTimeoutMS: 5000,
-  })
+  const { client, db } = getDatabaseConnection()
 
   return betterAuth({
     baseURL: env.baseURL,
     secret: env.secret,
     advanced: { cookiePrefix: "ebrias" },
-    database: mongodbAdapter(client.db(env.databaseName), { client }),
+    database: mongodbAdapter(db, { client }),
     socialProviders: {
       google: { clientId: env.clientId, clientSecret: env.clientSecret },
     },

@@ -10,7 +10,10 @@ export function AccountControl({
   callbackPath = "/",
 }: {
   callbackFailed: boolean
-  callbackPath?: "/" | "/eventos/nochevieja-2026"
+  callbackPath?:
+    | "/"
+    | "/eventos/nochevieja-2026"
+    | "/eventos/nochevieja-2026/disfraces"
 }) {
   const session = authClient.useSession()
   const [busy, setBusy] = useState(false)

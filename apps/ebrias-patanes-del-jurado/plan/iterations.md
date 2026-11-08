@@ -40,4 +40,11 @@
 - Aceptación: ficha temática accesible desde portada, fechas y lugar correctos, estancias separadas de visitas del 31 y Diana pendiente. La lista requiere sesión.
 - Validación: Biome, tipos, build y comprobación de la ruta sin sesión.
 
+## EPJ-06 — Elección anónima de disfraz
+
+- Estado: `validated`.
+- Rutas: `src/app/eventos/`, `src/features/`, `src/lib/`, `scripts/` y documentación de Ebrias.
+- Aceptación: catálogo con búsqueda normalizada y alta manual, reserva exclusiva y privada, tres intentos por cuenta, contador oculto y una prórroga administrativa.
+- Validación: Biome, tipos, build, catálogo y comprobaciones del acceso y las reservas.
+
 [Alcance](master.md) · [Evidencia](iteration-log.md)

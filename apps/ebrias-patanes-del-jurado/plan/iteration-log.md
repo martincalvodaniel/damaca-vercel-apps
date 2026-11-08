@@ -31,4 +31,10 @@ Inicio: 69% de 5 h y 94% de 7 d disponibles (10:26 CET).
 - Biome, tipos y build de integración correctos.
 - Chrome a 320 y 1440 px verificó el enlace de portada, la ficha y la ocultación de la lista sin sesión. Pendiente comprobar la vista con una cuenta de Google.
 
+## EPJ-06
+
+- Biome, tipos y build de integración correctos.
+- MongoDB 8 desechable verificó exclusividad concurrente, conservación del disfraz si falla el cambio, liberación al cambiar, bloqueo, prórroga única y alta en catálogo. Se comprobaron los alias y la búsqueda normalizada.
+- La ficha local pide sesión antes de mostrar el buscador. El estado enviado al navegador contiene el bloqueo, sin el contador.
+
 [Iteraciones](iterations.md) · [Alcance](master.md)

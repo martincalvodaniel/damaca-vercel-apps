@@ -51,6 +51,10 @@ export default async function NewYearsEve() {
           </p>
         </header>
 
+        <Link className={styles.back} href="/eventos/nochevieja-2026/disfraces">
+          Elegir disfraz →
+        </Link>
+
         {session ? (
           <div className={styles.roster}>
             <section className={styles.card}>

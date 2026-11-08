@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 84">
+  <title>Sorting Hat</title>
+  <path d="M8 71c13-7 20-7 28-13L47 29 70 7l-3 20 12 13 11 21c10 2 16 5 22 9-16 14-86 15-104 1Z" fill="#886046" stroke="#edc875" stroke-width="2" stroke-linejoin="round"/>
+  <path d="m70 7-8 24-15 11 17-3 15 1-12-13 3-20ZM36 58l20 7 34-4 11 6-27 8-42-3-14-3Z" fill="#4a302d"/>
+  <path d="m48 47 8 3m18-5-8 5m-14 9 7-4 9 3" fill="none" stroke="#2e1e22" stroke-width="3" stroke-linecap="round"/>
+</svg>
