@@ -66,4 +66,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Biome en los archivos editados, tipos, build y comprobación del diff correctos. Una maqueta con el CSS de la ficha se comprobó en Chrome a 320 y 1440 px con un nombre de 60 caracteres, sin desbordamiento.
 - Pendiente comprobar la creación y reasignación con una sesión real y MongoDB.
 
+## EPJ-18
+
+- Los relámpagos eligen uno de los cuatro bordes de la escena con un punto aleatorio y se disparan con pausas variables. La duración de cada relámpago se ajustó a 750 ms.
+- Biome explícito en los dos archivos: correcto, con cinco advertencias preexistentes de especificidad CSS y callbacks JSX. `bun run lint --changed --since=HEAD` no encontró archivos; `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` terminó correctamente (resultado desde caché); `git diff --check` correcto.
+
 [Iteraciones](iterations.md) · [Alcance](master.md)

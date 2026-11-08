@@ -172,8 +172,15 @@ function LightningStorm({ active }: { active: boolean }) {
         for (let index = 0; index < count; index++) {
           const bolt = document.createElement("span")
           bolt.className = styles.bolt
-          bolt.style.left = `${((index + Math.random()) * 100) / count}%`
-          bolt.style.top = `${Math.random() * 24 - 10}%`
+          const position = `${8 + Math.random() * 84}%`
+          const edge = Math.floor(Math.random() * 4)
+          const anchors = [
+            { left: position, top: "0", rotate: "0deg" },
+            { left: "100%", top: position, rotate: "90deg" },
+            { left: position, top: "100%", rotate: "180deg" },
+            { left: "0", top: position, rotate: "-90deg" },
+          ]
+          Object.assign(bolt.style, anchors[edge])
           bolt.style.height = `${28 + Math.random() * 28}%`
           bolt.style.filter =
             Math.random() < 0.5 ? "none" : "hue-rotate(216deg)"
@@ -182,7 +189,7 @@ function LightningStorm({ active }: { active: boolean }) {
           layer.append(bolt)
         }
       }
-      timer = window.setTimeout(strike, 850 + Math.random() * 1650)
+      timer = window.setTimeout(strike, 1000 + Math.random() * 1500)
     }
 
     timer = window.setTimeout(strike, 350)

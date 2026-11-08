@@ -332,9 +332,10 @@
   position: absolute;
   width: min(38vw, 22rem);
   translate: -50% 0;
+  transform-origin: top center;
   opacity: 0;
   background: url("/images/letux-lightning.svg") top center / contain no-repeat;
-  animation: distant-lightning 600ms linear both;
+  animation: distant-lightning 750ms linear both;
 }
 
 .storm {

@@ -132,3 +132,11 @@
 - Dependencias: sesión administrativa y MongoDB de la app.
 - Aceptación: encabezados con recuento, bloques nuevos persistentes y seleccionables al asignar asistencia, creación exclusiva de administradores, rechazo de nombres vacíos o repetidos.
 - Validación: Biome, tipos, build y revisión responsive.
+
+## EPJ-18 — Variación de los relámpagos de Lumos
+
+- Estado: `validated`.
+- Objetivo: variar la dirección de los relámpagos y ajustar su ritmo y duración.
+- Rutas: `src/app/eventos/26-12-30-nochevieja-letux/lumos-gate.tsx`, `src/app/eventos/26-12-30-nochevieja-letux/lumos-gate.module.css` y `plan/`.
+- Aceptación: los relámpagos pueden entrar desde cualquiera de los cuatro bordes, con posición y pausa variables; la animación dura 750 ms.
+- Validación: Biome en los archivos afectados, tipos de la app y `git diff --check`.
