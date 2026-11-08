@@ -71,4 +71,10 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Los relámpagos eligen uno de los cuatro bordes de la escena con un punto aleatorio y se disparan con pausas variables. La duración de cada relámpago se ajustó a 750 ms.
 - Biome explícito en los dos archivos: correcto, con cinco advertencias preexistentes de especificidad CSS y callbacks JSX. `bun run lint --changed --since=HEAD` no encontró archivos; `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` terminó correctamente (resultado desde caché); `git diff --check` correcto.
 
+## EPJ-19
+
+- El audio usa una instancia compartida entre la ficha de Letux y la selección de disfraz. El control persistente permite activarlo o pausarlo en ambas rutas; al navegar con el enlace de la app, el audio continúa y el estado accesible sigue indicando «Pausar música».
+- La nota doble quedó nítida; cuando está apagada, una línea roja la tacha. A 320 px el botón mide 48 × 48 px y el documento no tiene desbordamiento horizontal. A 1440 px tampoco se detectó desbordamiento y el botón queda dentro del viewport.
+- Biome en los seis archivos afectados, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos. El servidor de desarrollo ya ocupaba el puerto 3020; la comprobación visual reutilizó esa instancia.
+
 [Iteraciones](iterations.md) · [Alcance](master.md)

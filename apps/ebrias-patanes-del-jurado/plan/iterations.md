@@ -140,3 +140,11 @@
 - Rutas: `src/app/eventos/26-12-30-nochevieja-letux/lumos-gate.tsx`, `src/app/eventos/26-12-30-nochevieja-letux/lumos-gate.module.css` y `plan/`.
 - Aceptación: los relámpagos pueden entrar desde cualquiera de los cuatro bordes, con posición y pausa variables; la animación dura 750 ms.
 - Validación: Biome en los archivos afectados, tipos de la app y `git diff --check`.
+
+## EPJ-19 — Control de música con icono
+
+- Estado: `validated`.
+- Objetivo: mantener la música de Letux al navegar entre la ficha y la selección de disfraz, con un control visual de estado.
+- Rutas: páginas de evento y disfraces, control/estado de música en `src/app/eventos/26-12-30-nochevieja-letux/` y `plan/`.
+- Aceptación: el audio sigue sonando sin reiniciarse al navegar entre ambas páginas; el control persistente ofrece activar/pausar, muestra una nota clara sin tachar al sonar y tachada en rojo al estar detenida; conserva nombre y estado accesibles.
+- Validación: Biome en los archivos afectados, tipos de la app y `git diff --check`.

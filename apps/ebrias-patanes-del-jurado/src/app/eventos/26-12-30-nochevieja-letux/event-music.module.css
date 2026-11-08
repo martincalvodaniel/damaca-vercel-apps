@@ -1,0 +1,45 @@
+.music {
+  position: fixed;
+  z-index: 50;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: calc(76px + env(safe-area-inset-bottom));
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  min-height: 44px;
+  padding: 0;
+  border: 2px solid #e5c27f;
+  border-radius: 50%;
+  color: #24180e;
+  background: linear-gradient(180deg, #fff7df, #eacb8c);
+  box-shadow: 0 3px 14px #0009;
+  cursor: pointer;
+  place-items: center;
+}
+
+.music:hover {
+  background: linear-gradient(180deg, #fffbea, #f0d59d);
+}
+
+.music:focus-visible {
+  outline: 3px solid #fff7df;
+  outline-offset: 3px;
+}
+
+.icon {
+  width: 1.65rem;
+  height: 1.65rem;
+  overflow: visible;
+}
+
+.muteSlash {
+  fill: none;
+  stroke: #c62838;
+  stroke-width: 3.2;
+}
+
+@media (min-width: 48rem) {
+  .music {
+    bottom: 1.25rem;
+  }
+}

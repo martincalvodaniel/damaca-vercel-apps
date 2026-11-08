@@ -83,7 +83,7 @@
 .casting .mist {
   animation: disperse 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
 }
-.mist {
+.gate .mist {
   position: absolute;
   inset: -15%;
   pointer-events: none;
@@ -134,25 +134,6 @@
 }
 .mental {
   opacity: 0.78;
-}
-.music {
-  position: fixed;
-  z-index: 50;
-  right: max(1rem, env(safe-area-inset-right));
-  bottom: calc(76px + env(safe-area-inset-bottom));
-  min-width: 10rem;
-  border: 2px solid #e5c27f;
-  border-radius: 999px;
-  color: #24180e;
-  background: linear-gradient(180deg, #fff7df, #eacb8c);
-  font:
-    700 1rem Georgia,
-    serif;
-}
-@media (min-width: 48rem) {
-  .music {
-    bottom: 1.25rem;
-  }
 }
 @keyframes drift {
   to {
@@ -249,7 +230,7 @@
   filter: none;
 }
 
-.mist {
+.gate .mist {
   background: url("/images/letux-mist.svg") center 92% / 130% 43% no-repeat;
   filter: none;
 }

@@ -7,6 +7,7 @@ import {
 } from "@/features/costumes/reservations"
 import { getCostumeOwnerId } from "@/features/members/directory"
 import { getAuthorizedUser } from "@/lib/session"
+import { EventMusicControl } from "../event-music"
 import styles from "../page.module.css"
 
 export default async function Costumes() {
@@ -25,29 +26,32 @@ export default async function Costumes() {
     .catch(() => null)
 
   return (
-    <main className={styles.event}>
-      <div className={styles.content}>
-        <header className={styles.header}>
-          <Image
-            src="/images/sorting-hat.svg"
-            alt="Sombrero Seleccionador"
-            width={120}
-            height={84}
-            loading="eager"
-          />
-          <h1 className={styles.title}>Elige tu disfraz</h1>
-          <p className={styles.details}>
-            Una persona por personaje. Tu elección es secreta.
-          </p>
-        </header>
-        {initial ? (
-          <CostumePicker initial={initial} />
-        ) : (
-          <section className={styles.card}>
-            <p>No se pudo cargar la elección. Recarga la página.</p>
-          </section>
-        )}
-      </div>
-    </main>
+    <>
+      <main className={styles.event}>
+        <div className={styles.content}>
+          <header className={styles.header}>
+            <Image
+              src="/images/sorting-hat.svg"
+              alt="Sombrero Seleccionador"
+              width={120}
+              height={84}
+              loading="eager"
+            />
+            <h1 className={styles.title}>Elige tu disfraz</h1>
+            <p className={styles.details}>
+              Una persona por personaje. Tu elección es secreta.
+            </p>
+          </header>
+          {initial ? (
+            <CostumePicker initial={initial} />
+          ) : (
+            <section className={styles.card}>
+              <p>No se pudo cargar la elección. Recarga la página.</p>
+            </section>
+          )}
+        </div>
+      </main>
+      <EventMusicControl />
+    </>
   )
 }

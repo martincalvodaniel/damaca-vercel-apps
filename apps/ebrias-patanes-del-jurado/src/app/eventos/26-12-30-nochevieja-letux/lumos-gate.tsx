@@ -1,6 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { EventMusicControl } from "./event-music"
+import { startEventMusic } from "./event-music-state"
 import styles from "./lumos-gate.module.css"
 
 const storageKey = "letux-lumos-revealed"
@@ -10,10 +12,8 @@ const normalize = (value: string) =>
 export function LumosGate({ children }: { children: React.ReactNode }) {
   const [revealed, setRevealed] = useState(false)
   const [listening, setListening] = useState(false)
-  const [music, setMusic] = useState(false)
   const [casting, setCasting] = useState(false)
   const recognition = useRef<{ stop: () => void } | null>(null)
-  const audio = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
     try {
@@ -23,31 +23,23 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
     }
     return () => {
       recognition.current?.stop()
-      audio.current?.pause()
     }
   }, [])
 
-  const reveal = () => {
+  const reveal = useCallback(() => {
     recognition.current?.stop()
     setListening(false)
     setCasting(true)
     window.setTimeout(() => setRevealed(true), 1800)
-    const player = audio.current ?? new Audio("/audio/letux-celesta.wav?v=5")
-    audio.current = player
-    player.loop = true
-    player.volume = 0.05
-    void player
-      .play()
-      .then(() => setMusic(true))
-      .catch(() => setMusic(false))
+    void startEventMusic()
     try {
       localStorage.setItem(storageKey, "true")
     } catch {
       /* The current visit can still continue. */
     }
-  }
+  }, [])
 
-  const listen = () => {
+  const listen = useCallback(() => {
     const Speech =
       (
         window as Window & {
@@ -76,25 +68,7 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
       if (said.includes("lumos")) reveal()
     }
     instance.start()
-  }
-
-  const toggleMusic = async () => {
-    if (music) {
-      audio.current?.pause()
-      setMusic(false)
-      return
-    }
-    const player = audio.current ?? new Audio("/audio/letux-celesta.wav?v=5")
-    audio.current = player
-    player.loop = true
-    player.volume = 0.05
-    try {
-      await player.play()
-      setMusic(true)
-    } catch {
-      setMusic(false)
-    }
-  }
+  }, [reveal])
 
   return (
     <>
@@ -132,11 +106,7 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
           </div>
         </section>
       )}
-      {revealed ? (
-        <button type="button" className={styles.music} onClick={toggleMusic}>
-          {music ? "Pausar música" : "Activar música"}
-        </button>
-      ) : null}
+      {revealed ? <EventMusicControl /> : null}
     </>
   )
 }
