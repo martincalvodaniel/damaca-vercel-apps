@@ -197,3 +197,17 @@
 - Dependencias: estado de Lumos guardado en el navegador.
 - Aceptación: la recarga no muestra el gate tras ejecutar Lumos. En una primera visita o si el almacenamiento falla, el gate sigue disponible.
 - Validación: Biome, tipos, pruebas aplicables, build y comprobación de la recarga.
+
+## EPJ-28 — Quitar «Añadir bloque» de «Quién viene»
+
+- Estado: `in_progress`.
+- Rutas: `attendance-form.tsx` y plan de la app.
+- Aceptación: «Quién viene» conserva los bloques existentes sin ofrecer crear otros. «Coches» sigue ofreciendo «Añadir coche» a quienes pueden gestionarlos.
+- Validación: Biome, tipos, build y comprobación de ambas secciones.
+
+## EPJ-29 — Controles de Nochevieja
+
+- Estado: `in_progress`.
+- Rutas: ficha de Letux, formulario y estilos.
+- Aceptación: enlace de disfraces antes de las secciones, una sola sección abierta y creación de coches desde un modal accesible con el botón «+» en la cabecera desplegada.
+- Validación: Biome, tipos, build y revisión de la interfaz.

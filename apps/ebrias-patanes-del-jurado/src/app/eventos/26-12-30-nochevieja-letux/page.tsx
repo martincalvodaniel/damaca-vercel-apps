@@ -9,7 +9,7 @@ import {
 import { getMemberDirectory } from "@/features/members/directory"
 import { getCarBoard, unassignedCar } from "@/features/members/event-cars"
 import { canManageAttendance, getAuthorizedUser } from "@/lib/session"
-import { AttendanceBoard } from "./attendance-form"
+import { AttendanceBoard, CarSection } from "./attendance-form"
 import { LumosGate } from "./lumos-gate"
 import styles from "./page.module.css"
 
@@ -49,7 +49,13 @@ export default async function NewYearsEve() {
             </p>
           </header>
 
-          <details className={styles.attendees}>
+          <Link
+            className={styles.back}
+            href="/eventos/26-12-30-nochevieja-letux/disfraces"
+          >
+            Elegir disfraz →
+          </Link>
+          <details name="letux-sections" className={styles.attendees}>
             <summary>¿Quién viene?</summary>
             <AttendanceBoard
               blocks={blocks}
@@ -58,8 +64,7 @@ export default async function NewYearsEve() {
               canManage={canManage}
             />
           </details>
-          <details className={styles.attendees}>
-            <summary>Reparto de coches</summary>
+          <CarSection canManage={canManage}>
             <AttendanceBoard
               mode="cars"
               blocks={cars.blocks}
@@ -70,13 +75,7 @@ export default async function NewYearsEve() {
               members={[]}
               canManage={canManage}
             />
-          </details>
-          <Link
-            className={styles.back}
-            href="/eventos/26-12-30-nochevieja-letux/disfraces"
-          >
-            Elegir disfraz →
-          </Link>
+          </CarSection>
         </div>
       </main>
     </LumosGate>

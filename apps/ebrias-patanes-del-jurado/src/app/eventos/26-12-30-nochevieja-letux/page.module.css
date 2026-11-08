@@ -127,10 +127,10 @@
 
 .card ul {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.2rem 0.35rem;
+  gap: 0.3rem;
   margin: 0.3rem 0 0;
-  padding-inline-start: 1.1rem;
+  padding: 0;
+  list-style: none;
 }
 
 .pending {
@@ -145,7 +145,7 @@
 
 @media (min-width: 48rem) {
   .roster {
-    grid-template-columns: 3fr 2fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
     gap: 1rem;
   }
@@ -311,6 +311,10 @@
   margin-bottom: 0.65rem;
 }
 
+.attendees[open] > .roster > .card {
+  margin-inline: 0.45rem;
+}
+
 .lockedMessage {
   color: #a01824;
   font-weight: 700;
@@ -382,4 +386,68 @@
 
 .movableAttendee:active {
   cursor: grabbing;
+}
+
+.carSummary {
+  position: relative;
+}
+
+.attendees[open] > .carSummary {
+  padding-inline-end: 3.25rem;
+  min-height: 52px;
+  align-content: center;
+}
+
+.addCar {
+  display: none;
+  position: absolute;
+  inset-inline-end: 0;
+  top: 50%;
+  translate: 0 -50%;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  color: var(--wax);
+  background: transparent;
+  font:
+    700 1.6rem Georgia,
+    serif;
+  cursor: pointer;
+}
+
+.attendees[open] > .carSummary .addCar {
+  display: block;
+}
+
+.carDialog {
+  box-sizing: border-box;
+  width: min(24rem, calc(100% - 1.5rem));
+  padding: 0.85rem;
+  border: 5px double #956538;
+  border-radius: 0.45rem;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 0 1.4rem #9e5c2b40;
+}
+
+.carDialog::backdrop {
+  background: #120c1bd9;
+}
+
+.carDialog h2 {
+  margin: 0 0 0.5rem;
+  color: var(--wax);
+  font-family: Georgia, serif;
+}
+
+.carDialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.carDialogActions button {
+  min-height: 44px;
+  cursor: pointer;
 }

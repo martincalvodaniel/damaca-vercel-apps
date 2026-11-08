@@ -2,6 +2,8 @@
 
 import {
   type DragEvent,
+  type MouseEvent,
+  type ReactNode,
   useActionState,
   useCallback,
   useId,
@@ -9,7 +11,6 @@ import {
   useState,
 } from "react"
 import {
-  addAttendanceBlock,
   addEventCar,
   createAttendee,
   updateAttendance,
@@ -65,7 +66,6 @@ export function AttendanceBoard({
             mode={mode}
           />
         ))}
-      {canManage ? <BlockForm mode={mode} /> : null}
       <p role="status" hidden={!message}>
         {message}
       </p>
@@ -260,25 +260,73 @@ function AttendeeRow({
   )
 }
 
-function BlockForm({ mode }: { mode: "attendance" | "cars" }) {
-  const isCars = mode === "cars"
+export function CarSection({
+  canManage,
+  children,
+}: {
+  canManage: boolean
+  children: ReactNode
+}) {
+  const dialog = useRef<HTMLDialogElement>(null)
+  const titleId = useId()
+  const openDialog = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    dialog.current?.showModal()
+    dialog.current?.querySelector("input")?.focus()
+  }, [])
+  const closeDialog = useCallback(() => dialog.current?.close(), [])
   const [message, action, pending] = useActionState(
-    isCars ? addEventCar : addAttendanceBlock,
+    async (previous: string, form: FormData) => {
+      const result = await addEventCar(previous, form)
+      if (!result) dialog.current?.close()
+      return result
+    },
     ""
   )
+
   return (
-    <details>
-      <summary>{isCars ? "Añadir coche" : "Añadir bloque"}</summary>
-      <form action={action} className="account admission-form">
-        <label>
-          {isCars ? "Nombre del coche" : "Nombre del bloque"}
-          <input name="name" required maxLength={60} />
-        </label>
-        <button type="submit" disabled={pending}>
-          {isCars ? "Crear coche" : "Crear bloque"}
-        </button>
-        <p role="status">{message}</p>
-      </form>
+    <details name="letux-sections" className={styles.attendees}>
+      <summary className={styles.carSummary}>
+        Reparto de coches
+        {canManage ? (
+          <button
+            type="button"
+            className={styles.addCar}
+            aria-label="Añadir coche"
+            aria-haspopup="dialog"
+            onClick={openDialog}
+          >
+            +
+          </button>
+        ) : null}
+      </summary>
+      {children}
+      {canManage ? (
+        <dialog
+          ref={dialog}
+          className={styles.carDialog}
+          aria-labelledby={titleId}
+        >
+          <h2 id={titleId}>Añadir coche</h2>
+          <form action={action} className={styles.picker}>
+            <label>
+              Nombre del coche
+              <input name="name" required maxLength={60} />
+            </label>
+            <p role="status" hidden={!message}>
+              {message}
+            </p>
+            <div className={styles.carDialogActions}>
+              <button type="button" onClick={closeDialog}>
+                Cancelar
+              </button>
+              <button type="submit" disabled={pending}>
+                Crear coche
+              </button>
+            </div>
+          </form>
+        </dialog>
+      ) : null}
     </details>
   )
 }
