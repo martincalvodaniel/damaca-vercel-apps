@@ -17,7 +17,7 @@ export function AccountControl({
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(
     admissionRequired
-      ? "Un administrador debe autorizar tu correo antes de que puedas entrar."
+      ? "Tu solicitud está pendiente. Podrás entrar cuando un administrador autorice tu correo."
       : callbackFailed
         ? "No se ha podido completar el acceso. Inténtalo de nuevo."
         : null

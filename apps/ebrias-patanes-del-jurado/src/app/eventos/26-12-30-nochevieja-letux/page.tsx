@@ -1,31 +1,25 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import {
+  attendanceLabels,
+  getEventRoster,
+  letuxEvent,
+  seedLetuxRoster,
+} from "@/features/members/attendance"
 import { getAuthorizedUser } from "@/lib/session"
+import { AttendanceForm } from "./attendance-form"
 import styles from "./page.module.css"
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this page export.
 export const metadata: Metadata = { title: "Nochevieja en Letux · Ebrias" }
 
-const overnightGuests = [
-  "Álvaro",
-  "Víctor",
-  "Dani",
-  "Pali",
-  "Borja",
-  "Andrea",
-  "Ángela",
-  "Sergio",
-  "Pat",
-  "Adri",
-  "Lis",
-  "Pit",
-]
-const dayGuests = ["Lu", "La", "Ma", "Bebé2"]
-
 export default async function NewYearsEve() {
   const user = await getAuthorizedUser()
   if (!user) redirect("/")
+
+  await seedLetuxRoster()
+  const roster = await getEventRoster(letuxEvent)
 
   return (
     <main className={styles.event}>
@@ -49,27 +43,31 @@ export default async function NewYearsEve() {
         <details className={styles.attendees}>
           <summary>¿Quién viene?</summary>
           <div className={styles.roster}>
-            <section className={styles.card}>
-              <h2>Estancia</h2>
-              <ul>
-                {overnightGuests.map((name) => (
-                  <li key={name}>{name}</li>
-                ))}
-                <li>
-                  Diana <span className={styles.pending}>Pendiente</span>
-                </li>
-              </ul>
-            </section>
-            <section className={styles.card}>
-              <h2>Comida y día del 31</h2>
-              <ul>
-                {dayGuests.map((name) => (
-                  <li key={name}>{name}</li>
-                ))}
-              </ul>
-            </section>
+            {(["overnight", "day", "pending"] as const).map((status) => {
+              const guests = roster.filter((member) => member.status === status)
+              if (!guests.length) return null
+
+              return (
+                <section key={status} className={styles.card}>
+                  <h2>{attendanceLabels[status]}</h2>
+                  <ul>
+                    {guests.map(({ id, alias }) => (
+                      <li key={id}>{alias}</li>
+                    ))}
+                  </ul>
+                </section>
+              )
+            })}
           </div>
         </details>
+        {user.role === "admin" ? (
+          <details className={styles.attendees}>
+            <summary>Gestionar asistencia</summary>
+            <div className={styles.card}>
+              <AttendanceForm roster={roster} labels={attendanceLabels} />
+            </div>
+          </details>
+        ) : null}
         <Link
           className={styles.back}
           href="/eventos/26-12-30-nochevieja-letux/disfraces"

@@ -1,11 +1,29 @@
 import { redirect } from "next/navigation"
 import { AccountControl } from "@/features/landing/account-control"
+import { seedLetuxRoster } from "@/features/members/attendance"
+import {
+  getDisplayAlias,
+  getMemberDirectory,
+} from "@/features/members/directory"
 import { AdmissionForm } from "@/features/settings/admission-form"
+import { AliasForm } from "@/features/settings/alias-form"
+import { listPendingAdmissions, normalizeEmail } from "@/lib/admission"
 import { getAuthorizedUser } from "@/lib/session"
 
 export default async function Settings() {
   const user = await getAuthorizedUser()
   if (!user) redirect("/")
+
+  const isAdmin = user.role === "admin"
+  if (isAdmin) await seedLetuxRoster()
+  const [alias, requests, members] = await Promise.all([
+    getDisplayAlias(normalizeEmail(user.email), user.name),
+    isAdmin ? listPendingAdmissions() : [],
+    isAdmin ? getMemberDirectory() : [],
+  ])
+  const available = members.flatMap(({ id, alias, email }) =>
+    email ? [] : [{ id, alias }]
+  )
 
   return (
     <main className="settings">
@@ -25,21 +43,48 @@ export default async function Settings() {
             />
           ) : null}
           <div>
-            <p>{user.name}</p>
+            <p>{alias}</p>
             <p>{user.email}</p>
           </div>
         </div>
+        <AliasForm key={alias} alias={alias} />
         <AccountControl signedIn />
       </section>
-      {user.role === "admin" && (
-        <section className="settings-card">
-          <h2>Admisión</h2>
-          <p>
-            Autoriza el correo antes de que la persona entre por primera vez.
-          </p>
-          <AdmissionForm />
-        </section>
-      )}
+      {isAdmin ? (
+        <>
+          <section className="settings-card">
+            <h2>Solicitudes de acceso ({requests.length})</h2>
+            {requests.length === 0 ? (
+              <p>No hay solicitudes pendientes.</p>
+            ) : (
+              <ul className="management-list">
+                {requests.map(({ _id, name }) => (
+                  <li key={_id}>
+                    <AdmissionForm
+                      members={available}
+                      request={{ email: _id, name }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+            <details>
+              <summary>Autorizar o asociar un correo manualmente</summary>
+              <AdmissionForm members={available} />
+            </details>
+          </section>
+          <section className="settings-card">
+            <h2>Miembros ({members.length})</h2>
+            <ul className="management-list">
+              {members.map(({ id, alias, email }) => (
+                <li key={id}>
+                  <strong>{alias}</strong> · {email ?? "Sin correo asociado"}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      ) : null}
     </main>
   )
 }

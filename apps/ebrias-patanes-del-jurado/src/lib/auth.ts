@@ -4,7 +4,7 @@ import { betterAuth } from "better-auth"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { APIError } from "better-auth/api"
 import { getAuthEnvironment } from "@/config/auth-env"
-import { getAccessRole } from "@/lib/admission"
+import { getAccessRole, requestAdmission } from "@/lib/admission"
 import { getDatabaseConnection } from "@/lib/database"
 
 function denyAdmission(): never {
@@ -12,6 +12,16 @@ function denyAdmission(): never {
     code: "admission_required",
     message: "Administrator approval is required",
   })
+}
+
+async function enforceAdmission(user: {
+  email: string
+  emailVerified: boolean
+  name: string
+}) {
+  if (await getAccessRole(user)) return
+  await requestAdmission(user)
+  denyAdmission()
 }
 
 function createAuth() {
@@ -30,7 +40,7 @@ function createAuth() {
       user: {
         create: {
           before: async (user) => {
-            if (!(await getAccessRole(user))) denyAdmission()
+            await enforceAdmission(user)
           },
         },
       },
@@ -40,7 +50,8 @@ function createAuth() {
             const user = await context?.context.internalAdapter.findUserById(
               session.userId
             )
-            if (!user || !(await getAccessRole(user))) denyAdmission()
+            if (!user) denyAdmission()
+            await enforceAdmission(user)
           },
         },
       },

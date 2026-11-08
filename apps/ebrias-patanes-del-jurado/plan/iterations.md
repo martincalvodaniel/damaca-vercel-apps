@@ -2,7 +2,7 @@
 
 ## EPJ-01 — Landing instalable
 
-- Estado: `validated`.
+- Estado: `validated`. [Evidencia archivada](archive/2026-11-08/iteration-log.md#epj-01).
 - Rutas: `apps/ebrias-patanes-del-jurado/**`, `bun.lock`.
 - Dependencias: catálogo del monorepo, cliente OAuth de Google y acceso al clúster MongoDB del Hub.
 - Aceptación: portada adaptable; entrada y salida con Google en la misma portada; persistencia aislada; manifiesto standalone con iconos y nombre por rama.
@@ -10,7 +10,7 @@
 
 ## EPJ-02 — Fotografías del jurado
 
-- Estado: `validated`.
+- Estado: `validated`. [Evidencia archivada](archive/2026-11-08/iteration-log.md#epj-02).
 - Rutas: `apps/ebrias-patanes-del-jurado/**`.
 - Dependencias: dos fotografías proporcionadas por el usuario.
 - Aceptación: las dos fotos se muestran completas en la portada y un recorte de la primera identifica la pestaña y la app instalada.
@@ -18,7 +18,7 @@
 
 ## EPJ-03 — Portada con el dibujo sin marco
 
-- Estado: `validated`.
+- Estado: `validated`. [Evidencia archivada](archive/2026-11-08/iteration-log.md#epj-03).
 - Rutas: `src/app/` y `plan/` de la app.
 - Dependencias: las dos versiones del dibujo guardadas en EPJ-02.
 - Aceptación: la portada muestra solo la versión sin marco. La versión con marco queda disponible para otras pantallas.
@@ -26,7 +26,7 @@
 
 ## EPJ-04 — Nubes, textos y favicon
 
-- Estado: `validated`.
+- Estado: `validated`. [Evidencia archivada](archive/2026-11-08/iteration-log.md#epj-04).
 - Rutas: `src/app/`, `public/icons/` y `plan/`.
 - Dependencias: diseño de portada de [AGW-24](../../../plan/iterations.md#agw-24--diseño-compacto-en-móvil).
 - Aceptación: más nubes, textos nuevos, carga inmediata del dibujo y favicon EP/DJ.
@@ -99,3 +99,11 @@
 - Dependencias: rutas de EPJ-10 y Sombrero Seleccionador existente.
 - Aceptación: ambas páginas evocan Hogwarts mediante un castillo nocturno, dorados, pergamino y lacre; controles legibles en móvil y escritorio.
 - Validación: Biome, tipos, build y comprobación visual a 320 y 1440 px.
+
+## EPJ-14 — Solicitudes, miembros y asistencia
+
+- Estado: `validated`.
+- Rutas: autenticación, Ajustes, ficha de Letux, persistencia y plan de Ebrias.
+- Dependencias: Google OAuth, MongoDB con transacciones y lista inicial de Letux.
+- Aceptación: solicitud única por correo verificado, admisión administrativa directa con vínculo opcional a miembro existente o alta, alias personal y asistencia persistente por evento.
+- Validación: Biome, tipos, build, pruebas de MongoDB y comprobación responsive.
