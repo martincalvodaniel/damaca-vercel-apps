@@ -83,6 +83,16 @@ h1 em {
   line-height: 1.35;
 }
 
+.event-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 44px;
+  margin-bottom: 0.25rem;
+  color: var(--ink);
+  font-weight: 800;
+}
+
 .account p {
   margin: 0.4rem 0;
   font-size: 0.9rem;

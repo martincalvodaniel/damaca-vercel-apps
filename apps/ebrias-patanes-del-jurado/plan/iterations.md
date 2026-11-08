@@ -32,4 +32,12 @@
 - Aceptación: más nubes, textos nuevos, carga inmediata del dibujo y favicon EP/DJ.
 - Validación: Biome, tipos, build y comprobación de la portada.
 
+## EPJ-05 — Nochevieja en Letux
+
+- Estado: `validated`.
+- Rutas: `src/app/`, `src/features/landing/` y `plan/`.
+- Dependencias: sesión de Google y lista proporcionada por el usuario.
+- Aceptación: ficha temática accesible desde portada, fechas y lugar correctos, estancias separadas de visitas del 31 y Diana pendiente. La lista requiere sesión.
+- Validación: Biome, tipos, build y comprobación de la ruta sin sesión.
+
 [Alcance](master.md) · [Evidencia](iteration-log.md)

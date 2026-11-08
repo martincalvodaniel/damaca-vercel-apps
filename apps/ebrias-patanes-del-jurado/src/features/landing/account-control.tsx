@@ -7,8 +7,10 @@ const authClient = createAuthClient()
 
 export function AccountControl({
   callbackFailed,
+  callbackPath = "/",
 }: {
   callbackFailed: boolean
+  callbackPath?: "/" | "/eventos/nochevieja-2026"
 }) {
   const session = authClient.useSession()
   const [busy, setBusy] = useState(false)
@@ -24,7 +26,7 @@ export function AccountControl({
         ? await authClient.signOut()
         : await authClient.signIn.social({
             provider: "google",
-            callbackURL: "/",
+            callbackURL: callbackPath,
           })
 
       if (result.error) setFailed(true)
@@ -33,7 +35,7 @@ export function AccountControl({
     } finally {
       setBusy(false)
     }
-  }, [user])
+  }, [callbackPath, user])
 
   return (
     <div className="account">
