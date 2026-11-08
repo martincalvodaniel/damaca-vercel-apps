@@ -188,3 +188,12 @@
 
 - Estado: `in_progress`.
 - Aceptación: migrar identificadores heredados de Letux a UUID y conservar las referencias del club y de los eventos.
+
+## EPJ-27 — Recarga sin parpadeo de Lumos
+
+- Estado: in_progress.
+- Objetivo: evitar que el gate aparezca al recargar si Lumos ya se ejecutó.
+- Rutas: componente `lumos-gate.tsx` y planificación de la app.
+- Dependencias: estado de Lumos guardado en el navegador.
+- Aceptación: la recarga no muestra el gate tras ejecutar Lumos. En una primera visita o si el almacenamiento falla, el gate sigue disponible.
+- Validación: Biome, tipos, pruebas aplicables, build y comprobación de la recarga.

@@ -10,7 +10,7 @@ const normalize = (value: string) =>
   value.toLocaleLowerCase("es").replace(/[^\p{L}\p{N}]/gu, "")
 
 export function LumosGate({ children }: { children: React.ReactNode }) {
-  const [revealed, setRevealed] = useState(false)
+  const [revealed, setRevealed] = useState<boolean | null>(null)
   const [listening, setListening] = useState(false)
   const [casting, setCasting] = useState(false)
   const recognition = useRef<{ stop: () => void } | null>(null)
@@ -19,7 +19,7 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
     try {
       setRevealed(localStorage.getItem(storageKey) === "true")
     } catch {
-      /* Storage may be unavailable. */
+      setRevealed(false)
     }
     return () => {
       recognition.current?.stop()
@@ -75,7 +75,7 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
       <div inert={!revealed} aria-hidden={!revealed}>
         {children}
       </div>
-      {!revealed && (
+      {revealed === false && (
         <section
           className={`${styles.gate} ${casting ? styles.casting : ""}`}
           aria-label="Hechizo para iluminar"
