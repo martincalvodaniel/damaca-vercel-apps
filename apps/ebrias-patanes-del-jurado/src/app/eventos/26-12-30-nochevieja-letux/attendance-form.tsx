@@ -1,6 +1,13 @@
 "use client"
 
-import { type DragEvent, useActionState, useCallback, useState } from "react"
+import {
+  type DragEvent,
+  useActionState,
+  useCallback,
+  useId,
+  useRef,
+  useState,
+} from "react"
 import { addAttendanceBlock, createAttendee, updateAttendance } from "./actions"
 import styles from "./page.module.css"
 
@@ -69,9 +76,33 @@ function AttendanceSection({
   const available = members.filter(
     ({ id }) => !guests.some(({ memberId }) => memberId === id)
   )
-  const [open, setOpen] = useState(false)
-  const toggle = useCallback(() => setOpen((value) => !value), [])
-  const [message, action, pending] = useActionState(createAttendee, "")
+  const dialog = useRef<HTMLDialogElement>(null)
+  const titleId = useId()
+  const [query, setQuery] = useState("")
+  const search = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value)
+  }, [])
+  const openPicker = useCallback(() => {
+    setQuery("")
+    dialog.current?.showModal()
+    dialog.current?.querySelector("input")?.focus()
+  }, [])
+  const closePicker = useCallback(() => dialog.current?.close(), [])
+  const submit = useCallback(
+    async (previous: string, form: FormData) => {
+      const result = await createAttendee(previous, form)
+      if (result === "Asistente añadido.") closePicker()
+      return result
+    },
+    [closePicker]
+  )
+  const [message, action, pending] = useActionState(submit, "")
+  const name = query.trim()
+  const normalize = (value: string) =>
+    value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase("es")
+  const matches = available.filter(({ alias }) =>
+    normalize(alias).includes(normalize(name))
+  )
   const dragOver = useCallback(
     (event: DragEvent) => {
       if (
@@ -109,37 +140,68 @@ function AttendanceSection({
           <button
             className={styles.addAttendee}
             type="button"
-            onClick={toggle}
-            aria-expanded={open}
+            onClick={openPicker}
+            aria-haspopup="dialog"
             aria-label={`Añadir a ${block.label}`}
           >
             +
           </button>
         ) : null}
       </div>
-      {open && canManage ? (
-        <form action={action} className="account admission-form">
-          <input type="hidden" name="status" value={block.id} />
-          <label>
-            Miembro del club
-            <select name="member" className="member-select">
-              <option value="">Invitado sin vínculo</option>
-              {available.map(({ id, alias }) => (
-                <option key={id} value={id}>
-                  {alias}
-                </option>
+      {canManage ? (
+        <dialog
+          ref={dialog}
+          className={styles.attendeeDialog}
+          aria-labelledby={titleId}
+        >
+          <div className={styles.blockHeader}>
+            <h2 id={titleId}>Añadir a {block.label}</h2>
+            <button
+              type="button"
+              className={styles.addAttendee}
+              onClick={closePicker}
+              aria-label="Cerrar"
+            >
+              ×
+            </button>
+          </div>
+          <form action={action} className="account admission-form">
+            <input type="hidden" name="status" value={block.id} />
+            <label>
+              Buscar miembro o escribir un nombre
+              <input
+                name="name"
+                type="search"
+                value={query}
+                onChange={search}
+                maxLength={80}
+              />
+            </label>
+            {name ? (
+              <button type="submit" name="member" value="" disabled={pending}>
+                Añadir «{name}» como invitado
+              </button>
+            ) : null}
+            <ul className={styles.memberResults}>
+              {matches.map(({ id, alias }) => (
+                <li key={id}>
+                  <button
+                    type="submit"
+                    name="member"
+                    value={id}
+                    disabled={pending}
+                  >
+                    {alias}
+                  </button>
+                </li>
               ))}
-            </select>
-          </label>
-          <label>
-            Nombre del invitado
-            <input name="name" maxLength={80} />
-          </label>
-          <button type="submit" disabled={pending}>
-            Añadir
-          </button>
-          <p role="status">{message}</p>
-        </form>
+            </ul>
+            {matches.length === 0 ? (
+              <p>No hay miembros que coincidan.</p>
+            ) : null}
+            <p role="status">{message}</p>
+          </form>
+        </dialog>
       ) : null}
       {guests.length ? (
         <ul>
@@ -167,7 +229,12 @@ function AttendeeRow({
     [guest.id]
   )
   return (
-    <li draggable={canManage} onDragStart={canManage ? drag : undefined}>
+    <li
+      className={canManage ? styles.movableAttendee : undefined}
+      draggable={canManage}
+      onDragStart={canManage ? drag : undefined}
+    >
+      {canManage ? <span aria-hidden="true">⠿</span> : null}
       {guest.alias}
     </li>
   )

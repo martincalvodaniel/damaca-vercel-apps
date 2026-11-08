@@ -337,3 +337,49 @@
   font-size: 1.4rem;
   cursor: pointer;
 }
+
+.attendeeDialog {
+  box-sizing: border-box;
+  width: min(28rem, calc(100% - 1rem));
+  max-height: 85dvh;
+  padding: 0.75rem;
+  border: 2px solid #967044;
+  border-radius: 0.75rem;
+  background: #fff8db;
+  color: #2d1d15;
+}
+
+.attendeeDialog::backdrop {
+  background: #100c19bb;
+}
+
+.memberResults {
+  display: grid;
+  gap: 0.35rem;
+  max-height: 35dvh;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.memberResults button {
+  width: 100%;
+  text-align: start;
+}
+
+.movableAttendee {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 36px;
+  margin-block: 0.3rem;
+  padding-inline: 0.5rem;
+  border: 1px solid #967044;
+  border-radius: 0.4rem;
+  cursor: grab;
+  overflow-wrap: anywhere;
+}
+
+.movableAttendee:active {
+  cursor: grabbing;
+}
