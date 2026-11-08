@@ -8,11 +8,7 @@ import {
 } from "@/features/members/attendance"
 import { getMemberDirectory } from "@/features/members/directory"
 import { canManageAttendance, getAuthorizedUser } from "@/lib/session"
-import {
-  AttendanceBlockForm,
-  AttendanceForm,
-  AttendeeForm,
-} from "./attendance-form"
+import { AttendanceBoard } from "./attendance-form"
 import { LumosGate } from "./lumos-gate"
 import styles from "./page.module.css"
 
@@ -53,40 +49,13 @@ export default async function NewYearsEve() {
 
           <details className={styles.attendees}>
             <summary>¿Quién viene?</summary>
-            <div className={styles.roster}>
-              {blocks.map(({ id: status, label }) => {
-                if (status === "absent") return null
-                const guests = roster.filter(
-                  (member) => member.status === status
-                )
-
-                return (
-                  <section key={status} className={styles.card}>
-                    <h2>
-                      {label} ({guests.length})
-                    </h2>
-                    {guests.length > 0 ? (
-                      <ul>
-                        {guests.map(({ id, alias }) => (
-                          <li key={id}>{alias}</li>
-                        ))}
-                      </ul>
-                    ) : null}
-                  </section>
-                )
-              })}
-            </div>
+            <AttendanceBoard
+              blocks={blocks}
+              roster={roster}
+              members={members}
+              canManage={canManage}
+            />
           </details>
-          {canManage ? (
-            <details className={styles.attendees}>
-              <summary>Gestionar asistencia</summary>
-              <div className={styles.card}>
-                <AttendeeForm members={members} />
-                <AttendanceForm roster={roster} blocks={blocks} />
-                <AttendanceBlockForm />
-              </div>
-            </details>
-          ) : null}
           <Link
             className={styles.back}
             href="/eventos/26-12-30-nochevieja-letux/disfraces"

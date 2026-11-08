@@ -173,3 +173,8 @@
 
 - Estado: `in_progress`.
 - Aceptación: la acción administrativa elimina el miembro y sus datos vinculados de asistencia, disfraces y acceso.
+
+## EPJ-24 — Gestión de asistencia por bloque
+
+- Estado: `in_progress`.
+- Aceptación: alta desde cada bloque, traslado mediante arrastre o selector y acciones dentro de la lista.

@@ -315,3 +315,30 @@
   color: #a01824;
   font-weight: 700;
 }
+
+.blockHeader,
+.attendeeActions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.blockHeader {
+  justify-content: space-between;
+}
+
+.addAttendee {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.attendeeActions select {
+  max-width: 100%;
+}

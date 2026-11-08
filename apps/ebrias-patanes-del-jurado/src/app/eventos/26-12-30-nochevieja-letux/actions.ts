@@ -79,8 +79,12 @@ export async function createAttendee(_previous: string, form: FormData) {
   const member = String(form.get("member") ?? "")
   if ((!member && !name) || name.length > 80 || member.length > 100)
     return "Selecciona un miembro o escribe el nombre del invitado."
+  const status = form.get("status")
   try {
-    if (!(await addAttendee(letuxEvent, name, member)))
+    const blocks = await getAttendanceBlocks(letuxEvent)
+    if (typeof status !== "string" || !blocks.some(({ id }) => id === status))
+      return "Bloque no válido."
+    if (!(await addAttendee(letuxEvent, name, member, status)))
       return "El miembro no está disponible o ya está en la lista."
   } catch {
     return "No se pudo añadir el asistente."

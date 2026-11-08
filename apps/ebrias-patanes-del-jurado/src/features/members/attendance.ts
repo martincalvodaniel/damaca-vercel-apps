@@ -65,6 +65,7 @@ export async function getEventRoster(event: string) {
   return roster
     .map(({ _id: id, name, memberId, status }) => ({
       id,
+      memberId,
       alias: (memberId && aliases.get(memberId)) || name,
       status,
     }))
@@ -74,7 +75,8 @@ export async function getEventRoster(event: string) {
 export async function addAttendee(
   event: string,
   name: string,
-  memberId: string
+  memberId: string,
+  status: string
 ) {
   const member = memberId
     ? await memberCollection().findOne({ _id: memberId })
@@ -84,15 +86,15 @@ export async function addAttendee(
   const result = await attendees(event).updateOne(
     { _id: id },
     {
+      $set: { status },
       $setOnInsert: {
         name: member?.alias ?? name,
-        status: "pending",
         ...(member && { memberId }),
       },
     },
     { upsert: true }
   )
-  return result.upsertedCount === 1
+  return result.upsertedCount === 1 || result.matchedCount === 1
 }
 
 export async function removeAttendee(event: string, id: string) {
