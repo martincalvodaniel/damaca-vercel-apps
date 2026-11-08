@@ -463,6 +463,16 @@
   background: #120c1bd9;
 }
 
+@media (width < 48rem) {
+  .carDialog {
+    inset-block-start: max(0.5rem, env(safe-area-inset-top));
+    inset-block-end: auto;
+    margin-block: 0;
+    max-height: calc(100dvh - max(0.5rem, env(safe-area-inset-top)) - 0.5rem);
+    overflow-y: auto;
+  }
+}
+
 .carDialog h2 {
   margin: 0 0 0.5rem;
   color: var(--wax);
