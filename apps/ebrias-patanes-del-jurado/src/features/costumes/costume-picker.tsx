@@ -5,10 +5,11 @@ import {
   type MouseEvent,
   useActionState,
   useCallback,
+  useEffect,
   useId,
   useState,
 } from "react"
-import styles from "@/app/eventos/nochevieja-2026/page.module.css"
+import styles from "@/app/eventos/26-12-30-nochevieja-letux/page.module.css"
 import { type PickerState, submitCostume } from "./actions"
 import {
   canonicalCharacter,
@@ -20,9 +21,8 @@ import {
 const messages = {
   reserved: "¡El Sombrero ha hablado! Tu disfraz está reservado.",
   taken: "Ese personaje ya está reservado.",
-  locked:
-    "Te has pasado de listo. Contacta con el administrador para conocer tu castigo.",
-  added: "Personaje añadido al catálogo. Ya puedes intentar reservarlo.",
+  added: "¡El Sombrero ha hablado! Tu disfraz está reservado.",
+  locked: "",
   invalid: "Elige un personaje del catálogo o añade un nombre válido.",
   error:
     "El Sombrero se ha quedado en silencio. Recarga para comprobar tu reserva.",
@@ -32,25 +32,45 @@ const messages = {
 export function CostumePicker({ initial }: { initial: PickerState }) {
   const [state, submit, pending] = useActionState(submitCostume, initial)
   const [query, setQuery] = useState("")
+  const [selected, setSelected] = useState("")
+  useEffect(() => {
+    if (state.result === "reserved" && state.current !== null) {
+      setSelected("")
+    }
+  }, [state.result, state.current])
   const inputId = useId()
-  const updateQuery = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value),
-    []
-  )
+  const updateQuery = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value)
+    setSelected("")
+  }, [])
   const selectSuggestion = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) =>
-      setQuery(event.currentTarget.value),
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const name = event.currentTarget.value
+      setSelected(name)
+    },
     []
   )
+  const selectCreate = useCallback(() => setSelected("__create__"), [])
+  const clearQuery = useCallback(() => {
+    setQuery("")
+    setSelected("")
+  }, [])
   const key = normalizeCharacter(canonicalCharacter(query.trim()))
   const names = [...characterCatalog, ...state.added]
   const exact = names.find((name) => normalizeCharacter(name) === key)
-  const suggestions =
-    key && !exact
-      ? names.filter((name) => matchesCharacter(name, query)).slice(0, 8)
-      : []
-  const blocked = state.blocked
-
+  const highlighted = selected || state.current || ""
+  const suggestions = key
+    ? names.filter((name) => matchesCharacter(name, query)).slice(0, 8)
+    : []
+  const creating = Boolean(key) && !exact
+  const selectedKnown = names.find(
+    (name) => normalizeCharacter(name) === normalizeCharacter(selected)
+  )
+  const selectedValue =
+    selectedKnown ??
+    (selected === "__create__" && creating
+      ? canonicalCharacter(query.trim())
+      : "")
   return (
     <section className={styles.card}>
       {state.current !== null && (
@@ -58,17 +78,11 @@ export function CostumePicker({ initial }: { initial: PickerState }) {
           <strong>Tu disfraz:</strong> {state.current}
         </p>
       )}
-      {state.result ? <p role="status">{messages[state.result]}</p> : null}
-      {blocked &&
-        state.result !== "locked" &&
-        state.result !== "error" &&
-        state.result !== "signed-out" && <p>{messages.locked}</p>}
-      {!blocked && (
-        <form action={submit} className={styles.picker}>
-          <label htmlFor={inputId}>Busca tu personaje</label>
+      <form action={submit} className={styles.picker}>
+        <label htmlFor={inputId}>Busca tu personaje</label>
+        <div className={styles.searchField}>
           <input
             id={inputId}
-            name="character"
             value={query}
             onChange={updateQuery}
             placeholder="Ej. Hermione"
@@ -77,42 +91,108 @@ export function CostumePicker({ initial }: { initial: PickerState }) {
             required
             disabled={pending}
           />
-          {suggestions.length > 0 && (
-            <div className={styles.suggestions}>
-              {suggestions.map((name) => (
-                <button
-                  key={name}
-                  type="button"
-                  value={name}
-                  onClick={selectSuggestion}
-                  disabled={pending}
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
-          )}
-          {exact ? (
+          {query.length > 0 && (
             <button
-              type="submit"
-              name="intent"
-              value="reserve"
-              disabled={pending || exact === state.current}
+              type="button"
+              className={styles.clearSearch}
+              onClick={clearQuery}
+              disabled={pending}
+              aria-label="Limpiar búsqueda"
+              title="Limpiar búsqueda"
             >
-              {state.current ? "Cambiar disfraz" : "Reservar disfraz"}
-            </button>
-          ) : (
-            <button
-              type="submit"
-              name="intent"
-              value="add"
-              disabled={pending || key.length < 2}
-            >
-              Añadir al catálogo
+              <svg
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                aria-hidden="true"
+              >
+                <path d="m5 5 10 10M15 5 5 15" />
+              </svg>
             </button>
           )}
-        </form>
-      )}
+        </div>
+        {(suggestions.length > 0 || creating) && (
+          <div className={styles.suggestions}>
+            {creating ? (
+              <button
+                type="button"
+                value="__create__"
+                className={
+                  selected === "__create__"
+                    ? styles.createSelected
+                    : styles.createOption
+                }
+                onClick={selectCreate}
+                disabled={pending}
+              >
+                {query.trim()} (Crear)
+              </button>
+            ) : null}
+            {suggestions.map((name) => (
+              <button
+                key={name}
+                type="button"
+                value={name}
+                className={
+                  normalizeCharacter(highlighted) === normalizeCharacter(name)
+                    ? styles.selectedSuggestion
+                    : undefined
+                }
+                onClick={selectSuggestion}
+                disabled={pending}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+        )}
+        <input type="hidden" name="character" value={selectedValue} />
+        <input
+          type="hidden"
+          name="intent"
+          value={selected === "__create__" ? "add-reserve" : "reserve"}
+        />
+        <button
+          type="submit"
+          disabled={
+            pending ||
+            state.result === "locked" ||
+            !selectedValue ||
+            selectedValue === state.current
+          }
+        >
+          {state.current ? "Cambiar disfraz" : "Reservar disfraz"}
+        </button>
+        {state.result ? (
+          <p
+            className={
+              state.result === "locked" ? styles.lockedMessage : undefined
+            }
+            role="status"
+          >
+            {state.result === "locked" ? (
+              <>
+                Qué haces?!
+                <br />
+                <strong>Te has pasado de list@!</strong>
+                <br />
+                <strong>
+                  No estarás intentando averiguar que personajes están
+                  reservados ya, verdad?
+                </strong>
+                <br />
+                <strong>
+                  Contacta con el administrador si realmente quieres cambiar de
+                  personaje para conocer tu castigo 😈
+                </strong>
+              </>
+            ) : (
+              messages[state.result]
+            )}
+          </p>
+        ) : null}
+      </form>
     </section>
   )
 }

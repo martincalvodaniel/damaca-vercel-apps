@@ -21,6 +21,25 @@ export function Navigation({ image }: { image?: string | null }) {
         Inicio
       </Link>
       <Link
+        href="/eventos/26-12-30-nochevieja-letux"
+        aria-current={
+          pathname.startsWith("/eventos/26-12-30-nochevieja-letux")
+            ? "page"
+            : undefined
+        }
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          aria-hidden="true"
+        >
+          <path d="M4 7h16v14H4zM8 3v8m8-8v8M4 11h16M8 15h2m4 0h2" />
+        </svg>
+        Nochevieja 26
+      </Link>
+      <Link
         href="/settings"
         aria-current={pathname === "/settings" ? "page" : undefined}
       >

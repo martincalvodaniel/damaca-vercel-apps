@@ -45,4 +45,39 @@ Inicio: 53% de 5 h y 91% de 7 d disponibles (10:43 CET).
 - Las comprobaciones HTTP rechazaron sesiones antiguas sin permiso y una cuenta sin correo verificado. La acción rechazó altas de usuarios sin privilegios, normalizó el correo e hizo idempotente la admisión repetida.
 - Chrome a 320 y 1440 px comprobó la portada pública, la portada privada y Ajustes, sin desbordamiento horizontal. Queda pendiente la comprobación con Google real en el entorno desplegado.
 
+## EPJ-08
+
+- El selector separa el texto escrito de la selección confirmada. Ofrece coincidencias existentes y una opción destacada «(Crear)»; cada tipo de selección tiene un resaltado diferente.
+- «Reservar disfraz» permanece visible y deshabilitado hasta seleccionar una opción. Crear añade el personaje y lo reserva en la misma acción del servidor.
+- Biome en los tres archivos modificados, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos. No se ejecutó build ni comprobación visual.
+
+## EPJ-09
+
+- El selector permanecía oculto al alcanzar cero intentos, y el aviso de castigo se mostraba junto al estado bloqueado, incluso tras la reserva válida que agotaba el cupo. El formulario ahora siempre permanece visible y el aviso solo se muestra tras recibir el resultado `locked` al enviar otro intento.
+- Biome, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos. No se ejecutó build ni comprobación visual.
+
+## EPJ-10
+
+- El evento pasó a `/eventos/26-12-30-nochevieja-letux`; la ruta de disfraces y la navegación usan la nueva dirección. Se retiró el enlace de vuelta de la página de disfraces.
+- Los listados de estancia y comida/día del 31 se agruparon bajo «¿Quién viene?» con `<details>` colapsado inicialmente. «Elegir disfraz» quedó fuera de la sección colapsable.
+- Biome, build, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos.
+
+## EPJ-11
+
+- Se añadió una limpieza que elimina de la colección de personajes los nombres dinámicos sin elecciones que los referencien. Se ejecuta al cambiar una reserva correcta y si una creación no logra reservarse. El catálogo fijo queda fuera de esta limpieza.
+- Biome, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos. No se ejecutaron pruebas.
+
+## EPJ-12
+
+- Tras una reserva o cambio, el selector conserva el texto del buscador, limpia la selección anterior y recalcula coincidencias con los personajes dinámicos que siguen en la base de datos.
+- Biome, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos. No se ejecutaron pruebas.
+
+## EPJ-13
+
+Inicio: 44% de 5 h y 90% de 7 d disponibles (11:08 CET).
+
+- Las dos páginas comparten un castillo nocturno ilustrado, títulos dorados, pergamino y botones de lacre. El selector conserva el Sombrero y distingue selección de catálogo y creación.
+- Biome sin avisos en la hoja editada, tipos, build y `git diff --check` correctos. Se revisaron maquetas con los estilos reales en Chrome a 320 y 1440 px, con asistentes desplegados y sugerencias visibles. No se usó una sesión autenticada.
+- Entrega local: la hoja editada pertenece a una ruta que ya estaba sin seguimiento junto con cambios previos de navegación y reservas. Publicarla de forma aislada dejaría el estilo sin sus consumidores.
+
 [Iteraciones](iterations.md) · [Alcance](master.md)

@@ -1,5 +1,4 @@
 import Image from "next/image"
-import Link from "next/link"
 import { redirect } from "next/navigation"
 import { CostumePicker } from "@/features/costumes/costume-picker"
 import {
@@ -27,9 +26,6 @@ export default async function Costumes() {
   return (
     <main className={styles.event}>
       <div className={styles.content}>
-        <Link className={styles.back} href="/eventos/nochevieja-2026">
-          ← Nochevieja en Letux
-        </Link>
         <header className={styles.header}>
           <Image
             src="/images/sorting-hat.svg"

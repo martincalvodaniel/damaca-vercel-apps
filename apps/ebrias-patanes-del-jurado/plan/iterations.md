@@ -56,3 +56,46 @@
 - Dependencias: Google OAuth, MongoDB y lista inicial de administradores por entorno.
 - Aceptación: sin permiso previo no se crea sesión ni se accede con una anterior. Portada pública con Google como única acción, navegación privada Inicio y Ajustes, identidad visible y admisión reservada a administradores.
 - Validación: Biome, tipos, build, casos de acceso y comprobación visual en móvil y escritorio.
+
+## EPJ-08 — Selección explícita de disfraz
+
+- Estado: `validated`.
+- Rutas: selector de disfraces, acción de reserva, estilos y plan de la app.
+- Aceptación: el texto nuevo aparece como opción explícita «(Crear)»; la selección de creación y las coincidencias del catálogo tienen resaltados distintos; reservar está siempre visible y solo habilitado tras seleccionar; crear añade al catálogo y reserva en la misma acción.
+- Validación: Biome en los archivos modificados, comprobación de tipos y `git diff --check`.
+
+## EPJ-09 — Buscador tras agotar intentos
+
+- Estado: `validated`.
+- Rutas: selector de disfraces y plan de la app.
+- Aceptación: el buscador permanece visible después de la tercera reserva válida; el aviso de límite aparece solo al intentar otra reserva cuando ya no quedan intentos.
+- Validación: Biome, comprobación de tipos y `git diff --check`.
+
+## EPJ-10 — Ruta y ficha de evento
+
+- Estado: `validated`.
+- Rutas: página de Nochevieja, selección de disfraz, navegación y plan de la app.
+- Aceptación: la ruta del evento usa el prefijo `YY-MM-DD`; los listados aparecen juntos en una sección «¿Quién viene?» colapsada inicialmente; «Elegir disfraz» permanece visible fuera de esa sección; la página de disfraces no incluye enlace de vuelta.
+- Validación: Biome, tipos, build y `git diff --check`.
+
+## EPJ-11 — Limpieza de personajes dinámicos sin reservas
+
+- Estado: `validated`.
+- Rutas: acciones y persistencia de disfraces.
+- Aceptación: los personajes creados por usuarios se eliminan del catálogo cuando una reserva cambia a otro personaje y ya nadie los tiene seleccionados; un personaje creado que no llega a reservarse tampoco permanece huérfano; el catálogo fijo no se elimina.
+- Validación: Biome, comprobación de tipos y `git diff --check`.
+
+## EPJ-12 — Actualizar búsqueda tras reservar
+
+- Estado: `validated`.
+- Rutas: selector y acciones de disfraces.
+- Aceptación: tras reservar o cambiar, el texto de búsqueda se conserva, la selección activa se limpia y las sugerencias se vuelven a calcular con la lista actualizada del catálogo.
+- Validación: Biome, comprobación de tipos y `git diff --check`.
+
+## EPJ-13 — Invitación y registro de Hogwarts
+
+- Estado: `validated`.
+- Rutas: estilos compartidos de las dos páginas de Letux, `public/images/` y plan de la app.
+- Dependencias: rutas de EPJ-10 y Sombrero Seleccionador existente.
+- Aceptación: ambas páginas evocan Hogwarts mediante un castillo nocturno, dorados, pergamino y lacre; controles legibles en móvil y escritorio.
+- Validación: Biome, tipos, build y comprobación visual a 320 y 1440 px.

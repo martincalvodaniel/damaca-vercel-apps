@@ -1,0 +1,312 @@
+.event {
+  min-height: 100svh;
+  padding: clamp(0.65rem, 3vw, 2rem) 0.75rem 2rem;
+  color: #faeaca;
+  background:
+    radial-gradient(circle, #e1bb7755 1px, transparent 1.5px) 0 0 / 53px 49px,
+    radial-gradient(circle, #e1bb7733 1px, transparent 1.5px) 17px 10px / 71px
+    67px,
+    radial-gradient(ellipse at top, #2c344e, #101422 48%, #090b14);
+  --gold: #e9c482;
+  --ink: #382116;
+  --wax: #681e2a;
+  --paper: radial-gradient(ellipse at 45% 35%, #fff0cd, #ebce97);
+}
+
+.content {
+  max-width: 47.5rem;
+  margin-inline: auto;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 0.75rem;
+  padding: 0.6rem;
+  text-decoration: none;
+}
+
+.header {
+  padding: clamp(0.65rem, 3vw, 1.25rem) 0.4rem 0.65rem;
+  text-align: center;
+  margin-bottom: 0.4rem;
+  border: 4px double #b99257;
+  border-radius: 4rem 4rem 0.4rem 0.4rem / 2rem 2rem 0.4rem 0.4rem;
+  background:
+    linear-gradient(#10142200 20%, #101422bc 57%, #101422 96%),
+    url("/images/wizard-castle.svg") center top / cover no-repeat,
+    #252d43;
+  box-shadow:
+    inset 0 0 1.6rem #080910,
+    0 0.5rem 2rem #06070d80;
+}
+
+.crest {
+  display: grid;
+  width: 3rem;
+  height: 3.4rem;
+  margin: 0 auto 0.35rem;
+  place-items: center;
+  border: 3px double var(--gold);
+  border-radius: 0.5rem 0.5rem 45% 45%;
+  color: #ffe2a1;
+  background: radial-gradient(at top, #9e3b43, #461522);
+  box-shadow: 0 0.2rem 0.75rem #0a0b13;
+}
+
+.crest svg {
+  width: 1.3rem;
+  height: 1.7rem;
+}
+
+.title {
+  max-width: none;
+  margin: 0.15rem 0;
+  color: #ffe3a6;
+  -webkit-text-stroke: 0;
+  text-shadow:
+    0 2px #6e4228,
+    0 4px 12px #000;
+  font-size: clamp(2rem, 7vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  font-family: Georgia, serif;
+  font-weight: 700;
+}
+
+.date,
+.details {
+  margin: 0.2rem 0 0;
+  text-wrap: balance;
+}
+
+.details {
+  color: #efdcba;
+  font-size: 0.875rem;
+}
+
+.roster {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.attendees {
+  margin-top: 0.3rem;
+}
+
+.attendees summary {
+  min-height: 34px;
+  padding: 0.25rem 0.4rem;
+  cursor: pointer;
+}
+
+.card {
+  padding: 0.45rem;
+}
+
+.card h2 {
+  margin: 0;
+  font:
+    700 1.3rem Georgia,
+    serif;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #95653880;
+  color: var(--wax);
+}
+
+.card p {
+  margin: 0.35rem 0;
+}
+
+.card ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.2rem 0.35rem;
+  margin: 0.3rem 0 0;
+  padding-inline-start: 1.1rem;
+}
+
+.pending {
+  display: inline-block;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  color: #6d2a18;
+  background: #f9d6a6;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+@media (min-width: 48rem) {
+  .roster {
+    grid-template-columns: 3fr 2fr;
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+}
+
+.picker {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 0.25rem;
+}
+
+.picker input,
+.picker button {
+  min-height: 34px;
+  padding: 0.15rem 0.3rem;
+  border: 1px solid #705038;
+  border-radius: 0.35rem;
+  font: inherit;
+}
+
+.picker input {
+  width: 100%;
+  color: #302238;
+  background: #fff9e9;
+}
+
+.searchField {
+  position: relative;
+}
+
+.picker .searchField input {
+  padding-right: 2.4rem;
+}
+
+.picker .searchField .clearSearch {
+  position: absolute;
+  top: 50%;
+  right: 0.2rem;
+  display: grid;
+  width: 2.2rem;
+  min-height: 34px;
+  padding: 0;
+  transform: translateY(-50%);
+  place-items: center;
+  border: 0;
+  color: #b42318;
+  background: transparent;
+}
+
+.picker .searchField .clearSearch svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.picker button {
+  color: #fff0cf;
+  background: #482546;
+  cursor: pointer;
+}
+
+.picker button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.15rem;
+}
+
+.suggestions button {
+  color: #302238;
+  background: #fff9e9;
+  overflow-wrap: anywhere;
+}
+
+.suggestions .createOption {
+  font-weight: 700;
+  border: 2px solid #705038;
+}
+
+.suggestions .selectedSuggestion,
+.suggestions .createSelected {
+  color: #fff0cf;
+  background: #17634b;
+  outline: 3px solid #d5a743;
+  outline-offset: 1px;
+}
+
+.header img {
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 0.75rem #f9ca7b9e);
+}
+
+.date {
+  color: var(--gold);
+  font-family: Georgia, serif;
+  font-weight: 700;
+}
+
+.back,
+.picker button[type="submit"] {
+  justify-content: center;
+  border: 3px double #d5aa6b;
+  border-radius: 0.35rem;
+  color: #fff0cf;
+  background: linear-gradient(#8d303b, var(--wax));
+  font:
+    700 1.05rem Georgia,
+    serif;
+}
+
+.back:hover,
+.picker button[type="submit"]:enabled:hover {
+  background: #8d303b;
+}
+
+.attendees summary,
+.card {
+  border: 4px double #956538;
+  border-radius: 0.35rem;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 0 1rem #9e5c2b26;
+}
+
+.attendees summary,
+.picker label {
+  font:
+    700 1.15rem Georgia,
+    serif;
+}
+
+.suggestions .createOption {
+  border-style: dashed;
+  color: var(--wax);
+  background: #fae5c7;
+}
+
+.suggestions .selectedSuggestion {
+  background: #205445;
+}
+
+.suggestions .createSelected {
+  background: var(--wax);
+}
+
+.event :focus-visible {
+  outline: 1px solid #705038;
+  outline-offset: 0;
+}
+
+.back:focus-visible {
+  outline-color: var(--gold);
+}
+.attendees[open] summary {
+  margin-bottom: 0.65rem;
+}
+
+.lockedMessage {
+  color: #a01824;
+  font-weight: 700;
+}

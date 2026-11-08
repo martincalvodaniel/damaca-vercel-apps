@@ -67,6 +67,12 @@ export async function addCharacter(key: string, name: string) {
   return (await characters().findOne({ _id: key }))?.name ?? name
 }
 
+export async function deleteCharacterIfUnselected(key: string) {
+  const selected = await choices().countDocuments({ characterKey: key })
+  if (selected > 0) return
+  await characters().deleteOne({ _id: key })
+}
+
 function isDuplicate(error: unknown) {
   return error instanceof MongoServerError && error.code === 11000
 }

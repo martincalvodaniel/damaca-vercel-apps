@@ -8,6 +8,7 @@ import {
 } from "./characters"
 import {
   addCharacter,
+  deleteCharacterIfUnselected,
   getAddedCharacters,
   getCostumeState,
   reserveCostume,
@@ -73,14 +74,47 @@ export async function submitCostume(
       }
     }
 
+    if (form.get("intent") === "add-reserve" && !known) {
+      const name = await addCharacter(key, requested)
+      const result = await reserveCostume(userId, key, name)
+      if (result !== "reserved") await deleteCharacterIfUnselected(key)
+      const updated = await getCostumeState(userId)
+      if (result === "reserved" && choice.current) {
+        const previousKey = normalizeCharacter(choice.current)
+        if (
+          !characterCatalog.some(
+            (item) => normalizeCharacter(item) === previousKey
+          )
+        ) {
+          await deleteCharacterIfUnselected(previousKey)
+        }
+      }
+      return {
+        current: updated.current,
+        blocked: updated.remaining === 0,
+        added: await getAddedCharacters(),
+        result,
+      }
+    }
+
     if (!known || form.get("intent") !== "reserve")
       return { ...state, result: "invalid" }
     const result = await reserveCostume(userId, key, known)
+    if (result === "reserved" && choice.current) {
+      const previousKey = normalizeCharacter(choice.current)
+      if (
+        !characterCatalog.some(
+          (item) => normalizeCharacter(item) === previousKey
+        )
+      ) {
+        await deleteCharacterIfUnselected(previousKey)
+      }
+    }
     const updated = await getCostumeState(userId)
     return {
       current: updated.current,
       blocked: updated.remaining === 0,
-      added,
+      added: await getAddedCharacters(),
       result,
     }
   } catch {

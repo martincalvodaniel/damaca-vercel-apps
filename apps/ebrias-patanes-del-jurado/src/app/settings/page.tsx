@@ -12,8 +12,23 @@ export default async function Settings() {
       <h1>Ajustes</h1>
       <section className="settings-card">
         <h2>Tu cuenta de Google</h2>
-        <p>{user.name}</p>
-        <p>{user.email}</p>
+        <div className="account-profile">
+          {user.image ? (
+            // biome-ignore lint/performance/noImgElement: The avatar is a small, external Google profile image.
+            <img
+              className="account-avatar"
+              src={user.image}
+              width={64}
+              height={64}
+              alt=""
+              referrerPolicy="no-referrer"
+            />
+          ) : null}
+          <div>
+            <p>{user.name}</p>
+            <p>{user.email}</p>
+          </div>
+        </div>
         <AccountControl signedIn />
       </section>
       {user.role === "admin" && (

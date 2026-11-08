@@ -17,6 +17,8 @@ body {
 
 .landing {
   min-height: 100svh;
+  display: grid;
+  align-items: center;
   padding: 1rem 0.875rem 1.25rem;
   background:
     radial-gradient(ellipse 4rem 1.5rem at 12% 3rem, #fff 98%, transparent),
@@ -43,6 +45,7 @@ body {
   align-items: center;
   gap: 0.875rem;
   max-width: 69rem;
+  width: 100%;
   margin-inline: auto;
 }
 
@@ -229,6 +232,26 @@ body:has(.club-nav) {
 .settings-card h2 {
   margin: 0;
   font-size: 1.15rem;
+}
+
+.account-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.account-avatar {
+  flex: 0 0 auto;
+  width: 4rem;
+  height: 4rem;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.account-profile p {
+  overflow-wrap: anywhere;
 }
 
 .settings-card p {

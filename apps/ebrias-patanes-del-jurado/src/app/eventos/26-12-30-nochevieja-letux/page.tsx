@@ -30,14 +30,12 @@ export default async function NewYearsEve() {
   return (
     <main className={styles.event}>
       <div className={styles.content}>
-        <Link className={styles.back} href="/">
-          ← Club social
-        </Link>
         <header className={styles.header}>
           <div className={styles.crest} aria-hidden="true">
-            ✦
+            <svg viewBox="0 0 24 32" fill="currentColor" aria-hidden="true">
+              <path d="M14.5 0 4 18h6.5L8 32l12-20h-7L14.5 0Z" />
+            </svg>
           </div>
-          <p className={styles.kicker}>Convocatoria del jurado</p>
           <h1 className={styles.title}>Nochevieja en Letux</h1>
           <p className={styles.date}>
             <time dateTime="2026-12-30">30 dic 2026</time> –{" "}
@@ -48,31 +46,36 @@ export default async function NewYearsEve() {
           </p>
         </header>
 
-        <Link className={styles.back} href="/eventos/nochevieja-2026/disfraces">
+        <details className={styles.attendees}>
+          <summary>¿Quién viene?</summary>
+          <div className={styles.roster}>
+            <section className={styles.card}>
+              <h2>Estancia</h2>
+              <ul>
+                {overnightGuests.map((name) => (
+                  <li key={name}>{name}</li>
+                ))}
+                <li>
+                  Diana <span className={styles.pending}>Pendiente</span>
+                </li>
+              </ul>
+            </section>
+            <section className={styles.card}>
+              <h2>Comida y día del 31</h2>
+              <ul>
+                {dayGuests.map((name) => (
+                  <li key={name}>{name}</li>
+                ))}
+              </ul>
+            </section>
+          </div>
+        </details>
+        <Link
+          className={styles.back}
+          href="/eventos/26-12-30-nochevieja-letux/disfraces"
+        >
           Elegir disfraz →
         </Link>
-
-        <div className={styles.roster}>
-          <section className={styles.card}>
-            <h2>Estancia</h2>
-            <ul>
-              {overnightGuests.map((name) => (
-                <li key={name}>{name}</li>
-              ))}
-              <li>
-                Diana <span className={styles.pending}>Pendiente</span>
-              </li>
-            </ul>
-          </section>
-          <section className={styles.card}>
-            <h2>Comida y día del 31</h2>
-            <ul>
-              {dayGuests.map((name) => (
-                <li key={name}>{name}</li>
-              ))}
-            </ul>
-          </section>
-        </div>
       </div>
     </main>
   )

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" fill="none">
+  <defs>
+    <radialGradient id="halo">
+      <stop stop-color="#d9ae73" stop-opacity=".65"/>
+      <stop offset="1" stop-color="#d9ae73" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="510" cy="97" r="97" fill="url(#halo)"/>
+  <circle cx="510" cy="97" r="46" fill="#e7cba0"/>
+  <path d="M0 250 97 223l57 14 73-45 70 16 94-37 89 38 65-30 101 52 114-10v79H0Z" fill="#273044"/>
+  <path d="M0 279l90-13 73 5 72-33 58 10 60-16 71 15 70-17 82 25 80-6 104 26v25H0Z" fill="#101422"/>
+  <path d="M188 262v-69l-8-2 29-34 26 34-8 2v27h18v-64l-9-2 25-34 24 34-8 2v53h18v-83l-9-1 25-31 23 31-8 1v71h20v-96l-10-2 33-62 31 62-10 2v91h16v-34l35-26 36 26v38h18v-79l-8-1 27-39 27 39-8 1v99h24v-40l-7-1 22-28 23 28-8 1v55Z" fill="#101422"/>
+  <path d="M365 143v-19q4-10 8 0v19Zm0 36v-16q4-9 8 0v16Zm145-12v-14q4-8 8 0v14Zm0 30v-13q4-8 8 0v13Zm-201-43v-9q3-7 6 0v9Zm-52 30v-9q3-7 6 0v9Zm-51 30v-9q3-7 6 0v9Zm222-16v-14q4-8 8 0v14Zm17 0v-14q4-8 8 0v14Zm128 36v-9q3-7 6 0v9Z" fill="#e5b772"/>
+  <path d="M59 94h12m-6-6v12m100 13h8m-4-4v8m74-59h12m-6-6v12m365 26h14m-7-7v14m62 49h8m-4-4v8m-549 22h10m-5-5v10" stroke="#d2b17e" opacity=".7"/>
+</svg>
