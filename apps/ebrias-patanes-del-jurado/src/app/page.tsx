@@ -25,17 +25,26 @@ export default async function Home({
           <AccountControl callbackFailed={Boolean(error)} />
         </div>
 
-        <div className="poster" aria-hidden="true">
-          <div className="poster-caption">Convocatoria oficial</div>
+        <figure className="poster">
           <Image
-            src="/icons/emblem.svg"
-            alt=""
-            width={304}
-            height={304}
-            unoptimized
+            src="/images/jury-portrait.jpg"
+            alt="Dibujo coloreado del jurado reunido en el estrado"
+            width={1280}
+            height={911}
+            sizes="(min-width: 76rem) 30rem, (min-width: 48rem) 42vw, 100vw"
           />
-          <div className="poster-caption">Quórum: quien se apunte</div>
-        </div>
+          <Image
+            className="framed-photo"
+            src="/images/jury-framed.jpg"
+            alt="El dibujo del jurado en su marco azul de nubes"
+            width={1280}
+            height={960}
+            sizes="(min-width: 76rem) 23rem, (min-width: 48rem) 32vw, 75vw"
+          />
+          <figcaption className="poster-caption">
+            Quórum: quien se apunte
+          </figcaption>
+        </figure>
       </section>
 
       <footer>Que conste en acta: nos vemos pronto.</footer>

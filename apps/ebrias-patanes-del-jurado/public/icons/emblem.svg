@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <title>Jury club emblem</title>
-  <path fill="#562b52" d="M0 0h256v256H0z"/>
-  <path fill="#f6acbd" stroke="#fff7e7" stroke-width="8" d="M96 83h64v18a32 32 0 0 1-64 0V83Z"/>
-  <path fill="none" stroke="#fff7e7" stroke-linecap="round" stroke-width="8" d="M128 133v43m-23 0h46M78 64l-9-13m59 12V43m50 21 9-13"/>
-  <path fill="#fff7e7" d="m57 136 4 12 12 4-12 4-4 12-4-12-12-4 12-4 4-12Zm144-21 4 12 12 4-12 4-4 12-4-12-12-4 12-4 4-12Z"/>
-</svg>

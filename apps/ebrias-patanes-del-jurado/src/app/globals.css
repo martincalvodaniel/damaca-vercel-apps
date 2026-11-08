@@ -103,18 +103,27 @@ button:disabled {
 .poster {
   display: grid;
   justify-items: center;
+  min-width: 0;
+  margin: 0;
   gap: 1rem;
   padding: 1.5rem 0.75rem;
   text-align: center;
   color: #fff7e7;
   background: #562b52;
   border: 6px double #fff7e7;
-  border-radius: 48% 48% 0.5rem 0.5rem / 14% 14% 0.5rem 0.5rem;
+  border-radius: 0.75rem;
 }
 
 .poster img {
-  width: min(100%, 19rem);
+  display: block;
+  width: 100%;
   height: auto;
+  border-radius: 0.25rem;
+}
+
+.poster .framed-photo {
+  width: 75%;
+  justify-self: end;
 }
 
 .poster-caption {
