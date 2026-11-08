@@ -269,13 +269,31 @@
   background: #8d303b;
 }
 
-.attendees summary,
+.attendees > summary,
 .card {
-  border: 4px double #956538;
-  border-radius: 0.35rem;
+  border: 1px solid #a47742;
+  border-radius: 0.65rem 0.3rem 0.55rem 0.3rem / 0.4rem 0.65rem 0.35rem 0.6rem;
   color: var(--ink);
-  background: var(--paper);
-  box-shadow: inset 0 0 1rem #9e5c2b26;
+  background:
+    linear-gradient(
+      90deg,
+      #7345156b,
+      #f8dfaa99 0.3rem,
+      transparent 0.65rem,
+      transparent calc(100% - 0.65rem),
+      #f8dfaa99 calc(100% - 0.3rem),
+      #7345156b
+    ),
+    radial-gradient(ellipse at 92% 8%, #b17b394d, transparent 44%), var(--paper);
+  box-shadow:
+    inset 0 2px 0 #ffedc88a,
+    inset 0 -2px 0 #8f592f38,
+    0 2px 4px #06030a66;
+  padding-inline-start: 0.8rem;
+}
+
+.card {
+  padding-inline-end: 0.8rem;
 }
 
 .attendees summary,
@@ -311,7 +329,7 @@
   margin-bottom: 0.65rem;
 }
 
-.attendees[open] > .roster > .card {
+.attendees[open] > .card {
   margin-inline: 0.45rem;
 }
 
