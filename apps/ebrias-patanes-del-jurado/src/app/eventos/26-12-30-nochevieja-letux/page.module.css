@@ -329,8 +329,10 @@
   margin-bottom: 0.65rem;
 }
 
-.attendees[open] > .card {
-  margin-inline: 0.45rem;
+@media (width < 48rem) {
+  .attendees[open] > .roster > .card {
+    margin-inline: 0.45rem;
+  }
 }
 
 .lockedMessage {
