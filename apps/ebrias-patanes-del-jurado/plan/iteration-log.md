@@ -77,4 +77,10 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - La nota doble quedó nítida; cuando está apagada, una línea roja la tacha. A 320 px el botón mide 48 × 48 px y el documento no tiene desbordamiento horizontal. A 1440 px tampoco se detectó desbordamiento y el botón queda dentro del viewport.
 - Biome en los seis archivos afectados, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos. El servidor de desarrollo ya ocupaba el puerto 3020; la comprobación visual reutilizó esa instancia.
 
+## EPJ-20
+
+- Se añadió una acción de servidor con comprobación de rol administrador y validación del correo. La persistencia elimina solo el registro cuya clave normalizada coincide y que todavía tiene `pending: true`; miembros y accesos admitidos quedan fuera de esa operación.
+- Ajustes muestra «Eliminar solicitud» con estilo de advertencia en cada solicitud pendiente. Se añadió 8 px de margen entre el formulario de admisión y el desplegable de cambio de correo.
+- Biome en los cinco archivos afectados, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos. La vista real de Ajustes se revisó a 320 y 1440 px sin desbordamiento; el margen medido fue 8 px. No se pulsó eliminar durante la revisión.
+
 [Iteraciones](iterations.md) · [Alcance](master.md)

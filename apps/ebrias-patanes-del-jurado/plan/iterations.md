@@ -148,3 +148,11 @@
 - Rutas: páginas de evento y disfraces, control/estado de música en `src/app/eventos/26-12-30-nochevieja-letux/` y `plan/`.
 - Aceptación: el audio sigue sonando sin reiniciarse al navegar entre ambas páginas; el control persistente ofrece activar/pausar, muestra una nota clara sin tachar al sonar y tachada en rojo al estar detenida; conserva nombre y estado accesibles.
 - Validación: Biome en los archivos afectados, tipos de la app y `git diff --check`.
+
+## EPJ-20 — Eliminar solicitudes de acceso
+
+- Estado: `validated`.
+- Objetivo: permitir a los administradores descartar solicitudes pendientes y separar visualmente la admisión del control de cambio de correo.
+- Rutas: Ajustes, acciones y persistencia de admissions, estilos globales y plan de Ebrias.
+- Aceptación: solo administradores pueden borrar registros que sigan pendientes; borrar una solicitud no toca miembros ni accesos ya admitidos. Entre el botón «Admitir» y el desplegable de cambio de correo hay separación visible.
+- Validación: Biome en archivos afectados, tipos de la app, `git diff --check` y revisión responsive de Ajustes.

@@ -72,6 +72,14 @@ export function listPendingAdmissions() {
   return admissions().find({ pending: true }).sort({ requestedAt: 1 }).toArray()
 }
 
+export async function deletePendingAdmission(email: string) {
+  const result = await admissions().deleteOne({
+    _id: normalizeEmail(email),
+    pending: true,
+  })
+  return result.deletedCount > 0
+}
+
 export async function admitEmail(email: string, target: string) {
   const { client } = getDatabaseConnection()
   return client.withSession((session) =>

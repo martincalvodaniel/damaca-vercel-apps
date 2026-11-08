@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache"
 import { saveDisplayAlias, saveMemberAlias } from "@/features/members/directory"
-import { admitEmail, normalizeEmail, replaceMemberEmail } from "@/lib/admission"
+import {
+  admitEmail,
+  deletePendingAdmission,
+  normalizeEmail,
+  replaceMemberEmail,
+} from "@/lib/admission"
 import { getAuthorizedUser } from "@/lib/session"
 
 export async function approveEmail(_previous: string, form: FormData) {
@@ -33,6 +38,32 @@ export async function approveEmail(_previous: string, form: FormData) {
   revalidatePath("/settings")
   revalidatePath("/eventos", "layout")
   return `${email} ya puede entrar con Google.`
+}
+
+export async function deleteAdmissionRequest(
+  _previous: string,
+  form: FormData
+) {
+  if ((await getAuthorizedUser())?.role !== "admin") {
+    return "Solo los administradores pueden eliminar solicitudes."
+  }
+
+  const value = form.get("email")
+  const email = typeof value === "string" ? normalizeEmail(value) : ""
+  if (email.length > 254 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/u.test(email)) {
+    return "La solicitud no es válida."
+  }
+
+  try {
+    if (!(await deletePendingAdmission(email))) {
+      return "La solicitud ya no está pendiente."
+    }
+  } catch {
+    return "No se pudo eliminar la solicitud. Inténtalo de nuevo."
+  }
+
+  revalidatePath("/settings")
+  return "Solicitud eliminada."
 }
 
 export async function updateAlias(_previous: string, form: FormData) {

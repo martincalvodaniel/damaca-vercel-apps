@@ -298,6 +298,12 @@ body:has(.club-nav) {
   padding: 0.25rem 0.4rem;
 }
 
+.settings-card .request-delete-form button {
+  border-color: #8d2634;
+  background: #ffe1e3;
+  color: #65152f;
+}
+
 @media (min-width: 48rem) {
   .club-nav {
     position: sticky;
@@ -386,4 +392,8 @@ body:has(.club-nav) {
 .management-list li + li {
   border-top: 1px solid currentColor;
   padding-top: 0.5rem;
+}
+
+.management-list > li > .admission-form + details {
+  margin-top: 0.5rem;
 }
