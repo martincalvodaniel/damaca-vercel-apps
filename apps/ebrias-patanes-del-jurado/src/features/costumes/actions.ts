@@ -1,6 +1,5 @@
 "use server"
 
-import { getCostumeOwnerId } from "@/features/members/directory"
 import { getAuthorizedUser } from "@/lib/session"
 import {
   canonicalCharacter,
@@ -11,6 +10,7 @@ import {
   addCharacter,
   deleteCharacterIfUnselected,
   getAddedCharacters,
+  getCostumeOwnerId,
   getCostumeState,
   reserveCostume,
 } from "./reservations"

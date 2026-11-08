@@ -84,3 +84,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Biome en los cinco archivos afectados, `bun run type-check --filter=@damaca/ebrias-patanes-del-jurado` y `git diff --check`: correctos. La vista real de Ajustes se revisó a 320 y 1440 px sin desbordamiento; el margen medido fue 8 px. No se pulsó eliminar durante la revisión.
 
 [Iteraciones](iterations.md) · [Alcance](master.md)
+
+## EPJ-21
+
+- Se separaron los asistentes del directorio y se retiró la siembra automática. La gestión exige administrador o miembro vinculado.
+- La limpieza heredada tiene vista previa. Pendientes la comprobación con sesiones reales, la revisión responsive y la ejecución de la limpieza.

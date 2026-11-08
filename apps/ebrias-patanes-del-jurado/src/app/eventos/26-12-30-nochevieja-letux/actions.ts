@@ -2,16 +2,18 @@
 
 import { revalidatePath } from "next/cache"
 import {
+  addAttendee,
   createAttendanceBlock,
   getAttendanceBlocks,
   letuxEvent,
+  removeAttendee,
   setAttendance,
 } from "@/features/members/attendance"
-import { getAuthorizedUser } from "@/lib/session"
+import { canManageAttendance } from "@/lib/session"
 
 export async function updateAttendance(_previous: string, form: FormData) {
-  if ((await getAuthorizedUser())?.role !== "admin") {
-    return "Solo los administradores pueden cambiar la asistencia."
+  if (!(await canManageAttendance())) {
+    return "Solo los miembros del club y los administradores pueden cambiar la asistencia."
   }
 
   const member = form.get("member")
@@ -26,12 +28,18 @@ export async function updateAttendance(_previous: string, form: FormData) {
   }
 
   try {
+    if (form.get("intent") === "remove") {
+      if (!(await removeAttendee(letuxEvent, member)))
+        return "No se encontró ese asistente."
+      revalidatePath("/eventos/26-12-30-nochevieja-letux")
+      return "Asistente eliminado."
+    }
     const blocks = await getAttendanceBlocks(letuxEvent)
     if (!blocks.some(({ id }) => id === status)) {
       return "Comprueba el bloque de asistencia."
     }
     if (!(await setAttendance(letuxEvent, member, status))) {
-      return "No se encontró ese miembro."
+      return "No se encontró ese asistente."
     }
   } catch {
     return "No se pudo guardar la asistencia."
@@ -42,8 +50,8 @@ export async function updateAttendance(_previous: string, form: FormData) {
 }
 
 export async function addAttendanceBlock(_previous: string, form: FormData) {
-  if ((await getAuthorizedUser())?.role !== "admin") {
-    return "Solo los administradores pueden crear bloques."
+  if (!(await canManageAttendance())) {
+    return "Solo los miembros del club y los administradores pueden crear bloques."
   }
 
   const name = form.get("name")
@@ -62,4 +70,21 @@ export async function addAttendanceBlock(_previous: string, form: FormData) {
 
   revalidatePath("/eventos/26-12-30-nochevieja-letux")
   return "Bloque creado."
+}
+
+export async function createAttendee(_previous: string, form: FormData) {
+  if (!(await canManageAttendance()))
+    return "No tienes permiso para gestionar asistentes."
+  const name = String(form.get("name") ?? "").trim()
+  const member = String(form.get("member") ?? "")
+  if ((!member && !name) || name.length > 80 || member.length > 100)
+    return "Selecciona un miembro o escribe el nombre del invitado."
+  try {
+    if (!(await addAttendee(letuxEvent, name, member)))
+      return "El miembro no está disponible o ya está en la lista."
+  } catch {
+    return "No se pudo añadir el asistente."
+  }
+  revalidatePath("/eventos/26-12-30-nochevieja-letux")
+  return "Asistente añadido."
 }

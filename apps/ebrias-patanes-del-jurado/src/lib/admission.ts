@@ -161,9 +161,12 @@ export async function replaceMemberEmail(
       const previousUser = await db
         .collection("user")
         .findOne({ email: previous, emailVerified: true }, { session })
+      const owners = db.collection<{ _id: string; ownerId: string }>(
+        "261230-costume-owners"
+      )
+      const owner = await owners.findOne({ _id: memberId }, { session })
       const previousOwnerId =
-        member.costumeOwnerId ??
-        (previousUser ? String(previousUser._id) : null)
+        owner?.ownerId ?? (previousUser ? String(previousUser._id) : null)
       const previousChoice =
         previousOwnerId &&
         (await db
@@ -177,13 +180,17 @@ export async function replaceMemberEmail(
             email: next,
             alias: previousAlias?.alias ?? member.alias,
             aliasUpdated: true,
-            ...(previousChoice && previousOwnerId
-              ? { costumeOwnerId: previousOwnerId }
-              : {}),
           },
         },
         { session }
       )
+      if (previousChoice && previousOwnerId) {
+        await owners.updateOne(
+          { _id: memberId },
+          { $set: { ownerId: previousOwnerId } },
+          { session, upsert: true }
+        )
+      }
       await admissions().updateOne(
         { _id: previous },
         {

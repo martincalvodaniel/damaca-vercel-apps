@@ -47,88 +47,61 @@ export async function createAttendanceBlock(event: string, label: string) {
   return result.upsertedCount === 1
 }
 
-const letuxRoster = [
-  {
-    status: "overnight",
-    aliases: [
-      "Álvaro",
-      "Víctor",
-      "Dani",
-      "Pali",
-      "Borja",
-      "Andrea",
-      "Ángela",
-      "Sergio",
-      "Pat",
-      "Adri",
-      "Lis",
-      "Pit",
-    ],
-  },
-  { status: "day", aliases: ["Lu", "La", "Ma", "Bebé2"] },
-  { status: "pending", aliases: ["Diana"] },
-] as const
-
-function attendanceCollection(event: string) {
+function attendees(event: string) {
   return getDatabaseConnection().db.collection<{
     _id: string
+    name: string
+    memberId?: string
     status: string
-  }>(`${event}-attendance`)
-}
-
-export async function seedLetuxRoster() {
-  const roster = letuxRoster.flatMap(({ status, aliases }) =>
-    aliases.map((alias) => ({
-      id: `letux:${alias.toLowerCase()}`,
-      alias,
-      status,
-    }))
-  )
-  await Promise.all([
-    memberCollection().bulkWrite(
-      roster.map(({ id, alias }) => ({
-        updateOne: {
-          filter: { _id: id },
-          update: { $setOnInsert: { alias } },
-          upsert: true,
-        },
-      }))
-    ),
-    attendanceCollection(letuxEvent).bulkWrite(
-      roster.map(({ id, status }) => ({
-        updateOne: {
-          filter: { _id: id },
-          update: { $setOnInsert: { status } },
-          upsert: true,
-        },
-      }))
-    ),
-  ])
+  }>(`${event}-attendees`)
 }
 
 export async function getEventRoster(event: string) {
-  const [members, attendance] = await Promise.all([
+  const [roster, members] = await Promise.all([
+    attendees(event).find().toArray(),
     getMemberDirectory(),
-    attendanceCollection(event).find().toArray(),
   ])
-  const statuses = new Map(attendance.map(({ _id, status }) => [_id, status]))
-  return members.map(({ id, alias }) => ({
-    id,
-    alias,
-    status: statuses.get(id) ?? "absent",
-  }))
+  const aliases = new Map(members.map(({ id, alias }) => [id, alias]))
+  return roster
+    .map(({ _id: id, name, memberId, status }) => ({
+      id,
+      alias: (memberId && aliases.get(memberId)) || name,
+      status,
+    }))
+    .sort((a, b) => a.alias.localeCompare(b.alias, "es"))
 }
 
-export async function setAttendance(
+export async function addAttendee(
   event: string,
-  memberId: string,
-  status: string
+  name: string,
+  memberId: string
 ) {
-  if (!(await memberCollection().findOne({ _id: memberId }))) return false
-  await attendanceCollection(event).updateOne(
-    { _id: memberId },
-    { $set: { status } },
+  const member = memberId
+    ? await memberCollection().findOne({ _id: memberId })
+    : null
+  if (memberId && !member) return false
+  const id = member ? `member:${member._id}` : crypto.randomUUID()
+  const result = await attendees(event).updateOne(
+    { _id: id },
+    {
+      $setOnInsert: {
+        name: member?.alias ?? name,
+        status: "pending",
+        ...(member && { memberId }),
+      },
+    },
     { upsert: true }
   )
-  return true
+  return result.upsertedCount === 1
+}
+
+export async function removeAttendee(event: string, id: string) {
+  return (await attendees(event).deleteOne({ _id: id })).deletedCount === 1
+}
+
+export async function setAttendance(event: string, id: string, status: string) {
+  return (
+    (await attendees(event).updateOne({ _id: id }, { $set: { status } }))
+      .matchedCount === 1
+  )
 }

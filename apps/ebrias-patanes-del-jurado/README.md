@@ -19,3 +19,13 @@ bun --conditions=react-server --env-file=/path/to/target.env apps/ebrias-patanes
 Para la base de integración, el entorno del comando debe incluir `VERCEL_GIT_COMMIT_REF=int` y `NODE_ENV=production`. Para la base local, usa `NODE_ENV=development`. El comando solo concede la prórroga y no lee ni imprime el personaje.
 
 Configura `ALLOWED_EMAILS` con los correos de Google de los administradores separados por comas, en cada entorno antes de publicar el cambio. Los administradores pueden entrar directamente y admitir otros correos desde Ajustes. La admisión se guarda en la base de ese entorno y se exige también a las cuentas con sesiones anteriores.
+
+### Letux cleanup
+
+Run the legacy cleanup after switching the app to the new roster. Use the environment file for the intended database and set the app environment explicitly.
+
+```sh
+NODE_ENV=development bun --conditions=react-server --env-file=/path/to/local.env apps/ebrias-patanes-del-jurado/scripts/cleanup-letux-members.ts
+```
+
+Review the database name and counts, then append `--apply` to remove unlinked legacy Letux entries and move old costume ownership links. The roster starts empty. The old attendance collection can be removed independently. To clear the entire event later, remove the collections with the `261230-` prefix.

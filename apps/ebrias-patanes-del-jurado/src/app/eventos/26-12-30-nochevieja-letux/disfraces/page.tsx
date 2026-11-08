@@ -3,9 +3,9 @@ import { redirect } from "next/navigation"
 import { CostumePicker } from "@/features/costumes/costume-picker"
 import {
   getAddedCharacters,
+  getCostumeOwnerId,
   getCostumeState,
 } from "@/features/costumes/reservations"
-import { getCostumeOwnerId } from "@/features/members/directory"
 import { getAuthorizedUser } from "@/lib/session"
 import { EventMusicControl } from "../event-music"
 import styles from "../page.module.css"

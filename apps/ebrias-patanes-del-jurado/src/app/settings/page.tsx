@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation"
 import { AccountControl } from "@/features/landing/account-control"
-import { seedLetuxRoster } from "@/features/members/attendance"
 import {
   getDisplayAlias,
   getMemberDirectory,
@@ -17,7 +16,6 @@ export default async function Settings() {
   if (!user) redirect("/")
 
   const isAdmin = user.role === "admin"
-  if (isAdmin) await seedLetuxRoster()
   const [alias, requests, members] = await Promise.all([
     getDisplayAlias(normalizeEmail(user.email), user.name),
     isAdmin ? listPendingAdmissions() : [],

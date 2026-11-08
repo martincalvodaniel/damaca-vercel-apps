@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState } from "react"
-import { addAttendanceBlock, updateAttendance } from "./actions"
+import { addAttendanceBlock, createAttendee, updateAttendance } from "./actions"
 
 export function AttendanceForm({
   roster,
@@ -17,9 +17,9 @@ export function AttendanceForm({
   return (
     <form action={action} className="account admission-form">
       <label>
-        Miembro
+        Asistente
         <select name="member" required>
-          <option value="">Selecciona un miembro</option>
+          <option value="">Selecciona un asistente</option>
           {roster.map(({ id, alias, status }) => (
             <option key={id} value={id}>
               {alias} · {labels.get(status)}
@@ -29,7 +29,7 @@ export function AttendanceForm({
       </label>
       <label>
         Asistencia
-        <select name="status" required>
+        <select name="status">
           <option value="">Selecciona un bloque</option>
           {blocks.map(({ id: status, label }) => (
             <option key={status} value={status}>
@@ -40,6 +40,9 @@ export function AttendanceForm({
       </label>
       <button type="submit" disabled={pending}>
         {pending ? "Guardando…" : "Guardar asistencia"}
+      </button>
+      <button type="submit" name="intent" value="remove" disabled={pending}>
+        Quitar asistente
       </button>
       <p role="status">{message}</p>
     </form>
@@ -57,6 +60,37 @@ export function AttendanceBlockForm() {
       </label>
       <button type="submit" disabled={pending}>
         {pending ? "Creando…" : "Crear bloque"}
+      </button>
+      <p role="status">{message}</p>
+    </form>
+  )
+}
+
+export function AttendeeForm({
+  members,
+}: {
+  members: { id: string; alias: string }[]
+}) {
+  const [message, action, pending] = useActionState(createAttendee, "")
+  return (
+    <form action={action} className="account admission-form">
+      <label>
+        Miembro del club
+        <select name="member" className="member-select">
+          <option value="">Invitado sin vínculo</option>
+          {members.map(({ id, alias }) => (
+            <option key={id} value={id}>
+              {alias}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        Nombre del invitado
+        <input name="name" maxLength={80} />
+      </label>
+      <button type="submit" disabled={pending}>
+        Añadir asistente
       </button>
       <p role="status">{message}</p>
     </form>

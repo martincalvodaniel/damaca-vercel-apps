@@ -5,10 +5,14 @@ import {
   getAttendanceBlocks,
   getEventRoster,
   letuxEvent,
-  seedLetuxRoster,
 } from "@/features/members/attendance"
-import { getAuthorizedUser } from "@/lib/session"
-import { AttendanceBlockForm, AttendanceForm } from "./attendance-form"
+import { getMemberDirectory } from "@/features/members/directory"
+import { canManageAttendance, getAuthorizedUser } from "@/lib/session"
+import {
+  AttendanceBlockForm,
+  AttendanceForm,
+  AttendeeForm,
+} from "./attendance-form"
 import { LumosGate } from "./lumos-gate"
 import styles from "./page.module.css"
 
@@ -19,11 +23,13 @@ export default async function NewYearsEve() {
   const user = await getAuthorizedUser()
   if (!user) redirect("/")
 
-  await seedLetuxRoster()
   const [roster, blocks] = await Promise.all([
     getEventRoster(letuxEvent),
     getAttendanceBlocks(letuxEvent),
   ])
+
+  const canManage = await canManageAttendance()
+  const members = canManage ? await getMemberDirectory() : []
 
   return (
     <LumosGate>
@@ -71,10 +77,11 @@ export default async function NewYearsEve() {
               })}
             </div>
           </details>
-          {user.role === "admin" ? (
+          {canManage ? (
             <details className={styles.attendees}>
               <summary>Gestionar asistencia</summary>
               <div className={styles.card}>
+                <AttendeeForm members={members} />
                 <AttendanceForm roster={roster} blocks={blocks} />
                 <AttendanceBlockForm />
               </div>

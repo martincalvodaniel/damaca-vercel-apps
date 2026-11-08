@@ -8,7 +8,6 @@ export function memberCollection() {
     alias: string
     email?: string
     aliasUpdated?: true
-    costumeOwnerId?: string
   }>("members")
 }
 
@@ -48,13 +47,6 @@ export async function saveMemberAlias(id: string, alias: string) {
     { $set: { alias, aliasUpdated: true } }
   )
   return result.matchedCount > 0
-}
-
-export async function getCostumeOwnerId(email: string, userId: string) {
-  const member = await memberCollection().findOne({
-    email: email.trim().toLowerCase(),
-  })
-  return member?.costumeOwnerId ?? userId
 }
 
 export async function getMemberDirectory() {

@@ -127,3 +127,15 @@ export async function grantFinalAttempt(userId: string) {
   )
   return result.modifiedCount === 1
 }
+
+export async function getCostumeOwnerId(email: string, userId: string) {
+  const db = getDatabaseConnection().db
+  const member = await db
+    .collection<{ _id: string }>("members")
+    .findOne({ email: email.trim().toLowerCase() })
+  if (!member) return userId
+  const owner = await db
+    .collection<{ _id: string; ownerId: string }>("261230-costume-owners")
+    .findOne({ _id: member._id })
+  return owner?.ownerId ?? userId
+}

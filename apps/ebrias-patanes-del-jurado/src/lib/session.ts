@@ -2,6 +2,7 @@ import "server-only"
 
 import { headers } from "next/headers"
 import { cache } from "react"
+import { memberCollection } from "@/features/members/directory"
 import { getAccessRole } from "@/lib/admission"
 import { getAuth } from "@/lib/auth"
 
@@ -16,4 +17,15 @@ export const getAuthorizedUser = cache(async () => {
   } catch {
     return null
   }
+})
+
+export const canManageAttendance = cache(async () => {
+  const user = await getAuthorizedUser()
+  return Boolean(
+    user &&
+      (user.role === "admin" ||
+        (await memberCollection().findOne({
+          email: user.email.trim().toLowerCase(),
+        })))
+  )
 })

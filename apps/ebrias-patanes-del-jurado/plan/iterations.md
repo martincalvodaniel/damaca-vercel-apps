@@ -156,3 +156,9 @@
 - Rutas: Ajustes, acciones y persistencia de admissions, estilos globales y plan de Ebrias.
 - Aceptación: solo administradores pueden borrar registros que sigan pendientes; borrar una solicitud no toca miembros ni accesos ya admitidos. Entre el botón «Admitir» y el desplegable de cambio de correo hay separación visible.
 - Validación: Biome en archivos afectados, tipos de la app, `git diff --check` y revisión responsive de Ajustes.
+
+## EPJ-21 — Asistentes por evento
+
+- Estado: `in_progress`.
+- Rutas: asistencia, disfraces, Ajustes y limpieza de Letux.
+- Aceptación: invitados independientes, gestión por miembros y administradores, y persistencia de evento aislada por prefijo.
