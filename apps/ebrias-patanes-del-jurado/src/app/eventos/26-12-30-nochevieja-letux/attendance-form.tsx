@@ -73,9 +73,8 @@ function AttendanceSection({
   move: (id: string, status: string) => Promise<void>
 }) {
   const guests = roster.filter(({ status }) => status === block.id)
-  const available = members.filter(
-    ({ id }) => !guests.some(({ memberId }) => memberId === id)
-  )
+  const assignedMemberIds = new Set(roster.map(({ memberId }) => memberId))
+  const available = members.filter(({ id }) => !assignedMemberIds.has(id))
   const dialog = useRef<HTMLDialogElement>(null)
   const titleId = useId()
   const [query, setQuery] = useState("")
@@ -91,7 +90,7 @@ function AttendanceSection({
   const submit = useCallback(
     async (previous: string, form: FormData) => {
       const result = await createAttendee(previous, form)
-      if (result === "Asistente añadido.") closePicker()
+      if (!result) closePicker()
       return result
     },
     [closePicker]

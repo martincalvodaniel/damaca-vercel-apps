@@ -83,5 +83,5 @@ export async function createAttendee(_previous: string, form: FormData) {
     return "No se pudo añadir el asistente."
   }
   revalidatePath("/eventos/26-12-30-nochevieja-letux")
-  return "Asistente añadido."
+  return ""
 }
