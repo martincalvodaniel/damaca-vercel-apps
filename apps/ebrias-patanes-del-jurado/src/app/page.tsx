@@ -12,11 +12,11 @@ export default async function Home({
     <main className="landing">
       <section className="hero">
         <div className="intro">
-          <p className="eyebrow">Club de quedadas</p>
+          <p className="eyebrow">Club social</p>
           <h1>
             Ebrias <em>Patanes</em> del Jurado
           </h1>
-          <p className="lede">El punto de encuentro para la próxima quedada.</p>
+          <p className="lede">Nuestro punto de encuentro</p>
           <AccountControl callbackFailed={Boolean(error)} />
         </div>
 
@@ -24,6 +24,7 @@ export default async function Home({
           <Image
             src="/images/jury-portrait.jpg"
             alt="Dibujo coloreado del jurado reunido en el estrado"
+            loading="eager"
             width={1280}
             height={911}
             sizes="(min-width: 76rem) 30rem, (min-width: 48rem) 42vw, 100vw"

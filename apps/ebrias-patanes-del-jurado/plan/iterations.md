@@ -24,4 +24,12 @@
 - Aceptación: la portada muestra solo la versión sin marco. La versión con marco queda disponible para otras pantallas.
 - Validación: Biome, tipos, build y revisión de las referencias a las imágenes.
 
+## EPJ-04 — Nubes, textos y favicon
+
+- Estado: `validated`.
+- Rutas: `src/app/`, `public/icons/` y `plan/`.
+- Dependencias: diseño de portada de [AGW-24](../../../plan/iterations.md#agw-24--diseño-compacto-en-móvil).
+- Aceptación: más nubes, textos nuevos, carga inmediata del dibujo y favicon EP/DJ.
+- Validación: Biome, tipos, build y comprobación de la portada.
+
 [Alcance](master.md) · [Evidencia](iteration-log.md)

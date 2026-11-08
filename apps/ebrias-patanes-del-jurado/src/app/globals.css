@@ -23,6 +23,18 @@ body {
     radial-gradient(ellipse 2rem 1.8rem at 10% 2.5rem, #fff 98%, transparent),
     radial-gradient(ellipse 6rem 1.7rem at 89% 7rem, #fff 98%, transparent),
     radial-gradient(ellipse 3rem 2rem at 88% 6.4rem, #fff 98%, transparent),
+    radial-gradient(ellipse 3.4rem 1.15rem at 45% 1.5rem, #fff 98%, transparent),
+    radial-gradient(
+      ellipse 1.6rem 1.25rem at 44% 1.15rem,
+      #fff 98%,
+      transparent
+    ),
+    radial-gradient(ellipse 4.4rem 1.4rem at 4% 67%, #fff 98%, transparent),
+    radial-gradient(ellipse 2.1rem 1.65rem at 6% 65%, #fff 98%, transparent),
+    radial-gradient(ellipse 4rem 1.4rem at 96% 90%, #fff 98%, transparent),
+    radial-gradient(ellipse 2rem 1.6rem at 94% 88%, #fff 98%, transparent),
+    radial-gradient(ellipse 3.8rem 1.25rem at 43% 94%, #fff 98%, transparent),
+    radial-gradient(ellipse 1.8rem 1.5rem at 42% 92%, #fff 98%, transparent),
     linear-gradient(var(--sky), #b7e6ff);
 }
 

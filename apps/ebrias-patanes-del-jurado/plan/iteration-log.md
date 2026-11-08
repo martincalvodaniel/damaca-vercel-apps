@@ -19,4 +19,10 @@ Inicio: 79% de 5 h y 95% de 7 d disponibles (10:01 CET).
 - Biome, tipos y build de integración correctos.
 - La portada solo referencia la imagen sin marco. La foto con marco sigue guardada en la app.
 
+## EPJ-04
+
+Inicio: 72% de 5 h y 94% de 7 d disponibles (10:17 CET).
+- Biome, tipos y build de integración correctos.
+- La portada local sirve los textos nuevos, el dibujo con carga inmediata y el favicon SVG EP/DJ.
+
 [Iteraciones](iterations.md) · [Alcance](master.md)

@@ -6,11 +6,11 @@ import "./globals.css"
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this layout export.
 export const metadata: Metadata = {
   title: "Ebrias Patanes del Jurado",
-  description: "El punto de encuentro para la próxima quedada.",
+  description: "Nuestro punto de encuentro",
   applicationName: installName,
   appleWebApp: { capable: true, title: installName },
   icons: {
-    icon: { url: "/icons/favicon.png", sizes: "32x32", type: "image/png" },
+    icon: { url: "/icons/favicon.svg", type: "image/svg+xml" },
     apple: "/icons/apple-touch-icon.png",
   },
 }
