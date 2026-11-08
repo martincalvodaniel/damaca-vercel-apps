@@ -1,9 +1,12 @@
 import Image from "next/image"
 import { redirect } from "next/navigation"
+import { CharacterCreationControl } from "@/features/costumes/character-creation-control"
 import { CostumePicker } from "@/features/costumes/costume-picker"
 import {
   getAddedCharacters,
+  getCharacterCreationEnabled,
   getCostumeOwnerId,
+  getCostumeReservationCount,
   getCostumeState,
 } from "@/features/costumes/reservations"
 import { getAuthorizedUser } from "@/lib/session"
@@ -14,16 +17,20 @@ export default async function Costumes() {
   const user = await getAuthorizedUser()
   if (!user) redirect("/")
 
-  const initial = await Promise.all([
-    getCostumeOwnerId(user.email, user.id).then(getCostumeState),
-    getAddedCharacters(),
+  const [initial, reservationCount, allowAdd] = await Promise.all([
+    Promise.all([
+      getCostumeOwnerId(user.email, user.id).then(getCostumeState),
+      getAddedCharacters(),
+    ])
+      .then(([choice, added]) => ({
+        current: choice.current,
+        blocked: choice.remaining === 0,
+        added,
+      }))
+      .catch(() => null),
+    getCostumeReservationCount(),
+    getCharacterCreationEnabled(),
   ])
-    .then(([choice, added]) => ({
-      current: choice.current,
-      blocked: choice.remaining === 0,
-      added,
-    }))
-    .catch(() => null)
 
   return (
     <>
@@ -41,9 +48,21 @@ export default async function Costumes() {
             <p className={styles.details}>
               Una persona por personaje. Tu elección es secreta.
             </p>
+            <p className={styles.details}>
+              {reservationCount}{" "}
+              {reservationCount === 1
+                ? "asistente reservó"
+                : "asistentes reservaron"}{" "}
+              ya su personaje.
+            </p>
           </header>
           {initial ? (
-            <CostumePicker initial={initial} />
+            <>
+              {user.role === "admin" ? (
+                <CharacterCreationControl enabled={allowAdd} />
+              ) : null}
+              <CostumePicker initial={{ ...initial, allowAdd }} />
+            </>
           ) : (
             <section className={styles.card}>
               <p>No se pudo cargar la elección. Recarga la página.</p>

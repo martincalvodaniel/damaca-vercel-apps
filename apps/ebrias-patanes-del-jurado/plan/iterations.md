@@ -211,3 +211,10 @@
 - Rutas: ficha de Letux, formulario y estilos.
 - Aceptación: enlace de disfraces antes de las secciones, una sola sección abierta y creación de coches desde un modal accesible con el botón «+» en la cabecera desplegada.
 - Validación: Biome, tipos, build y revisión de la interfaz.
+
+## EPJ-30 — Contador de reservas y control de personajes
+
+- Estado: `in_progress`.
+- Rutas: página de disfraces y dominio de reservas.
+- Aceptación: mostrar el número de asistentes con personaje reservado bajo la nota introductoria; ocultar la creación libre por defecto y permitir a admins habilitarla o deshabilitarla. La acción de servidor valida el permiso.
+- Validación: Biome, tipos, build y comprobaciones de reservas y permisos.

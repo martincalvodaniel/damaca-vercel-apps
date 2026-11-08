@@ -58,6 +58,27 @@ export async function getAddedCharacters() {
   ).map(({ name }) => name)
 }
 
+export async function getCostumeReservationCount() {
+  return choices().countDocuments({ characterKey: { $exists: true } })
+}
+
+export async function getCharacterCreationEnabled() {
+  const setting = await getDatabaseConnection()
+    .db.collection<{ _id: string; enabled: boolean }>("261230-costume-settings")
+    .findOne({ _id: "character-creation" })
+  return setting?.enabled === true
+}
+
+export async function setCharacterCreationEnabled(enabled: boolean) {
+  await getDatabaseConnection()
+    .db.collection<{ _id: string; enabled: boolean }>("261230-costume-settings")
+    .updateOne(
+      { _id: "character-creation" },
+      { $set: { enabled } },
+      { upsert: true }
+    )
+}
+
 export async function addCharacter(key: string, name: string) {
   await characters().updateOne(
     { _id: key },

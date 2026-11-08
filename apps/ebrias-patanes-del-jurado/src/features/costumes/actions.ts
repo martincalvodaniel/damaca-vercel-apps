@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { getAuthorizedUser } from "@/lib/session"
 import {
   canonicalCharacter,
@@ -10,15 +11,18 @@ import {
   addCharacter,
   deleteCharacterIfUnselected,
   getAddedCharacters,
+  getCharacterCreationEnabled,
   getCostumeOwnerId,
   getCostumeState,
   reserveCostume,
+  setCharacterCreationEnabled,
 } from "./reservations"
 
 export interface PickerState {
   current: string | null
   blocked: boolean
   added: string[]
+  allowAdd: boolean
   result?:
     | "reserved"
     | "taken"
@@ -36,18 +40,26 @@ export async function submitCostume(
   try {
     const user = await getAuthorizedUser()
     if (!user) {
-      return { current: null, blocked: true, added: [], result: "signed-out" }
+      return {
+        current: null,
+        blocked: true,
+        added: [],
+        allowAdd: false,
+        result: "signed-out",
+      }
     }
 
     const userId = await getCostumeOwnerId(user.email, user.id)
-    const [choice, added] = await Promise.all([
+    const [choice, added, allowAdd] = await Promise.all([
       getCostumeState(userId),
       getAddedCharacters(),
+      getCharacterCreationEnabled(),
     ])
     const state = {
       current: choice.current,
       blocked: choice.remaining === 0,
       added,
+      allowAdd,
     }
     const value = form.get("character")
     if (
@@ -66,7 +78,7 @@ export async function submitCostume(
     const known = [...characterCatalog, ...added].find(
       (name) => normalizeCharacter(name) === key
     )
-    if (form.get("intent") === "add") {
+    if (form.get("intent") === "add" && allowAdd) {
       const name = known ?? (await addCharacter(key, requested))
       return {
         ...state,
@@ -75,7 +87,7 @@ export async function submitCostume(
       }
     }
 
-    if (form.get("intent") === "add-reserve" && !known) {
+    if (form.get("intent") === "add-reserve" && !known && allowAdd) {
       const name = await addCharacter(key, requested)
       const result = await reserveCostume(userId, key, name)
       if (result !== "reserved") await deleteCharacterIfUnselected(key)
@@ -94,6 +106,7 @@ export async function submitCostume(
         current: updated.current,
         blocked: updated.remaining === 0,
         added: await getAddedCharacters(),
+        allowAdd,
         result,
       }
     }
@@ -116,9 +129,32 @@ export async function submitCostume(
       current: updated.current,
       blocked: updated.remaining === 0,
       added: await getAddedCharacters(),
+      allowAdd,
       result,
     }
   } catch {
-    return { current: null, blocked: true, added: [], result: "error" }
+    return {
+      current: null,
+      blocked: true,
+      added: [],
+      allowAdd: false,
+      result: "error",
+    }
+  }
+}
+
+export async function setCharacterCreation(_previous: string, form: FormData) {
+  if ((await getAuthorizedUser())?.role !== "admin") {
+    return "Solo los administradores pueden cambiar esta opción."
+  }
+  const enabled = form.get("enabled") === "true"
+  try {
+    await setCharacterCreationEnabled(enabled)
+    revalidatePath("/eventos/26-12-30-nochevieja-letux/disfraces")
+    return enabled
+      ? "Creación de personajes habilitada."
+      : "Creación de personajes deshabilitada."
+  } catch {
+    return "No se pudo guardar la opción."
   }
 }

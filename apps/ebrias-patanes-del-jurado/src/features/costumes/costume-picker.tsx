@@ -62,7 +62,7 @@ export function CostumePicker({ initial }: { initial: PickerState }) {
   const suggestions = key
     ? names.filter((name) => matchesCharacter(name, query)).slice(0, 8)
     : []
-  const creating = Boolean(key) && !exact
+  const creating = state.allowAdd && Boolean(key) && !exact
   const selectedKnown = names.find(
     (name) => normalizeCharacter(name) === normalizeCharacter(selected)
   )
