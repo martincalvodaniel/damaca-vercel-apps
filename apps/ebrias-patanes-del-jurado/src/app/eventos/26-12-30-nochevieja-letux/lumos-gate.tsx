@@ -32,7 +32,7 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
     setListening(false)
     setCasting(true)
     window.setTimeout(() => setRevealed(true), 1800)
-    const player = audio.current ?? new Audio("/audio/letux-celesta.wav?v=4")
+    const player = audio.current ?? new Audio("/audio/letux-celesta.wav?v=5")
     audio.current = player
     player.loop = true
     player.volume = 0.05
@@ -84,7 +84,7 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
       setMusic(false)
       return
     }
-    const player = audio.current ?? new Audio("/audio/letux-celesta.wav?v=4")
+    const player = audio.current ?? new Audio("/audio/letux-celesta.wav?v=5")
     audio.current = player
     player.loop = true
     player.volume = 0.05
@@ -108,9 +108,8 @@ export function LumosGate({ children }: { children: React.ReactNode }) {
           aria-live="polite"
         >
           <div className={styles.mist} aria-hidden="true" />
-          <div className={styles.rune} aria-hidden="true">
-            ✦
-          </div>
+          <div className={styles.storm} aria-hidden="true" />
+          <div className={styles.light} aria-hidden="true" />
           <div className={styles.prompt}>
             <p>
               Recuerda: <strong>Lumos</strong> para iluminar

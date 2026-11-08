@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <filter id="glow" x="-50%" y="-25%" width="200%" height="150%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <path id="bolt" d="M133 2 124 28 128 36 104 59 109 72 90 96 96 108 71 140 76 154 53 183 56 198 34 229 39 238 17 279"/>
+    <path id="branches" d="M105 59 82 66 70 84 47 92 33 111 M90 96 116 104 122 121 140 131 149 150 171 159 M71 140 49 143 39 158 18 163 M55 184 77 188 84 205 108 217 118 235 M122 121 112 137 116 150 M39 158 43 175 31 187"/>
+  </defs>
+  <g stroke="#61ffaa" filter="url(#glow)">
+    <use href="#bolt" stroke-width="8"/>
+    <use href="#branches" stroke-width="3"/>
+  </g>
+  <use href="#bolt" stroke="#edfff5" stroke-width="2.2"/>
+  <use href="#branches" stroke="#a7ffce" stroke-width=".9"/>
+</svg>

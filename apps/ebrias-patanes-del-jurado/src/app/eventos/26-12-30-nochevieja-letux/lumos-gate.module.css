@@ -29,7 +29,7 @@
     #aeb9d022 14%,
     transparent 42%
   );
-  filter: blur(32px);
+  filter: none;
   animation: cloud-one 13s ease-in-out infinite alternate;
 }
 .gate::after {
@@ -162,15 +162,15 @@
 @keyframes fog-roll {
   0% {
     transform: translate3d(-5%, 3%, 0) scale(0.96) rotate(-2deg);
-    filter: blur(14px);
+    filter: none;
   }
   50% {
     transform: translate3d(2%, -2%, 0) scale(1.05) rotate(1deg);
-    filter: blur(20px);
+    filter: none;
   }
   100% {
     transform: translate3d(6%, -5%, 0) scale(1.12) rotate(3deg);
-    filter: blur(15px);
+    filter: none;
   }
 }
 @keyframes cloud-one {
@@ -211,17 +211,17 @@
   0% {
     opacity: 1;
     transform: scale(1);
-    filter: blur(22px);
+    filter: none;
   }
   45% {
     opacity: 0.9;
     transform: scale(1.16) translateY(-3%);
-    filter: blur(32px);
+    filter: none;
   }
   100% {
     opacity: 0;
     transform: scale(1.6) translateY(-8%);
-    filter: blur(60px);
+    filter: none;
   }
 }
 @keyframes ascend {
@@ -307,6 +307,110 @@
   .gate::after,
   .casting,
   .casting .mist {
+    animation: none;
+  }
+}
+
+.gate {
+  isolation: isolate;
+  background: radial-gradient(
+    ellipse at 50% 75%,
+    #131d23,
+    #05070d 58%,
+    #020306
+  );
+}
+
+.storm,
+.light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.storm::before,
+.storm::after {
+  position: absolute;
+  top: -2rem;
+  width: min(38vw, 22rem);
+  height: 48vh;
+  content: "";
+  opacity: 0;
+  background: url("/images/letux-lightning.svg") top center / contain no-repeat;
+  animation: distant-lightning 12s linear infinite;
+}
+
+.storm::before {
+  left: 1vw;
+}
+
+.storm::after {
+  right: 1vw;
+  transform: scaleX(-1);
+  filter: hue-rotate(216deg);
+  animation-delay: 5s;
+}
+
+.storm {
+  background: radial-gradient(ellipse at 50% 96%, #33424945, transparent 63%);
+}
+
+.light {
+  opacity: 0;
+  background: radial-gradient(
+    circle,
+    #fff4c2a6,
+    #d7ac5348 20%,
+    transparent 62%
+  );
+}
+
+.gate.casting {
+  animation: clear-night 1.8s ease-out forwards;
+}
+
+.casting .storm {
+  opacity: 0;
+}
+
+.casting .light {
+  animation: wand-light 1.8s ease-out both;
+}
+
+@keyframes distant-lightning {
+  0%,
+  23%,
+  34%,
+  100% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes wand-light {
+  from {
+    opacity: 0;
+    transform: scale(0.12);
+  }
+  34% {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storm::before,
+  .storm::after,
+  .gate.casting,
+  .casting .light {
     animation: none;
   }
 }
