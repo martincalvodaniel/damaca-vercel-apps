@@ -7,6 +7,7 @@ import {
 } from "@/features/members/directory"
 import { AdmissionForm } from "@/features/settings/admission-form"
 import { AliasForm } from "@/features/settings/alias-form"
+import { EmailChangeForm } from "@/features/settings/email-change-form"
 import { listPendingAdmissions, normalizeEmail } from "@/lib/admission"
 import { getAuthorizedUser } from "@/lib/session"
 
@@ -65,6 +66,7 @@ export default async function Settings() {
                       members={available}
                       request={{ email: _id, name }}
                     />
+                    <EmailChangeForm email={_id} members={members} />
                   </li>
                 ))}
               </ul>
@@ -80,6 +82,10 @@ export default async function Settings() {
               {members.map(({ id, alias, email }) => (
                 <li key={id}>
                   <strong>{alias}</strong> · {email ?? "Sin correo asociado"}
+                  <details>
+                    <summary>Editar alias</summary>
+                    <AliasForm key={alias} alias={alias} memberId={id} />
+                  </details>
                 </li>
               ))}
             </ul>

@@ -14,4 +14,6 @@ La portada pública ofrece únicamente el acceso con Google. Solo los administra
 
 Los intentos de acceso de correos verificados sin autorización dejan una solicitud pendiente en Ajustes. Un administrador puede admitirla vinculando el correo a un miembro o creando uno. La lista inicial de Letux se importa con sus categorías de asistencia. Los miembros se reutilizan por evento y el administrador gestiona la asistencia desde cada ficha. Cada cuenta autorizada puede editar su alias en Ajustes. El nombre actual se usa como alias inicial.
 
+Los administradores pueden cambiar el correo de un miembro desde una solicitud verificada. El cambio conserva la asistencia, el alias y la reserva de disfraz. El miembro y los administradores pueden editar el mismo alias visible.
+
 [Iteraciones](iterations.md) · [Registro](iteration-log.md) · [Flujo](../../../plan/workflow.md)

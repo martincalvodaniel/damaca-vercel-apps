@@ -1,8 +1,8 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { saveDisplayAlias } from "@/features/members/directory"
-import { admitEmail, normalizeEmail } from "@/lib/admission"
+import { saveDisplayAlias, saveMemberAlias } from "@/features/members/directory"
+import { admitEmail, normalizeEmail, replaceMemberEmail } from "@/lib/admission"
 import { getAuthorizedUser } from "@/lib/session"
 
 export async function approveEmail(_previous: string, form: FormData) {
@@ -46,7 +46,19 @@ export async function updateAlias(_previous: string, form: FormData) {
   }
 
   try {
-    await saveDisplayAlias(normalizeEmail(user.email), alias)
+    const memberId = form.get("aliasMember")
+    if (memberId !== null) {
+      if (user.role !== "admin")
+        return "Solo los administradores pueden editar otros alias."
+      if (
+        typeof memberId !== "string" ||
+        !(await saveMemberAlias(memberId, alias))
+      ) {
+        return "No se encontró el miembro."
+      }
+    } else {
+      await saveDisplayAlias(normalizeEmail(user.email), alias)
+    }
   } catch {
     return "No se pudo guardar el alias."
   }
@@ -54,4 +66,38 @@ export async function updateAlias(_previous: string, form: FormData) {
   revalidatePath("/settings")
   revalidatePath("/eventos", "layout")
   return "Alias guardado."
+}
+
+export async function changeMemberEmail(_previous: string, form: FormData) {
+  if ((await getAuthorizedUser())?.role !== "admin") {
+    return "Solo los administradores pueden cambiar el correo."
+  }
+  const selection = form.get("memberToChange")
+  const email = form.get("email")
+  if (
+    typeof selection !== "string" ||
+    typeof email !== "string" ||
+    selection.length > 400 ||
+    email.length > 254
+  ) {
+    return "Selecciona un miembro y una solicitud."
+  }
+  const separator = selection.indexOf("|")
+  const memberId = separator > 0 ? selection.slice(0, separator) : ""
+  const previous = selection.slice(separator + 1)
+  if (!memberId || !previous || form.get("confirm") !== "on") {
+    return "Confirma los dos correos antes de guardar."
+  }
+  try {
+    if (
+      !(await replaceMemberEmail(memberId, previous, normalizeEmail(email)))
+    ) {
+      return "No se puede cambiar el correo. Revisa el miembro y la solicitud."
+    }
+  } catch {
+    return "No se pudo cambiar el correo. Inténtalo de nuevo."
+  }
+  revalidatePath("/settings")
+  revalidatePath("/eventos", "layout")
+  return "Correo actualizado."
 }

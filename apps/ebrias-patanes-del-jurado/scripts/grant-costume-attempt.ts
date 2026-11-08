@@ -1,4 +1,6 @@
 import { grantFinalAttempt } from "../src/features/costumes/reservations"
+import { getCostumeOwnerId } from "../src/features/members/directory"
+import { getAccessRole } from "../src/lib/admission"
 import { getDatabaseConnection } from "../src/lib/database"
 
 const email = process.argv[2]?.trim().toLowerCase()
@@ -11,7 +13,11 @@ try {
   const user = await db
     .collection("user")
     .findOne({ email, emailVerified: true }, { projection: { _id: 1 } })
-  if (!user || !(await grantFinalAttempt(String(user._id)))) {
+  if (
+    !user ||
+    !(await getAccessRole({ email, emailVerified: true })) ||
+    !(await grantFinalAttempt(await getCostumeOwnerId(email, String(user._id))))
+  ) {
     throw new Error(
       "No eligible account found, or the extra attempt was already granted"
     )

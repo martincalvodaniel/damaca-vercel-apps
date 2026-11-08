@@ -66,4 +66,11 @@ Inicio: 31% de 5 h y 88% de 7 d disponibles.
 - El selector de miembros mantiene el envío nativo y personaliza el menú en navegadores compatibles. La maqueta en Chrome verificó apertura, elección con teclado y ratón y el valor enviado por el formulario.
 - Biome, tipos, build y comprobación del diff correctos. Una maqueta con el CSS real comprobó ambas anchuras (320 y 1440 px), con botones alineados y sin desbordamiento. No se usó una sesión autenticada.
 
+## EPJ-16
+
+Inicio: 25% de 5 h y 87% de 7 d disponibles.
+- Google simulado, acciones HTTP y MongoDB desechable verificaron la transferencia, los permisos, la revocación de la sesión anterior, el reintento y el conflicto entre dos solicitudes simultáneas.
+- Se conservaron el alias previo, la asistencia y el estado del disfraz con sus intentos y prórroga. Los cambios de alias de administrador y miembro se reflejaron en el directorio y en el evento.
+- Biome, tipos y build correctos. Chrome verificó Ajustes y Letux a 320 y 1440 px. Queda pendiente validar Google real en el entorno desplegado.
+
 [Iteraciones](iterations.md) · [Alcance](master.md)

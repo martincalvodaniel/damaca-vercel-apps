@@ -6,14 +6,19 @@ import { updateAlias } from "./actions"
 export function AliasForm({
   alias,
   children,
+  memberId,
 }: {
   alias: string
-  children: ReactNode
+  children?: ReactNode
+  memberId?: string
 }) {
   const [message, action, pending] = useActionState(updateAlias, "")
 
   return (
     <form action={action} className="account admission-form alias-form">
+      {memberId ? (
+        <input type="hidden" name="aliasMember" value={memberId} />
+      ) : null}
       <label>
         Alias visible
         <input name="alias" defaultValue={alias} maxLength={80} required />

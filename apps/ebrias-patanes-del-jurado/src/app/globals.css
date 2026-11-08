@@ -263,7 +263,7 @@ body:has(.club-nav) {
   gap: 0.4rem;
 }
 
-.admission-form input,
+.admission-form input:not([type="checkbox"]),
 .admission-form select {
   min-width: 0;
   min-height: 36px;

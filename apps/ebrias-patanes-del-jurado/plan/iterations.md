@@ -115,3 +115,11 @@
 - Dependencias: formulario de alias y control de sesión existentes.
 - Aceptación: campos y botones más bajos, acciones de cuenta en la misma fila y separación entre el perfil y el alias, sin desbordamiento. El desplegable de miembros tiene el estilo de Ajustes y conserva las opciones y el envío del formulario.
 - Validación: Biome, tipos, build y comprobación a 320 y 1440 px.
+
+## EPJ-16 — Cambio de correo y alias de miembros
+
+- Estado: `validated`.
+- Rutas: Ajustes, admisión, miembros, disfraces y planificación de Ebrias.
+- Dependencias: solicitudes verificadas y transacciones MongoDB.
+- Aceptación: cambio administrativo con revocación del correo anterior y conservación de alias, asistencia y disfraz. Edición administrativa del alias visible.
+- Validación: Biome, tipos, build, MongoDB y revisión responsive.

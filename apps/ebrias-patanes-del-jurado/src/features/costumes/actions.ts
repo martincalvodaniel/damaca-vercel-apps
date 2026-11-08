@@ -1,5 +1,6 @@
 "use server"
 
+import { getCostumeOwnerId } from "@/features/members/directory"
 import { getAuthorizedUser } from "@/lib/session"
 import {
   canonicalCharacter,
@@ -38,7 +39,7 @@ export async function submitCostume(
       return { current: null, blocked: true, added: [], result: "signed-out" }
     }
 
-    const userId = user.id
+    const userId = await getCostumeOwnerId(user.email, user.id)
     const [choice, added] = await Promise.all([
       getCostumeState(userId),
       getAddedCharacters(),

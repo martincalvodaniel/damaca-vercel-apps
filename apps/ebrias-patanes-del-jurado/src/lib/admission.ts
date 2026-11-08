@@ -1,7 +1,7 @@
 import "server-only"
 
 import { MongoServerError } from "mongodb"
-import { memberCollection } from "@/features/members/directory"
+import { aliases, memberCollection } from "@/features/members/directory"
 import { getDatabaseConnection } from "@/lib/database"
 
 interface Identity {
@@ -23,6 +23,7 @@ function admissions() {
   return getDatabaseConnection().db.collection<{
     _id: string
     pending?: true
+    revoked?: true
     requestedAt?: Date
     name?: string
     memberId?: string
@@ -39,6 +40,7 @@ export async function getAccessRole(user: Identity) {
   return (await admissions().findOne({
     _id: email,
     pending: { $exists: false },
+    revoked: { $exists: false },
   }))
     ? "member"
     : null
@@ -79,6 +81,7 @@ export async function admitEmail(email: string, target: string) {
         { $unset: { pending: "" }, $setOnInsert: { _id: email } },
         { session, upsert: true, returnDocument: "after" }
       )
+      if (admission?.revoked) return false
       const members = memberCollection()
       const current = await members.findOne({ email }, { session })
       if (current) return !target || target === "new" || target === current._id
@@ -109,6 +112,86 @@ export async function admitEmail(email: string, target: string) {
           { session }
         )
       }
+      return true
+    })
+  )
+}
+
+export async function replaceMemberEmail(
+  memberId: string,
+  previous: string,
+  next: string
+) {
+  if (previous === next || isAdmin(previous) || isAdmin(next)) return false
+
+  const { client, db } = getDatabaseConnection()
+  return client.withSession((session) =>
+    session.withTransaction(async () => {
+      const members = memberCollection()
+      const member = await members.findOne({ _id: memberId }, { session })
+      const request = await admissions().findOne({ _id: next }, { session })
+      if (
+        member?.email === next &&
+        request?.memberId === memberId &&
+        request.requestedAt &&
+        !request.pending
+      ) {
+        return (
+          (await admissions().findOne(
+            { _id: previous, revoked: true, memberId },
+            { session }
+          )) !== null
+        )
+      }
+      if (member?.email !== previous || !request?.pending || request.revoked)
+        return false
+      if (await members.findOne({ email: next }, { session })) return false
+
+      const previousAlias = member.aliasUpdated
+        ? null
+        : await aliases().findOne({ _id: previous }, { session })
+      const previousUser = await db
+        .collection("user")
+        .findOne({ email: previous, emailVerified: true }, { session })
+      const previousOwnerId =
+        member.costumeOwnerId ??
+        (previousUser ? String(previousUser._id) : null)
+      const previousChoice =
+        previousOwnerId &&
+        (await db
+          .collection<{ _id: string }>("261230-costume-choices")
+          .findOne({ _id: previousOwnerId }, { session }))
+
+      await members.updateOne(
+        { _id: memberId, email: previous },
+        {
+          $set: {
+            email: next,
+            alias: previousAlias?.alias ?? member.alias,
+            aliasUpdated: true,
+            ...(previousChoice && previousOwnerId
+              ? { costumeOwnerId: previousOwnerId }
+              : {}),
+          },
+        },
+        { session }
+      )
+      await admissions().updateOne(
+        { _id: previous },
+        {
+          $set: { revoked: true, memberId },
+          $unset: { pending: "" },
+        },
+        { session, upsert: true }
+      )
+      await admissions().updateOne(
+        { _id: next, pending: true },
+        {
+          $set: { memberId },
+          $unset: { pending: "" },
+        },
+        { session }
+      )
       return true
     })
   )

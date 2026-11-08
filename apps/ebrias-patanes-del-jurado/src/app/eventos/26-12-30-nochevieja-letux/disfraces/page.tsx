@@ -5,6 +5,7 @@ import {
   getAddedCharacters,
   getCostumeState,
 } from "@/features/costumes/reservations"
+import { getCostumeOwnerId } from "@/features/members/directory"
 import { getAuthorizedUser } from "@/lib/session"
 import styles from "../page.module.css"
 
@@ -13,7 +14,7 @@ export default async function Costumes() {
   if (!user) redirect("/")
 
   const initial = await Promise.all([
-    getCostumeState(user.id),
+    getCostumeOwnerId(user.email, user.id).then(getCostumeState),
     getAddedCharacters(),
   ])
     .then(([choice, added]) => ({
