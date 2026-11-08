@@ -108,12 +108,17 @@
 
 .card h2 {
   margin: 0;
+  overflow-wrap: anywhere;
   font:
     700 1.3rem Georgia,
     serif;
   padding-bottom: 0.25rem;
   border-bottom: 1px solid #95653880;
   color: var(--wax);
+}
+
+.card label {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .card p {

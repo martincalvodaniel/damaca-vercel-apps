@@ -1,20 +1,6 @@
 # Registro de entregas
 
-[Entregas EPJ-01 a EPJ-05 archivadas](archive/2026-11-08/iteration-log.md).
-
-## EPJ-06
-
-- Biome, tipos y build de integración correctos.
-- MongoDB 8 desechable verificó exclusividad concurrente, conservación del disfraz si falla el cambio, liberación al cambiar, bloqueo, prórroga única y alta en catálogo. Se comprobaron los alias y la búsqueda normalizada.
-- La ficha local pide sesión antes de mostrar el buscador. El estado enviado al navegador contiene el bloqueo, sin el contador.
-
-## EPJ-07
-
-Inicio: 53% de 5 h y 91% de 7 d disponibles (10:43 CET).
-- Better Auth creaba cuentas y sesiones de Google sin comprobar admisión. El callback ahora aplica el permiso y las rutas y acciones privadas vuelven a comprobarlo para las sesiones anteriores.
-- Biome, tipos y build correctos. Una réplica MongoDB 8 desechable y el callback real de Better Auth con respuestas simuladas de Google verificaron el rechazo sin alta ni sesión, el acceso de administrador y el primer acceso tras autorizar.
-- Las comprobaciones HTTP rechazaron sesiones antiguas sin permiso y una cuenta sin correo verificado. La acción rechazó altas de usuarios sin privilegios, normalizó el correo e hizo idempotente la admisión repetida.
-- Chrome a 320 y 1440 px comprobó la portada pública, la portada privada y Ajustes, sin desbordamiento horizontal. Queda pendiente la comprobación con Google real en el entorno desplegado.
+[Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
 ## EPJ-08
 
@@ -72,5 +58,12 @@ Inicio: 25% de 5 h y 87% de 7 d disponibles.
 - Google simulado, acciones HTTP y MongoDB desechable verificaron la transferencia, los permisos, la revocación de la sesión anterior, el reintento y el conflicto entre dos solicitudes simultáneas.
 - Se conservaron el alias previo, la asistencia y el estado del disfraz con sus intentos y prórroga. Los cambios de alias de administrador y miembro se reflejaron en el directorio y en el evento.
 - Biome, tipos y build correctos. Chrome verificó Ajustes y Letux a 320 y 1440 px. Queda pendiente validar Google real en el entorno desplegado.
+
+## EPJ-17
+
+Inicio: 19% de 5 h y 86% de 7 d disponibles.
+- Cada bloque visible muestra su total. Los administradores pueden crear bloques del evento y asignarles miembros; el servidor comprueba el rol y los nombres se guardan sin duplicados por mayúsculas o espacios.
+- Biome en los archivos editados, tipos, build y comprobación del diff correctos. Una maqueta con el CSS de la ficha se comprobó en Chrome a 320 y 1440 px con un nombre de 60 caracteres, sin desbordamiento.
+- Pendiente comprobar la creación y reasignación con una sesión real y MongoDB.
 
 [Iteraciones](iterations.md) · [Alcance](master.md)

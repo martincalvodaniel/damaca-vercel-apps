@@ -2,13 +2,13 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import {
-  attendanceLabels,
+  getAttendanceBlocks,
   getEventRoster,
   letuxEvent,
   seedLetuxRoster,
 } from "@/features/members/attendance"
 import { getAuthorizedUser } from "@/lib/session"
-import { AttendanceForm } from "./attendance-form"
+import { AttendanceBlockForm, AttendanceForm } from "./attendance-form"
 import styles from "./page.module.css"
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this page export.
@@ -19,7 +19,10 @@ export default async function NewYearsEve() {
   if (!user) redirect("/")
 
   await seedLetuxRoster()
-  const roster = await getEventRoster(letuxEvent)
+  const [roster, blocks] = await Promise.all([
+    getEventRoster(letuxEvent),
+    getAttendanceBlocks(letuxEvent),
+  ])
 
   return (
     <main className={styles.event}>
@@ -43,18 +46,22 @@ export default async function NewYearsEve() {
         <details className={styles.attendees}>
           <summary>¿Quién viene?</summary>
           <div className={styles.roster}>
-            {(["overnight", "day", "pending"] as const).map((status) => {
+            {blocks.map(({ id: status, label }) => {
+              if (status === "absent") return null
               const guests = roster.filter((member) => member.status === status)
-              if (!guests.length) return null
 
               return (
                 <section key={status} className={styles.card}>
-                  <h2>{attendanceLabels[status]}</h2>
-                  <ul>
-                    {guests.map(({ id, alias }) => (
-                      <li key={id}>{alias}</li>
-                    ))}
-                  </ul>
+                  <h2>
+                    {label} ({guests.length})
+                  </h2>
+                  {guests.length > 0 ? (
+                    <ul>
+                      {guests.map(({ id, alias }) => (
+                        <li key={id}>{alias}</li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </section>
               )
             })}
@@ -64,7 +71,8 @@ export default async function NewYearsEve() {
           <details className={styles.attendees}>
             <summary>Gestionar asistencia</summary>
             <div className={styles.card}>
-              <AttendanceForm roster={roster} labels={attendanceLabels} />
+              <AttendanceForm roster={roster} blocks={blocks} />
+              <AttendanceBlockForm />
             </div>
           </details>
         ) : null}

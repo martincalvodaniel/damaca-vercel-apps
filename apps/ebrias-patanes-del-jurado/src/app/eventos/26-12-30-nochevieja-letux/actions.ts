@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache"
 import {
-  type AttendanceStatus,
-  attendanceLabels,
+  createAttendanceBlock,
+  getAttendanceBlocks,
   letuxEvent,
   setAttendance,
 } from "@/features/members/attendance"
@@ -20,15 +20,17 @@ export async function updateAttendance(_previous: string, form: FormData) {
     typeof member !== "string" ||
     member.length > 100 ||
     typeof status !== "string" ||
-    !Object.hasOwn(attendanceLabels, status)
+    status.length > 150
   ) {
     return "Comprueba el miembro y la asistencia."
   }
 
   try {
-    if (
-      !(await setAttendance(letuxEvent, member, status as AttendanceStatus))
-    ) {
+    const blocks = await getAttendanceBlocks(letuxEvent)
+    if (!blocks.some(({ id }) => id === status)) {
+      return "Comprueba el bloque de asistencia."
+    }
+    if (!(await setAttendance(letuxEvent, member, status))) {
       return "No se encontró ese miembro."
     }
   } catch {
@@ -37,4 +39,27 @@ export async function updateAttendance(_previous: string, form: FormData) {
 
   revalidatePath("/eventos/26-12-30-nochevieja-letux")
   return "Asistencia guardada."
+}
+
+export async function addAttendanceBlock(_previous: string, form: FormData) {
+  if ((await getAuthorizedUser())?.role !== "admin") {
+    return "Solo los administradores pueden crear bloques."
+  }
+
+  const name = form.get("name")
+  const label =
+    typeof name === "string" ? name.trim().replace(/\s+/gu, " ") : ""
+  if (!label || label.length > 60)
+    return "Introduce un nombre de hasta 60 caracteres."
+
+  try {
+    if (!(await createAttendanceBlock(letuxEvent, label))) {
+      return "Ya existe un bloque con ese nombre."
+    }
+  } catch {
+    return "No se pudo crear el bloque."
+  }
+
+  revalidatePath("/eventos/26-12-30-nochevieja-letux")
+  return "Bloque creado."
 }

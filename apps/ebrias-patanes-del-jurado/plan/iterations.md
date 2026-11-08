@@ -123,3 +123,12 @@
 - Dependencias: solicitudes verificadas y transacciones MongoDB.
 - Aceptación: cambio administrativo con revocación del correo anterior y conservación de alias, asistencia y disfraz. Edición administrativa del alias visible.
 - Validación: Biome, tipos, build, MongoDB y revisión responsive.
+
+## EPJ-17 — Bloques de asistencia configurables
+
+- Estado: `validated`.
+- Objetivo: contar miembros por bloque y permitir que un administrador cree bloques en Letux.
+- Rutas: `src/app/eventos/26-12-30-nochevieja-letux/`, `src/features/members/attendance.ts` y `plan/`.
+- Dependencias: sesión administrativa y MongoDB de la app.
+- Aceptación: encabezados con recuento, bloques nuevos persistentes y seleccionables al asignar asistencia, creación exclusiva de administradores, rechazo de nombres vacíos o repetidos.
+- Validación: Biome, tipos, build y revisión responsive.

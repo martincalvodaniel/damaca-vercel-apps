@@ -5,14 +5,47 @@ import { getMemberDirectory, memberCollection } from "./directory"
 
 export const letuxEvent = "261230"
 
-export const attendanceLabels = {
+const attendanceLabels = {
   overnight: "Estancia",
   day: "Comida y día del 31",
   pending: "Pendiente",
   absent: "No va",
 } as const
 
-export type AttendanceStatus = keyof typeof attendanceLabels
+function attendanceBlockCollection(event: string) {
+  return getDatabaseConnection().db.collection<{
+    _id: string
+    label: string
+  }>(`${event}-attendance-blocks`)
+}
+
+export async function getAttendanceBlocks(event: string) {
+  const custom = await attendanceBlockCollection(event)
+    .find()
+    .sort({ _id: 1 })
+    .toArray()
+  return [
+    ...Object.entries(attendanceLabels).map(([id, label]) => ({ id, label })),
+    ...custom.map(({ _id: id, label }) => ({ id, label })),
+  ]
+}
+
+export async function createAttendanceBlock(event: string, label: string) {
+  const normalized = label.normalize("NFC").toLowerCase()
+  if (
+    Object.values(attendanceLabels).some(
+      (existing) => existing.toLowerCase() === normalized
+    )
+  )
+    return false
+
+  const result = await attendanceBlockCollection(event).updateOne(
+    { _id: `custom:${normalized}` },
+    { $setOnInsert: { label } },
+    { upsert: true }
+  )
+  return result.upsertedCount === 1
+}
 
 const letuxRoster = [
   {
@@ -39,7 +72,7 @@ const letuxRoster = [
 function attendanceCollection(event: string) {
   return getDatabaseConnection().db.collection<{
     _id: string
-    status: AttendanceStatus
+    status: string
   }>(`${event}-attendance`)
 }
 
@@ -89,7 +122,7 @@ export async function getEventRoster(event: string) {
 export async function setAttendance(
   event: string,
   memberId: string,
-  status: AttendanceStatus
+  status: string
 ) {
   if (!(await memberCollection().findOne({ _id: memberId }))) return false
   await attendanceCollection(event).updateOne(
