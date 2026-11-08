@@ -47,3 +47,12 @@ AGW-05 temporarily integrated Pocha Score and Card Wars. AGW-08 supersedes that 
 - Acceptance: only verified Hub administrators can manage grants; administrators can receive and lose a grant for an individual private app; administrator membership never bypasses OIDC app-grant checks; public games remain ungrantable; admin-facing text explains the distinction.
 - Validation: Hub Biome, type-check, tests, production build, and `git diff --check`; publish to `int` and verify the explicit Tasks grant through Site administration.
 - Evidence: [delivery log](iteration-log.md#04--keep-administrator-application-grants-explicit).
+
+## 05 — Restore OIDC routing exceptions
+
+- Status: `validated`.
+- Goal and paths: restore the previous exceptions in `vercel.ts`, update `src/lib/auth/protocol-routing.test.ts`, and record the delivery in the Hub plan and log.
+- Dependencies: existing Hub OIDC clients. Initial Codex capacity: 95% of 5 h and 98% of 7 d.
+- Acceptance: exempt only the previous OIDC machine routes from the Spain rule and keep that rule on browser routes, including sign-in and authorization.
+- Validation: routing tests, Hub types and build, Biome, and diff check.
+- Evidence: [delivery log](iteration-log.md#05--restore-oidc-routing-exceptions).

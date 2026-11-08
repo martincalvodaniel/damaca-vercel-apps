@@ -65,4 +65,4 @@ La rama seleccionada en vercel-deploy-alias fija el entorno: `main` siempre Prod
 
 Billing y Home Management incorporan manifiestos web propios con los iconos existentes y apertura en modo independiente. Entrega [AGW-21](iterations.md#agw-21--manifiestos-de-instalación-para-billing-y-home-management).
 
-[AGW-22](iterations.md#agw-22--align-vercel-configuration) unifica las apps y las dos plantillas: despliegue Git desactivado, acceso limitado a España en todas las rutas e instalación condicional con bunx. El filtro también se aplica a los endpoints OAuth/OIDC del Hub.
+[AGW-22](iterations.md#agw-22--align-vercel-configuration) unifica las apps y las dos plantillas: despliegue Git desactivado, acceso limitado a España por defecto e instalación condicional con bunx. El Hub conserva las excepciones para endpoints OAuth/OIDC de máquina recogidas en su [entrega 05](../apps/damaca-hub/plan/iterations.md#05--restore-oidc-routing-exceptions).

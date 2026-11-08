@@ -48,3 +48,5 @@ The production-to-int refresh implementation from AGW-12 is retained but suspend
 La publicación Vercel pasa a ser manual bajo petición mediante `git.deploymentEnabled: false`. Registro transversal: [AGW-17](../../../plan/iterations.md#agw-17--manual-vercel-deployments).
 
 La configuración de despliegue y acceso geográfico se rige por [AGW-22](../../../plan/iterations.md#agw-22--align-vercel-configuration).
+
+[Delivery 05](iterations.md#05--restore-oidc-routing-exceptions) restores the geographic exceptions for OIDC machine endpoints. Browser sign-in and authorization remain subject to the Spain rule.
