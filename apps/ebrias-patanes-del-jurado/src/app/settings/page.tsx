@@ -47,8 +47,9 @@ export default async function Settings() {
             <p>{user.email}</p>
           </div>
         </div>
-        <AliasForm key={alias} alias={alias} />
-        <AccountControl signedIn />
+        <AliasForm key={alias} alias={alias}>
+          <AccountControl signedIn />
+        </AliasForm>
       </section>
       {isAdmin ? (
         <>

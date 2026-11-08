@@ -26,3 +26,9 @@ Inicio: 72% de 5 h y 94% de 7 d disponibles (10:17 CET).
 - La portada local sirve los textos nuevos, el dibujo con carga inmediata y el favicon SVG EP/DJ.
 
 [Registro vigente](../../iteration-log.md)
+
+## EPJ-05
+
+Inicio: 69% de 5 h y 94% de 7 d disponibles (10:26 CET).
+- Biome, tipos y build de integración correctos.
+- Chrome a 320 y 1440 px verificó el enlace de portada, la ficha y la ocultación de la lista sin sesión. Pendiente comprobar la vista con una cuenta de Google.

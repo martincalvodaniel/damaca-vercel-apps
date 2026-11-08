@@ -28,7 +28,7 @@ export function AdmissionForm({
       )}
       <label>
         Miembro
-        <select name="member">
+        <select className="member-select" name="member">
           <option value="">
             {request ? "Crear miembro nuevo" : "Solo autorizar"}
           </option>

@@ -263,10 +263,11 @@ body:has(.club-nav) {
   gap: 0.4rem;
 }
 
-.admission-form input {
+.admission-form input,
+.admission-form select {
   min-width: 0;
-  min-height: 44px;
-  padding: 0.5rem;
+  min-height: 36px;
+  padding: 0.25rem 0.5rem;
   border: 2px solid var(--ink);
   border-radius: 0.5rem;
   font: inherit;
@@ -277,7 +278,24 @@ body:has(.club-nav) {
 }
 
 .admission-form p:empty {
+  position: absolute;
   margin: 0;
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.settings-actions button {
+  white-space: nowrap;
+}
+
+.settings-card .account button {
+  min-height: 36px;
+  padding: 0.25rem 0.4rem;
 }
 
 @media (min-width: 48rem) {
@@ -310,17 +328,50 @@ body:has(.club-nav) {
   gap: 0.25rem;
 }
 
-.admission-form select {
+.member-select {
   width: 100%;
-  min-width: 0;
-  min-height: 44px;
-  padding: 0.5rem;
-  border: 2px solid var(--ink);
-  border-radius: 0.5rem;
-  font: inherit;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
 }
 
-.settings-card .admission-form + .account,
+@supports (appearance: base-select) {
+  .member-select,
+  .member-select::picker(select) {
+    appearance: base-select;
+  }
+
+  .member-select::picker(select) {
+    max-height: min(16rem, 45dvh);
+    margin-block: 0.25rem;
+    padding: 0.25rem;
+    border: 2px solid var(--ink);
+    border-radius: 0.5rem;
+    background: #fff8db;
+    color: var(--ink);
+    box-shadow: 2px 3px var(--ink);
+  }
+
+  .member-select option {
+    min-height: 36px;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    white-space: normal;
+  }
+
+  .member-select option:checked {
+    background: var(--yellow);
+    font-weight: 800;
+  }
+
+  .member-select option:hover,
+  .member-select option:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: -2px;
+  }
+}
+
+.alias-form,
 .settings-card details .admission-form {
   margin-top: 0.65rem;
 }

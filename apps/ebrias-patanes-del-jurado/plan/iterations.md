@@ -107,3 +107,11 @@
 - Dependencias: Google OAuth, MongoDB con transacciones y lista inicial de Letux.
 - Aceptación: solicitud única por correo verificado, admisión administrativa directa con vínculo opcional a miembro existente o alta, alias personal y asistencia persistente por evento.
 - Validación: Biome, tipos, build, pruebas de MongoDB y comprobación responsive.
+
+## EPJ-15 — Controles compactos y selector de miembros en Ajustes
+
+- Estado: `validated`.
+- Objetivo y rutas: compactar Ajustes en sus estilos, página y formularios de alias y admisión.
+- Dependencias: formulario de alias y control de sesión existentes.
+- Aceptación: campos y botones más bajos, acciones de cuenta en la misma fila y separación entre el perfil y el alias, sin desbordamiento. El desplegable de miembros tiene el estilo de Ajustes y conserva las opciones y el envío del formulario.
+- Validación: Biome, tipos, build y comprobación a 320 y 1440 px.

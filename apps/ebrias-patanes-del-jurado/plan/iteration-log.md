@@ -1,12 +1,6 @@
 # Registro de entregas
 
-[Entregas EPJ-01 a EPJ-04 archivadas](archive/2026-11-08/iteration-log.md).
-
-## EPJ-05
-
-Inicio: 69% de 5 h y 94% de 7 d disponibles (10:26 CET).
-- Biome, tipos y build de integración correctos.
-- Chrome a 320 y 1440 px verificó el enlace de portada, la ficha y la ocultación de la lista sin sesión. Pendiente comprobar la vista con una cuenta de Google.
+[Entregas EPJ-01 a EPJ-05 archivadas](archive/2026-11-08/iteration-log.md).
 
 ## EPJ-06
 
@@ -64,5 +58,12 @@ Inicio: 39% de 5 h y 89% de 7 d disponibles (11:46 CET).
 - Las acciones HTTP verificaron el aislamiento del alias personal y el permiso administrativo de asistencia. Los 17 registros iniciales conservaron su categoría y la importación repetida no sobrescribió una edición.
 - Chrome a 320 y 1440 px verificó Ajustes y la ficha de Letux sin desbordamiento horizontal. Queda pendiente comprobar el acceso con Google real tras desplegar.
 - La viabilidad de Web Push se confirmó. Los avisos del sistema quedan fuera de este corte.
+
+## EPJ-15
+
+Inicio: 31% de 5 h y 88% de 7 d disponibles.
+- Los controles de Ajustes bajan de 44 a 36 px. Las dos acciones de cuenta comparten fila y hay 10 px entre el perfil y el alias.
+- El selector de miembros mantiene el envío nativo y personaliza el menú en navegadores compatibles. La maqueta en Chrome verificó apertura, elección con teclado y ratón y el valor enviado por el formulario.
+- Biome, tipos, build y comprobación del diff correctos. Una maqueta con el CSS real comprobó ambas anchuras (320 y 1440 px), con botones alineados y sin desbordamiento. No se usó una sesión autenticada.
 
 [Iteraciones](iterations.md) · [Alcance](master.md)
