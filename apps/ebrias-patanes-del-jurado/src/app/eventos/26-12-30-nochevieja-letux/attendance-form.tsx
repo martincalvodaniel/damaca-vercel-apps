@@ -39,6 +39,13 @@ export function AttendanceBoard({
   canManage: boolean
   mode?: "attendance" | "cars"
 }) {
+  const blockIds = new Set(blocks.map(({ id }) => id))
+  const assignedMemberIds = new Set(
+    roster
+      .filter(({ status }) => blockIds.has(status))
+      .map(({ memberId }) => memberId)
+  )
+  const available = members.filter(({ id }) => !assignedMemberIds.has(id))
   const [message, setMessage] = useState("")
   const move = useCallback(
     async (id: string, status: string) => {
@@ -64,7 +71,7 @@ export function AttendanceBoard({
             key={block.id}
             block={block}
             roster={roster}
-            members={members}
+            members={available}
             canManage={canManage}
             move={move}
             mode={mode}
@@ -93,8 +100,6 @@ function AttendanceSection({
   move: (id: string, status: string) => Promise<void>
 }) {
   const guests = roster.filter(({ status }) => status === block.id)
-  const assignedMemberIds = new Set(roster.map(({ memberId }) => memberId))
-  const available = members.filter(({ id }) => !assignedMemberIds.has(id))
   const dialog = useRef<HTMLDialogElement>(null)
   const titleId = useId()
   const [query, setQuery] = useState("")
@@ -119,7 +124,7 @@ function AttendanceSection({
   const name = query.trim()
   const normalize = (value: string) =>
     value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase("es")
-  const matches = available.filter(({ alias }) =>
+  const matches = members.filter(({ alias }) =>
     normalize(alias).includes(normalize(name))
   )
   const dragType = `application/x-ebrias-${mode}`
