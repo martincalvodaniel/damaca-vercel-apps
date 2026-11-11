@@ -1,6 +1,8 @@
 import { headers } from "next/headers"
 import { getAuth } from "@/lib/auth"
+import { listCaptures } from "@/lib/captures"
 import { signIn, signOut } from "./actions"
+import { CapturePanel } from "./capture-panel"
 
 export default async function Landing({
   searchParams,
@@ -11,7 +13,7 @@ export default async function Landing({
   const session = await getAuth().api.getSession({ headers: requestHeaders })
 
   return (
-    <main>
+    <main className={session ? "signed-in" : undefined}>
       <div className="masthead">
         <span className="mark" aria-hidden="true">
           d.
@@ -21,15 +23,18 @@ export default async function Landing({
       <section aria-label="Proofs of concept">
         <p className="eyebrow">Proofs of concept</p>
         <h1>damaca-pocs</h1>
-        <p className="intro">
-          A place to try out ideas and see which ones are worth building.
-        </p>
+        {session ? null : (
+          <p className="intro">
+            A place to try out ideas and see which ones are worth building.
+          </p>
+        )}
         {query.auth === "error" && !session && (
           <p role="alert">Google sign-in could not be completed. Try again.</p>
         )}
         {session ? (
           <>
             <p className="account">Signed in as {session.user.email}</p>
+            <CapturePanel entries={await listCaptures(session.user.id)} />
             <form action={signOut}>
               <button type="submit">Sign out</button>
             </form>
@@ -42,9 +47,12 @@ export default async function Landing({
           </form>
         )}
       </section>
-      <footer>
-        <span className="dot" aria-hidden="true" /> No experiments yet
-      </footer>
+      {session ? null : (
+        <footer>
+          <span className="dot" aria-hidden="true" /> Personal capture with
+          Alexa and ChatGPT
+        </footer>
+      )}
     </main>
   )
 }

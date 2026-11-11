@@ -12,3 +12,9 @@
 - [Criterios](iterations.md#poc-02--selección-de-la-base-de-datos). Inicio a las 11:15 CET del 11 de noviembre de 2026, con 97 % de 5 h y 67 % de 7 d disponibles.
 - La prueba reprodujo la selección fija de `damaca-pocs` y pasó después de aplicar `MONGODB_DB` al adaptador. La prueba observa el nombre de base solicitado al driver sin conectarse a MongoDB.
 - Pasaron Biome, la prueba de regresión, los tipos y el build filtrados de Damaca POCs y `git diff --check`.
+
+## POC-03
+
+- [Criterios](iterations.md#poc-03--captura-desde-alexa). Capacidad inicial disponible del 90 % de 5 h y del 66 % de 7 d.
+- Biome, tipos, pruebas y build de Damaca POCs pasaron en local. Las pruebas cubren el diálogo, la zona horaria y el filtro de rutas.
+- Queda pendiente configurar la skill en Alexa Developer Console y verificar el simulador, el dispositivo y el panel privado en una preview accesible.

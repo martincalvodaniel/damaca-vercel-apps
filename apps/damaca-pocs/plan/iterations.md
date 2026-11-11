@@ -19,3 +19,23 @@
 - Aceptación. Usar el nombre configurado y conservar `damaca-pocs` como valor predeterminado si falta o está vacío.
 - Validación. Prueba de regresión en la inicialización de autenticación, Biome, tipos y build.
 - [Evidencia](iteration-log.md#poc-02)
+
+## POC-03 · Captura desde Alexa
+
+- Estado `in_progress`.
+- Objetivo. Guardar compras y recordatorios de Alexa y mostrarlos en un panel privado.
+- `target_paths`. `apps/damaca-pocs/**`, catálogo raíz y lockfile.
+- Dependencias. MongoDB, Google, skill privada de Alexa y preview HTTPS.
+- Aceptación. Captura en español, vencimientos de Madrid, aislamiento por cuenta y deduplicación de reintentos.
+- Validación. Biome, tipos, pruebas, build y recorrido en preview.
+- [Evidencia](iteration-log.md#poc-03)
+
+## POC-04 · Captura desde ChatGPT
+
+- Estado `pending`.
+- Objetivo. Guardar enlaces y resúmenes desde una integración MCP privada.
+- `target_paths`. `apps/damaca-pocs/**`, catálogo raíz y lockfile.
+- Dependencias. POC-03, cliente OAuth y acceso a herramientas privadas de escritura en ChatGPT web.
+- Aceptación. Las dos herramientas guardan entradas bajo la identidad del token OAuth.
+- Validación. Biome, tipos, pruebas, build y recorrido en ChatGPT web.
+- [Evidencia](iteration-log.md#poc-04)

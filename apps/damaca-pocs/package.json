@@ -12,6 +12,7 @@
   "dependencies": {
     "@vercel/config": "catalog:",
     "better-auth": "catalog:",
+    "ask-sdk-express-adapter": "catalog:",
     "mongodb": "catalog:",
     "next": "catalog:",
     "react": "catalog:",

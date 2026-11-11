@@ -12,7 +12,7 @@ export const config: VercelConfig = {
   regions: ["cdg1"],
   routes: [
     {
-      src: "/(.*)",
+      src: "/((?!api/integrations/alexa$).*)",
       missing: [
         {
           type: "header",

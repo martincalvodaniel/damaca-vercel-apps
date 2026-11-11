@@ -1,0 +1,64 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "damaca",
+      "intents": [
+        {
+          "name": "AddShoppingItem",
+          "slots": [
+            {
+              "name": "Item",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "añade {Item} a la lista de la compra",
+            "pon en la lista de la compra {Item}"
+          ]
+        },
+        {
+          "name": "AddReminder",
+          "slots": [
+            {
+              "name": "Reminder",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "crea un recordatorio para {Reminder}",
+            "guarda un recordatorio para {Reminder}"
+          ]
+        },
+        {
+          "name": "SetReminderDate",
+          "slots": [
+            {
+              "name": "Date",
+              "type": "AMAZON.DATE"
+            }
+          ],
+          "samples": ["para {Date}", "el día {Date}", "{Date}"]
+        },
+        {
+          "name": "SetReminderTime",
+          "slots": [
+            {
+              "name": "Time",
+              "type": "AMAZON.TIME"
+            }
+          ],
+          "samples": ["a las {Time}", "a la {Time}", "{Time}"]
+        },
+        {
+          "name": "AMAZON.StopIntent"
+        },
+        {
+          "name": "AMAZON.CancelIntent"
+        },
+        {
+          "name": "AMAZON.HelpIntent"
+        }
+      ]
+    }
+  }
+}

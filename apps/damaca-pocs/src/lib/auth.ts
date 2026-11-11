@@ -3,19 +3,18 @@ import "server-only"
 import { betterAuth } from "better-auth"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { nextCookies } from "better-auth/next-js"
-import { MongoClient } from "mongodb"
 import { getAuthEnv } from "@/config/env"
+import { getDatabase } from "./database"
 
 function createAuth() {
-  const { baseURL, secret, clientId, clientSecret, mongoUri, mongoDatabase } =
-    getAuthEnv()
-  const client = new MongoClient(mongoUri)
+  const { baseURL, secret, clientId, clientSecret } = getAuthEnv()
+  const { client, database } = getDatabase()
 
   return betterAuth({
     appName: "damaca-pocs",
     baseURL,
     secret,
-    database: mongodbAdapter(client.db(mongoDatabase), { client }),
+    database: mongodbAdapter(database, { client }),
     advanced: { cookiePrefix: "damaca-pocs" },
     socialProviders: { google: { clientId, clientSecret } },
     plugins: [nextCookies()],
