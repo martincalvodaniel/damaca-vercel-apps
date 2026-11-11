@@ -2,7 +2,12 @@ import "server-only"
 
 import { createHash } from "node:crypto"
 import { oauthProvider } from "@better-auth/oauth-provider"
-import { captureScope, getChatGptClient, getMcpUrls } from "./chatgpt-config"
+import {
+  authPath,
+  captureScope,
+  getChatGptClient,
+  getMcpUrls,
+} from "./chatgpt-config"
 
 export function createCaptureOAuthProvider() {
   const { resource } = getMcpUrls()
@@ -34,9 +39,14 @@ export function createCaptureOAuthProvider() {
         clientDiscovery: {
           id: "damaca-chatgpt",
           matches: () => true,
-          resolve: async (_context, id) => {
+          resolve: async (context, id) => {
             const client = getChatGptClient()
             if (!client || id !== client.id) return null
+            const request = context.request
+            const usesFormCredentials =
+              request?.method === "POST" &&
+              new URL(request.url).pathname === `${authPath}/oauth2/token` &&
+              !request.headers.has("authorization")
             return {
               clientDiscoveryId: "damaca-chatgpt",
               clientId: client.id,
@@ -46,7 +56,9 @@ export function createCaptureOAuthProvider() {
               grantTypes: ["authorization_code", "refresh_token"],
               responseTypes: ["code"],
               applicationType: "web",
-              tokenEndpointAuthMethod: "client_secret_basic",
+              tokenEndpointAuthMethod: usesFormCredentials
+                ? "client_secret_post"
+                : "client_secret_basic",
               requirePKCE: true,
               skipConsent: false,
               enableEndSession: false,
