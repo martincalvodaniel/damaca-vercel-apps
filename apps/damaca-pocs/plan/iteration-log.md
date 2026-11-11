@@ -18,3 +18,9 @@
 - [Criterios](iterations.md#poc-03--captura-desde-alexa). Capacidad inicial disponible del 90 % de 5 h y del 66 % de 7 d.
 - Biome, tipos, pruebas y build de Damaca POCs pasaron en local. Las pruebas cubren el diálogo, la zona horaria y el filtro de rutas.
 - Queda pendiente configurar la skill en Alexa Developer Console y verificar el simulador, el dispositivo y el panel privado en una preview accesible.
+
+## POC-04
+
+- [Criterios](iterations.md#poc-04--captura-desde-chatgpt). Capacidad inicial disponible del 87 % de 5 h y del 65 % de 7 d.
+- Las pruebas locales ejercitan el intercambio OAuth con consentimiento y PKCE, el rechazo de tokens inválidos y las dos herramientas MCP por Streamable HTTP. También cubren deduplicación de Alexa, aislamiento de consultas y las excepciones geográficas.
+- Las consolas de Alexa y ChatGPT solicitaron iniciar sesión. La preview aún carece de las variables de ambas integraciones. Falta verificar la disponibilidad de escritura en la cuenta de ChatGPT y completar el recorrido con los proveedores.

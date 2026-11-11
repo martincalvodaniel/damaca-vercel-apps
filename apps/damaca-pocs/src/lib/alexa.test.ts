@@ -74,17 +74,38 @@ it("saves a reminder only after collecting date and time", async () => {
   })
 })
 
-it("exempts only the Alexa webhook from the regional rule", () => {
+it("exempts exact integration endpoints from the regional rule", () => {
   const route = config.routes?.[0]
   if (!route || !("src" in route)) throw new Error("Missing geography rule")
   const restricted = new RegExp(`^${route.src}$`, "u")
-  expect(restricted.test("/api/integrations/alexa")).toBe(false)
+  for (const path of [
+    "/api/integrations/alexa",
+    "/api/integrations/mcp",
+    "/api/auth/oauth2/token",
+    "/api/auth/jwks",
+    "/.well-known/oauth-authorization-server/api/auth",
+    "/.well-known/oauth-protected-resource/api/integrations/mcp",
+  ]) {
+    expect(restricted.test(path)).toBe(false)
+  }
   for (const path of [
     "/",
     "/api/auth/callback/google",
+    "/api/auth/oauth2/authorize",
+    "/api/auth/oauth2/consent",
+    "/connect/consent",
+    "/api/integrations/mcp-other",
     "/api/integrations/alexa/other",
     "/api/integrations/alexa-other",
   ]) {
     expect(restricted.test(path)).toBe(true)
   }
+})
+
+it("rejects an unsigned webhook before it can dispatch a command", async () => {
+  const { SkillRequestSignatureVerifier } = await import(
+    "ask-sdk-express-adapter"
+  )
+  const verifier = new SkillRequestSignatureVerifier()
+  await expect(verifier.verify("{}", {})).rejects.toThrow("Missing Certificate")
 })

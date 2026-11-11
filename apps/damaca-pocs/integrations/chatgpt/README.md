@@ -1,0 +1,6 @@
+# Integración privada de ChatGPT
+
+1. En ChatGPT web, comprueba que Plugins ofrece **Add custom MCP server** y admite herramientas de escritura en tu cuenta. Usa el nombre `Damaca`, la URL HTTPS estable de la preview con la ruta `/api/integrations/mcp` y OAuth con cliente preconfigurado.
+2. Genera un identificador y un secreto aleatorio para el cliente. Introduce ambos en ChatGPT y en las variables de preview `CHATGPT_CLIENT_ID` y `CHATGPT_CLIENT_SECRET`. Copia exactamente la URI de retorno que muestre ChatGPT en `CHATGPT_REDIRECT_URI`. La configuración usa `client_secret_basic`, PKCE S256 y el alcance `captures:write`.
+3. Asegúrate de que `BETTER_AUTH_URL` coincide con el origen HTTPS de la preview y de que su callback de Google está registrado. La infraestructura debe permitir a los proveedores acceder a las rutas exactas de integración y metadatos. El inicio de sesión y el consentimiento se completan desde España.
+4. Instala la integración y selecciona `@Damaca` desde un chat web. Autoriza el acceso con la cuenta de Google de Damaca y prueba «Exporta un resumen de esta conversación» y «Guarda este enlace: https://example.com». Comprueba que ambas entradas aparecen tras recargar el panel.

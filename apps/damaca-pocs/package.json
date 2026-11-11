@@ -10,6 +10,9 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@better-auth/oauth-provider": "catalog:",
+    "@modelcontextprotocol/sdk": "catalog:",
+    "zod": "catalog:",
     "@vercel/config": "catalog:",
     "better-auth": "catalog:",
     "ask-sdk-express-adapter": "catalog:",

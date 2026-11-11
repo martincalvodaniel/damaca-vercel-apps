@@ -33,6 +33,7 @@
       "zod": "4.6.7",
       "sharp": "0.35.5",
       "@better-auth/oauth-provider": "1.7.12",
+      "@modelcontextprotocol/sdk": "1.32.2",
       "web-push": "3.6.7",
       "@types/web-push": "3.6.4"
     }

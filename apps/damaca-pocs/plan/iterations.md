@@ -32,7 +32,7 @@
 
 ## POC-04 · Captura desde ChatGPT
 
-- Estado `pending`.
+- Estado `in_progress`.
 - Objetivo. Guardar enlaces y resúmenes desde una integración MCP privada.
 - `target_paths`. `apps/damaca-pocs/**`, catálogo raíz y lockfile.
 - Dependencias. POC-03, cliente OAuth y acceso a herramientas privadas de escritura en ChatGPT web.
