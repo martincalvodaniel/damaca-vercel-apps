@@ -39,3 +39,13 @@
 - Aceptación. Las dos herramientas guardan entradas bajo la identidad del token OAuth.
 - Validación. Biome, tipos, pruebas, build y recorrido en ChatGPT web.
 - [Evidencia](iteration-log.md#poc-04)
+
+## POC-05 · Iconos de Damaca POCs
+
+- Estado `validated`.
+- Objetivo. Dar a la app un favicon y un icono cuadrado reutilizable en Vercel y ChatGPT.
+- `target_paths`. `apps/damaca-pocs/src/app/{favicon.ico,apple-icon.png}`, `apps/damaca-pocs/public/damaca-pocs-logo.png` y planificación de la app.
+- Dependencias. Convenciones de metadatos de Next.js y archivos de imagen para carga manual.
+- Aceptación. Favicon legible a 16 px, icono táctil y PNG cuadrado de 512 px basados en la marca de la portada.
+- Validación. Inspección de los archivos, Biome, tipos, pruebas y build.
+- [Evidencia](iteration-log.md#poc-05)

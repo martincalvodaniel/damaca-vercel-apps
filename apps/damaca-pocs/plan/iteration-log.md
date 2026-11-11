@@ -25,3 +25,9 @@
 - Las pruebas locales ejercitan el intercambio OAuth con consentimiento y PKCE, el rechazo de tokens inválidos y las dos herramientas MCP por Streamable HTTP. También cubren deduplicación de Alexa, aislamiento de consultas y las excepciones geográficas.
 - Las consolas de Alexa y ChatGPT solicitaron iniciar sesión. La preview aún carece de las variables de ambas integraciones. Falta verificar la disponibilidad de escritura en la cuenta de ChatGPT y completar el recorrido con los proveedores.
 - En preview, Google devolvió el control a Damaca y el consentimiento respondió 200. El intercambio de tokens devolvió 400. Una prueba controlada reprodujo el rechazo de `client_secret_post` pese a que el servidor lo anunciaba. El cliente preconfigurado ahora admite ambos métodos de envío del mismo secreto. Pasaron las diez pruebas, los tipos y el build. Queda pendiente reintentar la conexión desde ChatGPT web.
+
+## POC-05
+
+- [Criterios](iterations.md#poc-05--iconos-de-damaca-pocs). Capacidad inicial disponible del 36 % de 5 h y del 57 % de 7 d.
+- Se adaptó la marca `d.` de la portada a un favicon ICO con 16, 32 y 48 px, un icono Apple de 180 px y un PNG cuadrado de 512 px para carga manual.
+- Se comprobaron las dimensiones y los fotogramas del ICO, se inspeccionó el PNG y se confirmó la generación de los iconos en el build. Pasaron Biome incremental, tipos, las diez pruebas y el build.
