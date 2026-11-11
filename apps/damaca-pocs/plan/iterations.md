@@ -49,3 +49,13 @@
 - Aceptación. Favicon legible a 16 px, icono táctil y PNG cuadrado de 512 px basados en la marca de la portada.
 - Validación. Inspección de los archivos, Biome, tipos, pruebas y build.
 - [Evidencia](iteration-log.md#poc-05)
+
+## POC-06 · Recuperación del diálogo de Alexa
+
+- Estado `validated`.
+- Objetivo. Mantener abierta la skill cuando una frase no coincide con el paso esperado.
+- `target_paths`. Controlador y pruebas de Alexa, modelo español y planificación de Damaca POCs.
+- Dependencias. Skill privada de Alexa y preview de `int`.
+- Aceptación. Tras una frase fuera de contexto, Damaca indica cómo reformular y permite guardar una compra en la misma sesión.
+- Validación. Prueba de regresión del diálogo, Biome, tipos y build.
+- [Evidencia](iteration-log.md#poc-06)

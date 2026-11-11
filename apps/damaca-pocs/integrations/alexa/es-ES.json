@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "damaca",
+      "invocationName": "damaca pocs",
       "intents": [
         {
           "name": "AddShoppingItem",
@@ -13,6 +13,7 @@
           ],
           "samples": [
             "añade {Item} a la lista de la compra",
+            "añade {Item} a la compra",
             "pon en la lista de la compra {Item}"
           ]
         },
@@ -26,6 +27,7 @@
           ],
           "samples": [
             "crea un recordatorio para {Reminder}",
+            "recuérdame que {Reminder}",
             "guarda un recordatorio para {Reminder}"
           ]
         },

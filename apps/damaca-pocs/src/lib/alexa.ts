@@ -19,7 +19,7 @@ export type AlexaEnvelope = {
 
 export function alexaReply(
   text: string,
-  attributes?: { reminder: string; date?: string }
+  attributes?: { reminder?: string; date?: string }
 ) {
   return {
     version: "1.0",
@@ -49,6 +49,9 @@ export function isAlexaRequest(
   )
 }
 
+const commandPrompt =
+  "Di, por ejemplo, añade arroz a la compra o crea un recordatorio para llamar al dentista."
+
 export async function handleAlexa(
   envelope: AlexaEnvelope,
   now: Date,
@@ -57,23 +60,13 @@ export async function handleAlexa(
   const request = envelope.request
   if (request?.type === "SessionEndedRequest")
     return { version: "1.0", sessionAttributes: undefined, response: {} }
-  if (request?.type === "LaunchRequest") {
-    const text = "Puedes añadir algo a la compra o crear un recordatorio."
-    return {
-      ...alexaReply(text),
-      response: {
-        ...alexaReply(text).response,
-        shouldEndSession: false,
-        reprompt: { outputSpeech: { type: "PlainText", text } },
-      },
-    }
-  }
+  if (request?.type === "LaunchRequest") return alexaReply(commandPrompt, {})
 
   const intent = request?.intent
   const slot = (name: string) => intent?.slots?.[name]?.value?.trim() ?? ""
   const requestId = request?.requestId
   if (request?.type !== "IntentRequest" || !requestId)
-    return alexaReply("No he entendido el comando.")
+    return alexaReply(commandPrompt, envelope.session?.attributes ?? {})
   const attributes = envelope.session?.attributes
   const reminder = attributes?.reminder
   const date = attributes?.date
@@ -85,20 +78,26 @@ export async function handleAlexa(
     case "AddShoppingItem": {
       const text = slot("Item")
       if (!text || text.length > 300)
-        return alexaReply("Vuelve a intentarlo con un artículo breve.")
+        return alexaReply(
+          "Di añade seguido del artículo, por ejemplo añade arroz a la compra.",
+          attributes ?? {}
+        )
       await save({ source: "alexa", requestId, kind: "shopping", text })
       return alexaReply("Guardado en tu lista de la compra de Damaca.")
     }
     case "AddReminder": {
       const text = slot("Reminder")
       if (!text || text.length > 300)
-        return alexaReply("Vuelve a intentarlo con un recordatorio breve.")
+        return alexaReply(
+          "Dime qué quieres recordar con una frase breve.",
+          attributes ?? {}
+        )
       return alexaReply("¿Qué día? Di, por ejemplo, para mañana.", {
         reminder: text,
       })
     }
     case "SetReminderDate": {
-      if (!reminder) return alexaReply("Primero dime qué quieres recordar.")
+      if (!reminder) return alexaReply(commandPrompt, {})
       const value = slot("Date")
       if (!/^\d{4}-\d{2}-\d{2}$/u.test(value))
         return alexaReply("Dime un día concreto.", { reminder })
@@ -108,8 +107,11 @@ export async function handleAlexa(
       )
     }
     case "SetReminderTime": {
-      if (!reminder || !date)
-        return alexaReply("Primero dime qué quieres recordar y qué día.")
+      if (!reminder) return alexaReply(commandPrompt, {})
+      if (!date)
+        return alexaReply("¿Qué día? Di, por ejemplo, para mañana.", {
+          reminder,
+        })
       const dueAt = parseReminderDate(date, slot("Time"), now)
       if (!dueAt) {
         return alexaReply(
@@ -127,9 +129,6 @@ export async function handleAlexa(
       return alexaReply("Recordatorio guardado en Damaca.")
     }
     default:
-      return alexaReply(
-        "Puedes añadir algo a la compra o crear un recordatorio.",
-        reminder ? { reminder, date } : undefined
-      )
+      return alexaReply(commandPrompt, attributes ?? {})
   }
 }

@@ -31,3 +31,9 @@
 - [Criterios](iterations.md#poc-05--iconos-de-damaca-pocs). Capacidad inicial disponible del 36 % de 5 h y del 57 % de 7 d.
 - Se adaptó la marca `d.` de la portada a un favicon ICO con 16, 32 y 48 px, un icono Apple de 180 px y un PNG cuadrado de 512 px para carga manual.
 - Se comprobaron las dimensiones y los fotogramas del ICO, se inspeccionó el PNG y se confirmó la generación de los iconos en el build. Pasaron Biome incremental, tipos, las diez pruebas y el build.
+
+## POC-06
+
+- [Criterios](iterations.md#poc-06--recuperación-del-diálogo-de-alexa). Capacidad inicial disponible del 25 % de 5 h y del 55 % de 7 d.
+- El simulador abrió la skill y salió de ella tras interpretar «arroz» como un paso de recordatorio. La prueba local comprueba que Damaca mantiene abierta esa sesión y acepta la compra siguiente.
+- Pasaron Biome incremental, tipos, once pruebas y build. El modelo actualizado añade variantes naturales de compra y recordatorio. Falta importarlo y compilarlo en Alexa Developer Console para verificar el reconocimiento real.

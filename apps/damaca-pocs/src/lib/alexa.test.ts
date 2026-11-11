@@ -109,3 +109,42 @@ it("rejects an unsigned webhook before it can dispatch a command", async () => {
   const verifier = new SkillRequestSignatureVerifier()
   await expect(verifier.verify("{}", {})).rejects.toThrow("Missing Certificate")
 })
+
+it("keeps the skill open after a reminder slot is matched out of context", async () => {
+  const save = mock(async () => "entry")
+  const recovery = await handleAlexa(
+    {
+      request: {
+        type: "IntentRequest",
+        requestId: "misheard-item",
+        intent: { name: "SetReminderTime" },
+      },
+    },
+    now,
+    save
+  )
+  expect(recovery.response).toMatchObject({ shouldEndSession: false })
+  expect(save).not.toHaveBeenCalled()
+
+  await handleAlexa(
+    {
+      session: { attributes: recovery.sessionAttributes },
+      request: {
+        type: "IntentRequest",
+        requestId: "shopping-item",
+        intent: {
+          name: "AddShoppingItem",
+          slots: { Item: { value: "arroz" } },
+        },
+      },
+    },
+    now,
+    save
+  )
+  expect(save).toHaveBeenCalledWith({
+    source: "alexa",
+    requestId: "shopping-item",
+    kind: "shopping",
+    text: "arroz",
+  })
+})
