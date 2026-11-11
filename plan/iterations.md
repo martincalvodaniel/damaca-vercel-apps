@@ -248,3 +248,12 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Dependencias: Bun 1.4.4 y los manifiestos de los workspaces activos.
 - Aceptación: retirar el workspace y sus referencias vigentes. El README enumera cada workspace activo con su ruta y puerto de desarrollo.
 - Validación: instalación congelada, descubrimiento de workspaces en Turbo, contraste del README con los manifiestos, búsqueda de referencias y revisión del diff.
+
+## AGW-26 — Verificar la selección de base MongoDB
+
+- Estado: `validated`.
+- Objetivo: asegurar que las aplicaciones con MongoDB y la plantilla `mongo-google` respeten `MONGODB_DB`.
+- Rutas: configuración de Ebrias, ejemplos de entorno de Ebrias y Billing, README de Ebrias y planificación de la raíz, Ebrias y Billing.
+- Dependencias: clientes MongoDB de cada app y generador de workspaces.
+- Aceptación: la base indicada llega al driver y cada app conserva su valor predeterminado si la variable falta.
+- Validación: ejecutar la selección con valores ficticios y sin conexión al clúster, probar el generador y ejecutar Biome, tipos y build en Ebrias.

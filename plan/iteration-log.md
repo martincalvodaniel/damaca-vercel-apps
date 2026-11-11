@@ -225,3 +225,10 @@ Inicio: 75% de 5 h y 95% de 7 d disponibles (10:10 CET).
 - Inicio el 11 de noviembre de 2026 a las 11:00 CET, con 99 % de 5 h y 67 % de 7 d disponibles. [Aceptación](iterations.md#agw-25--retirar-un-workspace-y-actualizar-el-inventario).
 - Retirado el workspace solicitado y regenerado `bun.lock`. La comprobación del README confirmó las nueve aplicaciones, sus puertos y los enlaces locales. La búsqueda de referencias al workspace retirado quedó vacía.
 - Pasaron `bun install --frozen-lockfile`, `bun run turbo ls`, las seis pruebas de `bun run test:generator` y `git diff --check`. Biome incremental terminó con cero archivos aplicables. El código de las aplicaciones activas queda fuera del alcance de las comprobaciones de tipos y builds de este corte.
+
+## AGW-26 — Verificar la selección de base MongoDB
+
+- [Criterios](iterations.md#agw-26--verificar-la-selección-de-base-mongodb). Inicio a las 11:18 CET del 11 de noviembre de 2026, con 95 % de 5 h y 66 % de 7 d disponibles.
+- Ebrias seleccionaba su valor predeterminado incluso con `MONGODB_DB` configurado. Tras el cambio, se verificaron el override y el valor predeterminado en desarrollo, integración y producción. Better Auth, los repositorios y los scripts usan la misma conexión.
+- Confirmados el override y el valor predeterminado en Billing, Dalis Home, Dalis Tasks, Hub y una app generada con `mongo-google`. Pasó la regresión de Damaca POCs. Las comprobaciones observaron la base seleccionada en el driver con configuración ficticia y sin conexión a MongoDB.
+- Pasaron las seis pruebas del generador, los tipos y el build de Ebrias, Biome y `git diff --check`.

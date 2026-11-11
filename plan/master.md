@@ -74,3 +74,7 @@ Home Management y Tasks se instalan como `dalis-home` y `dalis-tasks`. Los despl
 ## Diseño adaptable
 
 La interfaz de las aplicaciones prioriza el contenido útil y la densidad en móvil. La regla para agentes vive en [AGENTS.md](../AGENTS.md). Ebrias aplica este criterio en su portada inspirada en Los Simpson.
+
+## Selección de base de datos MongoDB
+
+Las aplicaciones con MongoDB y la plantilla `mongo-google` usan `MONGODB_DB` para seleccionar la base dentro del clúster indicado por `MONGODB_URI`. Cada app conserva sus valores predeterminados por entorno. [AGW-26](iterations.md#agw-26--verificar-la-selección-de-base-mongodb).

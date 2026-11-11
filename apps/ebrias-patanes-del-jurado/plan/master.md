@@ -17,3 +17,5 @@ Los intentos de acceso de correos verificados sin autorización dejan una solici
 Los administradores pueden cambiar el correo de un miembro desde una solicitud verificada. El cambio conserva la asistencia, el alias y la reserva de disfraz. El miembro y los administradores pueden editar el mismo alias visible.
 
 [Iteraciones](iterations.md) · [Registro](iteration-log.md) · [Flujo](../../../plan/workflow.md)
+
+`MONGODB_DB` permite elegir la base de autenticación y de datos. Si la variable falta o está vacía, se conserva la selección predeterminada para desarrollo, integración y producción. [AGW-26](../../../plan/iterations.md#agw-26--verificar-la-selección-de-base-mongodb).
