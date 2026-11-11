@@ -6,6 +6,7 @@ export function getAuthEnv() {
     BETTER_AUTH_URL: explicitUrl,
     GOOGLE_CLIENT_ID: clientId,
     GOOGLE_CLIENT_SECRET: clientSecret,
+    MONGODB_DB: mongoDatabase,
     MONGODB_URI: mongoUri,
     VERCEL_BRANCH_URL: branchHost,
   } = process.env
@@ -22,5 +23,6 @@ export function getAuthEnv() {
     clientId,
     clientSecret,
     mongoUri,
+    mongoDatabase: mongoDatabase?.trim() || "damaca-pocs",
   }
 }
