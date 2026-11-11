@@ -14,6 +14,7 @@
           "samples": [
             "añade {Item} a la lista de la compra",
             "añade {Item} a la compra",
+            "apunta {Item} en mi lista de la compra",
             "pon en la lista de la compra {Item}"
           ]
         },
@@ -39,7 +40,7 @@
               "type": "AMAZON.DATE"
             }
           ],
-          "samples": ["para {Date}", "el día {Date}", "{Date}"]
+          "samples": ["para {Date}", "el día {Date}"]
         },
         {
           "name": "SetReminderTime",
@@ -49,7 +50,7 @@
               "type": "AMAZON.TIME"
             }
           ],
-          "samples": ["a las {Time}", "a la {Time}", "{Time}"]
+          "samples": ["a las {Time}", "a la {Time}"]
         },
         {
           "name": "AMAZON.StopIntent"

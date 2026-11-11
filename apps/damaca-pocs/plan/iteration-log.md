@@ -37,3 +37,4 @@
 - [Criterios](iterations.md#poc-06--recuperación-del-diálogo-de-alexa). Capacidad inicial disponible del 25 % de 5 h y del 55 % de 7 d.
 - El simulador abrió la skill y salió de ella tras interpretar «arroz» como un paso de recordatorio. La prueba local comprueba que Damaca mantiene abierta esa sesión y acepta la compra siguiente.
 - Pasaron Biome incremental, tipos, once pruebas y build. El modelo actualizado añade variantes naturales de compra y recordatorio. Falta importarlo y compilarlo en Alexa Developer Console para verificar el reconocimiento real.
+- El JSON de un intento real confirmó que Alexa devolvía `SetReminderTime` con el slot vacío al pedir una compra. Se quitaron los ejemplos de fecha y hora que consistían solo en el slot y se añadió una frase de compra con un prefijo y un contexto distintos. Pasaron la validación del JSON y Biome. Queda pendiente compilar el modelo en Alexa y comprobar el intent del simulador.
