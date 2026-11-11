@@ -239,3 +239,12 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Dependencias: portada y dibujo sin marco de Ebrias.
 - Aceptación: regla de diseño adaptable para todas las apps y portada de Ebrias con estética de dibujo animado, título, acceso y dibujo visibles en móvil.
 - Validación: Biome, tipos, build y revisión en móvil y escritorio.
+
+## AGW-25 — Retirar un workspace y actualizar el inventario
+
+- Estado: `validated`.
+- Objetivo: retirar la prueba de concepto solicitada y documentar todas las aplicaciones disponibles.
+- Rutas: workspace retirado en `apps/*`, `bun.lock`, `README.md` y planificación raíz.
+- Dependencias: Bun 1.4.4 y los manifiestos de los workspaces activos.
+- Aceptación: retirar el workspace y sus referencias vigentes. El README enumera cada workspace activo con su ruta y puerto de desarrollo.
+- Validación: instalación congelada, descubrimiento de workspaces en Turbo, contraste del README con los manifiestos, búsqueda de referencias y revisión del diff.

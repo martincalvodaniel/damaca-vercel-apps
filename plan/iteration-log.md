@@ -202,8 +202,8 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 ## AGW-22 — Align Vercel configuration
 
 - [Aceptación](iterations.md#agw-22--align-vercel-configuration). Los once archivos coinciden al normalizar el nombre del paquete. Las dos ramas del comando de instalación se verificaron con un sustituto local de bunx.
-- Biome comprobó explícitamente los once archivos y la prueba actualizada del Hub. Pasaron los tipos, las suites disponibles de Alexa y Hub, las seis pruebas del generador y `git diff --check`.
-- Builds de Hub, Damaca POCs y LBDP completados. Alexa compiló con Webpack y variables ficticias de build. Turbopack no pudo abrir un puerto local en el entorno.
+- Biome comprobó explícitamente los once archivos y la prueba actualizada del Hub. Pasaron los tipos, la suite del Hub, las seis pruebas del generador y `git diff --check`.
+- Builds de Hub, Damaca POCs y LBDP completados.
 - La regla geográfica incluye los endpoints OAuth/OIDC del Hub. Las llamadas servidor a servidor clasificadas fuera de España o sin país quedan bloqueadas. Sin verificación de tráfico en Vercel.
 
 ## AGW-23 — Nombres de instalación de Dalis
@@ -219,3 +219,9 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 Inicio: 75% de 5 h y 95% de 7 d disponibles (10:10 CET).
 - Biome, tipos y build de Ebrias correctos.
 - En Chrome a 320 × 568, 390 × 844 y 1440 × 900, el título, el botón y el dibujo completo se ven sin desplazamiento horizontal ni vertical para alcanzarlos.
+
+## AGW-25 — Retirar un workspace y actualizar el inventario
+
+- Inicio el 11 de noviembre de 2026 a las 11:00 CET, con 99 % de 5 h y 67 % de 7 d disponibles. [Aceptación](iterations.md#agw-25--retirar-un-workspace-y-actualizar-el-inventario).
+- Retirado el workspace solicitado y regenerado `bun.lock`. La comprobación del README confirmó las nueve aplicaciones, sus puertos y los enlaces locales. La búsqueda de referencias al workspace retirado quedó vacía.
+- Pasaron `bun install --frozen-lockfile`, `bun run turbo ls`, las seis pruebas de `bun run test:generator` y `git diff --check`. Biome incremental terminó con cero archivos aplicables. El código de las aplicaciones activas queda fuera del alcance de las comprobaciones de tipos y builds de este corte.
