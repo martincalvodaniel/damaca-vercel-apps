@@ -15,3 +15,9 @@ Record observed evidence for completed iterations here. Do not record planned wo
 - Added browser AES-256-GCM encryption with owner and purpose binding, Argon2id password derivation, PRF and recovery wrappers, atomic versioned saves, key rotation, a nonce-based CSP, and the compact vault UI.
 - Scoped Biome, TypeScript, 39 Bun tests, and the Webpack production build passed. The compiled HTTP suite passed with disposable MongoDB and verified per-user isolation, strict input, same-origin writes, a concurrent creation conflict, ciphertext persistence, and revocation. Chrome verified setup, entry creation, hidden passwords, recovery, lock and unlock, and no horizontal overflow at 320 and 1200 CSS pixels. The browser check verified the API response omitted the fixture's plaintext.
 - Real Google and Android PRF checks still belong to iteration 04. The Vercel CLI found no `damaca-secrets` project in the configured team.
+
+## 03 — Offline consultation
+
+- Starting capacity: 75% of 5 hours and 42% of 7 days.
+- Added opt-in IndexedDB storage for the encrypted password-unlock snapshot, a build-versioned neutral shell, and a runtime lease with a 24-hour default. Account changes, denied access, sign-out, and opt-out clear the snapshot.
+- Passed scoped Biome, TypeScript, 42 Bun tests, and the Webpack production build. Chrome at 320 CSS pixels reopened the normal URL after stopping the server, unlocked read-only data, expired a shortened configurable lease, and removed the snapshot after online denial. Cache Storage contained only the neutral shell and build assets. The IndexedDB fixture contained neither plaintext nor passkey and recovery wrappers.

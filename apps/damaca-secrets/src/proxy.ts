@@ -7,7 +7,11 @@ export function proxy(request: NextRequest) {
 
   if (pathname.startsWith("/api/")) return NextResponse.next()
 
-  if (!pathname.startsWith("/auth/") && !getSessionCookie(request)) {
+  if (
+    !pathname.startsWith("/auth/") &&
+    pathname !== "/offline-vault" &&
+    !getSessionCookie(request)
+  ) {
     const signInUrl = new URL("/auth/signin", request.url)
     signInUrl.searchParams.set("callbackUrl", `${pathname}${search}`)
     return NextResponse.redirect(signInUrl)

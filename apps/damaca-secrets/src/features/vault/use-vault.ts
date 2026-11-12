@@ -1,7 +1,12 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { loadVault, saveVault, VaultRequestError } from "@/features/vault/api"
+import { loadOnlineSnapshot } from "@/features/offline/online-snapshot"
+import {
+  isTransportFailure,
+  saveVault,
+  VaultRequestError,
+} from "@/features/vault/api"
 import {
   decryptEntries,
   encryptEntries,
@@ -12,9 +17,14 @@ import {
   wrapPasskey,
 } from "@/features/vault/crypto"
 import { authenticatePasskey, registerPasskey } from "@/features/vault/passkeys"
+import { useIdleLock } from "@/features/vault/use-idle-lock"
+import {
+  clearOfflineVault,
+  readOfflineVault,
+  refreshOfflineVault,
+  subscribeToOfflineReset,
+} from "@/lib/offline/storage"
 import type { EncryptedVault, VaultEntry, VaultRead } from "@/schemas/vault"
-
-const IDLE_MS = 5 * 60 * 1000
 
 type OpenVault = { key: CryptoKey; entries: VaultEntry[] }
 type PreparedVault = Awaited<ReturnType<typeof prepareVault>> & {
@@ -37,47 +47,50 @@ export function useVault() {
     setError("")
   }, [])
 
+  const offline = useCallback(async () => {
+    lock()
+    setSnapshot(undefined)
+    if (await readOfflineVault().catch(() => undefined)) {
+      window.location.replace("/offline-vault")
+      return
+    }
+    setError(
+      "You are offline. Enable offline access when connected to consult this vault without coverage."
+    )
+  }, [lock])
+
   useEffect(() => {
     const controller = new AbortController()
-    loadVault(controller.signal)
+    loadOnlineSnapshot(
+      AbortSignal.any([controller.signal, AbortSignal.timeout(8000)])
+    )
       .then((data) => {
         if (!controller.signal.aborted) setSnapshot(data)
       })
       .catch((error: unknown) => {
-        if (!controller.signal.aborted) {
-          setError(
-            error instanceof VaultRequestError
-              ? error.message
-              : "Could not load the vault."
-          )
+        if (controller.signal.aborted) return
+        if (isTransportFailure(error)) {
+          void offline()
+          return
         }
+        setError(
+          error instanceof VaultRequestError
+            ? error.message
+            : "Could not load the vault."
+        )
       })
+    const onOffline = () => void offline()
+    window.addEventListener("offline", onOffline)
+    const stop = subscribeToOfflineReset(lock)
     return () => {
       epoch.current++
       controller.abort()
+      window.removeEventListener("offline", onOffline)
+      stop()
     }
-  }, [])
+  }, [lock, offline])
 
-  useEffect(() => {
-    if (!open && !prepared) return
-    let timeout: ReturnType<typeof setTimeout>
-    function reset() {
-      clearTimeout(timeout)
-      timeout = setTimeout(lock, IDLE_MS)
-    }
-    reset()
-    for (const event of ["pointerdown", "keydown", "input"]) {
-      window.addEventListener(event, reset)
-    }
-    window.addEventListener("pagehide", lock)
-    return () => {
-      clearTimeout(timeout)
-      for (const event of ["pointerdown", "keydown", "input"]) {
-        window.removeEventListener(event, reset)
-      }
-      window.removeEventListener("pagehide", lock)
-    }
-  }, [lock, open, prepared])
+  useIdleLock(Boolean(open || prepared), lock)
 
   const run = useCallback(
     async (
@@ -95,12 +108,17 @@ export function useVault() {
         return current()
       } catch (error) {
         if (current()) {
+          if (isTransportFailure(error) && !navigator.onLine) {
+            await offline()
+            return false
+          }
           if (
             error instanceof VaultRequestError &&
             [401, 403, 409].includes(error.status)
           ) {
             lock()
             setSnapshot(undefined)
+            if (error.status !== 409) await clearOfflineVault().catch(() => {})
           }
           setError(error instanceof VaultRequestError ? error.message : message)
         }
@@ -110,13 +128,13 @@ export function useVault() {
         setBusy(false)
       }
     },
-    [lock]
+    [lock, offline]
   )
 
   const reload = useCallback(
     () =>
       run(async (current) => {
-        const data = await loadVault()
+        const data = await loadOnlineSnapshot()
         if (current()) setSnapshot(data)
       }, "Could not load the vault."),
     [run]
@@ -133,7 +151,7 @@ export function useVault() {
               ? await authenticatePasskey(encrypted.passkeys)
               : undefined
           try {
-            const latest = await loadVault()
+            const latest = await loadOnlineSnapshot()
             if (
               latest.ownerId !== ownerId ||
               latest.revision !== snapshot.revision
@@ -191,8 +209,10 @@ export function useVault() {
   const persist = useCallback(
     async (encrypted: EncryptedVault) => {
       if (!snapshot) throw new Error("Vault is unavailable")
-      const revision = await saveVault(snapshot.revision, encrypted)
-      setSnapshot({ ...snapshot, revision, encrypted })
+      const saved = await saveVault(snapshot.revision, encrypted)
+      const next = { ...snapshot, ...saved, encrypted }
+      await refreshOfflineVault(next).catch(() => {})
+      setSnapshot(next)
     },
     [snapshot]
   )

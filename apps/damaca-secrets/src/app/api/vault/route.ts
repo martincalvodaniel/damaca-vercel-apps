@@ -1,4 +1,4 @@
-import { getAuthBaseUrl } from "@/config/env"
+import { getAuthBaseUrl, getOfflineVaultDuration } from "@/config/env"
 import { getAccessRole } from "@/lib/auth/access"
 import { getVerifiedSession } from "@/lib/auth/session"
 import { readVault, writeVault } from "@/lib/db/vault"
@@ -41,10 +41,18 @@ async function parseBody(request: Request): Promise<unknown> {
   }
 }
 
+function issueLease() {
+  const checkedAt = Date.now()
+  return { checkedAt, expiresAt: checkedAt + getOfflineVaultDuration() }
+}
+
 export async function GET() {
   const owner = await authorize()
   if (typeof owner !== "string") return owner
-  return Response.json(await readVault(owner), { headers })
+  return Response.json(
+    { ...(await readVault(owner)), ...issueLease() },
+    { headers }
+  )
 }
 
 export async function PUT(request: Request) {
@@ -63,6 +71,7 @@ export async function PUT(request: Request) {
   const payload = vaultWriteSchema.safeParse(body)
   if (!payload.success) return failure(400)
   const { revision, encrypted } = payload.data
+  const lease = issueLease()
   if (!(await writeVault(owner, revision, encrypted))) return failure(409)
-  return Response.json({ revision: revision + 1 }, { headers })
+  return Response.json({ revision: revision + 1, ...lease }, { headers })
 }

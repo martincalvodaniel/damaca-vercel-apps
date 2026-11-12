@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback } from "react"
+import { OfflineSettings } from "@/features/offline/offline-settings"
 import { buttonClass } from "@/features/vault/components/styles"
 import { canUsePasskeys } from "@/features/vault/passkeys"
 import type { VaultController } from "@/features/vault/use-vault"
@@ -54,6 +55,9 @@ export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
           </button>
         ) : null}
       </div>
+      {vault.snapshot ? (
+        <OfflineSettings ownerId={vault.snapshot.ownerId} />
+      ) : null}
     </details>
   )
 }

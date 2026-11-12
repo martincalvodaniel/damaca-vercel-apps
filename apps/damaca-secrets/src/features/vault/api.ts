@@ -2,6 +2,7 @@ import {
   type EncryptedVault,
   VAULT_BODY_LIMIT,
   vaultReadSchema,
+  vaultSaveSchema,
 } from "@/schemas/vault"
 
 export class VaultRequestError extends Error {
@@ -33,5 +34,12 @@ export async function saveVault(revision: number, encrypted: EncryptedVault) {
     body,
   })
   if (!response.ok) throw new VaultRequestError(response.status)
-  return revision + 1
+  return vaultSaveSchema.parse(await response.json())
+}
+
+export function isTransportFailure(error: unknown) {
+  return (
+    error instanceof TypeError ||
+    (error instanceof DOMException && error.name === "TimeoutError")
+  )
 }

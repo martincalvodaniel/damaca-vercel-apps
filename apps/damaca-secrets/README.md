@@ -19,6 +19,12 @@ bun run build --filter=@damaca/damaca-secrets
 
 El servidor local usa el puerto 3007. Las pruebas de integración `src/lib/db/user-access.integration.ts` y `test/access-http.ts` se ejecutan desde la raíz con `bun --no-env-file --conditions=react-server run` y la ruta del script. Usan un MongoDB desechable en loopback y una base nueva `template_access_test_<identificador>` por ejecución. Para la prueba HTTP, configura también el servidor de prueba con el mismo entorno, un origen `http://127.0.0.1:<puerto>` y el administrador ficticio `admin@example.com`.
 
+## Consulta sin conexión
+
+En la caja desbloqueada, abre **Vault security** y activa **Enable offline access** en un navegador de confianza. Espera a que aparezcan la última sincronización y el vencimiento. Al volver a abrir la URL sin red, puedes desbloquear con la contraseña maestra para buscar, ver y copiar credenciales de la última copia sincronizada.
+
+El navegador conserva la copia cifrada en IndexedDB. La interfaz sin conexión se prepara en builds de producción. `OFFLINE_VAULT_HOURS` cambia la vigencia de las nuevas copias, con 24 horas por defecto. Las escrituras, passkeys y recuperación requieren conexión. Desactivar el acceso o cerrar sesión borra la copia. Una revocación remota se aplica cuando se comprueba la conexión, o cuando vence el plazo local si el navegador sigue desconectado.
+
 ## Preproducción
 
 Usa un proyecto Vercel con directorio raíz `apps/damaca-secrets` y despliegue manual de `int`. La [configuración de Vercel](vercel.ts) restringe el tráfico a España. El origen HTTPS estable debe coincidir con `BETTER_AUTH_URL` y con el retorno `/api/auth/callback/google` del cliente OAuth exclusivo de preproducción. Configura un MongoDB aislado, un secreto de Better Auth y los correos de prueba en el entorno Preview.

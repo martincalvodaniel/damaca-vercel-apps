@@ -18,7 +18,7 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 ## 03 — Offline consultation
 
-- Status: `pending`.
+- Status: `validated`.
 - Paths: app PWA shell and service worker, browser storage, vault UI and API.
 - Dependencies: 02.
 - Acceptance: opt-in encrypted snapshot, password unlock in airplane mode, configurable 24-hour validity, cleanup on logout and denial, online revalidation, and read-only offline use.

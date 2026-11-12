@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useCallback, useState } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { authClient } from "@/lib/auth/auth-client"
+import { clearOfflineVault } from "@/lib/offline/storage"
 
 export function AccountSwitchButton() {
   const router = useRouter()
@@ -13,6 +14,7 @@ export function AccountSwitchButton() {
     setPending(true)
     setError(false)
     try {
+      await clearOfflineVault()
       const result = await authClient.signOut()
       if (result.error) throw new Error("Sign-out failed")
       router.replace("/auth/signin")

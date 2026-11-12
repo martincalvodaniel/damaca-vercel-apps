@@ -14,7 +14,9 @@ function vaults() {
   return getCollection<VaultDocument>(COLLECTION_NAMES.vaults)
 }
 
-export async function readVault(ownerId: string): Promise<VaultRead> {
+export async function readVault(
+  ownerId: string
+): Promise<Pick<VaultRead, "ownerId" | "revision" | "encrypted">> {
   const result = await (await vaults()).findOne({ _id: ownerId })
   return {
     ownerId,

@@ -10,11 +10,11 @@ const bytes = (length: number) =>
     .length(Math.ceil((length * 4) / 3))
     .regex(base64Url)
 
-const box = z.strictObject({
+export const encryptedBoxSchema = z.strictObject({
   nonce: bytes(12),
   ciphertext: z.string().min(22).max(VAULT_BODY_LIMIT).regex(base64Url),
 })
-const wrappedKey = box.extend({ ciphertext: bytes(48) })
+const wrappedKey = encryptedBoxSchema.extend({ ciphertext: bytes(48) })
 
 export const passwordKeySchema = z.strictObject({
   salt: bytes(16),
@@ -29,7 +29,7 @@ const passkeySchema = z.strictObject({
 
 export const encryptedVaultSchema = z.strictObject({
   version: z.literal(1),
-  entries: box,
+  entries: encryptedBoxSchema,
   password: passwordKeySchema,
   recovery: wrappedKey,
   passkeys: z.array(passkeySchema).max(MAX_PASSKEYS),
@@ -44,10 +44,21 @@ export const vaultWriteSchema = z.strictObject({
   encrypted: encryptedVaultSchema,
 })
 
+export const offlineLeaseFields = {
+  checkedAt: z.number().int().nonnegative(),
+  expiresAt: z.number().int().positive(),
+}
+
 export const vaultReadSchema = z.strictObject({
+  ...offlineLeaseFields,
   ownerId: z.string().min(1),
   revision: z.number().int().nonnegative(),
   encrypted: encryptedVaultSchema.nullable(),
+})
+
+export const vaultSaveSchema = z.strictObject({
+  ...offlineLeaseFields,
+  revision: z.number().int().positive(),
 })
 
 export const entrySchema = z.strictObject({

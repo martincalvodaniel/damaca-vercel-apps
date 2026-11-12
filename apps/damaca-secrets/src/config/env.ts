@@ -72,3 +72,16 @@ export function getDatabaseEnv() {
     uri: getRequiredEnv("MONGODB_URI"),
   }
 }
+
+export function getOfflineVaultDuration() {
+  // biome-ignore lint/suspicious/noUndeclaredEnvVars: Runtime policy for issued offline leases.
+  const value = process.env.OFFLINE_VAULT_HOURS?.trim()
+  const hours = value ? Number(value) : 24
+  const duration = Math.round(hours * 3600000)
+  if (!Number.isSafeInteger(duration) || duration < 1 || hours > 8760) {
+    throw new Error(
+      "OFFLINE_VAULT_HOURS must be a positive duration of at most one year"
+    )
+  }
+  return duration
+}
