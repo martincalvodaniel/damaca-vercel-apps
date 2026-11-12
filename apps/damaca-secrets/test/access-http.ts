@@ -127,6 +127,25 @@ function actionForm(
 }
 
 try {
+  const signIn = await fetch(`${origin}/api/auth/sign-in/social`, {
+    method: "POST",
+    headers: { origin, "content-type": "application/json" },
+    body: JSON.stringify({
+      provider: "google",
+      callbackURL: "/",
+      disableRedirect: true,
+    }),
+  })
+  assert.equal(signIn.status, 200)
+  const authorization = new URL((await signIn.json()).url)
+  assert.equal(authorization.origin, "https://accounts.google.com")
+  assert.equal(
+    authorization.searchParams.get("redirect_uri"),
+    `${origin}/api/auth/callback/google`
+  )
+  assert.ok(authorization.searchParams.get("state"))
+  assert.equal(authorization.searchParams.get("code_challenge_method"), "S256")
+
   const admin = await createCookie("admin@example.com")
   const user = await createCookie("normal@example.com")
   const unverified = await createCookie("unverified@example.com", false)

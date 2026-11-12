@@ -24,6 +24,7 @@ function createAuth(
     user: { modelName: COLLECTION_NAMES.authUsers },
     session: { modelName: COLLECTION_NAMES.authSessions },
     account: {
+      encryptOAuthTokens: true,
       modelName: COLLECTION_NAMES.authAccounts,
       accountLinking: { enabled: false },
     },

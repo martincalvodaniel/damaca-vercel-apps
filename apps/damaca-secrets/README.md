@@ -27,4 +27,11 @@ El navegador conserva la copia cifrada en IndexedDB. La interfaz sin conexión s
 
 ## Preproducción
 
-Usa un proyecto Vercel con directorio raíz `apps/damaca-secrets` y despliegue manual de `int`. La [configuración de Vercel](vercel.ts) restringe el tráfico a España. El origen HTTPS estable debe coincidir con `BETTER_AUTH_URL` y con el retorno `/api/auth/callback/google` del cliente OAuth exclusivo de preproducción. Configura un MongoDB aislado, un secreto de Better Auth y los correos de prueba en el entorno Preview.
+El [proyecto de Vercel](https://vercel.com/martincalvodaniels-projects/damaca-secrets) está vinculado al monorepo con directorio raíz `apps/damaca-secrets`. Vercel ha verificado el dominio `damaca-secrets-int.vercel.app` para la rama `int`. Preview ya tiene `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET` y `MONGODB_DB=damaca-secrets-preview` para esa rama. La [configuración de Vercel](vercel.ts) restringe el tráfico a España.
+
+Para habilitar la primera preproducción, introduce estos valores en las [variables de Vercel](https://vercel.com/martincalvodaniels-projects/damaca-secrets/settings/environment-variables), en Preview para `int`:
+1. `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` de un cliente OAuth web dedicado. Registra `https://damaca-secrets-int.vercel.app` como origen y `https://damaca-secrets-int.vercel.app/api/auth/callback/google` como URI de retorno. Añade las cuentas de prueba si la aplicación OAuth está en modo de pruebas.
+2. `MONGODB_URI` con un usuario de MongoDB con acceso a `damaca-secrets-preview` y conectividad desde Vercel.
+3. `ALLOWED_EMAILS` con los correos de los administradores iniciales, separados por comas.
+
+Después, despliega manualmente el SHA validado de `origin/int` mediante el [flujo de Vercel del monorepo](../../.agents/skills/vercel-deploy-alias/SKILL.md) y comprueba el dominio de Preview. Utiliza credenciales ficticias para verificar Google, la aprobación desde una segunda cuenta, el guardado en la caja y la revocación. En Chrome para Android, registra una passkey compatible con PRF, bloquea y vuelve a abrir la caja. Activa la consulta offline, cierra la app y repite la apertura en modo avión con la contraseña maestra. Anota los resultados en el [registro de validación](plan/iteration-log.md).
