@@ -1,4 +1,7 @@
+import { headers } from "next/headers"
 import { themeBootstrapScript } from "@/config/theme"
-export function ThemeBootstrap() {
-  return <script>{themeBootstrapScript}</script>
+
+export async function ThemeBootstrap() {
+  const nonce = (await headers()).get("x-nonce") ?? undefined
+  return <script nonce={nonce}>{themeBootstrapScript}</script>
 }

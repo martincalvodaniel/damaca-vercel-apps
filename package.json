@@ -8,6 +8,7 @@
       "packages/*"
     ],
     "catalog": {
+      "@noble/hashes": "2.4.0",
       "@biomejs/biome": "2.6.2",
       "@tailwindcss/postcss": "4.3.3",
       "@types/bun": "1.4.4",

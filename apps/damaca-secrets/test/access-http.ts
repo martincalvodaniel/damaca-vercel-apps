@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { makeSignature } from "better-auth/crypto"
 import { getAuthEnv, getDatabaseEnv } from "@/config/env"
+import { prepareVault } from "@/features/vault/crypto"
 import { getAuth } from "@/lib/auth/auth"
 import { closeDatabaseConnection } from "@/lib/db/client"
 import { COLLECTION_NAMES } from "@/lib/db/collections"
@@ -10,6 +11,7 @@ import {
   listAccessRequests,
   revokeUserAccess,
 } from "@/lib/db/user-access"
+import { vaultReadSchema } from "@/schemas/vault"
 
 const configuration = getAuthEnv()
 const database = getDatabaseEnv()
@@ -58,6 +60,22 @@ async function request(path: string, cookie?: string, body?: FormData) {
     method: body ? "POST" : "GET",
     headers: { ...(cookie ? { cookie } : {}), origin },
     body,
+  })
+}
+
+async function writeVault(
+  cookie: string,
+  body: unknown,
+  requestOrigin = origin
+) {
+  return fetch(`${origin}/api/vault`, {
+    method: "PUT",
+    headers: {
+      cookie,
+      origin: requestOrigin,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(body),
   })
 }
 
@@ -142,8 +160,59 @@ try {
   const home = await request("/", user)
   assert.equal(home.status, 200)
   const homeHtml = await home.text()
-  assert.ok(homeHtml.includes("user"))
+  assert.ok(homeHtml.includes("Vault"))
   assert.ok(!homeHtml.includes('href="/admin"'))
+  assert.equal((await request("/api/vault")).status, 401)
+  const userVault = vaultReadSchema.parse(
+    await (await request("/api/vault", user)).json()
+  )
+  assert.equal(userVault.revision, 0)
+  const fixture = await prepareVault(
+    userVault.ownerId,
+    "fixture master password",
+    []
+  )
+  assert.equal(
+    (
+      await writeVault(
+        user,
+        { revision: 0, encrypted: fixture.encrypted },
+        "https://example.test"
+      )
+    ).status,
+    403
+  )
+  assert.equal(
+    (
+      await writeVault(user, {
+        revision: 0,
+        encrypted: fixture.encrypted,
+        ownerId: "forged",
+      })
+    ).status,
+    400
+  )
+  const writes = await Promise.all([
+    writeVault(user, { revision: 0, encrypted: fixture.encrypted }),
+    writeVault(user, { revision: 0, encrypted: fixture.encrypted }),
+  ])
+  assert.deepEqual(writes.map((response) => response.status).sort(), [200, 409])
+  const stored = await request("/api/vault", user)
+  assert.equal(stored.headers.get("cache-control"), "no-store")
+  assert.deepEqual(
+    vaultReadSchema.parse(await stored.json()).encrypted,
+    fixture.encrypted
+  )
+  const adminVault = vaultReadSchema.parse(
+    await (await request("/api/vault", admin)).json()
+  )
+  assert.notEqual(adminVault.ownerId, userVault.ownerId)
+  assert.equal(adminVault.encrypted, null)
+  assert.equal(
+    (await writeVault(admin, { revision: 1, encrypted: fixture.encrypted }))
+      .status,
+    409
+  )
   const userSettings = await request("/settings", user)
   assert.equal(userSettings.status, 200)
   const userSettingsHtml = await userSettings.text()
@@ -175,6 +244,12 @@ try {
     (await request("/admin", user)).headers
       .get("location")
       ?.includes("/auth/access")
+  )
+  assert.equal((await request("/api/vault", user)).status, 403)
+  assert.equal(
+    (await writeVault(user, { revision: 1, encrypted: fixture.encrypted }))
+      .status,
+    403
   )
   const outsider = await createCookie("requester@example.com")
   const requestResponse = await request("/auth/access", outsider)

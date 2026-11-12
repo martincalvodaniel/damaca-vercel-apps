@@ -1,5 +1,5 @@
-import { HomeScreen } from "@/features/home/components/home-screen"
+import { VaultScreen } from "@/features/vault/components/vault-screen"
 
 export default function HomePage() {
-  return <HomeScreen />
+  return <VaultScreen />
 }

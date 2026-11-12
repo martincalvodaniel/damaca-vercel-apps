@@ -11,7 +11,7 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 ## 02 — Personal encrypted vault
 
-- Status: `pending`.
+- Status: `validated`.
 - Paths: app vault, browser cryptography, account UI, MongoDB repository and API.
 - Dependencies: 01.
 - Acceptance: authenticated encryption for all entry fields, isolated access, password and passkey unlock, recovery and atomic rekey, compact CRUD, search, generation, copy, locking, and conflict handling. Validate protocol and cryptography locally.

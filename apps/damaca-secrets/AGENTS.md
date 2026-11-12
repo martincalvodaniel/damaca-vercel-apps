@@ -22,7 +22,7 @@ Follow the [root agent workflow](../../plan/workflow.md) for branch, planning, c
 
 - Next.js 16 App Router, React 19, React DOM 19, and TypeScript.
 - Better Auth for Google authentication; persist users and sessions through the native MongoDB adapter.
-- Native `mongodb` driver, `server-only`, SWR, and Zod.
+- Native `mongodb` driver, `server-only`, SWR, and Zod. Vault encryption uses Web Crypto and Argon2id from the pinned `@noble/hashes` package.
 - Tailwind CSS 4, Biome, and Bun for package management and tests.
 - Exact versions belong to `package.json` and `bun.lock`. Use `bun install --frozen-lockfile` for a reproducible installation. Keep Bun as the single lockfile source.
 - Do not introduce core dependencies, an ORM, a state library, a UI kit, or alternative auth/data solutions without explicit human approval. PDF support is not installed; evaluate it only for a concrete requirement.
@@ -68,6 +68,11 @@ src/hooks/                       Global client hooks, created when needed
 - Evaluate indexes whenever introducing a collection or query/sort/lookup/uniqueness pattern. Register required indexes in `src/lib/db/ensure-indexes.ts`, never ad hoc.
 - Never log or commit secrets, tokens, credentials, or personal data. `.env.example` is the only tracked environment template and must contain placeholders only.
 - Use isolated resources for integration tests and clean up only resources owned by the test. Do not run database commands against user or production data implicitly.
+
+## Vault Security
+
+- Encrypt and decrypt vault contents in the browser. Send only versioned encrypted snapshots and wrapped keys to the vault API. Never put plaintext, wrapping secrets, or PRF results in server payloads, URLs, analytics, or persistent browser storage.
+- Bind encrypted data to its owner and purpose with authenticated encryption. Keep optimistic writes atomic and derive the owner exclusively from the current session.
 
 ## Definition of Done
 

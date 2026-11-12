@@ -9,6 +9,7 @@ export const COLLECTION_NAMES = {
   authSessions: "auth_sessions",
   authAccounts: "auth_accounts",
   authVerifications: "auth_verifications",
+  vaults: "vaults",
   userAccess: "user_access",
 } as const satisfies Record<string, string>
 
