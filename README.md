@@ -4,17 +4,18 @@ Monorepo for independent web applications. Applications stay in their own worksp
 
 ## Applications
 
-| Workspace | Path | Development port |
-| --- | --- | ---: |
-| `@damaca/billing-poc` | [`apps/billing-poc`](apps/billing-poc/) | 3000 |
-| `@damaca/card-wars` | [`apps/card-wars`](apps/card-wars/) | 3004 |
-| `@damaca/dalis-home-management` | [`apps/dalis-home-management`](apps/dalis-home-management/) | 3001 |
-| `@damaca/dalis-tasks-events` | [`apps/dalis-tasks-events`](apps/dalis-tasks-events/) | 3002 |
-| `@damaca/damaca-hub` | [`apps/damaca-hub`](apps/damaca-hub/) | 3005 |
-| `@damaca/damaca-pocs` | [`apps/damaca-pocs`](apps/damaca-pocs/) | 3008 |
-| `@damaca/ebrias-patanes-del-jurado` | [`apps/ebrias-patanes-del-jurado`](apps/ebrias-patanes-del-jurado/) | 3020 |
-| `@damaca/lbdp` | [`apps/lbdp`](apps/lbdp/) | 3006 |
-| `@damaca/pocha-score` | [`apps/pocha-score`](apps/pocha-score/) | 3003 |
+| Workspace                           | Path                                                                | Development port |
+| ----------------------------------- | ------------------------------------------------------------------- | ---------------: |
+| `@damaca/billing-poc`               | [`apps/billing-poc`](apps/billing-poc/)                             |             3000 |
+| `@damaca/card-wars`                 | [`apps/card-wars`](apps/card-wars/)                                 |             3004 |
+| `@damaca/dalis-home-management`     | [`apps/dalis-home-management`](apps/dalis-home-management/)         |             3001 |
+| `@damaca/dalis-tasks-events`        | [`apps/dalis-tasks-events`](apps/dalis-tasks-events/)               |             3002 |
+| `@damaca/damaca-hub`                | [`apps/damaca-hub`](apps/damaca-hub/)                               |             3005 |
+| `@damaca/damaca-pocs`               | [`apps/damaca-pocs`](apps/damaca-pocs/)                             |             3008 |
+| `@damaca/damaca-secrets`            | [`apps/damaca-secrets`](apps/damaca-secrets/)                       |             3007 |
+| `@damaca/ebrias-patanes-del-jurado` | [`apps/ebrias-patanes-del-jurado`](apps/ebrias-patanes-del-jurado/) |             3020 |
+| `@damaca/lbdp`                      | [`apps/lbdp`](apps/lbdp/)                                           |             3006 |
+| `@damaca/pocha-score`               | [`apps/pocha-score`](apps/pocha-score/)                             |             3003 |
 
 ## Getting started
 
