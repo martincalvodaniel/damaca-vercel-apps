@@ -53,3 +53,9 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: vault editor, Settings security section, and shared icon buttons.
 - Acceptance: security controls are reachable through Settings and require vault unlock. Save and cancel sit beside lock in the editor header. Icon actions have filled backgrounds, with green for save, red for cancel, and blue for generation.
+
+## 09 — Vault header alignment
+
+- Status: `validated`.
+- Paths: vault heading and entry editor.
+- Acceptance: lock sits immediately after the Vault title. Save and cancel stay flush with the right edge of the editor.

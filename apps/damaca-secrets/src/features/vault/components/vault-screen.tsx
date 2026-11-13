@@ -37,7 +37,7 @@ export function VaultScreen() {
       aria-busy={busy}
     >
       {!open || prepared ? (
-        <header className="flex min-h-9 items-center justify-between gap-2">
+        <header className="flex min-h-9 items-center gap-2">
           <h1 className="text-xl font-semibold tracking-tight">Vault</h1>
           {open || prepared ? (
             <IconButton icon="lock" label="Lock vault" onClick={lock} />
