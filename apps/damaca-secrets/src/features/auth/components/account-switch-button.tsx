@@ -30,7 +30,7 @@ export function AccountSwitchButton() {
         type="button"
         onClick={switchAccount}
         disabled={pending}
-        className="min-h-11 rounded-lg border border-zinc-300 px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60 dark:border-zinc-700"
+        className="min-h-9 rounded-lg border border-zinc-300 px-3 py-1 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60 dark:border-zinc-700"
       >
         {pending ? "Signing out…" : "Use another account"}
       </button>

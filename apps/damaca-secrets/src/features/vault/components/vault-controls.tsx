@@ -22,7 +22,7 @@ export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
 
   return (
     <details className="border-t border-zinc-200 text-sm dark:border-zinc-800">
-      <summary className="flex min-h-11 cursor-pointer items-center font-medium">
+      <summary className="flex min-h-9 cursor-pointer items-center font-medium">
         Vault security
       </summary>
       <div className="flex flex-wrap gap-2 pb-2">

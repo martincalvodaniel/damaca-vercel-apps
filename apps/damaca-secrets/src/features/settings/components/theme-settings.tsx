@@ -34,7 +34,7 @@ export function ThemeSettings() {
           id={id}
           value={theme}
           onChange={handleChange}
-          className="min-h-11 rounded-lg border border-zinc-300 bg-transparent px-3 dark:border-zinc-700"
+          className="min-h-9 rounded-lg border border-zinc-300 bg-transparent px-3 dark:border-zinc-700"
         >
           <option value="system">System</option>
           <option value="light">Light</option>

@@ -38,7 +38,7 @@ export async function SettingsScreen() {
       {session.role === "admin" ? (
         <Link
           href="/admin"
-          className="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-zinc-700"
+          className="inline-flex min-h-9 items-center justify-center rounded-lg border border-zinc-300 px-3 py-1 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-zinc-700"
         >
           Site administration
         </Link>

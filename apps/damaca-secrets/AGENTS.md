@@ -55,6 +55,7 @@ src/hooks/                       Global client hooks, created when needed
 - Keep domain components under `features/<feature>/components/**`; generic components belong in `components/ui/**` or `components/shared/**`.
 - Build responsive, mobile-first screens with accessible labels, keyboard support, visible focus, usable touch targets, and no fixed content covering controls.
 - Keep the vault and settings reachable through the compact app navigation.
+- Prefer the shared compact icon button for recognizable actions. Provide an accessible action name, keep visible keyboard focus, and preserve a 36px target for standard buttons. Keep text on sign-in, setup steps, and choices whose meaning depends on the wording.
 
 ## Validation, Authentication, and Data
 

@@ -35,3 +35,9 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: app development script and server session lookup.
 - Acceptance: the normal workspace dev command serves Google sign-in on a cold start without an external MongoDB module error or waiting on MongoDB for anonymous requests. Requests carrying a session still use Better Auth and MongoDB to validate identity.
+
+## 06 — Compact controls
+
+- Status: `validated`.
+- Paths: app navigation, shared controls, and vault, access, and settings screens.
+- Acceptance: reduce control height across the app, prefer recognizable icons with accessible action names, and keep meaningful text on workflow choices. Verify narrow mobile and desktop layouts.

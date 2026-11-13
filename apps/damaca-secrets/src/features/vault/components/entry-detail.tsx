@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useState } from "react"
-import { buttonClass } from "@/features/vault/components/styles"
+import { IconButton } from "@/components/ui/icon-button"
 import type { VaultEntry } from "@/schemas/vault"
 
 interface EntryDetailProps {
@@ -40,22 +40,33 @@ export function EntryDetail({
 
   return (
     <section className="grid max-w-xl gap-3" aria-label="Credential details">
-      <div className="flex items-start gap-2">
-        <button type="button" onClick={onBack} className={buttonClass}>
-          Back
-        </button>
-        <h2 className="min-w-0 flex-1 break-words pt-2 text-lg font-semibold">
+      <div className="flex items-center gap-1">
+        <IconButton
+          type="button"
+          onClick={onBack}
+          icon="back"
+          label="Back to vault"
+        />
+        <h2 className="min-w-0 flex-1 break-words text-lg font-semibold">
           {entry.title}
         </h2>
         {onEdit ? (
-          <button
+          <IconButton
             type="button"
             disabled={busy}
             onClick={onEdit}
-            className={buttonClass}
-          >
-            Edit
-          </button>
+            icon="edit"
+            label="Edit entry"
+          />
+        ) : null}
+        {onDelete ? (
+          <IconButton
+            disabled={busy}
+            onClick={onDelete}
+            icon="delete"
+            label="Delete entry"
+            tone="danger"
+          />
         ) : null}
       </div>
       <dl className="grid gap-3 rounded-xl border border-zinc-300 p-3 text-sm dark:border-zinc-700">
@@ -65,15 +76,13 @@ export function EntryDetail({
               <dt className="text-zinc-600 dark:text-zinc-400">Username</dt>
               <dd className="break-all">{entry.username}</dd>
             </div>
-            <button
+            <IconButton
               type="button"
               name="username"
               onClick={copy}
-              className={buttonClass}
-              aria-label="Copy username"
-            >
-              Copy
-            </button>
+              icon="copy"
+              label="Copy username"
+            />
           </div>
         ) : null}
         {entry.password ? (
@@ -84,23 +93,20 @@ export function EntryDetail({
                 {visible ? entry.password : "••••••••"}
               </dd>
             </div>
-            <button
+            <IconButton
               type="button"
               onClick={toggle}
-              className={buttonClass}
-              aria-label={visible ? "Hide password" : "Show password"}
-            >
-              {visible ? "Hide" : "Show"}
-            </button>
-            <button
+              icon={visible ? "hide" : "show"}
+              label={visible ? "Hide password" : "Show password"}
+              aria-pressed={visible}
+            />
+            <IconButton
               type="button"
               name="password"
               onClick={copy}
-              className={buttonClass}
-              aria-label="Copy password"
-            >
-              Copy
-            </button>
+              icon="copy"
+              label="Copy password"
+            />
           </div>
         ) : null}
         {entry.url ? (
@@ -119,16 +125,6 @@ export function EntryDetail({
       <p role="status" className="text-sm empty:hidden">
         {feedback}
       </p>
-      {onDelete ? (
-        <button
-          type="button"
-          disabled={busy}
-          onClick={onDelete}
-          className="min-h-11 justify-self-start text-sm text-red-700 underline dark:text-red-400"
-        >
-          Delete entry
-        </button>
-      ) : null}
     </section>
   )
 }

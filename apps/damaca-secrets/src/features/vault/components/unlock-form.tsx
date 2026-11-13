@@ -45,7 +45,7 @@ export function UnlockForm({
     <form
       onSubmit={submit}
       autoComplete="off"
-      className="flex max-w-md flex-col gap-3"
+      className="flex max-w-md flex-col gap-2"
     >
       <label className="grid gap-1 text-sm font-medium">
         Master password
@@ -58,29 +58,31 @@ export function UnlockForm({
           className={inputClass}
         />
       </label>
-      <button type="submit" disabled={busy} className={primaryClass}>
-        Unlock
-      </button>
-      {passkeys && hasPasskey ? (
-        <button
-          type="button"
-          disabled={busy}
-          onClick={unlockWithPasskey}
-          className={buttonClass}
-        >
-          Unlock with a passkey
+      <div className="flex flex-wrap items-center gap-2">
+        <button type="submit" disabled={busy} className={primaryClass}>
+          Unlock
         </button>
-      ) : null}
-      {onRecover ? (
-        <button
-          type="button"
-          disabled={busy}
-          onClick={onRecover}
-          className="min-h-11 self-start text-sm underline"
-        >
-          Use recovery code
-        </button>
-      ) : null}
+        {passkeys && hasPasskey ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={unlockWithPasskey}
+            className={buttonClass}
+          >
+            Unlock with a passkey
+          </button>
+        ) : null}
+        {onRecover ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onRecover}
+            className="min-h-9 px-1 text-sm underline"
+          >
+            Use recovery code
+          </button>
+        ) : null}
+      </div>
     </form>
   )
 }

@@ -1,7 +1,8 @@
 "use client"
 
 import { type FormEvent, useCallback, useState } from "react"
-import { buttonClass, primaryClass } from "@/features/vault/components/styles"
+import { IconButton } from "@/components/ui/icon-button"
+import { primaryClass } from "@/features/vault/components/styles"
 
 interface RecoveryConfirmationProps {
   busy: boolean
@@ -44,14 +45,17 @@ export function RecoveryConfirmation({
         {code}
       </code>
       <div className="flex items-center gap-2">
-        <button type="button" onClick={copy} className={buttonClass}>
-          Copy code
-        </button>
+        <IconButton
+          type="button"
+          onClick={copy}
+          icon="copy"
+          label="Copy recovery code"
+        />
         <span role="status" className="text-sm">
           {copyStatus}
         </span>
       </div>
-      <label className="flex min-h-11 items-center gap-2 text-sm">
+      <label className="flex min-h-9 items-center gap-2 text-sm">
         <input name="saved" type="checkbox" required className="size-5" />I
         saved my recovery code.
       </label>
@@ -59,14 +63,13 @@ export function RecoveryConfirmation({
         <button type="submit" disabled={busy} className={primaryClass}>
           Save vault
         </button>
-        <button
+        <IconButton
           type="button"
           disabled={busy}
           onClick={onCancel}
-          className={buttonClass}
-        >
-          Cancel
-        </button>
+          icon="close"
+          label="Cancel setup"
+        />
       </div>
     </form>
   )

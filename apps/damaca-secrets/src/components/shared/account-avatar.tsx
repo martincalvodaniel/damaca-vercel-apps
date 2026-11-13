@@ -7,9 +7,16 @@ interface AccountAvatarProps {
   name: string
   email: string
   image?: string | null
+  compact?: boolean
 }
 
-export function AccountAvatar({ name, email, image }: AccountAvatarProps) {
+export function AccountAvatar({
+  name,
+  email,
+  image,
+  compact = false,
+}: AccountAvatarProps) {
+  const sizeClass = compact ? "size-5" : "size-8"
   const [failedImage, setFailedImage] = useState<string | null>(null)
   const handleError = useCallback(() => setFailedImage(image ?? null), [image])
   if (image && image !== failedImage) {
@@ -23,7 +30,7 @@ export function AccountAvatar({ name, email, image }: AccountAvatarProps) {
         referrerPolicy="no-referrer"
         draggable={false}
         onError={handleError}
-        className="size-8 shrink-0 rounded-full object-cover"
+        className={`${sizeClass} shrink-0 rounded-full object-cover`}
       />
     )
   }
@@ -36,7 +43,7 @@ export function AccountAvatar({ name, email, image }: AccountAvatarProps) {
   return (
     <span
       aria-hidden="true"
-      className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200"
+      className={`${sizeClass} inline-flex shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200`}
     >
       {initials}
     </span>

@@ -35,7 +35,7 @@ export function PendingRequests({
         {hasCursor ? (
           <Link
             href="/admin"
-            className="min-h-11 rounded px-2 py-3 text-sm underline focus-visible:outline-2"
+            className="min-h-9 rounded px-2 py-1 text-sm underline focus-visible:outline-2"
           >
             First requests
           </Link>
@@ -43,7 +43,7 @@ export function PendingRequests({
         {requests.nextCursor ? (
           <Link
             href={`/admin?requestsAfter=${encodeURIComponent(requests.nextCursor)}`}
-            className="min-h-11 rounded px-2 py-3 text-sm underline focus-visible:outline-2"
+            className="min-h-9 rounded px-2 py-1 text-sm underline focus-visible:outline-2"
           >
             Next requests
           </Link>

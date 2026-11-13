@@ -2,6 +2,7 @@
 
 import { useActionState, useId } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
+import { IconButton } from "@/components/ui/icon-button"
 import { changeUserAccess } from "@/features/admin/actions"
 import type { AccessActionState } from "@/types/access"
 
@@ -41,18 +42,23 @@ export function AccessForm({ email }: AccessFormProps) {
             required
             maxLength={254}
             placeholder="user@example.com"
-            className="min-h-11 min-w-0 rounded-lg border border-zinc-300 bg-transparent px-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:border-zinc-700"
+            className="min-h-9 min-w-0 rounded-lg border border-zinc-300 bg-transparent px-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:border-zinc-700"
           />
         </div>
       )}
-      <button
+      <IconButton
         type="submit"
         disabled={pending}
-        aria-label={isRevoke ? `Revoke access for ${email}` : undefined}
-        className="min-h-11 rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 disabled:cursor-wait disabled:opacity-60 dark:border-zinc-700 dark:hover:bg-zinc-800"
-      >
-        {pending ? "Saving…" : isRevoke ? "Revoke access" : "Grant access"}
-      </button>
+        icon={isRevoke ? "close" : "check"}
+        label={isRevoke ? `Revoke access for ${email}` : "Grant access"}
+        tone={isRevoke ? "danger" : "primary"}
+        className="self-start"
+      />
+      {pending ? (
+        <p role="status" className="text-sm">
+          Saving…
+        </p>
+      ) : null}
       {state.status === "error" ? (
         <ErrorBanner>{state.message}</ErrorBanner>
       ) : null}

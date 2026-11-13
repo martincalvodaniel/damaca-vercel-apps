@@ -45,12 +45,12 @@ body {
 }
 
 html {
-  scroll-padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+  scroll-padding-bottom: calc(3.25rem + env(safe-area-inset-bottom));
 }
 
 @media (min-width: 768px) {
   html {
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 3.25rem;
     scroll-padding-bottom: 0;
   }
 }

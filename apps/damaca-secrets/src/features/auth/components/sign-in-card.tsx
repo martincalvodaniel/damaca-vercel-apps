@@ -35,17 +35,14 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-zinc-950">
-      <section className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="mb-7 text-center">
+      <section className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="mb-3 text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400">
             {"Damaca Secrets"}
           </p>
-          <h1 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+          <h1 className="mt-1 text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
             Welcome back
           </h1>
-          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            Sign in to access.
-          </p>
         </div>
 
         {error ? <ErrorBanner>{error}</ErrorBanner> : null}
@@ -54,9 +51,9 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
           type="button"
           onClick={handleSignIn}
           disabled={isPending}
-          className="mt-5 flex w-full items-center justify-center gap-3 rounded-lg border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
+          className="mt-3 flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-3 py-1 text-sm font-medium text-zinc-900 transition hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
         >
-          <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+          <svg className="size-4" viewBox="0 0 24 24" aria-hidden="true">
             <path
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
               fill="#4285F4"

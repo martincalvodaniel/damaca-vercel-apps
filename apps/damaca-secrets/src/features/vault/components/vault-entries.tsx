@@ -7,9 +7,10 @@ import {
   useDeferredValue,
   useState,
 } from "react"
+import { IconButton } from "@/components/ui/icon-button"
 import { EntryDetail } from "@/features/vault/components/entry-detail"
 import { EntryForm } from "@/features/vault/components/entry-form"
-import { inputClass, primaryClass } from "@/features/vault/components/styles"
+import { inputClass } from "@/features/vault/components/styles"
 import type { VaultEntry } from "@/schemas/vault"
 
 interface VaultEntriesProps {
@@ -103,14 +104,14 @@ export function VaultEntries({ busy, entries, onUpdate }: VaultEntriesProps) {
           onChange={search}
         />
         {onUpdate ? (
-          <button
+          <IconButton
             type="button"
             onClick={add}
             disabled={busy}
-            className={`${primaryClass} shrink-0`}
-          >
-            Add entry
-          </button>
+            icon="add"
+            label="Add entry"
+            tone="primary"
+          />
         ) : null}
       </div>
       {filtered.length ? (
@@ -121,7 +122,7 @@ export function VaultEntries({ busy, entries, onUpdate }: VaultEntriesProps) {
                 type="button"
                 value={id}
                 onClick={select}
-                className="flex min-h-12 w-full items-center gap-3 rounded-lg px-3 py-1.5 text-left focus-visible:outline-2 focus-visible:-outline-offset-2"
+                className="flex min-h-10 w-full items-center gap-3 rounded-lg px-2.5 py-1 text-left focus-visible:outline-2 focus-visible:-outline-offset-2"
               >
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-semibold">

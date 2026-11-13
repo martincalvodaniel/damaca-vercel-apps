@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
+import { IconButton } from "@/components/ui/icon-button"
 import { loadOnlineSnapshot } from "@/features/offline/online-snapshot"
 import { isTransportFailure, VaultRequestError } from "@/features/vault/api"
-import { buttonClass } from "@/features/vault/components/styles"
 import { UnlockForm } from "@/features/vault/components/unlock-form"
 import { VaultEntries } from "@/features/vault/components/vault-entries"
 import { decryptEntries, unlockPassword } from "@/features/vault/crypto"
@@ -186,12 +186,10 @@ export function OfflineScreen() {
       data-offline-shell="damaca-secrets"
       className="mx-auto grid w-full max-w-3xl gap-3 px-3 py-3 sm:px-6 sm:py-5"
     >
-      <header className="flex min-h-11 items-center justify-between gap-2">
+      <header className="flex min-h-9 items-center justify-between gap-2">
         <h1 className="text-xl font-semibold tracking-tight">Offline vault</h1>
         {entries ? (
-          <button type="button" className={buttonClass} onClick={lock}>
-            Lock
-          </button>
+          <IconButton icon="lock" label="Lock vault" onClick={lock} />
         ) : null}
       </header>
       {status ? (

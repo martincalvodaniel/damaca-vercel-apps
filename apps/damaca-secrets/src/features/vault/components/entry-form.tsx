@@ -1,11 +1,8 @@
 "use client"
 
 import { type FormEvent, useCallback, useRef } from "react"
-import {
-  buttonClass,
-  inputClass,
-  primaryClass,
-} from "@/features/vault/components/styles"
+import { IconButton } from "@/components/ui/icon-button"
+import { inputClass } from "@/features/vault/components/styles"
 import { generatePassword } from "@/features/vault/crypto"
 import { entrySchema, type VaultEntry } from "@/schemas/vault"
 
@@ -72,14 +69,13 @@ export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
             maxLength={1024}
           />
         </label>
-        <button
+        <IconButton
           type="button"
           disabled={busy}
           onClick={generate}
-          className={buttonClass}
-        >
-          Generate
-        </button>
+          icon="generate"
+          label="Generate password"
+        />
       </div>
       <label className="grid gap-1 text-sm">
         URL
@@ -103,17 +99,20 @@ export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
         />
       </label>
       <div className="flex gap-2 pt-1">
-        <button type="submit" disabled={busy} className={primaryClass}>
-          Save
-        </button>
-        <button
+        <IconButton
+          type="submit"
+          disabled={busy}
+          icon="save"
+          label="Save entry"
+          tone="primary"
+        />
+        <IconButton
           type="button"
           disabled={busy}
           onClick={onCancel}
-          className={buttonClass}
-        >
-          Cancel
-        </button>
+          icon="close"
+          label="Cancel editing"
+        />
       </div>
     </form>
   )

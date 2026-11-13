@@ -1,11 +1,8 @@
 "use client"
 
 import { type FormEvent, useCallback, useState } from "react"
-import {
-  buttonClass,
-  inputClass,
-  primaryClass,
-} from "@/features/vault/components/styles"
+import { IconButton } from "@/components/ui/icon-button"
+import { inputClass, primaryClass } from "@/features/vault/components/styles"
 import type { VaultController } from "@/features/vault/use-vault"
 
 export type SetupMode = "create" | "change" | "recover"
@@ -105,14 +102,13 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
           Continue
         </button>
         {onCancel ? (
-          <button
+          <IconButton
             type="button"
             disabled={busy}
             onClick={onCancel}
-            className={buttonClass}
-          >
-            Cancel
-          </button>
+            icon="close"
+            label="Cancel setup"
+          />
         ) : null}
       </div>
     </form>
