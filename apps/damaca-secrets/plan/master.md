@@ -8,4 +8,6 @@ Offline reading is optional per browser. A previously synchronized encrypted cop
 
 The first release targets isolated Vercel Preview and real Android Chrome verification. Sharing, import, export, TOTP, and autofill are outside the first release.
 
+Installation uses the Damaca Secrets manifest and the generated vault icon. The shared generator and Vercel avatar are tracked in [AGW-27](../../../plan/iterations.md#agw-27--iconos-de-damaca-secrets).
+
 See [iterations](iterations.md), [delivery log](iteration-log.md), and [app rules](../AGENTS.md).

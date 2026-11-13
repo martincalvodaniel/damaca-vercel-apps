@@ -232,3 +232,11 @@ Inicio: 75% de 5 h y 95% de 7 d disponibles (10:10 CET).
 - Ebrias seleccionaba su valor predeterminado incluso con `MONGODB_DB` configurado. Tras el cambio, se verificaron el override y el valor predeterminado en desarrollo, integración y producción. Better Auth, los repositorios y los scripts usan la misma conexión.
 - Confirmados el override y el valor predeterminado en Billing, Dalis Home, Dalis Tasks, Hub y una app generada con `mongo-google`. Pasó la regresión de Damaca POCs. Las comprobaciones observaron la base seleccionada en el driver con configuración ficticia y sin conexión a MongoDB.
 - Pasaron las seis pruebas del generador, los tipos y el build de Ebrias, Biome y `git diff --check`.
+
+## AGW-27 — Iconos de Damaca Secrets
+
+- Capacidad inicial de Codex de 59 % en 5 horas y 33 % en 7 días.
+- El generador compartido produce el favicon ICO, los PNG de 192 y 512 px, la variante maskable, el icono de Apple de 180 px y el SVG del Hub. El manifiesto y los recursos de instalación forman parte de la interfaz disponible sin conexión.
+- Pasaron Biome, TypeScript y el build Webpack. Se verificaron los tres tamaños del ICO, las dimensiones PNG, los metadatos de la página de acceso y HTTP 200 para cada recurso y el manifiesto.
+- La API de Vercel confirmó la carga y la lectura posterior del avatar de Damaca Secrets. La instalación en un dispositivo real sigue pendiente.
+- El commit queda local porque `int` contiene el commit ajeno sin publicar `44e6431`.

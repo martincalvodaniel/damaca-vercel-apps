@@ -257,3 +257,9 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Dependencias: clientes MongoDB de cada app y generador de workspaces.
 - Aceptación: la base indicada llega al driver y cada app conserva su valor predeterminado si la variable falta.
 - Validación: ejecutar la selección con valores ficticios y sin conexión al clúster, probar el generador y ejecutar Biome, tipos y build en Ebrias.
+
+## AGW-27 — Iconos de Damaca Secrets
+
+- Estado: `validated`.
+- Rutas: generador de iconos, recursos de Damaca Secrets y copia de catálogo del Hub.
+- Aceptación: generar el favicon y los iconos de instalación, servir el manifiesto y verificar el avatar del proyecto de Vercel.

@@ -35,6 +35,8 @@ Las seis aplicaciones disponen de favicons propios, recursos de instalación y A
 
 El generador de iconos se ejecuta desde el entorno de desarrollo raíz; las apps compilan de forma independiente con sus instalaciones filtradas de Vercel. CI comprueba los tipos con una instalación aislada por app.
 
+Damaca Secrets usa el generador compartido para sus iconos de navegador e instalación y mantiene el mismo diseño en el proyecto de Vercel. [AGW-27](iterations.md#agw-27--iconos-de-damaca-secrets).
+
 El catálogo y las fichas de administración del Hub muestran los iconos de las aplicaciones desde copias SVG locales sincronizadas por ese mismo generador, sin depender de sus URLs de despliegue.
 
 ## Previous identity decision (historical, superseded by AGW-08)

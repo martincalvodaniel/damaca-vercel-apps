@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Damaca Secrets</title>
+  <rect width="64" height="64" rx="14" fill="#047857"/>
+  <path d="M22 29v-7a10 10 0 0 1 20 0v7" fill="none" stroke="#ecfdf5" stroke-width="5"/>
+  <rect x="16" y="27" width="32" height="25" rx="6" fill="#ecfdf5"/>
+  <path d="M32 36v7" stroke="#047857" stroke-linecap="round" stroke-width="4"/>
+</svg>

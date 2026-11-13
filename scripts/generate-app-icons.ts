@@ -8,6 +8,7 @@ const applications = [
   { name: "pocha-score", background: "#047857" },
   { name: "card-wars", background: "#213f36" },
   { name: "damaca-hub", background: "#18181b" },
+  { name: "damaca-secrets", background: "#047857" },
   { name: "billing-poc", background: "#fafafa" },
   { name: "dalis-home-management", background: "#1d4f40" },
   {
