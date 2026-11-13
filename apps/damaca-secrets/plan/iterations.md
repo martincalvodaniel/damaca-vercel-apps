@@ -7,14 +7,14 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: app scaffold, identity and access, root lockfile and inventory.
 - Dependencies: Google and MongoDB for live identity acceptance.
-- Acceptance: independent workspace, durable identity, verified Google account gate, role checks and admin review. Local checks cover the authorization rules. Live Google acceptance belongs to iteration 04.
+- Acceptance: independent workspace, durable identity, verified Google account gate, role checks and admin review. Local checks cover the authorization rules. Live Google acceptance belongs to iteration 04. [Archived evidence](archive/2026-11-13/iteration-log.md#01--google-access-and-app-foundation).
 
 ## 02 — Personal encrypted vault
 
 - Status: `validated`.
 - Paths: app vault, browser cryptography, account UI, MongoDB repository and API.
 - Dependencies: 01.
-- Acceptance: authenticated encryption for all entry fields, isolated access, password and passkey unlock, recovery and atomic rekey, compact CRUD, search, generation, copy, locking, and conflict handling. Validate protocol and cryptography locally.
+- Acceptance: authenticated encryption for all entry fields, isolated access, password and passkey unlock, recovery and atomic rekey, compact CRUD, search, generation, copy, locking, and conflict handling. Validate protocol and cryptography locally. [Archived evidence](archive/2026-11-13/iteration-log.md#02--personal-encrypted-vault).
 
 ## 03 — Offline consultation
 
@@ -27,7 +27,7 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 - Status: `validated`.
 - Paths: app deployment configuration and acceptance evidence.
-- Dependencies: 01–03, dedicated Google OAuth credentials, a MongoDB URI restricted to the preview database, test administrators, and an Android device. The Vercel project and branch origin are configured. See [Preview setup](../README.md#preproducción).
+- Dependencies: 01–03, dedicated Google OAuth credentials, a MongoDB URI restricted to the preview database, test administrators, and an Android device. The Vercel project and branch origin are configured. See [deployments](../README.md#despliegues).
 - Acceptance: verify end-to-end Google, permission, vault, passkey, and offline flows with synthetic accounts, narrow viewport and desktop, Android Chrome, and no plaintext leakage. Record actual results and gaps.
 
 ## 05 — Local development startup
@@ -71,3 +71,10 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: app README.
 - Acceptance: document client-side encryption, MongoDB contents, key-unlock methods, security limits, and explanatory diagrams consistent with implementation. Validate local links, consistency, and `git diff --check`.
+
+## 12 — Deployment README cleanup
+
+- Status: `validated`.
+- Paths: app README and planning records.
+- Dependencies: preview acceptance in iteration 04.
+- Acceptance: replace the completed first-preview checklist with current deployment links and preserve the observed acceptance evidence. Verify local links and `git diff --check`.

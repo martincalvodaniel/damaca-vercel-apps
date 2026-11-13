@@ -1,25 +1,17 @@
 # Delivery log
 
+Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02.
+
+## 12 — Deployment README cleanup
+
+- Starting capacity on 2026-11-13 at 21:50 CET: 100% of 5 hours and 24% of 7 days.
+- Replaced the first-preview setup and acceptance checklist with the deployment links. Kept the owner-confirmed results in iteration 04 and archived evidence from iterations 01 and 02.
+- Checked local link targets and anchors and ran `git diff --check`. No application checks were run for this documentation-only change.
+
 ## 11 — Vault security documentation
 
 - Documented browser-side AES-GCM encryption, the MongoDB snapshot, password/passkey/recovery key wrapping, and security boundaries in the README; added Mermaid storage and unlock diagrams.
 - Checked implementation details against `crypto.ts`, `use-vault.ts`, the API route, and Mongo repository. `git diff --check` passed. No application tests were run for this documentation-only change.
-
-Record observed evidence for completed iterations here. Do not record planned work as completed evidence.
-
-## 01 — Google access and app foundation
-
-- Initial Codex capacity: 95% of 5 hours and 45% of 7 days.
-- Generated the independent workspace on port 3007. Configured Better Auth with durable MongoDB identity and sessions, Google-only account creation, verified identities, and live application grants. Administrators retain the starter's review and revocation flows.
-- Passed scoped Biome, TypeScript, and 37 Bun tests. MongoDB integration passed against a disposable loopback database. Compiled HTTP checks passed for verified identities, administrator separation, requests, approval, and revocation using persistent fixture sessions.
-- The default Turbopack build hit the host's internal port restriction. The scoped Webpack production build passed, and Chrome rendered sign-in at 320 and 1200 CSS pixels with no horizontal overflow. Real OAuth and Android acceptance are tracked in iteration 04.
-
-## 02 — Personal encrypted vault
-
-- Capacity near the start: 86% of 5 hours and 44% of 7 days. The initial push selected the wrong loaded SSH identity. Forcing the configured personal identity for this invocation published and verified iteration 01.
-- Added browser AES-256-GCM encryption with owner and purpose binding, Argon2id password derivation, PRF and recovery wrappers, atomic versioned saves, key rotation, a nonce-based CSP, and the compact vault UI.
-- Scoped Biome, TypeScript, 39 Bun tests, and the Webpack production build passed. The compiled HTTP suite passed with disposable MongoDB and verified per-user isolation, strict input, same-origin writes, a concurrent creation conflict, ciphertext persistence, and revocation. Chrome verified setup, entry creation, hidden passwords, recovery, lock and unlock, and no horizontal overflow at 320 and 1200 CSS pixels. The browser check verified the API response omitted the fixture's plaintext.
-- Real Google and Android PRF checks still belong to iteration 04. The Vercel CLI found no `damaca-secrets` project in the configured team.
 
 ## 03 — Offline consultation
 
@@ -33,7 +25,7 @@ Record observed evidence for completed iterations here. Do not record planned wo
 - Created and verified the Vercel project in the configured team, linked to the monorepo with root `apps/damaca-secrets` and access to workspace sources outside that directory. Verified `damaca-secrets-int.vercel.app` is assigned to `int`, and set the Preview-only origin, database name, and generated session secret.
 - Enabled Better Auth OAuth token encryption. The final Webpack production build, TypeScript, 42 unit tests, and compiled integration passed with synthetic data. Integration confirmed a Google authorization redirect with the expected callback, state, and PKCE.
 - Chrome's virtual WebAuthn PRF authenticator registered and unlocked a vault on `localhost`. Chrome rejected the raw loopback IP as a relying-party domain. Physical Android and the real Google callback remain pending.
-- Vercel reported zero deployments. The Google OAuth client, MongoDB URI restricted to the preview database, and administrator allowlist are needed before deploying the validated `int` SHA. The exact inputs, callback, and device acceptance steps are in [Preview setup](../README.md#preproducción).
+- Vercel reported zero deployments. The Google OAuth client, MongoDB URI restricted to the preview database, and administrator allowlist are needed before deploying the validated `int` SHA.
 
 - On 2026-11-13, the owner reported successful installation from Preview (`int`) in Chrome on Android and real Google sign-in as an administrator. The owner then confirmed all four acceptance scenarios: request, approval and account isolation, vault synchronization and passkey unlock, airplane-mode consultation and revocation with local copy removal after reconnecting, and recovery with a new master password. The local ciphertext and viewport checks are recorded in iterations 01–03.
 
