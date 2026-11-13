@@ -1,5 +1,10 @@
 # Delivery log
 
+## 11 — Vault security documentation
+
+- Documented browser-side AES-GCM encryption, the MongoDB snapshot, password/passkey/recovery key wrapping, and security boundaries in the README; added Mermaid storage and unlock diagrams.
+- Checked implementation details against `crypto.ts`, `use-vault.ts`, the API route, and Mongo repository. `git diff --check` passed. No application tests were run for this documentation-only change.
+
 Record observed evidence for completed iterations here. Do not record planned work as completed evidence.
 
 ## 01 — Google access and app foundation

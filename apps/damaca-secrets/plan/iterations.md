@@ -65,3 +65,9 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: shared icon button and vault actions.
 - Acceptance: copy matches password generation in blue, show and hide use violet, edit uses amber, back stays neutral gray, and lock uses slate.
+
+## 11 — Vault security documentation
+
+- Status: `validated`.
+- Paths: app README.
+- Acceptance: document client-side encryption, MongoDB contents, key-unlock methods, security limits, and explanatory diagrams consistent with implementation. Validate local links, consistency, and `git diff --check`.
