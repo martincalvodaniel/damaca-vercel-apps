@@ -3,10 +3,10 @@ import { ActionIcon, type ActionIconName } from "@/components/ui/action-icon"
 
 const tones = {
   neutral:
-    "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800",
+    "bg-zinc-200 text-zinc-900 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700",
   primary: "bg-emerald-700 text-white hover:bg-emerald-800",
-  danger:
-    "text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950",
+  danger: "bg-red-700 text-white hover:bg-red-800",
+  utility: "bg-blue-700 text-white hover:bg-blue-800",
 }
 
 type IconButtonProps = Omit<

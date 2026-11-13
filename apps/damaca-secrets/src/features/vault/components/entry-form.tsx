@@ -9,11 +9,11 @@ import { entrySchema, type VaultEntry } from "@/schemas/vault"
 interface EntryFormProps {
   busy: boolean
   entry?: VaultEntry
-  onCancel: () => void
+  formId: string
   onSave: (entry: VaultEntry) => void
 }
 
-export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
+export function EntryForm({ busy, entry, formId, onSave }: EntryFormProps) {
   const password = useRef<HTMLInputElement>(null)
   const [generated, setGenerated] = useState(false)
   const clearGenerated = useCallback(() => setGenerated(false), [])
@@ -37,7 +37,12 @@ export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
   )
 
   return (
-    <form autoComplete="off" onSubmit={submit} className="grid max-w-xl gap-2">
+    <form
+      id={formId}
+      autoComplete="off"
+      onSubmit={submit}
+      className="grid max-w-xl gap-2"
+    >
       <label className="grid gap-1 text-sm">
         Title
         <input
@@ -77,6 +82,7 @@ export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
           disabled={busy}
           onClick={generate}
           icon="generate"
+          tone="utility"
           label="Generate password"
         />
       </div>
@@ -107,22 +113,6 @@ export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
           maxLength={8192}
         />
       </label>
-      <div className="flex gap-2 pt-1">
-        <IconButton
-          type="submit"
-          disabled={busy}
-          icon="save"
-          label="Save entry"
-          tone="primary"
-        />
-        <IconButton
-          type="button"
-          disabled={busy}
-          onClick={onCancel}
-          icon="close"
-          label="Cancel editing"
-        />
-      </div>
     </form>
   )
 }

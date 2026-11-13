@@ -2,6 +2,7 @@ import Link from "next/link"
 import { AccountAvatar } from "@/components/shared/account-avatar"
 import { AccountSwitchButton } from "@/features/auth/components/account-switch-button"
 import { ThemeSettings } from "@/features/settings/components/theme-settings"
+import { VaultSecuritySettings } from "@/features/settings/components/vault-security-settings"
 import { requireAuthorizedSession } from "@/lib/auth/session"
 
 export async function SettingsScreen() {
@@ -34,6 +35,7 @@ export async function SettingsScreen() {
           <AccountSwitchButton />
         </div>
       </section>
+      <VaultSecuritySettings />
       <ThemeSettings />
       {session.role === "admin" ? (
         <Link

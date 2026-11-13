@@ -9,16 +9,14 @@ import {
   type SetupMode,
 } from "@/features/vault/components/setup-form"
 import { UnlockForm } from "@/features/vault/components/unlock-form"
-import { VaultControls } from "@/features/vault/components/vault-controls"
 import { VaultEntries } from "@/features/vault/components/vault-entries"
 import { useVault } from "@/features/vault/use-vault"
 
 export function VaultScreen() {
   const vault = useVault()
   const { busy, error, open, prepared, snapshot } = vault
-  const [mode, setMode] = useState<SetupMode>()
+  const [mode, setMode] = useState<Extract<SetupMode, "recover">>()
   const recover = useCallback(() => setMode("recover"), [])
-  const change = useCallback(() => setMode("change"), [])
   const resetMode = useCallback(() => setMode(undefined), [])
   const cancel = useCallback(() => {
     vault.cancelPreparation()
@@ -38,12 +36,14 @@ export function VaultScreen() {
       className="mx-auto grid w-full max-w-3xl gap-3 px-3 py-3 sm:px-6 sm:py-5"
       aria-busy={busy}
     >
-      <header className="flex min-h-9 items-center justify-between gap-2">
-        <h1 className="text-xl font-semibold tracking-tight">Vault</h1>
-        {open || prepared ? (
-          <IconButton icon="lock" label="Lock vault" onClick={lock} />
-        ) : null}
-      </header>
+      {!open || prepared ? (
+        <header className="flex min-h-9 items-center justify-between gap-2">
+          <h1 className="text-xl font-semibold tracking-tight">Vault</h1>
+          {open || prepared ? (
+            <IconButton icon="lock" label="Lock vault" onClick={lock} />
+          ) : null}
+        </header>
+      ) : null}
       {error ? <ErrorBanner>{error}</ErrorBanner> : null}
       {prepared ? (
         <RecoveryConfirmation
@@ -63,14 +63,12 @@ export function VaultScreen() {
         />
       ) : null}
       {!prepared && !setup && open ? (
-        <>
-          <VaultEntries
-            busy={busy}
-            entries={open.entries}
-            onUpdate={vault.updateEntries}
-          />
-          <VaultControls vault={vault} onChangePassword={change} />
-        </>
+        <VaultEntries
+          busy={busy}
+          entries={open.entries}
+          onLock={lock}
+          onUpdate={vault.updateEntries}
+        />
       ) : null}
       {!prepared && !setup && !open && snapshot?.encrypted ? (
         <UnlockForm

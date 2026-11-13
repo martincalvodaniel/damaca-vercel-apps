@@ -47,3 +47,9 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: vault generator and credential form.
 - Acceptance: every generated password has 24 valid characters and the form confirms generation while keeping the value masked.
+
+## 08 — Vault settings and editor actions
+
+- Status: `validated`.
+- Paths: vault editor, Settings security section, and shared icon buttons.
+- Acceptance: security controls are reachable through Settings and require vault unlock. Save and cancel sit beside lock in the editor header. Icon actions have filled backgrounds, with green for save, red for cancel, and blue for generation.

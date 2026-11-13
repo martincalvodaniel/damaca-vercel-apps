@@ -69,6 +69,7 @@ export function RecoveryConfirmation({
           onClick={onCancel}
           icon="close"
           label="Cancel setup"
+          tone="danger"
         />
       </div>
     </form>

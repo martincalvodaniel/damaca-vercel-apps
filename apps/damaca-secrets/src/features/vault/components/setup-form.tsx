@@ -108,6 +108,7 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
             onClick={onCancel}
             icon="close"
             label="Cancel setup"
+            tone="danger"
           />
         ) : null}
       </div>

@@ -50,3 +50,10 @@ Record observed evidence for completed iterations here. Do not record planned wo
 - Reproduced out-of-range alphabet indices that appended `undefined`. Mapped accepted random bytes into the alphabet while keeping unbiased sampling. The entry form now confirms generation and keeps the field masked.
 - Passed a deterministic regression, 1,000 generated samples of exactly 24 characters, 43 tests, TypeScript, Biome, and the Webpack build. Chrome at 320px confirmed generation, masking, and saving the exact generated value. Desktop unlock passed at 1200px.
 - Publication is pending because `int` still contains the unrelated local commit `44e6431`.
+
+## 08 — Vault settings and editor actions
+
+- Starting capacity: 71% of 5 hours and 35% of 7 days.
+- Moved vault security and offline controls to Settings, where the user unlocks the vault before managing them. The entry editor puts save and cancel beside lock. Shared icon buttons have filled backgrounds and keep accessible action names.
+- Biome, TypeScript, 43 tests, and the Webpack build passed. Chrome verified the editor header, cancel, generation and save at 320px, plus Settings unlock and access to password change and offline controls at 1200px.
+- Publication remains pending because `int` includes the unrelated local commit `44e6431`.

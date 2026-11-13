@@ -21,10 +21,7 @@ export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
   }, [removePasskeys])
 
   return (
-    <details className="border-t border-zinc-200 text-sm dark:border-zinc-800">
-      <summary className="flex min-h-9 cursor-pointer items-center font-medium">
-        Vault security
-      </summary>
+    <>
       <div className="flex flex-wrap gap-2 pb-2">
         <button
           type="button"
@@ -58,6 +55,6 @@ export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
       {vault.snapshot ? (
         <OfflineSettings ownerId={vault.snapshot.ownerId} />
       ) : null}
-    </details>
+    </>
   )
 }
