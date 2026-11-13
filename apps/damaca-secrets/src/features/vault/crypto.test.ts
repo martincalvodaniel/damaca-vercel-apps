@@ -1,6 +1,7 @@
-import { describe, expect, it } from "bun:test"
+import { describe, expect, it, spyOn } from "bun:test"
 import {
   decryptEntries,
+  generatePassword,
   prepareVault,
   unlockPasskey,
   unlockPassword,
@@ -89,4 +90,20 @@ describe("vault cryptography", () => {
       await decryptEntries(owner, next.key, next.encrypted.entries)
     ).toEqual(entries)
   }, 15_000)
+})
+
+describe("password generation", () => {
+  it("maps accepted random bytes into the alphabet and skips biased bytes", () => {
+    using random = spyOn(crypto, "getRandomValues").mockImplementation(
+      (array: unknown) => {
+        if (!(array instanceof Uint8Array))
+          throw new Error("Expected random bytes")
+        array.fill(200)
+        array[0] = 255
+        return array
+      }
+    )
+    expect(generatePassword()).toBe("+".repeat(24))
+    expect(random).toHaveBeenCalledTimes(1)
+  })
 })

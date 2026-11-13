@@ -275,7 +275,7 @@ export function generatePassword() {
   while (value.length < 24) {
     for (const byte of randomBytes(32)) {
       if (byte >= cutoff) continue
-      value += alphabet[byte]
+      value += alphabet[byte % alphabet.length]
       if (value.length === 24) return value
     }
   }

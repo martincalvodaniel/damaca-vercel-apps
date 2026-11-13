@@ -1,6 +1,6 @@
 "use client"
 
-import { type FormEvent, useCallback, useRef } from "react"
+import { type FormEvent, useCallback, useRef, useState } from "react"
 import { IconButton } from "@/components/ui/icon-button"
 import { inputClass } from "@/features/vault/components/styles"
 import { generatePassword } from "@/features/vault/crypto"
@@ -15,10 +15,12 @@ interface EntryFormProps {
 
 export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
   const password = useRef<HTMLInputElement>(null)
+  const [generated, setGenerated] = useState(false)
+  const clearGenerated = useCallback(() => setGenerated(false), [])
   const generate = useCallback(() => {
     if (password.current) {
       password.current.value = generatePassword()
-      password.current.focus()
+      setGenerated(true)
     }
   }, [])
   const submit = useCallback(
@@ -65,6 +67,7 @@ export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
             ref={password}
             name="password"
             type="password"
+            onChange={clearGenerated}
             defaultValue={entry?.password}
             maxLength={1024}
           />
@@ -77,6 +80,12 @@ export function EntryForm({ busy, entry, onCancel, onSave }: EntryFormProps) {
           label="Generate password"
         />
       </div>
+      <p
+        role="status"
+        className="text-xs text-zinc-600 empty:hidden dark:text-zinc-400"
+      >
+        {generated ? "Password generated." : ""}
+      </p>
       <label className="grid gap-1 text-sm">
         URL
         <input

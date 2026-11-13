@@ -41,3 +41,9 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: app navigation, shared controls, and vault, access, and settings screens.
 - Acceptance: reduce control height across the app, prefer recognizable icons with accessible action names, and keep meaningful text on workflow choices. Verify narrow mobile and desktop layouts.
+
+## 07 — Password generation
+
+- Status: `validated`.
+- Paths: vault generator and credential form.
+- Acceptance: every generated password has 24 valid characters and the form confirms generation while keeping the value masked.
