@@ -7,6 +7,9 @@ const tones = {
   primary: "bg-emerald-700 text-white hover:bg-emerald-800",
   danger: "bg-red-700 text-white hover:bg-red-800",
   utility: "bg-blue-700 text-white hover:bg-blue-800",
+  visibility: "bg-violet-700 text-white hover:bg-violet-800",
+  edit: "bg-amber-700 text-white hover:bg-amber-800",
+  security: "bg-slate-700 text-white hover:bg-slate-800",
 }
 
 type IconButtonProps = Omit<

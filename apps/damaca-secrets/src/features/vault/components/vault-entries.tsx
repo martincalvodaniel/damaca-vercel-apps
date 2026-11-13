@@ -82,7 +82,12 @@ export function VaultEntries({
       <header className="flex min-h-9 items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-semibold tracking-tight">Vault</h1>
-          <IconButton icon="lock" label="Lock vault" onClick={onLock} />
+          <IconButton
+            icon="lock"
+            tone="security"
+            label="Lock vault"
+            onClick={onLock}
+          />
         </div>
         {actions ? <div className="flex gap-1.5">{actions}</div> : null}
       </header>

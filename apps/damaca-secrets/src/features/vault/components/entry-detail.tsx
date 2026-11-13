@@ -56,6 +56,7 @@ export function EntryDetail({
             disabled={busy}
             onClick={onEdit}
             icon="edit"
+            tone="edit"
             label="Edit entry"
           />
         ) : null}
@@ -81,6 +82,7 @@ export function EntryDetail({
               name="username"
               onClick={copy}
               icon="copy"
+              tone="utility"
               label="Copy username"
             />
           </div>
@@ -97,6 +99,7 @@ export function EntryDetail({
               type="button"
               onClick={toggle}
               icon={visible ? "hide" : "show"}
+              tone="visibility"
               label={visible ? "Hide password" : "Show password"}
               aria-pressed={visible}
             />
@@ -105,6 +108,7 @@ export function EntryDetail({
               name="password"
               onClick={copy}
               icon="copy"
+              tone="utility"
               label="Copy password"
             />
           </div>

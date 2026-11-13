@@ -49,6 +49,7 @@ export function RecoveryConfirmation({
           type="button"
           onClick={copy}
           icon="copy"
+          tone="utility"
           label="Copy recovery code"
         />
         <span role="status" className="text-sm">

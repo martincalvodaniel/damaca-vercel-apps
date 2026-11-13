@@ -189,7 +189,12 @@ export function OfflineScreen() {
       <header className="flex min-h-9 items-center justify-between gap-2">
         <h1 className="text-xl font-semibold tracking-tight">Offline vault</h1>
         {entries ? (
-          <IconButton icon="lock" label="Lock vault" onClick={lock} />
+          <IconButton
+            icon="lock"
+            tone="security"
+            label="Lock vault"
+            onClick={lock}
+          />
         ) : null}
       </header>
       {status ? (

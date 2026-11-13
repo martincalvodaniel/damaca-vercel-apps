@@ -64,3 +64,10 @@ Record observed evidence for completed iterations here. Do not record planned wo
 - Grouped the lock icon with the Vault heading. Save and cancel remain together at the far right of the entry editor.
 - Biome, TypeScript, and the Webpack build passed. Chrome confirmed an 8px title-to-lock gap, right-aligned editor actions, no horizontal overflow, and working cancel and lock at 320px and 1200px.
 - Publication remains pending because `int` includes the unrelated local commit `44e6431`.
+
+## 10 — Vault action colors
+
+- Starting capacity: 64% of 5 hours and 33% of 7 days.
+- Copy uses the generator's blue, password visibility uses violet, edit uses amber, back stays neutral gray, and lock uses slate across the vault, Settings, and offline.
+- Biome, TypeScript, and the Webpack build passed. Chrome checked matching copy and generator backgrounds, the same color in both eye states, and the vault flow at 320px and 1200px.
+- Publication remains pending because `int` includes the unrelated local commit `44e6431`.

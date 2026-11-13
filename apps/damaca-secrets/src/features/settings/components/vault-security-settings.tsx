@@ -38,7 +38,12 @@ export function VaultSecuritySettings() {
           Vault security
         </h2>
         {open || prepared ? (
-          <IconButton icon="lock" label="Lock vault" onClick={lock} />
+          <IconButton
+            icon="lock"
+            tone="security"
+            label="Lock vault"
+            onClick={lock}
+          />
         ) : null}
       </header>
       {error ? <ErrorBanner>{error}</ErrorBanner> : null}

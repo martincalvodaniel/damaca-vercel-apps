@@ -59,3 +59,9 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: vault heading and entry editor.
 - Acceptance: lock sits immediately after the Vault title. Save and cancel stay flush with the right edge of the editor.
+
+## 10 — Vault action colors
+
+- Status: `validated`.
+- Paths: shared icon button and vault actions.
+- Acceptance: copy matches password generation in blue, show and hide use violet, edit uses amber, back stays neutral gray, and lock uses slate.
