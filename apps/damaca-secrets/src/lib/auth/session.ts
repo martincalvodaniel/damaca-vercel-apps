@@ -1,5 +1,6 @@
 import "server-only"
 
+import { getSessionCookie } from "better-auth/cookies"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
@@ -8,6 +9,7 @@ import { getAuth } from "@/lib/auth/auth"
 
 export const getVerifiedSession = cache(async () => {
   const requestHeaders = await headers()
+  if (!getSessionCookie(requestHeaders)) return null
   const session = await (await getAuth()).api.getSession({
     headers: requestHeaders,
   })

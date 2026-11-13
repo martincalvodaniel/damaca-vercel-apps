@@ -29,3 +29,10 @@ Record observed evidence for completed iterations here. Do not record planned wo
 - Enabled Better Auth OAuth token encryption. The final Webpack production build, TypeScript, 42 unit tests, and compiled integration passed with synthetic data. Integration confirmed a Google authorization redirect with the expected callback, state, and PKCE.
 - Chrome's virtual WebAuthn PRF authenticator registered and unlocked a vault on `localhost`. Chrome rejected the raw loopback IP as a relying-party domain. Physical Android and the real Google callback remain pending.
 - Vercel reported zero deployments. The Google OAuth client, MongoDB URI restricted to the preview database, and administrator allowlist are needed before deploying the validated `int` SHA. The exact inputs, callback, and device acceptance steps are in [Preview setup](../README.md#preproducción).
+
+## 05 — Local development startup
+
+- Starting capacity: 100% of 5 hours and 39% of 7 days.
+- Reproduced HTTP 500 on the active local server and twice on a cold copy of the workspace. Bun running Turbopack failed to resolve the generated MongoDB external alias. Running Next.js dev with Node resolved the driver. Session lookup also skips Better Auth initialization when the session cookie is absent.
+- The root dev command served Google sign-in with HTTP 200 from a cold Node and Turbopack start in 1.85 seconds with MongoDB deliberately unreachable. Scoped Biome, TypeScript, 42 Bun tests, the Webpack production build, and the compiled HTTP integration with disposable MongoDB passed.
+- Publication remains pending because local `int` already includes the unrelated unpublished commit `44e6431`. The remote was verified at `cd939db` before preparing this fix.

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "bun run scripts/build.ts",
     "db:ensure-indexes": "bun --conditions=react-server run scripts/ensure-indexes.ts",
-    "dev": "bun run --bun next dev --port 3007",
+    "dev": "node ./node_modules/next/dist/bin/next dev --port 3007",
     "knip": "knip",
     "start": "bun run --bun next start",
     "test": "bun test --preload ./test/setup.ts",
