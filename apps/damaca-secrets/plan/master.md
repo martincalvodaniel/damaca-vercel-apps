@@ -6,7 +6,7 @@ App administrators approve and revoke access. Vault data and wrapped keys are en
 
 Offline reading is optional per browser. A previously synchronized encrypted copy supports password unlock for 24 hours by default, configurable by deployment. Writes and passkeys require connectivity. Reconnection checks permission before renewing the copy. A disconnected browser applies its local expiration policy.
 
-The first release targets isolated Vercel Preview and real Android Chrome verification. Sharing, import, export, TOTP, and autofill are outside the first release.
+The first release passed owner acceptance on Vercel Preview (`int`) and Chrome on Android. See [iteration 04 evidence](iteration-log.md#04--vercel-preview-and-device-acceptance). Sharing, import, export, TOTP, and autofill are outside the first release.
 
 Installation uses the Damaca Secrets manifest and the generated vault icon. The shared generator and Vercel avatar are tracked in [AGW-27](../../../plan/iterations.md#agw-27--iconos-de-damaca-secrets).
 

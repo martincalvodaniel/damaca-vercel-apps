@@ -25,7 +25,7 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 ## 04 — Vercel preview and device acceptance
 
-- Status: `blocked`.
+- Status: `validated`.
 - Paths: app deployment configuration and acceptance evidence.
 - Dependencies: 01–03, dedicated Google OAuth credentials, a MongoDB URI restricted to the preview database, test administrators, and an Android device. The Vercel project and branch origin are configured. See [Preview setup](../README.md#preproducción).
 - Acceptance: verify end-to-end Google, permission, vault, passkey, and offline flows with synthetic accounts, narrow viewport and desktop, Android Chrome, and no plaintext leakage. Record actual results and gaps.
