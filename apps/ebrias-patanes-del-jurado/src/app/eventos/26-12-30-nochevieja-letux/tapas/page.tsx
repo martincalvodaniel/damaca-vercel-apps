@@ -215,185 +215,189 @@ export default async function TapasContest({
               : "Letux · 30 de diciembre de 2026"}
           </p>
         </header>
-        {assisted ? (
-          <section className={styles.panel}>
-            {round && voter && options.length ? (
-              <Ballot
-                key={`${round}:${voter.id}`}
-                options={options}
-                round={round}
-                assisted={voter.id}
-                completed={`${contestPath}?handoff=done`}
-              />
-            ) : (
-              <p>Esta papeleta ya no está disponible.</p>
-            )}
-            <Link
-              className={eventStyles.back}
-              href={`${contestPath}?handoff=done`}
-              replace
-            >
-              Cancelar y devolver el móvil
-            </Link>
-          </section>
-        ) : handoff === "done" ? (
-          <section className={styles.panel}>
-            <p>Devuelve el móvil al administrador.</p>
-            <Link className={eventStyles.back} href={contestPath} replace>
-              Volver al concurso
-            </Link>
-          </section>
-        ) : (
-          <>
-            <Link className={eventStyles.back} href={eventPath}>
-              ← Nochevieja en Letux
-            </Link>
-            {contest.phase === "registration" && (
-              <section className={styles.panel}>
-                <h2>Inscripciones</h2>
-                {contest.tapas.length ? (
-                  <ul>
-                    {contest.tapas.map(({ id, name, authors }) => (
-                      <li key={id}>
-                        <strong>{name}</strong> ·{" "}
-                        {authors.map(({ alias }) => alias).join(" y ")}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>Todavía no hay tapas inscritas.</p>
+        <div className={eventStyles.eventActions}>
+          {assisted ? (
+            <section className={styles.panel}>
+              {round && voter && options.length ? (
+                <Ballot
+                  key={`${round}:${voter.id}`}
+                  options={options}
+                  round={round}
+                  assisted={voter.id}
+                  completed={`${contestPath}?handoff=done`}
+                />
+              ) : (
+                <p>Esta papeleta ya no está disponible.</p>
+              )}
+              <Link
+                className={eventStyles.back}
+                href={`${contestPath}?handoff=done`}
+                replace
+              >
+                Cancelar y devolver el móvil
+              </Link>
+            </section>
+          ) : handoff === "done" ? (
+            <section className={styles.panel}>
+              <p>Devuelve el móvil al administrador.</p>
+              <Link className={eventStyles.back} href={contestPath} replace>
+                Volver al concurso
+              </Link>
+            </section>
+          ) : (
+            <>
+              <Link className={eventStyles.back} href={eventPath}>
+                ← Nochevieja en Letux
+              </Link>
+              {contest.phase === "registration" && (
+                <section className={styles.panel}>
+                  <h2>Inscripciones</h2>
+                  {contest.tapas.length ? (
+                    <ul>
+                      {contest.tapas.map(({ id, name, authors }) => (
+                        <li key={id}>
+                          <strong>{name}</strong> ·{" "}
+                          {authors.map(({ alias }) => alias).join(" y ")}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>Todavía no hay tapas inscritas.</p>
+                  )}
+                  {actor.member && (own || !registered) ? (
+                    <>
+                      <ContestForm
+                        key={own?.id ?? "new"}
+                        intent="save"
+                        label={own ? "Guardar cambios" : "Inscribir mi tapa"}
+                      >
+                        <label>
+                          Nombre de la tapa
+                          <input
+                            name="name"
+                            maxLength={80}
+                            required
+                            defaultValue={own?.name}
+                          />
+                        </label>
+                        <label>
+                          Coautor o coautora (opcional)
+                          <select
+                            name="partner"
+                            defaultValue={own?.authors[1]?.id ?? ""}
+                          >
+                            <option value="">En solitario</option>
+                            {people.map(({ id, alias }) => (
+                              <option key={id} value={id}>
+                                {alias}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </ContestForm>
+                      {Boolean(own) && (
+                        <ContestForm intent="remove" label="Retirar mi tapa" />
+                      )}
+                    </>
+                  ) : registered ? (
+                    <p>Ya figuras como coautor en una tapa.</p>
+                  ) : (
+                    <p>
+                      Para inscribir una tapa necesitas una cuenta vinculada al
+                      club.
+                    </p>
+                  )}
+                </section>
+              )}
+              {round !== null && (
+                <section className={styles.panel}>
+                  <h2>
+                    {round === "rubric"
+                      ? "Votación con rúbrica"
+                      : "Votación de desempate"}
+                  </h2>
+                  {voter && options.length ? (
+                    <>
+                      <p>
+                        {round === "rubric"
+                          ? "Puntúa todas las tapas ajenas del 0 al 10."
+                          : "Elige tu favorita entre las finalistas."}{" "}
+                        Puedes cambiar tu papeleta hasta el cierre.
+                      </p>
+                      <Ballot
+                        key={round}
+                        round={round}
+                        options={options}
+                        initial={
+                          round === "rubric"
+                            ? contest.rubric.find(
+                                ({ voter: id }) => id === voter.id
+                              )?.value
+                            : undefined
+                        }
+                        choice={
+                          round === "runoff"
+                            ? contest.runoff.find(
+                                ({ voter: id }) => id === voter.id
+                              )?.value
+                            : undefined
+                        }
+                      />
+                    </>
+                  ) : (
+                    <p>
+                      {voter
+                        ? round === "rubric"
+                          ? "No tienes tapas ajenas que puntuar."
+                          : "Los autores de las tapas finalistas no votan en el desempate."
+                        : "Solo pueden votar los asistentes inscritos al abrir la votación."}
+                    </p>
+                  )}
+                </section>
+              )}
+              {canSeeResults(contest, actor.admin) && (
+                <Results contest={contest} sort={sort} />
+              )}
+              {!actor.admin &&
+                !round &&
+                !canSeeResults(contest, false) &&
+                contest.phase !== "registration" && (
+                  <section className={styles.panel}>
+                    <p>
+                      La votación está cerrada. Los resultados están pendientes
+                      de publicación.
+                    </p>
+                  </section>
                 )}
-                {actor.member && (own || !registered) ? (
-                  <>
-                    <ContestForm
-                      key={own?.id ?? "new"}
-                      intent="save"
-                      label={own ? "Guardar cambios" : "Inscribir mi tapa"}
-                    >
+              {actor.admin && contest.phase !== "published" && (
+                <section className={styles.panel}>
+                  <h2>Administración</h2>
+                  <Management key={contest.phase} contest={contest} />
+                  {round && eligible.length > 0 && (
+                    <form className={styles.form} action={contestPath}>
                       <label>
-                        Nombre de la tapa
-                        <input
-                          name="name"
-                          maxLength={80}
-                          required
-                          defaultValue={own?.name}
-                        />
-                      </label>
-                      <label>
-                        Coautor o coautora (opcional)
-                        <select
-                          name="partner"
-                          defaultValue={own?.authors[1]?.id ?? ""}
-                        >
-                          <option value="">En solitario</option>
-                          {people.map(({ id, alias }) => (
+                        Preparar voto asistido
+                        <select name="assisted" required defaultValue="">
+                          <option value="" disabled>
+                            Elige un asistente
+                          </option>
+                          {eligible.map(({ id, alias }) => (
                             <option key={id} value={id}>
                               {alias}
                             </option>
                           ))}
                         </select>
                       </label>
-                    </ContestForm>
-                    {Boolean(own) && (
-                      <ContestForm intent="remove" label="Retirar mi tapa" />
-                    )}
-                  </>
-                ) : registered ? (
-                  <p>Ya figuras como coautor en una tapa.</p>
-                ) : (
-                  <p>
-                    Para inscribir una tapa necesitas una cuenta vinculada al
-                    club.
-                  </p>
-                )}
-              </section>
-            )}
-            {round !== null && (
-              <section className={styles.panel}>
-                <h2>
-                  {round === "rubric"
-                    ? "Votación con rúbrica"
-                    : "Votación de desempate"}
-                </h2>
-                {voter && options.length ? (
-                  <>
-                    <p>
-                      {round === "rubric"
-                        ? "Puntúa todas las tapas ajenas del 0 al 10."
-                        : "Elige tu favorita entre las finalistas."}{" "}
-                      Puedes cambiar tu papeleta hasta el cierre.
-                    </p>
-                    <Ballot
-                      key={round}
-                      round={round}
-                      options={options}
-                      initial={
-                        round === "rubric"
-                          ? contest.rubric.find(
-                              ({ voter: id }) => id === voter.id
-                            )?.value
-                          : undefined
-                      }
-                      choice={
-                        round === "runoff"
-                          ? contest.runoff.find(
-                              ({ voter: id }) => id === voter.id
-                            )?.value
-                          : undefined
-                      }
-                    />
-                  </>
-                ) : (
-                  <p>
-                    {voter
-                      ? round === "rubric"
-                        ? "No tienes tapas ajenas que puntuar."
-                        : "Los autores de las tapas finalistas no votan en el desempate."
-                      : "Solo pueden votar los asistentes inscritos al abrir la votación."}
-                  </p>
-                )}
-              </section>
-            )}
-            {canSeeResults(contest, actor.admin) && (
-              <Results contest={contest} sort={sort} />
-            )}
-            {!actor.admin &&
-              !round &&
-              !canSeeResults(contest, false) &&
-              contest.phase !== "registration" && (
-                <section className={styles.panel}>
-                  <p>
-                    La votación está cerrada. Los resultados están pendientes de
-                    publicación.
-                  </p>
+                      <button type="submit">
+                        Abrir papeleta en este móvil
+                      </button>
+                    </form>
+                  )}
                 </section>
               )}
-            {actor.admin && contest.phase !== "published" && (
-              <section className={styles.panel}>
-                <h2>Administración</h2>
-                <Management key={contest.phase} contest={contest} />
-                {round && eligible.length > 0 && (
-                  <form className={styles.form} action={contestPath}>
-                    <label>
-                      Preparar voto asistido
-                      <select name="assisted" required defaultValue="">
-                        <option value="" disabled>
-                          Elige un asistente
-                        </option>
-                        {eligible.map(({ id, alias }) => (
-                          <option key={id} value={id}>
-                            {alias}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <button type="submit">Abrir papeleta en este móvil</button>
-                  </form>
-                )}
-              </section>
-            )}
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </main>
   )

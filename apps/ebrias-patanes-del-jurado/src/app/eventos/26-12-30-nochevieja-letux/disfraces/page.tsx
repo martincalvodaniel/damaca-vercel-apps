@@ -57,24 +57,26 @@ export default async function Costumes() {
               ya su personaje.
             </p>
           </header>
-          <Link
-            className={styles.back}
-            href="/eventos/26-12-30-nochevieja-letux"
-          >
-            ← Nochevieja en Letux
-          </Link>
-          {initial ? (
-            <>
-              {user.role === "admin" ? (
-                <CharacterCreationControl enabled={allowAdd} />
-              ) : null}
-              <CostumePicker initial={{ ...initial, allowAdd }} />
-            </>
-          ) : (
-            <section className={styles.card}>
-              <p>No se pudo cargar la elección. Recarga la página.</p>
-            </section>
-          )}
+          <div className={styles.eventActions}>
+            <Link
+              className={styles.back}
+              href="/eventos/26-12-30-nochevieja-letux"
+            >
+              ← Nochevieja en Letux
+            </Link>
+            {initial ? (
+              <>
+                {user.role === "admin" ? (
+                  <CharacterCreationControl enabled={allowAdd} />
+                ) : null}
+                <CostumePicker initial={{ ...initial, allowAdd }} />
+              </>
+            ) : (
+              <section className={styles.card}>
+                <p>No se pudo cargar la elección. Recarga la página.</p>
+              </section>
+            )}
+          </div>
         </div>
       </main>
       <EventMusicControl />

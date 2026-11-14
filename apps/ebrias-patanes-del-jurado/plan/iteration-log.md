@@ -2,11 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-23 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-24
-
-- Se integró la gestión en «¿Quién viene?». Pendiente comprobar la interacción y la vista en móvil y escritorio.
+[Entregas EPJ-08 a EPJ-24 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-25
 
@@ -60,3 +56,9 @@
 - La ficha usa un único espacio entre sus cuatro controles. Disfraces recupera el enlace a la ficha con el mismo estilo y posición que Tapas.
 - Maqueta en Chrome con los estilos reales: tres huecos iguales de 4,8 px a 320 y 1440 px, con el listado abierto y cerrado.
 - Biome incremental, tipos, build y comprobación del diff correctos. El build mostró el aviso de DNS de MongoDB al inicializar índices.
+
+## EPJ-34 — Separación en Disfraces y Tapas
+
+- Capacidad inicial disponible: 35% en 5 h y 14% en 7 días.
+- Las dos páginas usan la separación de la ficha entre el enlace de vuelta, los controles y las tarjetas.
+- Maquetas con los estilos reales en Chrome: huecos de 4,8 px a 320 y 1440 px. Biome, tipos y build correctos.

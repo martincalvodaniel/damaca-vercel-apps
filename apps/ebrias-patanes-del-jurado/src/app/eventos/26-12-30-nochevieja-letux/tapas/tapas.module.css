@@ -1,6 +1,5 @@
 .panel {
   composes: card from "../page.module.css";
-  margin-block: 0.6rem;
   overflow-wrap: anywhere;
 }
 

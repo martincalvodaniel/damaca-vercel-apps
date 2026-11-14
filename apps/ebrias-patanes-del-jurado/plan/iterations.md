@@ -246,3 +246,11 @@
 - Aceptación: los cuatro controles de la ficha tienen la misma separación vertical y Disfraces incluye el enlace de vuelta a la ficha.
 - Validación: Biome, tipos, build y medida de los tres huecos en móvil y escritorio.
 - Evidencia: [registro de Ebrias](iteration-log.md#epj-33--separación-uniforme-en-letux).
+
+## EPJ-34 — Separación en Disfraces y Tapas
+
+- Estado: `validated`.
+- Rutas: páginas de Disfraces y Tapas y estilos de Tapas.
+- Dependencias: separación compartida de la ficha de Letux (EPJ-33).
+- Aceptación: el enlace, los controles y las tarjetas de cada página tienen el mismo hueco vertical que los controles de la ficha.
+- Validación: Biome, tipos, build y medida en Chrome a 320 y 1440 px.

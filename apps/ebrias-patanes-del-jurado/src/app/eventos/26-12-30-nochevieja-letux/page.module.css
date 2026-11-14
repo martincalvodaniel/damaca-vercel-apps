@@ -98,8 +98,12 @@
   margin-top: 0.75rem;
 }
 
-:where(.eventActions) > .back {
-  margin-top: 0;
+:where(.eventActions) > :is(.back, form) {
+  margin-block: 0;
+}
+
+.eventActions > form > [role="status"]:empty {
+  margin: 0;
 }
 
 .attendees summary {

@@ -1,4 +1,4 @@
-# Registro archivado de entregas EPJ-08 a EPJ-23
+# Registro archivado de entregas EPJ-08 a EPJ-24
 
 ## EPJ-08
 
@@ -100,3 +100,7 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 ## EPJ-23
 
 - Se añadió la acción de borrado con confirmación y transacción MongoDB. Pendiente comprobar el flujo con una cuenta desechable y revisar la pantalla en móvil y escritorio.
+
+## EPJ-24
+
+- Se integró la gestión en «¿Quién viene?». Pendiente comprobar la interacción y la vista en móvil y escritorio.
