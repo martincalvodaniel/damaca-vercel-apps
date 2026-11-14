@@ -112,3 +112,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 ## EPJ-26
 
 - Se preparó una migración con vista previa y transacción por miembro. Pendiente aplicar en las bases de destino.
+
+## EPJ-27
+
+- [Criterios](iterations.md#epj-27--recarga-sin-parpadeo-de-lumos). El HTML inicial incluye el contenido del evento y omite el gate hasta resolver el estado local.
+- Biome sobre el componente, comprobación de tipos y build de la app correctos. Turbo no encontró tareas de test para la app. Se comprobó el HTML inicial con `renderToString`.
+- Pendiente comprobar la recarga en navegador móvil y de escritorio. La consulta al remoto falló al resolver GitHub.

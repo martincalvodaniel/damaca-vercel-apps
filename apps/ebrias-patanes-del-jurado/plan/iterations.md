@@ -269,3 +269,12 @@
 - Rutas: control de creación y estilos de Letux.
 - Aceptación: la respuesta de la acción aparece en un aviso flotante que se puede cerrar sin mover el buscador.
 - Validación: Biome, tipos, build y comprobación responsive.
+
+## EPJ-37 — Guía editable de Nochevieja en Letux
+
+- Estado: `validated`.
+- Objetivo: leer el programa de Letux por días y mantener los textos desde la ficha.
+- Rutas: ficha de Letux, `src/features/event-guide` y plan de Ebrias.
+- Dependencias: roles actuales, MongoDB de la app y secciones de asistencia, coches, Tapas y Disfraces.
+- Aceptación: programa con bloques ordenables y notas fijas, edición exclusiva de administradores, persistencia inmediata y protección frente a cambios simultáneos. El acceso y los flujos existentes siguen disponibles.
+- Validación: Biome incremental, tipos, pruebas de Ebrias, build y recorrido de la guía y el editor a 320 y 1440 px con MongoDB aislado.

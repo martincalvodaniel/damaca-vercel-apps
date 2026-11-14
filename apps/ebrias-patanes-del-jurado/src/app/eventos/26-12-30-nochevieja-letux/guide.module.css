@@ -1,0 +1,114 @@
+.guide {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.65rem;
+}
+
+.panel {
+  min-width: 0;
+  padding: clamp(0.55rem, 2vw, 1rem);
+  border: 1px solid #b99257;
+  border-radius: 0.45rem;
+  color: var(--ink);
+  background: var(--paper);
+  overflow-wrap: anywhere;
+}
+
+.panel h2,
+.panel h3,
+.fields legend,
+.blockFields legend {
+  margin: 0;
+  color: var(--wax);
+  font-family: Georgia, serif;
+  font-weight: 700;
+}
+
+.panel h2 {
+  font-size: 1.35rem;
+}
+
+.panel h3 {
+  font-size: 1.1rem;
+}
+
+.panel article {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid #95653880;
+}
+
+.copy {
+  margin: 0.25rem 0;
+  white-space: pre-wrap;
+}
+
+.fields,
+.blockFields {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fields .fields,
+.blockFields {
+  padding: 0.4rem;
+  border: 1px solid #95653880;
+  border-radius: 0.35rem;
+}
+
+.fields label {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.fields :is(input, textarea) {
+  width: 100%;
+  min-width: 0;
+  padding: 0.4rem;
+  border: 1px solid #705038;
+  border-radius: 0.35rem;
+  color: var(--ink);
+  background: #fff9e9;
+  font: inherit;
+}
+
+.fields textarea {
+  resize: vertical;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+:where(.fields) button,
+.primary {
+  justify-self: start;
+  min-height: 44px;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #705038;
+  border-radius: 0.35rem;
+  color: var(--ink);
+  background: #fff9e9;
+  font: inherit;
+}
+
+.primary {
+  border-color: var(--gold);
+  color: #faeaca;
+  background: var(--wax);
+}
+
+.fields button:enabled,
+.primary:enabled {
+  cursor: pointer;
+}
+
+.fields button:disabled {
+  opacity: 0.6;
+}

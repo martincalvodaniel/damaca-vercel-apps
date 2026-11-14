@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { type GuideBlock, guideSections } from "@/features/event-guide/guide"
+import { readGuide } from "@/features/event-guide/store"
 import {
   getAttendanceBlocks,
   getEventRoster,
@@ -14,6 +16,8 @@ import {
   AttendanceBoard,
   CarSection,
 } from "./attendance-form"
+import guideStyles from "./guide.module.css"
+import { GuideEditor } from "./guide-editor"
 import { LumosGate } from "./lumos-gate"
 import styles from "./page.module.css"
 
@@ -24,13 +28,15 @@ export default async function NewYearsEve() {
   const user = await getAuthorizedUser()
   if (!user) redirect("/")
 
-  const [roster, blocks, cars] = await Promise.all([
-    getEventRoster(letuxEvent),
-    getAttendanceBlocks(letuxEvent),
-    getCarBoard(letuxEvent),
-  ])
+  const [roster, blocks, cars, { guide, revision }, canManage] =
+    await Promise.all([
+      getEventRoster(letuxEvent),
+      getAttendanceBlocks(letuxEvent),
+      getCarBoard(letuxEvent),
+      readGuide(),
+      canManageAttendance(),
+    ])
 
-  const canManage = await canManageAttendance()
   const members = canManage ? await getMemberDirectory() : []
 
   return (
@@ -53,13 +59,16 @@ export default async function NewYearsEve() {
             </p>
           </header>
 
-          <div className={styles.eventActions}>
-            <Link
-              className={styles.back}
-              href="/eventos/26-12-30-nochevieja-letux/disfraces"
-            >
-              Elegir disfraz →
-            </Link>
+          <div className={guideStyles.guide}>
+            {user.role === "admin" ? (
+              <GuideEditor guide={guide} revision={revision} />
+            ) : null}
+            {guide.notes.lodging ? (
+              <section className={guideStyles.panel}>
+                <h2>Alojamiento</h2>
+                <GuideText text={guide.notes.lodging} />
+              </section>
+            ) : null}
             <AttendanceBlocksSection canManage={canManage}>
               <AttendanceBoard
                 blocks={blocks}
@@ -68,6 +77,34 @@ export default async function NewYearsEve() {
                 canManage={canManage}
               />
             </AttendanceBlocksSection>
+            <section className={guideStyles.panel}>
+              <h2>{guideSections[0].label}</h2>
+              <GuideText text={guide.notes.tapas} />
+              <Link
+                className={styles.back}
+                href="/eventos/26-12-30-nochevieja-letux/tapas"
+              >
+                Concurso de tapas →
+              </Link>
+              <GuideBlocks blocks={guide.sections.dec30} />
+            </section>
+            <section className={guideStyles.panel}>
+              <h2>{guideSections[1].label}</h2>
+              <GuideBlocks blocks={guide.sections.dec31} />
+              <article>
+                <GuideText text={guide.notes.costumes} />
+                <Link
+                  className={styles.back}
+                  href="/eventos/26-12-30-nochevieja-letux/disfraces"
+                >
+                  Elegir disfraz →
+                </Link>
+              </article>
+            </section>
+            <OptionalSection
+              label={guideSections[2].label}
+              blocks={guide.sections.jan01}
+            />
             <CarSection canManage={canManage}>
               <AttendanceBoard
                 mode="cars"
@@ -80,15 +117,41 @@ export default async function NewYearsEve() {
                 canManage={canManage}
               />
             </CarSection>
-            <Link
-              className={styles.back}
-              href="/eventos/26-12-30-nochevieja-letux/tapas"
-            >
-              Concurso de tapas →
-            </Link>
+            <OptionalSection
+              label={guideSections[3].label}
+              blocks={guide.sections.other}
+            />
           </div>
         </div>
       </main>
     </LumosGate>
   )
+}
+
+function GuideText({ text }: { text: string }) {
+  return text ? <p className={guideStyles.copy}>{text}</p> : null
+}
+
+function GuideBlocks({ blocks }: { blocks: GuideBlock[] }) {
+  return blocks.map(({ id, title, text }) => (
+    <article key={id}>
+      <h3>{title}</h3>
+      <GuideText text={text} />
+    </article>
+  ))
+}
+
+function OptionalSection({
+  label,
+  blocks,
+}: {
+  label: string
+  blocks: GuideBlock[]
+}) {
+  return blocks.length ? (
+    <section className={guideStyles.panel}>
+      <h2>{label}</h2>
+      <GuideBlocks blocks={blocks} />
+    </section>
+  ) : null
 }
