@@ -11,6 +11,7 @@ import {
 } from "react"
 import styles from "@/app/eventos/26-12-30-nochevieja-letux/page.module.css"
 import { type PickerState, submitCostume } from "./actions"
+import { CharacterCreationControl } from "./character-creation-control"
 import {
   canonicalCharacter,
   characterCatalog,
@@ -29,7 +30,13 @@ const messages = {
   "signed-out": "Tu sesión ha caducado. Recarga e inicia sesión otra vez.",
 }
 
-export function CostumePicker({ initial }: { initial: PickerState }) {
+export function CostumePicker({
+  initial,
+  canManageCreation,
+}: {
+  initial: PickerState
+  canManageCreation: boolean
+}) {
   const [state, submit, pending] = useActionState(submitCostume, initial)
   const [query, setQuery] = useState("")
   const [selected, setSelected] = useState("")
@@ -78,8 +85,13 @@ export function CostumePicker({ initial }: { initial: PickerState }) {
           <strong>Tu disfraz:</strong> {state.current}
         </p>
       )}
-      <form action={submit} className={styles.picker}>
+      <div className={styles.costumeSearchHeading}>
         <label htmlFor={inputId}>Busca tu personaje</label>
+        {canManageCreation ? (
+          <CharacterCreationControl enabled={initial.allowAdd} />
+        ) : null}
+      </div>
+      <form action={submit} className={styles.picker}>
         <div className={styles.searchField}>
           <input
             id={inputId}

@@ -2,11 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-24 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-25
-
-- El reparto reutiliza los bloques y el arrastre de asistencia. Los coches y las asignaciones se guardan en colecciones propias del evento. Pendiente la revisión visual y del arrastre en navegador.
+[Entregas EPJ-08 a EPJ-25 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-26
 
@@ -62,3 +58,9 @@
 - Capacidad inicial disponible: 35% en 5 h y 14% en 7 días.
 - Las dos páginas usan la separación de la ficha entre el enlace de vuelta, los controles y las tarjetas.
 - Maquetas con los estilos reales en Chrome: huecos de 4,8 px a 320 y 1440 px. Biome, tipos y build correctos.
+
+## EPJ-35 — Control de creación junto al buscador
+
+- Capacidad inicial disponible: 33% en 5 h y 14% en 7 días.
+- El botón exclusivo del administrador comparte fila con la etiqueta y reutiliza el estilo de lacre. Se compacta el texto visible para que quepa en móvil.
+- Biome, tipos y build correctos. En una maqueta de Chrome con los estilos reales, ambas opciones conservaron la posición del buscador y se alinearon con la etiqueta a 320 y 1440 px.

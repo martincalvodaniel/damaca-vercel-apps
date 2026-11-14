@@ -254,3 +254,11 @@
 - Dependencias: separación compartida de la ficha de Letux (EPJ-33).
 - Aceptación: el enlace, los controles y las tarjetas de cada página tienen el mismo hueco vertical que los controles de la ficha.
 - Validación: Biome, tipos, build y medida en Chrome a 320 y 1440 px.
+
+## EPJ-35 — Control de creación junto al buscador
+
+- Estado: `validated`.
+- Rutas: página de Disfraces, selector de personajes y estilos de Letux.
+- Dependencias: control de creación de EPJ-30.
+- Aceptación: el botón de administración comparte fila y altura con la etiqueta del buscador, incluso en móvil.
+- Validación: Biome, tipos, build y medida en Chrome.

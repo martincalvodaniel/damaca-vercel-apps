@@ -1,4 +1,4 @@
-# Registro archivado de entregas EPJ-08 a EPJ-24
+# Registro archivado de entregas EPJ-08 a EPJ-25
 
 ## EPJ-08
 
@@ -104,3 +104,7 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 ## EPJ-24
 
 - Se integró la gestión en «¿Quién viene?». Pendiente comprobar la interacción y la vista en móvil y escritorio.
+
+## EPJ-25
+
+- El reparto reutiliza los bloques y el arrastre de asistencia. Los coches y las asignaciones se guardan en colecciones propias del evento. Pendiente la revisión visual y del arrastre en navegador.

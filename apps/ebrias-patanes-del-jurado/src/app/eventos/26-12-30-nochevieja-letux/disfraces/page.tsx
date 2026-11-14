@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { CharacterCreationControl } from "@/features/costumes/character-creation-control"
 import { CostumePicker } from "@/features/costumes/costume-picker"
 import {
   getAddedCharacters,
@@ -65,12 +64,10 @@ export default async function Costumes() {
               ← Nochevieja en Letux
             </Link>
             {initial ? (
-              <>
-                {user.role === "admin" ? (
-                  <CharacterCreationControl enabled={allowAdd} />
-                ) : null}
-                <CostumePicker initial={{ ...initial, allowAdd }} />
-              </>
+              <CostumePicker
+                initial={{ ...initial, allowAdd }}
+                canManageCreation={user.role === "admin"}
+              />
             ) : (
               <section className={styles.card}>
                 <p>No se pudo cargar la elección. Recarga la página.</p>

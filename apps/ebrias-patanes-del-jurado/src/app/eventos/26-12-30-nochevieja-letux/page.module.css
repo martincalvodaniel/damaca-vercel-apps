@@ -311,7 +311,8 @@
 }
 
 .attendees summary,
-.picker label {
+.picker label,
+.costumeSearchHeading label {
   font:
     700 1.15rem Georgia,
     serif;
@@ -517,4 +518,34 @@
   place-items: center;
   min-height: 32px;
   padding: 0;
+}
+
+.costumeSearchHeading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+}
+
+.costumeSearchHeading label {
+  line-height: 1.4rem;
+}
+
+.characterCreation {
+  margin: 0;
+  text-align: end;
+}
+
+.characterCreation button {
+  display: block;
+  margin-inline-start: auto;
+  height: 1.4rem;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+  font-size: 0.78rem;
+}
+
+.characterCreation p:empty {
+  display: none;
 }
