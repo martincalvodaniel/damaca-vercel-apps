@@ -169,3 +169,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Capacidad inicial disponible: 33% en 5 h y 14% en 7 días.
 - El botón exclusivo del administrador comparte fila con la etiqueta y reutiliza el estilo de lacre. Se compacta el texto visible para que quepa en móvil.
 - Biome, tipos y build correctos. En una maqueta de Chrome con los estilos reales, ambas opciones conservaron la posición del buscador y se alinearon con la etiqueta a 320 y 1440 px.
+
+## EPJ-36 — Aviso flotante en Disfraces
+
+- El mensaje de la acción aparece en un aviso de pergamino con botón de cierre y anuncio accesible.
+- Capacidad inicial disponible de 30% en 5 h y 13% en 7 días. Biome, tipos y build correctos. Chrome verificó en maqueta con los estilos reales que el aviso cabe y el buscador no se mueve a 320 y 1440 px.

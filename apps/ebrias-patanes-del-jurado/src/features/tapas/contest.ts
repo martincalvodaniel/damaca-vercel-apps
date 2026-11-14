@@ -255,6 +255,13 @@ export function applyContestAction(
 
   if (!actor.admin) fail("Solo un administrador puede usar este control.")
   if (
+    action === "unpublish" &&
+    contest.phase === "published" &&
+    field(form, "confirm") === "yes"
+  ) {
+    return { ...contest, phase: "resolved" }
+  }
+  if (
     action === "reopen-registration" &&
     contest.phase !== "registration" &&
     contest.phase !== "published" &&

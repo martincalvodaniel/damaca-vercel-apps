@@ -184,12 +184,21 @@ function Management({ contest }: { contest: Contest }) {
           </label>
         </ContestForm>
       )
+    case "published":
+      return (
+        <ContestForm intent="unpublish" label="Retirar publicación">
+          <label className={styles.confirm}>
+            <input type="checkbox" required name="confirm" value="yes" />{" "}
+            Confirmo que quiero volver a ocultar los resultados.
+          </label>
+        </ContestForm>
+      )
     case "resolved":
       return (
         <ContestForm intent="publish" label="Publicar resultados">
           <label className={styles.confirm}>
             <input type="checkbox" required name="confirm" value="yes" />{" "}
-            Confirmo la publicación definitiva.
+            Confirmo que quiero publicar los resultados.
           </label>
         </ContestForm>
       )
@@ -449,28 +458,29 @@ export default async function TapasContest({
                     </p>
                   </section>
                 )}
-              {actor.admin && contest.phase !== "published" && (
+              {actor.admin ? (
                 <section className={styles.panel}>
                   <h2>Administración</h2>
                   <Management key={contest.phase} contest={contest} />
-                  {contest.phase !== "registration" && (
-                    <ContestForm
-                      key={`reopen:${contest.phase}`}
-                      intent="reopen-registration"
-                      label="Reabrir inscripciones"
-                    >
-                      <label className={styles.confirm}>
-                        <input
-                          type="checkbox"
-                          required
-                          name="confirm"
-                          value="yes"
-                        />{" "}
-                        Conservar las tapas inscritas y borrar todas las
-                        papeletas y resultados.
-                      </label>
-                    </ContestForm>
-                  )}
+                  {contest.phase !== "registration" &&
+                    contest.phase !== "published" && (
+                      <ContestForm
+                        key={`reopen:${contest.phase}`}
+                        intent="reopen-registration"
+                        label="Reabrir inscripciones"
+                      >
+                        <label className={styles.confirm}>
+                          <input
+                            type="checkbox"
+                            required
+                            name="confirm"
+                            value="yes"
+                          />{" "}
+                          Conservar las tapas inscritas y borrar todas las
+                          papeletas y resultados.
+                        </label>
+                      </ContestForm>
+                    )}
                   {round && eligible.length > 0 && (
                     <form className={styles.form} action={contestPath}>
                       <label>
@@ -492,7 +502,7 @@ export default async function TapasContest({
                     </form>
                   )}
                 </section>
-              )}
+              ) : null}
             </>
           )}
         </div>

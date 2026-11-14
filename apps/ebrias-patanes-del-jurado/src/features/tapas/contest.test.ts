@@ -279,3 +279,23 @@ it("lets an admin register, transfer authorship and remove a tapa only during re
     "disponible"
   )
 })
+
+it("lets only an admin withdraw a published result with confirmation", () => {
+  const confirmation = { confirm: "yes" }
+  const runoff = runoffFixture()
+  const voted = submit(runoff, member("e"), "vote", {
+    round: "runoff",
+    choice: "First",
+  })
+  const resolved = submit(voted, admin, "resolve-runoff")
+  const published = submit(resolved, admin, "publish", confirmation)
+  expect(() =>
+    submit(published, member("e"), "unpublish", confirmation)
+  ).toThrow("administrador")
+  expect(() => submit(published, admin, "unpublish")).toThrow("disponible")
+  const withdrawn = submit(published, admin, "unpublish", confirmation)
+  expect(withdrawn).toEqual(resolved)
+  expect(canSeeResults(withdrawn, false)).toBe(false)
+  expect(canSeeResults(withdrawn, true)).toBe(true)
+  expect(submit(withdrawn, admin, "publish", confirmation)).toEqual(published)
+})

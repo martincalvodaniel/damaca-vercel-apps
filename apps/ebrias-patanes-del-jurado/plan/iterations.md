@@ -341,3 +341,10 @@
 - Dependencias: directorio de miembros y fase de inscripción.
 - Aceptación: el administrador puede inscribir, editar y borrar cualquier tapa durante la inscripción. Se mantiene la autoría única por miembro.
 - Validación: Biome, tipos, pruebas de permisos y build.
+
+## EPJ-46 — Retirar la publicación del concurso
+
+- Estado: `validated`.
+- Rutas: reglas y controles de administración de Tapas.
+- Aceptación: el administrador puede devolver un resultado publicado a la vista privada con confirmación y volver a publicarlo.
+- Validación: Biome, tipos, pruebas de transición y build.
