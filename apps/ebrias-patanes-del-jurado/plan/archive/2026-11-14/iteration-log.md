@@ -136,3 +136,11 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - [Criterios](iterations.md#epj-30--contador-de-reservas-y-control-de-personajes). El contador usa reservas actuales; la creación libre queda desactivada por defecto y solo el admin puede cambiarla. El servidor vuelve a validar la opción al recibir una reserva.
 - Biome, tipos y build de la app correctos. Revisión visual pendiente.
+
+## EPJ-31 — Concurso de tapas en Letux
+
+- Inicio en `int` sin cambios locales ni commits sin publicar. Capacidad inicial disponible: 45% en 5 h y 16% en 7 días.
+- Aceptación: [EPJ-31](iterations.md#epj-31--concurso-de-tapas-en-letux).
+- Implementadas inscripción, rúbrica, voto asistido, resolución con desempate o sorteo y publicación definitiva. Al abrir se congela el censo; las escrituras usan una revisión del documento MongoDB para comprobar concurrencia.
+- Biome en los archivos editados, tipos, cinco pruebas de reglas y `git diff --check`: correctos. El build pasó tras adaptar una importación previa a los exports de `web-push` 4.0.0. El entorno del build no resolvió el DNS de MongoDB para inicializar índices de Better Auth.
+- Chrome autenticado con sesiones ficticias y MongoDB 8 desechable: inscripción, exclusiones, voto directo y asistido en ambas rondas, cierre parcial, privacidad hasta publicar, orden por categoría y ausencia de desplazamiento horizontal a 320 y 1440 px. No se usó Google real ni la base de datos del club.

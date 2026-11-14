@@ -130,6 +130,7 @@ function GuideSectionFields({
   setDraft: Dispatch<SetStateAction<EventGuide>>
   editNote: (event: ChangeEvent<HTMLTextAreaElement>) => void
 }) {
+  const heading = useId()
   const blocks = draft.sections[section]
   const entries = guideEntries(draft, section)
 
@@ -204,22 +205,30 @@ function GuideSectionFields({
   )
 
   return (
-    <fieldset className={styles.fields}>
-      <legend>{label}</legend>
+    <fieldset className={styles.fields} aria-labelledby={heading}>
+      <div className={styles.blockHeading}>
+        <span id={heading}>{label}</span>
+        <div className={styles.blockButtons}>
+          <BlockButton
+            label="Añadir bloque"
+            path="M12 5v14M5 12h14"
+            disabled={blocks.length >= guideLimits.blocks}
+            onClick={addBlock}
+          />
+        </div>
+      </div>
       {entries.map((block, index) =>
         "link" in block ? (
           <fieldset className={styles.blockFields} key={block.id}>
             <legend>{block.title}</legend>
-            <label>
-              Nota
-              <textarea
-                rows={2}
-                maxLength={guideLimits.text}
-                value={draft.notes[block.id]}
-                name={block.id}
-                onChange={editNote}
-              />
-            </label>
+            <textarea
+              aria-label="Nota"
+              rows={2}
+              maxLength={guideLimits.text}
+              value={draft.notes[block.id]}
+              name={block.id}
+              onChange={editNote}
+            />
           </fieldset>
         ) : (
           <GuideBlockFields
@@ -233,13 +242,6 @@ function GuideSectionFields({
           />
         )
       )}
-      <button
-        type="button"
-        disabled={blocks.length >= guideLimits.blocks}
-        onClick={addBlock}
-      >
-        Añadir bloque
-      </button>
     </fieldset>
   )
 }
@@ -259,7 +261,6 @@ function GuideBlockFields({
   moveBlock: (id: string, direction: -1 | 1) => void
   removeBlock: (id: string) => void
 }) {
-  const heading = useId()
   const editTitle = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       editBlock(block.id, "title", event.currentTarget.value)
@@ -285,9 +286,20 @@ function GuideBlockFields({
   }, [block.id, removeBlock])
 
   return (
-    <fieldset className={styles.blockFields} aria-labelledby={heading}>
+    <fieldset
+      className={styles.blockFields}
+      aria-label={block.title.trim() || "Bloque sin título"}
+    >
       <div className={styles.blockHeading}>
-        <span id={heading}>Bloque {index + 1}</span>
+        <input
+          className={styles.blockTitle}
+          aria-label="Título"
+          placeholder="Añadir título"
+          maxLength={guideLimits.title}
+          required={Boolean(block.text.trim())}
+          value={block.title}
+          onChange={editTitle}
+        />
         <div className={styles.blockButtons}>
           <BlockButton
             label="Subir"
@@ -308,24 +320,13 @@ function GuideBlockFields({
           />
         </div>
       </div>
-      <label>
-        Título
-        <input
-          maxLength={guideLimits.title}
-          required={Boolean(block.text.trim())}
-          value={block.title}
-          onChange={editTitle}
-        />
-      </label>
-      <label>
-        Texto
-        <textarea
-          rows={2}
-          maxLength={guideLimits.text}
-          value={block.text}
-          onChange={editText}
-        />
-      </label>
+      <textarea
+        aria-label="Texto"
+        rows={2}
+        maxLength={guideLimits.text}
+        value={block.text}
+        onChange={editText}
+      />
     </fieldset>
   )
 }

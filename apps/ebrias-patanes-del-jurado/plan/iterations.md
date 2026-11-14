@@ -302,3 +302,11 @@
 - Dependencias: EPJ-37 y EPJ-39.
 - Aceptación: cada nota se edita en su actividad. Los bloques usan campos compactos e iconos accesibles a la derecha del encabezado.
 - Validación: Biome, tipos, pruebas, build y revisión del editor a 320 y 1440 px.
+
+## EPJ-41 — Títulos editables y alta desde la cabecera
+
+- Estado: `validated`.
+- Rutas: editor de Letux, estilos y registro de Ebrias.
+- Dependencias: EPJ-40.
+- Aceptación: el encabezado muestra el título real y permite editarlo directamente. Los iconos siguen a su derecha y cada sección permite añadir bloques con el icono «+» junto a su título. Los campos de descripción y nota conservan su nombre accesible sin repetirlo visualmente.
+- Validación: Biome, tipos, pruebas, build y comprobación del título en Chrome.

@@ -2,15 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-30 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-31 — Concurso de tapas en Letux
-
-- Inicio en `int` sin cambios locales ni commits sin publicar. Capacidad inicial disponible: 45% en 5 h y 16% en 7 días.
-- Aceptación: [EPJ-31](iterations.md#epj-31--concurso-de-tapas-en-letux).
-- Implementadas inscripción, rúbrica, voto asistido, resolución con desempate o sorteo y publicación definitiva. Al abrir se congela el censo; las escrituras usan una revisión del documento MongoDB para comprobar concurrencia.
-- Biome en los archivos editados, tipos, cinco pruebas de reglas y `git diff --check`: correctos. El build pasó tras adaptar una importación previa a los exports de `web-push` 4.0.0. El entorno del build no resolvió el DNS de MongoDB para inicializar índices de Better Auth.
-- Chrome autenticado con sesiones ficticias y MongoDB 8 desechable: inscripción, exclusiones, voto directo y asistido en ambas rondas, cierre parcial, privacidad hasta publicar, orden por categoría y ausencia de desplazamiento horizontal a 320 y 1440 px. No se usó Google real ni la base de datos del club.
+[Entregas EPJ-08 a EPJ-31 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-32 — Estilo de Tapas en Letux
 
@@ -66,3 +58,9 @@
 - Inicio a las 14:07 CET con un 14% disponible en 5 h y un 11% en 7 días.
 - [Criterios](iterations.md#epj-40--edición-compacta-de-la-guía-de-letux). Cada nota se edita en su actividad. Campos más bajos e iconos junto al título de cada bloque.
 - Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado verificó el guardado de ambas notas, la reordenación, los iconos alineados de 34 px y el ancho del editor a 320 y 1440 px.
+
+## EPJ-41 — Títulos editables y alta desde la cabecera
+
+- Inicio a las 14:09 CET con un 11% disponible en 5 h y un 10% en 7 días.
+- [Criterios](iterations.md#epj-41--títulos-editables-y-alta-desde-la-cabecera). El título se edita en la cabecera, el alta usa un icono «+» por sección y las descripciones y notas mantienen únicamente el nombre accesible.
+- Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado verificó foco y edición al pulsar el título, alta desde los encabezados, ausencia de etiquetas visibles, lectura de nombres accesibles y persistencia tras guardar y recargar. El editor cabe a 320 y 1440 px.

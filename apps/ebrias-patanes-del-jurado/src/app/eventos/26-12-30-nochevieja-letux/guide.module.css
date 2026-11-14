@@ -127,6 +127,27 @@
   justify-content: space-between;
 }
 
+.blockHeading .blockTitle {
+  flex: 1;
+  border-color: transparent;
+  color: inherit;
+  background: transparent;
+}
+
+.blockHeading .blockTitle::placeholder {
+  color: #78543b;
+}
+
+.blockHeading .blockTitle:hover,
+.blockHeading .blockTitle:focus {
+  border-color: #705038;
+  background: #fff9e9;
+}
+
+.blockButtons {
+  flex: none;
+}
+
 .blockButtons button {
   display: grid;
   width: 34px;
