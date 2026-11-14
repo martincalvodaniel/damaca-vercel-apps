@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-38 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-39 — Orden de Tapas y Disfraces en la guía
-
-- Inicio a las 14:03 CET con un 16% disponible en 5 h y un 11% en 7 días.
-- [Criterios](iterations.md#epj-39--orden-de-tapas-y-disfraces-en-la-guía). «Subir» y «Bajar» permiten cruzar la actividad de cada día. Se conserva el orden inicial de los documentos anteriores.
-- Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado confirmó ambos órdenes tras guardar y recargar, sin desbordamiento de la guía a 320 y 1440 px.
+[Entregas EPJ-08 a EPJ-39 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-40 — Edición compacta de la guía de Letux
 
@@ -59,3 +53,8 @@
 
 - Capacidad inicial de 82% en 5 h y 6% en 7 días. El listado oculta los nombres y Ajustes permite al administrador alternar su rol efectivo en ese navegador.
 - Biome, tipos, ocho pruebas de Tapas y build correctos. La vista de miembro no se comprobó en un navegador autenticado.
+
+## EPJ-49 — Acciones de inscripción junto a los autores
+
+- Capacidad inicial de 78% en 5 h y 6% en 7 días. Los iconos abren la edición y la confirmación de borrado según permisos. Los coautores pueden editar el nombre durante la inscripción.
+- Biome, tipos, nueve pruebas de Tapas y build correctos. Queda pendiente la comprobación visual en un navegador autenticado.

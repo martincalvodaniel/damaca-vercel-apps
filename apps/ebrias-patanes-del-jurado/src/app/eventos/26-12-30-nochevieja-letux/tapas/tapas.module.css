@@ -119,3 +119,22 @@
   border-top: 1px solid #95653880;
   padding-block-start: 0.45rem;
 }
+
+.entryRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.entryRow button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid currentColor;
+  border-radius: 0.35rem;
+  color: var(--wax);
+  background: transparent;
+  cursor: pointer;
+}

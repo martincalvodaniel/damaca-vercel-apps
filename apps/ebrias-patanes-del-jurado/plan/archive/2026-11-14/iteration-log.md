@@ -187,3 +187,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Inicio a las 13:02 CET con un 18% disponible en 5 h y un 11% en 7 días.
 - [Criterios](iterations.md#epj-38--coches-junto-a-asistentes-en-letux). El desplegable de coches sigue al de asistentes en el orden de la ficha.
 - Orden revisado en el diff. Biome, tipos, cinco pruebas de Ebrias, build y `git diff --check` correctos.
+
+## EPJ-39 — Orden de Tapas y Disfraces en la guía
+
+- Inicio a las 14:03 CET con un 16% disponible en 5 h y un 11% en 7 días.
+- [Criterios](iterations.md#epj-39--orden-de-tapas-y-disfraces-en-la-guía). «Subir» y «Bajar» permiten cruzar la actividad de cada día. Se conserva el orden inicial de los documentos anteriores.
+- Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado confirmó ambos órdenes tras guardar y recargar, sin desbordamiento de la guía a 320 y 1440 px.

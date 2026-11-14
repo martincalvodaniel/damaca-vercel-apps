@@ -299,3 +299,20 @@ it("lets only an admin withdraw a published result with confirmation", () => {
   expect(canSeeResults(withdrawn, true)).toBe(true)
   expect(submit(withdrawn, admin, "publish", confirmation)).toEqual(published)
 })
+
+it("lets coauthors rename their tapa without changing its authors", () => {
+  const initial = register(emptyContest(), "a", "First", "b")
+  const update = { tapa: "First", name: "Updated", partner: "c" }
+  const edited = submit(initial, member("b"), "rename-own", update)
+  expect(edited.tapas[0]).toEqual({ ...initial.tapas[0], name: "Updated" })
+  expect(() => submit(initial, member("c"), "rename-own", update)).toThrow(
+    "disponible"
+  )
+  expect(() => submit(initial, member("b"), "remove", update)).toThrow(
+    "disponible"
+  )
+  const opened = submit(initial, admin, "open")
+  expect(() => submit(opened, member("b"), "rename-own", update)).toThrow(
+    "disponible"
+  )
+})

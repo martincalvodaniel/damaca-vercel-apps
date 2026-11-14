@@ -18,7 +18,7 @@ import {
   readContest,
 } from "@/features/tapas/store"
 import eventStyles from "../page.module.css"
-import { Ballot, ContestForm } from "./controls"
+import { Ballot, ContestForm, EntryControls } from "./controls"
 import styles from "./tapas.module.css"
 
 const reasons = {
@@ -311,37 +311,100 @@ export default async function TapasContest({
                     <ul>
                       {contest.tapas.map((tapa) => (
                         <li key={tapa.id}>
-                          <strong>
-                            {tapa.authors.map(({ alias }) => alias).join(" y ")}
-                          </strong>
-                          {actor.admin ? (
-                            <details>
-                              <summary>Editar o borrar inscripción</summary>
-                              <AdminEntry
-                                tapa={tapa}
-                                people={available(tapa)}
-                              />
-                              <ContestForm
-                                intent="admin-remove"
-                                label="Borrar tapa"
-                              >
-                                <input
-                                  type="hidden"
-                                  name="tapa"
-                                  value={tapa.id}
+                          <EntryControls
+                            authors={tapa.authors
+                              .map(({ alias }) => alias)
+                              .join(" y ")}
+                            edit={
+                              actor.admin ? (
+                                <AdminEntry
+                                  tapa={tapa}
+                                  people={available(tapa)}
                                 />
-                                <label className={styles.confirm}>
+                              ) : tapa.authors[0]?.id === actor.member?.id ? (
+                                <ContestForm
+                                  intent="save"
+                                  label="Guardar cambios"
+                                >
+                                  <label>
+                                    Nombre de la tapa
+                                    <input
+                                      name="name"
+                                      maxLength={80}
+                                      required
+                                      defaultValue={tapa.name}
+                                    />
+                                  </label>
+                                  <label>
+                                    Coautor o coautora (opcional)
+                                    <select
+                                      name="partner"
+                                      defaultValue={tapa.authors[1]?.id ?? ""}
+                                    >
+                                      <option value="">En solitario</option>
+                                      {available(tapa)
+                                        .filter(
+                                          ({ id }) => id !== actor.member?.id
+                                        )
+                                        .map(({ id, alias }) => (
+                                          <option key={id} value={id}>
+                                            {alias}
+                                          </option>
+                                        ))}
+                                    </select>
+                                  </label>
+                                </ContestForm>
+                              ) : tapa.authors.some(
+                                  ({ id }) => id === actor.member?.id
+                                ) ? (
+                                <ContestForm
+                                  intent="rename-own"
+                                  label="Guardar cambios"
+                                >
                                   <input
-                                    type="checkbox"
-                                    required
-                                    name="confirm"
-                                    value="yes"
+                                    type="hidden"
+                                    name="tapa"
+                                    value={tapa.id}
                                   />
-                                  Confirmo que quiero borrar esta tapa.
-                                </label>
-                              </ContestForm>
-                            </details>
-                          ) : null}
+                                  <label>
+                                    Nombre de la tapa
+                                    <input
+                                      name="name"
+                                      maxLength={80}
+                                      required
+                                      defaultValue={tapa.name}
+                                    />
+                                  </label>
+                                </ContestForm>
+                              ) : null
+                            }
+                            remove={
+                              actor.admin ||
+                              tapa.authors[0]?.id === actor.member?.id ? (
+                                <ContestForm
+                                  intent={
+                                    actor.admin ? "admin-remove" : "remove"
+                                  }
+                                  label="Borrar tapa"
+                                >
+                                  <input
+                                    type="hidden"
+                                    name="tapa"
+                                    value={tapa.id}
+                                  />
+                                  <label className={styles.confirm}>
+                                    <input
+                                      type="checkbox"
+                                      required
+                                      name="confirm"
+                                      value="yes"
+                                    />
+                                    Confirmo que quiero borrar esta tapa.
+                                  </label>
+                                </ContestForm>
+                              ) : null
+                            }
+                          />
                         </li>
                       ))}
                     </ul>
@@ -353,44 +416,25 @@ export default async function TapasContest({
                       <summary>Inscribir una tapa</summary>
                       <AdminEntry people={available()} />
                     </details>
-                  ) : actor.member && (own || !registered) ? (
-                    <>
-                      <ContestForm
-                        key={own?.id ?? "new"}
-                        intent="save"
-                        label={own ? "Guardar cambios" : "Inscribir mi tapa"}
-                      >
-                        <label>
-                          Nombre de la tapa
-                          <input
-                            name="name"
-                            maxLength={80}
-                            required
-                            defaultValue={own?.name}
-                          />
-                        </label>
-                        <label>
-                          Coautor o coautora (opcional)
-                          <select
-                            name="partner"
-                            defaultValue={own?.authors[1]?.id ?? ""}
-                          >
-                            <option value="">En solitario</option>
-                            {people.map(({ id, alias }) => (
-                              <option key={id} value={id}>
-                                {alias}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
-                      </ContestForm>
-                      {Boolean(own) && (
-                        <ContestForm intent="remove" label="Retirar mi tapa" />
-                      )}
-                    </>
-                  ) : registered ? (
-                    <p>Ya figuras como coautor en una tapa.</p>
-                  ) : (
+                  ) : actor.member && !registered ? (
+                    <ContestForm intent="save" label="Inscribir mi tapa">
+                      <label>
+                        Nombre de la tapa
+                        <input name="name" maxLength={80} required />
+                      </label>
+                      <label>
+                        Coautor o coautora (opcional)
+                        <select name="partner" defaultValue="">
+                          <option value="">En solitario</option>
+                          {people.map(({ id, alias }) => (
+                            <option key={id} value={id}>
+                              {alias}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </ContestForm>
+                  ) : actor.member ? null : (
                     <p>
                       Para inscribir una tapa necesitas una cuenta vinculada al
                       club.

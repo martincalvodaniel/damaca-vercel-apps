@@ -363,3 +363,10 @@
 - Dependencias: directorio y autorización existentes.
 - Aceptación: la lista de inscripción muestra solo autores. El admin puede alternar la vista de miembro desde Ajustes y recuperar sus controles con el mismo botón.
 - Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-49 — Acciones de inscripción junto a los autores
+
+- Estado: `validated`.
+- Rutas: listado, formularios y reglas de Tapas.
+- Aceptación: iconos de edición y borrado disponibles según permisos. Los coautores pueden cambiar el nombre sin modificar la autoría.
+- Validación: Biome, tipos, pruebas de permisos y build.

@@ -185,3 +185,71 @@ export function Ballot({
     </>
   )
 }
+
+export function EntryControls({
+  authors,
+  edit,
+  remove,
+}: {
+  authors: string
+  edit?: ReactNode
+  remove?: ReactNode
+}) {
+  const [panel, setPanel] = useState<"edit" | "remove" | null>(null)
+  const toggleEdit = useCallback(
+    () => setPanel((current) => (current === "edit" ? null : "edit")),
+    []
+  )
+  const toggleRemove = useCallback(
+    () => setPanel((current) => (current === "remove" ? null : "remove")),
+    []
+  )
+  return (
+    <>
+      <div className={styles.entryRow}>
+        <strong>{authors}</strong>
+        {edit ? (
+          <button
+            type="button"
+            aria-label={`Editar tapa de ${authors}`}
+            aria-expanded={panel === "edit"}
+            onClick={toggleEdit}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="m14 6 4 4M4 20l4-.8L20 7l-4-4L4.8 16z" />
+            </svg>
+          </button>
+        ) : null}
+        {remove ? (
+          <button
+            type="button"
+            aria-label={`Borrar tapa de ${authors}`}
+            aria-expanded={panel === "remove"}
+            onClick={toggleRemove}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 9v8m4-8v8" />
+            </svg>
+          </button>
+        ) : null}
+      </div>
+      {panel === "edit" ? edit : panel === "remove" ? remove : null}
+    </>
+  )
+}

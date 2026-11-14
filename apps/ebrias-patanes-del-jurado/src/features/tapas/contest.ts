@@ -159,6 +159,25 @@ export function applyContestAction(
   context: { people: Person[]; roster: Attendee[]; newId: string }
 ): Contest {
   const action = field(form, "intent")
+  if (action === "rename-own") {
+    const target = field(form, "tapa")
+    const tapa = contest.tapas.find(
+      ({ id, authors }) =>
+        id === target &&
+        authors.some((author) => author.id === actor.member?.id)
+    )
+    if (contest.phase !== "registration" || !tapa)
+      fail("La inscripción no está disponible.")
+    const name = field(form, "name").trim()
+    if (!name || name.length > 80)
+      fail("Escribe un nombre de hasta 80 caracteres.")
+    return {
+      ...contest,
+      tapas: contest.tapas.map((entry) =>
+        entry === tapa ? { ...entry, name } : entry
+      ),
+    }
+  }
   const adminEntry = action === "admin-save" || action === "admin-remove"
   if (adminEntry || action === "save" || action === "remove") {
     if (adminEntry && !actor.admin)
