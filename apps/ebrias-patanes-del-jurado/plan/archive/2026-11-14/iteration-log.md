@@ -253,3 +253,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - Capacidad inicial de 76% en 5 h y 5% en 7 días.
 - Botones de 24 px con iconos de 14 px, sin relleno y con 2 px de separación. Biome, tipos y build correctos.
+
+## EPJ-51 — Vista de miembro en la navegación
+
+- Capacidad inicial de 74% en 5 h y 5% en 7 días. El selector de vista ocupa el extremo izquierdo de la barra global y conserva su disponibilidad para la cuenta administradora.
+- Biome, tipos y build correctos. Sin comprobación en navegador autenticado.

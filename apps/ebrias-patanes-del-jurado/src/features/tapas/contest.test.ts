@@ -10,6 +10,7 @@ import {
   finalRunoffCounts,
   nextReveal,
   results,
+  revealAnnouncement,
   revealedPodium,
   revealVersion,
   settleReveal,
@@ -430,7 +431,18 @@ it("keeps the winner hidden until the shared deadline and blocks duplicate revea
   expect(finished.countdown).toBeUndefined()
   expect(canSeeResults(finished)).toBe(true)
   expect(finished.winner).toBe("First")
-  expect(() => submit(scheduled, admin, "reveal", { step }, 25000)).toThrow(
+  expect(revealAnnouncement(scheduled, 24999)).toBeNull()
+  expect(revealAnnouncement(scheduled, 25000)).toEqual({
+    place: 1,
+    revealedAt: 25000,
+    expiresAt: 28000,
+    tapas: [{ id: "First", name: "First", authors: ["a", "b"] }],
+  })
+  expect(revealAnnouncement(scheduled, 28000)).toBeNull()
+  expect(() => submit(scheduled, admin, "reveal", { step }, 27999)).toThrow(
+    "en curso"
+  )
+  expect(() => submit(scheduled, admin, "reveal", { step }, 28000)).toThrow(
     "disponible"
   )
 })

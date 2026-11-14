@@ -161,6 +161,28 @@ export function settleReveal(contest: Contest, now: number): Contest {
     : { ...rest, phase: "published" }
 }
 
+export function revealAnnouncement(stored: Contest, now: number) {
+  const countdown = stored.countdown
+  if (!countdown || now < countdown.endsAt || now >= countdown.endsAt + 3000)
+    return null
+  const contest = settleReveal(stored, now)
+  const award = podium(contest).find(({ place }) => place === countdown.place)
+  const tapas =
+    award?.tapas.filter(
+      ({ id }) => countdown.place !== 1 || id === contest.winner
+    ) ?? []
+  return {
+    place: countdown.place,
+    revealedAt: countdown.endsAt,
+    expiresAt: countdown.endsAt + 3000,
+    tapas: tapas.map(({ id, name, authors }) => ({
+      id,
+      name,
+      authors: authors.map(({ alias }) => alias),
+    })),
+  }
+}
+
 export function revealVersion(contest: Contest) {
   return `${contest.votingGeneration ?? 0}:${contest.phase}:${contest.revealedPlaces ?? 0}`
 }
@@ -223,6 +245,12 @@ export function applyContestAction(
   form: FormData,
   context: { people: Person[]; roster: Attendee[]; newId: string; now: number }
 ): Contest {
+  if (
+    actor.admin &&
+    contest.countdown &&
+    context.now < contest.countdown.endsAt + 3000
+  )
+    fail("Hay una revelación en curso.")
   contest = settleReveal(contest, context.now)
   if (contest.countdown) fail("Hay una revelación en curso.")
   const action = field(form, "intent")

@@ -2,12 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-50 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-51 — Vista de miembro en la navegación
-
-- Capacidad inicial de 74% en 5 h y 5% en 7 días. El selector de vista ocupa el extremo izquierdo de la barra global y conserva su disponibilidad para la cuenta administradora.
-- Biome, tipos y build correctos. Sin comprobación en navegador autenticado.
+[Entregas EPJ-08 a EPJ-51 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-52 — Confirmaciones y avisos de acciones
 
@@ -60,3 +55,8 @@
 
 - Capacidad inicial de 44% en 5 h y 91% en 7 días. Dos segundos de preparación y tres de cuenta atrás. La fecha límite se aplica en servidor sin depender de que el administrador mantenga la página abierta.
 - Biome, tipos, doce pruebas de Tapas y build correctos. Pendiente la revisión visual con dos sesiones autenticadas.
+
+## EPJ-61 — Anuncio del premio en la cuenta atrás
+
+- Capacidad inicial de 34% en 5 h y 90% en 7 días. El anuncio ocupa la capa de cuenta atrás durante tres segundos y la plata aparece encima del bronce.
+- Biome, tipos, doce pruebas y build correctos. Se comprobó la ventana de publicación y el bloqueo de avances. Pendiente la revisión visual con dos sesiones autenticadas.

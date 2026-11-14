@@ -448,3 +448,10 @@
 - Rutas: Tapas y consulta de revelación.
 - Aceptación: cuenta atrás compartida tras dos segundos de preparación, sin revelar datos antes del plazo.
 - Validación: Biome, tipos, pruebas temporales y build.
+
+## EPJ-61 — Anuncio del premio en la cuenta atrás
+
+- Estado: `validated`.
+- Rutas: revelación y podio de Tapas.
+- Aceptación: mostrar los premiados durante tres segundos al terminar la cuenta atrás y ordenar la plata encima del bronce.
+- Validación: Biome, tipos, pruebas de Tapas y build.

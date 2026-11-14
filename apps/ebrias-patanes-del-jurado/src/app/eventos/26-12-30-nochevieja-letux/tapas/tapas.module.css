@@ -209,3 +209,33 @@
     animation: none;
   }
 }
+
+.awardAnnouncement {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  width: min(90vw, 36rem);
+  max-height: 85dvh;
+  overflow: auto;
+  overflow-wrap: anywhere;
+  pointer-events: auto;
+  text-align: center;
+  animation: countdown-pulse 0.55s ease-out both;
+}
+
+.awardAnnouncement ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+}
+
+.awardAnnouncement li + li {
+  margin-top: 0.4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .awardAnnouncement {
+    animation: none;
+  }
+}

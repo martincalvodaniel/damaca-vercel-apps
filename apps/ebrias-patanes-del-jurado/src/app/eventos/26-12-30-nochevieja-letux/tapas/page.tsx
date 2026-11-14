@@ -11,6 +11,7 @@ import {
   type Person,
   podium,
   results,
+  revealAnnouncement,
   revealedPodium,
   revealVersion,
   selectVoter,
@@ -265,6 +266,7 @@ export default async function TapasContest({
   ])
   const serverNow = Date.now()
   const contest = settleReveal(stored.contest, serverNow)
+  const announcing = Boolean(revealAnnouncement(stored.contest, serverNow))
   const round =
     contest.phase === "rubric" || contest.phase === "runoff"
       ? contest.phase
@@ -307,6 +309,7 @@ export default async function TapasContest({
     <main className={eventStyles.event}>
       <RevealSync
         version={revealVersion(contest)}
+        announcing={announcing}
         countdown={contest.countdown ?? null}
         serverNow={serverNow}
       />
@@ -552,22 +555,24 @@ export default async function TapasContest({
                 <Results contest={contest} sort={sort} />
               )}
               {!canSeeResults(contest) &&
-                revealedPodium(contest).map(({ place, tapas }) => (
-                  <section key={place} className={styles.panel}>
-                    <h2>
-                      <span aria-hidden="true">{medals[place]?.icon}</span>{" "}
-                      {medals[place]?.label}
-                    </h2>
-                    <ul>
-                      {tapas.map(({ id, name, authors }) => (
-                        <li key={id}>
-                          <strong>{name}</strong> ·{" "}
-                          {authors.map(({ alias }) => alias).join(" y ")}
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                ))}
+                revealedPodium(contest)
+                  .reverse()
+                  .map(({ place, tapas }) => (
+                    <section key={place} className={styles.panel}>
+                      <h2>
+                        <span aria-hidden="true">{medals[place]?.icon}</span>{" "}
+                        {medals[place]?.label}
+                      </h2>
+                      <ul>
+                        {tapas.map(({ id, name, authors }) => (
+                          <li key={id}>
+                            <strong>{name}</strong> ·{" "}
+                            {authors.map(({ alias }) => alias).join(" y ")}
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
               {!actor.admin &&
                 !round &&
                 !canSeeResults(contest) &&
@@ -582,14 +587,19 @@ export default async function TapasContest({
               {actor.admin ? (
                 <section className={styles.panel}>
                   <h2>Administración</h2>
-                  <Management key={contest.phase} contest={contest} />
+                  {announcing ? (
+                    <p>Revelación en curso…</p>
+                  ) : (
+                    <Management key={contest.phase} contest={contest} />
+                  )}
                   {contest.phase === "registration" ? (
                     <details>
                       <summary>Inscribir una tapa</summary>
                       <AdminEntry people={available()} />
                     </details>
                   ) : null}
-                  {!contest.countdown &&
+                  {!announcing &&
+                    !contest.countdown &&
                     contest.phase !== "registration" &&
                     contest.phase !== "published" && (
                       <ContestForm

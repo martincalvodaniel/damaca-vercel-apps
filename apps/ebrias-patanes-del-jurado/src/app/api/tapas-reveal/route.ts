@@ -1,4 +1,8 @@
-import { revealVersion, settleReveal } from "@/features/tapas/contest"
+import {
+  revealAnnouncement,
+  revealVersion,
+  settleReveal,
+} from "@/features/tapas/contest"
 import { readContest } from "@/features/tapas/store"
 import { getAuthorizedUser } from "@/lib/session"
 
@@ -14,6 +18,7 @@ export async function GET() {
       version: revealVersion(contest),
       countdown: contest.countdown ?? null,
       serverNow,
+      announcement: revealAnnouncement(stored.contest, serverNow),
     },
     { headers }
   )
