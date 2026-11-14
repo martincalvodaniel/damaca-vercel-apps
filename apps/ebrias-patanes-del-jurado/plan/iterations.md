@@ -294,3 +294,11 @@
 - Dependencias: guía de Letux (EPJ-37).
 - Aceptación: cada actividad se ordena junto a los bloques de su día, aparece una sola vez y conserva su nota y enlace. Las guías existentes mantienen su orden inicial.
 - Validación: Biome, tipos, pruebas de compatibilidad y guardado del orden, build y recorrido en Chrome.
+
+## EPJ-40 — Edición compacta de la guía de Letux
+
+- Estado: `validated`.
+- Rutas: editor de Letux, estilos y plan de Ebrias.
+- Dependencias: EPJ-37 y EPJ-39.
+- Aceptación: cada nota se edita en su actividad. Los bloques usan campos compactos e iconos accesibles a la derecha del encabezado.
+- Validación: Biome, tipos, pruebas, build y revisión del editor a 320 y 1440 px.

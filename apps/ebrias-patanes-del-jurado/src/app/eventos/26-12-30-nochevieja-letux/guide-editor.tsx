@@ -6,6 +6,7 @@ import {
   type SetStateAction,
   type SubmitEvent,
   useCallback,
+  useId,
   useState,
   useTransition,
 } from "react"
@@ -16,11 +17,11 @@ import {
   type GuideSection,
   guideEntries,
   guideLimits,
-  guideNotes,
   guideSections,
   isActivityDay,
 } from "@/features/event-guide/guide"
 import styles from "./guide.module.css"
+import eventStyles from "./page.module.css"
 
 type GuideVersion = { guide: EventGuide; revision: number }
 
@@ -82,18 +83,16 @@ function GuideForm({
     <form aria-label="Editar guía" className={styles.panel} onSubmit={submit}>
       <fieldset className={styles.fields} disabled={pending}>
         <legend>Editar guía</legend>
-        {guideNotes.map(({ id, label }) => (
-          <label key={id}>
-            {label}
-            <textarea
-              rows={2}
-              maxLength={guideLimits.text}
-              value={draft.notes[id]}
-              name={id}
-              onChange={editNote}
-            />
-          </label>
-        ))}
+        <label>
+          Alojamiento
+          <textarea
+            rows={2}
+            maxLength={guideLimits.text}
+            value={draft.notes.lodging}
+            name="lodging"
+            onChange={editNote}
+          />
+        </label>
         {guideSections.map(({ id, label }) => (
           <GuideSectionFields
             key={id}
@@ -101,10 +100,11 @@ function GuideForm({
             section={id}
             draft={draft}
             setDraft={setDraft}
+            editNote={editNote}
           />
         ))}
         <div className={styles.controls}>
-          <button className={styles.primary} type="submit">
+          <button className={eventStyles.seal} type="submit">
             {pending ? "Guardando…" : "Guardar cambios"}
           </button>
           <button type="button" onClick={close}>
@@ -122,11 +122,13 @@ function GuideSectionFields({
   draft,
   section,
   setDraft,
+  editNote,
 }: {
   label: string
   draft: EventGuide
   section: GuideSection
   setDraft: Dispatch<SetStateAction<EventGuide>>
+  editNote: (event: ChangeEvent<HTMLTextAreaElement>) => void
 }) {
   const blocks = draft.sections[section]
   const entries = guideEntries(draft, section)
@@ -206,9 +208,19 @@ function GuideSectionFields({
       <legend>{label}</legend>
       {entries.map((block, index) =>
         "link" in block ? (
-          <p key={block.id}>
-            <strong>{block.title}</strong>
-          </p>
+          <fieldset className={styles.blockFields} key={block.id}>
+            <legend>{block.title}</legend>
+            <label>
+              Nota
+              <textarea
+                rows={2}
+                maxLength={guideLimits.text}
+                value={draft.notes[block.id]}
+                name={block.id}
+                onChange={editNote}
+              />
+            </label>
+          </fieldset>
         ) : (
           <GuideBlockFields
             key={block.id}
@@ -247,6 +259,7 @@ function GuideBlockFields({
   moveBlock: (id: string, direction: -1 | 1) => void
   removeBlock: (id: string) => void
 }) {
+  const heading = useId()
   const editTitle = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       editBlock(block.id, "title", event.currentTarget.value)
@@ -272,8 +285,29 @@ function GuideBlockFields({
   }, [block.id, removeBlock])
 
   return (
-    <fieldset className={styles.blockFields}>
-      <legend>Bloque {index + 1}</legend>
+    <fieldset className={styles.blockFields} aria-labelledby={heading}>
+      <div className={styles.blockHeading}>
+        <span id={heading}>Bloque {index + 1}</span>
+        <div className={styles.blockButtons}>
+          <BlockButton
+            label="Subir"
+            path="m6 15 6-6 6 6"
+            disabled={index === 0}
+            onClick={moveUp}
+          />
+          <BlockButton
+            label="Bajar"
+            path="m6 9 6 6 6-6"
+            disabled={last}
+            onClick={moveDown}
+          />
+          <BlockButton
+            label="Eliminar"
+            path="m6 6 12 12M18 6 6 18"
+            onClick={remove}
+          />
+        </div>
+      </div>
       <label>
         Título
         <input
@@ -286,23 +320,48 @@ function GuideBlockFields({
       <label>
         Texto
         <textarea
-          rows={3}
+          rows={2}
           maxLength={guideLimits.text}
           value={block.text}
           onChange={editText}
         />
       </label>
-      <div className={styles.controls}>
-        <button type="button" disabled={index === 0} onClick={moveUp}>
-          Subir
-        </button>
-        <button type="button" disabled={last} onClick={moveDown}>
-          Bajar
-        </button>
-        <button type="button" onClick={remove}>
-          Eliminar
-        </button>
-      </div>
     </fieldset>
+  )
+}
+
+function BlockButton({
+  label,
+  path,
+  disabled,
+  onClick,
+}: {
+  label: string
+  path: string
+  disabled?: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d={path} />
+      </svg>
+    </button>
   )
 }

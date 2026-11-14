@@ -131,3 +131,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - Cambios posteriores: se restauró el margen nativo de las listas de asistentes y la sangría se aplicó a las tarjetas de bloque. Biome y `git diff --check` correctos.
 - Entrega: commit local pendiente de push, despliegue Preview de `int` y movimiento del alias. `git ls-remote origin refs/heads/int` falló porque el entorno no resuelve `github.com`; Vercel CLI tampoco pudo conectar.
+
+## EPJ-30
+
+- [Criterios](iterations.md#epj-30--contador-de-reservas-y-control-de-personajes). El contador usa reservas actuales; la creación libre queda desactivada por defecto y solo el admin puede cambiarla. El servidor vuelve a validar la opción al recibir una reserva.
+- Biome, tipos y build de la app correctos. Revisión visual pendiente.
