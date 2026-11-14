@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import { CharacterCreationControl } from "@/features/costumes/character-creation-control"
 import { CostumePicker } from "@/features/costumes/costume-picker"
@@ -56,6 +57,12 @@ export default async function Costumes() {
               ya su personaje.
             </p>
           </header>
+          <Link
+            className={styles.back}
+            href="/eventos/26-12-30-nochevieja-letux"
+          >
+            ← Nochevieja en Letux
+          </Link>
           {initial ? (
             <>
               {user.role === "admin" ? (

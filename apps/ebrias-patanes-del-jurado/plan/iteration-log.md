@@ -2,11 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-22 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-23
-
-- Se añadió la acción de borrado con confirmación y transacción MongoDB. Pendiente comprobar el flujo con una cuenta desechable y revisar la pantalla en móvil y escritorio.
+[Entregas EPJ-08 a EPJ-23 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-24
 
@@ -58,3 +54,9 @@
 - Tapas reutiliza las tarjetas de pergamino, la tipografía de formularios y los botones de lacre de Letux y Disfraces.
 - Chrome autenticado con MongoDB desechable: igualdad de estilos calculados en las tarjetas y los botones principales de Tapas y Disfraces, y recorrido completo a 320 y 1440 px sin desplazamiento horizontal.
 - Build correcto, con el aviso de DNS de la base configurada al inicializar índices de Better Auth.
+
+## EPJ-33 — Separación uniforme en Letux
+
+- La ficha usa un único espacio entre sus cuatro controles. Disfraces recupera el enlace a la ficha con el mismo estilo y posición que Tapas.
+- Maqueta en Chrome con los estilos reales: tres huecos iguales de 4,8 px a 320 y 1440 px, con el listado abierto y cerrado.
+- Biome incremental, tipos, build y comprobación del diff correctos. El build mostró el aviso de DNS de MongoDB al inicializar índices.

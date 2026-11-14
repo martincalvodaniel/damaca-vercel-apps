@@ -53,38 +53,40 @@ export default async function NewYearsEve() {
             </p>
           </header>
 
-          <Link
-            className={styles.back}
-            href="/eventos/26-12-30-nochevieja-letux/disfraces"
-          >
-            Elegir disfraz →
-          </Link>
-          <AttendanceBlocksSection canManage={canManage}>
-            <AttendanceBoard
-              blocks={blocks}
-              roster={roster}
-              members={members}
-              canManage={canManage}
-            />
-          </AttendanceBlocksSection>
-          <CarSection canManage={canManage}>
-            <AttendanceBoard
-              mode="cars"
-              blocks={cars.blocks}
-              roster={roster.map((guest) => ({
-                ...guest,
-                status: cars.assigned.get(guest.id) ?? unassignedCar,
-              }))}
-              members={[]}
-              canManage={canManage}
-            />
-          </CarSection>
-          <Link
-            className={styles.back}
-            href="/eventos/26-12-30-nochevieja-letux/tapas"
-          >
-            Concurso de tapas →
-          </Link>
+          <div className={styles.eventActions}>
+            <Link
+              className={styles.back}
+              href="/eventos/26-12-30-nochevieja-letux/disfraces"
+            >
+              Elegir disfraz →
+            </Link>
+            <AttendanceBlocksSection canManage={canManage}>
+              <AttendanceBoard
+                blocks={blocks}
+                roster={roster}
+                members={members}
+                canManage={canManage}
+              />
+            </AttendanceBlocksSection>
+            <CarSection canManage={canManage}>
+              <AttendanceBoard
+                mode="cars"
+                blocks={cars.blocks}
+                roster={roster.map((guest) => ({
+                  ...guest,
+                  status: cars.assigned.get(guest.id) ?? unassignedCar,
+                }))}
+                members={[]}
+                canManage={canManage}
+              />
+            </CarSection>
+            <Link
+              className={styles.back}
+              href="/eventos/26-12-30-nochevieja-letux/tapas"
+            >
+              Concurso de tapas →
+            </Link>
+          </div>
         </div>
       </main>
     </LumosGate>

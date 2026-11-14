@@ -92,8 +92,14 @@
   gap: 0.35rem;
 }
 
-.attendees {
-  margin-top: 0.3rem;
+.eventActions {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 0.75rem;
+}
+
+:where(.eventActions) > .back {
+  margin-top: 0;
 }
 
 .attendees summary {

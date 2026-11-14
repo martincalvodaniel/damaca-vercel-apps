@@ -237,3 +237,12 @@
 - Aceptación: Tapas reutiliza el pergamino, los campos y los botones de lacre del evento en móvil y escritorio.
 - Validación: Biome, tipos, build y revisión responsive.
 - Evidencia: [registro de Ebrias](iteration-log.md#epj-32--estilo-de-tapas-en-letux).
+
+## EPJ-33 — Separación uniforme en Letux
+
+- Estado: `validated`.
+- Rutas: ficha de Letux, Disfraces y estilos del evento.
+- Dependencias: EPJ-31.
+- Aceptación: los cuatro controles de la ficha tienen la misma separación vertical y Disfraces incluye el enlace de vuelta a la ficha.
+- Validación: Biome, tipos, build y medida de los tres huecos en móvil y escritorio.
+- Evidencia: [registro de Ebrias](iteration-log.md#epj-33--separación-uniforme-en-letux).
