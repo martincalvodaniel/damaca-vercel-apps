@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-51 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-52 — Confirmaciones y avisos de acciones
-
-- Capacidad inicial de 72% en 5 h y 5% en 7 días. Las casillas y la confirmación nativa de borrado usan modales con controles en cabecera. La revisión de papeletas también se muestra en un modal.
-- El aviso flotante común recoge respuestas de Tapas, Disfraces, la guía, asistencia, coches y los formularios de Ajustes. El aviso persistente de intentos agotados permanece visible.
-- Biome, tipos, nueve pruebas de Tapas y build correctos. Sin comprobación del recorrido en un navegador autenticado.
+[Entregas EPJ-08 a EPJ-52 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-53 — Controles compactos de confirmación
 
@@ -60,3 +54,7 @@
 
 - Capacidad inicial de 34% en 5 h y 90% en 7 días. El anuncio ocupa la capa de cuenta atrás durante tres segundos y la plata aparece encima del bronce.
 - Biome, tipos, doce pruebas y build correctos. Se comprobó la ventana de publicación y el bloqueo de avances. Pendiente la revisión visual con dos sesiones autenticadas.
+
+## EPJ-62 — Formato del anuncio de Tapas
+
+- Capacidad inicial de 27% en 5 h y 89% en 7 días. El anuncio pone los autores entre paréntesis tras el nombre. Biome, tipos y build correctos.

@@ -117,9 +117,7 @@ export function RevealSync({
           <ul>
             {award.tapas.map(({ id, name, authors }) => (
               <li key={id}>
-                <strong>{name}</strong>
-                <br />
-                {authors.join(" y ")}
+                <strong>{name}</strong> ({authors.join(" y ")})
               </li>
             ))}
           </ul>

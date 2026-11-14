@@ -455,3 +455,9 @@
 - Rutas: revelación y podio de Tapas.
 - Aceptación: mostrar los premiados durante tres segundos al terminar la cuenta atrás y ordenar la plata encima del bronce.
 - Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-62 — Formato del anuncio de Tapas
+
+- Estado: `validated`.
+- Aceptación: el anuncio muestra el nombre de la tapa seguido de sus autores entre paréntesis.
+- Validación: Biome, tipos y build.
