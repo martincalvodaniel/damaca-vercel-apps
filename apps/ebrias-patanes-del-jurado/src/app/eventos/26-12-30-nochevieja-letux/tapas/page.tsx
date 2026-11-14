@@ -14,6 +14,7 @@ import {
   revealedPodium,
   revealVersion,
   selectVoter,
+  settleReveal,
   type Tapa,
 } from "@/features/tapas/contest"
 import {
@@ -172,6 +173,7 @@ function AdminEntry({ tapa, people }: { tapa?: Tapa; people: Person[] }) {
 }
 
 function Management({ contest }: { contest: Contest }) {
+  if (contest.countdown) return <p>Revelación en curso…</p>
   switch (contest.phase) {
     case "registration":
       return (
@@ -257,10 +259,12 @@ export default async function TapasContest({
 }) {
   const actor = await getContestActor()
   if (!actor) redirect("/")
-  const [{ contest }, { sort, assisted, handoff }] = await Promise.all([
+  const [stored, { sort, assisted, handoff }] = await Promise.all([
     readContest(),
     searchParams,
   ])
+  const serverNow = Date.now()
+  const contest = settleReveal(stored.contest, serverNow)
   const round =
     contest.phase === "rubric" || contest.phase === "runoff"
       ? contest.phase
@@ -301,7 +305,11 @@ export default async function TapasContest({
 
   return (
     <main className={eventStyles.event}>
-      <RevealSync version={revealVersion(contest)} />
+      <RevealSync
+        version={revealVersion(contest)}
+        countdown={contest.countdown ?? null}
+        serverNow={serverNow}
+      />
       <div className={eventStyles.content}>
         <header className={eventStyles.header}>
           <h1 className={eventStyles.title}>
@@ -581,7 +589,8 @@ export default async function TapasContest({
                       <AdminEntry people={available()} />
                     </details>
                   ) : null}
-                  {contest.phase !== "registration" &&
+                  {!contest.countdown &&
+                    contest.phase !== "registration" &&
                     contest.phase !== "published" && (
                       <ContestForm
                         key={`reopen:${contest.phase}`}

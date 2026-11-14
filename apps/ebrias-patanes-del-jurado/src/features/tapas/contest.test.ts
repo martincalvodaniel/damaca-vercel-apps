@@ -12,6 +12,7 @@ import {
   results,
   revealedPodium,
   revealVersion,
+  settleReveal,
 } from "./contest"
 
 const people = ["a", "b", "c", "d", "e"].map((id) => ({ id, alias: id }))
@@ -33,7 +34,8 @@ function submit(
   contest: Contest,
   actor: Actor,
   intent: string,
-  fields: Record<string, string> = {}
+  fields: Record<string, string> = {},
+  now = 10000
 ) {
   const form = new FormData()
   for (const [key, value] of Object.entries({ intent, ...fields }))
@@ -42,13 +44,17 @@ function submit(
     people,
     roster,
     newId: fields.name ?? "new",
+    now,
   })
 }
 
 function advance(contest: Contest, actor = admin) {
   const next = nextReveal(contest)
   if (!next) throw new Error("No pending reveal")
-  return submit(contest, actor, "reveal", { step: next.token })
+  return settleReveal(
+    submit(contest, actor, "reveal", { step: next.token }),
+    15000
+  )
 }
 
 function publish(contest: Contest) {
@@ -399,4 +405,32 @@ it("shows final runoff totals including zero without changing the reveal version
   const withdrawn = submit(published, admin, "unpublish", { confirm: "yes" })
   expect(revealVersion(withdrawn)).not.toBe(revealVersion(resolved))
   expect(finalRunoffCounts(withdrawn).size).toBe(0)
+})
+
+it("keeps the winner hidden until the shared deadline and blocks duplicate reveals", () => {
+  const runoff = runoffFixture()
+  const voted = submit(runoff, member("e"), "vote", {
+    round: "runoff",
+    choice: "First",
+  })
+  const resolved = submit(voted, admin, "resolve-runoff")
+  const step = nextReveal(resolved)?.token ?? ""
+  const scheduled = submit(resolved, admin, "reveal", { step }, 20000)
+  expect(scheduled.countdown).toEqual({
+    place: 1,
+    startsAt: 22000,
+    endsAt: 25000,
+  })
+  expect(nextReveal(scheduled)).toBeNull()
+  expect(canSeeResults(settleReveal(scheduled, 24999))).toBe(false)
+  expect(() => submit(scheduled, admin, "reveal", { step }, 24999)).toThrow(
+    "en curso"
+  )
+  const finished = settleReveal(scheduled, 25000)
+  expect(finished.countdown).toBeUndefined()
+  expect(canSeeResults(finished)).toBe(true)
+  expect(finished.winner).toBe("First")
+  expect(() => submit(scheduled, admin, "reveal", { step }, 25000)).toThrow(
+    "disponible"
+  )
 })

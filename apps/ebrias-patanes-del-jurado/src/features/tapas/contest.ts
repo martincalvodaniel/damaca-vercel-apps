@@ -22,7 +22,14 @@ type Phase =
 type Ballot<T> = { voter: string; value: T }
 type Rubric = { tapa: string; scores: Scores }[]
 
+export type RevealCountdown = {
+  place: number
+  startsAt: number
+  endsAt: number
+}
+
 export type Contest = {
+  countdown?: RevealCountdown
   phase: Phase
   votingGeneration?: number
   revealedPlaces?: number
@@ -146,6 +153,14 @@ export function podium(contest: Contest) {
   return levels.map((tapas, index) => ({ place: index + 1, tapas })).reverse()
 }
 
+export function settleReveal(contest: Contest, now: number): Contest {
+  if (!contest.countdown || now < contest.countdown.endsAt) return contest
+  const { countdown, ...rest } = contest
+  return countdown.place > 1
+    ? { ...rest, revealedPlaces: (rest.revealedPlaces ?? 0) + 1 }
+    : { ...rest, phase: "published" }
+}
+
 export function revealVersion(contest: Contest) {
   return `${contest.votingGeneration ?? 0}:${contest.phase}:${contest.revealedPlaces ?? 0}`
 }
@@ -170,7 +185,11 @@ export function revealedPodium(contest: Contest) {
 }
 
 export function nextReveal(contest: Contest) {
-  if (contest.phase !== "resolved" && contest.phase !== "preview") return null
+  if (
+    contest.countdown ||
+    (contest.phase !== "resolved" && contest.phase !== "preview")
+  )
+    return null
   const places = podium(contest)
   const place = places[contest.revealedPlaces ?? 0]?.place ?? 0
   return {
@@ -202,8 +221,10 @@ export function applyContestAction(
   contest: Contest,
   actor: Actor,
   form: FormData,
-  context: { people: Person[]; roster: Attendee[]; newId: string }
+  context: { people: Person[]; roster: Attendee[]; newId: string; now: number }
 ): Contest {
+  contest = settleReveal(contest, context.now)
+  if (contest.countdown) fail("Hay una revelación en curso.")
   const action = field(form, "intent")
   if (action === "rename-own") {
     const target = field(form, "tapa")
@@ -409,9 +430,13 @@ export function applyContestAction(
   if (action === "reveal") {
     const next = nextReveal(contest)
     if (next && field(form, "step") === next.token) {
-      if (next.place > 1)
-        return { ...contest, revealedPlaces: (contest.revealedPlaces ?? 0) + 1 }
-      return { ...contest, phase: next.needsRunoff ? "runoff" : "published" }
+      if (next.needsRunoff) return { ...contest, phase: "runoff" }
+      if (!next.place) return { ...contest, phase: "published" }
+      const startsAt = context.now + 2000
+      return {
+        ...contest,
+        countdown: { place: next.place, startsAt, endsAt: startsAt + 3000 },
+      }
     }
   }
   fail("Esta acción ya no está disponible.")

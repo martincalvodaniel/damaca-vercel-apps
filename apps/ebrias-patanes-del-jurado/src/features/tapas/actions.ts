@@ -39,7 +39,10 @@ export async function submitContest(
   for (let attempt = 0; attempt < 5; attempt += 1) {
     const { revision, contest } = await readContest()
     try {
-      const next = applyContestAction(contest, actor, form, context)
+      const next = applyContestAction(contest, actor, form, {
+        ...context,
+        now: Date.now(),
+      })
       if (await writeContest(revision, next)) {
         revalidatePath(contestPath)
         return ""

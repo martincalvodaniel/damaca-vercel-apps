@@ -441,3 +441,10 @@
 - Rutas: resultados de Tapas y consulta autenticada de progreso.
 - Aceptación: medallas y votos finales de desempate, con actualización automática al avanzar el podio.
 - Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-60 — Cuenta atrás del podio
+
+- Estado: `validated`.
+- Rutas: Tapas y consulta de revelación.
+- Aceptación: cuenta atrás compartida tras dos segundos de preparación, sin revelar datos antes del plazo.
+- Validación: Biome, tipos, pruebas temporales y build.

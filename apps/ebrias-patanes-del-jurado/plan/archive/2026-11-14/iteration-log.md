@@ -248,3 +248,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - Capacidad inicial de 78% en 5 h y 6% en 7 días. Los iconos abren la edición y la confirmación de borrado según permisos. Los coautores pueden editar el nombre durante la inscripción.
 - Biome, tipos, nueve pruebas de Tapas y build correctos. Queda pendiente la comprobación visual en un navegador autenticado.
+
+## EPJ-50 — Iconos compactos en Tapas
+
+- Capacidad inicial de 76% en 5 h y 5% en 7 días.
+- Botones de 24 px con iconos de 14 px, sin relleno y con 2 px de separación. Biome, tipos y build correctos.

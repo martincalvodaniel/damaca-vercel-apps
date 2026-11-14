@@ -170,3 +170,42 @@
   font: inherit;
   cursor: pointer;
 }
+
+.countdownOverlay {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.65rem;
+  color: #ffe3a6;
+  background: #090b14ee;
+  font:
+    700 clamp(1.5rem, 6vw, 3rem) Georgia,
+    serif;
+  pointer-events: none;
+}
+
+.countdownNumber {
+  font-size: clamp(5rem, 24vw, 12rem);
+  line-height: 1;
+  animation: countdown-pulse 0.75s ease-out both;
+}
+
+@keyframes countdown-pulse {
+  from {
+    transform: scale(0.65);
+    opacity: 0.35;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdownNumber {
+    animation: none;
+  }
+}

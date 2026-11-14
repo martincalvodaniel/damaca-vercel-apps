@@ -2,12 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-49 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-50 — Iconos compactos en Tapas
-
-- Capacidad inicial de 76% en 5 h y 5% en 7 días.
-- Botones de 24 px con iconos de 14 px, sin relleno y con 2 px de separación. Biome, tipos y build correctos.
+[Entregas EPJ-08 a EPJ-50 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-51 — Vista de miembro en la navegación
 
@@ -60,3 +55,8 @@
 - Capacidad inicial de 52% en 5 h y 93% en 7 días. Medallas por puntuación final, diamante para la ganadora y recuentos de finalistas tras publicar.
 - Las pantallas visibles consultan el progreso cada dos segundos mediante una ruta autenticada que devuelve solo una versión.
 - Biome, tipos, once pruebas de Tapas y build correctos. Pendiente la comprobación con dos sesiones autenticadas.
+
+## EPJ-60 — Cuenta atrás del podio
+
+- Capacidad inicial de 44% en 5 h y 91% en 7 días. Dos segundos de preparación y tres de cuenta atrás. La fecha límite se aplica en servidor sin depender de que el administrador mantenga la página abierta.
+- Biome, tipos, doce pruebas de Tapas y build correctos. Pendiente la revisión visual con dos sesiones autenticadas.
