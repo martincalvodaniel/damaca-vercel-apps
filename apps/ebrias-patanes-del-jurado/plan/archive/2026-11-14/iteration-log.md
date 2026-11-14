@@ -118,3 +118,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - [Criterios](iterations.md#epj-27--recarga-sin-parpadeo-de-lumos). El HTML inicial incluye el contenido del evento y omite el gate hasta resolver el estado local.
 - Biome sobre el componente, comprobación de tipos y build de la app correctos. Turbo no encontró tareas de test para la app. Se comprobó el HTML inicial con `renderToString`.
 - Pendiente comprobar la recarga en navegador móvil y de escritorio. La consulta al remoto falló al resolver GitHub.
+
+## EPJ-28
+
+- [Criterios](iterations.md#epj-28--quitar-añadir-bloque-de-quién-viene). El formulario de creación solo se monta en «Coches» para usuarios con permiso de gestión.
+- Biome sobre el componente, tipos y build correctos. Pendiente comprobar ambas secciones en navegador móvil y de escritorio.

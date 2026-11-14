@@ -278,3 +278,11 @@
 - Dependencias: roles actuales, MongoDB de la app y secciones de asistencia, coches, Tapas y Disfraces.
 - Aceptación: programa con bloques ordenables y notas fijas, edición exclusiva de administradores, persistencia inmediata y protección frente a cambios simultáneos. El acceso y los flujos existentes siguen disponibles.
 - Validación: Biome incremental, tipos, pruebas de Ebrias, build y recorrido de la guía y el editor a 320 y 1440 px con MongoDB aislado.
+
+## EPJ-38 — Coches junto a asistentes en Letux
+
+- Estado: `validated`.
+- Rutas: ficha de Letux y plan de Ebrias.
+- Dependencias: guía de Letux (EPJ-37).
+- Aceptación: «Reparto de coches» aparece inmediatamente después de «¿Quién viene?», antes del programa.
+- Validación: inspección del orden, Biome, tipos, pruebas de Ebrias y build.

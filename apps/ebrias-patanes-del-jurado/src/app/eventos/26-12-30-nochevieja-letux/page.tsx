@@ -77,6 +77,18 @@ export default async function NewYearsEve() {
                 canManage={canManage}
               />
             </AttendanceBlocksSection>
+            <CarSection canManage={canManage}>
+              <AttendanceBoard
+                mode="cars"
+                blocks={cars.blocks}
+                roster={roster.map((guest) => ({
+                  ...guest,
+                  status: cars.assigned.get(guest.id) ?? unassignedCar,
+                }))}
+                members={[]}
+                canManage={canManage}
+              />
+            </CarSection>
             <section className={guideStyles.panel}>
               <h2>{guideSections[0].label}</h2>
               <GuideText text={guide.notes.tapas} />
@@ -105,18 +117,6 @@ export default async function NewYearsEve() {
               label={guideSections[2].label}
               blocks={guide.sections.jan01}
             />
-            <CarSection canManage={canManage}>
-              <AttendanceBoard
-                mode="cars"
-                blocks={cars.blocks}
-                roster={roster.map((guest) => ({
-                  ...guest,
-                  status: cars.assigned.get(guest.id) ?? unassignedCar,
-                }))}
-                members={[]}
-                canManage={canManage}
-              />
-            </CarSection>
             <OptionalSection
               label={guideSections[3].label}
               blocks={guide.sections.other}
