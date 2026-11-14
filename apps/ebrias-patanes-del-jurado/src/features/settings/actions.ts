@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { cookies } from "next/headers"
 import { deleteMember } from "@/features/members/delete-member"
 import { saveDisplayAlias, saveMemberAlias } from "@/features/members/directory"
 import {
@@ -9,7 +10,24 @@ import {
   normalizeEmail,
   replaceMemberEmail,
 } from "@/lib/admission"
-import { getAuthorizedUser } from "@/lib/session"
+import { getAuthorizedUser, memberViewCookie } from "@/lib/session"
+
+export async function toggleMemberView() {
+  const user = await getAuthorizedUser()
+  if (!user?.isAccountAdmin) return
+  const jar = await cookies()
+  if (user.memberView) {
+    jar.delete(memberViewCookie)
+  } else {
+    jar.set(memberViewCookie, user.id, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      secure:
+        process.env.NODE_ENV === "production" && process.env.VERCEL === "1",
+    })
+  }
+}
 
 export async function approveEmail(_previous: string, form: FormData) {
   if ((await getAuthorizedUser())?.role !== "admin") {

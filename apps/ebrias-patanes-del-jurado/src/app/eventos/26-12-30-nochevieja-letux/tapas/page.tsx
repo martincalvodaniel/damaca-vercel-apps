@@ -311,11 +311,12 @@ export default async function TapasContest({
                     <ul>
                       {contest.tapas.map((tapa) => (
                         <li key={tapa.id}>
-                          <strong>{tapa.name}</strong> ·{" "}
-                          {tapa.authors.map(({ alias }) => alias).join(" y ")}
+                          <strong>
+                            {tapa.authors.map(({ alias }) => alias).join(" y ")}
+                          </strong>
                           {actor.admin ? (
                             <details>
-                              <summary>Editar o borrar {tapa.name}</summary>
+                              <summary>Editar o borrar inscripción</summary>
                               <AdminEntry
                                 tapa={tapa}
                                 people={available(tapa)}

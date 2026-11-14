@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-37 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-38 — Coches junto a asistentes en Letux
-
-- Inicio a las 13:02 CET con un 18% disponible en 5 h y un 11% en 7 días.
-- [Criterios](iterations.md#epj-38--coches-junto-a-asistentes-en-letux). El desplegable de coches sigue al de asistentes en el orden de la ficha.
-- Orden revisado en el diff. Biome, tipos, cinco pruebas de Ebrias, build y `git diff --check` correctos.
+[Entregas EPJ-08 a EPJ-38 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-39 — Orden de Tapas y Disfraces en la guía
 
@@ -60,3 +54,8 @@
 
 - Capacidad inicial de 86% en 5 h y 7% en 7 días. La papeleta usa dos filas y campos de 44 px.
 - Maqueta en Chrome a 320 y 1440 px con los estilos reales: dos filas alineadas sin desbordar y rechazo de 11. Biome, tipos, ocho pruebas de Tapas y build correctos.
+
+## EPJ-48 — Inscripciones secretas y vista de miembro
+
+- Capacidad inicial de 82% en 5 h y 6% en 7 días. El listado oculta los nombres y Ajustes permite al administrador alternar su rol efectivo en ese navegador.
+- Biome, tipos, ocho pruebas de Tapas y build correctos. La vista de miembro no se comprobó en un navegador autenticado.

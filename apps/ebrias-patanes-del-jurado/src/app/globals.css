@@ -214,6 +214,30 @@ body:has(.club-nav) {
   padding-bottom: calc(58px + env(safe-area-inset-bottom));
 }
 
+.settings-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.member-view-toggle {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.member-view-toggle[aria-pressed="true"] {
+  background: #ffe3a6;
+  color: #382116;
+}
+
 .settings {
   max-width: 34rem;
   margin-inline: auto;

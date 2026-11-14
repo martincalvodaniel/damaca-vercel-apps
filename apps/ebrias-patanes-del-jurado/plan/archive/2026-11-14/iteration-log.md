@@ -181,3 +181,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - [Criterios](iterations.md#epj-37--guía-editable-de-nochevieja-en-letux). Programa por días, notas y bloques administrables con control de revisión en MongoDB.
 - Biome en los seis archivos de código, tipos, cinco pruebas de Ebrias, build y `git diff --check` correctos.
 - Chrome con MongoDB desechable y sesiones ficticias: acceso privado, Lumos con la alternativa sin micrófono, guía vacía, alta, orden y borrado de bloques, lectura desde otra sesión, intento directo de guardado de miembro rechazado, guardado con revisión desactualizada y borrador conservado, desplegables de asistentes y coches y navegación a Tapas y Disfraces. Guía y editor sin desplazamiento horizontal a 320 y 1440 px.
+
+## EPJ-38 — Coches junto a asistentes en Letux
+
+- Inicio a las 13:02 CET con un 18% disponible en 5 h y un 11% en 7 días.
+- [Criterios](iterations.md#epj-38--coches-junto-a-asistentes-en-letux). El desplegable de coches sigue al de asistentes en el orden de la ficha.
+- Orden revisado en el diff. Biome, tipos, cinco pruebas de Ebrias, build y `git diff --check` correctos.

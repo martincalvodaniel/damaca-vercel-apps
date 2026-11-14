@@ -355,3 +355,11 @@
 - Rutas: papeleta y estilos de Tapas.
 - Aceptación: dos filas de categoría y nota por duplicado, con campos estrechos de 0 a 10.
 - Validación: Biome, tipos, pruebas de Tapas, build y comprobación responsive.
+
+## EPJ-48 — Inscripciones secretas y vista de miembro
+
+- Estado: `validated`.
+- Rutas: Tapas, Ajustes y sesión de Ebrias.
+- Dependencias: directorio y autorización existentes.
+- Aceptación: la lista de inscripción muestra solo autores. El admin puede alternar la vista de miembro desde Ajustes y recuperar sus controles con el mismo botón.
+- Validación: Biome, tipos, pruebas de Tapas y build.
