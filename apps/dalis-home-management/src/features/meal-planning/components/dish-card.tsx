@@ -10,13 +10,14 @@ import { DishNotes } from "./dish-notes"
 interface DishCardProps {
   dish: Dish
   onEdit: (dish: Dish) => void
+  onClone: (dish: Dish) => void
 }
 
 const quantityFormatter = new Intl.NumberFormat("es-ES", {
   maximumFractionDigits: 2,
 })
 
-export function DishCard({ dish, onEdit }: DishCardProps) {
+export function DishCard({ dish, onEdit, onClone }: DishCardProps) {
   const [error, setError] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -37,6 +38,7 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
   }, [dish.id])
 
   const editDish = useCallback(() => onEdit(dish), [dish, onEdit])
+  const cloneDish = useCallback(() => onClone(dish), [dish, onClone])
   const openDeleteDialog = useCallback(() => setIsDeleteDialogOpen(true), [])
   const closeDeleteDialog = useCallback(() => setIsDeleteDialogOpen(false), [])
 
@@ -76,20 +78,28 @@ export function DishCard({ dish, onEdit }: DishCardProps) {
           <p className="mt-1.5 text-xs font-medium text-danger">{error}</p>
         ) : null}
 
-        <div className="mt-2 flex gap-2 border-t border-border pt-2">
+        <div className="mt-2 grid grid-cols-3 items-center gap-2 border-t border-border pt-2">
           <button
             type="button"
             onClick={editDish}
             disabled={isPending}
-            className="rounded-full bg-surface px-3.5 py-1 text-xs font-semibold transition hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
+            className="min-h-8 justify-self-start rounded-full bg-surface px-3.5 py-1 text-xs font-semibold transition hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
           >
             Editar
           </button>
           <button
             type="button"
+            onClick={cloneDish}
+            disabled={isPending}
+            className="min-h-8 justify-self-center rounded-full bg-surface px-3.5 py-1 text-xs font-semibold transition hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
+          >
+            Clonar
+          </button>
+          <button
+            type="button"
             onClick={openDeleteDialog}
             disabled={isPending}
-            className="ml-auto rounded-full px-3 py-1 text-xs font-semibold text-danger transition hover:bg-danger-soft focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
+            className="min-h-8 justify-self-end rounded-full px-3 py-1 text-xs font-semibold text-danger transition hover:bg-danger-soft focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
           >
             Eliminar
           </button>

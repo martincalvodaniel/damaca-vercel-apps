@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react"
 import type { CatalogProductOption } from "@/features/catalog/product-option"
 import type { Dish } from "@/schemas/dish"
+import type { DishFormMode } from "./dish-form"
 import { DishManager } from "./dish-manager"
 
 interface DishCatalogPageProps {
@@ -12,22 +13,22 @@ interface DishCatalogPageProps {
 
 export function DishCatalogPage({ dishes, products }: DishCatalogPageProps) {
   const [search, setSearch] = useState("")
-  const [editingDish, setEditingDish] = useState<Dish | null>(null)
-  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [formMode, setFormMode] = useState<DishFormMode | null>(null)
 
   const closeForm = useCallback(() => {
-    setIsFormOpen(false)
-    setEditingDish(null)
+    setFormMode(null)
   }, [])
 
   const editDish = useCallback((dish: Dish) => {
-    setEditingDish(dish)
-    setIsFormOpen(true)
+    setFormMode({ kind: "edit", dish })
+  }, [])
+
+  const cloneDish = useCallback((dish: Dish) => {
+    setFormMode({ kind: "clone", dish })
   }, [])
 
   const openCreateForm = useCallback(() => {
-    setEditingDish(null)
-    setIsFormOpen(true)
+    setFormMode({ kind: "create" })
   }, [])
 
   return (
@@ -66,9 +67,9 @@ export function DishCatalogPage({ dishes, products }: DishCatalogPageProps) {
           products={products}
           search={search}
           onSearchChange={setSearch}
-          editingDish={editingDish}
-          isFormOpen={isFormOpen}
+          formMode={formMode}
           onEdit={editDish}
+          onClone={cloneDish}
           onClose={closeForm}
         />
       </div>

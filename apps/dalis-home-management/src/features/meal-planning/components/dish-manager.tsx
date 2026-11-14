@@ -3,7 +3,7 @@
 import { ModalDialog } from "@/components/ui/modal-dialog"
 import type { CatalogProductOption } from "@/features/catalog/product-option"
 import type { Dish } from "@/schemas/dish"
-import { DishForm } from "./dish-form"
+import { DishForm, type DishFormMode } from "./dish-form"
 import { DishList } from "./dish-list"
 
 interface DishManagerProps {
@@ -11,9 +11,9 @@ interface DishManagerProps {
   products: CatalogProductOption[]
   search: string
   onSearchChange: (search: string) => void
-  editingDish: Dish | null
-  isFormOpen: boolean
+  formMode: DishFormMode | null
   onEdit: (dish: Dish) => void
+  onClone: (dish: Dish) => void
   onClose: () => void
 }
 
@@ -22,9 +22,9 @@ export function DishManager({
   products,
   search,
   onSearchChange,
-  editingDish,
-  isFormOpen,
+  formMode,
   onEdit,
+  onClone,
   onClose,
 }: DishManagerProps) {
   return (
@@ -34,16 +34,25 @@ export function DishManager({
         search={search}
         onSearchChange={onSearchChange}
         onEdit={onEdit}
+        onClone={onClone}
       />
       <ModalDialog
-        open={isFormOpen}
-        ariaLabel={editingDish ? `Editar ${editingDish.name}` : "Añadir plato"}
+        open={formMode !== null}
+        ariaLabel={
+          formMode?.kind === "edit"
+            ? `Editar ${formMode.dish.name}`
+            : "Añadir plato"
+        }
         onDismiss={onClose}
       >
-        {isFormOpen ? (
+        {formMode ? (
           <DishForm
-            key={editingDish?.id ?? "new-dish"}
-            dish={editingDish}
+            key={
+              formMode.kind === "create"
+                ? "create"
+                : `${formMode.kind}-${formMode.dish.id}`
+            }
+            mode={formMode}
             initialName={search.trim()}
             products={products}
             onCancel={onClose}

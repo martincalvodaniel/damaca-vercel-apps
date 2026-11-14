@@ -20,8 +20,12 @@ import {
 import type { Dish } from "@/schemas/dish"
 import { type IngredientDraft, IngredientRow } from "./ingredient-row"
 
+export type DishFormMode =
+  | { kind: "create" }
+  | { kind: "edit" | "clone"; dish: Dish }
+
 interface DishFormProps {
-  dish: Dish | null
+  mode: DishFormMode
   initialName?: string
   products: CatalogProductOption[]
   onCancel: () => void
@@ -48,12 +52,14 @@ function getInitialIngredients(dish: Dish | null): IngredientDraft[] {
 }
 
 export function DishForm({
-  dish,
+  mode,
   initialName,
   products,
   onCancel,
   onSaved,
 }: DishFormProps) {
+  const dish = mode.kind === "create" ? null : mode.dish
+  const editingDish = mode.kind === "edit" ? mode.dish : null
   const formId = useId()
   const nameId = useId()
   const notesId = useId()
@@ -66,7 +72,6 @@ export function DishForm({
   >(null)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
-  const isEditing = dish !== null
 
   const ingredientRows = useMemo(
     () =>
@@ -146,8 +151,8 @@ export function DishForm({
 
       startTransition(async () => {
         try {
-          const result = dish
-            ? await updateDishAction(dish.id, input)
+          const result = editingDish
+            ? await updateDishAction(editingDish.id, input)
             : await createDishAction(input)
 
           if (!result.success) {
@@ -162,7 +167,7 @@ export function DishForm({
         }
       })
     },
-    [dish, ingredients, onSaved]
+    [editingDish, ingredients, onSaved]
   )
 
   const dismissProductDialog = useCallback(
@@ -173,11 +178,11 @@ export function DishForm({
   return (
     <section className="flex h-full min-h-0 flex-col bg-surface">
       <DialogHeader
-        title={isEditing ? dish.name : "Guardar una comida"}
+        title={editingDish?.name ?? "Guardar una comida"}
         onDismiss={onCancel}
         cancelDisabled={isPending}
         confirmLabel={
-          isPending ? "Guardando…" : isEditing ? "Guardar" : "Crear plato"
+          isPending ? "Guardando…" : editingDish ? "Guardar" : "Crear plato"
         }
         confirmDisabled={isPending}
         confirmForm={formId}

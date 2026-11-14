@@ -11,6 +11,7 @@ interface DishListProps {
   search: string
   onSearchChange: (search: string) => void
   onEdit: (dish: Dish) => void
+  onClone: (dish: Dish) => void
 }
 
 const diacriticPattern = /\p{Diacritic}/gu
@@ -27,6 +28,7 @@ export function DishList({
   search,
   onSearchChange,
   onEdit,
+  onClone,
 }: DishListProps) {
   const titleId = useId()
   const searchInputId = useId()
@@ -104,7 +106,12 @@ export function DishList({
       ) : (
         <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
           {filteredDishes.map((dish) => (
-            <DishCard key={dish.id} dish={dish} onEdit={onEdit} />
+            <DishCard
+              key={dish.id}
+              dish={dish}
+              onEdit={onEdit}
+              onClone={onClone}
+            />
           ))}
         </div>
       )}

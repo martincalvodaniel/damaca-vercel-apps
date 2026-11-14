@@ -1,5 +1,15 @@
 # Iteraciones
 
+## HM-22 — Clonar platos
+
+- Estado: `validated`.
+- Objetivo: crear variantes desde el recetario.
+- Rutas: `src/features/meal-planning/components/dish-*.tsx` y `plan/`.
+- Dependencias: formulario y acción de creación existentes; sin nuevas dependencias ni cambios de datos.
+- Aceptación: «Clonar» entre «Editar» y «Eliminar»; formulario de creación con nombre, ingredientes, cantidades y notas del original; guardar crea otro plato y cancelar no guarda.
+- Validación prevista: Biome, tipos, tests, build y comprobación responsive del flujo.
+- Evidencia: [HM-22](iteration-log.md#hm-22--clonar-platos).
+
 ## HM-21 — Autoría uniforme y filtro sin sugerencias
 
 - Estado: `validated`.
@@ -37,7 +47,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: componentes existentes, sin cambios de datos ni dependencias nuevas.
 - Aceptación: separación superior de 8px en las tres listas; vista previa en una fila con contador numérico a la derecha del título; selector y vaciado de semana en la misma fila también en móvil, sin desbordamiento; ocultar títulos y textos de presentación redundantes en escritorio, conservar títulos móviles y rango semanal.
 - Validación prevista: Biome, tipos, tests, build Webpack y comprobación visual aislada de disposición responsive.
-- Evidencia: [HM-03](iteration-log.md#hm-03--cabeceras-y-vista-previa-compactas).
+- Evidencia: [HM-03](archive/2026-11-14/iteration-log.md#hm-03--cabeceras-y-vista-previa-compactas).
 
 ## HM-04 — Corregir visibilidad responsive de títulos
 
@@ -47,7 +57,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: disposición compacta de HM-03.
 - Aceptación: títulos y presentación visibles desde 640px y ocultos por debajo; conservar buscadores, contador, rango semanal y controles compactos; eliminar el texto de ayuda sobre arrastrar; mantener «Vaciar semana» visible y deshabilitado cuando no hay comidas planificadas.
 - Validación prevista: Biome, tipos, tests, build Webpack y verificación responsive en Chrome.
-- Evidencia: [HM-04](iteration-log.md#hm-04--corregir-visibilidad-responsive-de-títulos).
+- Evidencia: [HM-04](archive/2026-11-14/iteration-log.md#hm-04--corregir-visibilidad-responsive-de-títulos).
 
 ## HM-05 — Acceso compacto para copiar semana anterior
 
@@ -57,7 +67,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: estilos compactos de vista previa y acción de copia existentes.
 - Aceptación: eliminar título, descripción y contenedor decorativo del panel; botón de ancho completo con mismos colores, altura y forma que vista previa; flecha a la izquierda y texto alineado a la derecha; conservar copia, estado de carga y errores; accesos de copia y vista previa mutuamente excluyentes.
 - Validación prevista: Biome, tipos, tests, build Webpack y revisión responsive aislada.
-- Evidencia: [HM-05](iteration-log.md#hm-05--acceso-compacto-para-copiar-semana-anterior).
+- Evidencia: [HM-05](archive/2026-11-14/iteration-log.md#hm-05--acceso-compacto-para-copiar-semana-anterior).
 
 ## HM-06 — Contador semanal compacto
 
@@ -67,7 +77,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: número actual de comidas planificadas, sin cambios de datos.
 - Aceptación: mostrar únicamente `X/14` dentro de una etiqueta compacta junto al rango semanal, conservando descripción accesible y adaptación a móvil/escritorio.
 - Validación prevista: Biome, tipos, tests, build Webpack y revisión visual aislada.
-- Evidencia: [HM-06](iteration-log.md#hm-06--contador-semanal-compacto).
+- Evidencia: [HM-06](archive/2026-11-14/iteration-log.md#hm-06--contador-semanal-compacto).
 
 ## HM-07 — Ocultar barra horizontal de filtros
 
@@ -77,7 +87,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: filtro compartido de lugares de compra, sin cambios funcionales ni dependencias nuevas.
 - Aceptación: barra invisible con soporte estándar y WebKit; contenido horizontal desplazable y filtros accesibles mediante teclado.
 - Validación prevista: Biome, tipos, tests, build Webpack y comprobación de scroll en Chrome.
-- Evidencia: [HM-07](iteration-log.md#hm-07--ocultar-barra-horizontal-de-filtros).
+- Evidencia: [HM-07](archive/2026-11-14/iteration-log.md#hm-07--ocultar-barra-horizontal-de-filtros).
 
 ## HM-08 — Modales móviles adaptadas al teclado
 
@@ -87,7 +97,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: dialog nativo y VisualViewport del navegador; sin dependencias nuevas.
 - Aceptación: modales superiores en móvil con margen seguro, altura limitada al área visible y contenido desplazable; formularios accesibles al reducirse el viewport por teclado; paneles de altura completa y diálogos anidados compatibles; escritorio centrado; conservar cierre, foco y bloqueo del fondo.
 - Validación prevista: Biome, tipos, tests, build Webpack y Chrome con reducción simulada del viewport visual, navegación por formularios y comprobación desktop.
-- Evidencia: [HM-08](iteration-log.md#hm-08--modales-móviles-adaptadas-al-teclado).
+- Evidencia: [HM-08](archive/2026-11-14/iteration-log.md#hm-08--modales-móviles-adaptadas-al-teclado).
 
 ## HM-09 — Modales de pantalla completa y acciones superiores
 
@@ -97,7 +107,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: controles nativos de formulario, hook de viewport de HM-08 y referencia de Tasks (solo lectura); sin nuevas dependencias.
 - Aceptación: pantalla completa en móvil y escritorio; cruz roja izquierda y tick verde derecha, título centrado y cabecera siempre visible; validación y envío nativos, accesibilidad y estados pendientes conservados; contenido desplazable desde arriba; teclado y diálogos anidados compatibles; sin botones duplicados al pie.
 - Validación prevista: Biome, tipos, tests, build Webpack y Chrome con scroll, validación, envíos aislados, teclado simulado y diálogos anidados.
-- Evidencia: [HM-09](iteration-log.md#hm-09--modales-de-pantalla-completa-y-acciones-superiores).
+- Evidencia: [HM-09](archive/2026-11-14/iteration-log.md#hm-09--modales-de-pantalla-completa-y-acciones-superiores).
 
 ## HM-10 — Sistema de color cohesionado y accesible
 
@@ -107,7 +117,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: Tailwind y temas existentes; sin nuevas dependencias ni cambios de datos.
 - Aceptación: superficies comunes y opacas en modales/tarjetas; acciones principales y foco uniformes; estados semánticos separados de acentos de sección; textos pequeños con contraste AA; productos comprados legibles sin atenuar todo el bloque; capas oscuras y controles nativos coherentes; colores centralizados y componentes migrados; reglas accesibles desde AGENTS; conservar comportamiento, modales completas y teclado.
 - Validación prevista: Biome de todos los archivos tocados, tipos, tests, build Webpack, revisión visual clara/oscura y contraste calculado sobre colores compuestos, prueba de interacción de formularios y comprobación de referencias documentales.
-- Evidencia: [HM-10](iteration-log.md#hm-10--sistema-de-color-cohesionado-y-accesible).
+- Evidencia: [HM-10](archive/2026-11-14/iteration-log.md#hm-10--sistema-de-color-cohesionado-y-accesible).
 
 ## HM-11 — Tareas recurrentes del hogar
 
@@ -117,7 +127,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: arquitectura existente, sin nuevas dependencias.
 - Aceptación: plan aprobado en esta conversación; periodicidad máxima, aviso al 80%, sin avisos antes de la primera ejecución, histórico corregible y calendario rojo/verde/neutro.
 - Validación prevista: Biome, tipos, tests, build y QA visual/interactiva.
-- Evidencia: [HM-11](iteration-log.md#hm-11--tareas-recurrentes-del-hogar).
+- Evidencia: [HM-11](archive/2026-11-14/iteration-log.md#hm-11--tareas-recurrentes-del-hogar).
 
 ## HM-12 — Densidad móvil coherente en Tareas
 
@@ -127,7 +137,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: componentes y tokens actuales, sin cambios de negocio, datos, dependencias o páginas ajenas.
 - Aceptación: cabecera de página y presentación ocultas en móvil; barra compacta; acciones por iconos donde aportan espacio, con nombres accesibles; fechas, periodicidad, avisos y acciones conservados; calendario y listas con separación reducida; verificación de densidad y legibilidad a 320/390px y escritorio en ambos temas. Contrato de diseño enlazado y exigible para nuevas páginas y revisiones.
 - Validación prevista: Biome incremental, tipos, tests existentes, build y Chrome con comparación de alturas, interacción, teclado, contraste y ausencia de desbordamiento.
-- Evidencia: [HM-12](iteration-log.md#hm-12--densidad-móvil-coherente-en-tareas).
+- Evidencia: [HM-12](archive/2026-11-14/iteration-log.md#hm-12--densidad-móvil-coherente-en-tareas).
 
 ## HM-13 — Controles compactos y restauración de tareas
 
