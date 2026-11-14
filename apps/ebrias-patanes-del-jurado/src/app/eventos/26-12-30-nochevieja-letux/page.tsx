@@ -139,6 +139,7 @@ function ProgramDay({
       {guideEntries(guide, day).map((entry) =>
         "link" in entry ? (
           <article key={entry.id}>
+            <h3>{guide.activityTitles?.[entry.id] ?? entry.title}</h3>
             <GuideText text={guide.notes[entry.id]} />
             <Link
               className={styles.back}
@@ -148,7 +149,7 @@ function ProgramDay({
                   : "/eventos/26-12-30-nochevieja-letux/disfraces"
               }
             >
-              {guide.activityTitles?.[entry.id] ?? entry.link} →
+              {entry.link} →
             </Link>
           </article>
         ) : (

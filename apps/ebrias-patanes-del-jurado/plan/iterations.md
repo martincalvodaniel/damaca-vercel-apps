@@ -318,3 +318,11 @@
 - Dependencias: EPJ-41.
 - Aceptación: ambos títulos se editan desde su bloque y aparecen en la guía. Vaciar un título recupera el nombre original.
 - Validación: Biome, tipos, pruebas de guardado y build.
+
+## EPJ-43 — Títulos y botones de las actividades
+
+- Estado: `validated`.
+- Rutas: ficha y modelo de la guía de Letux.
+- Dependencias: EPJ-42.
+- Aceptación: el título editable aparece como encabezado de bloque y los botones conservan sus etiquetas fijas con flecha.
+- Validación: Biome, tipos, pruebas y build.

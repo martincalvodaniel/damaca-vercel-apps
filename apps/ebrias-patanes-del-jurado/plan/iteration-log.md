@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-32 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-33 — Separación uniforme en Letux
-
-- La ficha usa un único espacio entre sus cuatro controles. Disfraces recupera el enlace a la ficha con el mismo estilo y posición que Tapas.
-- Maqueta en Chrome con los estilos reales: tres huecos iguales de 4,8 px a 320 y 1440 px, con el listado abierto y cerrado.
-- Biome incremental, tipos, build y comprobación del diff correctos. El build mostró el aviso de DNS de MongoDB al inicializar índices.
+[Entregas EPJ-08 a EPJ-33 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-34 — Separación en Disfraces y Tapas
 
@@ -63,3 +57,9 @@
 - El usuario autorizó continuar pese a la reserva de capacidad.
 - [Criterios](iterations.md#epj-42--nombres-editables-para-tapas-y-disfraces). Los títulos se guardan con la guía y se usan en los enlaces. Los campos vacíos recuperan el nombre original.
 - Biome, tipos, ocho pruebas y build correctos. No se hizo una comprobación adicional en navegador.
+
+## EPJ-43 — Títulos y botones de las actividades
+
+- Capacidad inicial disponible de 100% en 5 h y 9% en 7 días.
+- [Criterios](iterations.md#epj-43--títulos-y-botones-de-las-actividades). Los títulos se muestran como encabezados y los botones conservan sus etiquetas fijas con flecha.
+- Biome, tipos, ocho pruebas y build correctos.

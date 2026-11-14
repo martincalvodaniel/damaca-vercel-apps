@@ -17,7 +17,7 @@ type GuideNote = (typeof guideNotes)[number]["id"]
 export type GuideBlock = { id: string; title: string; text: string }
 export const guideActivities = {
   dec30: { id: "tapas", title: "Concurso de tapas", link: "Concurso de tapas" },
-  dec31: { id: "costumes", title: "Disfraces", link: "Elegir disfraz" },
+  dec31: { id: "costumes", title: "Disfraces", link: "Elige tu disfraz" },
 } as const
 
 export type ActivityDay = keyof typeof guideActivities
