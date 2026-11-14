@@ -60,7 +60,9 @@ export function ActionFeedback({ children }: { children: ReactNode }) {
 export function ActionPopup() {
   const [message, setMessage] = useState<ReactNode>(null)
   const popup = useRef<HTMLDivElement>(null)
+  const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const dismiss = useCallback(() => {
+    clearTimeout(timeout.current)
     popup.current?.hidePopover()
     setMessage(null)
   }, [])
@@ -68,11 +70,15 @@ export function ActionPopup() {
     function onFeedback(event: Event) {
       setMessage((event as CustomEvent<ReactNode>).detail)
       popup.current?.showPopover()
+      clearTimeout(timeout.current)
+      timeout.current = setTimeout(dismiss, 5000)
     }
     window.addEventListener("ebrias-action-feedback", onFeedback)
-    return () =>
+    return () => {
+      clearTimeout(timeout.current)
       window.removeEventListener("ebrias-action-feedback", onFeedback)
-  }, [])
+    }
+  }, [dismiss])
   return (
     <div ref={popup} popover="manual" className="action-popup">
       <div role="status">{message}</div>

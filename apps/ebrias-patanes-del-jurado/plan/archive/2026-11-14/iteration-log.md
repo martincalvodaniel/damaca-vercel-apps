@@ -228,3 +228,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - Inicio con 93% de 5 h y 8% de 7 días disponibles. La administración permite altas, cambios de nombre y autoría y borrado con confirmación durante la inscripción.
 - Biome, tipos, siete pruebas de Tapas y build correctos. Las pruebas verifican permisos, autores duplicados y el bloqueo fuera de inscripción.
+
+## EPJ-46 — Retirar la publicación del concurso
+
+- Capacidad inicial de 90% en 5 h y 8% en 7 días. La retirada devuelve el resultado a la vista privada y conserva las papeletas.
+- Biome, tipos, ocho pruebas de Tapas y build correctos. La prueba cubre el permiso, la confirmación, la visibilidad y la republicación.

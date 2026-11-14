@@ -2,12 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-45 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-46 — Retirar la publicación del concurso
-
-- Capacidad inicial de 90% en 5 h y 8% en 7 días. La retirada devuelve el resultado a la vista privada y conserva las papeletas.
-- Biome, tipos, ocho pruebas de Tapas y build correctos. La prueba cubre el permiso, la confirmación, la visibilidad y la republicación.
+[Entregas EPJ-08 a EPJ-46 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-47 — Rúbrica compacta
 
@@ -56,3 +51,9 @@
 
 - Capacidad inicial de 89% en 5 h y 98% en 7 días. Lista compartida con orden persistente, marcas independientes, edición y borrado confirmado.
 - Biome, tipos, diez pruebas de compra y Tapas y build correctos. La comprobación en Chrome quedó pendiente porque la sesión ficticia redirigía a la portada antes de abrir la ficha.
+
+## EPJ-56 — Ajustes de compra, inscripciones y avisos
+
+- Capacidad inicial disponible de 74% en 5 h y 96% en 7 días.
+- La compra comparte la sangría móvil. Tapas muestra el total, separa el formulario personal y abre la confirmación desde la papelera. El formulario de alta del administrador se mueve a Administración.
+- Los avisos se cierran a los cinco segundos y reinician el plazo al recibir otro mensaje. Biome, tipos, diez pruebas y build correctos. Pendiente comprobar el recorrido con una sesión autenticada.

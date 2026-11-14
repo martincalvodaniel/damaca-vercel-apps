@@ -345,6 +345,7 @@
 }
 
 @media (width < 48rem) {
+  .attendees[open] > .card,
   .attendees[open] > .roster > .card {
     margin-inline: 0.45rem;
   }

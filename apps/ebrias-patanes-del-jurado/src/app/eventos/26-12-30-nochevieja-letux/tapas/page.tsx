@@ -304,7 +304,7 @@ export default async function TapasContest({
               </Link>
               {contest.phase === "registration" && (
                 <section className={styles.panel}>
-                  <h2>Inscripciones</h2>
+                  <h2>Inscripciones ({contest.tapas.length})</h2>
                   {contest.tapas.length ? (
                     <ul>
                       {contest.tapas.map((tapa) => (
@@ -325,13 +325,17 @@ export default async function TapasContest({
                                   label="Guardar cambios"
                                 >
                                   <label>
-                                    Nombre de la tapa
+                                    Nombre de tu tapa
                                     <input
                                       name="name"
                                       maxLength={80}
                                       required
                                       defaultValue={tapa.name}
                                     />
+                                    <small>
+                                      El resto de participantes no verá el
+                                      nombre hasta que se abra la votación.
+                                    </small>
                                   </label>
                                   <label>
                                     Coautor o coautora (opcional)
@@ -365,13 +369,17 @@ export default async function TapasContest({
                                     value={tapa.id}
                                   />
                                   <label>
-                                    Nombre de la tapa
+                                    Nombre de tu tapa
                                     <input
                                       name="name"
                                       maxLength={80}
                                       required
                                       defaultValue={tapa.name}
                                     />
+                                    <small>
+                                      El resto de participantes no verá el
+                                      nombre hasta que se abra la votación.
+                                    </small>
                                   </label>
                                 </ContestForm>
                               ) : null
@@ -384,6 +392,7 @@ export default async function TapasContest({
                                     actor.admin ? "admin-remove" : "remove"
                                   }
                                   label="Borrar tapa"
+                                  iconLabel={`Borrar tapa de ${tapa.authors.map(({ alias }) => alias).join(" y ")}`}
                                   confirmation="Se eliminará esta inscripción."
                                 >
                                   <input
@@ -401,30 +410,34 @@ export default async function TapasContest({
                   ) : (
                     <p>Todavía no hay tapas inscritas.</p>
                   )}
-                  {actor.admin ? (
-                    <details>
-                      <summary>Inscribir una tapa</summary>
-                      <AdminEntry people={available()} />
-                    </details>
-                  ) : actor.member && !registered ? (
-                    <ContestForm intent="save" label="Inscribir mi tapa">
-                      <label>
-                        Nombre de la tapa
-                        <input name="name" maxLength={80} required />
-                      </label>
-                      <label>
-                        Coautor o coautora (opcional)
-                        <select name="partner" defaultValue="">
-                          <option value="">En solitario</option>
-                          {people.map(({ id, alias }) => (
-                            <option key={id} value={id}>
-                              {alias}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </ContestForm>
-                  ) : actor.member ? null : (
+                  {!actor.admin && actor.member && !registered ? (
+                    <>
+                      {contest.tapas.length > 0 ? (
+                        <hr className={styles.entryDivider} />
+                      ) : null}
+                      <ContestForm intent="save" label="Inscribir mi tapa">
+                        <label>
+                          Nombre de tu tapa
+                          <input name="name" maxLength={80} required />
+                          <small>
+                            El resto de participantes no verá el nombre hasta
+                            que se abra la votación.
+                          </small>
+                        </label>
+                        <label>
+                          Coautor o coautora (opcional)
+                          <select name="partner" defaultValue="">
+                            <option value="">En solitario</option>
+                            {people.map(({ id, alias }) => (
+                              <option key={id} value={id}>
+                                {alias}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </ContestForm>
+                    </>
+                  ) : actor.admin || actor.member ? null : (
                     <p>
                       Para inscribir una tapa necesitas una cuenta vinculada al
                       club.
@@ -497,6 +510,12 @@ export default async function TapasContest({
                 <section className={styles.panel}>
                   <h2>Administración</h2>
                   <Management key={contest.phase} contest={contest} />
+                  {contest.phase === "registration" ? (
+                    <details>
+                      <summary>Inscribir una tapa</summary>
+                      <AdminEntry people={available()} />
+                    </details>
+                  ) : null}
                   {contest.phase !== "registration" &&
                     contest.phase !== "published" && (
                       <ContestForm

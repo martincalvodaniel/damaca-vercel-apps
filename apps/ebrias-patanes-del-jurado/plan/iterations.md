@@ -413,3 +413,10 @@
 - Rutas: ficha de Letux y lista compartida de la compra.
 - Aceptación: los miembros pueden añadir, editar, marcar, reordenar y borrar con confirmación. Marcar no mueve un elemento.
 - Validación: Biome, tipos, pruebas de orden y build.
+
+## EPJ-56 — Ajustes de compra, inscripciones y avisos
+
+- Estado: `validated`.
+- Rutas: desplegables de Letux, Tapas y avisos globales.
+- Aceptación: sangría compartida, contador y separación de inscripciones, borrado directo mediante modal y avisos de hasta cinco segundos.
+- Validación: Biome, tipos, pruebas de Tapas y build.

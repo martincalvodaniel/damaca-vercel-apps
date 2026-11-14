@@ -26,6 +26,7 @@ export function ContestForm({
   label,
   completed,
   confirmation,
+  iconLabel,
   header,
   onSaved,
 }: {
@@ -34,6 +35,7 @@ export function ContestForm({
   label: string
   completed?: string
   confirmation?: string
+  iconLabel?: string
   header?: { titleId: string; cancel: () => void }
   onSaved?: () => void
 }) {
@@ -52,7 +54,7 @@ export function ContestForm({
   return (
     <>
       <form
-        className={styles.form}
+        className={iconLabel ? styles.entryAction : styles.form}
         action={submit}
         onSubmit={confirmation ? controls.request : undefined}
       >
@@ -67,8 +69,29 @@ export function ContestForm({
             <DialogActions cancel={header.cancel} pending={pending} />
           </header>
         ) : (
-          <button type="submit" disabled={pending}>
-            {pending ? "Guardando…" : String(label)}
+          <button
+            type="submit"
+            disabled={pending}
+            aria-label={iconLabel}
+            aria-haspopup={confirmation ? "dialog" : undefined}
+          >
+            {iconLabel ? (
+              <svg
+                viewBox="0 0 24 24"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 9v8m4-8v8" />
+              </svg>
+            ) : pending ? (
+              "Guardando…"
+            ) : (
+              String(label)
+            )}
           </button>
         )}
       </form>
@@ -223,15 +246,8 @@ export function EntryControls({
   edit?: ReactNode
   remove?: ReactNode
 }) {
-  const [panel, setPanel] = useState<"edit" | "remove" | null>(null)
-  const toggleEdit = useCallback(
-    () => setPanel((current) => (current === "edit" ? null : "edit")),
-    []
-  )
-  const toggleRemove = useCallback(
-    () => setPanel((current) => (current === "remove" ? null : "remove")),
-    []
-  )
+  const [editing, setEditing] = useState(false)
+  const toggleEdit = useCallback(() => setEditing((current) => !current), [])
   return (
     <>
       <div className={styles.entryRow}>
@@ -240,7 +256,7 @@ export function EntryControls({
           <button
             type="button"
             aria-label={`Editar tapa de ${authors}`}
-            aria-expanded={panel === "edit"}
+            aria-expanded={editing}
             onClick={toggleEdit}
           >
             <svg
@@ -256,28 +272,9 @@ export function EntryControls({
             </svg>
           </button>
         ) : null}
-        {remove ? (
-          <button
-            type="button"
-            aria-label={`Borrar tapa de ${authors}`}
-            aria-expanded={panel === "remove"}
-            onClick={toggleRemove}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="14"
-              height="14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 9v8m4-8v8" />
-            </svg>
-          </button>
-        ) : null}
+        {remove}
       </div>
-      {panel === "edit" ? edit : panel === "remove" ? remove : null}
+      {editing ? edit : null}
     </>
   )
 }
