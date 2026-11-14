@@ -220,9 +220,10 @@ export default async function TapasContest({
             <section className={styles.panel}>
               {round && voter && options.length ? (
                 <Ballot
-                  key={`${round}:${voter.id}`}
+                  key={`${contest.votingGeneration}:${round}:${voter.id}`}
                   options={options}
                   round={round}
+                  generation={contest.votingGeneration}
                   assisted={voter.id}
                   completed={`${contestPath}?handoff=done`}
                 />
@@ -325,8 +326,9 @@ export default async function TapasContest({
                         Puedes cambiar tu papeleta hasta el cierre.
                       </p>
                       <Ballot
-                        key={round}
+                        key={`${contest.votingGeneration}:${round}`}
                         round={round}
+                        generation={contest.votingGeneration}
                         options={options}
                         initial={
                           round === "rubric"
@@ -373,6 +375,24 @@ export default async function TapasContest({
                 <section className={styles.panel}>
                   <h2>Administración</h2>
                   <Management key={contest.phase} contest={contest} />
+                  {contest.phase !== "registration" && (
+                    <ContestForm
+                      key={`reopen:${contest.phase}`}
+                      intent="reopen-registration"
+                      label="Reabrir inscripciones"
+                    >
+                      <label className={styles.confirm}>
+                        <input
+                          type="checkbox"
+                          required
+                          name="confirm"
+                          value="yes"
+                        />{" "}
+                        Conservar las tapas inscritas y borrar todas las
+                        papeletas y resultados.
+                      </label>
+                    </ContestForm>
+                  )}
                   {round && eligible.length > 0 && (
                     <form className={styles.form} action={contestPath}>
                       <label>

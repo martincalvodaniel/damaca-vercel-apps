@@ -24,6 +24,7 @@ type Rubric = { tapa: string; scores: Scores }[]
 
 export type Contest = {
   phase: Phase
+  votingGeneration?: number
   tapas: Tapa[]
   roster: Attendee[]
   rubric: Ballot<Rubric>[]
@@ -195,7 +196,10 @@ export function applyContestAction(
   }
 
   if (action === "vote") {
-    if (field(form, "round") !== contest.phase)
+    if (
+      field(form, "round") !== contest.phase ||
+      field(form, "generation") !== (contest.votingGeneration?.toString() ?? "")
+    )
       fail("Esta ronda ya no está abierta.")
     const voter = selectVoter(contest, actor, field(form, "assisted"))
     if (!voter) fail("No puedes votar por este asistente.")
@@ -234,6 +238,18 @@ export function applyContestAction(
   }
 
   if (!actor.admin) fail("Solo un administrador puede usar este control.")
+  if (
+    action === "reopen-registration" &&
+    contest.phase !== "registration" &&
+    contest.phase !== "published" &&
+    field(form, "confirm") === "yes"
+  ) {
+    return {
+      ...emptyContest(),
+      tapas: contest.tapas,
+      votingGeneration: (contest.votingGeneration ?? 0) + 1,
+    }
+  }
   if (action === "open" && contest.phase === "registration") {
     if (!contest.tapas.length)
       fail("Inscribe al menos una tapa antes de abrir la votación.")

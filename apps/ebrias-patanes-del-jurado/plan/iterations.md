@@ -326,3 +326,10 @@
 - Dependencias: EPJ-42.
 - Aceptación: el título editable aparece como encabezado de bloque y los botones conservan sus etiquetas fijas con flecha.
 - Validación: Biome, tipos, pruebas y build.
+
+## EPJ-44 — Reabrir las inscripciones de tapas
+
+- Estado: `validated`.
+- Rutas: concurso y administración de Tapas.
+- Aceptación: un admin puede volver a inscripción antes de publicar, previa confirmación. Se conservan las tapas y se reinicia la votación.
+- Validación: Biome, tipos, pruebas de transición y build.

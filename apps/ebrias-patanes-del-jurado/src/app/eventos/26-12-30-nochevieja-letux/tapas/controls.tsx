@@ -56,6 +56,7 @@ export function ContestForm({
 export function Ballot({
   options,
   round,
+  generation,
   assisted,
   completed,
   initial,
@@ -63,6 +64,7 @@ export function Ballot({
 }: {
   options: Tapa[]
   round: "rubric" | "runoff"
+  generation?: number
   assisted?: string
   completed?: string
   initial?: { tapa: string; scores: Scores }[]
@@ -156,6 +158,7 @@ export function Ballot({
             completed={completed}
           >
             <input type="hidden" name="round" value={round} />
+            <input type="hidden" name="generation" value={generation ?? ""} />
             {Boolean(assisted) && (
               <input type="hidden" name="assisted" value={assisted} />
             )}

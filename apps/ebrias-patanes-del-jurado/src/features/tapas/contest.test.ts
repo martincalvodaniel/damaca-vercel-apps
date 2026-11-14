@@ -203,3 +203,42 @@ it("a contest with no votes can publish without a winner", () => {
   ).toBeNull()
   expect(results(resolved)[0].count).toBe(0)
 })
+
+it("reopens registration only with admin confirmation and discards old ballots", () => {
+  const runoff = runoffFixture()
+  const voted = submit(runoff, member("e"), "vote", {
+    round: "runoff",
+    choice: "First",
+  })
+  const resolved = submit(voted, admin, "resolve-runoff")
+  const confirmation = { confirm: "yes" }
+  expect(() =>
+    submit(resolved, member("e"), "reopen-registration", confirmation)
+  ).toThrow("administrador")
+  expect(() => submit(resolved, admin, "reopen-registration")).toThrow(
+    "disponible"
+  )
+  const published = submit(resolved, admin, "publish", confirmation)
+  expect(() =>
+    submit(published, admin, "reopen-registration", confirmation)
+  ).toThrow("disponible")
+
+  const reopened = submit(resolved, admin, "reopen-registration", confirmation)
+  expect(reopened).toEqual({
+    ...emptyContest(),
+    tapas: resolved.tapas,
+    votingGeneration: 1,
+  })
+  const edited = register(reopened, "a", "Updated", "b")
+  const next = submit(edited, admin, "open")
+  const ballot = {
+    round: "rubric",
+    ...scores("First", [5, 5, 5, 5]),
+    ...scores("Second", [5, 5, 5, 5]),
+    ...scores("Third", [5, 5, 5, 5]),
+  }
+  expect(() => submit(next, member("e"), "vote", ballot)).toThrow("abierta")
+  expect(
+    submit(next, member("e"), "vote", { ...ballot, generation: "1" }).rubric
+  ).toHaveLength(1)
+})
