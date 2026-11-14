@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-43 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-44 — Reabrir las inscripciones de tapas
-
-- Capacidad inicial disponible de 98% en 5 h y 9% en 7 días.
-- La reapertura exige administrador y confirmación, conserva las tapas y reinicia el censo y las papeletas. Se rechazan papeletas abiertas antes del reinicio.
-- Biome, tipos, seis pruebas de Tapas y build correctos.
+[Entregas EPJ-08 a EPJ-44 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-45 — Gestión de inscripciones por el administrador
 
@@ -55,3 +49,10 @@
 
 - Capacidad inicial de 66% en 5 h y 4% en 7 días. Los controles pasan a 28 px sin relleno ni margen y se reduce el hueco de cabecera.
 - Biome, tipos y build correctos.
+
+## EPJ-54 — Recuperar el acceso tras un fallo inicial de MongoDB
+
+- Capacidad inicial de 96% en 5 h y 99% en 7 días.
+- La autenticación espera a que MongoDB conecte y comparte la inicialización entre peticiones. Un fallo descarta el intento y registra el tipo de error.
+- Prueba local temporal contra la ruta de sesión, con un proxy TCP y MongoDB 8. Antes del cambio, la primera petición devolvió HTTP 500 y fallaron las 12 lecturas posteriores. Con el cambio, la primera devolvió HTTP 503 y las 12 lecturas concurrentes recuperaron la sesión en el mismo proceso.
+- Biome sobre los tres archivos TypeScript, tipos, 12 pruebas de Ebrias, build y `git diff --check` correctos. Pendiente probar OAuth con una cuenta autorizada en un despliegue de integración.

@@ -398,3 +398,11 @@
 - Rutas: estilos globales de confirmaciones y avisos.
 - Aceptación: botones de 28 px sin margen ni relleno, con menos separación en cabecera.
 - Validación: Biome, tipos y build.
+
+## EPJ-54 — Recuperar el acceso tras un fallo inicial de MongoDB
+
+- Estado: `validated`.
+- Rutas: capa de autenticación, ruta de Better Auth, lectura de sesión y planificación de Ebrias.
+- Dependencias: Better Auth y el cliente de MongoDB de Ebrias.
+- Aceptación: si la primera conexión falla, la siguiente petición puede restaurar una sesión válida sin reiniciar el proceso. Las peticiones concurrentes comparten el intento de conexión.
+- Validación: reproducir el fallo con MongoDB local, verificar la recuperación, ejecutar Biome, tipos, pruebas y build. La comprobación con Google requiere una cuenta autorizada en integración.
