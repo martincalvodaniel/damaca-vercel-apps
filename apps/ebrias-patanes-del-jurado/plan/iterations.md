@@ -391,3 +391,10 @@
 - Rutas: formularios de Ebrias y componentes de confirmación.
 - Aceptación: cada confirmación usa un modal con controles en la cabecera y los mensajes de formularios aparecen como avisos flotantes.
 - Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-53 — Controles compactos de confirmación
+
+- Estado: `validated`.
+- Rutas: estilos globales de confirmaciones y avisos.
+- Aceptación: botones de 28 px sin margen ni relleno, con menos separación en cabecera.
+- Validación: Biome, tipos y build.

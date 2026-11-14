@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-42 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-43 — Títulos y botones de las actividades
-
-- Capacidad inicial disponible de 100% en 5 h y 9% en 7 días.
-- [Criterios](iterations.md#epj-43--títulos-y-botones-de-las-actividades). Los títulos se muestran como encabezados y los botones conservan sus etiquetas fijas con flecha.
-- Biome, tipos, ocho pruebas y build correctos.
+[Entregas EPJ-08 a EPJ-43 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-44 — Reabrir las inscripciones de tapas
 
@@ -56,3 +50,8 @@
 - Capacidad inicial de 72% en 5 h y 5% en 7 días. Las casillas y la confirmación nativa de borrado usan modales con controles en cabecera. La revisión de papeletas también se muestra en un modal.
 - El aviso flotante común recoge respuestas de Tapas, Disfraces, la guía, asistencia, coches y los formularios de Ajustes. El aviso persistente de intentos agotados permanece visible.
 - Biome, tipos, nueve pruebas de Tapas y build correctos. Sin comprobación del recorrido en un navegador autenticado.
+
+## EPJ-53 — Controles compactos de confirmación
+
+- Capacidad inicial de 66% en 5 h y 4% en 7 días. Los controles pasan a 28 px sin relleno ni margen y se reduce el hueco de cabecera.
+- Biome, tipos y build correctos.

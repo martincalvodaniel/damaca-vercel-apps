@@ -460,6 +460,7 @@ body:has(.club-nav) {
 }
 
 .action-confirmation header,
+.action-dialog-heading,
 .action-popup:popover-open {
   display: flex;
   align-items: center;
@@ -480,12 +481,16 @@ body:has(.club-nav) {
 .action-dialog-heading > :is(.action-cancel, .action-accept),
 .action-popup > .action-cancel {
   flex: none;
-  min-width: 44px;
-  min-height: 44px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
   border: 1px solid currentColor;
   border-radius: 0.35rem;
   background: transparent;
-  font: 700 1.35rem system-ui;
+  font: 700 1rem / 1 system-ui;
   cursor: pointer;
 }
 
@@ -502,10 +507,9 @@ body:has(.club-nav) {
   margin: 0 auto;
 }
 
+.action-confirmation header,
 .action-dialog-heading {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+  gap: 0.2rem;
 }
 
 .action-dialog-heading h2 {

@@ -211,3 +211,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - El usuario autorizó continuar pese a la reserva de capacidad.
 - [Criterios](iterations.md#epj-42--nombres-editables-para-tapas-y-disfraces). Los títulos se guardan con la guía y se usan en los enlaces. Los campos vacíos recuperan el nombre original.
 - Biome, tipos, ocho pruebas y build correctos. No se hizo una comprobación adicional en navegador.
+
+## EPJ-43 — Títulos y botones de las actividades
+
+- Capacidad inicial disponible de 100% en 5 h y 9% en 7 días.
+- [Criterios](iterations.md#epj-43--títulos-y-botones-de-las-actividades). Los títulos se muestran como encabezados y los botones conservan sus etiquetas fijas con flecha.
+- Biome, tipos, ocho pruebas y build correctos.
