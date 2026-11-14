@@ -7,9 +7,11 @@ import {
   canSeeResults,
   categories,
   emptyContest,
+  finalRunoffCounts,
   nextReveal,
   results,
   revealedPodium,
+  revealVersion,
 } from "./contest"
 
 const people = ["a", "b", "c", "d", "e"].map((id) => ({ id, alias: id }))
@@ -374,4 +376,27 @@ it("reveals tied score levels from third to first and rejects a repeated step", 
   ])
   expect(canSeeResults(second)).toBe(false)
   expect(canSeeResults(advance(second))).toBe(true)
+})
+
+it("shows final runoff totals including zero without changing the reveal version on votes", () => {
+  const runoff = runoffFixture()
+  const voted = submit(runoff, member("e"), "vote", {
+    round: "runoff",
+    choice: "First",
+  })
+  expect(revealVersion(voted)).toBe(revealVersion(runoff))
+  expect(finalRunoffCounts(voted).size).toBe(0)
+  const resolved = submit(voted, admin, "resolve-runoff")
+  expect(finalRunoffCounts(resolved).size).toBe(0)
+  const published = publish(resolved)
+  expect(finalRunoffCounts(published)).toEqual(
+    new Map([
+      ["First", 1],
+      ["Second", 0],
+      ["Third", 0],
+    ])
+  )
+  const withdrawn = submit(published, admin, "unpublish", { confirm: "yes" })
+  expect(revealVersion(withdrawn)).not.toBe(revealVersion(resolved))
+  expect(finalRunoffCounts(withdrawn).size).toBe(0)
 })

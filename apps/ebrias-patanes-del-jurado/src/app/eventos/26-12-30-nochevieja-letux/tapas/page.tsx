@@ -6,10 +6,13 @@ import {
   type Contest,
   canSeeResults,
   categories,
+  finalRunoffCounts,
   nextReveal,
   type Person,
+  podium,
   results,
   revealedPodium,
+  revealVersion,
   selectVoter,
   type Tapa,
 } from "@/features/tapas/contest"
@@ -21,6 +24,7 @@ import {
 } from "@/features/tapas/store"
 import eventStyles from "../page.module.css"
 import { Ballot, ContestForm, EntryControls } from "./controls"
+import { RevealSync } from "./reveal-sync"
 import styles from "./tapas.module.css"
 
 const reasons = {
@@ -29,8 +33,29 @@ const reasons = {
   draw: "Sorteo presencial",
 }
 
+const medals: Record<number, { icon: string; label: string }> = {
+  1: { icon: "🥇", label: "Primer puesto" },
+  2: { icon: "🥈", label: "Segundo puesto" },
+  3: { icon: "🥉", label: "Tercer puesto" },
+}
+
+function Medal({ place }: { place: number }) {
+  const medal = medals[place]
+  return medal ? (
+    <span role="img" aria-label={medal.label}>
+      {medal.icon}
+    </span>
+  ) : null
+}
+
 function Results({ contest, sort }: { contest: Contest; sort?: string }) {
   const key = categories.find(([category]) => category === sort)?.[0] ?? "total"
+  const places = new Map(
+    podium(contest).flatMap(({ place, tapas }) =>
+      tapas.map(({ id }) => [id, place] as const)
+    )
+  )
+  const runoffCounts = finalRunoffCounts(contest)
   const winner = contest.tapas.find(({ id }) => id === contest.winner)
   const format = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 2 })
   return (
@@ -65,6 +90,12 @@ function Results({ contest, sort }: { contest: Contest; sort?: string }) {
         {results(contest, key).map(
           ({ id, name, authors, count, total, sums }) => (
             <li key={id}>
+              <Medal place={places.get(id) ?? 0} />
+              {id === contest.winner ? (
+                <span role="img" aria-label="Ganadora del concurso">
+                  💎
+                </span>
+              ) : null}{" "}
               <strong>{name}</strong> ·{" "}
               {authors.map(({ alias }) => alias).join(" y ")}
               {count ? (
@@ -73,6 +104,12 @@ function Results({ contest, sort }: { contest: Contest; sort?: string }) {
                     <strong>{format.format(total / count)} / 40</strong> ·{" "}
                     {count} {count === 1 ? "valoración" : "valoraciones"}
                   </p>
+                  {runoffCounts.has(id) ? (
+                    <p>
+                      Votos de desempate:{" "}
+                      <strong>{runoffCounts.get(id)}</strong>
+                    </p>
+                  ) : null}
                   <dl className={styles.scores}>
                     {categories.map(([category, label]) => (
                       <div key={category}>
@@ -264,6 +301,7 @@ export default async function TapasContest({
 
   return (
     <main className={eventStyles.event}>
+      <RevealSync version={revealVersion(contest)} />
       <div className={eventStyles.content}>
         <header className={eventStyles.header}>
           <h1 className={eventStyles.title}>
@@ -508,7 +546,10 @@ export default async function TapasContest({
               {!canSeeResults(contest) &&
                 revealedPodium(contest).map(({ place, tapas }) => (
                   <section key={place} className={styles.panel}>
-                    <h2>{place === 2 ? "Segundo puesto" : "Tercer puesto"}</h2>
+                    <h2>
+                      <span aria-hidden="true">{medals[place]?.icon}</span>{" "}
+                      {medals[place]?.label}
+                    </h2>
                     <ul>
                       {tapas.map(({ id, name, authors }) => (
                         <li key={id}>

@@ -132,7 +132,7 @@ export function canSeeResults(contest: Contest) {
   return contest.phase === "published"
 }
 
-function podium(contest: Contest) {
+export function podium(contest: Contest) {
   const levels: Result[][] = []
   for (const row of results(contest)) {
     if (!row.count) break
@@ -144,6 +144,23 @@ function podium(contest: Contest) {
     }
   }
   return levels.map((tapas, index) => ({ place: index + 1, tapas })).reverse()
+}
+
+export function revealVersion(contest: Contest) {
+  return `${contest.votingGeneration ?? 0}:${contest.phase}:${contest.revealedPlaces ?? 0}`
+}
+
+export function finalRunoffCounts(contest: Contest) {
+  const counts = new Map<string, number>()
+  if (!canSeeResults(contest)) return counts
+  const tied = finalists(contest)
+  if (tied.length < 2) return counts
+  for (const { id } of tied) counts.set(id, 0)
+  for (const { value } of contest.runoff) {
+    const count = counts.get(value)
+    if (count !== undefined) counts.set(value, count + 1)
+  }
+  return counts
 }
 
 export function revealedPodium(contest: Contest) {

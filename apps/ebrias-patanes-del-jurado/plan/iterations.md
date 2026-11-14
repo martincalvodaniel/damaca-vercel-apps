@@ -434,3 +434,10 @@
 - Rutas: papeletas, resultados y reglas de Tapas.
 - Aceptación: selector de 0 a 10, atajos solo en la papeleta propia del admin y podio público revelado en orden descendente por pasos.
 - Validación: Biome, tipos, pruebas de transiciones y build.
+
+## EPJ-59 — Podio sincronizado y medallas
+
+- Estado: `validated`.
+- Rutas: resultados de Tapas y consulta autenticada de progreso.
+- Aceptación: medallas y votos finales de desempate, con actualización automática al avanzar el podio.
+- Validación: Biome, tipos, pruebas de Tapas y build.
