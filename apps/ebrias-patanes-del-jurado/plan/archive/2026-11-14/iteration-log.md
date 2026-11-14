@@ -193,3 +193,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Inicio a las 14:03 CET con un 16% disponible en 5 h y un 11% en 7 días.
 - [Criterios](iterations.md#epj-39--orden-de-tapas-y-disfraces-en-la-guía). «Subir» y «Bajar» permiten cruzar la actividad de cada día. Se conserva el orden inicial de los documentos anteriores.
 - Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado confirmó ambos órdenes tras guardar y recargar, sin desbordamiento de la guía a 320 y 1440 px.
+
+## EPJ-40 — Edición compacta de la guía de Letux
+
+- Inicio a las 14:07 CET con un 14% disponible en 5 h y un 11% en 7 días.
+- [Criterios](iterations.md#epj-40--edición-compacta-de-la-guía-de-letux). Cada nota se edita en su actividad. Campos más bajos e iconos junto al título de cada bloque.
+- Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado verificó el guardado de ambas notas, la reordenación, los iconos alineados de 34 px y el ancho del editor a 320 y 1440 px.

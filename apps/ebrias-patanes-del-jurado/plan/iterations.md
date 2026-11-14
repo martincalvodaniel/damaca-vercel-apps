@@ -370,3 +370,10 @@
 - Rutas: listado, formularios y reglas de Tapas.
 - Aceptación: iconos de edición y borrado disponibles según permisos. Los coautores pueden cambiar el nombre sin modificar la autoría.
 - Validación: Biome, tipos, pruebas de permisos y build.
+
+## EPJ-50 — Iconos compactos en Tapas
+
+- Estado: `validated`.
+- Rutas: controles de inscripción y estilos de Tapas.
+- Aceptación: iconos de 14 px en botones de 24 px, sin relleno y con 2 px de separación.
+- Validación: Biome, tipos y build.

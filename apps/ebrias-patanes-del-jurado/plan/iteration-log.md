@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-39 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-40 — Edición compacta de la guía de Letux
-
-- Inicio a las 14:07 CET con un 14% disponible en 5 h y un 11% en 7 días.
-- [Criterios](iterations.md#epj-40--edición-compacta-de-la-guía-de-letux). Cada nota se edita en su actividad. Campos más bajos e iconos junto al título de cada bloque.
-- Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado verificó el guardado de ambas notas, la reordenación, los iconos alineados de 34 px y el ancho del editor a 320 y 1440 px.
+[Entregas EPJ-08 a EPJ-40 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-41 — Títulos editables y alta desde la cabecera
 
@@ -58,3 +52,8 @@
 
 - Capacidad inicial de 78% en 5 h y 6% en 7 días. Los iconos abren la edición y la confirmación de borrado según permisos. Los coautores pueden editar el nombre durante la inscripción.
 - Biome, tipos, nueve pruebas de Tapas y build correctos. Queda pendiente la comprobación visual en un navegador autenticado.
+
+## EPJ-50 — Iconos compactos en Tapas
+
+- Capacidad inicial de 76% en 5 h y 5% en 7 días.
+- Botones de 24 px con iconos de 14 px, sin relleno y con 2 px de separación. Biome, tipos y build correctos.
