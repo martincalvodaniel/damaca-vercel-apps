@@ -55,8 +55,32 @@
   gap: 0.35rem 0.65rem;
 }
 
-.scores input {
-  width: 100%;
+.rubricGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2.75rem minmax(0, 1fr) 2.75rem;
+  align-items: center;
+  gap: 0.25rem 0.35rem;
+}
+
+.form .rubricGrid label {
+  display: block;
+  font-size: clamp(0.8rem, 3vw, 1rem);
+  line-height: 1.15;
+}
+
+.rubricGrid input[type="number"] {
+  appearance: textfield;
+  box-sizing: border-box;
+  min-width: 0;
+  padding-inline: 0.2rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.rubricGrid input::-webkit-inner-spin-button,
+.rubricGrid input::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
 }
 
 .scores dd {

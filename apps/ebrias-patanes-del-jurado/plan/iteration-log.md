@@ -2,14 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-36 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-37 — Guía editable de Nochevieja en Letux
-
-- Inicio a las 12:44 CET con un 27% disponible en 5 h y un 13% en 7 días. `int` llevaba cinco commits locales pendientes de push.
-- [Criterios](iterations.md#epj-37--guía-editable-de-nochevieja-en-letux). Programa por días, notas y bloques administrables con control de revisión en MongoDB.
-- Biome en los seis archivos de código, tipos, cinco pruebas de Ebrias, build y `git diff --check` correctos.
-- Chrome con MongoDB desechable y sesiones ficticias: acceso privado, Lumos con la alternativa sin micrófono, guía vacía, alta, orden y borrado de bloques, lectura desde otra sesión, intento directo de guardado de miembro rechazado, guardado con revisión desactualizada y borrador conservado, desplegables de asistentes y coches y navegación a Tapas y Disfraces. Guía y editor sin desplazamiento horizontal a 320 y 1440 px.
+[Entregas EPJ-08 a EPJ-37 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-38 — Coches junto a asistentes en Letux
 
@@ -62,3 +55,8 @@
 
 - Capacidad inicial de 90% en 5 h y 8% en 7 días. La retirada devuelve el resultado a la vista privada y conserva las papeletas.
 - Biome, tipos, ocho pruebas de Tapas y build correctos. La prueba cubre el permiso, la confirmación, la visibilidad y la republicación.
+
+## EPJ-47 — Rúbrica compacta
+
+- Capacidad inicial de 86% en 5 h y 7% en 7 días. La papeleta usa dos filas y campos de 44 px.
+- Maqueta en Chrome a 320 y 1440 px con los estilos reales: dos filas alineadas sin desbordar y rechazo de 11. Biome, tipos, ocho pruebas de Tapas y build correctos.

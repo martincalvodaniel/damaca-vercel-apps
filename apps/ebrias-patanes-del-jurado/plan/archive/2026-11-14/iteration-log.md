@@ -174,3 +174,10 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - El mensaje de la acción aparece en un aviso de pergamino con botón de cierre y anuncio accesible.
 - Capacidad inicial disponible de 30% en 5 h y 13% en 7 días. Biome, tipos y build correctos. Chrome verificó en maqueta con los estilos reales que el aviso cabe y el buscador no se mueve a 320 y 1440 px.
+
+## EPJ-37 — Guía editable de Nochevieja en Letux
+
+- Inicio a las 12:44 CET con un 27% disponible en 5 h y un 13% en 7 días. `int` llevaba cinco commits locales pendientes de push.
+- [Criterios](iterations.md#epj-37--guía-editable-de-nochevieja-en-letux). Programa por días, notas y bloques administrables con control de revisión en MongoDB.
+- Biome en los seis archivos de código, tipos, cinco pruebas de Ebrias, build y `git diff --check` correctos.
+- Chrome con MongoDB desechable y sesiones ficticias: acceso privado, Lumos con la alternativa sin micrófono, guía vacía, alta, orden y borrado de bloques, lectura desde otra sesión, intento directo de guardado de miembro rechazado, guardado con revisión desactualizada y borrador conservado, desplegables de asistentes y coches y navegación a Tapas y Disfraces. Guía y editor sin desplazamiento horizontal a 320 y 1440 px.

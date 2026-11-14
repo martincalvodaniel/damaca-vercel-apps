@@ -348,3 +348,10 @@
 - Rutas: reglas y controles de administración de Tapas.
 - Aceptación: el administrador puede devolver un resultado publicado a la vista privada con confirmación y volver a publicarlo.
 - Validación: Biome, tipos, pruebas de transición y build.
+
+## EPJ-47 — Rúbrica compacta
+
+- Estado: `validated`.
+- Rutas: papeleta y estilos de Tapas.
+- Aceptación: dos filas de categoría y nota por duplicado, con campos estrechos de 0 a 10.
+- Validación: Biome, tipos, pruebas de Tapas, build y comprobación responsive.

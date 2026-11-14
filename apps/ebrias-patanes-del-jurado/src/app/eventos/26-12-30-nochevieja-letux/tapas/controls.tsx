@@ -3,9 +3,11 @@
 import { useRouter } from "next/navigation"
 import {
   type FormEvent,
+  Fragment,
   type ReactNode,
   useActionState,
   useCallback,
+  useId,
   useState,
 } from "react"
 import { submitContest } from "@/features/tapas/actions"
@@ -70,6 +72,7 @@ export function Ballot({
   initial?: { tapa: string; scores: Scores }[]
   choice?: string
 }) {
+  const ballotId = useId()
   const [review, setReview] = useState<Record<string, string> | null>(null)
   const reviewBallot = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -94,12 +97,16 @@ export function Ballot({
           options.map((tapa) => (
             <fieldset key={tapa.id}>
               <legend>{tapa.name}</legend>
-              <div className={styles.scores}>
+              <div className={styles.rubricGrid}>
                 {categories.map(([key, label]) => (
-                  <label key={key}>
-                    {label}
+                  <Fragment key={key}>
+                    <label htmlFor={`${ballotId}-${tapa.id}-${key}`}>
+                      {label}:
+                    </label>
                     <input
+                      id={`${ballotId}-${tapa.id}-${key}`}
                       type="number"
+                      inputMode="numeric"
                       name={`score:${tapa.id}:${key}`}
                       required
                       min={0}
@@ -111,7 +118,7 @@ export function Ballot({
                         ]
                       }
                     />
-                  </label>
+                  </Fragment>
                 ))}
               </div>
             </fieldset>
