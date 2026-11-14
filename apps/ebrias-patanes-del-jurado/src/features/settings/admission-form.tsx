@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionFeedback } from "@/features/feedback/actions-client"
 import { approveEmail, deleteAdmissionRequest } from "./actions"
 
 export function AdmissionForm({
@@ -10,12 +10,9 @@ export function AdmissionForm({
   members: { id: string; alias: string }[]
   request?: { email: string; name?: string }
 }) {
-  const [message, action, pending] = useActionState(approveEmail, "")
+  const [, action, pending] = useActionFeedback(approveEmail)
 
-  const [deleteMessage, deleteAction, deleting] = useActionState(
-    deleteAdmissionRequest,
-    ""
-  )
+  const [, deleteAction, deleting] = useActionFeedback(deleteAdmissionRequest)
 
   return (
     <form action={action} className="account admission-form">
@@ -60,7 +57,6 @@ export function AdmissionForm({
           </button>
         ) : null}
       </div>
-      <p role="status">{deleteMessage || message}</p>
     </form>
   )
 }

@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-41 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-42 — Nombres editables para Tapas y Disfraces
-
-- El usuario autorizó continuar pese a la reserva de capacidad.
-- [Criterios](iterations.md#epj-42--nombres-editables-para-tapas-y-disfraces). Los títulos se guardan con la guía y se usan en los enlaces. Los campos vacíos recuperan el nombre original.
-- Biome, tipos, ocho pruebas y build correctos. No se hizo una comprobación adicional en navegador.
+[Entregas EPJ-08 a EPJ-42 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-43 — Títulos y botones de las actividades
 
@@ -56,3 +50,9 @@
 
 - Capacidad inicial de 74% en 5 h y 5% en 7 días. El selector de vista ocupa el extremo izquierdo de la barra global y conserva su disponibilidad para la cuenta administradora.
 - Biome, tipos y build correctos. Sin comprobación en navegador autenticado.
+
+## EPJ-52 — Confirmaciones y avisos de acciones
+
+- Capacidad inicial de 72% en 5 h y 5% en 7 días. Las casillas y la confirmación nativa de borrado usan modales con controles en cabecera. La revisión de papeletas también se muestra en un modal.
+- El aviso flotante común recoge respuestas de Tapas, Disfraces, la guía, asistencia, coches y los formularios de Ajustes. El aviso persistente de intentos agotados permanece visible.
+- Biome, tipos, nueve pruebas de Tapas y build correctos. Sin comprobación del recorrido en un navegador autenticado.

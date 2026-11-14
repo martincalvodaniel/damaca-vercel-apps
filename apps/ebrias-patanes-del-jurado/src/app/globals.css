@@ -442,3 +442,80 @@ body:has(.club-nav) {
   font: 700 1.4rem system-ui;
   cursor: pointer;
 }
+
+.action-confirmation,
+.action-popup {
+  box-sizing: border-box;
+  width: min(calc(100% - 1.5rem), 30rem);
+  padding: 0.75rem;
+  border: 2px solid var(--ink);
+  border-radius: 0.55rem;
+  color: var(--ink);
+  background: #fff8db;
+  box-shadow: 0 0.25rem 1rem #0005;
+}
+
+.action-confirmation::backdrop {
+  background: #0009;
+}
+
+.action-confirmation header,
+.action-popup:popover-open {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.action-confirmation h2,
+.action-popup [role="status"] {
+  flex: 1;
+  margin: 0;
+}
+
+.action-confirmation p {
+  margin: 0.5rem 0 0;
+}
+
+.action-confirmation :where(header) > :is(.action-cancel, .action-accept),
+.action-dialog-heading > :is(.action-cancel, .action-accept),
+.action-popup > .action-cancel {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid currentColor;
+  border-radius: 0.35rem;
+  background: transparent;
+  font: 700 1.35rem system-ui;
+  cursor: pointer;
+}
+
+.action-confirmation .action-accept {
+  color: #176b35;
+}
+
+.action-confirmation .action-cancel {
+  color: #a02130;
+}
+
+.action-popup {
+  inset: auto 0 calc(4rem + env(safe-area-inset-bottom));
+  margin: 0 auto;
+}
+
+.action-dialog-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.action-dialog-heading h2 {
+  flex: 1;
+}
+
+.action-dialog-heading .action-cancel {
+  color: #a02130;
+}
+
+.action-dialog-heading .action-accept {
+  color: #176b35;
+}

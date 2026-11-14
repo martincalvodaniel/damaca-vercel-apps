@@ -1,6 +1,7 @@
 "use client"
 
-import { type ReactNode, useActionState } from "react"
+import type { ReactNode } from "react"
+import { useActionFeedback } from "@/features/feedback/actions-client"
 import { updateAlias } from "./actions"
 
 export function AliasForm({
@@ -12,7 +13,7 @@ export function AliasForm({
   children?: ReactNode
   memberId?: string
 }) {
-  const [message, action, pending] = useActionState(updateAlias, "")
+  const [, action, pending] = useActionFeedback(updateAlias)
 
   return (
     <form action={action} className="account admission-form alias-form">
@@ -29,7 +30,6 @@ export function AliasForm({
         </button>
         {children}
       </div>
-      <p role="status">{message}</p>
     </form>
   )
 }

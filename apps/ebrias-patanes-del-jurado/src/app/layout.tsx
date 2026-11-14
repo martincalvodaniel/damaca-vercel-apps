@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import type { ReactNode } from "react"
 import { installName } from "@/config/install-name"
+import { ActionPopup } from "@/features/feedback/feedback"
 import { Navigation } from "@/features/landing/navigation"
 import { toggleMemberView } from "@/features/settings/actions"
 import { getAuthorizedUser } from "@/lib/session"
@@ -66,6 +67,7 @@ export default async function RootLayout({
           </Navigation>
         ) : null}
         {children}
+        <ActionPopup />
       </body>
     </html>
   )

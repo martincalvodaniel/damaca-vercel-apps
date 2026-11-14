@@ -20,6 +20,7 @@ import {
   guideSections,
   isActivityDay,
 } from "@/features/event-guide/guide"
+import { notifyAction } from "@/features/feedback/actions-client"
 import styles from "./guide.module.css"
 import eventStyles from "./page.module.css"
 
@@ -51,20 +52,20 @@ function GuideForm({
 }: GuideVersion & { close: () => void }) {
   const [draft, setDraft] = useState(guide)
   const [baseRevision] = useState(revision)
-  const [message, setMessage] = useState("")
   const [pending, startTransition] = useTransition()
 
   const submit = useCallback(
     (event: SubmitEvent<HTMLFormElement>) => {
       event.preventDefault()
-      setMessage("")
       startTransition(async () => {
         try {
           const error = await saveGuide(baseRevision, draft)
-          if (error) setMessage(error)
-          else close()
+          notifyAction(error || "Guía guardada.")
+          if (!error) close()
         } catch {
-          setMessage("No se pudo guardar la guía. Puedes volver a intentarlo.")
+          notifyAction(
+            "No se pudo guardar la guía. Puedes volver a intentarlo."
+          )
         }
       })
     },
@@ -112,7 +113,6 @@ function GuideForm({
           </button>
         </div>
       </fieldset>
-      {message ? <p role="alert">{message}</p> : null}
     </form>
   )
 }

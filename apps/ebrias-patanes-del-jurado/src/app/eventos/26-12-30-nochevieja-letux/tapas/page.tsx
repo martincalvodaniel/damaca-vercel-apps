@@ -186,21 +186,19 @@ function Management({ contest }: { contest: Contest }) {
       )
     case "published":
       return (
-        <ContestForm intent="unpublish" label="Retirar publicación">
-          <label className={styles.confirm}>
-            <input type="checkbox" required name="confirm" value="yes" />{" "}
-            Confirmo que quiero volver a ocultar los resultados.
-          </label>
-        </ContestForm>
+        <ContestForm
+          intent="unpublish"
+          label="Retirar publicación"
+          confirmation="Los resultados volverán a ser privados."
+        ></ContestForm>
       )
     case "resolved":
       return (
-        <ContestForm intent="publish" label="Publicar resultados">
-          <label className={styles.confirm}>
-            <input type="checkbox" required name="confirm" value="yes" />{" "}
-            Confirmo que quiero publicar los resultados.
-          </label>
-        </ContestForm>
+        <ContestForm
+          intent="publish"
+          label="Publicar resultados"
+          confirmation="Los miembros podrán ver la clasificación."
+        ></ContestForm>
       )
     default:
       return null
@@ -386,21 +384,13 @@ export default async function TapasContest({
                                     actor.admin ? "admin-remove" : "remove"
                                   }
                                   label="Borrar tapa"
+                                  confirmation="Se eliminará esta inscripción."
                                 >
                                   <input
                                     type="hidden"
                                     name="tapa"
                                     value={tapa.id}
                                   />
-                                  <label className={styles.confirm}>
-                                    <input
-                                      type="checkbox"
-                                      required
-                                      name="confirm"
-                                      value="yes"
-                                    />
-                                    Confirmo que quiero borrar esta tapa.
-                                  </label>
                                 </ContestForm>
                               ) : null
                             }
@@ -513,18 +503,8 @@ export default async function TapasContest({
                         key={`reopen:${contest.phase}`}
                         intent="reopen-registration"
                         label="Reabrir inscripciones"
-                      >
-                        <label className={styles.confirm}>
-                          <input
-                            type="checkbox"
-                            required
-                            name="confirm"
-                            value="yes"
-                          />{" "}
-                          Conservar las tapas inscritas y borrar todas las
-                          papeletas y resultados.
-                        </label>
-                      </ContestForm>
+                        confirmation="Se conservarán las tapas inscritas y se borrarán todas las papeletas y resultados."
+                      ></ContestForm>
                     )}
                   {round && eligible.length > 0 && (
                     <form className={styles.form} action={contestPath}>

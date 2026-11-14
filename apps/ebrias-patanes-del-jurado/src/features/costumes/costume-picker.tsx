@@ -10,6 +10,7 @@ import {
   useState,
 } from "react"
 import styles from "@/app/eventos/26-12-30-nochevieja-letux/page.module.css"
+import { notifyAction } from "@/features/feedback/actions-client"
 import { type PickerState, submitCostume } from "./actions"
 import { CharacterCreationControl } from "./character-creation-control"
 import {
@@ -37,7 +38,15 @@ export function CostumePicker({
   initial: PickerState
   canManageCreation: boolean
 }) {
-  const [state, submit, pending] = useActionState(submitCostume, initial)
+  const [state, submit, pending] = useActionState(
+    async (previous: PickerState, form: FormData) => {
+      const next = await submitCostume(previous, form)
+      if (next.result && next.result !== "locked")
+        notifyAction(messages[next.result])
+      return next
+    },
+    initial
+  )
   const [query, setQuery] = useState("")
   const [selected, setSelected] = useState("")
   useEffect(() => {
@@ -176,32 +185,21 @@ export function CostumePicker({
         >
           {state.current ? "Cambiar disfraz" : "Reservar disfraz"}
         </button>
-        {state.result ? (
-          <p
-            className={
-              state.result === "locked" ? styles.lockedMessage : undefined
-            }
-            role="status"
-          >
-            {state.result === "locked" ? (
-              <>
-                Qué haces?!
-                <br />
-                <strong>Te has pasado de list@!</strong>
-                <br />
-                <strong>
-                  No estarás intentando averiguar que personajes están
-                  reservados ya, verdad?
-                </strong>
-                <br />
-                <strong>
-                  Contacta con el administrador si realmente quieres cambiar de
-                  personaje para conocer tu castigo 😈
-                </strong>
-              </>
-            ) : (
-              messages[state.result]
-            )}
+        {state.result === "locked" ? (
+          <p className={styles.lockedMessage} role="status">
+            Qué haces?!
+            <br />
+            <strong>Te has pasado de list@!</strong>
+            <br />
+            <strong>
+              No estarás intentando averiguar que personajes están reservados
+              ya, verdad?
+            </strong>
+            <br />
+            <strong>
+              Contacta con el administrador si realmente quieres cambiar de
+              personaje para conocer tu castigo 😈
+            </strong>
           </p>
         ) : null}
       </form>

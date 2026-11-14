@@ -384,3 +384,10 @@
 - Rutas: navegación global y Ajustes.
 - Aceptación: el ojo aparece en el extremo izquierdo de la barra para administradores, también con la vista de miembro activa.
 - Validación: Biome, tipos y build.
+
+## EPJ-52 — Confirmaciones y avisos de acciones
+
+- Estado: `validated`.
+- Rutas: formularios de Ebrias y componentes de confirmación.
+- Aceptación: cada confirmación usa un modal con controles en la cabecera y los mensajes de formularios aparecen como avisos flotantes.
+- Validación: Biome, tipos, pruebas de Tapas y build.

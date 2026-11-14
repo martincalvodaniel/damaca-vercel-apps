@@ -8,8 +8,14 @@ import {
   useActionState,
   useCallback,
   useId,
+  useRef,
   useState,
 } from "react"
+import {
+  notifyAction,
+  useConfirmation,
+} from "@/features/feedback/actions-client"
+import { Confirmation, DialogActions } from "@/features/feedback/feedback"
 import { submitContest } from "@/features/tapas/actions"
 import { categories, type Scores, type Tapa } from "@/features/tapas/contest"
 import styles from "./tapas.module.css"
@@ -19,39 +25,59 @@ export function ContestForm({
   intent,
   label,
   completed,
+  confirmation,
+  header,
+  onSaved,
 }: {
   children?: ReactNode
   intent: string
   label: string
   completed?: string
+  confirmation?: string
+  header?: { titleId: string; cancel: () => void }
+  onSaved?: () => void
 }) {
   const router = useRouter()
-  const [saved, setSaved] = useState(false)
-  const [error, submit, pending] = useActionState(
+  const controls = useConfirmation()
+  const [, submit, pending] = useActionState(
     async (previous: string, data: FormData) => {
-      setSaved(false)
       const message = await submitContest(previous, data)
-      if (!message) {
-        setSaved(true)
-        if (completed) router.replace(completed)
-      }
+      if (!message) onSaved?.()
+      notifyAction(message || "Guardado.")
+      if (!message && completed) router.replace(completed)
       return message
     },
     ""
   )
   return (
-    <form className={styles.form} action={submit}>
-      <input type="hidden" name="intent" value={intent} />
-      {children}
-      <button type="submit" disabled={pending}>
-        {pending ? "Guardando…" : String(label)}
-      </button>
-      {error ? (
-        <p role="alert">{error}</p>
-      ) : saved ? (
-        <p role="status">Guardado.</p>
+    <>
+      <form
+        className={styles.form}
+        action={submit}
+        onSubmit={confirmation ? controls.request : undefined}
+      >
+        <input type="hidden" name="intent" value={intent} />
+        {confirmation ? (
+          <input type="hidden" name="confirm" value="yes" />
+        ) : null}
+        {children}
+        {header ? (
+          <header className="action-dialog-heading">
+            <h2 id={header.titleId}>Revisa tu papeleta</h2>
+            <DialogActions cancel={header.cancel} pending={pending} />
+          </header>
+        ) : (
+          <button type="submit" disabled={pending}>
+            {pending ? "Guardando…" : String(label)}
+          </button>
+        )}
+      </form>
+      {confirmation ? (
+        <Confirmation controls={controls} title={label}>
+          {confirmation}
+        </Confirmation>
       ) : null}
-    </form>
+    </>
   )
 }
 
@@ -73,9 +99,11 @@ export function Ballot({
   choice?: string
 }) {
   const ballotId = useId()
+  const reviewDialog = useRef<HTMLDialogElement>(null)
   const [review, setReview] = useState<Record<string, string> | null>(null)
   const reviewBallot = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    reviewDialog.current?.showModal()
     setReview(
       Object.fromEntries(
         Array.from(new FormData(event.currentTarget), ([key, value]) => [
@@ -86,6 +114,7 @@ export function Ballot({
     )
   }, [])
   const editBallot = useCallback(() => setReview(null), [])
+  const closeReview = useCallback(() => reviewDialog.current?.close(), [])
   return (
     <>
       <form
@@ -140,30 +169,36 @@ export function Ballot({
         )}
         <button type="submit">Revisar papeleta</button>
       </form>
-      {review !== null && (
-        <section aria-label="Revisión de papeleta">
-          <h2>Revisa tu papeleta</h2>
-          {round === "rubric" ? (
-            options.map(({ id, name }) => (
-              <div key={id}>
-                <strong>{name}</strong>
-                <ul>
-                  {categories.map(([key, label]) => (
-                    <li key={key}>
-                      {label}: {review[`score:${id}:${key}`]}/10
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          ) : (
-            <p>{options.find(({ id }) => id === review.choice)?.name}</p>
-          )}
+      <dialog
+        ref={reviewDialog}
+        className="action-confirmation"
+        aria-labelledby={`${ballotId}-review`}
+        onClose={editBallot}
+      >
+        {review !== null ? (
           <ContestForm
             intent="vote"
             label="Enviar papeleta"
             completed={completed}
+            header={{ titleId: `${ballotId}-review`, cancel: closeReview }}
+            onSaved={closeReview}
           >
+            {round === "rubric" ? (
+              options.map(({ id, name }) => (
+                <div key={id}>
+                  <strong>{name}</strong>
+                  <ul>
+                    {categories.map(([key, label]) => (
+                      <li key={key}>
+                        {label}: {review[`score:${id}:${key}`]}/10
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <p>{options.find(({ id }) => id === review.choice)?.name}</p>
+            )}
             <input type="hidden" name="round" value={round} />
             <input type="hidden" name="generation" value={generation ?? ""} />
             {Boolean(assisted) && (
@@ -173,15 +208,8 @@ export function Ballot({
               <input key={key} type="hidden" name={key} value={value} />
             ))}
           </ContestForm>
-          <button
-            type="button"
-            className={styles.secondary}
-            onClick={editBallot}
-          >
-            Editar papeleta
-          </button>
-        </section>
-      )}
+        ) : null}
+      </dialog>
     </>
   )
 }

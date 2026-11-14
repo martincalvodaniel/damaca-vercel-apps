@@ -1,6 +1,10 @@
 "use client"
 
-import { useActionState } from "react"
+import {
+  useActionFeedback,
+  useConfirmation,
+} from "@/features/feedback/actions-client"
+import { Confirmation } from "@/features/feedback/feedback"
 import { changeMemberEmail } from "./actions"
 
 export function EmailChangeForm({
@@ -10,11 +14,16 @@ export function EmailChangeForm({
   email: string
   members: { id: string; alias: string; email?: string }[]
 }) {
-  const [message, action, pending] = useActionState(changeMemberEmail, "")
+  const [, action, pending] = useActionFeedback(changeMemberEmail)
+  const controls = useConfirmation()
   return (
     <details>
       <summary>Cambiar correo de un miembro</summary>
-      <form action={action} className="account admission-form">
+      <form
+        action={action}
+        onSubmit={controls.request}
+        className="account admission-form"
+      >
         <input type="hidden" name="email" value={email} />
         <label>
           Miembro y correo anterior
@@ -34,17 +43,15 @@ export function EmailChangeForm({
             )}
           </select>
         </label>
-        <label>
-          <span>
-            <input type="checkbox" name="confirm" required /> Confirmo el cambio
-            a {email}
-          </span>
-        </label>
+        <input type="hidden" name="confirm" value="on" />
         <button type="submit" disabled={pending}>
           Cambiar correo
         </button>
-        <p role="status">{message}</p>
       </form>
+      <Confirmation controls={controls} title="Cambiar correo">
+        Confirma que quieres cambiar el correo del miembro seleccionado a{" "}
+        {email}.
+      </Confirmation>
     </details>
   )
 }
