@@ -79,6 +79,12 @@ export default async function NewYearsEve() {
               canManage={canManage}
             />
           </CarSection>
+          <Link
+            className={styles.back}
+            href="/eventos/26-12-30-nochevieja-letux/tapas"
+          >
+            Concurso de tapas →
+          </Link>
         </div>
       </main>
     </LumosGate>

@@ -19,3 +19,9 @@ Los administradores pueden cambiar el correo de un miembro desde una solicitud v
 [Iteraciones](iterations.md) · [Registro](iteration-log.md) · [Flujo](../../../plan/workflow.md)
 
 `MONGODB_DB` permite elegir la base de autenticación y de datos. Si la variable falta o está vacía, se conserva la selección predeterminada para desarrollo, integración y producción. [AGW-26](../../../plan/iterations.md#agw-26--verificar-la-selección-de-base-mongodb).
+
+## Concurso de tapas de Letux
+
+El 30 de diciembre hay un concurso con tapas individuales o en pareja. El administrador abre la votación, que fija participantes y tapas. Los asistentes puntúan todas las tapas ajenas de 0 a 10 en sabor, presentación, originalidad y calidad de los ingredientes. Un administrador puede facilitar el voto a un asistente desde su móvil. Se conserva una papeleta por persona y ronda, modificable hasta el cierre.
+
+La suma de las cuatro medias determina la clasificación inicial. Los empates por el primer puesto se resuelven en una ronda extra sin los autores finalistas; si persisten, se comparan sabor, calidad, originalidad y presentación, y finalmente se recurre al sorteo presencial. El administrador revisa los resultados antes de publicarlos de manera definitiva. Ver [EPJ-31](iterations.md#epj-31--concurso-de-tapas-en-letux).

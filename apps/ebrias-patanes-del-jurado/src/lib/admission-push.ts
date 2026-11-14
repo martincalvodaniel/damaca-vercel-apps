@@ -1,11 +1,11 @@
 import "server-only"
 
-import webPush, { type PushSubscription } from "web-push"
+import * as webPush from "web-push"
 import { getDatabaseConnection } from "./database"
 
 export function pushDevices() {
   return getDatabaseConnection().db.collection<
-    PushSubscription & { _id: string; email: string }
+    webPush.PushSubscription & { _id: string; email: string }
   >("admission-push-devices")
 }
 

@@ -218,3 +218,13 @@
 - Rutas: página de disfraces y dominio de reservas.
 - Aceptación: mostrar el número de asistentes con personaje reservado bajo la nota introductoria; ocultar la creación libre por defecto y permitir a admins habilitarla o deshabilitarla. La acción de servidor valida el permiso.
 - Validación: Biome, tipos, build y comprobaciones de reservas y permisos.
+
+## EPJ-31 — Concurso de tapas en Letux
+
+- Estado: `validated`.
+- Objetivo: registrar tapas, votar con rúbrica y resolver y publicar el concurso.
+- Rutas: ficha y subruta de tapas de Letux, `src/features/tapas` y plan de Ebrias.
+- Dependencias: sesiones, directorio, asistentes y MongoDB de Ebrias.
+- Aceptación: inscripción única por miembro, censo fijo, exclusión de autores, voto asistido, desempate y resultados reservados hasta publicación.
+- Validación: Biome incremental, tipos, pruebas de reglas y permisos, build y revisión de móvil y escritorio.
+- Evidencia: [registro de Ebrias](iteration-log.md#epj-31--concurso-de-tapas-en-letux).
