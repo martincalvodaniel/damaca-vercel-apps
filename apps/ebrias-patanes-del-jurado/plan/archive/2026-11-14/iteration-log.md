@@ -199,3 +199,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Inicio a las 14:07 CET con un 14% disponible en 5 h y un 11% en 7 días.
 - [Criterios](iterations.md#epj-40--edición-compacta-de-la-guía-de-letux). Cada nota se edita en su actividad. Campos más bajos e iconos junto al título de cada bloque.
 - Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado verificó el guardado de ambas notas, la reordenación, los iconos alineados de 34 px y el ancho del editor a 320 y 1440 px.
+
+## EPJ-41 — Títulos editables y alta desde la cabecera
+
+- Inicio a las 14:09 CET con un 11% disponible en 5 h y un 10% en 7 días.
+- [Criterios](iterations.md#epj-41--títulos-editables-y-alta-desde-la-cabecera). El título se edita en la cabecera, el alta usa un icono «+» por sección y las descripciones y notas mantienen únicamente el nombre accesible.
+- Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado verificó foco y edición al pulsar el título, alta desde los encabezados, ausencia de etiquetas visibles, lectura de nombres accesibles y persistencia tras guardar y recargar. El editor cabe a 320 y 1440 px.

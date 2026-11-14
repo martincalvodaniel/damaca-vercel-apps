@@ -2,12 +2,15 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import type { ReactNode } from "react"
 import { AdmissionAlert } from "./admission-alert"
 
 export function Navigation({
+  children,
   image,
   showAdmissionAlerts,
 }: {
+  children?: ReactNode
   image?: string | null
   showAdmissionAlerts: boolean
 }) {
@@ -15,6 +18,7 @@ export function Navigation({
 
   return (
     <nav className="club-nav" aria-label="Navegación principal">
+      {children}
       <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>
         <svg
           viewBox="0 0 24 24"

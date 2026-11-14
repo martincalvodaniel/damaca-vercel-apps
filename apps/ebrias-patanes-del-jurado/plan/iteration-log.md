@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-40 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-41 — Títulos editables y alta desde la cabecera
-
-- Inicio a las 14:09 CET con un 11% disponible en 5 h y un 10% en 7 días.
-- [Criterios](iterations.md#epj-41--títulos-editables-y-alta-desde-la-cabecera). El título se edita en la cabecera, el alta usa un icono «+» por sección y las descripciones y notas mantienen únicamente el nombre accesible.
-- Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado verificó foco y edición al pulsar el título, alta desde los encabezados, ausencia de etiquetas visibles, lectura de nombres accesibles y persistencia tras guardar y recargar. El editor cabe a 320 y 1440 px.
+[Entregas EPJ-08 a EPJ-41 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-42 — Nombres editables para Tapas y Disfraces
 
@@ -57,3 +51,8 @@
 
 - Capacidad inicial de 76% en 5 h y 5% en 7 días.
 - Botones de 24 px con iconos de 14 px, sin relleno y con 2 px de separación. Biome, tipos y build correctos.
+
+## EPJ-51 — Vista de miembro en la navegación
+
+- Capacidad inicial de 74% en 5 h y 5% en 7 días. El selector de vista ocupa el extremo izquierdo de la barra global y conserva su disponibilidad para la cuenta administradora.
+- Biome, tipos y build correctos. Sin comprobación en navegador autenticado.

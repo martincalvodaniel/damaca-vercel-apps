@@ -377,3 +377,10 @@
 - Rutas: controles de inscripción y estilos de Tapas.
 - Aceptación: iconos de 14 px en botones de 24 px, sin relleno y con 2 px de separación.
 - Validación: Biome, tipos y build.
+
+## EPJ-51 — Vista de miembro en la navegación
+
+- Estado: `validated`.
+- Rutas: navegación global y Ajustes.
+- Aceptación: el ojo aparece en el extremo izquierdo de la barra para administradores, también con la vista de miembro activa.
+- Validación: Biome, tipos y build.
