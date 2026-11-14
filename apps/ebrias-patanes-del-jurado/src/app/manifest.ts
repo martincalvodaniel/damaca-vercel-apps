@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next"
-import { installName } from "@/config/runtime"
+import { installName } from "@/config/install-name"
 
 export const dynamic = "force-static"
 

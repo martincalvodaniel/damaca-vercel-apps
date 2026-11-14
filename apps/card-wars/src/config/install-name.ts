@@ -1,0 +1,4 @@
+const baseName = "card-wars"
+
+export const installName =
+  process.env.VERCEL_GIT_COMMIT_REF === "int" ? `${baseName}-int` : baseName

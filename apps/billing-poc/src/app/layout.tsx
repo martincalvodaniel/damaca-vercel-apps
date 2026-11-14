@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import Providers from "@/components/shared/Providers"
+import { installName } from "@/config/install-name"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -15,6 +16,8 @@ const geistMono = Geist_Mono({
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires metadata export alongside layout component
 export const metadata: Metadata = {
+  applicationName: installName,
+  appleWebApp: { capable: true, title: installName },
   title: "Facturación",
   description: "Aplicación de facturación",
 }

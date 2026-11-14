@@ -19,6 +19,41 @@ function readTextFiles(directory) {
     .join("\n")
 }
 
+function expectInstallableStarter(appRoot, identifier) {
+  const manifestPath = path.join(appRoot, "src/app/manifest.ts")
+  for (const branch of ["main", "int"]) {
+    const expectedName = branch === "int" ? `${identifier}-int` : identifier
+    const result = Bun.spawnSync(
+      [
+        process.execPath,
+        "-e",
+        "const { default: manifest } = await import(process.argv[1]); console.log(JSON.stringify(manifest()))",
+        manifestPath,
+      ],
+      {
+        cwd: appRoot,
+        env: { ...process.env, VERCEL_GIT_COMMIT_REF: branch },
+      }
+    )
+    expect(result.stderr.toString()).toBe("")
+    expect(result.exitCode).toBe(0)
+    const manifest = JSON.parse(result.stdout.toString())
+    expect(manifest).toMatchObject({
+      name: expectedName,
+      short_name: expectedName,
+      display: "standalone",
+    })
+    for (const size of [192, 512]) {
+      const icon = manifest.icons.find(
+        (entry) =>
+          entry.sizes === `${size}x${size}` && entry.purpose !== "maskable"
+      )
+      expect(icon).toBeDefined()
+      expect(fs.existsSync(path.join(appRoot, "public", icon.src))).toBe(true)
+    }
+  }
+}
+
 beforeAll(() => {
   fs.mkdirSync(path.join(fixtureRoot, "apps"), { recursive: true })
   fs.mkdirSync(path.join(fixtureRoot, "turbo", "generators", "templates"), {
@@ -142,6 +177,7 @@ describe("app generator", () => {
       "utf8"
     )
 
+    expectInstallableStarter(appRoot, "family-ledger")
     expect(packageJson.name).toBe("@damaca/family-ledger")
     expect(packageJson.scripts.dev).toContain("--port 3002")
     expect(environment).toContain("BETTER_AUTH_URL=http://localhost:3002")
@@ -185,19 +221,16 @@ describe("app generator", () => {
     )
     const allText = readTextFiles(appRoot)
 
+    expectInstallableStarter(appRoot, "personal-notes")
     expect(packageJson.name).toBe("@damaca/personal-notes")
     expect(packageJson.scripts.dev).toContain("--port 3003")
     expect(packageJson.scripts.start).toContain("--port 3003")
     expect(appConfig).toContain('storageName: "personal-notes"')
     expect(appConfig).toContain('cachePrefix: "personal-notes-shell-"')
-    expect(fs.existsSync(path.join(appRoot, "src/app/manifest.ts"))).toBe(true)
     expect(fs.existsSync(path.join(appRoot, "scripts/service-worker.js"))).toBe(
       true
     )
     expect(fs.existsSync(path.join(appRoot, "src/lib/storage/AGENTS.md"))).toBe(
-      true
-    )
-    expect(fs.existsSync(path.join(appRoot, "public/icons/icon-192.png"))).toBe(
       true
     )
     expect(fs.existsSync(path.join(appRoot, ".env.local"))).toBe(false)

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import type { ReactNode } from "react"
-import { installName } from "@/config/runtime"
+import { installName } from "@/config/install-name"
 import { Navigation } from "@/features/landing/navigation"
 import { getAuthorizedUser } from "@/lib/session"
 import "./globals.css"

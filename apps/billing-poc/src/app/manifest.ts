@@ -1,15 +1,13 @@
 import type { MetadataRoute } from "next"
+import { installName } from "@/config/install-name"
 
 export const dynamic = "force-static"
 
 export default function manifest(): MetadataRoute.Manifest {
-  const name =
-    process.env.VERCEL_GIT_COMMIT_REF === "int" ? "billing-int" : "billing"
-
   return {
     id: "/",
-    name,
-    short_name: name,
+    name: installName,
+    short_name: installName,
     description: "Aplicación de facturación",
     lang: "es",
     start_url: "/",

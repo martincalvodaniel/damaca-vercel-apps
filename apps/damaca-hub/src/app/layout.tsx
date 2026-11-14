@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
 import { ThemeBootstrap } from "@/components/shared/theme-bootstrap"
+import { installName } from "@/config/install-name"
 import "./globals.css"
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires metadata to be exported alongside the root layout.
 export const metadata: Metadata = {
+  applicationName: installName,
+  appleWebApp: { capable: true, title: installName },
   title: "Damaca Hub",
   description:
     "An application directory and access manager for Damaca web apps.",

@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next"
 import { appConfig } from "@/config/app"
+import { installName } from "@/config/install-name"
 
 export const dynamic = "force-static"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: appConfig.name,
-    short_name: appConfig.shortName,
+    name: installName,
+    short_name: installName,
     description: appConfig.description,
     lang: "en",
     start_url: "/",

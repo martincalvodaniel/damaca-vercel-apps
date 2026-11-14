@@ -1,8 +1,13 @@
 import type { Metadata } from "next"
 import { ThemeBootstrap } from "@/components/shared/theme-bootstrap"
+import { installName } from "@/config/install-name"
 import "./globals.css"
 
+// biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this layout export.
 export const metadata: Metadata = {
+  applicationName: installName,
+  appleWebApp: { capable: true, title: installName },
+  icons: { apple: "/icons/apple-touch-icon.png" },
   title: "__APP_NAME_JSON__",
   description: "A private app with Google sign-in and MongoDB-backed access.",
 }

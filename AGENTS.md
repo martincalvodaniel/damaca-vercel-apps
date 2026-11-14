@@ -10,6 +10,12 @@
 - Preserve per-app environment variable boundaries and never copy secrets or local Vercel credentials into the repository.
 - Keep Vercel projects scoped to their app directory and keep `main` human-managed.
 
+## Web app installation
+
+- Every web app must serve a public installation manifest and local icons at 192×192 and 512×512. Set `display: "standalone"`, a same-origin start URL and a scope that covers it. Preserve the existing installation ID and launch route when editing an app.
+- Set `name`, `short_name`, `applicationName` and the Apple web app title from the same kebab-case installation name. Use the app identifier for new apps and append `-int` only when `VERCEL_GIT_COMMIT_REF` equals `int`. Both Turborepo starters implement this rule, and Turbo includes the branch in its cache key.
+- When adding an app or changing installation metadata, verify the generated manifests for `main` and `int`, their links in the served HTML and their icons. Record Android installation separately when tested on a device.
+
 ## Responsive UI
 
 - Design for narrow phones first. Fit as much useful information as possible in the initial viewport with compact margins, padding and gaps, simple layouts, and no repeated labels or copy. Keep text readable, controls easy to tap and content free of horizontal scrolling.

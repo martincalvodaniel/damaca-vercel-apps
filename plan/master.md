@@ -17,6 +17,10 @@ Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y f
 
 [AGW-14](iterations.md#agw-14--audit-vercel-deployment-quota-discrepancy) conserva el [informe y borrador de soporte](../docs/incidents/2026-11-01-vercel-deployment-limit.md) del bloqueo Hobby: 32 READY y 110 omisiones automáticas en la ventana auditada. La selección nativa ya está activa en las seis apps; no sustituirla por Ignored Build Step ni deducir consumo del total CANCELED. La causa interna y el desbloqueo requieren evidencia de Vercel. [AGW-15](iterations.md#agw-15--verify-vercel-preview-recovery) separa la verificación Preview pendiente; soporte no se ha contactado.
 
+## Instalación de webapps
+
+Todas las apps sirven un manifiesto para instalarse en modo independiente. Los nombres base vigentes son `billing`, `card-wars`, `dalis-home`, `dalis-tasks`, `damaca-hub`, `damaca-pocs`, `damaca-secrets`, `ebrias`, `lbdp` y `pocha-score`. La rama `int` añade `-int`. Las apps nuevas usan el identificador del generador. La regla operativa está en [AGENTS.md](../AGENTS.md#web-app-installation) y la entrega transversal en [AGW-28](iterations.md#agw-28--instalación-uniforme-de-webapps).
+
 ## Aplicaciones
 
 El [inventario de aplicaciones activas](../README.md#applications) recoge los workspaces y sus puertos de desarrollo. Las bases `mongo-google` y `local-pwa` viven en `turbo/generators/templates/`, fuera de `apps/*`, y crean nuevos workspaces bajo demanda. La lista de apps activas puede cambiar; la obligación documental aplica a todas las apps futuras. El alcance y registro de producto se mantienen en cada plan de app.

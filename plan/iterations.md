@@ -263,3 +263,13 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Estado: `validated`.
 - Rutas: generador de iconos, recursos de Damaca Secrets y copia de catálogo del Hub.
 - Aceptación: generar el favicon y los iconos de instalación, servir el manifiesto y verificar el avatar del proyecto de Vercel.
+
+## AGW-28 — Instalación uniforme de webapps
+
+- Estado: `validated`.
+- Objetivo: las diez webapps publican un nombre de instalación corto en kebab-case, con sufijo `-int` en integración. Ambos generadores incorporan el mismo contrato.
+- Rutas: manifiestos, configuración, metadatos e iconos locales de `apps/*`, `scripts/`, `turbo/`, `turbo.json`, `AGENTS.md` y `plan/`.
+- Dependencias: manifiestos de Next.js, iconos locales y referencia Git de Vercel.
+- Aceptación: nombres pactados en ambos entornos, manifiestos con iconos válidos y acceso público al manifiesto e iconos, y uso del identificador de workspace por defecto al generar una app.
+- Validación: Biome, tipos, pruebas, build, nombres de las dos ramas y comprobación de ambos generadores.
+- Evidencia: [registro AGW-28](iteration-log.md#agw-28--instalación-uniforme-de-webapps).

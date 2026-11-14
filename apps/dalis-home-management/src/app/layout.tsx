@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires metadata exports in the layout module
 export const metadata: Metadata = {
+  applicationName: installName,
   title: "Dali — Nuestro hogar, más fácil",
   appleWebApp: { capable: true, title: installName },
   description:

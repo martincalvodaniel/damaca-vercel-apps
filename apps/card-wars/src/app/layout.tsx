@@ -3,16 +3,17 @@ import { PwaProvider } from "@/components/shared/pwa-provider"
 import { ThemeBootstrap } from "@/components/shared/theme-bootstrap"
 import { ThemeProvider } from "@/components/shared/theme-provider"
 import { appConfig } from "@/config/app"
+import { installName } from "@/config/install-name"
 import "./globals.css"
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires route metadata in the root layout.
 export const metadata: Metadata = {
   title: appConfig.name,
   description: appConfig.description,
-  applicationName: appConfig.name,
+  applicationName: installName,
   appleWebApp: {
     capable: true,
-    title: appConfig.shortName,
+    title: installName,
     statusBarStyle: "default",
   },
   icons: {

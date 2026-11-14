@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next"
+import { installName } from "@/config/install-name"
 
 export const dynamic = "force-static"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "Damaca Secrets",
-    short_name: "Damaca Secrets",
+    name: installName,
+    short_name: installName,
     description: "A private vault for your account credentials.",
     lang: "en",
     start_url: "/",

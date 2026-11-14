@@ -2,9 +2,12 @@
 import type { Metadata } from "next"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-ui"
+import { installName } from "@/config/install-name"
 import "./globals.css"
 
 export const metadata: Metadata = {
+  applicationName: installName,
+  appleWebApp: { capable: true, title: installName },
   title: {
     default: "La Bottega di Pali · Cerámica en Zaragoza",
     template: "%s · La Bottega di Pali",

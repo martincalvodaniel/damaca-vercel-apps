@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires metadata exports in the layout module
 export const metadata: Metadata = {
+  applicationName: installName,
   title: "Dalis Tasks & Events",
   description: "Tus tareas y fechas importantes, también sin conexión",
   appleWebApp: { capable: true, title: installName },

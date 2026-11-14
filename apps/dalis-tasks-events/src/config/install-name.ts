@@ -1,4 +1,4 @@
+const baseName = "dalis-tasks"
+
 export const installName =
-  process.env.VERCEL_GIT_COMMIT_REF === "int"
-    ? "dalis-tasks-int"
-    : "dalis-tasks"
+  process.env.VERCEL_GIT_COMMIT_REF === "int" ? `${baseName}-int` : baseName
