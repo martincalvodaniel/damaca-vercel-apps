@@ -2,7 +2,8 @@ import { getAuth } from "@/lib/auth"
 
 async function handler(request: Request) {
   try {
-    return await getAuth().handler(request)
+    const auth = await getAuth()
+    return await auth.handler(request)
   } catch {
     return Response.json(
       { error: "Authentication unavailable" },

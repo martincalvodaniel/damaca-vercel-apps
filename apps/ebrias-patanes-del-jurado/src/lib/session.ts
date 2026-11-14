@@ -10,7 +10,8 @@ export const memberViewCookie = "ebrias-member-view"
 
 export const getAuthorizedUser = cache(async () => {
   try {
-    const session = await getAuth().api.getSession({ headers: await headers() })
+    const auth = await getAuth()
+    const session = await auth.api.getSession({ headers: await headers() })
     if (!session) return null
 
     const { user } = session

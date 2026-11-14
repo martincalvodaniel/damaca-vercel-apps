@@ -24,9 +24,10 @@ async function enforceAdmission(user: {
   denyAdmission()
 }
 
-function createAuth() {
+async function createAuth() {
   const env = getAuthEnvironment()
   const { client, db } = getDatabaseConnection()
+  await client.connect()
 
   return betterAuth({
     baseURL: env.baseURL,
@@ -63,6 +64,13 @@ function createAuth() {
 let auth: ReturnType<typeof createAuth> | undefined
 
 export function getAuth() {
-  auth ??= createAuth()
+  auth ??= createAuth().catch((error: unknown) => {
+    auth = undefined
+    console.error(
+      "Authentication initialization failed",
+      error instanceof Error ? error.name : "Unknown error"
+    )
+    throw error
+  })
   return auth
 }

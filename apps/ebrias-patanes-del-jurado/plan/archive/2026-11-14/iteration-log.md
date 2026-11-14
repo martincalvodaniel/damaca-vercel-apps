@@ -217,3 +217,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Capacidad inicial disponible de 100% en 5 h y 9% en 7 días.
 - [Criterios](iterations.md#epj-43--títulos-y-botones-de-las-actividades). Los títulos se muestran como encabezados y los botones conservan sus etiquetas fijas con flecha.
 - Biome, tipos, ocho pruebas y build correctos.
+
+## EPJ-44 — Reabrir las inscripciones de tapas
+
+- Capacidad inicial disponible de 98% en 5 h y 9% en 7 días.
+- La reapertura exige administrador y confirmación, conserva las tapas y reinicia el censo y las papeletas. Se rechazan papeletas abiertas antes del reinicio.
+- Biome, tipos, seis pruebas de Tapas y build correctos.
