@@ -2,15 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-28 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-29
-
-- [Criterios](iterations.md#epj-29--controles-de-nochevieja). Enlace de disfraces sobre el acordeón nativo y modal de creación de coches en la cabecera desplegada.
-- Biome sobre los tres archivos, tipos, build y comprobación del diff correctos. Pendiente revisión en navegador móvil y de escritorio.
-
-- Cambios posteriores: se restauró el margen nativo de las listas de asistentes y la sangría se aplicó a las tarjetas de bloque. Biome y `git diff --check` correctos.
-- Entrega: commit local pendiente de push, despliegue Preview de `int` y movimiento del alias. `git ls-remote origin refs/heads/int` falló porque el entorno no resuelve `github.com`; Vercel CLI tampoco pudo conectar.
+[Entregas EPJ-08 a EPJ-29 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-30
 
@@ -67,3 +59,9 @@
 - Inicio a las 13:02 CET con un 18% disponible en 5 h y un 11% en 7 días.
 - [Criterios](iterations.md#epj-38--coches-junto-a-asistentes-en-letux). El desplegable de coches sigue al de asistentes en el orden de la ficha.
 - Orden revisado en el diff. Biome, tipos, cinco pruebas de Ebrias, build y `git diff --check` correctos.
+
+## EPJ-39 — Orden de Tapas y Disfraces en la guía
+
+- Inicio a las 14:03 CET con un 16% disponible en 5 h y un 11% en 7 días.
+- [Criterios](iterations.md#epj-39--orden-de-tapas-y-disfraces-en-la-guía). «Subir» y «Bajar» permiten cruzar la actividad de cada día. Se conserva el orden inicial de los documentos anteriores.
+- Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado confirmó ambos órdenes tras guardar y recargar, sin desbordamiento de la guía a 320 y 1440 px.

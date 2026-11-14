@@ -123,3 +123,11 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - [Criterios](iterations.md#epj-28--quitar-añadir-bloque-de-quién-viene). El formulario de creación solo se monta en «Coches» para usuarios con permiso de gestión.
 - Biome sobre el componente, tipos y build correctos. Pendiente comprobar ambas secciones en navegador móvil y de escritorio.
+
+## EPJ-29
+
+- [Criterios](iterations.md#epj-29--controles-de-nochevieja). Enlace de disfraces sobre el acordeón nativo y modal de creación de coches en la cabecera desplegada.
+- Biome sobre los tres archivos, tipos, build y comprobación del diff correctos. Pendiente revisión en navegador móvil y de escritorio.
+
+- Cambios posteriores: se restauró el margen nativo de las listas de asistentes y la sangría se aplicó a las tarjetas de bloque. Biome y `git diff --check` correctos.
+- Entrega: commit local pendiente de push, despliegue Preview de `int` y movimiento del alias. `git ls-remote origin refs/heads/int` falló porque el entorno no resuelve `github.com`; Vercel CLI tampoco pudo conectar.

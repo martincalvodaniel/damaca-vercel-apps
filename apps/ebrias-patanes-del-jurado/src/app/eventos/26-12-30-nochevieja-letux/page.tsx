@@ -1,7 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { type GuideBlock, guideSections } from "@/features/event-guide/guide"
+import {
+  type ActivityDay,
+  type EventGuide,
+  type GuideBlock,
+  guideEntries,
+  guideSections,
+} from "@/features/event-guide/guide"
 import { readGuide } from "@/features/event-guide/store"
 import {
   getAttendanceBlocks,
@@ -89,30 +95,16 @@ export default async function NewYearsEve() {
                 canManage={canManage}
               />
             </CarSection>
-            <section className={guideStyles.panel}>
-              <h2>{guideSections[0].label}</h2>
-              <GuideText text={guide.notes.tapas} />
-              <Link
-                className={styles.back}
-                href="/eventos/26-12-30-nochevieja-letux/tapas"
-              >
-                Concurso de tapas →
-              </Link>
-              <GuideBlocks blocks={guide.sections.dec30} />
-            </section>
-            <section className={guideStyles.panel}>
-              <h2>{guideSections[1].label}</h2>
-              <GuideBlocks blocks={guide.sections.dec31} />
-              <article>
-                <GuideText text={guide.notes.costumes} />
-                <Link
-                  className={styles.back}
-                  href="/eventos/26-12-30-nochevieja-letux/disfraces"
-                >
-                  Elegir disfraz →
-                </Link>
-              </article>
-            </section>
+            <ProgramDay
+              day="dec30"
+              label={guideSections[0].label}
+              guide={guide}
+            />
+            <ProgramDay
+              day="dec31"
+              label={guideSections[1].label}
+              guide={guide}
+            />
             <OptionalSection
               label={guideSections[2].label}
               blocks={guide.sections.jan01}
@@ -132,13 +124,48 @@ function GuideText({ text }: { text: string }) {
   return text ? <p className={guideStyles.copy}>{text}</p> : null
 }
 
-function GuideBlocks({ blocks }: { blocks: GuideBlock[] }) {
-  return blocks.map(({ id, title, text }) => (
-    <article key={id}>
-      <h3>{title}</h3>
-      <GuideText text={text} />
+function ProgramDay({
+  day,
+  label,
+  guide,
+}: {
+  day: ActivityDay
+  label: string
+  guide: EventGuide
+}) {
+  return (
+    <section className={guideStyles.panel}>
+      <h2>{label}</h2>
+      {guideEntries(guide, day).map((entry) =>
+        "link" in entry ? (
+          <article key={entry.id}>
+            <GuideText text={guide.notes[entry.id]} />
+            <Link
+              className={styles.back}
+              href={
+                entry.id === "tapas"
+                  ? "/eventos/26-12-30-nochevieja-letux/tapas"
+                  : "/eventos/26-12-30-nochevieja-letux/disfraces"
+              }
+            >
+              {entry.link} →
+            </Link>
+          </article>
+        ) : (
+          <GuideArticle key={entry.id} block={entry} />
+        )
+      )}
+    </section>
+  )
+}
+
+function GuideArticle({ block }: { block: GuideBlock }) {
+  return (
+    <article>
+      <h3>{block.title}</h3>
+      <GuideText text={block.text} />
     </article>
-  ))
+  )
 }
 
 function OptionalSection({
@@ -151,7 +178,9 @@ function OptionalSection({
   return blocks.length ? (
     <section className={guideStyles.panel}>
       <h2>{label}</h2>
-      <GuideBlocks blocks={blocks} />
+      {blocks.map((block) => (
+        <GuideArticle key={block.id} block={block} />
+      ))}
     </section>
   ) : null
 }

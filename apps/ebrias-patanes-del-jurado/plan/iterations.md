@@ -286,3 +286,11 @@
 - Dependencias: guía de Letux (EPJ-37).
 - Aceptación: «Reparto de coches» aparece inmediatamente después de «¿Quién viene?», antes del programa.
 - Validación: inspección del orden, Biome, tipos, pruebas de Ebrias y build.
+
+## EPJ-39 — Orden de Tapas y Disfraces en la guía
+
+- Estado: `validated`.
+- Rutas: ficha y editor de Letux, modelo de la guía y plan de Ebrias.
+- Dependencias: guía de Letux (EPJ-37).
+- Aceptación: cada actividad se ordena junto a los bloques de su día, aparece una sola vez y conserva su nota y enlace. Las guías existentes mantienen su orden inicial.
+- Validación: Biome, tipos, pruebas de compatibilidad y guardado del orden, build y recorrido en Chrome.

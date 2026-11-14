@@ -13,9 +13,12 @@ import { saveGuide } from "@/features/event-guide/actions"
 import {
   type EventGuide,
   type GuideBlock,
+  type GuideSection,
+  guideEntries,
   guideLimits,
   guideNotes,
   guideSections,
+  isActivityDay,
 } from "@/features/event-guide/guide"
 import styles from "./guide.module.css"
 
@@ -96,7 +99,7 @@ function GuideForm({
             key={id}
             label={label}
             section={id}
-            blocks={draft.sections[id]}
+            draft={draft}
             setDraft={setDraft}
           />
         ))}
@@ -116,81 +119,108 @@ function GuideForm({
 
 function GuideSectionFields({
   label,
-  blocks,
+  draft,
   section,
   setDraft,
 }: {
   label: string
-  blocks: GuideBlock[]
-  section: keyof EventGuide["sections"]
+  draft: EventGuide
+  section: GuideSection
   setDraft: Dispatch<SetStateAction<EventGuide>>
 }) {
-  const setBlocks = useCallback(
-    (update: (blocks: GuideBlock[]) => GuideBlock[]) => {
-      setDraft((current) => ({
-        ...current,
-        sections: {
-          ...current.sections,
-          [section]: update(current.sections[section]),
-        },
-      }))
+  const blocks = draft.sections[section]
+  const entries = guideEntries(draft, section)
+
+  const setEntries = useCallback(
+    (
+      update: (
+        entries: ReturnType<typeof guideEntries>
+      ) => ReturnType<typeof guideEntries>
+    ) => {
+      setDraft((current) => {
+        const next = update(guideEntries(current, section))
+        const activityPositions = {
+          dec30: current.activityPositions?.dec30 ?? 0,
+          dec31:
+            current.activityPositions?.dec31 ?? current.sections.dec31.length,
+        }
+        if (isActivityDay(section)) {
+          activityPositions[section] = next.findIndex(
+            (entry) => "link" in entry
+          )
+        }
+        return {
+          ...current,
+          activityPositions,
+          sections: {
+            ...current.sections,
+            [section]: next.filter((entry) => "text" in entry),
+          },
+        }
+      })
     },
     [section, setDraft]
   )
 
   const addBlock = useCallback(() => {
     const block = { id: crypto.randomUUID(), title: "", text: "" }
-    setBlocks((current) => [...current, block])
-  }, [setBlocks])
+    setEntries((current) => [...current, block])
+  }, [setEntries])
 
   const removeBlock = useCallback(
     (blockId: string) => {
-      setBlocks((current) => current.filter(({ id }) => id !== blockId))
+      setEntries((current) => current.filter(({ id }) => id !== blockId))
     },
-    [setBlocks]
+    [setEntries]
   )
 
   const moveBlock = useCallback(
     (id: string, direction: -1 | 1) => {
-      setBlocks((current) => {
-        const index = current.findIndex((block) => block.id === id)
+      setEntries((current) => {
+        const index = current.findIndex((entry) => entry.id === id)
         const target = index + direction
-        const block = current[index]
-        if (!block || target < 0 || target >= current.length) return current
+        const entry = current[index]
+        if (!entry || target < 0 || target >= current.length) return current
         const next = [...current]
         next.splice(index, 1)
-        next.splice(target, 0, block)
+        next.splice(target, 0, entry)
         return next
       })
     },
-    [setBlocks]
+    [setEntries]
   )
 
   const editBlock = useCallback(
     (id: string, field: "title" | "text", value: string) => {
-      setBlocks((current) =>
+      setEntries((current) =>
         current.map((block) =>
           block.id === id ? { ...block, [field]: value } : block
         )
       )
     },
-    [setBlocks]
+    [setEntries]
   )
 
   return (
     <fieldset className={styles.fields}>
       <legend>{label}</legend>
-      {blocks.map((block, index) => (
-        <GuideBlockFields
-          key={block.id}
-          block={block}
-          index={index}
-          last={index === blocks.length - 1}
-          moveBlock={moveBlock}
-          editBlock={editBlock}
-          removeBlock={removeBlock}
-        />
-      ))}
+      {entries.map((block, index) =>
+        "link" in block ? (
+          <p key={block.id}>
+            <strong>{block.title}</strong>
+          </p>
+        ) : (
+          <GuideBlockFields
+            key={block.id}
+            block={block}
+            index={index}
+            last={index === entries.length - 1}
+            moveBlock={moveBlock}
+            editBlock={editBlock}
+            removeBlock={removeBlock}
+          />
+        )
+      )}
       <button
         type="button"
         disabled={blocks.length >= guideLimits.blocks}
