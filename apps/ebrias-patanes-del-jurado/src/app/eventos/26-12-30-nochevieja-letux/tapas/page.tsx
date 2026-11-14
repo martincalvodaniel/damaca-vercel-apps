@@ -6,8 +6,10 @@ import {
   type Contest,
   canSeeResults,
   categories,
+  nextReveal,
   type Person,
   results,
+  revealedPodium,
   selectVoter,
   type Tapa,
 } from "@/features/tapas/contest"
@@ -33,9 +35,7 @@ function Results({ contest, sort }: { contest: Contest; sort?: string }) {
   const format = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 2 })
   return (
     <section className={styles.panel}>
-      <h2>
-        {contest.phase === "published" ? "Resultados" : "Vista previa privada"}
-      </h2>
+      <h2>Resultados</h2>
       {winner ? (
         <p>
           <strong>Ganadora: {winner.name}</strong>
@@ -147,14 +147,8 @@ function Management({ contest }: { contest: Contest }) {
         <ContestForm intent="resolve" label="Resolver votación">
           <p>
             {contest.rubric.length} papeletas recibidas. Al resolver, se cierra
-            la rúbrica y se abre la vista previa privada.
+            la rúbrica y queda listo el podio para revelarlo.
           </p>
-        </ContestForm>
-      )
-    case "preview":
-      return (
-        <ContestForm intent="open-runoff" label="Abrir desempate">
-          <p>Hay un empate en el primer puesto.</p>
         </ContestForm>
       )
     case "runoff":
@@ -192,14 +186,28 @@ function Management({ contest }: { contest: Contest }) {
           confirmation="Los resultados volverán a ser privados."
         ></ContestForm>
       )
-    case "resolved":
+    case "preview":
+    case "resolved": {
+      const next = nextReveal(contest)
+      if (!next) return null
+      const labels = [
+        "Publicar cierre sin ganadora",
+        "Revelar primer puesto",
+        "Revelar segundo puesto",
+        "Revelar tercer puesto",
+      ]
       return (
         <ContestForm
-          intent="publish"
-          label="Publicar resultados"
-          confirmation="Los miembros podrán ver la clasificación."
-        ></ContestForm>
+          key={next.token}
+          intent="reveal"
+          label={
+            next.needsRunoff ? "Preparar primer puesto" : labels[next.place]
+          }
+        >
+          <input type="hidden" name="step" value={next.token} />
+        </ContestForm>
       )
+    }
     default:
       return null
   }
@@ -275,7 +283,7 @@ export default async function TapasContest({
                   key={`${contest.votingGeneration}:${round}:${voter.id}`}
                   options={options}
                   round={round}
-                  canRandomize={actor.admin}
+                  canRandomize={false}
                   generation={contest.votingGeneration}
                   assisted={voter.id}
                   completed={`${contestPath}?handoff=done`}
@@ -494,12 +502,26 @@ export default async function TapasContest({
                   )}
                 </section>
               )}
-              {canSeeResults(contest, actor.admin) && (
+              {canSeeResults(contest) && (
                 <Results contest={contest} sort={sort} />
               )}
+              {!canSeeResults(contest) &&
+                revealedPodium(contest).map(({ place, tapas }) => (
+                  <section key={place} className={styles.panel}>
+                    <h2>{place === 2 ? "Segundo puesto" : "Tercer puesto"}</h2>
+                    <ul>
+                      {tapas.map(({ id, name, authors }) => (
+                        <li key={id}>
+                          <strong>{name}</strong> ·{" "}
+                          {authors.map(({ alias }) => alias).join(" y ")}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ))}
               {!actor.admin &&
                 !round &&
-                !canSeeResults(contest, false) &&
+                !canSeeResults(contest) &&
                 contest.phase !== "registration" && (
                   <section className={styles.panel}>
                     <p>

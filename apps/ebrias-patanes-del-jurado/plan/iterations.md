@@ -427,3 +427,10 @@
 - Rutas: papeletas de Tapas.
 - Aceptación: el administrador puede rellenar un borrador propio o asistido en ambas rondas, con revisión antes de enviar.
 - Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-58 — Selector de notas y revelación del podio
+
+- Estado: `validated`.
+- Rutas: papeletas, resultados y reglas de Tapas.
+- Aceptación: selector de 0 a 10, atajos solo en la papeleta propia del admin y podio público revelado en orden descendente por pasos.
+- Validación: Biome, tipos, pruebas de transiciones y build.

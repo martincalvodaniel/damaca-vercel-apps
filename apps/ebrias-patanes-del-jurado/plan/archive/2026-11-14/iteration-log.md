@@ -238,3 +238,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - Capacidad inicial de 86% en 5 h y 7% en 7 días. La papeleta usa dos filas y campos de 44 px.
 - Maqueta en Chrome a 320 y 1440 px con los estilos reales: dos filas alineadas sin desbordar y rechazo de 11. Biome, tipos, ocho pruebas de Tapas y build correctos.
+
+## EPJ-48 — Inscripciones secretas y vista de miembro
+
+- Capacidad inicial de 82% en 5 h y 6% en 7 días. El listado oculta los nombres y Ajustes permite al administrador alternar su rol efectivo en ese navegador.
+- Biome, tipos, ocho pruebas de Tapas y build correctos. La vista de miembro no se comprobó en un navegador autenticado.

@@ -63,21 +63,6 @@
   line-height: 1.15;
 }
 
-.rubricGrid input[type="number"] {
-  appearance: textfield;
-  box-sizing: border-box;
-  min-width: 0;
-  padding-inline: 0.2rem;
-  font-size: 1rem;
-  text-align: center;
-}
-
-.rubricGrid input::-webkit-inner-spin-button,
-.rubricGrid input::-webkit-outer-spin-button {
-  appearance: none;
-  margin: 0;
-}
-
 .scores dd {
   margin: 0;
 }
@@ -155,6 +140,33 @@
   gap: 0.35rem;
 }
 
-.form .ballotActions > button {
+.ballotActions > button {
   flex: 1 1 auto;
+}
+
+.form .scoreButton {
+  width: 100%;
+}
+
+.form .scoreShortcut {
+  min-height: 28px;
+  min-width: 28px;
+  padding: 0;
+}
+
+.scoreChoices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+
+.scoreChoices button {
+  min-height: 44px;
+  border: 1px solid currentColor;
+  border-radius: 0.35rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
 }

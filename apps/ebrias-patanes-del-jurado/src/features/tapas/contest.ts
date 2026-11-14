@@ -25,6 +25,7 @@ type Rubric = { tapa: string; scores: Scores }[]
 export type Contest = {
   phase: Phase
   votingGeneration?: number
+  revealedPlaces?: number
   tapas: Tapa[]
   roster: Attendee[]
   rubric: Ballot<Rubric>[]
@@ -127,11 +128,39 @@ export function selectVoter(
     : undefined
 }
 
-export function canSeeResults(contest: Contest, admin: boolean) {
-  return (
-    contest.phase === "published" ||
-    (admin && ["preview", "runoff", "draw", "resolved"].includes(contest.phase))
-  )
+export function canSeeResults(contest: Contest) {
+  return contest.phase === "published"
+}
+
+function podium(contest: Contest) {
+  const levels: Result[][] = []
+  for (const row of results(contest)) {
+    if (!row.count) break
+    const last = levels.at(-1)
+    if (last && compareScore(last[0], row, "total") === 0) last.push(row)
+    else {
+      if (levels.length === 3) break
+      levels.push([row])
+    }
+  }
+  return levels.map((tapas, index) => ({ place: index + 1, tapas })).reverse()
+}
+
+export function revealedPodium(contest: Contest) {
+  return podium(contest)
+    .filter(({ place }) => place > 1)
+    .slice(0, contest.revealedPlaces ?? 0)
+}
+
+export function nextReveal(contest: Contest) {
+  if (contest.phase !== "resolved" && contest.phase !== "preview") return null
+  const places = podium(contest)
+  const place = places[contest.revealedPlaces ?? 0]?.place ?? 0
+  return {
+    place,
+    token: `${contest.votingGeneration ?? 0}:${contest.phase}:${place}`,
+    needsRunoff: place === 1 && contest.phase === "preview",
+  }
 }
 
 export class ContestError extends Error {}
@@ -278,7 +307,12 @@ export function applyContestAction(
     contest.phase === "published" &&
     field(form, "confirm") === "yes"
   ) {
-    return { ...contest, phase: "resolved" }
+    return {
+      ...contest,
+      phase: "resolved",
+      revealedPlaces: 0,
+      votingGeneration: (contest.votingGeneration ?? 0) + 1,
+    }
   }
   if (
     action === "reopen-registration" &&
@@ -322,8 +356,6 @@ export function applyContestAction(
       winner: tied.length === 1 ? tied[0].id : null,
     }
   }
-  if (action === "open-runoff" && contest.phase === "preview")
-    return { ...contest, phase: "runoff" }
   if (action === "resolve-runoff" && contest.phase === "runoff") {
     const votes = new Map<string, number>()
     for (const { value } of contest.runoff)
@@ -357,11 +389,13 @@ export function applyContestAction(
       fail("Elige una de las tapas que entraron en el sorteo.")
     return { ...contest, phase: "resolved", winner, reason: "draw" }
   }
-  if (
-    action === "publish" &&
-    contest.phase === "resolved" &&
-    field(form, "confirm") === "yes"
-  )
-    return { ...contest, phase: "published" }
+  if (action === "reveal") {
+    const next = nextReveal(contest)
+    if (next && field(form, "step") === next.token) {
+      if (next.place > 1)
+        return { ...contest, revealedPlaces: (contest.revealedPlaces ?? 0) + 1 }
+      return { ...contest, phase: next.needsRunoff ? "runoff" : "published" }
+    }
+  }
   fail("Esta acción ya no está disponible.")
 }

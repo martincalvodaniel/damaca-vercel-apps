@@ -123,6 +123,42 @@ export function Ballot({
   choice?: string
   canRandomize: boolean
 }) {
+  const [draftScores, setDraftScores] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      (initial ?? []).flatMap(({ tapa, scores }) =>
+        categories.map(([key]) => [`score:${tapa}:${key}`, String(scores[key])])
+      )
+    )
+  )
+  const scoreDialog = useRef<HTMLDialogElement>(null)
+  const [selection, setSelection] = useState<{
+    fields: string[]
+    title: string
+  } | null>(null)
+  const openScore = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      const { value, dataset } = event.currentTarget
+      setSelection({
+        fields: value.split("\n"),
+        title: dataset.title ?? "Elegir nota",
+      })
+      scoreDialog.current?.showModal()
+    },
+    []
+  )
+  const closeScore = useCallback(() => scoreDialog.current?.close(), [])
+  const chooseScore = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (!selection) return
+      const value = event.currentTarget.value
+      setDraftScores((current) => ({
+        ...current,
+        ...Object.fromEntries(selection.fields.map((field) => [field, value])),
+      }))
+      closeScore()
+    },
+    [selection, closeScore]
+  )
   const ballotForm = useRef<HTMLFormElement>(null)
   const randomize = useCallback(() => {
     const form = ballotForm.current
@@ -135,15 +171,24 @@ export function Ballot({
       }
       return
     }
-    for (const tapa of options) {
-      for (const [category] of categories) {
-        const score = form.elements.namedItem(`score:${tapa.id}:${category}`)
-        if (score instanceof HTMLInputElement) {
-          score.value = String(Math.floor(Math.random() * 11))
-        }
-      }
-    }
+    setDraftScores(
+      Object.fromEntries(
+        options.flatMap(({ id }) =>
+          categories.map(([key]) => [
+            `score:${id}:${key}`,
+            String(Math.floor(Math.random() * 11)),
+          ])
+        )
+      )
+    )
   }, [canRandomize, options, round])
+  const complete =
+    round !== "rubric" ||
+    options.every(({ id }) =>
+      categories.every(
+        ([key]) => draftScores[`score:${id}:${key}`] !== undefined
+      )
+    )
   const ballotId = useId()
   const reviewDialog = useRef<HTMLDialogElement>(null)
   const [review, setReview] = useState<Record<string, string> | null>(null)
@@ -172,30 +217,52 @@ export function Ballot({
         {round === "rubric" ? (
           options.map((tapa) => (
             <fieldset key={tapa.id}>
-              <legend>{tapa.name}</legend>
+              <legend>
+                {tapa.name}{" "}
+                {canRandomize ? (
+                  <button
+                    type="button"
+                    className={styles.scoreShortcut}
+                    value={categories
+                      .map(([key]) => `score:${tapa.id}:${key}`)
+                      .join("\n")}
+                    data-title={`Todas las notas · ${tapa.name}`}
+                    aria-label={`Poner la misma nota en las cuatro categorías de ${tapa.name}`}
+                    aria-haspopup="dialog"
+                    onClick={openScore}
+                  >
+                    ?
+                  </button>
+                ) : null}
+              </legend>
               <div className={styles.rubricGrid}>
-                {categories.map(([key, label]) => (
-                  <Fragment key={key}>
-                    <label htmlFor={`${ballotId}-${tapa.id}-${key}`}>
-                      {label}:
-                    </label>
-                    <input
-                      id={`${ballotId}-${tapa.id}-${key}`}
-                      type="number"
-                      inputMode="numeric"
-                      name={`score:${tapa.id}:${key}`}
-                      required
-                      min={0}
-                      max={10}
-                      step={1}
-                      defaultValue={
-                        initial?.find(({ tapa: id }) => id === tapa.id)?.scores[
-                          key
-                        ]
-                      }
-                    />
-                  </Fragment>
-                ))}
+                {categories.map(([key, label]) => {
+                  const field = `score:${tapa.id}:${key}`
+                  return (
+                    <Fragment key={key}>
+                      <label htmlFor={`${ballotId}-${tapa.id}-${key}`}>
+                        {label}:
+                      </label>
+                      <button
+                        id={`${ballotId}-${tapa.id}-${key}`}
+                        type="button"
+                        className={styles.scoreButton}
+                        value={field}
+                        data-title={`${label} · ${tapa.name}`}
+                        aria-label={`${label}: ${draftScores[field] ?? "sin nota"}`}
+                        aria-haspopup="dialog"
+                        onClick={openScore}
+                      >
+                        {draftScores[field] ?? "—"}
+                      </button>
+                      <input
+                        type="hidden"
+                        name={field}
+                        value={draftScores[field] ?? ""}
+                      />
+                    </Fragment>
+                  )
+                })}
               </div>
             </fieldset>
           ))
@@ -224,9 +291,40 @@ export function Ballot({
               Rellenar al azar
             </button>
           ) : null}
-          <button type="submit">Revisar papeleta</button>
+          <button type="submit" disabled={!complete}>
+            Revisar papeleta
+          </button>
         </div>
       </form>
+      <dialog
+        ref={scoreDialog}
+        className="action-confirmation"
+        aria-labelledby={`${ballotId}-score`}
+      >
+        <header>
+          <h2 id={`${ballotId}-score`}>{selection?.title ?? "Elegir nota"}</h2>
+          <button
+            type="button"
+            className="action-cancel"
+            aria-label="Cancelar"
+            onClick={closeScore}
+          >
+            ×
+          </button>
+        </header>
+        <div className={styles.scoreChoices}>
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
+            <button
+              key={score}
+              type="button"
+              value={score}
+              onClick={chooseScore}
+            >
+              {score}
+            </button>
+          ))}
+        </div>
+      </dialog>
       <dialog
         ref={reviewDialog}
         className="action-confirmation"
