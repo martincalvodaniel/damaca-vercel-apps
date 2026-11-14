@@ -20,7 +20,11 @@ export async function submitContest(
   const intent = form.get("intent")
   const opening = intent === "open" && actor.admin
   const [people, roster] = await Promise.all([
-    (intent === "save" && actor.member) || opening ? getMemberDirectory() : [],
+    (intent === "save" && actor.member) ||
+    (intent === "admin-save" && actor.admin) ||
+    opening
+      ? getMemberDirectory()
+      : [],
     opening ? getEventRoster(letuxEvent) : [],
   ])
   const context = {

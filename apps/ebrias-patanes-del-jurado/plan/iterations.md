@@ -333,3 +333,11 @@
 - Rutas: concurso y administración de Tapas.
 - Aceptación: un admin puede volver a inscripción antes de publicar, previa confirmación. Se conservan las tapas y se reinicia la votación.
 - Validación: Biome, tipos, pruebas de transición y build.
+
+## EPJ-45 — Gestión de inscripciones por el administrador
+
+- Estado: `validated`.
+- Rutas: formulario y reglas del concurso de Tapas.
+- Dependencias: directorio de miembros y fase de inscripción.
+- Aceptación: el administrador puede inscribir, editar y borrar cualquier tapa durante la inscripción. Se mantiene la autoría única por miembro.
+- Validación: Biome, tipos, pruebas de permisos y build.

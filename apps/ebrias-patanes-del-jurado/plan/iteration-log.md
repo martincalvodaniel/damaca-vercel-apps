@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-34 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-35 — Control de creación junto al buscador
-
-- Capacidad inicial disponible: 33% en 5 h y 14% en 7 días.
-- El botón exclusivo del administrador comparte fila con la etiqueta y reutiliza el estilo de lacre. Se compacta el texto visible para que quepa en móvil.
-- Biome, tipos y build correctos. En una maqueta de Chrome con los estilos reales, ambas opciones conservaron la posición del buscador y se alinearon con la etiqueta a 320 y 1440 px.
+[Entregas EPJ-08 a EPJ-35 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-36 — Aviso flotante en Disfraces
 
@@ -63,3 +57,8 @@
 - Capacidad inicial disponible de 98% en 5 h y 9% en 7 días.
 - La reapertura exige administrador y confirmación, conserva las tapas y reinicia el censo y las papeletas. Se rechazan papeletas abiertas antes del reinicio.
 - Biome, tipos, seis pruebas de Tapas y build correctos.
+
+## EPJ-45 — Gestión de inscripciones por el administrador
+
+- Inicio con 93% de 5 h y 8% de 7 días disponibles. La administración permite altas, cambios de nombre y autoría y borrado con confirmación durante la inscripción.
+- Biome, tipos, siete pruebas de Tapas y build correctos. Las pruebas verifican permisos, autores duplicados y el bloqueo fuera de inscripción.

@@ -159,18 +159,30 @@ export function applyContestAction(
   context: { people: Person[]; roster: Attendee[]; newId: string }
 ): Contest {
   const action = field(form, "intent")
-  if (action === "save" || action === "remove") {
-    const member = actor.member
-    if (contest.phase !== "registration" || !member)
+  const adminEntry = action === "admin-save" || action === "admin-remove"
+  if (adminEntry || action === "save" || action === "remove") {
+    if (adminEntry && !actor.admin)
+      fail("Solo un administrador puede usar este control.")
+    if (contest.phase !== "registration")
       fail("La inscripción no está disponible.")
-    const own = contest.tapas.find(
-      ({ authors }) => authors[0]?.id === member.id
-    )
-    if (action === "remove")
+    const target = field(form, "tapa")
+    const own = adminEntry
+      ? contest.tapas.find(({ id }) => id === target)
+      : contest.tapas.find(({ authors }) => authors[0]?.id === actor.member?.id)
+    if ((adminEntry && target && !own) || (!adminEntry && !actor.member))
+      fail("La inscripción no está disponible.")
+    if (action === "remove" || action === "admin-remove") {
+      if (!own || (adminEntry && field(form, "confirm") !== "yes"))
+        fail("La inscripción no está disponible.")
       return {
         ...contest,
         tapas: contest.tapas.filter((entry) => entry !== own),
       }
+    }
+    const member = adminEntry
+      ? context.people.find(({ id }) => id === field(form, "author"))
+      : actor.member
+    if (!member) fail("Elige un miembro como autor.")
     const name = field(form, "name").trim()
     if (!name || name.length > 80)
       fail("Escribe un nombre de hasta 80 caracteres.")
@@ -191,7 +203,11 @@ export function applyContestAction(
     }
     return {
       ...contest,
-      tapas: [...other, { id: own?.id ?? context.newId, name, authors }],
+      tapas: own
+        ? contest.tapas.map((entry) =>
+            entry === own ? { ...entry, name, authors } : entry
+          )
+        : [...other, { id: context.newId, name, authors }],
     }
   }
 

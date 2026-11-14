@@ -242,3 +242,40 @@ it("reopens registration only with admin confirmation and discards old ballots",
     submit(next, member("e"), "vote", { ...ballot, generation: "1" }).rubric
   ).toHaveLength(1)
 })
+
+it("lets an admin register, transfer authorship and remove a tapa only during registration", () => {
+  const initial = register(emptyContest(), "a", "First", "b")
+  const entry = { name: "Second", author: "c", partner: "d" }
+  expect(() => submit(initial, member("c"), "admin-save", entry)).toThrow(
+    "administrador"
+  )
+  expect(() =>
+    submit(initial, admin, "admin-save", { ...entry, partner: "b" })
+  ).toThrow("otra tapa")
+  const created = submit(initial, admin, "admin-save", entry)
+  const edited = submit(created, admin, "admin-save", {
+    tapa: "First",
+    name: "Updated",
+    author: "e",
+  })
+  expect(edited.tapas[0]).toMatchObject({
+    id: "First",
+    name: "Updated",
+    authors: [people[4]],
+  })
+  const remove = { tapa: "First", confirm: "yes" }
+  expect(() => submit(edited, member("e"), "admin-remove", remove)).toThrow(
+    "administrador"
+  )
+  expect(() =>
+    submit(edited, admin, "admin-remove", { tapa: "First" })
+  ).toThrow("disponible")
+  expect(submit(edited, admin, "admin-remove", remove).tapas).toEqual([
+    created.tapas[1],
+  ])
+  const opened = submit(edited, admin, "open")
+  expect(() => submit(opened, admin, "admin-save", entry)).toThrow("disponible")
+  expect(() => submit(opened, admin, "admin-remove", remove)).toThrow(
+    "disponible"
+  )
+})

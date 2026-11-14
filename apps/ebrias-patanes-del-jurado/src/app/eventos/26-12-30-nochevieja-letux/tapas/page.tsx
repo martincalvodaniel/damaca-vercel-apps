@@ -6,8 +6,10 @@ import {
   type Contest,
   canSeeResults,
   categories,
+  type Person,
   results,
   selectVoter,
+  type Tapa,
 } from "@/features/tapas/contest"
 import {
   contestPath,
@@ -88,6 +90,47 @@ function Results({ contest, sort }: { contest: Contest; sort?: string }) {
         )}
       </ol>
     </section>
+  )
+}
+
+function AdminEntry({ tapa, people }: { tapa?: Tapa; people: Person[] }) {
+  return (
+    <ContestForm
+      intent="admin-save"
+      label={tapa ? "Guardar cambios" : "Inscribir tapa"}
+    >
+      <input type="hidden" name="tapa" value={tapa?.id ?? ""} />
+      <label>
+        Nombre de la tapa
+        <input name="name" maxLength={80} required defaultValue={tapa?.name} />
+      </label>
+      <label>
+        Autor o autora
+        <select
+          name="author"
+          required
+          defaultValue={tapa?.authors[0]?.id ?? ""}
+        >
+          <option value="">Elige un miembro</option>
+          {people.map(({ id, alias }) => (
+            <option key={id} value={id}>
+              {alias}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        Coautor o coautora (opcional)
+        <select name="partner" defaultValue={tapa?.authors[1]?.id ?? ""}>
+          <option value="">En solitario</option>
+          {people.map(({ id, alias }) => (
+            <option key={id} value={id}>
+              {alias}
+            </option>
+          ))}
+        </select>
+      </label>
+    </ContestForm>
   )
 }
 
@@ -180,21 +223,23 @@ export default async function TapasContest({
     contest.tapas.some(({ authors }) =>
       authors.some(({ id }) => id === actor.member?.id)
     )
-  const people =
+  const directory =
     !assisted &&
     contest.phase === "registration" &&
-    actor.member &&
-    (own || !registered)
-      ? (await getMemberDirectory()).filter(
-          ({ id }) =>
-            id !== actor.member?.id &&
-            !contest.tapas.some(
-              (entry) =>
-                entry !== own &&
-                entry.authors.some((author) => author.id === id)
-            )
-        )
+    (actor.admin || (actor.member && (own || !registered)))
+      ? await getMemberDirectory()
       : []
+  const available = (tapa?: Tapa) =>
+    directory.filter(
+      ({ id }) =>
+        !contest.tapas.some(
+          (entry) =>
+            entry !== tapa && entry.authors.some((author) => author.id === id)
+        )
+    )
+  const people = available(own || undefined).filter(
+    ({ id }) => id !== actor.member?.id
+  )
   const eligible =
     !assisted && actor.admin && round
       ? contest.roster.filter((person) => ballotOptions(contest, person).length)
@@ -255,17 +300,50 @@ export default async function TapasContest({
                   <h2>Inscripciones</h2>
                   {contest.tapas.length ? (
                     <ul>
-                      {contest.tapas.map(({ id, name, authors }) => (
-                        <li key={id}>
-                          <strong>{name}</strong> ·{" "}
-                          {authors.map(({ alias }) => alias).join(" y ")}
+                      {contest.tapas.map((tapa) => (
+                        <li key={tapa.id}>
+                          <strong>{tapa.name}</strong> ·{" "}
+                          {tapa.authors.map(({ alias }) => alias).join(" y ")}
+                          {actor.admin ? (
+                            <details>
+                              <summary>Editar o borrar {tapa.name}</summary>
+                              <AdminEntry
+                                tapa={tapa}
+                                people={available(tapa)}
+                              />
+                              <ContestForm
+                                intent="admin-remove"
+                                label="Borrar tapa"
+                              >
+                                <input
+                                  type="hidden"
+                                  name="tapa"
+                                  value={tapa.id}
+                                />
+                                <label className={styles.confirm}>
+                                  <input
+                                    type="checkbox"
+                                    required
+                                    name="confirm"
+                                    value="yes"
+                                  />
+                                  Confirmo que quiero borrar esta tapa.
+                                </label>
+                              </ContestForm>
+                            </details>
+                          ) : null}
                         </li>
                       ))}
                     </ul>
                   ) : (
                     <p>Todavía no hay tapas inscritas.</p>
                   )}
-                  {actor.member && (own || !registered) ? (
+                  {actor.admin ? (
+                    <details>
+                      <summary>Inscribir una tapa</summary>
+                      <AdminEntry people={available()} />
+                    </details>
+                  ) : actor.member && (own || !registered) ? (
                     <>
                       <ContestForm
                         key={own?.id ?? "new"}

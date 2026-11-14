@@ -163,3 +163,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Capacidad inicial disponible: 35% en 5 h y 14% en 7 días.
 - Las dos páginas usan la separación de la ficha entre el enlace de vuelta, los controles y las tarjetas.
 - Maquetas con los estilos reales en Chrome: huecos de 4,8 px a 320 y 1440 px. Biome, tipos y build correctos.
+
+## EPJ-35 — Control de creación junto al buscador
+
+- Capacidad inicial disponible: 33% en 5 h y 14% en 7 días.
+- El botón exclusivo del administrador comparte fila con la etiqueta y reutiliza el estilo de lacre. Se compacta el texto visible para que quepa en móvil.
+- Biome, tipos y build correctos. En una maqueta de Chrome con los estilos reales, ambas opciones conservaron la posición del buscador y se alinearon con la etiqueta a 320 y 1440 px.
