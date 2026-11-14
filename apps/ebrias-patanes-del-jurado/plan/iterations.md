@@ -262,3 +262,10 @@
 - Dependencias: control de creación de EPJ-30.
 - Aceptación: el botón de administración comparte fila y altura con la etiqueta del buscador, incluso en móvil.
 - Validación: Biome, tipos, build y medida en Chrome.
+
+## EPJ-36 — Aviso flotante en Disfraces
+
+- Estado: `validated`.
+- Rutas: control de creación y estilos de Letux.
+- Aceptación: la respuesta de la acción aparece en un aviso flotante que se puede cerrar sin mover el buscador.
+- Validación: Biome, tipos, build y comprobación responsive.

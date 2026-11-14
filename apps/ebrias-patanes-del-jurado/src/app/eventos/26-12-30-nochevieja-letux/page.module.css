@@ -537,7 +537,7 @@
   text-align: end;
 }
 
-.characterCreation button {
+.characterCreation > button {
   display: block;
   margin-inline-start: auto;
   height: 1.4rem;
@@ -546,6 +546,39 @@
   font-size: 0.78rem;
 }
 
-.characterCreation p:empty {
-  display: none;
+.creationNotice {
+  position: fixed;
+  z-index: 10;
+  inset-inline: 0.75rem;
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  width: fit-content;
+  max-width: calc(100% - 1.5rem);
+  margin-inline: auto;
+  padding: 0.5rem 0.75rem;
+  border: 3px double var(--gold);
+  border-radius: 0.4rem;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 0.25rem 1rem #090b1480;
+  text-align: start;
+}
+
+.creationNotice:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.creationNotice button {
+  min-height: 44px;
+  flex-shrink: 0;
+  padding-inline: 0.5rem;
+}
+
+.creationAnnouncement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
