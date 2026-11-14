@@ -231,7 +231,6 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Validación: Biome, tipos, pruebas, compilación y comprobación de nombres generados.
 - Evidencia: [registro AGW-23](iteration-log.md#agw-23--nombres-de-instalación-de-dalis).
 
-
 ## AGW-24 — Diseño compacto en móvil
 
 - Estado: `validated`.
@@ -273,3 +272,11 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Aceptación: nombres pactados en ambos entornos, manifiestos con iconos válidos y acceso público al manifiesto e iconos, y uso del identificador de workspace por defecto al generar una app.
 - Validación: Biome, tipos, pruebas, build, nombres de las dos ramas y comprobación de ambos generadores.
 - Evidencia: [registro AGW-28](iteration-log.md#agw-28--instalación-uniforme-de-webapps).
+
+## AGW-29 — Actualizar dependencias del monorepo
+
+- Estado: `validated`.
+- Rutas: catálogo y lockfile raíz, pruebas de índices de Dalis Home, Dalis Tasks, Damaca Hub y Damaca Secrets, configuración de Biome, `packages/identity/src/` y planificación raíz.
+- Aceptación: instalación reproducible y compatibilidad de la actualización con los workspaces y el envío Web Push. El Hub local conserva callbacks HTTP de loopback registrados y los demás requieren HTTPS.
+- Validación: Biome, tipos, suites y builds, más envío Web Push contra un servidor local.
+- Evidencia: [AGW-29](iteration-log.md#agw-29--actualizar-dependencias-del-monorepo).
