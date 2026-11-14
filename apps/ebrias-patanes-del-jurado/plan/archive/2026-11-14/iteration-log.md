@@ -144,3 +144,10 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Implementadas inscripción, rúbrica, voto asistido, resolución con desempate o sorteo y publicación definitiva. Al abrir se congela el censo; las escrituras usan una revisión del documento MongoDB para comprobar concurrencia.
 - Biome en los archivos editados, tipos, cinco pruebas de reglas y `git diff --check`: correctos. El build pasó tras adaptar una importación previa a los exports de `web-push` 4.0.0. El entorno del build no resolvió el DNS de MongoDB para inicializar índices de Better Auth.
 - Chrome autenticado con sesiones ficticias y MongoDB 8 desechable: inscripción, exclusiones, voto directo y asistido en ambas rondas, cierre parcial, privacidad hasta publicar, orden por categoría y ausencia de desplazamiento horizontal a 320 y 1440 px. No se usó Google real ni la base de datos del club.
+
+## EPJ-32 — Estilo de Tapas en Letux
+
+- Inicio en `int` limpio y sincronizado. Capacidad disponible: 39% en 5 h y 15% en 7 días.
+- Tapas reutiliza las tarjetas de pergamino, la tipografía de formularios y los botones de lacre de Letux y Disfraces.
+- Chrome autenticado con MongoDB desechable: igualdad de estilos calculados en las tarjetas y los botones principales de Tapas y Disfraces, y recorrido completo a 320 y 1440 px sin desplazamiento horizontal.
+- Build correcto, con el aviso de DNS de la base configurada al inicializar índices de Better Auth.

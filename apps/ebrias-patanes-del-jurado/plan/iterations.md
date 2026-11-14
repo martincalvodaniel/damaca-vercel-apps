@@ -310,3 +310,11 @@
 - Dependencias: EPJ-40.
 - Aceptación: el encabezado muestra el título real y permite editarlo directamente. Los iconos siguen a su derecha y cada sección permite añadir bloques con el icono «+» junto a su título. Los campos de descripción y nota conservan su nombre accesible sin repetirlo visualmente.
 - Validación: Biome, tipos, pruebas, build y comprobación del título en Chrome.
+
+## EPJ-42 — Nombres editables para Tapas y Disfraces
+
+- Estado: `validated`.
+- Rutas: editor, ficha y modelo de la guía de Letux.
+- Dependencias: EPJ-41.
+- Aceptación: ambos títulos se editan desde su bloque y aparecen en la guía. Vaciar un título recupera el nombre original.
+- Validación: Biome, tipos, pruebas de guardado y build.

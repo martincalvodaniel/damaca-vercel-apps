@@ -26,6 +26,7 @@ type GuideActivity = (typeof guideActivities)[ActivityDay]
 export type EventGuide = {
   notes: Record<GuideNote, string>
   sections: Record<GuideSection, GuideBlock[]>
+  activityTitles?: Partial<Record<GuideActivity["id"], string>>
   activityPositions?: Record<ActivityDay, number>
 }
 
@@ -67,6 +68,17 @@ export function parseGuide(input: unknown): EventGuide | null {
     const note = input.notes[id]
     if (typeof note !== "string" || note.length > guideLimits.text) return null
     guide.notes[id] = note.trim()
+  }
+
+  const titles = input.activityTitles
+  if (titles !== undefined && !isRecord(titles)) return null
+  const activityTitles: NonNullable<EventGuide["activityTitles"]> = {}
+  for (const { id } of Object.values(guideActivities)) {
+    const title = titles?.[id]
+    if (title === undefined) continue
+    if (typeof title !== "string" || title.length > guideLimits.title)
+      return null
+    if (title.trim()) activityTitles[id] = title.trim()
   }
 
   const positions = input.activityPositions
@@ -120,5 +132,5 @@ export function parseGuide(input: unknown): EventGuide | null {
     }
   }
 
-  return { ...guide, activityPositions }
+  return { ...guide, activityPositions, activityTitles }
 }

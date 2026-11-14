@@ -193,6 +193,17 @@ function GuideSectionFields({
     [setEntries]
   )
 
+  const editActivityTitle = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.currentTarget
+      setDraft((current) => ({
+        ...current,
+        activityTitles: { ...current.activityTitles, [name]: value },
+      }))
+    },
+    [setDraft]
+  )
+
   const editBlock = useCallback(
     (id: string, field: "title" | "text", value: string) => {
       setEntries((current) =>
@@ -219,8 +230,22 @@ function GuideSectionFields({
       </div>
       {entries.map((block, index) =>
         "link" in block ? (
-          <fieldset className={styles.blockFields} key={block.id}>
-            <legend>{block.title}</legend>
+          <fieldset
+            className={styles.blockFields}
+            key={block.id}
+            aria-label={block.title}
+          >
+            <div className={styles.blockHeading}>
+              <input
+                className={styles.blockTitle}
+                aria-label={`Título de ${block.title}`}
+                name={block.id}
+                placeholder={block.title}
+                maxLength={guideLimits.title}
+                value={draft.activityTitles?.[block.id] ?? block.title}
+                onChange={editActivityTitle}
+              />
+            </div>
             <textarea
               aria-label="Nota"
               rows={2}

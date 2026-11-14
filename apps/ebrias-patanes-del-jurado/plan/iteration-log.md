@@ -2,14 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-31 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-32 — Estilo de Tapas en Letux
-
-- Inicio en `int` limpio y sincronizado. Capacidad disponible: 39% en 5 h y 15% en 7 días.
-- Tapas reutiliza las tarjetas de pergamino, la tipografía de formularios y los botones de lacre de Letux y Disfraces.
-- Chrome autenticado con MongoDB desechable: igualdad de estilos calculados en las tarjetas y los botones principales de Tapas y Disfraces, y recorrido completo a 320 y 1440 px sin desplazamiento horizontal.
-- Build correcto, con el aviso de DNS de la base configurada al inicializar índices de Better Auth.
+[Entregas EPJ-08 a EPJ-32 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-33 — Separación uniforme en Letux
 
@@ -64,3 +57,9 @@
 - Inicio a las 14:09 CET con un 11% disponible en 5 h y un 10% en 7 días.
 - [Criterios](iterations.md#epj-41--títulos-editables-y-alta-desde-la-cabecera). El título se edita en la cabecera, el alta usa un icono «+» por sección y las descripciones y notas mantienen únicamente el nombre accesible.
 - Biome, tipos, siete pruebas y build correctos. Chrome con MongoDB aislado verificó foco y edición al pulsar el título, alta desde los encabezados, ausencia de etiquetas visibles, lectura de nombres accesibles y persistencia tras guardar y recargar. El editor cabe a 320 y 1440 px.
+
+## EPJ-42 — Nombres editables para Tapas y Disfraces
+
+- El usuario autorizó continuar pese a la reserva de capacidad.
+- [Criterios](iterations.md#epj-42--nombres-editables-para-tapas-y-disfraces). Los títulos se guardan con la guía y se usan en los enlaces. Los campos vacíos recuperan el nombre original.
+- Biome, tipos, ocho pruebas y build correctos. No se hizo una comprobación adicional en navegador.

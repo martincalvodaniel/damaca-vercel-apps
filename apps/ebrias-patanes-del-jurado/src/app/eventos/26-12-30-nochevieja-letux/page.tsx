@@ -148,7 +148,7 @@ function ProgramDay({
                   : "/eventos/26-12-30-nochevieja-letux/disfraces"
               }
             >
-              {entry.link} →
+              {guide.activityTitles?.[entry.id] ?? entry.link} →
             </Link>
           </article>
         ) : (

@@ -59,3 +59,16 @@ it("saved activities stay between the intended blocks when empty blocks are disc
     parseGuide({ ...guide, activityPositions: { dec30: 4, dec31: 2 } })
   ).toBeNull()
 })
+
+it("activity titles are trimmed independently and blank titles restore the default", () => {
+  const submitted = {
+    ...emptyGuide(),
+    activityTitles: { tapas: "  Torneo de tapas  ", costumes: " " },
+  }
+  expect(parseGuide(submitted)?.activityTitles).toEqual({
+    tapas: "Torneo de tapas",
+  })
+  expect(
+    parseGuide({ ...submitted, activityTitles: { tapas: "a".repeat(101) } })
+  ).toBeNull()
+})
