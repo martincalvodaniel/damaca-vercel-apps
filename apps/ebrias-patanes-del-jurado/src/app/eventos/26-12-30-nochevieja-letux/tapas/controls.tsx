@@ -132,7 +132,7 @@ export function Ballot({
         <button type="submit">Revisar papeleta</button>
       </form>
       {review !== null && (
-        <section className={styles.panel} aria-label="Revisión de papeleta">
+        <section aria-label="Revisión de papeleta">
           <h2>Revisa tu papeleta</h2>
           {round === "rubric" ? (
             options.map(({ id, name }) => (
@@ -163,7 +163,11 @@ export function Ballot({
               <input key={key} type="hidden" name={key} value={value} />
             ))}
           </ContestForm>
-          <button type="button" onClick={editBallot}>
+          <button
+            type="button"
+            className={styles.secondary}
+            onClick={editBallot}
+          >
             Editar papeleta
           </button>
         </section>

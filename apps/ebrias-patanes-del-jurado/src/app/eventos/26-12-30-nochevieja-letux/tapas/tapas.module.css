@@ -1,27 +1,23 @@
 .panel {
+  composes: card from "../page.module.css";
   margin-block: 0.6rem;
-  padding: clamp(0.65rem, 2vw, 1rem);
-  border: 1px solid #ac8954;
-  border-radius: 0.5rem;
-  background: #151b2d;
   overflow-wrap: anywhere;
 }
 
-.panel h2,
-.panel p,
 .panel dl {
   margin-block: 0 0.45rem;
 }
 
-.panel ul {
-  margin-block: 0.25rem 0.6rem;
-  padding-inline-start: 1.2rem;
+.form {
+  composes: picker from "../page.module.css";
+  gap: 0.45rem;
+  margin-block: 0.45rem;
 }
 
-.form {
-  display: grid;
-  gap: 0.5rem;
-  margin-block: 0.45rem;
+.secondary {
+  composes: seal from "../page.module.css";
+  min-height: 44px;
+  padding-inline: 0.6rem;
 }
 
 .form[hidden] {
@@ -32,6 +28,7 @@
   display: grid;
   gap: 0.2rem;
   grid-template-columns: minmax(0, 1fr);
+  font-size: 1rem;
 }
 
 .form .confirm {
@@ -39,25 +36,17 @@
   align-items: center;
 }
 
-.panel button,
-.form input,
+.form button,
+.form input:not([type="hidden"], [type="checkbox"]),
 .form select {
   min-height: 44px;
   max-width: 100%;
-  font: inherit;
-}
-
-.panel button {
-  justify-self: start;
-  color: #231609;
-  background: #ffe3a6;
-  border: 1px solid #e9c482;
-  padding: 0.35rem 0.6rem;
 }
 
 .form fieldset {
   min-width: 0;
-  border: 1px solid #ac8954;
+  border: 1px solid #95653880;
+  border-radius: 0.35rem;
   padding: 0.55rem;
 }
 
@@ -88,9 +77,14 @@
   padding-inline: 0.45rem;
 }
 
+.sort a {
+  color: var(--wax);
+}
+
 .sort [aria-current] {
-  color: #231609;
-  background: #ffe3a6;
+  color: #fff0cf;
+  background: var(--wax);
+  border-radius: 0.35rem;
 }
 
 .ranking {
@@ -99,6 +93,6 @@
 
 .ranking li + li {
   margin-block-start: 0.55rem;
-  border-top: 1px solid #ac8954;
+  border-top: 1px solid #95653880;
   padding-block-start: 0.45rem;
 }

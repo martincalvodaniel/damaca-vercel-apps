@@ -228,3 +228,12 @@
 - Aceptación: inscripción única por miembro, censo fijo, exclusión de autores, voto asistido, desempate y resultados reservados hasta publicación.
 - Validación: Biome incremental, tipos, pruebas de reglas y permisos, build y revisión de móvil y escritorio.
 - Evidencia: [registro de Ebrias](iteration-log.md#epj-31--concurso-de-tapas-en-letux).
+
+## EPJ-32 — Estilo de Tapas en Letux
+
+- Estado: `validated`.
+- Rutas: estilos compartidos del evento y subruta `tapas`.
+- Dependencias: EPJ-31 y estilos de Letux y Disfraces.
+- Aceptación: Tapas reutiliza el pergamino, los campos y los botones de lacre del evento en móvil y escritorio.
+- Validación: Biome, tipos, build y revisión responsive.
+- Evidencia: [registro de Ebrias](iteration-log.md#epj-32--estilo-de-tapas-en-letux).

@@ -162,6 +162,7 @@
 }
 
 .picker input,
+.picker select,
 .picker button {
   min-height: 34px;
   padding: 0.15rem 0.3rem;
@@ -170,7 +171,8 @@
   font: inherit;
 }
 
-.picker input {
+.picker input:not([type="checkbox"]),
+.picker select {
   width: 100%;
   color: #302238;
   background: #fff9e9;
@@ -253,6 +255,7 @@
 }
 
 .back,
+.seal,
 .picker button[type="submit"] {
   justify-content: center;
   border: 3px double #d5aa6b;
@@ -265,6 +268,7 @@
 }
 
 .back:hover,
+.seal:hover,
 .picker button[type="submit"]:enabled:hover {
   background: #8d303b;
 }
