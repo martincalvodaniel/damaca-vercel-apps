@@ -2,12 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-46 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-47 — Rúbrica compacta
-
-- Capacidad inicial de 86% en 5 h y 7% en 7 días. La papeleta usa dos filas y campos de 44 px.
-- Maqueta en Chrome a 320 y 1440 px con los estilos reales: dos filas alineadas sin desbordar y rechazo de 11. Biome, tipos, ocho pruebas de Tapas y build correctos.
+[Entregas EPJ-08 a EPJ-47 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-48 — Inscripciones secretas y vista de miembro
 
@@ -57,3 +52,9 @@
 - Capacidad inicial disponible de 74% en 5 h y 96% en 7 días.
 - La compra comparte la sangría móvil. Tapas muestra el total, separa el formulario personal y abre la confirmación desde la papelera. El formulario de alta del administrador se mueve a Administración.
 - Los avisos se cierran a los cinco segundos y reinician el plazo al recibir otro mensaje. Biome, tipos, diez pruebas y build correctos. Pendiente comprobar el recorrido con una sesión autenticada.
+
+## EPJ-57 — Relleno aleatorio de papeletas
+
+- Capacidad inicial disponible de 68% en 5 h y 95% en 7 días.
+- El administrador puede rellenar el borrador en ambas rondas desde su papeleta o una asistida. Se conserva el flujo de revisión y envío.
+- Biome, tipos, nueve pruebas de Tapas y build correctos. El botón nuevo queda pendiente de comprobar en un navegador autenticado.

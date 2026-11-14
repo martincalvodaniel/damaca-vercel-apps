@@ -112,6 +112,7 @@ export function Ballot({
   completed,
   initial,
   choice,
+  canRandomize,
 }: {
   options: Tapa[]
   round: "rubric" | "runoff"
@@ -120,7 +121,29 @@ export function Ballot({
   completed?: string
   initial?: { tapa: string; scores: Scores }[]
   choice?: string
+  canRandomize: boolean
 }) {
+  const ballotForm = useRef<HTMLFormElement>(null)
+  const randomize = useCallback(() => {
+    const form = ballotForm.current
+    if (!canRandomize || !form || !options.length) return
+    if (round === "runoff") {
+      const choiceField = form.elements.namedItem("choice")
+      if (choiceField instanceof HTMLSelectElement) {
+        choiceField.value =
+          options[Math.floor(Math.random() * options.length)].id
+      }
+      return
+    }
+    for (const tapa of options) {
+      for (const [category] of categories) {
+        const score = form.elements.namedItem(`score:${tapa.id}:${category}`)
+        if (score instanceof HTMLInputElement) {
+          score.value = String(Math.floor(Math.random() * 11))
+        }
+      }
+    }
+  }, [canRandomize, options, round])
   const ballotId = useId()
   const reviewDialog = useRef<HTMLDialogElement>(null)
   const [review, setReview] = useState<Record<string, string> | null>(null)
@@ -142,6 +165,7 @@ export function Ballot({
     <>
       <form
         className={styles.form}
+        ref={ballotForm}
         hidden={review !== null}
         onSubmit={reviewBallot}
       >
@@ -190,7 +214,18 @@ export function Ballot({
             </select>
           </label>
         )}
-        <button type="submit">Revisar papeleta</button>
+        <div className={styles.ballotActions}>
+          {canRandomize && options.length > 0 ? (
+            <button
+              type="button"
+              className={styles.secondary}
+              onClick={randomize}
+            >
+              Rellenar al azar
+            </button>
+          ) : null}
+          <button type="submit">Revisar papeleta</button>
+        </div>
       </form>
       <dialog
         ref={reviewDialog}

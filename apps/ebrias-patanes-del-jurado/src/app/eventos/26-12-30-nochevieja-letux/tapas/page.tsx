@@ -275,6 +275,7 @@ export default async function TapasContest({
                   key={`${contest.votingGeneration}:${round}:${voter.id}`}
                   options={options}
                   round={round}
+                  canRandomize={actor.admin}
                   generation={contest.votingGeneration}
                   assisted={voter.id}
                   completed={`${contestPath}?handoff=done`}
@@ -463,6 +464,7 @@ export default async function TapasContest({
                       <Ballot
                         key={`${contest.votingGeneration}:${round}`}
                         round={round}
+                        canRandomize={actor.admin}
                         generation={contest.votingGeneration}
                         options={options}
                         initial={

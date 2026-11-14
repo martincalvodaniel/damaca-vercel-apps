@@ -420,3 +420,10 @@
 - Rutas: desplegables de Letux, Tapas y avisos globales.
 - Aceptación: sangría compartida, contador y separación de inscripciones, borrado directo mediante modal y avisos de hasta cinco segundos.
 - Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-57 — Relleno aleatorio de papeletas
+
+- Estado: `validated`.
+- Rutas: papeletas de Tapas.
+- Aceptación: el administrador puede rellenar un borrador propio o asistido en ambas rondas, con revisión antes de enviar.
+- Validación: Biome, tipos, pruebas de Tapas y build.

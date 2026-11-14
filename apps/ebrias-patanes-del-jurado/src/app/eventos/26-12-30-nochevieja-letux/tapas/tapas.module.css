@@ -148,3 +148,13 @@
 .form small {
   font: 400 0.85rem / 1.3 system-ui;
 }
+
+.ballotActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.form .ballotActions > button {
+  flex: 1 1 auto;
+}
