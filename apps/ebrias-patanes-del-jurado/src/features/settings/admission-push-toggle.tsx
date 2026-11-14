@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useState } from "react"
+import { ActionFeedback } from "@/features/feedback/feedback"
 
 export function AdmissionPushToggle({ publicKey }: { publicKey: string }) {
   const [message, setMessage] = useState("")
@@ -50,7 +51,7 @@ export function AdmissionPushToggle({ publicKey }: { publicKey: string }) {
       <button type="button" disabled={pending} onClick={enable}>
         Activar avisos de solicitudes
       </button>
-      <p role="status">{message}</p>
+      <ActionFeedback>{message}</ActionFeedback>
     </div>
   )
 }

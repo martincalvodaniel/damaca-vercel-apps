@@ -8,6 +8,8 @@ Se reutiliza el clúster MongoDB del Hub con bases propias, separadas para integ
 
 La primera ficha de evento es Nochevieja en Letux, del 30 de diciembre de 2026 al 1 de enero de 2027. Muestra las fechas, el lugar y la temática, además de la lista de asistentes tras iniciar sesión. Desde la ficha se puede reservar un disfraz de forma anónima respecto al resto de participantes.
 
+La ficha de Letux se lee como una guía con alojamiento, asistentes, coches, programa por días y otros avisos. Los administradores publican las notas de alojamiento, Tapas y Disfraces y los bloques de título y texto ordenables desde la propia ficha. Cada actividad de Tapas o Disfraces se puede situar entre los bloques de su día. Las cuentas admitidas pueden leer la guía. La colección `261230-event-guide` guarda una revisión para evitar que una edición antigua sobrescriba otra más reciente. Ver [EPJ-37](iterations.md#epj-37--guía-editable-de-nochevieja-en-letux).
+
 Cada evento que necesite persistencia usa nombres de colección MongoDB con formato `YYMMDD-<purpose>`, con la fecha local de inicio del evento. Para Nochevieja en Letux el prefijo es `261230-`. La elección usa `261230-costume-choices` y `261230-costume-characters`. Cada solicitud válida de un personaje distinto al actual consume un intento, incluso si está ocupado. Un cambio fallido conserva el disfraz anterior. El contador es interno y la página solo avisa cuando se agotan los intentos. El administrador puede conceder un cuarto intento una sola vez.
 
 La portada pública ofrece únicamente el acceso con Google. Solo los administradores configurados y los correos admitidos previamente pueden acceder al área privada. Inicio y Ajustes forman la navegación privada. Ajustes muestra la cuenta y permite a los administradores admitir nuevos correos.
@@ -19,3 +21,11 @@ Los administradores pueden cambiar el correo de un miembro desde una solicitud v
 [Iteraciones](iterations.md) · [Registro](iteration-log.md) · [Flujo](../../../plan/workflow.md)
 
 `MONGODB_DB` permite elegir la base de autenticación y de datos. Si la variable falta o está vacía, se conserva la selección predeterminada para desarrollo, integración y producción. [AGW-26](../../../plan/iterations.md#agw-26--verificar-la-selección-de-base-mongodb).
+
+## Concurso de tapas de Letux
+
+El 30 de diciembre hay un concurso con tapas individuales o en pareja. El administrador abre la votación, que fija participantes y tapas. Los asistentes puntúan todas las tapas ajenas de 0 a 10 en sabor, presentación, originalidad y calidad de los ingredientes. Un administrador puede facilitar el voto a un asistente desde su móvil. Se conserva una papeleta por persona y ronda, modificable hasta el cierre.
+
+La suma de las cuatro medias determina la clasificación inicial. Los empates por el primer puesto se resuelven en una ronda extra sin los autores finalistas; si persisten, se comparan sabor, calidad, originalidad y presentación, y finalmente se recurre al sorteo presencial. El administrador revisa los resultados antes de publicarlos y puede retirar la publicación para volver a la vista privada sin perder las papeletas. Ver [EPJ-31](iterations.md#epj-31--concurso-de-tapas-en-letux).
+
+Durante la inscripción de Tapas, el listado muestra solo autores. El nombre se desvela al votar y sigue disponible para quien puede editar la inscripción. Desde la barra de navegación, el administrador puede usar la vista de miembro para consultar la app con los permisos habituales de su cuenta como miembro. El mismo botón permite recuperar la vista de administrador.

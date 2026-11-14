@@ -1,10 +1,12 @@
 import "server-only"
 
-import { headers } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { cache } from "react"
 import { memberCollection } from "@/features/members/directory"
 import { getAccessRole } from "@/lib/admission"
 import { getAuth } from "@/lib/auth"
+
+export const memberViewCookie = "ebrias-member-view"
 
 export const getAuthorizedUser = cache(async () => {
   try {
@@ -13,7 +15,17 @@ export const getAuthorizedUser = cache(async () => {
 
     const { user } = session
     const role = await getAccessRole(user)
-    return role ? { ...user, role } : null
+    if (!role) return null
+    const isAccountAdmin = role === "admin"
+    const memberView =
+      isAccountAdmin &&
+      (await cookies()).get(memberViewCookie)?.value === user.id
+    return {
+      ...user,
+      role: memberView ? ("member" as const) : role,
+      isAccountAdmin,
+      memberView,
+    }
   } catch {
     return null
   }

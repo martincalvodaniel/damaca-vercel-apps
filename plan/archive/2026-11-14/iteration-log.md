@@ -1,6 +1,7 @@
 # Registro archivado de entregas transversales
 
 <a id="agw-16-investigación-de-la-bottega-y-su-integración-con-billing"></a>
+
 ## AGW-16 — Investigación de La Bottega y su integración con billing
 
 - Alcance: [aceptación AGW-16](../../iterations.md#agw-16--investigación-de-la-bottega-y-su-integración-con-billing). Diez Markdown en español en [el dossier](../../../docs/research/la-bottega-di-pali/README.md): índice/recomendación, inventario, auditoría, billing, arquitectura/API, datos/reservas, riesgos/costes, migración/validación, decisiones pendientes y fuentes. Referencias desde documentación raíz y plan billing; registro principal único aquí.
@@ -13,6 +14,7 @@
 - Capacidad: inicial 63% de 5h y 49% de 7d; antes de validación documental, 46%/46% restantes. Se trabaja secuencialmente y se conservan las reservas de 7%/2%; lectura posterior a publicación comunicada al usuario.
 
 <a id="agw-14-audit-vercel-deployment-quota-discrepancy"></a>
+
 ## AGW-14 — Audit Vercel deployment quota discrepancy
 
 - Alcance: [aceptación AGW-14](../../iterations.md#agw-14--audit-vercel-deployment-quota-discrepancy). Informe, JSON saneado y borrador de soporte en [incidente del 1 de noviembre](../../../docs/incidents/2026-11-01-vercel-deployment-limit.md); guía de despliegue distingue omisiones nativas y cancelaciones mediante Ignored Build Step.
@@ -25,6 +27,7 @@
 - Capacidad inicial: 56% de 5h y 59% de 7d restantes; entrega estimada dentro de reservas.
 
 <a id="agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh"></a>
+
 ## AGW-13 — Restore independent Tasks authentication and suspend database refresh
 
 - Alcance: [aceptación AGW-13](../../iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). Decisión explícita del usuario: retirar temporalmente la dependencia de Tasks respecto al Hub y suspender el volcado en todos los entornos, conservando el código.
@@ -39,6 +42,7 @@
 - Capacidad durante validación (2026-10-31): 93% de 5h y 99% de 7d restantes.
 
 <a id="agw-12-shared-database-refresh-and-hub-integration"></a>
+
 ## AGW-12 — Shared database refresh and Hub integration
 
 > Implementación suspendida por AGW-13; conservar esta evidencia como historial.
@@ -50,6 +54,7 @@
 - Capacidad antes del cierre local (2026-10-26): 95% de 5h y 99% de 7d restantes.
 
 <a id="agw-11-dalis-tasks-uses-hub-identity"></a>
+
 ## AGW-11 — Dalis Tasks uses Hub identity
 
 > Integración retirada por AGW-13; Tasks vuelve a Google directo.
@@ -62,6 +67,7 @@
 - Capacidad inicial (2026-10-25): 90% de 5h y 74% de 7d restantes. Lectura tras validación (2026-10-25): 87% de 5h y 73% de 7d restantes; la lectura final posterior a publicación queda pendiente.
 
 <a id="agw-10-application-favicons"></a>
+
 ## AGW-10 — Application favicons
 
 - Alcance: [aceptación AGW-10](../../iterations.md#agw-10--application-favicons), ampliada por el usuario a iconos PWA y revisión de las seis aplicaciones. Registro principal único aquí; los seis planes maestros enlazan esta entrega.
@@ -91,6 +97,7 @@
 - Capacidad al inicio de esta ampliación: 37% de 5h y 81% de 7d. Registro principal y publicación en `int` continúan bajo AGW-10; `main` no se modifica.
 
 <a id="agw-09-restore-global-lint-success"></a>
+
 ## AGW-09 — Restore global lint success
 
 - Alcance: [aceptación AGW-09](../../iterations.md#agw-09--restore-global-lint-success). De los tres errores globales observados durante AGW-08, dos ya estaban corregidos en los documentos raíz de esa entrega; al comenzar este corte queda uno en la tabla de `docs/agents/triage-labels.md`.
@@ -100,6 +107,7 @@
 - Capacidad inicial: 70% de 5h y 86% de 7d restantes; reserva mínima respetada.
 
 <a id="agw-07-provision-triage-labels"></a>
+
 ## AGW-07 — Provision triage labels
 
 - Alcance: [aceptación AGW-07](../../iterations.md#agw-07--provision-triage-labels). El usuario renovó la sesión; `gh auth status --hostname github.com` y `gh api user --jq .login` confirman `martincalvodaniel` como cuenta activa válida.
@@ -109,6 +117,7 @@
 - Capacidad al reanudar (2026-10-25, comprobación de cierre de etiquetas a las 15:36 CET): 94% de 5h y 90% de 7d; reserva mínima respetada. La lectura final se comunica tras publicar.
 
 <a id="agw-06-configure-engineering-skills"></a>
+
 ## AGW-06 — Configure engineering skills
 
 - Alcance: [aceptación AGW-06](../../iterations.md#agw-06--configure-engineering-skills). Bloque `Agent skills` añadido a `AGENTS.md` por instrucción explícita del usuario; `CLAUDE.md` conserva su importación. Configuración creada en `docs/agents/` para GitHub Issues con repositorio explícito, cinco roles de triaje y dominio multi-contexto por app/paquete con creación diferida de glosarios y ADR.
@@ -119,10 +128,9 @@
 - Publicación: commit y coincidencia del SHA remoto se verifican en Git durante el cierre. El corte documental AGW-06 queda validado; la provisión remota se separa como AGW-07, bloqueada por autenticación. La configuración completa sigue pendiente de ese corte.
 - Capacidad al iniciar: 96% de 5h y 90% de 7d restantes; corte documental dentro de reservas. La lectura final se comunica al cierre.
 
-
-
 <a id="agw-05-google-identity-and-hub-access"></a>
 <a id="agw-08-public-games-and-hub-managed-oidc-clients"></a>
+
 # AGW-08 — Public games and Hub-managed OIDC clients
 
 - Cambios: Pocha Score y Card Wars recuperan exportación estática, caché offline, instalación y preview estático; se eliminan sus rutas, dependencias, configuración y controles de identidad sin tocar IndexedDB ni contratos de copias. Hub presenta los juegos como enlaces públicos y bloquea solicitudes, grants y clientes OIDC para ellos. Los administradores pueden mantener clientes por aplicación y entorno en MongoDB; secretos aleatorios se devuelven una vez y solo se persiste su hash; callback exacto, control de revisión, desactivación y rotación revocan tokens actuales. El proveedor resuelve clientes dinámicamente en cada operación. Se añadió helper de origen explícito o alias estable de Vercel para `int`/producción.
@@ -168,3 +176,9 @@
 - Se crea la skill local con selección de app y rama, resolución del SHA remoto y proyecto, despliegue manual por CLI/API, espera READY y verificación final del alias.
 - Se documentan los parámetros reales: name obligatorio y target omitido para Preview. Cuota 402 detiene la ejecución sin mover alias. Producción requiere petición explícita.
 - Revisión estática de frontmatter/procedimiento, diff check y lint staged; sin despliegue ni movimiento de alias durante esta entrega documental. Publicación y SHA remoto comprobados al cierre.
+
+## AGW-19 — Vercel deployment count skill
+
+- Script Python sin dependencias externas: consulta CLI paginada, ventana fija de creación [inicio, fin), deduplicación y totales por estado/proyecto; admite end ISO con zona y duración configurada.
+- Ejecución real: 2026-11-01T19:22:34.038Z a 2026-11-02T19:22:34.038Z, 94 registros: 59 CANCELED, 34 READY, 1 ERROR; una página cubre el límite inferior. Corrige el recuento conversacional anterior que usó un epoch mal convertido y omitió el límite superior.
+- Revisión de campos, suma de estados, formato, diff check y publicación en int comprobados al cierre. No se muta Vercel; no se infiere fuente del trigger ni cuota interna.

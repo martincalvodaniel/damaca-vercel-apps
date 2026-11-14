@@ -10,6 +10,8 @@ import {
   useRef,
   useState,
 } from "react"
+import { notifyAction } from "@/features/feedback/actions-client"
+import { DialogActions } from "@/features/feedback/feedback"
 import {
   addAttendanceBlock,
   addEventCar,
@@ -46,18 +48,20 @@ export function AttendanceBoard({
       .map(({ memberId }) => memberId)
   )
   const available = members.filter(({ id }) => !assignedMemberIds.has(id))
-  const [message, setMessage] = useState("")
   const move = useCallback(
     async (id: string, status: string) => {
       const form = new FormData()
       form.set("member", id)
       form.set("status", status)
       try {
-        setMessage(
-          await (mode === "cars" ? updateEventCar : updateAttendance)("", form)
+        notifyAction(
+          (await (mode === "cars" ? updateEventCar : updateAttendance)(
+            "",
+            form
+          )) || "Guardado."
         )
       } catch {
-        setMessage("No se pudo mover el asistente.")
+        notifyAction("No se pudo mover el asistente.")
       }
     },
     [mode]
@@ -77,9 +81,6 @@ export function AttendanceBoard({
             mode={mode}
           />
         ))}
-      <p role="status" hidden={!message}>
-        {message}
-      </p>
     </div>
   )
 }
@@ -117,7 +118,14 @@ function AttendanceSection({
     if (!result && !form.get("member")) setQuery("")
     return result
   }, [])
-  const [message, action, pending] = useActionState(submit, "")
+  const [, action, pending] = useActionState(
+    async (previous: string, form: FormData) => {
+      const result = await submit(previous, form)
+      notifyAction(result || "Asistente añadido.")
+      return result
+    },
+    ""
+  )
   const name = query.trim()
   const normalize = (value: string) =>
     value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase("es")
@@ -254,7 +262,6 @@ function AttendanceSection({
             {matches.length === 0 ? (
               <p>No hay miembros que coincidan.</p>
             ) : null}
-            <p role="status">{message}</p>
           </form>
         </dialog>
       ) : null}
@@ -328,10 +335,11 @@ export function CarSection({
     dialog.current?.querySelector("input")?.focus()
   }, [])
   const closeDialog = useCallback(() => dialog.current?.close(), [])
-  const [message, action, pending] = useActionState(
+  const [, action, pending] = useActionState(
     async (previous: string, form: FormData) => {
       const result = await addEventCar(previous, form)
       if (!result) dialog.current?.close()
+      notifyAction(result || "Guardado.")
       return result
     },
     ""
@@ -361,23 +369,23 @@ export function CarSection({
           className={styles.carDialog}
           aria-labelledby={titleId}
         >
-          <h2 id={titleId}>Añadir coche</h2>
-          <form action={action} className={styles.picker}>
+          <header className="action-dialog-heading">
+            <h2 id={titleId}>Añadir coche</h2>
+            <DialogActions
+              formId={`${titleId}-form`}
+              cancel={closeDialog}
+              pending={pending}
+            />
+          </header>
+          <form
+            id={`${titleId}-form`}
+            action={action}
+            className={styles.picker}
+          >
             <label>
               Nombre del coche
               <input name="name" required maxLength={60} />
             </label>
-            <p role="status" hidden={!message}>
-              {message}
-            </p>
-            <div className={styles.carDialogActions}>
-              <button type="button" onClick={closeDialog}>
-                Cancelar
-              </button>
-              <button type="submit" disabled={pending}>
-                Crear coche
-              </button>
-            </div>
           </form>
         </dialog>
       ) : null}
@@ -400,10 +408,11 @@ export function AttendanceBlocksSection({
     dialog.current?.querySelector("input")?.focus()
   }, [])
   const closeDialog = useCallback(() => dialog.current?.close(), [])
-  const [message, action, pending] = useActionState(
+  const [, action, pending] = useActionState(
     async (previous: string, form: FormData) => {
       const result = await addAttendanceBlock(previous, form)
       if (!result) dialog.current?.close()
+      notifyAction(result || "Guardado.")
       return result
     },
     ""
@@ -432,23 +441,23 @@ export function AttendanceBlocksSection({
           className={styles.carDialog}
           aria-labelledby={titleId}
         >
-          <h2 id={titleId}>Añadir bloque</h2>
-          <form action={action} className={styles.picker}>
+          <header className="action-dialog-heading">
+            <h2 id={titleId}>Añadir bloque</h2>
+            <DialogActions
+              formId={`${titleId}-form`}
+              cancel={closeDialog}
+              pending={pending}
+            />
+          </header>
+          <form
+            id={`${titleId}-form`}
+            action={action}
+            className={styles.picker}
+          >
             <label>
               Nombre del bloque
               <input name="name" required maxLength={60} />
             </label>
-            <p role="status" hidden={!message}>
-              {message}
-            </p>
-            <div className={styles.carDialogActions}>
-              <button type="button" onClick={closeDialog}>
-                Cancelar
-              </button>
-              <button type="submit" disabled={pending}>
-                Crear bloque
-              </button>
-            </div>
           </form>
         </dialog>
       ) : null}
@@ -471,11 +480,14 @@ function RemoveEntry({
   const openDialog = useCallback(() => dialog.current?.showModal(), [])
   const closeDialog = useCallback(() => dialog.current?.close(), [])
   const titleId = useId()
-  const [message, action, pending] = useActionState(
+  const [, action, pending] = useActionState(
     async (previous: string, form: FormData) => {
-      if (status === undefined) return removeEventBlock(previous, form)
-      const result = await removeEventAttendee(previous, form)
-      if (!result) closeDialog()
+      const result =
+        status === undefined
+          ? await removeEventBlock(previous, form)
+          : await removeEventAttendee(previous, form)
+      if (!result || result === "Bloque eliminado.") closeDialog()
+      notifyAction(result || "Guardado.")
       return result
     },
     ""
@@ -517,25 +529,22 @@ function RemoveEntry({
         className={styles.carDialog}
         aria-labelledby={titleId}
       >
-        <h2 id={titleId}>{title}</h2>
+        <header className="action-dialog-heading">
+          <h2 id={titleId}>{title}</h2>
+          <DialogActions
+            formId={`${titleId}-form`}
+            cancel={closeDialog}
+            pending={pending}
+          />
+        </header>
         <p>{description}</p>
-        <form
-          action={action}
-          className={`${styles.carDialogActions} ${styles.picker}`}
-        >
+        <form id={`${titleId}-form`} action={action} className={styles.picker}>
           <input type="hidden" name="mode" value={mode} />
           <input type="hidden" name="id" value={id} />
           {status !== undefined ? (
             <input type="hidden" name="status" value={status} />
           ) : null}
-          <button type="button" onClick={closeDialog}>
-            Cancelar
-          </button>
-          <button type="submit" disabled={pending}>
-            {status === undefined ? "Eliminar" : "Quitar"}
-          </button>
         </form>
-        <p role="status">{message}</p>
       </dialog>
     </>
   )
@@ -555,10 +564,11 @@ function EditBlock({
     dialog.current?.showModal()
   }, [])
   const closeDialog = useCallback(() => dialog.current?.close(), [])
-  const [message, action, pending] = useActionState(
+  const [, action, pending] = useActionState(
     async (previous: string, form: FormData) => {
       const result = await renameEventBlock(previous, form)
       if (!result) closeDialog()
+      notifyAction(result || "Guardado.")
       return result
     },
     ""
@@ -593,8 +603,15 @@ function EditBlock({
         className={styles.carDialog}
         aria-labelledby={titleId}
       >
-        <h2 id={titleId}>Editar «{block.label}»</h2>
-        <form action={action} className={styles.picker}>
+        <header className="action-dialog-heading">
+          <h2 id={titleId}>Editar «{block.label}»</h2>
+          <DialogActions
+            formId={`${titleId}-form`}
+            cancel={closeDialog}
+            pending={pending}
+          />
+        </header>
+        <form id={`${titleId}-form`} action={action} className={styles.picker}>
           <input type="hidden" name="id" value={block.id} />
           <input type="hidden" name="mode" value={mode} />
           <label>
@@ -606,17 +623,6 @@ function EditBlock({
               maxLength={60}
             />
           </label>
-          <p role="status" hidden={!message}>
-            {message}
-          </p>
-          <div className={styles.carDialogActions}>
-            <button type="button" onClick={closeDialog}>
-              Cancelar
-            </button>
-            <button type="submit" disabled={pending}>
-              Guardar
-            </button>
-          </div>
         </form>
       </dialog>
     </>

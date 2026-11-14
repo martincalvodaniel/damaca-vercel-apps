@@ -14,54 +14,64 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 
 <a id="agw-16-investigación-de-la-bottega-y-su-integración-con-billing"></a>
 <a id="agw-16--investigación-de-la-bottega-y-su-integración-con-billing"></a>
+
 - [AGW-16 — Investigación de La Bottega y su integración con billing](archive/2026-11-14/iteration-log.md#agw-16--investigación-de-la-bottega-y-su-integración-con-billing).
 
 <a id="agw-14-audit-vercel-deployment-quota-discrepancy"></a>
 <a id="agw-14--audit-vercel-deployment-quota-discrepancy"></a>
+
 - [AGW-14 — Audit Vercel deployment quota discrepancy](archive/2026-11-14/iteration-log.md#agw-14--audit-vercel-deployment-quota-discrepancy).
 
 <a id="agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh"></a>
 <a id="agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh"></a>
+
 - [AGW-13 — Restore independent Tasks authentication and suspend database refresh](archive/2026-11-14/iteration-log.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh).
 
 <a id="agw-12-shared-database-refresh-and-hub-integration"></a>
 <a id="agw-12--shared-database-refresh-and-hub-integration"></a>
+
 - [AGW-12 — Shared database refresh and Hub integration](archive/2026-11-14/iteration-log.md#agw-12--shared-database-refresh-and-hub-integration).
 
 <a id="agw-11-dalis-tasks-uses-hub-identity"></a>
 <a id="agw-11--dalis-tasks-uses-hub-identity"></a>
+
 - [AGW-11 — Dalis Tasks uses Hub identity](archive/2026-11-14/iteration-log.md#agw-11--dalis-tasks-uses-hub-identity).
 
 <a id="agw-10-application-favicons"></a>
 <a id="agw-10--application-favicons"></a>
+
 - [AGW-10 — Application favicons](archive/2026-11-14/iteration-log.md#agw-10--application-favicons).
 
 <a id="agw-09-restore-global-lint-success"></a>
 <a id="agw-09--restore-global-lint-success"></a>
+
 - [AGW-09 — Restore global lint success](archive/2026-11-14/iteration-log.md#agw-09--restore-global-lint-success).
 
 <a id="agw-07-provision-triage-labels"></a>
 <a id="agw-07--provision-triage-labels"></a>
+
 - [AGW-07 — Provision triage labels](archive/2026-11-14/iteration-log.md#agw-07--provision-triage-labels).
 
 <a id="agw-06-configure-engineering-skills"></a>
 <a id="agw-06--configure-engineering-skills"></a>
+
 - [AGW-06 — Configure engineering skills](archive/2026-11-14/iteration-log.md#agw-06--configure-engineering-skills).
 
 <a id="agw-05--google-identity-and-hub-access"></a>
+
 - [AGW-05 — Google identity and Hub access](archive/2026-11-14/iteration-log.md#agw-05--google-identity-and-hub-access).
 
 <a id="agw-17--manual-vercel-deployments"></a>
+
 - [AGW-17 — Manual Vercel deployments](archive/2026-11-14/iteration-log.md#agw-17--manual-vercel-deployments).
 
 <a id="agw-18--vercel-deployment-and-alias-skill"></a>
+
 - [AGW-18 — Vercel deployment and alias skill](archive/2026-11-14/iteration-log.md#agw-18--vercel-deployment-and-alias-skill).
 
-## AGW-19 — Vercel deployment count skill
+<a id="agw-19--vercel-deployment-count-skill"></a>
 
-- Script Python sin dependencias externas: consulta CLI paginada, ventana fija de creación [inicio, fin), deduplicación y totales por estado/proyecto; admite end ISO con zona y duración configurada.
-- Ejecución real: 2026-11-01T19:22:34.038Z a 2026-11-02T19:22:34.038Z, 94 registros: 59 CANCELED, 34 READY, 1 ERROR; una página cubre el límite inferior. Corrige el recuento conversacional anterior que usó un epoch mal convertido y omitió el límite superior.
-- Revisión de campos, suma de estados, formato, diff check y publicación en int comprobados al cierre. No se muta Vercel; no se infiere fuente del trigger ni cuota interna.
+- [AGW-19 — Vercel deployment count skill](archive/2026-11-14/iteration-log.md#agw-19--vercel-deployment-count-skill).
 
 ## AGW-20 — Branch deployment environments
 
@@ -89,10 +99,10 @@ Evidencias históricas [AGW-03 y AGW-04](archive/2026-11-01/iteration-log.md) ar
 - Verificados ambos manifiestos con `int`, `main` y valor vacío. La compilación webpack de `int` produjo los dos manifiestos y títulos Apple esperados. El primer intento local falló al descargar Geist y Geist Mono; la compilación con acceso a red pasó.
 - Biome y tipos correctos. Home Management: 187 pruebas correctas. Tasks: 1392 correctas y 225 omitidas por su configuración de pruebas. Cero fallos. Sin instalación en dispositivo ni despliegue.
 
-
 ## AGW-24 — Diseño compacto en móvil
 
 Inicio: 75% de 5 h y 95% de 7 d disponibles (10:10 CET).
+
 - Biome, tipos y build de Ebrias correctos.
 - En Chrome a 320 × 568, 390 × 844 y 1440 × 900, el título, el botón y el dibujo completo se ven sin desplazamiento horizontal ni vertical para alcanzarlos.
 
@@ -124,3 +134,14 @@ Inicio: 75% de 5 h y 95% de 7 d disponibles (10:10 CET).
 - Biome, tipos, pruebas de los 10 workspaces con suites y seis pruebas del generador correctos. Las integraciones que requieren MongoDB aislado conservaron sus exclusiones. El primer pase restringido no pudo abrir el puerto local que usa la suite de identidad y pasó al ejecutarla con acceso a ese puerto.
 - Compiladas las diez apps para cada rama y contrastados los 20 manifiestos generados. Se usó Webpack donde Turbopack falló por fuentes o puertos locales. Las rutas de inicio y los identificadores existentes se conservaron.
 - Por HTTP local con el build de `int` se verificaron en las diez apps los manifiestos e iconos públicos y el enlace al manifiesto, `application-name` y título Apple en el HTML. Los procesos que sirven rutas dinámicas recibieron la misma referencia Git que el build. No se realizó una instalación en un dispositivo Android.
+
+## AGW-29 — Actualizar dependencias del monorepo
+
+- [Aceptación](iterations.md#agw-29--actualizar-dependencias-del-monorepo). Inicio en `int` con cambios locales en el catálogo y lockfile. Capacidad inicial del 66% en 5h y 19% en 7d.
+- La instalación congelada y los tipos de los 12 workspaces pasan. Los mocks de índices de cuatro apps aceptan las opciones opcionales de MongoDB 7.9 sin cambiar las pruebas de comportamiento. Se sincronizó la versión del esquema de Biome.
+- Pasaron las seis pruebas del generador y nueve de las diez suites del monorepo. Web Push 4 entregó una petición cifrada con VAPID a un servidor HTTPS local y conservó el tipo y el código de error para respuestas 404 y 410.
+- La suite de identidad pasa 18 de 18 en la versión base. En el lote actualizado pasan 12 y fallan 6. El mismo fallo se reproduce en una copia aislada al actualizar únicamente Better Auth y su proveedor OAuth a 1.7.23. El primer fallo devuelve la redirección al Hub en lugar de a la app consumidora.
+- El fallo de autenticación impide validar el lote. Quedan por resolver esa incompatibilidad y pasar los builds. Los cambios se conservan localmente.
+
+- Resolución: la actualización exige HTTPS para los callbacks web. Se conserva el flujo HTTP local con una excepción que solo se activa cuando la URL del Hub es HTTP de loopback y el destino también es de loopback. Better Auth sigue exigiendo que el callback esté registrado. La prueba rechaza destinos HTTP externos y rutas de loopback sin registrar.
+- Validación final: instalación congelada, Biome, tipos en los 12 workspaces, 18 pruebas de identidad, 10 suites, 6 pruebas del generador y builds de las diez apps y los paquetes compartidos. Las pruebas que requieren MongoDB aislado conservan sus omisiones. La autenticación se probó con servidores locales.

@@ -25,7 +25,7 @@ export function createHubIdentity(configuration: {
   database: BetterAuthOptions["database"]
   isAllowed: (appId: string, email: string) => Promise<boolean>
 }) {
-  validateServiceUrl(configuration.baseUrl)
+  const baseUrl = validateServiceUrl(configuration.baseUrl)
   const hashSecret = (value: string) =>
     createHash("sha256").update(value).digest("base64url")
   return betterAuth({
@@ -80,6 +80,9 @@ export function createHubIdentity(configuration: {
       oauthProvider({
         loginPage: "/auth/signin",
         consentPage: "/auth/consent",
+        allowInsecureRedirectUri: (url) =>
+          baseUrl.protocol === "http:" &&
+          ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname),
         scopes: ["openid", "email", "profile", "offline_access"],
         grantTypes: ["authorization_code", "refresh_token"],
         codeExpiresIn: 60,

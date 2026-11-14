@@ -1,0 +1,136 @@
+.panel {
+  composes: card from "../page.module.css";
+  overflow-wrap: anywhere;
+}
+
+.panel dl {
+  margin-block: 0 0.45rem;
+}
+
+.form {
+  composes: picker from "../page.module.css";
+  gap: 0.45rem;
+  margin-block: 0.45rem;
+}
+
+.secondary {
+  composes: seal from "../page.module.css";
+  min-height: 44px;
+  padding-inline: 0.6rem;
+}
+
+.form[hidden] {
+  display: none;
+}
+
+.form label {
+  display: grid;
+  gap: 0.2rem;
+  grid-template-columns: minmax(0, 1fr);
+  font-size: 1rem;
+}
+
+.form button,
+.form input:not([type="hidden"], [type="checkbox"]),
+.form select {
+  min-height: 44px;
+  max-width: 100%;
+}
+
+.form fieldset {
+  min-width: 0;
+  border: 1px solid #95653880;
+  border-radius: 0.35rem;
+  padding: 0.55rem;
+}
+
+.scores {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 0.65rem;
+}
+
+.rubricGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2.75rem minmax(0, 1fr) 2.75rem;
+  align-items: center;
+  gap: 0.25rem 0.35rem;
+}
+
+.form .rubricGrid label {
+  display: block;
+  font-size: clamp(0.8rem, 3vw, 1rem);
+  line-height: 1.15;
+}
+
+.rubricGrid input[type="number"] {
+  appearance: textfield;
+  box-sizing: border-box;
+  min-width: 0;
+  padding-inline: 0.2rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.rubricGrid input::-webkit-inner-spin-button,
+.rubricGrid input::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.scores dd {
+  margin: 0;
+}
+
+.sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.sort a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.45rem;
+}
+
+.sort a {
+  color: var(--wax);
+}
+
+.sort [aria-current] {
+  color: #fff0cf;
+  background: var(--wax);
+  border-radius: 0.35rem;
+}
+
+.ranking {
+  padding-inline-start: 1.3rem;
+}
+
+.ranking li + li {
+  margin-block-start: 0.55rem;
+  border-top: 1px solid #95653880;
+  padding-block-start: 0.45rem;
+}
+
+.entryRow {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.entryRow button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  color: var(--wax);
+  background: transparent;
+  cursor: pointer;
+}

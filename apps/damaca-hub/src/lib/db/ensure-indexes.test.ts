@@ -75,7 +75,7 @@ describe("MongoDB index specifications", () => {
     const calls: Array<{ collection: string; name: string }> = []
     const database: IndexDatabase = {
       collection: (collection) => ({
-        createIndex: async (_keys, options) => {
+        createIndex: async (_keys, options?: { name?: string }) => {
           calls.push({ collection, name: options?.name ?? "" })
           return options?.name ?? ""
         },

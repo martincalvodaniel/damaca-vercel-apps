@@ -292,6 +292,8 @@ it("rejects unknown clients and unregistered callback URLs", async () => {
   for (const [clientId, redirectUri] of [
     ["unknown-client", "https://attacker.invalid/callback"],
     [configuration.clientId, "https://attacker.invalid/callback"],
+    [configuration.clientId, "http://attacker.invalid/callback"],
+    [configuration.clientId, `${consumerUrl}/unregistered-callback`],
   ]) {
     const url = new URL("/api/auth/oauth2/authorize", hubUrl)
     url.search = new URLSearchParams({
@@ -305,13 +307,11 @@ it("rejects unknown clients and unregistered callback URLs", async () => {
       headers: { Cookie: hubCookie },
       redirect: "manual",
     })
-    expect(response.headers.get("location") ?? "").not.toStartWith(
-      "https://attacker.invalid"
+    const location = response.headers.get("location")
+    expect(new URL(location ?? hubUrl, hubUrl).origin).toBe(hubUrl)
+    expect(response.status >= 400 || (location ?? "").includes("error=")).toBe(
+      true
     )
-    expect(
-      response.status >= 400 ||
-        (response.headers.get("location") ?? "").includes("error=")
-    ).toBe(true)
   }
 })
 

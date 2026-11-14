@@ -218,3 +218,183 @@
 - Rutas: página de disfraces y dominio de reservas.
 - Aceptación: mostrar el número de asistentes con personaje reservado bajo la nota introductoria; ocultar la creación libre por defecto y permitir a admins habilitarla o deshabilitarla. La acción de servidor valida el permiso.
 - Validación: Biome, tipos, build y comprobaciones de reservas y permisos.
+
+## EPJ-31 — Concurso de tapas en Letux
+
+- Estado: `validated`.
+- Objetivo: registrar tapas, votar con rúbrica y resolver y publicar el concurso.
+- Rutas: ficha y subruta de tapas de Letux, `src/features/tapas` y plan de Ebrias.
+- Dependencias: sesiones, directorio, asistentes y MongoDB de Ebrias.
+- Aceptación: inscripción única por miembro, censo fijo, exclusión de autores, voto asistido, desempate y resultados reservados hasta publicación.
+- Validación: Biome incremental, tipos, pruebas de reglas y permisos, build y revisión de móvil y escritorio.
+- Evidencia: [registro de Ebrias](iteration-log.md#epj-31--concurso-de-tapas-en-letux).
+
+## EPJ-32 — Estilo de Tapas en Letux
+
+- Estado: `validated`.
+- Rutas: estilos compartidos del evento y subruta `tapas`.
+- Dependencias: EPJ-31 y estilos de Letux y Disfraces.
+- Aceptación: Tapas reutiliza el pergamino, los campos y los botones de lacre del evento en móvil y escritorio.
+- Validación: Biome, tipos, build y revisión responsive.
+- Evidencia: [registro de Ebrias](iteration-log.md#epj-32--estilo-de-tapas-en-letux).
+
+## EPJ-33 — Separación uniforme en Letux
+
+- Estado: `validated`.
+- Rutas: ficha de Letux, Disfraces y estilos del evento.
+- Dependencias: EPJ-31.
+- Aceptación: los cuatro controles de la ficha tienen la misma separación vertical y Disfraces incluye el enlace de vuelta a la ficha.
+- Validación: Biome, tipos, build y medida de los tres huecos en móvil y escritorio.
+- Evidencia: [registro de Ebrias](iteration-log.md#epj-33--separación-uniforme-en-letux).
+
+## EPJ-34 — Separación en Disfraces y Tapas
+
+- Estado: `validated`.
+- Rutas: páginas de Disfraces y Tapas y estilos de Tapas.
+- Dependencias: separación compartida de la ficha de Letux (EPJ-33).
+- Aceptación: el enlace, los controles y las tarjetas de cada página tienen el mismo hueco vertical que los controles de la ficha.
+- Validación: Biome, tipos, build y medida en Chrome a 320 y 1440 px.
+
+## EPJ-35 — Control de creación junto al buscador
+
+- Estado: `validated`.
+- Rutas: página de Disfraces, selector de personajes y estilos de Letux.
+- Dependencias: control de creación de EPJ-30.
+- Aceptación: el botón de administración comparte fila y altura con la etiqueta del buscador, incluso en móvil.
+- Validación: Biome, tipos, build y medida en Chrome.
+
+## EPJ-36 — Aviso flotante en Disfraces
+
+- Estado: `validated`.
+- Rutas: control de creación y estilos de Letux.
+- Aceptación: la respuesta de la acción aparece en un aviso flotante que se puede cerrar sin mover el buscador.
+- Validación: Biome, tipos, build y comprobación responsive.
+
+## EPJ-37 — Guía editable de Nochevieja en Letux
+
+- Estado: `validated`.
+- Objetivo: leer el programa de Letux por días y mantener los textos desde la ficha.
+- Rutas: ficha de Letux, `src/features/event-guide` y plan de Ebrias.
+- Dependencias: roles actuales, MongoDB de la app y secciones de asistencia, coches, Tapas y Disfraces.
+- Aceptación: programa con bloques ordenables y notas fijas, edición exclusiva de administradores, persistencia inmediata y protección frente a cambios simultáneos. El acceso y los flujos existentes siguen disponibles.
+- Validación: Biome incremental, tipos, pruebas de Ebrias, build y recorrido de la guía y el editor a 320 y 1440 px con MongoDB aislado.
+
+## EPJ-38 — Coches junto a asistentes en Letux
+
+- Estado: `validated`.
+- Rutas: ficha de Letux y plan de Ebrias.
+- Dependencias: guía de Letux (EPJ-37).
+- Aceptación: «Reparto de coches» aparece inmediatamente después de «¿Quién viene?», antes del programa.
+- Validación: inspección del orden, Biome, tipos, pruebas de Ebrias y build.
+
+## EPJ-39 — Orden de Tapas y Disfraces en la guía
+
+- Estado: `validated`.
+- Rutas: ficha y editor de Letux, modelo de la guía y plan de Ebrias.
+- Dependencias: guía de Letux (EPJ-37).
+- Aceptación: cada actividad se ordena junto a los bloques de su día, aparece una sola vez y conserva su nota y enlace. Las guías existentes mantienen su orden inicial.
+- Validación: Biome, tipos, pruebas de compatibilidad y guardado del orden, build y recorrido en Chrome.
+
+## EPJ-40 — Edición compacta de la guía de Letux
+
+- Estado: `validated`.
+- Rutas: editor de Letux, estilos y plan de Ebrias.
+- Dependencias: EPJ-37 y EPJ-39.
+- Aceptación: cada nota se edita en su actividad. Los bloques usan campos compactos e iconos accesibles a la derecha del encabezado.
+- Validación: Biome, tipos, pruebas, build y revisión del editor a 320 y 1440 px.
+
+## EPJ-41 — Títulos editables y alta desde la cabecera
+
+- Estado: `validated`.
+- Rutas: editor de Letux, estilos y registro de Ebrias.
+- Dependencias: EPJ-40.
+- Aceptación: el encabezado muestra el título real y permite editarlo directamente. Los iconos siguen a su derecha y cada sección permite añadir bloques con el icono «+» junto a su título. Los campos de descripción y nota conservan su nombre accesible sin repetirlo visualmente.
+- Validación: Biome, tipos, pruebas, build y comprobación del título en Chrome.
+
+## EPJ-42 — Nombres editables para Tapas y Disfraces
+
+- Estado: `validated`.
+- Rutas: editor, ficha y modelo de la guía de Letux.
+- Dependencias: EPJ-41.
+- Aceptación: ambos títulos se editan desde su bloque y aparecen en la guía. Vaciar un título recupera el nombre original.
+- Validación: Biome, tipos, pruebas de guardado y build.
+
+## EPJ-43 — Títulos y botones de las actividades
+
+- Estado: `validated`.
+- Rutas: ficha y modelo de la guía de Letux.
+- Dependencias: EPJ-42.
+- Aceptación: el título editable aparece como encabezado de bloque y los botones conservan sus etiquetas fijas con flecha.
+- Validación: Biome, tipos, pruebas y build.
+
+## EPJ-44 — Reabrir las inscripciones de tapas
+
+- Estado: `validated`.
+- Rutas: concurso y administración de Tapas.
+- Aceptación: un admin puede volver a inscripción antes de publicar, previa confirmación. Se conservan las tapas y se reinicia la votación.
+- Validación: Biome, tipos, pruebas de transición y build.
+
+## EPJ-45 — Gestión de inscripciones por el administrador
+
+- Estado: `validated`.
+- Rutas: formulario y reglas del concurso de Tapas.
+- Dependencias: directorio de miembros y fase de inscripción.
+- Aceptación: el administrador puede inscribir, editar y borrar cualquier tapa durante la inscripción. Se mantiene la autoría única por miembro.
+- Validación: Biome, tipos, pruebas de permisos y build.
+
+## EPJ-46 — Retirar la publicación del concurso
+
+- Estado: `validated`.
+- Rutas: reglas y controles de administración de Tapas.
+- Aceptación: el administrador puede devolver un resultado publicado a la vista privada con confirmación y volver a publicarlo.
+- Validación: Biome, tipos, pruebas de transición y build.
+
+## EPJ-47 — Rúbrica compacta
+
+- Estado: `validated`.
+- Rutas: papeleta y estilos de Tapas.
+- Aceptación: dos filas de categoría y nota por duplicado, con campos estrechos de 0 a 10.
+- Validación: Biome, tipos, pruebas de Tapas, build y comprobación responsive.
+
+## EPJ-48 — Inscripciones secretas y vista de miembro
+
+- Estado: `validated`.
+- Rutas: Tapas, Ajustes y sesión de Ebrias.
+- Dependencias: directorio y autorización existentes.
+- Aceptación: la lista de inscripción muestra solo autores. El admin puede alternar la vista de miembro desde Ajustes y recuperar sus controles con el mismo botón.
+- Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-49 — Acciones de inscripción junto a los autores
+
+- Estado: `validated`.
+- Rutas: listado, formularios y reglas de Tapas.
+- Aceptación: iconos de edición y borrado disponibles según permisos. Los coautores pueden cambiar el nombre sin modificar la autoría.
+- Validación: Biome, tipos, pruebas de permisos y build.
+
+## EPJ-50 — Iconos compactos en Tapas
+
+- Estado: `validated`.
+- Rutas: controles de inscripción y estilos de Tapas.
+- Aceptación: iconos de 14 px en botones de 24 px, sin relleno y con 2 px de separación.
+- Validación: Biome, tipos y build.
+
+## EPJ-51 — Vista de miembro en la navegación
+
+- Estado: `validated`.
+- Rutas: navegación global y Ajustes.
+- Aceptación: el ojo aparece en el extremo izquierdo de la barra para administradores, también con la vista de miembro activa.
+- Validación: Biome, tipos y build.
+
+## EPJ-52 — Confirmaciones y avisos de acciones
+
+- Estado: `validated`.
+- Rutas: formularios de Ebrias y componentes de confirmación.
+- Aceptación: cada confirmación usa un modal con controles en la cabecera y los mensajes de formularios aparecen como avisos flotantes.
+- Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-53 — Controles compactos de confirmación
+
+- Estado: `validated`.
+- Rutas: estilos globales de confirmaciones y avisos.
+- Aceptación: botones de 28 px sin margen ni relleno, con menos separación en cabecera.
+- Validación: Biome, tipos y build.

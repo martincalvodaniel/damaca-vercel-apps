@@ -1,6 +1,6 @@
 import Image from "next/image"
+import Link from "next/link"
 import { redirect } from "next/navigation"
-import { CharacterCreationControl } from "@/features/costumes/character-creation-control"
 import { CostumePicker } from "@/features/costumes/costume-picker"
 import {
   getAddedCharacters,
@@ -56,18 +56,24 @@ export default async function Costumes() {
               ya su personaje.
             </p>
           </header>
-          {initial ? (
-            <>
-              {user.role === "admin" ? (
-                <CharacterCreationControl enabled={allowAdd} />
-              ) : null}
-              <CostumePicker initial={{ ...initial, allowAdd }} />
-            </>
-          ) : (
-            <section className={styles.card}>
-              <p>No se pudo cargar la elección. Recarga la página.</p>
-            </section>
-          )}
+          <div className={styles.eventActions}>
+            <Link
+              className={styles.back}
+              href="/eventos/26-12-30-nochevieja-letux"
+            >
+              ← Nochevieja en Letux
+            </Link>
+            {initial ? (
+              <CostumePicker
+                initial={{ ...initial, allowAdd }}
+                canManageCreation={user.role === "admin"}
+              />
+            ) : (
+              <section className={styles.card}>
+                <p>No se pudo cargar la elección. Recarga la página.</p>
+              </section>
+            )}
+          </div>
         </div>
       </main>
       <EventMusicControl />
