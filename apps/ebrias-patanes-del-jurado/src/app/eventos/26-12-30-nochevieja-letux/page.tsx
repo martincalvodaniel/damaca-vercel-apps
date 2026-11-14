@@ -16,6 +16,8 @@ import {
 } from "@/features/members/attendance"
 import { getMemberDirectory } from "@/features/members/directory"
 import { getCarBoard, unassignedCar } from "@/features/members/event-cars"
+import { ShoppingList } from "@/features/shopping/shopping-list"
+import { readShoppingList } from "@/features/shopping/store"
 import { canManageAttendance, getAuthorizedUser } from "@/lib/session"
 import {
   AttendanceBlocksSection,
@@ -34,13 +36,14 @@ export default async function NewYearsEve() {
   const user = await getAuthorizedUser()
   if (!user) redirect("/")
 
-  const [roster, blocks, cars, { guide, revision }, canManage] =
+  const [roster, blocks, cars, { guide, revision }, canManage, shopping] =
     await Promise.all([
       getEventRoster(letuxEvent),
       getAttendanceBlocks(letuxEvent),
       getCarBoard(letuxEvent),
       readGuide(),
       canManageAttendance(),
+      readShoppingList(),
     ])
 
   const members = canManage ? await getMemberDirectory() : []
@@ -95,6 +98,7 @@ export default async function NewYearsEve() {
                 canManage={canManage}
               />
             </CarSection>
+            <ShoppingList items={shopping.items} canEdit={canManage} />
             <ProgramDay
               day="dec30"
               label={guideSections[0].label}

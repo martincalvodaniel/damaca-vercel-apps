@@ -2,12 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-44 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-45 — Gestión de inscripciones por el administrador
-
-- Inicio con 93% de 5 h y 8% de 7 días disponibles. La administración permite altas, cambios de nombre y autoría y borrado con confirmación durante la inscripción.
-- Biome, tipos, siete pruebas de Tapas y build correctos. Las pruebas verifican permisos, autores duplicados y el bloqueo fuera de inscripción.
+[Entregas EPJ-08 a EPJ-45 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-46 — Retirar la publicación del concurso
 
@@ -56,3 +51,8 @@
 - La autenticación espera a que MongoDB conecte y comparte la inicialización entre peticiones. Un fallo descarta el intento y registra el tipo de error.
 - Prueba local temporal contra la ruta de sesión, con un proxy TCP y MongoDB 8. Antes del cambio, la primera petición devolvió HTTP 500 y fallaron las 12 lecturas posteriores. Con el cambio, la primera devolvió HTTP 503 y las 12 lecturas concurrentes recuperaron la sesión en el mismo proceso.
 - Biome sobre los tres archivos TypeScript, tipos, 12 pruebas de Ebrias, build y `git diff --check` correctos. Pendiente probar OAuth con una cuenta autorizada en un despliegue de integración.
+
+## EPJ-55 — Lista de la compra de Letux
+
+- Capacidad inicial de 89% en 5 h y 98% en 7 días. Lista compartida con orden persistente, marcas independientes, edición y borrado confirmado.
+- Biome, tipos, diez pruebas de compra y Tapas y build correctos. La comprobación en Chrome quedó pendiente porque la sesión ficticia redirigía a la portada antes de abrir la ficha.

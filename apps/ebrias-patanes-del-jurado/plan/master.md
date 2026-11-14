@@ -29,3 +29,5 @@ El 30 de diciembre hay un concurso con tapas individuales o en pareja. El admini
 La suma de las cuatro medias determina la clasificación inicial. Los empates por el primer puesto se resuelven en una ronda extra sin los autores finalistas; si persisten, se comparan sabor, calidad, originalidad y presentación, y finalmente se recurre al sorteo presencial. El administrador revisa los resultados antes de publicarlos y puede retirar la publicación para volver a la vista privada sin perder las papeletas. Ver [EPJ-31](iterations.md#epj-31--concurso-de-tapas-en-letux).
 
 Durante la inscripción de Tapas, el listado muestra solo autores. El nombre se desvela al votar y sigue disponible para quien puede editar la inscripción. Desde la barra de navegación, el administrador puede usar la vista de miembro para consultar la app con los permisos habituales de su cuenta como miembro. El mismo botón permite recuperar la vista de administrador.
+
+La ficha de Letux incluye una lista de la compra compartida debajo de los coches. Los miembros pueden añadir y editar productos, marcarlos, reordenarlos y borrarlos con confirmación. Marcar un producto conserva su posición.

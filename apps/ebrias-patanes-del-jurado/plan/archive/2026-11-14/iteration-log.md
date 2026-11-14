@@ -223,3 +223,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Capacidad inicial disponible de 98% en 5 h y 9% en 7 días.
 - La reapertura exige administrador y confirmación, conserva las tapas y reinicia el censo y las papeletas. Se rechazan papeletas abiertas antes del reinicio.
 - Biome, tipos, seis pruebas de Tapas y build correctos.
+
+## EPJ-45 — Gestión de inscripciones por el administrador
+
+- Inicio con 93% de 5 h y 8% de 7 días disponibles. La administración permite altas, cambios de nombre y autoría y borrado con confirmación durante la inscripción.
+- Biome, tipos, siete pruebas de Tapas y build correctos. Las pruebas verifican permisos, autores duplicados y el bloqueo fuera de inscripción.

@@ -406,3 +406,10 @@
 - Dependencias: Better Auth y el cliente de MongoDB de Ebrias.
 - Aceptación: si la primera conexión falla, la siguiente petición puede restaurar una sesión válida sin reiniciar el proceso. Las peticiones concurrentes comparten el intento de conexión.
 - Validación: reproducir el fallo con MongoDB local, verificar la recuperación, ejecutar Biome, tipos, pruebas y build. La comprobación con Google requiere una cuenta autorizada en integración.
+
+## EPJ-55 — Lista de la compra de Letux
+
+- Estado: `blocked`.
+- Rutas: ficha de Letux y lista compartida de la compra.
+- Aceptación: los miembros pueden añadir, editar, marcar, reordenar y borrar con confirmación. Marcar no mueve un elemento.
+- Validación: Biome, tipos, pruebas de orden y build.
