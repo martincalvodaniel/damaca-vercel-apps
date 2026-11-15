@@ -286,3 +286,10 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Estado: `validated`.
 - Rutas: generador raíz, recursos de Digest y documentación.
 - Aceptación: favicon nítido en tres tamaños, PNG cuadrado para Vercel e iconos públicos para Chrome, incluida la variante maskable. Verificar las variantes `main` e `int` del manifiesto y los vínculos en el HTML.
+
+## AGW-31 — Hacer recuperable la inicialización de la plantilla MongoDB
+
+- Estado: `validated`.
+- Rutas: autenticación, reglas y pruebas de la plantilla `mongo-google`.
+- Aceptación: las apps generadas inicializan Better Auth de forma diferida, comparten el intento concurrente y lo descartan si falla. Mantener el modo de sesión por cookie del starter y documentar la conexión previa para adaptadores persistentes.
+- Validación: pruebas del generador y de una app recién generada. Comprobar el acceso habitual y la recuperación local al activar un adaptador MongoDB en una copia de prueba.

@@ -151,3 +151,10 @@ Inicio: 75% de 5 h y 95% de 7 d disponibles (10:10 CET).
 - [Aceptación](iterations.md#agw-30--generar-los-iconos-de-damaca-digest). Inicio en `int`, árbol limpio, base `8571cd0` y capacidad inicial del 68% en 5h y 53% en 7d.
 - El generador raíz produjo ICO 16/32/48, PNG de 192/512, variante maskable opaca y Apple Touch de 180 px desde un SVG de Digest. El PNG de 512 px queda disponible para el avatar de Vercel.
 - Pasaron Biome y tipos. Los builds Webpack de `main` e `int` sirvieron por HTTP los manifiestos, vínculos HTML, favicon, SVG y los PNG con sus dimensiones esperadas. La instalación en Android y la carga del avatar a Vercel no se realizaron.
+
+## AGW-31 — Hacer recuperable la inicialización de la plantilla MongoDB
+
+- [Aceptación](iterations.md#agw-31--hacer-recuperable-la-inicialización-de-la-plantilla-mongodb). Inicio en `int`, base `9888847`. Capacidad inicial del 61% en 5h y 52% en 7d.
+- La base `mongo-google` comparte una inicialización diferida de Better Auth y descarta la promesa rechazada. Conserva las sesiones por cookie. Las instrucciones indican cómo esperar al cliente conectado si la app añade su propio adaptador persistente.
+- Pasaron las 6 pruebas del generador, los tipos, 37 pruebas, el build y la prueba HTTP de acceso de una app recién generada. Se ajustó el mock de índices a la firma MongoDB vigente para que pasen los tipos de la app generada.
+- En una copia de prueba de esa app, se activó un adaptador MongoDB persistente usando la secuencia documentada. Con MongoDB detenido, la consulta devolvió 503. Al arrancar la base desechable, tres peticiones devolvieron 200 sin reiniciar Next y sin `MongoTopologyClosedError`.

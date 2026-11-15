@@ -6,6 +6,7 @@ Base reutilizable para webapps con Next.js 16, React 19 y TypeScript. Incluye ac
 
 - App Router con Server Components; `src/app/**` contiene las entradas de rutas y layouts.
 - Better Auth configurado sin adaptador de base de datos: cookies JWT y estado OAuth en cookies. **MongoDB no persiste identidades, cuentas ni sesiones de Better Auth; sí persiste los permisos de acceso normales.** Cambiar este modelo requiere una decisión específica del proyecto.
+- La autenticación se inicializa bajo demanda con `getAuth()`. Si un proyecto añade persistencia para Better Auth, debe esperar a `getDatabase()` dentro de `createAuth()` antes de construir el adaptador. El intento fallido se descarta y la siguiente petición vuelve a inicializarlo.
 - Autorización en el layout protegido mediante `requireAuthorizedSession()`. El proxy comprueba la presencia de una cookie como optimización de redirección; no sustituye la autorización de cada operación.
 - Driver nativo MongoDB, conexión compartida, registro central de colecciones e índices. La colección `user_access` registra los usuarios normales autorizados y tiene un índice único por correo normalizado.
 - Tailwind CSS 4, Biome, pruebas con Bun y comprobación de TypeScript. SWR y Zod están instalados para las funcionalidades que los requieran.

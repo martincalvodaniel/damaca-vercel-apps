@@ -86,3 +86,5 @@ La interfaz de las aplicaciones prioriza el contenido útil y la densidad en mó
 ## Selección de base de datos MongoDB
 
 Las aplicaciones con MongoDB y la plantilla `mongo-google` usan `MONGODB_DB` para seleccionar la base dentro del clúster indicado por `MONGODB_URI`. Cada app conserva sus valores predeterminados por entorno. [AGW-26](iterations.md#agw-26--verificar-la-selección-de-base-mongodb).
+
+La plantilla `mongo-google` inicializa Better Auth bajo demanda y vuelve a intentarlo después de un fallo. Sigue usando sesiones por cookie. Las apps que adopten un adaptador persistente deben esperar al cliente MongoDB conectado dentro de esa inicialización. [AGW-31](iterations.md#agw-31--hacer-recuperable-la-inicialización-de-la-plantilla-mongodb).
