@@ -4,6 +4,7 @@ import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
 import { getMcpOwner } from "@/lib/auth/mcp-owner"
 import { saveArticle } from "@/lib/db/articles"
 import { allowCapture } from "@/lib/db/capture-rate"
+import { listTopics } from "@/lib/db/topics"
 
 export const runtime = "nodejs"
 
@@ -22,18 +23,26 @@ export async function POST(request: Request) {
       return new Response(null, { status: owner.status, headers })
     }
 
-    const server = createArticleServer(async (entry) => {
-      if (!(await allowCapture(owner.ownerId))) return null
-      const article = await saveArticle(owner.ownerId, entry)
-      return {
-        ...article,
-        detailUrl: new URL(`/articles/${article.articleId}`, resource).href,
-        warnings:
-          entry.accessStatus === "full"
-            ? []
-            : [`Reported access: ${entry.accessStatus}.`],
-      }
-    })
+    const server = createArticleServer(
+      async (entry) => {
+        if (!(await allowCapture(owner.ownerId))) return null
+        const article = await saveArticle(owner.ownerId, entry)
+        return {
+          ...article,
+          detailUrl: new URL(`/articles/${article.articleId}`, resource).href,
+          warnings:
+            entry.accessStatus === "full"
+              ? []
+              : [`Reported access: ${entry.accessStatus}.`],
+        }
+      },
+      async () =>
+        (await listTopics(owner.ownerId)).map(({ id, label, aliases }) => ({
+          id,
+          label,
+          aliases,
+        }))
+    )
     const transport = new WebStandardStreamableHTTPServerTransport({
       enableJsonResponse: true,
       maxRequestBodySize: 131_072,

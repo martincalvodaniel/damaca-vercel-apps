@@ -29,7 +29,15 @@ export default async function LibraryPage({
   )
   return (
     <section className="mx-auto max-w-2xl space-y-3">
-      <h1 className="text-2xl font-semibold">Library</h1>
+      <div className="flex items-center justify-between gap-2">
+        <h1 className="text-2xl font-semibold">Library</h1>
+        <Link
+          href="/topics"
+          className="inline-flex min-h-11 items-center text-sm underline"
+        >
+          Topics
+        </Link>
+      </div>
       <LibraryFilters query={query} />
       {!parsed.success ? (
         <p role="alert">Check the search filters and date ranges.</p>

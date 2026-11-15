@@ -82,6 +82,7 @@ export const articleEdit = z.object({
   contentType: z.union([z.literal(""), contentType]),
   summary: editLine(12_000),
   keyTakeaways: z.array(text(1500)).max(20),
+  topics: z.array(text(100)).max(15).optional(),
   personalNotes: editLine(12_000),
   readingStatus,
   favorite: z.boolean(),

@@ -1,6 +1,6 @@
 # Damaca Digest
 
-Biblioteca privada de lecturas con Next.js 16, React 19 y TypeScript. La aplicación incluye captura de artículos por MCP, biblioteca reciente y ficha privada. El estado de la captura MCP y la biblioteca se sigue en [las iteraciones](plan/iterations.md). Incluye acceso con Google mediante Better Auth, administradores definidos por entorno y usuarios autorizados en MongoDB, rutas protegidas, una capa MongoDB con conexión compartida y un flujo de desarrollo agéntico por iteraciones.
+Biblioteca privada de lecturas con Next.js 16, React 19 y TypeScript. La aplicación incluye captura de artículos por MCP, búsqueda y filtros, edición de fichas y un vocabulario privado de topics. El estado de la captura MCP y la biblioteca se sigue en [las iteraciones](plan/iterations.md). Incluye acceso con Google mediante Better Auth, administradores definidos por entorno y usuarios autorizados en MongoDB, rutas protegidas, una capa MongoDB con conexión compartida y un flujo de desarrollo agéntico por iteraciones.
 
 ## Qué incluye realmente
 
@@ -131,6 +131,8 @@ Las dos entradas rechazan destinos que no cumplan sus guardias de aislamiento y 
 ## Captura con ChatGPT
 
 En cada entorno autorizado, configura `CHATGPT_CLIENT_ID`, `CHATGPT_CLIENT_SECRET` y `CHATGPT_REDIRECT_URI` con un cliente estático y la URL de retorno HTTPS que indique ChatGPT. Configura el MCP privado con OAuth en `/api/integrations/mcp` y usa las credenciales de ese entorno. La cuenta de Google debe tener acceso vigente a Digest. Para comprobar el flujo, pide guardar una fuente pública y verifica el contenido, el nivel de acceso y la ficha que devuelve `save_article`.
+
+ChatGPT puede invocar `list_topics` con una búsqueda opcional y una página para reutilizar nombres y alias antes de guardar. En la web, **Topics** muestra los recuentos y permite renombrar, añadir alias y fusionar equivalencias. La ficha permite cambiar sus topics en **Edit article**. Las etiquetas capturadas antes de este cambio siguen visibles y se resuelven junto al vocabulario nuevo.
 
 Las pruebas HTTP usan un MongoDB desechable en loopback, credenciales ficticias y sesiones persistidas de prueba. Ejecutar desde la raíz con `DIGEST_TEST_MONGO_PORT=<puerto> bash apps/damaca-digest/test/run-capture-http.sh`. El runner compila y arranca Next, comprueba OAuth/MCP y el control de acceso web y termina el proceso local. El contenedor MongoDB desechable se elimina por separado. La prueba de Google y ChatGPT reales requiere un entorno HTTPS autorizado.
 

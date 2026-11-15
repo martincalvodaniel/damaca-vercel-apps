@@ -3,7 +3,7 @@ import { createHash } from "node:crypto"
 import { getAuthEnv, getChatGptClient, getDatabaseEnv } from "@/config/env"
 import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
 import { saveArticle } from "@/lib/db/articles"
-import { closeDatabaseConnection } from "@/lib/db/client"
+import { closeDatabaseConnection, getDatabase } from "@/lib/db/client"
 import { grantUserAccess, revokeUserAccess } from "@/lib/db/user-access"
 import { serverActionForm } from "./server-action-form"
 import { createFixtureSession } from "./session-fixture"
@@ -101,7 +101,8 @@ async function authorize(cookie: string, method: "post" | "basic") {
 async function call(
   method: string,
   token?: string,
-  args?: Record<string, unknown>
+  args?: Record<string, unknown>,
+  tool = "save_article"
 ) {
   return fetch(resource, {
     method: "POST",
@@ -114,7 +115,7 @@ async function call(
       jsonrpc: "2.0",
       id: 1,
       method,
-      ...(args && { params: { name: "save_article", arguments: args } }),
+      ...(args && { params: { name: tool, arguments: args } }),
     }),
   })
 }
@@ -273,6 +274,7 @@ try {
     contentType: "article",
     summary: "",
     keyTakeaways: "",
+    topics: "Personal topic",
     personalNotes: "Reader's private note",
     readingStatus: "read",
     favorite: "true",
@@ -287,6 +289,7 @@ try {
     accessStatus: "full",
     title: "ChatGPT title",
     summary: "New capture summary",
+    topics: ["ChatGPT topic"],
   })
   const enriched = await fetch(other.detailUrl, {
     headers: { cookie: second.cookie },
@@ -295,6 +298,8 @@ try {
   assert.match(enrichedHtml, /Manually corrected title/)
   assert.match(enrichedHtml, /Reader.*private note/)
   assert.match(enrichedHtml, /New capture summary/)
+  assert.match(enrichedHtml, /Personal topic/)
+  assert.doesNotMatch(enrichedHtml, /ChatGPT topic/)
   assert.match(enrichedHtml, /read · Favorite|read<!-- --> · Favorite/)
   console.info("Verified that recapture preserves manual edits.")
   const updatedEditor = await fetch(editUrl, {
@@ -322,6 +327,103 @@ try {
     (await fetch(other.detailUrl, { headers: { cookie: second.cookie } }))
       .status,
     404
+  )
+
+  const db = await getDatabase()
+  await db
+    .collection("articles")
+    .updateOne(
+      { ownerId: first.ownerId, canonicalUrl: url },
+      { $set: { proposedTopics: ["Engineering"] } }
+    )
+  const withTopics = await save(token, {
+    url: "https://example.com/topic-fixture",
+    title: "Topic fixture",
+    accessStatus: "full",
+    topics: ["A.I.", "ENGINEERING"],
+  })
+
+  async function vocabularyFor(bearer: string, query?: string) {
+    const response = await call(
+      "tools/call",
+      bearer,
+      query ? { query } : {},
+      "list_topics"
+    )
+    assert.equal(response.status, 200)
+    const payload = await response.json()
+    assert.ok(payload.result?.structuredContent, JSON.stringify(payload))
+    return payload.result.structuredContent.topics as {
+      id: string
+      label: string
+      aliases: string[]
+    }[]
+  }
+
+  const topics = await vocabularyFor(token)
+  const ai = topics.find(({ label }) => label === "A.I.")
+  const engineering = topics.find(({ label }) => label === "Engineering")
+  assert.ok(ai && engineering)
+  assert.deepEqual(
+    (await vocabularyFor(otherToken)).map(({ label }) => label),
+    ["Personal topic"]
+  )
+
+  const topicsUrl = `${origin}/topics`
+  async function manage(cookie: string, fields: Record<string, string>) {
+    const page = await fetch(topicsUrl, { headers: { cookie: first.cookie } })
+    const html = await page.text()
+    const form = [...html.matchAll(/<form[\s\S]*?<\/form>/g)]
+      .map(([value]) => value)
+      .find((value) => value.includes(`value="${fields.operation}"`))
+    assert.ok(form)
+    const body = serverActionForm(form)
+    for (const [key, value] of Object.entries(fields)) body.set(key, value)
+    const response = await fetch(topicsUrl, {
+      method: "POST",
+      headers: { cookie, origin },
+      body,
+      redirect: "manual",
+      signal: AbortSignal.timeout(10_000),
+    })
+    assert.equal(response.status, 303)
+    return response.headers.get("location")
+  }
+
+  const alias = {
+    operation: "alias",
+    topicId: ai.id,
+    label: "Artificial intelligence",
+  }
+  assert.equal(await manage(second.cookie, alias), "/topics?result=conflict")
+  assert.equal(await manage(first.cookie, alias), "/topics")
+  assert.equal(
+    await manage(first.cookie, {
+      operation: "merge",
+      topicId: ai.id,
+      targetId: engineering.id,
+    }),
+    "/topics"
+  )
+  const merged = await vocabularyFor(token, "artificial intelligence")
+  assert.equal(merged.length, 1)
+  assert.equal(merged[0].id, engineering.id)
+  assert.ok(merged[0].aliases.includes("A.I."))
+  const mergedPage = await fetch(topicsUrl, {
+    headers: { cookie: first.cookie },
+  })
+  assert.match(await mergedPage.text(), /2(?:<!-- -->)? articles/)
+  const byAlias = await fetch(`${origin}/?topic=Artificial+intelligence`, {
+    headers: { cookie: first.cookie },
+  })
+  const byAliasHtml = await byAlias.text()
+  assert.match(byAliasHtml, /Topic fixture/)
+  assert.match(byAliasHtml, /HTTP capture fixture/)
+  assert.match(
+    await (
+      await fetch(withTopics.detailUrl, { headers: { cookie: first.cookie } })
+    ).text(),
+    /Topics:.*Engineering/
   )
 
   await revokeUserAccess("reader@example.com")

@@ -1,7 +1,13 @@
 import Link from "next/link"
 import type { Article } from "@/lib/db/articles"
 
-export function ArticleDetail({ article }: { article: Article }) {
+export function ArticleDetail({
+  article,
+  topics,
+}: {
+  article: Article
+  topics: string[]
+}) {
   return (
     <article className="mx-auto max-w-2xl space-y-4 break-words">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -80,9 +86,7 @@ export function ArticleDetail({ article }: { article: Article }) {
           </ul>
         </section>
       )}
-      {!!article.proposedTopics?.length && (
-        <p>Topics: {article.proposedTopics.join(", ")}</p>
-      )}
+      {topics.length > 0 && <p>Topics: {topics.join(", ")}</p>}
       {article.personalNotes ? (
         <section>
           <h2 className="font-semibold">Personal notes</h2>

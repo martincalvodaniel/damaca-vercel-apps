@@ -67,7 +67,7 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 04b — Consolidar topics
 
-- Estado: `pending`.
+- Estado: `validated`.
 - Aceptación: IDs estables, alias y fusión por propietario, recuentos, edición de asignaciones y herramienta MCP `list_topics`.
 
 ## 05 — Validar preproducción
