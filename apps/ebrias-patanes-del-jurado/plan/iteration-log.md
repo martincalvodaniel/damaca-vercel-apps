@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-56 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-57 — Relleno aleatorio de papeletas
-
-- Capacidad inicial disponible de 68% en 5 h y 95% en 7 días.
-- El administrador puede rellenar el borrador en ambas rondas desde su papeleta o una asistida. Se conserva el flujo de revisión y envío.
-- Biome, tipos, nueve pruebas de Tapas y build correctos. El botón nuevo queda pendiente de comprobar en un navegador autenticado.
+[Entregas EPJ-08 a EPJ-57 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-58 — Selector de notas y revelación del podio
 
@@ -54,3 +48,7 @@
 ## EPJ-66 — Dos asistentes por fila
 
 - Capacidad inicial de 60% en 5 h y 82% en 7 días. Los bloques de asistencia muestran dos columnas y los coches mantienen su lista. Biome, tipos y build correctos. Sin comprobación en navegador autenticado.
+
+## EPJ-67 — Dos pasajeros por fila
+
+- Capacidad inicial de 53% en 5 h y 81% en 7 días. Los coches reutilizan las dos columnas de asistencia. Biome, tipos y build correctos.

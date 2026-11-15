@@ -287,3 +287,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Capacidad inicial disponible de 74% en 5 h y 96% en 7 días.
 - La compra comparte la sangría móvil. Tapas muestra el total, separa el formulario personal y abre la confirmación desde la papelera. El formulario de alta del administrador se mueve a Administración.
 - Los avisos se cierran a los cinco segundos y reinician el plazo al recibir otro mensaje. Biome, tipos, diez pruebas y build correctos. Pendiente comprobar el recorrido con una sesión autenticada.
+
+## EPJ-57 — Relleno aleatorio de papeletas
+
+- Capacidad inicial disponible de 68% en 5 h y 95% en 7 días.
+- El administrador puede rellenar el borrador en ambas rondas desde su papeleta o una asistida. Se conserva el flujo de revisión y envío.
+- Biome, tipos, nueve pruebas de Tapas y build correctos. El botón nuevo queda pendiente de comprobar en un navegador autenticado.

@@ -489,3 +489,10 @@
 - Rutas: lista de asistentes de Letux.
 - Aceptación: dos columnas por bloque de asistencia. Las listas de coches conservan una columna.
 - Validación: Biome, tipos y build.
+
+## EPJ-67 — Dos pasajeros por fila
+
+- Estado: `validated`.
+- Rutas: lista compartida de asistentes y coches de Letux.
+- Aceptación: las listas de coches reutilizan las dos columnas de asistencia.
+- Validación: Biome, tipos y build.
