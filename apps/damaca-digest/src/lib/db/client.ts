@@ -5,31 +5,16 @@ import { getDatabaseEnv } from "@/config/env"
 import { ensureIndexes } from "@/lib/db/ensure-indexes"
 
 interface MongoGlobal {
-  digestMongoClient?: MongoClient
   mongoClientPromise?: Promise<MongoClient>
 }
 
 const databaseEnv = getDatabaseEnv()
 const mongoGlobal = globalThis as typeof globalThis & MongoGlobal
 
-let mongoClient: MongoClient | undefined
 let clientPromise: Promise<MongoClient> | undefined
 
-function getMongoClient(): MongoClient {
-  if (databaseEnv.isDevelopment) {
-    mongoGlobal.digestMongoClient ??= new MongoClient(databaseEnv.uri)
-    return mongoGlobal.digestMongoClient
-  }
-  mongoClient ??= new MongoClient(databaseEnv.uri)
-  return mongoClient
-}
-
-export function getMongoDatabase(): Db {
-  return getMongoClient().db(databaseEnv.databaseName)
-}
-
 function createClientPromise(): Promise<MongoClient> {
-  return getMongoClient().connect()
+  return new MongoClient(databaseEnv.uri).connect()
 }
 
 function getClientPromise(): Promise<MongoClient> {
@@ -87,22 +72,19 @@ export async function closeDatabaseConnection(): Promise<void> {
     ? mongoGlobal.mongoClientPromise
     : clientPromise
 
-  const instance = databaseEnv.isDevelopment
-    ? mongoGlobal.digestMongoClient
-    : mongoClient
-  if (!instance) return
+  if (!activeClientPromise) {
+    return
+  }
 
   try {
-    await activeClientPromise?.catch(() => undefined)
-    await instance.close()
+    const client = await activeClientPromise
+    await client.close()
   } finally {
     indexesPromise = undefined
     clientPromise = undefined
-    mongoClient = undefined
 
     if (databaseEnv.isDevelopment) {
       mongoGlobal.mongoClientPromise = undefined
-      mongoGlobal.digestMongoClient = undefined
     }
   }
 }

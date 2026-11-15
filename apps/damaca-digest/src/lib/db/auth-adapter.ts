@@ -1,8 +1,8 @@
 import "server-only"
 
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
-import { getMongoDatabase } from "@/lib/db/client"
+import { getDatabase } from "@/lib/db/client"
 
-export function createAuthAdapter() {
-  return mongodbAdapter(getMongoDatabase(), { transaction: false })
+export async function createAuthAdapter() {
+  return mongodbAdapter(await getDatabase(), { transaction: false })
 }

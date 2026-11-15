@@ -3,7 +3,7 @@ import "server-only"
 import { oauthProviderResourceClient } from "@better-auth/oauth-provider/resource-client"
 import { getChatGptClient } from "@/config/env"
 import { getAccessRole } from "@/lib/auth/access"
-import { auth } from "@/lib/auth/auth"
+import { getAuth } from "@/lib/auth/auth"
 import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
 
 const { verifyAccessTokenRequest } = oauthProviderResourceClient().getActions()
@@ -40,6 +40,7 @@ export async function getMcpOwner(request: Request) {
     return { status: 401 } as const
   }
 
+  const auth = await getAuth()
   const user = await (await auth.$context).internalAdapter.findUserById(subject)
   if (!user?.emailVerified || !(await getAccessRole(user.email)))
     return { status: 403 } as const

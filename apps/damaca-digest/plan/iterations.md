@@ -32,6 +32,13 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Aceptación: el comando habitual de desarrollo carga la pantalla de acceso tras redirigir desde `/`, sin errores de resolución del driver de MongoDB.
 - Validación: comparar Bun y Node con Turbopack y repetir el recorrido HTTP con el comando corregido.
 
+## 03b — Recuperar autenticación tras un fallo de MongoDB
+
+- Estado: `validated`.
+- Rutas: inicialización de MongoDB, autenticación y entradas que la consumen.
+- Aceptación: una consulta de sesión durante el fallo inicial devuelve 503 y se recupera tras arrancar MongoDB sin reiniciar Next.
+- Validación: prueba bajo Next local con MongoDB detenida y restaurada, más Biome, tipos, tests y recorrido OAuth/MCP.
+
 ## 04 — Entregar biblioteca y topics
 
 - Estado: `pending`.

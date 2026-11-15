@@ -2,7 +2,8 @@ import { makeSignature } from "better-auth/crypto"
 import { getAuthEnv } from "@/config/env"
 
 export async function createFixtureSession(email: string) {
-  const { auth } = await import("@/lib/auth/auth")
+  const { getAuth } = await import("@/lib/auth/auth")
+  const auth = await getAuth()
   const { internalAdapter } = await auth.$context
   const user =
     (await internalAdapter.findUserByEmail(email))?.user ??
@@ -27,7 +28,8 @@ export async function setFixtureEmailVerified(
   email: string,
   emailVerified: boolean
 ) {
-  const { auth } = await import("@/lib/auth/auth")
+  const { getAuth } = await import("@/lib/auth/auth")
+  const auth = await getAuth()
   const { internalAdapter } = await auth.$context
   const account = await internalAdapter.findUserByEmail(email)
   if (!account) throw new Error("Fixture user was not found")

@@ -21,3 +21,10 @@
 - [Aceptación](iterations.md#03a--corregir-la-carga-de-mongodb-en-desarrollo). Inicio en `int`, base `3639e81`, con una edición local ajena en `.env.example`. Capacidad inicial del 87% en 5h y 56% en 7d.
 - En el servidor local, `/` redirigía con 307 y `/auth/signin` devolvía 500 al resolver `mongodb-339f4168658c3edd`. Con los mismos módulos instalados y salidas nuevas, Next 16.4.6 reprodujo el 500 bajo Bun y Turbopack. Node y Turbopack devolvieron 200, al igual que Bun y Webpack.
 - Digest arranca Next con Node en desarrollo. El comando corregido se verificó en una copia aislada con credenciales ficticias y un puerto alternativo. `/` devolvió 307 y la página de acceso devolvió 200 con el botón de Google. Pasaron Biome, TypeScript y 41 pruebas. La prueba cubrió la carga de la pantalla de acceso.
+
+## 03b — Recuperar autenticación tras un fallo de MongoDB
+
+- [Aceptación](iterations.md#03b--recuperar-autenticación-tras-un-fallo-de-mongodb). Inicio en `int`, base `00225a0`, con un cambio local ajeno en `.env.example`. Capacidad inicial del 82% en 5h y 55% en 7d.
+- Se reprodujo el fallo en Next local con una cookie firmada de prueba. Antes del cambio, la consulta devolvió 500 con MongoDB detenida y siguió devolviendo 500 al arrancarla, con `MongoTopologyClosedError`.
+- Better Auth espera al cliente conectado, comparte una inicialización y descarta los intentos fallidos. Después del cambio, el fallo inicial produjo HTTP 503 y las tres consultas siguientes devolvieron 200 en el mismo proceso tras arrancar MongoDB. La prueba usó MongoDB 8 desechable.
+- Pasaron Biome, TypeScript, 41 pruebas, el build y las integraciones HTTP locales de OAuth/MCP y control de acceso. El servidor y la configuración local del usuario quedaron fuera de la prueba.
