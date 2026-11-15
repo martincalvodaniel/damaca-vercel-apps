@@ -1,18 +1,47 @@
 import Link from "next/link"
+import { LibraryFilters } from "@/features/articles/components/library-filters"
 import { requireAuthorizedSession } from "@/lib/auth/session"
-import { listRecentArticles } from "@/lib/db/articles"
+import { listArticles } from "@/lib/db/articles"
+import {
+  libraryPageHref,
+  libraryQuery,
+  parseLibraryQuery,
+} from "@/schemas/library"
 
-export default async function LibraryPage() {
-  const { user } = await requireAuthorizedSession()
-  const articles = await listRecentArticles(user.id)
+type SearchParams = Promise<Record<string, string | string[] | undefined>>
+
+export default async function LibraryPage({
+  searchParams,
+}: {
+  searchParams: SearchParams
+}) {
+  const [{ user }, params] = await Promise.all([
+    requireAuthorizedSession(),
+    searchParams,
+  ])
+  const parsed = parseLibraryQuery(params)
+  const query = parsed.success ? parsed.data : libraryQuery.parse({})
+  const result = parsed.success
+    ? await listArticles(user.id, query)
+    : { items: [], hasNext: false }
+  const filtered = Object.keys(params).some(
+    (key) => key !== "sort" && !!params[key]
+  )
   return (
     <section className="mx-auto max-w-2xl space-y-3">
       <h1 className="text-2xl font-semibold">Library</h1>
-      {articles.length === 0 ? (
-        <p>Save an article from ChatGPT to start your library.</p>
+      <LibraryFilters query={query} />
+      {!parsed.success ? (
+        <p role="alert">Check the search filters and date ranges.</p>
+      ) : result.items.length === 0 ? (
+        <p>
+          {filtered
+            ? "No articles match this page or its filters."
+            : "Save an article from ChatGPT to start your library."}
+        </p>
       ) : (
         <ul className="space-y-2">
-          {articles.map((article) => (
+          {result.items.map((article) => (
             <li key={article.id}>
               <Link
                 href={`/articles/${article.id}`}
@@ -29,6 +58,30 @@ export default async function LibraryPage() {
             </li>
           ))}
         </ul>
+      )}
+      {(query.page > 1 || result.hasNext) && (
+        <nav
+          aria-label="Library pages"
+          className="flex items-center justify-between gap-3 text-sm"
+        >
+          {query.page > 1 && (
+            <Link
+              className="inline-flex min-h-11 items-center underline"
+              href={libraryPageHref(query, query.page - 1)}
+            >
+              Previous
+            </Link>
+          )}
+          <span>Page {query.page}</span>
+          {!!result.hasNext && (
+            <Link
+              className="inline-flex min-h-11 items-center underline"
+              href={libraryPageHref(query, query.page + 1)}
+            >
+              Next
+            </Link>
+          )}
+        </nav>
       )}
     </section>
   )

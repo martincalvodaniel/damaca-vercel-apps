@@ -19,7 +19,7 @@ bun run build --filter=@damaca/damaca-digest --cache=local:w -- --webpack
 cd apps/damaca-digest
 
 digest_server_log="$(mktemp)"
-bun --no-env-file ./node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port "$digest_http_port" >"$digest_server_log" 2>&1 &
+node ./node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port "$digest_http_port" >"$digest_server_log" 2>&1 &
 digest_server_pid=$!
 trap 'kill "$digest_server_pid" 2>/dev/null || true; rm -f "$digest_server_log"' EXIT
 

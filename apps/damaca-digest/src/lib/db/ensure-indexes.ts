@@ -28,6 +28,28 @@ export const INDEX_SPECS: readonly IndexSpec[] = [
     options: { name: "owner_capture_id_desc" },
   },
   {
+    collection: "articles",
+    keys: { ownerId: 1, publishedAt: -1, _id: -1 },
+    options: { name: "owner_publication_id_desc" },
+  },
+  {
+    collection: "articles",
+    keys: {
+      ownerId: 1,
+      title: "text",
+      summary: "text",
+      keyTakeaways: "text",
+      authors: "text",
+      source: "text",
+    },
+    options: {
+      name: "owner_article_search",
+      default_language: "none",
+      language_override: "textIndexLanguage",
+      weights: { title: 8, authors: 4, summary: 3, source: 2, keyTakeaways: 1 },
+    },
+  },
+  {
     collection: "capture_limits",
     keys: { expiresAt: 1 },
     options: { name: "capture_limit_ttl", expireAfterSeconds: 0 },

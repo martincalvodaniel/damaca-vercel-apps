@@ -1,10 +1,15 @@
 import "server-only"
 
-import { MongoServerError, ObjectId } from "mongodb"
+import { type Filter, MongoServerError, ObjectId, type Sort } from "mongodb"
 import type { z } from "zod"
 import { normalizeArticleUrl } from "@/features/articles/normalize-url"
 import { COLLECTION_NAMES, getCollection } from "@/lib/db/collections"
-import type { ArticleCapture, readingStatus } from "@/schemas/article"
+import type {
+  ArticleCapture,
+  ArticleEdit,
+  readingStatus,
+} from "@/schemas/article"
+import type { LibraryQuery } from "@/schemas/library"
 
 type ArticleDetails = Omit<
   ArticleCapture,
@@ -139,11 +144,119 @@ export async function findArticle(ownerId: string, id: string) {
   return document ? serialize(document) : null
 }
 
-export async function listRecentArticles(ownerId: string) {
+export async function editArticle(
+  ownerId: string,
+  id: string,
+  revision: number,
+  input: ArticleEdit
+) {
+  const collection = await articles()
+  const identity = { ownerId, _id: new ObjectId(id), revision }
+  const existing = await collection.findOne(identity)
+  if (!existing) return false
+
+  const { favorite, readingStatus, personalNotes, publishedAt, ...metadata } =
+    input
+  const set: Partial<ArticleDocument> = {
+    favorite,
+    readingStatus,
+    updatedAt: new Date(),
+  }
+  const unset: Partial<Record<keyof ArticleDocument, "">> = {}
+  if (personalNotes) set.personalNotes = personalNotes
+  else unset.personalNotes = ""
+
+  const values = {
+    ...metadata,
+    publishedAt:
+      publishedAt === existing.publishedAt?.toISOString().slice(0, 10)
+        ? existing.publishedAt
+        : publishedAt
+          ? new Date(`${publishedAt}T00:00:00.000Z`)
+          : undefined,
+  }
+  const edited: (keyof typeof values)[] = []
+  for (const field of Object.keys(values) as (keyof typeof values)[]) {
+    const value = values[field]
+    const normalized =
+      value && (!Array.isArray(value) || value.length) ? value : undefined
+    if (JSON.stringify(existing[field]) === JSON.stringify(normalized)) continue
+    edited.push(field)
+    if (normalized === undefined) unset[field] = ""
+    else Object.assign(set, { [field]: normalized })
+  }
+  const result = await collection.updateOne(identity, {
+    $set: set,
+    $unset: unset,
+    $inc: { revision: 1 },
+    ...(edited.length && { $addToSet: { editedFields: { $each: edited } } }),
+  })
+  return result.matchedCount === 1
+}
+
+export async function deleteArticle(
+  ownerId: string,
+  id: string,
+  revision: number
+) {
+  const result = await (await articles()).deleteOne({
+    ownerId,
+    _id: new ObjectId(id),
+    revision,
+  })
+  return result.deletedCount === 1
+}
+
+const librarySorts = {
+  capture: { capturedAt: -1, _id: -1 },
+  publication: { publishedAt: -1, _id: -1 },
+  title: { title: 1, _id: 1 },
+  relevance: { score: { $meta: "textScore" }, _id: -1 },
+} as const satisfies Record<LibraryQuery["sort"], Sort>
+
+function exactText(text: string) {
+  const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  return new RegExp(`^${escaped}$`, "i")
+}
+
+function dateRange(from?: string, to?: string) {
+  const exclusiveEnd = to && new Date(`${to}T00:00:00.000Z`)
+  if (exclusiveEnd) exclusiveEnd.setUTCDate(exclusiveEnd.getUTCDate() + 1)
+  return {
+    ...(from && { $gte: new Date(`${from}T00:00:00.000Z`) }),
+    ...(exclusiveEnd && { $lt: exclusiveEnd }),
+  }
+}
+
+export async function listArticles(ownerId: string, query: LibraryQuery) {
+  const filter: Filter<ArticleDocument> = { ownerId }
+  if (query.q) filter.$text = { $search: query.q }
+  if (query.author) filter.authors = exactText(query.author)
+  if (query.source) {
+    const source = exactText(query.source)
+    filter.$or = [{ source }, { sourceDomain: source }]
+  }
+  if (query.topic) filter.proposedTopics = exactText(query.topic)
+  if (query.language) filter.language = exactText(query.language)
+  if (query.type) filter.contentType = query.type
+  if (query.access) filter.accessStatus = query.access
+  if (query.reading) filter.readingStatus = query.reading
+  if (query.favorite) filter.favorite = true
+  if (query.capturedFrom || query.capturedTo)
+    filter.capturedAt = dateRange(query.capturedFrom, query.capturedTo)
+  if (query.publishedFrom || query.publishedTo)
+    filter.publishedAt = dateRange(query.publishedFrom, query.publishedTo)
+
+  const sort = query.sort === "relevance" && !query.q ? "capture" : query.sort
+  const pageSize = 20
   const documents = await (await articles())
-    .find({ ownerId })
-    .sort({ capturedAt: -1, _id: -1 })
-    .limit(30)
+    .find(filter)
+    .sort(librarySorts[sort])
+    .skip((query.page - 1) * pageSize)
+    .limit(pageSize + 1)
     .toArray()
-  return documents.map(serialize)
+  return {
+    items: documents.slice(0, pageSize).map(serialize),
+    hasNext: documents.length > pageSize && query.page < 99_999,
+  }
 }
