@@ -548,3 +548,60 @@ body:has(.club-nav) {
   background: #ffe3a6;
   font: 700 0.65rem system-ui;
 }
+
+.member-avatar-compact {
+  width: 16px;
+  height: 16px;
+}
+
+.member-avatar-compact .member-avatar-initials {
+  font-size: 0.55rem;
+}
+
+.person-select {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  position: relative;
+}
+
+.person-select .person-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.person-select-value {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  pointer-events: none;
+}
+
+.person-select-options {
+  display: grid;
+  max-height: 60dvh;
+  overflow: auto;
+  gap: 0.15rem;
+}
+
+.person-select .person-select-options button {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.person-select-options button[aria-pressed="true"] {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}
+
+.member-name {
+  display: inline;
+}

@@ -5,9 +5,11 @@ import { useCallback, useState } from "react"
 export function MemberAvatar({
   alias,
   image,
+  compact = false,
 }: {
   alias: string
   image: string | null
+  compact?: boolean
 }) {
   const [brokenImage, setBrokenImage] = useState<string | null>(null)
   const onError = useCallback(() => setBrokenImage(image), [image])
@@ -19,7 +21,11 @@ export function MemberAvatar({
     .join("")
     .toLocaleUpperCase("es")
   return (
-    <span className="member-avatar">
+    <span
+      className={
+        compact ? "member-avatar member-avatar-compact" : "member-avatar"
+      }
+    >
       {image && image !== brokenImage ? (
         // biome-ignore lint/performance/noImgElement: Google avatars are small external images.
         <img

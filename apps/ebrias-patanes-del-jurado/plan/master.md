@@ -35,3 +35,5 @@ La ficha de Letux incluye una lista de la compra compartida debajo de los coches
 Las descripciones de la guía de Letux admiten Markdown. Alojamiento conserva su texto editable y forma parte del grupo de desplegables.
 
 La compra admite un nivel de subelementos. Las marcas son independientes y el borrado de un padre requiere confirmar la lista de productos que se eliminarán.
+
+Las listas de asistentes, coches y Tapas muestran el avatar de Google junto al alias. Los invitados y las personas sin foto disponible aparecen con iniciales. Los selectores de miembros en Tapas y Ajustes reutilizan el mismo avatar compacto. [EPJ-70](iterations.md#epj-70--avatares-compactos-en-ebrias).

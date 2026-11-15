@@ -1,13 +1,14 @@
 "use client"
 
 import { useActionFeedback } from "@/features/feedback/actions-client"
+import { PersonSelect } from "@/features/members/person-select"
 import { approveEmail, deleteAdmissionRequest } from "./actions"
 
 export function AdmissionForm({
   members,
   request,
 }: {
-  members: { id: string; alias: string }[]
+  members: { id: string; alias: string; image?: string | null }[]
   request?: { email: string; name?: string }
 }) {
   const [, action, pending] = useActionFeedback(approveEmail)
@@ -28,20 +29,15 @@ export function AdmissionForm({
           <input name="email" type="email" maxLength={254} required />
         </label>
       )}
-      <label>
-        Miembro
-        <select className="member-select" name="member">
-          <option value="">
-            {request ? "Crear miembro nuevo" : "Solo autorizar"}
-          </option>
-          {!request && <option value="new">Crear miembro nuevo</option>}
-          {members.map(({ id, alias }) => (
-            <option key={id} value={id}>
-              {alias}
-            </option>
-          ))}
-        </select>
-      </label>
+      <PersonSelect
+        name="member"
+        label="Miembro"
+        options={members}
+        placeholder={request ? "Crear miembro nuevo" : "Solo autorizar"}
+        extra={
+          request ? undefined : { value: "new", label: "Crear miembro nuevo" }
+        }
+      />
       <div className="settings-actions">
         <button type="submit" disabled={pending || deleting}>
           {pending ? "Guardando…" : request ? "Admitir" : "Guardar acceso"}

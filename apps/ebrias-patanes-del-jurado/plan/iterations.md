@@ -510,3 +510,10 @@
 - Rutas: confirmación de borrado de compra.
 - Aceptación: texto singular para un producto y lista anidada para un grupo.
 - Validación: Biome, tipos y build.
+
+## EPJ-70 — Avatares compactos en Ebrias
+
+- Estado: `in_progress`.
+- Rutas: asistencia, coches, Tapas, Ajustes y componentes de miembros.
+- Aceptación: fotos o iniciales en las listas y selectores, con avatares compactos.
+- Validación: Biome, tipos y build.

@@ -49,3 +49,8 @@
 ## EPJ-69 — Lista de productos en la confirmación
 
 - Capacidad inicial de 30% en 5 h y 77% en 7 días. El modal usa texto singular o una lista anidada según el contenido. Biome, tipos y build correctos.
+
+## EPJ-70 — Avatares compactos en Ebrias
+
+- Capacidad inicial de 13% en 5 h y 74% en 7 días. Avatares de 16 px en las filas y selectores, con iniciales cuando falta la foto o falla su carga.
+- Biome incremental, tipos, 22 pruebas y build correctos. El build registró un aviso de DNS al inicializar la autenticación. Queda pendiente comprobar las rutas autenticadas en móvil y escritorio. Chrome terminó al iniciar la comprobación aislada del selector.

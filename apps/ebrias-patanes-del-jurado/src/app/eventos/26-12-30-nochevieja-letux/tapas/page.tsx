@@ -1,6 +1,12 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { getMemberDirectory } from "@/features/members/directory"
+import { Fragment } from "react"
+import {
+  getMemberDirectory,
+  readMemberAvatars,
+} from "@/features/members/directory"
+import { MemberAvatar } from "@/features/members/member-avatar"
+import { PersonSelect } from "@/features/members/person-select"
 import {
   ballotOptions,
   type Contest,
@@ -51,7 +57,33 @@ function Medal({ place }: { place: number }) {
   ) : null
 }
 
-function Results({ contest, sort }: { contest: Contest; sort?: string }) {
+function AuthorNames({
+  authors,
+  avatars,
+}: {
+  authors: Person[]
+  avatars: Map<string, string>
+}) {
+  return authors.map(({ id, alias }, index) => (
+    <Fragment key={id}>
+      {index > 0 ? " y " : null}
+      <span className="member-name">
+        <MemberAvatar compact alias={alias} image={avatars.get(id) ?? null} />
+        {alias}
+      </span>
+    </Fragment>
+  ))
+}
+
+function Results({
+  contest,
+  sort,
+  avatars,
+}: {
+  contest: Contest
+  sort?: string
+  avatars: Map<string, string>
+}) {
   const key = categories.find(([category]) => category === sort)?.[0] ?? "total"
   const places = new Map(
     podium(contest).flatMap(({ place, tapas }) =>
@@ -100,7 +132,7 @@ function Results({ contest, sort }: { contest: Contest; sort?: string }) {
                 </span>
               ) : null}{" "}
               <strong>{name}</strong> ·{" "}
-              {authors.map(({ alias }) => alias).join(" y ")}
+              <AuthorNames authors={authors} avatars={avatars} />
               {count ? (
                 <>
                   <p>
@@ -133,7 +165,13 @@ function Results({ contest, sort }: { contest: Contest; sort?: string }) {
   )
 }
 
-function AdminEntry({ tapa, people }: { tapa?: Tapa; people: Person[] }) {
+function AdminEntry({
+  tapa,
+  people,
+}: {
+  tapa?: Tapa
+  people: (Person & { image?: string })[]
+}) {
   return (
     <ContestForm
       intent="admin-save"
@@ -144,32 +182,21 @@ function AdminEntry({ tapa, people }: { tapa?: Tapa; people: Person[] }) {
         Nombre de la tapa
         <input name="name" maxLength={80} required defaultValue={tapa?.name} />
       </label>
-      <label>
-        Autor o autora
-        <select
-          name="author"
-          required
-          defaultValue={tapa?.authors[0]?.id ?? ""}
-        >
-          <option value="">Elige un miembro</option>
-          {people.map(({ id, alias }) => (
-            <option key={id} value={id}>
-              {alias}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Coautor o coautora (opcional)
-        <select name="partner" defaultValue={tapa?.authors[1]?.id ?? ""}>
-          <option value="">En solitario</option>
-          {people.map(({ id, alias }) => (
-            <option key={id} value={id}>
-              {alias}
-            </option>
-          ))}
-        </select>
-      </label>
+      <PersonSelect
+        name="author"
+        label="Autor o autora"
+        required
+        placeholder="Elige un miembro"
+        defaultValue={tapa?.authors[0]?.id ?? ""}
+        options={people}
+      />
+      <PersonSelect
+        name="partner"
+        label="Coautor o coautora (opcional)"
+        placeholder="En solitario"
+        defaultValue={tapa?.authors[1]?.id ?? ""}
+        options={people}
+      />
     </ContestForm>
   )
 }
@@ -286,23 +313,37 @@ export default async function TapasContest({
     (actor.admin || (actor.member && (own || !registered)))
       ? await getMemberDirectory()
       : []
-  const available = (tapa?: Tapa) =>
-    directory.filter(
-      ({ id }) =>
-        !contest.tapas.some(
-          (entry) =>
-            entry !== tapa && entry.authors.some((author) => author.id === id)
-        )
-    )
-  const people = available(own || undefined).filter(
-    ({ id }) => id !== actor.member?.id
-  )
   const eligible =
     !assisted && actor.admin && round
       ? contest.roster.filter((person) => ballotOptions(contest, person).length)
       : []
 
   if (assisted && !actor.admin) redirect(contestPath)
+
+  const visibleTapas = assisted
+    ? []
+    : contest.phase === "registration" || canSeeResults(contest)
+      ? contest.tapas
+      : revealedPodium(contest).flatMap(({ tapas }) => tapas)
+  const avatars = await readMemberAvatars([
+    ...directory.map(({ id }) => id),
+    ...visibleTapas.flatMap(({ authors }) => authors.map(({ id }) => id)),
+    ...eligible.flatMap(({ memberId }) => (memberId ? [memberId] : [])),
+    ...(assisted && voter?.memberId ? [voter.memberId] : []),
+  ])
+  const available = (tapa?: Tapa) =>
+    directory
+      .filter(
+        ({ id }) =>
+          !contest.tapas.some(
+            (entry) =>
+              entry !== tapa && entry.authors.some((author) => author.id === id)
+          )
+      )
+      .map((person) => ({ ...person, image: avatars.get(person.id) }))
+  const people = available(own || undefined).filter(
+    ({ id }) => id !== actor.member?.id
+  )
 
   return (
     <main className={eventStyles.event}>
@@ -318,9 +359,18 @@ export default async function TapasContest({
             {assisted ? "Papeleta de tapas" : "Concurso de tapas"}
           </h1>
           <p className={eventStyles.details}>
-            {assisted && voter
-              ? voter.alias
-              : "Letux · 30 de diciembre de 2026"}
+            {assisted && voter ? (
+              <span className="member-name">
+                <MemberAvatar
+                  compact
+                  alias={voter.alias}
+                  image={avatars.get(voter.memberId ?? "") ?? null}
+                />
+                {voter.alias}
+              </span>
+            ) : (
+              "Letux · 30 de diciembre de 2026"
+            )}
           </p>
         </header>
         <div className={eventStyles.eventActions}>
@@ -370,6 +420,12 @@ export default async function TapasContest({
                             authors={tapa.authors
                               .map(({ alias }) => alias)
                               .join(" y ")}
+                            authorNames={
+                              <AuthorNames
+                                authors={tapa.authors}
+                                avatars={avatars}
+                              />
+                            }
                             edit={
                               actor.admin ? (
                                 <AdminEntry
@@ -394,24 +450,15 @@ export default async function TapasContest({
                                       nombre hasta que se abra la votación.
                                     </small>
                                   </label>
-                                  <label>
-                                    Coautor o coautora (opcional)
-                                    <select
-                                      name="partner"
-                                      defaultValue={tapa.authors[1]?.id ?? ""}
-                                    >
-                                      <option value="">En solitario</option>
-                                      {available(tapa)
-                                        .filter(
-                                          ({ id }) => id !== actor.member?.id
-                                        )
-                                        .map(({ id, alias }) => (
-                                          <option key={id} value={id}>
-                                            {alias}
-                                          </option>
-                                        ))}
-                                    </select>
-                                  </label>
+                                  <PersonSelect
+                                    name="partner"
+                                    label="Coautor o coautora (opcional)"
+                                    placeholder="En solitario"
+                                    defaultValue={tapa.authors[1]?.id ?? ""}
+                                    options={available(tapa).filter(
+                                      ({ id }) => id !== actor.member?.id
+                                    )}
+                                  />
                                 </ContestForm>
                               ) : tapa.authors.some(
                                   ({ id }) => id === actor.member?.id
@@ -481,17 +528,12 @@ export default async function TapasContest({
                             que se abra la votación.
                           </small>
                         </label>
-                        <label>
-                          Coautor o coautora (opcional)
-                          <select name="partner" defaultValue="">
-                            <option value="">En solitario</option>
-                            {people.map(({ id, alias }) => (
-                              <option key={id} value={id}>
-                                {alias}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
+                        <PersonSelect
+                          name="partner"
+                          label="Coautor o coautora (opcional)"
+                          placeholder="En solitario"
+                          options={people}
+                        />
                       </ContestForm>
                     </>
                   ) : actor.admin || actor.member ? null : (
@@ -551,7 +593,7 @@ export default async function TapasContest({
                 </section>
               )}
               {canSeeResults(contest) && (
-                <Results contest={contest} sort={sort} />
+                <Results contest={contest} sort={sort} avatars={avatars} />
               )}
               {!canSeeResults(contest) &&
                 revealedPodium(contest)
@@ -566,7 +608,7 @@ export default async function TapasContest({
                         {tapas.map(({ id, name, authors }) => (
                           <li key={id}>
                             <strong>{name}</strong> ·{" "}
-                            {authors.map(({ alias }) => alias).join(" y ")}
+                            <AuthorNames authors={authors} avatars={avatars} />
                           </li>
                         ))}
                       </ul>
@@ -610,19 +652,18 @@ export default async function TapasContest({
                     )}
                   {round && eligible.length > 0 && (
                     <form className={styles.form} action={contestPath}>
-                      <label>
-                        Preparar voto asistido
-                        <select name="assisted" required defaultValue="">
-                          <option value="" disabled>
-                            Elige un asistente
-                          </option>
-                          {eligible.map(({ id, alias }) => (
-                            <option key={id} value={id}>
-                              {alias}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
+                      <PersonSelect
+                        name="assisted"
+                        label="Preparar voto asistido"
+                        required
+                        placeholder="Elige un asistente"
+                        options={eligible.map((person) => ({
+                          ...person,
+                          image: person.memberId
+                            ? avatars.get(person.memberId)
+                            : undefined,
+                        }))}
+                      />
                       <button type="submit">
                         Abrir papeleta en este móvil
                       </button>

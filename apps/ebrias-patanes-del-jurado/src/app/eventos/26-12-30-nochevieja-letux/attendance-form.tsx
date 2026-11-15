@@ -12,6 +12,7 @@ import {
 } from "react"
 import { notifyAction } from "@/features/feedback/actions-client"
 import { DialogActions } from "@/features/feedback/feedback"
+import { MemberAvatar } from "@/features/members/member-avatar"
 import {
   addAttendanceBlock,
   addEventCar,
@@ -25,7 +26,7 @@ import {
 import styles from "./page.module.css"
 
 type Block = { id: string; label: string }
-type Member = { id: string; alias: string }
+type Member = { id: string; alias: string; image?: string | null }
 type Attendee = Member & { status: string; memberId?: string }
 
 export function AttendanceBoard({
@@ -244,7 +245,7 @@ function AttendanceSection({
               </button>
             ) : null}
             <ul className={styles.memberResults}>
-              {matches.map(({ id, alias }) => (
+              {matches.map(({ id, alias, image }) => (
                 <li key={id}>
                   <button
                     type="submit"
@@ -252,6 +253,7 @@ function AttendanceSection({
                     value={id}
                     disabled={pending}
                   >
+                    <MemberAvatar compact alias={alias} image={image ?? null} />
                     {alias}
                   </button>
                 </li>
@@ -305,7 +307,10 @@ function AttendeeRow({
       onDragStart={canManage ? drag : undefined}
     >
       {canManage ? <span aria-hidden="true">⠿</span> : null}
-      <span className={styles.attendeeName}>{guest.alias}</span>
+      <span className={styles.attendeeName}>
+        <MemberAvatar compact alias={guest.alias} image={guest.image ?? null} />
+        {guest.alias}
+      </span>
       {canManage && (mode === "attendance" || guest.status !== "unassigned") ? (
         <RemoveEntry
           mode={mode}

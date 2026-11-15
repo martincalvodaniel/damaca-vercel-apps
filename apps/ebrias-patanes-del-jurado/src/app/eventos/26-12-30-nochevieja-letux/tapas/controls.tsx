@@ -372,10 +372,12 @@ export function Ballot({
 
 export function EntryControls({
   authors,
+  authorNames,
   edit,
   remove,
 }: {
   authors: string
+  authorNames: ReactNode
   edit?: ReactNode
   remove?: ReactNode
 }) {
@@ -384,7 +386,7 @@ export function EntryControls({
   return (
     <>
       <div className={styles.entryRow}>
-        <strong>{authors}</strong>
+        <strong>{authorNames}</strong>
         {edit ? (
           <button
             type="button"
