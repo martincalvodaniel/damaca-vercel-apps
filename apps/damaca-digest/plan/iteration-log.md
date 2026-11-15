@@ -15,3 +15,9 @@
 - Pasaron Biome, tipos y 41 pruebas de Digest. La prueba HTTP arrancó Next compilado con MongoDB 8 desechable. Verificó descubrimiento, JWT, intercambio OAuth con credenciales Basic y en formulario, captura completa/parcial/no disponible, revocación con token vigente, aislamiento de dos propietarios y seis escrituras concurrentes a la misma URL. Pasó también la prueba HTTP de roles y solicitudes de acceso. Se añadió el runner a CI.
 - El entorno de Digest carece de configuración Vercel y credenciales locales. El corte 02 queda bloqueado hasta disponer de un entorno HTTPS autorizado y de acceso a ChatGPT con escritura. Las pruebas locales usaron identidades y credenciales de prueba. Quedan por verificar Google y ChatGPT reales y el comportamiento geográfico en Vercel.
 - Better Auth ya crea su índice único de correo. La prueba con MongoDB detectó un conflicto al registrar un segundo índice equivalente y se retiró ese registro redundante.
+
+## 03a — Corregir la carga de MongoDB en desarrollo
+
+- [Aceptación](iterations.md#03a--corregir-la-carga-de-mongodb-en-desarrollo). Inicio en `int`, base `3639e81`, con una edición local ajena en `.env.example`. Capacidad inicial del 87% en 5h y 56% en 7d.
+- En el servidor local, `/` redirigía con 307 y `/auth/signin` devolvía 500 al resolver `mongodb-339f4168658c3edd`. Con los mismos módulos instalados y salidas nuevas, Next 16.4.6 reprodujo el 500 bajo Bun y Turbopack. Node y Turbopack devolvieron 200, al igual que Bun y Webpack.
+- Digest arranca Next con Node en desarrollo. El comando corregido se verificó en una copia aislada con credenciales ficticias y un puerto alternativo. `/` devolvió 307 y la página de acceso devolvió 200 con el botón de Google. Pasaron Biome, TypeScript y 41 pruebas. La prueba cubrió la carga de la pantalla de acceso.

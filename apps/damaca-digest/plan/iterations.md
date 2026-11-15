@@ -24,6 +24,14 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Dependencia: starter y validación local de protocolos y persistencia con un MongoDB desechable.
 - Aceptación: recorrido cliente OAuth/MCP de prueba → MongoDB → ficha para acceso completo, parcial y no disponible, con aislamiento entre cuentas y deduplicación concurrente. La aceptación con ChatGPT real queda en el corte 02.
 
+## 03a — Corregir la carga de MongoDB en desarrollo
+
+- Estado: `validated`.
+- Rutas: comando de desarrollo, documentación y registro de Digest.
+- Dependencia: Node instalado junto a Bun.
+- Aceptación: el comando habitual de desarrollo carga la pantalla de acceso tras redirigir desde `/`, sin errores de resolución del driver de MongoDB.
+- Validación: comparar Bun y Node con Turbopack y repetir el recorrido HTTP con el comando corregido.
+
 ## 04 — Entregar biblioteca y topics
 
 - Estado: `pending`.

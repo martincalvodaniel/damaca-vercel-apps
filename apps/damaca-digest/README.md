@@ -21,7 +21,7 @@ La regla corresponde al despliegue en Vercel; no se aplica al servidor local de 
 
 ## Arranque local
 
-Requisitos: Bun, una versión de Node compatible con el Next instalado y credenciales OAuth de Google. MongoDB es necesario para gestionar usuarios normales y comprobar su acceso.
+Requisitos: Bun, Node.js (24 en CI) y credenciales OAuth de Google. MongoDB es necesario para gestionar usuarios normales y comprobar su acceso.
 
 ```bash
 bun install --frozen-lockfile
@@ -43,8 +43,10 @@ Completa `.env.local` con valores propios de esta aplicación:
 Configura en Google el origen `http://localhost:3009` y la URI de retorno `http://localhost:3009/api/auth/callback/google`. Añade los orígenes y retornos correspondientes cuando despliegues y configura los usuarios de prueba si la pantalla de consentimiento lo requiere.
 
 ```bash
-bun run dev
+bun run dev --filter=@damaca/damaca-digest
 ```
+
+Ejecuta el comando desde la raíz del monorepo. El script de Digest arranca Next.js con Node para que Turbopack resuelva los módulos externos de servidor. Bun gestiona el workspace y ejecuta las pruebas.
 
 Abre [localhost:3009](http://localhost:3009). La ruta `/` requiere sesión y redirige a `/auth/signin`. Las variables de autenticación se leen al cargar su configuración: deben estar disponibles también durante la compilación. Los archivos `.env.local` y demás credenciales quedan fuera de Git; `.env.example` contiene únicamente ejemplos públicos.
 
