@@ -36,26 +36,31 @@ export async function createLibraryExport(
       controller.enqueue(encoder.encode(json ? "[\n" : "# Damaca Digest\n\n"))
     },
     async pull(controller) {
-      const next = await articles.next()
-      if (next.done) {
-        if (json) controller.enqueue(encoder.encode("\n]\n"))
-        controller.close()
-        return
-      }
+      try {
+        const next = await articles.next()
+        if (next.done) {
+          if (json) controller.enqueue(encoder.encode("\n]\n"))
+          controller.close()
+          return
+        }
 
-      const { value: article } = next
-      const snapshot = articleExport(
-        article,
-        labels(article.topicIds, article.proposedTopics ?? [])
-      )
-      const separator = first ? "" : json ? ",\n" : "\n---\n\n"
-      controller.enqueue(
-        encoder.encode(
-          separator +
-            (json ? JSON.stringify(snapshot) : articleMarkdown(snapshot, 2))
+        const { value: article } = next
+        const snapshot = articleExport(
+          article,
+          labels(article.topicIds, article.proposedTopics ?? [])
         )
-      )
-      first = false
+        const separator = first ? "" : json ? ",\n" : "\n---\n\n"
+        controller.enqueue(
+          encoder.encode(
+            separator +
+              (json ? JSON.stringify(snapshot) : articleMarkdown(snapshot, 2))
+          )
+        )
+        first = false
+      } catch (error) {
+        await articles.return(undefined).catch(() => undefined)
+        throw error
+      }
     },
     async cancel() {
       await articles.return(undefined)
