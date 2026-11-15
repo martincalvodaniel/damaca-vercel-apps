@@ -523,3 +523,27 @@ body:has(.club-nav) {
 .action-dialog-heading .action-accept {
   color: #176b35;
 }
+
+.member-avatar {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  margin-inline-end: 0.25rem;
+  vertical-align: middle;
+}
+
+.member-avatar img,
+.member-avatar-initials {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.member-avatar-initials {
+  color: #382116;
+  background: #ffe3a6;
+  font: 700 0.65rem system-ui;
+}

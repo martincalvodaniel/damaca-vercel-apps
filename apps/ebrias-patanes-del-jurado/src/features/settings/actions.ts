@@ -115,7 +115,7 @@ export async function updateAlias(_previous: string, form: FormData) {
 
   revalidatePath("/settings")
   revalidatePath("/eventos", "layout")
-  return "Alias guardado."
+  return ""
 }
 
 export async function changeMemberEmail(_previous: string, form: FormData) {

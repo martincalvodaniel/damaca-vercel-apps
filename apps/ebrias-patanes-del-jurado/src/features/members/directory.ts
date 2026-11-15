@@ -64,3 +64,27 @@ export async function getMemberDirectory() {
     }))
     .sort((a, b) => a.alias.localeCompare(b.alias, "es"))
 }
+
+export async function readMemberAvatars(ids: string[]) {
+  const avatars = new Map<string, string>()
+  if (!ids.length) return avatars
+  const members = await memberCollection()
+    .find(
+      { _id: { $in: ids }, email: { $exists: true } },
+      { projection: { email: 1 } }
+    )
+    .toArray()
+  const emails = members.flatMap(({ email }) => (email ? [email] : []))
+  if (!emails.length) return avatars
+  const users = await getDatabaseConnection()
+    .db.collection<{ email: string; image?: string }>("user")
+    .find({ email: { $in: emails } }, { projection: { email: 1, image: 1 } })
+    .toArray()
+  const images = new Map(users.map(({ email, image }) => [email, image]))
+  for (const { _id, email } of members) {
+    const image = email && images.get(email)
+    if (image && /^https:\/\/lh[0-9]+\.googleusercontent\.com\//u.test(image))
+      avatars.set(_id, image)
+  }
+  return avatars
+}

@@ -436,6 +436,7 @@ it("keeps the winner hidden until the shared deadline and blocks duplicate revea
   expect(revealAnnouncement(scheduled, 25000)).toEqual({
     place: 1,
     tie: false,
+    runoffVotes: 1,
     points: 20,
     revealedAt: 25000,
     expiresAt: 28000,
@@ -476,4 +477,55 @@ it("announces tied finalists after zero and opens runoff only after the announce
   expect(opened.phase).toBe("runoff")
   expect(ballotOptions(opened, roster[4])).toHaveLength(3)
   expect(canSeeResults(opened)).toBe(false)
+})
+
+it("shows only the winning runoff tally, including zero, in the final animation", () => {
+  const withoutRunoff: Contest = {
+    ...emptyContest(),
+    phase: "resolved",
+    winner: "First",
+  }
+  expect(
+    revealAnnouncement(
+      {
+        ...withoutRunoff,
+        countdown: { place: 1, startsAt: 12000, endsAt: 15000 },
+      },
+      15000
+    )?.runoffVotes
+  ).toBeNull()
+
+  const runoff = runoffFixture()
+  const zero = submit(
+    submit(runoff, admin, "resolve-runoff"),
+    admin,
+    "record-draw",
+    { winner: "First" }
+  )
+  const voted = submit(
+    submit(runoff, member("e"), "vote", {
+      round: "runoff",
+      choice: "First",
+    }),
+    admin,
+    "vote",
+    {
+      round: "runoff",
+      choice: "First",
+      assisted: "guest",
+    }
+  )
+  for (const [resolved, expected] of [
+    [zero, 0],
+    [submit(voted, admin, "resolve-runoff"), 2],
+  ] as const) {
+    const scheduled = submit(resolved, admin, "reveal", {
+      step: nextReveal(resolved)?.token ?? "",
+    })
+    expect(revealAnnouncement(scheduled, 14999)).toBeNull()
+    expect(revealAnnouncement(scheduled, 15000)?.runoffVotes).toBe(expected)
+    expect(
+      revealAnnouncement(scheduled, 15000)?.tapas.map(({ id }) => id)
+    ).toEqual(["First"])
+  }
 })

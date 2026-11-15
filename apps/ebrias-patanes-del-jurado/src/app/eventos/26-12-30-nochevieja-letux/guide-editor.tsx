@@ -60,7 +60,7 @@ function GuideForm({
       startTransition(async () => {
         try {
           const error = await saveGuide(baseRevision, draft)
-          notifyAction(error || "Guía guardada.")
+          if (error) notifyAction(error)
           if (!error) close()
         } catch {
           notifyAction(

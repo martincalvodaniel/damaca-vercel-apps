@@ -468,3 +468,10 @@
 - Rutas: revelación, papeletas y resultados de Tapas.
 - Aceptación: puntuación durante toda la animación, avatares al anunciar y cuenta atrás para el empate en cabeza. Los avances no muestran el aviso «Guardado».
 - Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-64 — Votos de la ganadora y avatares de miembros
+
+- Estado: `validated`.
+- Rutas: revelación de Tapas, avatares, Ajustes y avisos de Letux.
+- Aceptación: votos de la ganadora tras la cuenta atrás, avatares en Miembros y eliminación de los avisos genéricos de guardado.
+- Validación: Biome, tipos, pruebas de Tapas y build.

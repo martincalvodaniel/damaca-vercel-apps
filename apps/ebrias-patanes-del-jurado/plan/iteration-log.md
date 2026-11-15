@@ -2,14 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-53 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-54 — Recuperar el acceso tras un fallo inicial de MongoDB
-
-- Capacidad inicial de 96% en 5 h y 99% en 7 días.
-- La autenticación espera a que MongoDB conecte y comparte la inicialización entre peticiones. Un fallo descarta el intento y registra el tipo de error.
-- Prueba local temporal contra la ruta de sesión, con un proxy TCP y MongoDB 8. Antes del cambio, la primera petición devolvió HTTP 500 y fallaron las 12 lecturas posteriores. Con el cambio, la primera devolvió HTTP 503 y las 12 lecturas concurrentes recuperaron la sesión en el mismo proceso.
-- Biome sobre los tres archivos TypeScript, tipos, 12 pruebas de Ebrias, build y `git diff --check` correctos. Pendiente probar OAuth con una cuenta autorizada en un despliegue de integración.
+[Entregas EPJ-08 a EPJ-54 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-55 — Lista de la compra de Letux
 
@@ -58,3 +51,8 @@
 
 - Capacidad inicial de 98% en 5 h y 87% en 7 días. La animación muestra los puntos y solo al llegar a cero anuncia los autores con sus avatares. El empate en cabeza abre la votación tras el anuncio.
 - Biome, tipos, trece pruebas de Tapas y build correctos. La prueba cubre la ocultación de finalistas y la apertura del desempate al expirar el anuncio. Pendiente la comprobación visual con dos sesiones.
+
+## EPJ-64 — Votos de la ganadora y avatares de miembros
+
+- Capacidad inicial de 87% en 5 h y 86% en 7 días. La animación muestra el recuento de la ganadora tras la cuenta atrás. Ajustes y Tapas comparten el avatar con iniciales de respaldo. Se retiran los avisos genéricos de guardado.
+- Biome, tipos, catorce pruebas de Tapas y build correctos. Las pruebas cubren cero, uno, varios votos y ausencia de desempate. Pendiente la revisión visual con una sesión autenticada.

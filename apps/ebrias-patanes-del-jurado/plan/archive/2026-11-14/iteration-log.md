@@ -269,3 +269,10 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 
 - Capacidad inicial de 66% en 5 h y 4% en 7 días. Los controles pasan a 28 px sin relleno ni margen y se reduce el hueco de cabecera.
 - Biome, tipos y build correctos.
+
+## EPJ-54 — Recuperar el acceso tras un fallo inicial de MongoDB
+
+- Capacidad inicial de 96% en 5 h y 99% en 7 días.
+- La autenticación espera a que MongoDB conecte y comparte la inicialización entre peticiones. Un fallo descarta el intento y registra el tipo de error.
+- Prueba local temporal contra la ruta de sesión, con un proxy TCP y MongoDB 8. Antes del cambio, la primera petición devolvió HTTP 500 y fallaron las 12 lecturas posteriores. Con el cambio, la primera devolvió HTTP 503 y las 12 lecturas concurrentes recuperaron la sesión en el mismo proceso.
+- Biome sobre los tres archivos TypeScript, tipos, 12 pruebas de Ebrias, build y `git diff --check` correctos. Pendiente probar OAuth con una cuenta autorizada en un despliegue de integración.

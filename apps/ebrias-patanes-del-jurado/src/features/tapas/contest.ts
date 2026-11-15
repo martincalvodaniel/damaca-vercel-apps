@@ -189,6 +189,10 @@ export function revealAnnouncement(stored: Contest, now: number) {
   return {
     place: countdown.place,
     tie,
+    runoffVotes:
+      countdown.place === 1 && !tie && contest.winner
+        ? (finalRunoffCounts(contest).get(contest.winner) ?? null)
+        : null,
     points: score ? score.total / score.count : null,
     revealedAt: countdown.endsAt,
     expiresAt: countdown.endsAt + 3000,

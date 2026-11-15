@@ -1,14 +1,8 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import {
-  Fragment,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from "react"
+import { Fragment, useEffect, useRef, useState, useTransition } from "react"
+import { MemberAvatar } from "@/features/members/member-avatar"
 import type {
   publicCountdown,
   revealAnnouncement,
@@ -46,41 +40,6 @@ function RevealPoints({ points }: { points: number | null }) {
   return points === null ? null : (
     <span className={styles.revealPoints}>
       {scoreFormat.format(points)} / 40 puntos
-    </span>
-  )
-}
-
-function AuthorAvatar({ author }: { author: AwardAuthor }) {
-  const [brokenImage, setBrokenImage] = useState<string | null>(null)
-  const onError = useCallback(
-    () => setBrokenImage(author.image),
-    [author.image]
-  )
-  const initials = author.alias
-    .trim()
-    .split(/\s+/u)
-    .slice(0, 2)
-    .map((word) => Array.from(word)[0])
-    .join("")
-    .toLocaleUpperCase("es")
-  return (
-    <span className={styles.awardAuthor}>
-      {author.image && author.image !== brokenImage ? (
-        // biome-ignore lint/performance/noImgElement: Google avatars are small external images.
-        <img
-          src={author.image}
-          width={24}
-          height={24}
-          alt=""
-          referrerPolicy="no-referrer"
-          onError={onError}
-        />
-      ) : (
-        <span className={styles.awardInitials} aria-hidden="true">
-          {initials || "?"}
-        </span>
-      )}
-      {author.alias}
     </span>
   )
 }
@@ -181,6 +140,12 @@ export function RevealSync({
             {award.tie ? "¡Empate en el primer puesto!" : labels[award.place]}
           </strong>
           <RevealPoints points={award.points} />
+          {award.runoffVotes !== null ? (
+            <span className={styles.revealPoints}>
+              {award.runoffVotes} {award.runoffVotes === 1 ? "voto" : "votos"}{" "}
+              de desempate
+            </span>
+          ) : null}
           <ul>
             {award.tapas.map(({ id, name, authors }) => (
               <li key={id}>
@@ -188,7 +153,8 @@ export function RevealSync({
                 {authors.map((author, index) => (
                   <Fragment key={author.id}>
                     {index > 0 ? " y " : null}
-                    <AuthorAvatar author={author} />
+                    <MemberAvatar alias={author.alias} image={author.image} />
+                    {author.alias}
                   </Fragment>
                 ))}
                 )
