@@ -45,7 +45,7 @@ export function Confirmation({
           ✓
         </button>
       </header>
-      <p>{children}</p>
+      <div className="action-confirmation-copy">{children}</div>
     </dialog>
   )
 }

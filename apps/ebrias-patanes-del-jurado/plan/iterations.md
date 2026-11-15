@@ -496,3 +496,17 @@
 - Rutas: lista compartida de asistentes y coches de Letux.
 - Aceptación: las listas de coches reutilizan las dos columnas de asistencia.
 - Validación: Biome, tipos y build.
+
+## EPJ-68 — Arrastre y subelementos de compra
+
+- Estado: `validated`.
+- Rutas: lista compartida de Letux.
+- Aceptación: arrastre visible, un nivel de anidación, marcas independientes y borrado de grupo confirmado.
+- Validación: Biome, tipos, pruebas de jerarquía y build.
+
+## EPJ-69 — Lista de productos en la confirmación
+
+- Estado: `validated`.
+- Rutas: confirmación de borrado de compra.
+- Aceptación: texto singular para un producto y lista anidada para un grupo.
+- Validación: Biome, tipos y build.
