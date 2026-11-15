@@ -11,7 +11,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Damaca Secrets is a personal credential vault. Keep the accepted security and product boundaries in the app plan.
 - All generated or edited code, identifiers, code comments, technical error messages, and commit messages must be in English.
 - Communicate with the user in their language. README and product planning may be in Spanish.
-- The app UI language is English, as recorded in `plan/master.md`. Keep all visible copy, validation messages, accessibility text, and HTML `lang="en"` in English. Change the UI language only when explicitly requested; no localization framework is installed.
+- The app UI supports Spanish (default) and English. Keep visible copy, validation messages, accessible names, and document language in sync with the selected locale. Define translations in the app catalogs.
 - Read applicable nested `AGENTS.md` files before editing their directories. Nested rules add scoped constraints without weakening root boundaries.
 
 ## Agent Workflow
@@ -78,6 +78,7 @@ src/hooks/                       Global client hooks, created when needed
 ## Definition of Done
 
 For code, configuration, or package changes:
+
 - Correct paths and client/server directives; no server-only imports reachable from a client component.
 - Existing components reused; new components extracted and scoped correctly.
 - Inputs validated, operations authorized, persistence routed through the singleton, and index needs evaluated where applicable.

@@ -5,6 +5,8 @@ import { OfflineSettings } from "@/features/offline/offline-settings"
 import { buttonClass } from "@/features/vault/components/styles"
 import { canUsePasskeys } from "@/features/vault/passkeys"
 import type { VaultController } from "@/features/vault/use-vault"
+import { useLocale } from "@/lib/i18n/client"
+import { formatMessage } from "@/lib/i18n/messages"
 import { MAX_PASSKEYS } from "@/schemas/vault"
 
 interface VaultControlsProps {
@@ -13,12 +15,12 @@ interface VaultControlsProps {
 }
 
 export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
+  const { t } = useLocale()
   const { addPasskey, busy, removePasskeys } = vault
   const count = vault.snapshot?.encrypted?.passkeys.length ?? 0
   const remove = useCallback(() => {
-    if (window.confirm("Remove all passkeys from this vault?"))
-      void removePasskeys()
-  }, [removePasskeys])
+    if (window.confirm(t.confirmRemovePasskeys)) void removePasskeys()
+  }, [removePasskeys, t.confirmRemovePasskeys])
 
   return (
     <>
@@ -29,7 +31,7 @@ export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
           disabled={busy}
           className={buttonClass}
         >
-          Change master password
+          {t.changeMasterPassword}
         </button>
         {canUsePasskeys() && count < MAX_PASSKEYS ? (
           <button
@@ -38,7 +40,7 @@ export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
             disabled={busy}
             className={buttonClass}
           >
-            Add passkey
+            {t.addPasskey}
           </button>
         ) : null}
         {count > 0 ? (
@@ -48,7 +50,7 @@ export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
             disabled={busy}
             className={buttonClass}
           >
-            Remove passkeys ({count})
+            {formatMessage(t.removePasskeys, { count })}
           </button>
         ) : null}
       </div>

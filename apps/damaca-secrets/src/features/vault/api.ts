@@ -1,3 +1,4 @@
+import type { MessageKey } from "@/lib/i18n/messages"
 import {
   type EncryptedVault,
   VAULT_BODY_LIMIT,
@@ -7,15 +8,21 @@ import {
 
 export class VaultRequestError extends Error {
   constructor(readonly status: number) {
-    super(
-      status === 409
-        ? "The vault changed on another device. Reload the latest version before editing."
-        : status === 413
-          ? "The vault has reached its storage limit."
-          : status === 401 || status === 403
-            ? "Your access has ended. Sign in again to continue."
-            : "The vault could not be reached. Try again."
-    )
+    super(`Vault request failed with status ${status}`)
+  }
+
+  get code(): MessageKey {
+    switch (this.status) {
+      case 409:
+        return "vaultConflict"
+      case 413:
+        return "vaultLimit"
+      case 401:
+      case 403:
+        return "accessEnded"
+      default:
+        return "vaultUnreachable"
+    }
   }
 }
 

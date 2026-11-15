@@ -21,37 +21,33 @@ export async function reviewAccessRequest(
     if ((await dependencies.getActorRole()) !== "admin")
       return {
         status: "error",
-        message: "You do not have administrator permissions.",
+        code: "adminRequired",
       }
     const parsed = resolveAccessRequestSchema.safeParse(input)
     if (!parsed.success)
       return {
         status: "error",
-        message: "Invalid decision. Refresh the list.",
+        code: "invalidDecision",
       }
     const { email, requestId, decision } = parsed.data
     if (dependencies.isAdminEmail(email))
       return {
         status: "error",
-        message: "Administrators are managed through ALLOWED_EMAILS.",
+        code: "adminManagedEnvironment",
       }
     if (!(await dependencies.resolve(email, requestId, decision)))
       return {
         status: "error",
-        message:
-          "This request has changed. Refresh the list before reviewing it.",
+        code: "requestChanged",
       }
     return {
       status: "success",
-      message:
-        decision === "approve"
-          ? "Request approved. User access granted."
-          : "Request rejected.",
+      code: decision === "approve" ? "requestApproved" : "requestRejected",
     }
   } catch {
     return {
       status: "error",
-      message: "Could not review the request. Please try again.",
+      code: "reviewFailed",
     }
   }
 }

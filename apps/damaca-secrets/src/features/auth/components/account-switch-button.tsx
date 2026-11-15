@@ -4,9 +4,11 @@ import { useRouter } from "next/navigation"
 import { useCallback, useState } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { authClient } from "@/lib/auth/auth-client"
+import { useLocale } from "@/lib/i18n/client"
 import { clearOfflineVault } from "@/lib/offline/storage"
 
 export function AccountSwitchButton() {
+  const { t } = useLocale()
   const router = useRouter()
   const [pending, setPending] = useState(false)
   const [error, setError] = useState(false)
@@ -32,11 +34,9 @@ export function AccountSwitchButton() {
         disabled={pending}
         className="min-h-9 rounded-lg border border-zinc-300 px-3 py-1 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60 dark:border-zinc-700"
       >
-        {pending ? "Signing out…" : "Use another account"}
+        {pending ? t.signingOut : t.switchAccount}
       </button>
-      {error ? (
-        <ErrorBanner>Could not sign out. Please try again.</ErrorBanner>
-      ) : null}
+      {error ? <ErrorBanner>{t.signOutFailed}</ErrorBanner> : null}
     </div>
   )
 }

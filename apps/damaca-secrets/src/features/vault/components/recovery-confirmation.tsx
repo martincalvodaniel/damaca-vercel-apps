@@ -3,6 +3,9 @@
 import { type FormEvent, useCallback, useState } from "react"
 import { IconButton } from "@/components/ui/icon-button"
 import { primaryClass } from "@/features/vault/components/styles"
+import { useLocale } from "@/lib/i18n/client"
+import { useFormValidation } from "@/lib/i18n/form-validation"
+import type { MessageKey } from "@/lib/i18n/messages"
 
 interface RecoveryConfirmationProps {
   busy: boolean
@@ -17,13 +20,15 @@ export function RecoveryConfirmation({
   onCancel,
   onConfirm,
 }: RecoveryConfirmationProps) {
-  const [copyStatus, setCopyStatus] = useState("")
+  const { t } = useLocale()
+  const formValidation = useFormValidation()
+  const [copyStatus, setCopyStatus] = useState<MessageKey>()
   const copy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(code)
-      setCopyStatus("Recovery code copied.")
+      setCopyStatus("recoveryCodeCopied")
     } catch {
-      setCopyStatus("Select and copy the recovery code manually.")
+      setCopyStatus("recoveryCopyFailed")
     }
   }, [code])
 
@@ -36,11 +41,8 @@ export function RecoveryConfirmation({
   )
 
   return (
-    <form className="grid max-w-md gap-3" onSubmit={submit}>
-      <p className="text-sm">
-        Save this code somewhere safe outside Damaca Secrets. It lets you regain
-        access if you forget your master password.
-      </p>
+    <form {...formValidation} className="grid max-w-md gap-3" onSubmit={submit}>
+      <p className="text-sm">{t.recoverySaveHelp}</p>
       <code className="break-all rounded-lg border border-zinc-300 p-3 text-base select-all dark:border-zinc-700">
         {code}
       </code>
@@ -50,26 +52,26 @@ export function RecoveryConfirmation({
           onClick={copy}
           icon="copy"
           tone="utility"
-          label="Copy recovery code"
+          label={t.copyRecoveryCode}
         />
         <span role="status" className="text-sm">
-          {copyStatus}
+          {copyStatus ? t[copyStatus] : null}
         </span>
       </div>
       <label className="flex min-h-9 items-center gap-2 text-sm">
-        <input name="saved" type="checkbox" required className="size-5" />I
-        saved my recovery code.
+        <input name="saved" type="checkbox" required className="size-5" />
+        {t.recoverySaved}
       </label>
       <div className="flex gap-2">
         <button type="submit" disabled={busy} className={primaryClass}>
-          Save vault
+          {t.saveVault}
         </button>
         <IconButton
           type="button"
           disabled={busy}
           onClick={onCancel}
           icon="close"
-          label="Cancel setup"
+          label={t.cancelSetup}
           tone="danger"
         />
       </div>

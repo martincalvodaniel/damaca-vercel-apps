@@ -11,6 +11,7 @@ import {
   listAccessRequests,
   revokeUserAccess,
 } from "@/lib/db/user-access"
+import { localeCookie } from "@/lib/i18n/locale"
 import { vaultReadSchema } from "@/schemas/vault"
 
 const configuration = getAuthEnv()
@@ -146,6 +147,16 @@ try {
   assert.ok(authorization.searchParams.get("state"))
   assert.equal(authorization.searchParams.get("code_challenge_method"), "S256")
 
+  for (const [cookie, language, label] of [
+    [undefined, "es", "Continuar con Google"],
+    [`${localeCookie}=fr`, "es", "Continuar con Google"],
+    [`${localeCookie}=en`, "en", "Continue with Google"],
+  ] as const) {
+    const signInHtml = await (await request("/auth/signin", cookie)).text()
+    assert.ok(signInHtml.includes(`<html lang="${language}"`))
+    assert.ok(signInHtml.includes(label))
+  }
+
   const admin = await createCookie("admin@example.com")
   const user = await createCookie("normal@example.com")
   const unverified = await createCookie("unverified@example.com", false)
@@ -154,7 +165,9 @@ try {
   const adminResponse = await request("/admin", admin)
   assert.equal(adminResponse.status, 200)
   const adminHtml = await adminResponse.text()
-  assert.ok(adminHtml.includes("Site administration"))
+  assert.ok(adminHtml.includes("Administración del sitio"))
+  const englishAdmin = await request("/admin", `${admin}; ${localeCookie}=en`)
+  assert.ok((await englishAdmin.text()).includes("Site administration"))
   const adminSettings = await request("/settings", admin)
   assert.equal(adminSettings.status, 200)
   const adminSettingsHtml = await adminSettings.text()
@@ -179,7 +192,7 @@ try {
   const home = await request("/", user)
   assert.equal(home.status, 200)
   const homeHtml = await home.text()
-  assert.ok(homeHtml.includes("Vault"))
+  assert.ok(homeHtml.includes("Bóveda"))
   assert.ok(!homeHtml.includes('href="/admin"'))
   assert.equal((await request("/api/vault")).status, 401)
   const userVault = vaultReadSchema.parse(
@@ -274,7 +287,7 @@ try {
   const requestResponse = await request("/auth/access", outsider)
   assert.equal(requestResponse.status, 200)
   const requestHtml = await requestResponse.text()
-  assert.ok(requestHtml.includes("Request access"))
+  assert.ok(requestHtml.includes("Solicitar acceso"))
   assert.ok(
     (await request("/auth/signin", outsider)).headers
       .get("location")
@@ -319,7 +332,7 @@ try {
   )
   assert.equal(await getAccessRequestStatus(firstRequest.email), "rejected")
   const rejectedHtml = await (await request("/auth/access", outsider)).text()
-  assert.ok(rejectedHtml.includes("rejected"))
+  assert.ok(rejectedHtml.includes("Tu solicitud fue rechazada."))
   await request(
     "/auth/access",
     outsider,

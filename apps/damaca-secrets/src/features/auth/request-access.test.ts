@@ -65,6 +65,6 @@ describe("access requests", () => {
       }
     )
     expect(result.status).toBe("error")
-    expect(result.message).not.toContain("private")
+    expect(result).toEqual({ status: "error", code: "sendRequestFailed" })
   })
 })

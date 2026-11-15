@@ -6,8 +6,11 @@ import {
   requireVerifiedSession,
 } from "@/lib/auth/session"
 import { getAccessRequestStatus } from "@/lib/db/user-access"
+import { messages } from "@/lib/i18n/messages"
+import { getLocale } from "@/lib/i18n/server"
 
 export async function AccessRequestScreen() {
+  const t = messages[await getLocale()]
   const session = await requireVerifiedSession()
   if (await getAuthorizedSession()) redirect("/")
   try {
@@ -18,8 +21,6 @@ export async function AccessRequestScreen() {
       />
     )
   } catch {
-    return (
-      <ErrorBanner>Could not load your request. Please try again.</ErrorBanner>
-    )
+    return <ErrorBanner>{t.loadRequestFailed}</ErrorBanner>
   }
 }

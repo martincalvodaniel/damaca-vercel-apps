@@ -9,6 +9,8 @@ import { UnlockForm } from "@/features/vault/components/unlock-form"
 import { VaultEntries } from "@/features/vault/components/vault-entries"
 import { decryptEntries, unlockPassword } from "@/features/vault/crypto"
 import { useIdleLock } from "@/features/vault/use-idle-lock"
+import { useLocale } from "@/lib/i18n/client"
+import { formatOfflineDates, type MessageKey } from "@/lib/i18n/messages"
 import {
   readOfflineVault,
   subscribeToOfflineReset,
@@ -19,24 +21,27 @@ import {
 } from "@/schemas/offline-vault"
 import type { VaultEntry } from "@/schemas/vault"
 
-const reconnect = "Reconnect to sync this vault."
-const expiry = "Offline access expired. Reconnect to sync this vault."
+const reconnect = "reconnect"
+const expiry = "offlineExpired"
 
 export function OfflineScreen() {
+  const { locale, t } = useLocale()
   const [snapshot, setSnapshot] = useState<OfflineSnapshot>()
   const [entries, setEntries] = useState<VaultEntry[]>()
   const [busy, setBusy] = useState(false)
-  const [status, setStatus] = useState("Checking offline access…")
-  const [error, setError] = useState("")
+  const [status, setStatus] = useState<MessageKey | undefined>(
+    "checkingOffline"
+  )
+  const [error, setError] = useState<MessageKey>()
   const epoch = useRef(0)
 
   const lock = useCallback(() => {
     epoch.current++
     setEntries(undefined)
-    setError("")
+    setError(undefined)
   }, [])
   const invalidate = useCallback(
-    (message: string) => {
+    (message: MessageKey) => {
       lock()
       setSnapshot(undefined)
       setStatus(message)
@@ -71,11 +76,11 @@ export function OfflineScreen() {
           [401, 403].includes(error.status)
         ) {
           denied = true
-          invalidate("Your access has ended. Sign in again to continue.")
+          invalidate("accessEnded")
           return
         }
         if (!isTransportFailure(error)) {
-          invalidate("Could not verify access. Try again when connected.")
+          invalidate("verifyAccessFailed")
           return
         }
         if (denied) return
@@ -85,7 +90,7 @@ export function OfflineScreen() {
         else if (!isOfflineSnapshotUsable(local)) invalidate(expiry)
         else {
           setSnapshot(local)
-          setStatus("")
+          setStatus(undefined)
         }
       } finally {
         checking = false
@@ -139,7 +144,7 @@ export function OfflineScreen() {
     async (method: "password" | "passkey", password = "") => {
       if (method !== "password" || !snapshot || busy) return false
       setBusy(true)
-      setError("")
+      setError(undefined)
       const current = epoch.current
       try {
         if (!isOfflineSnapshotUsable(snapshot)) {
@@ -171,8 +176,7 @@ export function OfflineScreen() {
         setEntries(values)
         return true
       } catch {
-        if (epoch.current === current)
-          setError("Could not unlock with that master password.")
+        if (epoch.current === current) setError("unlockPasswordFailed")
         return false
       } finally {
         setBusy(false)
@@ -187,28 +191,34 @@ export function OfflineScreen() {
       className="mx-auto grid w-full max-w-3xl gap-3 px-3 py-3 sm:px-6 sm:py-5"
     >
       <header className="flex min-h-9 items-center justify-between gap-2">
-        <h1 className="text-xl font-semibold tracking-tight">Offline vault</h1>
+        <h1 className="text-xl font-semibold tracking-tight">
+          {t.offlineVault}
+        </h1>
         {entries ? (
           <IconButton
             icon="lock"
             tone="security"
-            label="Lock vault"
+            label={t.lockVault}
             onClick={lock}
           />
         ) : null}
       </header>
       {status ? (
         <p role="status" className="text-sm">
-          {status}
+          {t[status]}
         </p>
       ) : null}
       {snapshot ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          Read-only copy. Synced {new Date(snapshot.checkedAt).toLocaleString()}
-          . Available until {new Date(snapshot.expiresAt).toLocaleString()}.
+          {formatOfflineDates(
+            locale,
+            snapshot.checkedAt,
+            snapshot.expiresAt,
+            true
+          )}
         </p>
       ) : null}
-      {error ? <ErrorBanner>{error}</ErrorBanner> : null}
+      {error ? <ErrorBanner>{t[error]}</ErrorBanner> : null}
       {snapshot && !entries ? (
         <UnlockForm busy={busy} hasPasskey={false} onUnlock={unlock} />
       ) : null}

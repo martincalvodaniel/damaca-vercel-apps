@@ -13,6 +13,7 @@ import { IconButton } from "@/components/ui/icon-button"
 import { EntryDetail } from "@/features/vault/components/entry-detail"
 import { EntryForm } from "@/features/vault/components/entry-form"
 import { inputClass } from "@/features/vault/components/styles"
+import { useLocale } from "@/lib/i18n/client"
 import type { VaultEntry } from "@/schemas/vault"
 
 interface VaultEntriesProps {
@@ -28,6 +29,7 @@ export function VaultEntries({
   onLock,
   onUpdate,
 }: VaultEntriesProps) {
+  const { t } = useLocale()
   const formId = useId()
   const [query, setQuery] = useState("")
   const [selected, setSelected] = useState<string>()
@@ -73,19 +75,19 @@ export function VaultEntries({
   )
 
   const remove = useCallback(async () => {
-    if (!current || !window.confirm("Delete this credential?")) return
+    if (!current || !window.confirm(t.confirmDeleteEntry)) return
     if (await onUpdate?.(entries.filter(({ id }) => id !== current.id))) back()
-  }, [back, current, entries, onUpdate])
+  }, [back, current, entries, onUpdate, t.confirmDeleteEntry])
 
   const header = (actions?: ReactNode) =>
     onLock ? (
       <header className="flex min-h-9 items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-semibold tracking-tight">Vault</h1>
+          <h1 className="text-xl font-semibold tracking-tight">{t.vault}</h1>
           <IconButton
             icon="lock"
             tone="security"
-            label="Lock vault"
+            label={t.lockVault}
             onClick={onLock}
           />
         </div>
@@ -103,14 +105,14 @@ export function VaultEntries({
               form={formId}
               disabled={busy}
               icon="save"
-              label="Save entry"
+              label={t.saveEntry}
               tone="primary"
             />
             <IconButton
               disabled={busy}
               onClick={cancel}
               icon="close"
-              label="Cancel editing"
+              label={t.cancelEditing}
               tone="danger"
             />
           </>
@@ -144,13 +146,13 @@ export function VaultEntries({
   return (
     <>
       {header()}
-      <section aria-label="Saved credentials" className="grid gap-2">
+      <section aria-label={t.savedCredentials} className="grid gap-2">
         <div className="flex items-center gap-2">
           <input
-            aria-label="Search credentials"
+            aria-label={t.searchCredentials}
             type="search"
             className={inputClass}
-            placeholder="Search credentials"
+            placeholder={t.searchCredentials}
             value={query}
             onChange={search}
           />
@@ -160,7 +162,7 @@ export function VaultEntries({
               onClick={add}
               disabled={busy}
               icon="add"
-              label="Add entry"
+              label={t.addEntry}
               tone="primary"
             />
           ) : null}
@@ -194,9 +196,7 @@ export function VaultEntries({
           </ul>
         ) : (
           <p className="rounded-xl border border-dashed border-zinc-300 p-3 text-sm text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
-            {entries.length
-              ? "No matching credentials."
-              : "No saved credentials yet."}
+            {entries.length ? t.noMatches : t.noEntries}
           </p>
         )}
       </section>

@@ -1,6 +1,13 @@
 # Delivery log
 
-Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02.
+Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline consultation](archive/2026-11-15/iteration-log.md#03--offline-consultation) for iteration 03.
+
+## 13 — Spanish and English interface
+
+- Starting capacity on 2026-11-15 at approximately 15:49 CET: 89% of 5 hours and 71% of 7 days.
+- Added the browser language selector, Spanish default, typed catalogs, translated forms and feedback, and locale-aware document metadata. The cached offline shell stays public and reads the browser preference.
+- Passed Biome for the changed source and integration files, TypeScript, 45 Bun tests, compiled HTTP integration against disposable MongoDB, and Webpack builds for the default and int installation names. Checked served manifest links, names, and icon dimensions.
+- Chrome at 320 and 1200 CSS pixels confirmed both languages, accessible labels and validation, persistence after reload and account switch, and read-only offline reopening and unlock after stopping the server. The checks used synthetic sessions. Physical Android installation and live Google consent were outside these local checks.
 
 ## 12 — Deployment README cleanup
 
@@ -12,12 +19,6 @@ Record observed evidence for completed iterations here. See [archived evidence](
 
 - Documented browser-side AES-GCM encryption, the MongoDB snapshot, password/passkey/recovery key wrapping, and security boundaries in the README; added Mermaid storage and unlock diagrams.
 - Checked implementation details against `crypto.ts`, `use-vault.ts`, the API route, and Mongo repository. `git diff --check` passed. No application tests were run for this documentation-only change.
-
-## 03 — Offline consultation
-
-- Starting capacity: 75% of 5 hours and 42% of 7 days.
-- Added opt-in IndexedDB storage for the encrypted password-unlock snapshot, a build-versioned neutral shell, and a runtime lease with a 24-hour default. Account changes, denied access, sign-out, and opt-out clear the snapshot.
-- Passed scoped Biome, TypeScript, 42 Bun tests, and the Webpack production build. Chrome at 320 CSS pixels reopened the normal URL after stopping the server, unlocked read-only data, expired a shortened configurable lease, and removed the snapshot after online denial. Cache Storage contained only the neutral shell and build assets. The IndexedDB fixture contained neither plaintext nor passkey and recovery wrappers.
 
 ## 04 — Vercel preview and device acceptance
 

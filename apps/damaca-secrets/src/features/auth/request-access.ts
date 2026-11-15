@@ -23,24 +23,24 @@ export async function requestAccess(
     if (!email.success)
       return {
         status: "error",
-        message: "Sign in with a verified Google account to request access.",
+        code: "verifiedGoogleRequired",
       }
     if (!submitAccessRequestSchema.safeParse(input).success)
-      return { status: "error", message: "Invalid request." }
+      return { status: "error", code: "invalidRequest" }
     if (await dependencies.getRole(email.data))
       return {
         status: "error",
-        message: "Your account already has access. Return to the home page.",
+        code: "alreadyAuthorized",
       }
     await dependencies.submit(email.data)
     return {
       status: "success",
-      message: "Request sent. An administrator needs to review it.",
+      code: "requestSent",
     }
   } catch {
     return {
       status: "error",
-      message: "Could not send the request. Please try again.",
+      code: "sendRequestFailed",
     }
   }
 }

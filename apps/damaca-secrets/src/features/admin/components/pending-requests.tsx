@@ -1,22 +1,23 @@
 import Link from "next/link"
 import { RequestReviewForm } from "@/features/admin/components/request-review-form"
+import { messages } from "@/lib/i18n/messages"
+import { getLocale } from "@/lib/i18n/server"
 import type { AccessRequestPage } from "@/types/access"
 
-export function PendingRequests({
+export async function PendingRequests({
   requests,
   hasCursor,
 }: {
   requests: AccessRequestPage
   hasCursor: boolean
 }) {
+  const t = messages[await getLocale()]
   return (
-    <section aria-label="Pending requests" className="min-w-0">
-      <h2 className="mb-3 text-lg font-semibold">Pending requests</h2>
+    <section aria-label={t.pendingRequests} className="min-w-0">
+      <h2 className="mb-3 text-lg font-semibold">{t.pendingRequests}</h2>
       {requests.entries.length === 0 ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {hasCursor
-            ? "There are no more requests on this page."
-            : "There are no pending requests."}
+          {hasCursor ? t.noMoreRequests : t.noPendingRequests}
         </p>
       ) : (
         <ul className="flex flex-col gap-3">
@@ -31,13 +32,13 @@ export function PendingRequests({
           ))}
         </ul>
       )}
-      <nav aria-label="Request pages" className="mt-3 flex flex-wrap gap-3">
+      <nav aria-label={t.requestPages} className="mt-3 flex flex-wrap gap-3">
         {hasCursor ? (
           <Link
             href="/admin"
             className="min-h-9 rounded px-2 py-1 text-sm underline focus-visible:outline-2"
           >
-            First requests
+            {t.firstRequests}
           </Link>
         ) : null}
         {requests.nextCursor ? (
@@ -45,7 +46,7 @@ export function PendingRequests({
             href={`/admin?requestsAfter=${encodeURIComponent(requests.nextCursor)}`}
             className="min-h-9 rounded px-2 py-1 text-sm underline focus-visible:outline-2"
           >
-            Next requests
+            {t.nextRequests}
           </Link>
         ) : null}
       </nav>

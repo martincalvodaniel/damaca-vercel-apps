@@ -16,7 +16,7 @@ async function installShell() {
       OFFLINE_ASSET_URLS.map(async (path) => {
         const response = await fetch(path, {
           cache: "reload",
-          credentials: "same-origin",
+          credentials: path === shell ? "omit" : "same-origin",
         })
         if (
           !response.ok ||

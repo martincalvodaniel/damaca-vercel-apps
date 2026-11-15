@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { AccountAvatar } from "@/components/shared/account-avatar"
 import { HomeIcon } from "@/components/ui/home-icon"
 import { navigationDestinations } from "@/config/navigation"
+import { useLocale } from "@/lib/i18n/client"
 
 interface AppNavigationProps {
   name: string
@@ -13,10 +14,11 @@ interface AppNavigationProps {
 }
 
 export function AppNavigation({ name, email, image }: AppNavigationProps) {
+  const { t } = useLocale()
   const pathname = usePathname()
   return (
     <nav
-      aria-label="Main navigation"
+      aria-label={t.mainNavigation}
       className="fixed inset-x-0 bottom-0 z-30 border-t border-zinc-200 bg-white px-2 pt-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] md:sticky md:top-0 md:border-t-0 md:border-b md:px-5 md:py-1 dark:border-zinc-800 dark:bg-zinc-900"
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
@@ -50,7 +52,9 @@ export function AppNavigation({ name, email, image }: AppNavigationProps) {
                 ) : (
                   <HomeIcon />
                 )}
-                <span className="text-xs md:text-sm">{destination.label}</span>
+                <span className="text-xs md:text-sm">
+                  {t[destination.id === "home" ? "vault" : "settings"]}
+                </span>
               </Link>
             </li>
           ))}

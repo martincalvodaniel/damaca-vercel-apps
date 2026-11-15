@@ -2,6 +2,8 @@
 
 import { useCallback, useState } from "react"
 import { IconButton } from "@/components/ui/icon-button"
+import { useLocale } from "@/lib/i18n/client"
+import type { MessageKey } from "@/lib/i18n/messages"
 import type { VaultEntry } from "@/schemas/vault"
 
 interface EntryDetailProps {
@@ -19,8 +21,9 @@ export function EntryDetail({
   onEdit,
   onDelete,
 }: EntryDetailProps) {
+  const { t } = useLocale()
   const [visible, setVisible] = useState(false)
-  const [feedback, setFeedback] = useState("")
+  const [feedback, setFeedback] = useState<MessageKey>()
   const toggle = useCallback(() => setVisible((value) => !value), [])
   const copy = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,24 +31,22 @@ export function EntryDetail({
       if (field !== "username" && field !== "password") return
       try {
         await navigator.clipboard.writeText(entry[field])
-        setFeedback(
-          field === "password" ? "Password copied." : "Username copied."
-        )
+        setFeedback(field === "password" ? "passwordCopied" : "usernameCopied")
       } catch {
-        setFeedback("Could not copy. Select and copy the value manually.")
+        setFeedback("copyFailed")
       }
     },
     [entry]
   )
 
   return (
-    <section className="grid max-w-xl gap-3" aria-label="Credential details">
+    <section className="grid max-w-xl gap-3" aria-label={t.credentialDetails}>
       <div className="flex items-center gap-1">
         <IconButton
           type="button"
           onClick={onBack}
           icon="back"
-          label="Back to vault"
+          label={t.backToVault}
         />
         <h2 className="min-w-0 flex-1 break-words text-lg font-semibold">
           {entry.title}
@@ -57,7 +58,7 @@ export function EntryDetail({
             onClick={onEdit}
             icon="edit"
             tone="edit"
-            label="Edit entry"
+            label={t.editEntry}
           />
         ) : null}
         {onDelete ? (
@@ -65,7 +66,7 @@ export function EntryDetail({
             disabled={busy}
             onClick={onDelete}
             icon="delete"
-            label="Delete entry"
+            label={t.deleteEntry}
             tone="danger"
           />
         ) : null}
@@ -74,7 +75,7 @@ export function EntryDetail({
         {entry.username ? (
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
-              <dt className="text-zinc-600 dark:text-zinc-400">Username</dt>
+              <dt className="text-zinc-600 dark:text-zinc-400">{t.username}</dt>
               <dd className="break-all">{entry.username}</dd>
             </div>
             <IconButton
@@ -83,14 +84,14 @@ export function EntryDetail({
               onClick={copy}
               icon="copy"
               tone="utility"
-              label="Copy username"
+              label={t.copyUsername}
             />
           </div>
         ) : null}
         {entry.password ? (
           <div className="flex flex-wrap items-center gap-2">
             <div className="min-w-0 flex-1">
-              <dt className="text-zinc-600 dark:text-zinc-400">Password</dt>
+              <dt className="text-zinc-600 dark:text-zinc-400">{t.password}</dt>
               <dd className="break-all font-mono">
                 {visible ? entry.password : "••••••••"}
               </dd>
@@ -100,7 +101,7 @@ export function EntryDetail({
               onClick={toggle}
               icon={visible ? "hide" : "show"}
               tone="visibility"
-              label={visible ? "Hide password" : "Show password"}
+              label={visible ? t.hidePassword : t.showPassword}
               aria-pressed={visible}
             />
             <IconButton
@@ -109,25 +110,25 @@ export function EntryDetail({
               onClick={copy}
               icon="copy"
               tone="utility"
-              label="Copy password"
+              label={t.copyPassword}
             />
           </div>
         ) : null}
         {entry.url ? (
           <div>
-            <dt className="text-zinc-600 dark:text-zinc-400">URL</dt>
+            <dt className="text-zinc-600 dark:text-zinc-400">{t.url}</dt>
             <dd className="break-all">{entry.url}</dd>
           </div>
         ) : null}
         {entry.notes ? (
           <div>
-            <dt className="text-zinc-600 dark:text-zinc-400">Notes</dt>
+            <dt className="text-zinc-600 dark:text-zinc-400">{t.notes}</dt>
             <dd className="break-words whitespace-pre-wrap">{entry.notes}</dd>
           </div>
         ) : null}
       </dl>
       <p role="status" className="text-sm empty:hidden">
-        {feedback}
+        {feedback ? t[feedback] : null}
       </p>
     </section>
   )

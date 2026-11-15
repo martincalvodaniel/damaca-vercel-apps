@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react"
 import { loadOnlineSnapshot } from "@/features/offline/online-snapshot"
 import { buttonClass } from "@/features/vault/components/styles"
+import { useLocale } from "@/lib/i18n/client"
+import { formatOfflineDates, type MessageKey } from "@/lib/i18n/messages"
 import { prepareOfflineShell } from "@/lib/offline/client"
 import {
   clearOfflineVault,
@@ -17,9 +19,10 @@ import {
 } from "@/schemas/offline-vault"
 
 export function OfflineSettings({ ownerId }: { ownerId: string }) {
+  const { locale, t } = useLocale()
   const [snapshot, setSnapshot] = useState<OfflineSnapshot>()
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState("")
+  const [error, setError] = useState<MessageKey>()
   useEffect(() => {
     let active = true
     function read() {
@@ -40,7 +43,7 @@ export function OfflineSettings({ ownerId }: { ownerId: string }) {
 
   const toggle = useCallback(async () => {
     setBusy(true)
-    setError("")
+    setError(undefined)
     try {
       if (snapshot) {
         await clearOfflineVault()
@@ -55,9 +58,7 @@ export function OfflineSettings({ ownerId }: { ownerId: string }) {
         setSnapshot(await enableOfflineVault(copy, marker))
       }
     } catch {
-      setError(
-        "Could not update offline access. Check your connection and browser storage."
-      )
+      setError("offlineUpdateFailed")
     } finally {
       setBusy(false)
     }
@@ -65,38 +66,37 @@ export function OfflineSettings({ ownerId }: { ownerId: string }) {
 
   return (
     <section
-      aria-label="Offline access"
+      aria-label={t.offlineAccess}
       className="grid gap-2 border-t border-zinc-200 pt-2 dark:border-zinc-800"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="font-medium">Offline access</h2>
+        <h2 className="font-medium">{t.offlineAccess}</h2>
         <button
           type="button"
           onClick={toggle}
           disabled={busy}
           className={buttonClass}
         >
-          {snapshot ? "Disable offline access" : "Enable offline access"}
+          {snapshot ? t.disableOffline : t.enableOffline}
         </button>
       </div>
       {snapshot ? (
         <p className="text-xs text-zinc-600 dark:text-zinc-400">
-          Synced {new Date(snapshot.checkedAt).toLocaleString()}. Available
-          until {new Date(snapshot.expiresAt).toLocaleString()}.
+          {formatOfflineDates(locale, snapshot.checkedAt, snapshot.expiresAt)}
         </p>
       ) : (
         <p className="text-xs text-zinc-600 dark:text-zinc-400">
-          Save an encrypted copy for read-only access on this trusted browser.
+          {t.offlineExplanation}
         </p>
       )}
       {busy ? (
         <p role="status" className="text-xs">
-          Updating offline access…
+          {t.updatingOffline}
         </p>
       ) : null}
       {error ? (
         <p role="alert" className="text-xs text-red-700 dark:text-red-400">
-          {error}
+          {t[error]}
         </p>
       ) : null}
     </section>

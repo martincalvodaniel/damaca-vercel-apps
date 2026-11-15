@@ -8,6 +8,8 @@ import {
 } from "@/features/vault/components/styles"
 import { canUsePasskeys } from "@/features/vault/passkeys"
 import type { VaultController } from "@/features/vault/use-vault"
+import { useLocale } from "@/lib/i18n/client"
+import { useFormValidation } from "@/lib/i18n/form-validation"
 
 const subscribe = () => () => {}
 const noPasskeys = () => false
@@ -25,6 +27,8 @@ export function UnlockForm({
   onRecover,
   onUnlock,
 }: UnlockFormProps) {
+  const { t } = useLocale()
+  const formValidation = useFormValidation()
   const passkeys = useSyncExternalStore(subscribe, canUsePasskeys, noPasskeys)
   const submit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
@@ -43,12 +47,13 @@ export function UnlockForm({
 
   return (
     <form
+      {...formValidation}
       onSubmit={submit}
       autoComplete="off"
       className="flex max-w-md flex-col gap-2"
     >
       <label className="grid gap-1 text-sm font-medium">
-        Master password
+        {t.masterPassword}
         <input
           name="password"
           type="password"
@@ -60,7 +65,7 @@ export function UnlockForm({
       </label>
       <div className="flex flex-wrap items-center gap-2">
         <button type="submit" disabled={busy} className={primaryClass}>
-          Unlock
+          {t.unlock}
         </button>
         {passkeys && hasPasskey ? (
           <button
@@ -69,7 +74,7 @@ export function UnlockForm({
             onClick={unlockWithPasskey}
             className={buttonClass}
           >
-            Unlock with a passkey
+            {t.unlockWithPasskey}
           </button>
         ) : null}
         {onRecover ? (
@@ -79,7 +84,7 @@ export function UnlockForm({
             onClick={onRecover}
             className="min-h-9 px-1 text-sm underline"
           >
-            Use recovery code
+            {t.useRecoveryCode}
           </button>
         ) : null}
       </div>

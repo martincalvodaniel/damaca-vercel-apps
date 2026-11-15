@@ -18,35 +18,33 @@ export async function manageUserAccess(
     if ((await dependencies.getActorRole()) !== "admin") {
       return {
         status: "error",
-        message: "You do not have administrator permissions.",
+        code: "adminRequired",
       }
     }
     const parsed = userAccessMutationSchema.safeParse(input)
     if (!parsed.success) {
       return {
         status: "error",
-        message: "Enter a valid email address and an allowed operation.",
+        code: "invalidAccessOperation",
       }
     }
     const { email, operation } = parsed.data
     if (dependencies.isAdminEmail(email)) {
       return {
         status: "error",
-        message:
-          "Administrators are managed through ALLOWED_EMAILS, not this list.",
+        code: "adminManaged",
       }
     }
     if (operation === "grant") await dependencies.grant(email)
     else await dependencies.revoke(email)
     return {
       status: "success",
-      message:
-        operation === "grant" ? "User access granted." : "User access revoked.",
+      code: operation === "grant" ? "accessGranted" : "accessRevoked",
     }
   } catch {
     return {
       status: "error",
-      message: "Could not save the change. Please try again.",
+      code: "saveAccessFailed",
     }
   }
 }

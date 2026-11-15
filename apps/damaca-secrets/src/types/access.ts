@@ -1,3 +1,5 @@
+import type { MessageKey } from "@/lib/i18n/messages"
+
 export type AccessRole = "admin" | "user"
 
 export interface UserAccessEntry {
@@ -10,10 +12,9 @@ export interface UserAccessPage {
   nextCursor: string | null
 }
 
-export interface AccessActionState {
-  status: "idle" | "success" | "error"
-  message: string
-}
+export type AccessActionState =
+  | { status: "idle" }
+  | { status: "success" | "error"; code: MessageKey }
 
 export type AccessRequestStatus = "pending" | "rejected" | "approved"
 

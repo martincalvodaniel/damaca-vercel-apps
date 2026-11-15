@@ -4,6 +4,8 @@ import { type FormEvent, useCallback, useRef, useState } from "react"
 import { IconButton } from "@/components/ui/icon-button"
 import { inputClass } from "@/features/vault/components/styles"
 import { generatePassword } from "@/features/vault/crypto"
+import { useLocale } from "@/lib/i18n/client"
+import { useFormValidation } from "@/lib/i18n/form-validation"
 import { entrySchema, type VaultEntry } from "@/schemas/vault"
 
 interface EntryFormProps {
@@ -14,6 +16,8 @@ interface EntryFormProps {
 }
 
 export function EntryForm({ busy, entry, formId, onSave }: EntryFormProps) {
+  const { t } = useLocale()
+  const formValidation = useFormValidation()
   const password = useRef<HTMLInputElement>(null)
   const [generated, setGenerated] = useState(false)
   const clearGenerated = useCallback(() => setGenerated(false), [])
@@ -38,13 +42,14 @@ export function EntryForm({ busy, entry, formId, onSave }: EntryFormProps) {
 
   return (
     <form
+      {...formValidation}
       id={formId}
       autoComplete="off"
       onSubmit={submit}
       className="grid max-w-xl gap-2"
     >
       <label className="grid gap-1 text-sm">
-        Title
+        {t.title}
         <input
           className={inputClass}
           name="title"
@@ -55,7 +60,7 @@ export function EntryForm({ busy, entry, formId, onSave }: EntryFormProps) {
         />
       </label>
       <label className="grid gap-1 text-sm">
-        Username
+        {t.username}
         <input
           className={inputClass}
           name="username"
@@ -66,7 +71,7 @@ export function EntryForm({ busy, entry, formId, onSave }: EntryFormProps) {
       </label>
       <div className="flex items-end gap-2">
         <label className="grid min-w-0 flex-1 gap-1 text-sm">
-          Password
+          {t.password}
           <input
             className={inputClass}
             ref={password}
@@ -83,17 +88,17 @@ export function EntryForm({ busy, entry, formId, onSave }: EntryFormProps) {
           onClick={generate}
           icon="generate"
           tone="utility"
-          label="Generate password"
+          label={t.generatePassword}
         />
       </div>
       <p
         role="status"
         className="text-xs text-zinc-600 empty:hidden dark:text-zinc-400"
       >
-        {generated ? "Password generated." : ""}
+        {generated ? t.passwordGenerated : ""}
       </p>
       <label className="grid gap-1 text-sm">
-        URL
+        {t.url}
         <input
           className={inputClass}
           name="url"
@@ -104,7 +109,7 @@ export function EntryForm({ busy, entry, formId, onSave }: EntryFormProps) {
         />
       </label>
       <label className="grid gap-1 text-sm">
-        Notes
+        {t.notes}
         <textarea
           className={`${inputClass} py-2`}
           name="notes"

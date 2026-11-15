@@ -21,7 +21,7 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: app PWA shell and service worker, browser storage, vault UI and API.
 - Dependencies: 02.
-- Acceptance: opt-in encrypted snapshot, password unlock in airplane mode, configurable 24-hour validity, cleanup on logout and denial, online revalidation, and read-only offline use.
+- Acceptance: opt-in encrypted snapshot, password unlock in airplane mode, configurable 24-hour validity, cleanup on logout and denial, online revalidation, and read-only offline use. [Archived evidence](archive/2026-11-15/iteration-log.md#03--offline-consultation).
 
 ## 04 — Vercel preview and device acceptance
 
@@ -78,3 +78,11 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Paths: app README and planning records.
 - Dependencies: preview acceptance in iteration 04.
 - Acceptance: replace the completed first-preview checklist with current deployment links and preserve the observed acceptance evidence. Verify local links and `git diff --check`.
+
+## 13 — Spanish and English interface
+
+- Status: `validated`.
+- Paths: Damaca Secrets UI, locale preference, offline shell, metadata, and app plans.
+- Dependencies: existing settings, access flows, and offline shell.
+- Acceptance: Spanish default, persistent English or Spanish selection, localized visible and accessible copy throughout the app, and offline read-only access in the selected language.
+- Validation: incremental Biome, types, tests, build, manifests for both branches, and mobile, desktop, and offline browser checks.

@@ -4,6 +4,8 @@ import { type FormEvent, useCallback, useState } from "react"
 import { IconButton } from "@/components/ui/icon-button"
 import { inputClass, primaryClass } from "@/features/vault/components/styles"
 import type { VaultController } from "@/features/vault/use-vault"
+import { useLocale } from "@/lib/i18n/client"
+import { useFormValidation } from "@/lib/i18n/form-validation"
 
 export type SetupMode = "create" | "change" | "recover"
 
@@ -15,6 +17,8 @@ interface SetupFormProps {
 }
 
 export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
+  const { t } = useLocale()
+  const formValidation = useFormValidation()
   const [mismatch, setMismatch] = useState(false)
   const submit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
@@ -36,10 +40,15 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
   )
 
   return (
-    <form onSubmit={submit} autoComplete="off" className="grid max-w-md gap-3">
+    <form
+      {...formValidation}
+      onSubmit={submit}
+      autoComplete="off"
+      className="grid max-w-md gap-3"
+    >
       {mode === "recover" ? (
         <label className="grid gap-1 text-sm font-medium">
-          Recovery code
+          {t.recoveryCode}
           <input
             name="code"
             type="password"
@@ -51,7 +60,7 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
       ) : null}
       {mode === "change" ? (
         <label className="grid gap-1 text-sm font-medium">
-          Current master password
+          {t.currentMasterPassword}
           <input
             name="previous"
             type="password"
@@ -62,7 +71,7 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
         </label>
       ) : null}
       <label className="grid gap-1 text-sm font-medium">
-        New master password
+        {t.newMasterPassword}
         <input
           name="password"
           type="password"
@@ -73,7 +82,7 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
         />
       </label>
       <label className="grid gap-1 text-sm font-medium">
-        Confirm master password
+        {t.confirmMasterPassword}
         <input
           name="confirm"
           type="password"
@@ -84,22 +93,21 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
         />
       </label>
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
-        Use at least 15 characters. A generated passphrase is a good choice.
+        {t.passwordLengthHelp}
       </p>
       {mode !== "create" ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          You will get a new recovery code and need to set up your passkeys
-          again.
+          {t.rekeyHelp}
         </p>
       ) : null}
       {mismatch ? (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-          The passwords do not match.
+          {t.passwordMismatch}
         </p>
       ) : null}
       <div className="flex flex-wrap gap-2">
         <button type="submit" disabled={busy} className={primaryClass}>
-          Continue
+          {t.continue}
         </button>
         {onCancel ? (
           <IconButton
@@ -107,7 +115,7 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
             disabled={busy}
             onClick={onCancel}
             icon="close"
-            label="Cancel setup"
+            label={t.cancelSetup}
             tone="danger"
           />
         ) : null}

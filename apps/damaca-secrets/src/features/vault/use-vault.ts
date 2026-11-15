@@ -18,6 +18,7 @@ import {
 } from "@/features/vault/crypto"
 import { authenticatePasskey, registerPasskey } from "@/features/vault/passkeys"
 import { useIdleLock } from "@/features/vault/use-idle-lock"
+import type { MessageKey } from "@/lib/i18n/messages"
 import {
   clearOfflineVault,
   readOfflineVault,
@@ -36,7 +37,7 @@ export function useVault() {
   const [open, setOpen] = useState<OpenVault>()
   const [prepared, setPrepared] = useState<PreparedVault>()
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState("")
+  const [error, setError] = useState<MessageKey>()
   const epoch = useRef(0)
   const running = useRef(false)
 
@@ -44,7 +45,7 @@ export function useVault() {
     epoch.current++
     setOpen(undefined)
     setPrepared(undefined)
-    setError("")
+    setError(undefined)
   }, [])
 
   const offline = useCallback(async () => {
@@ -54,9 +55,7 @@ export function useVault() {
       window.location.replace("/offline-vault")
       return
     }
-    setError(
-      "You are offline. Enable offline access when connected to consult this vault without coverage."
-    )
+    setError("vaultOffline")
   }, [lock])
 
   useEffect(() => {
@@ -74,9 +73,7 @@ export function useVault() {
           return
         }
         setError(
-          error instanceof VaultRequestError
-            ? error.message
-            : "Could not load the vault."
+          error instanceof VaultRequestError ? error.code : "loadVaultFailed"
         )
       })
     const onOffline = () => void offline()
@@ -95,14 +92,14 @@ export function useVault() {
   const run = useCallback(
     async (
       operation: (current: () => boolean) => Promise<void>,
-      message = "Could not open or update the vault."
+      message: MessageKey = "vaultOperationFailed"
     ) => {
       if (running.current) return false
       running.current = true
       const previous = epoch.current
       const current = () => epoch.current === previous
       setBusy(true)
-      setError("")
+      setError(undefined)
       try {
         await operation(current)
         return current()
@@ -120,7 +117,7 @@ export function useVault() {
             setSnapshot(undefined)
             if (error.status !== 409) await clearOfflineVault().catch(() => {})
           }
-          setError(error instanceof VaultRequestError ? error.message : message)
+          setError(error instanceof VaultRequestError ? error.code : message)
         }
         return false
       } finally {
@@ -136,7 +133,7 @@ export function useVault() {
       run(async (current) => {
         const data = await loadOnlineSnapshot()
         if (current()) setSnapshot(data)
-      }, "Could not load the vault."),
+      }, "loadVaultFailed"),
     [run]
   )
 
@@ -175,9 +172,7 @@ export function useVault() {
           const entries = await decryptEntries(ownerId, key, encrypted.entries)
           if (current()) setOpen({ key, entries })
         },
-        method === "password"
-          ? "Could not unlock with that master password."
-          : "Could not unlock with this passkey. You can use your master password."
+        method === "password" ? "unlockPasswordFailed" : "unlockPasskeyFailed"
       ),
     [run, snapshot]
   )
@@ -199,9 +194,7 @@ export function useVault() {
           const next = await prepareVault(ownerId, password, entries)
           if (current()) setPrepared({ ...next, entries })
         },
-        recoveryCode
-          ? "Could not recover with that code."
-          : "Check the master password and try again."
+        recoveryCode ? "recoverFailed" : "checkMasterPassword"
       ),
     [run, snapshot]
   )
@@ -259,7 +252,7 @@ export function useVault() {
             ...encrypted,
             passkeys: [...encrypted.passkeys, wrapper],
           })
-      }, "Passkey setup failed. Choose a device or provider that supports WebAuthn PRF."),
+      }, "passkeySetupFailed"),
     [open, persist, run, snapshot]
   )
 

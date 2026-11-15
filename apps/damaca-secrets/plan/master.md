@@ -1,6 +1,6 @@
 # Damaca Secrets
 
-A personal password vault for approved Google accounts. Each user manages their own titles, usernames, passwords, URLs, and notes, with local search, password generation, and clipboard actions. The English interface uses compact mobile navigation and desktop navigation from the monorepo starter.
+A personal password vault for approved Google accounts. Each user manages their own titles, usernames, passwords, URLs, and notes, with local search, password generation, and clipboard actions. The interface defaults to Spanish, offers English, remembers the selection per browser, and uses compact mobile navigation and desktop navigation from the monorepo starter.
 
 App administrators approve and revoke access. Vault data and wrapped keys are encrypted in the browser before storage. The trusted web deployment serves the client. A database or app administrator cannot decrypt another user's vault through their role. The master password, a compatible WebAuthn PRF passkey, or a personal recovery code unlocks the vault. The recovery code requires current Google access and is stored by the user.
 

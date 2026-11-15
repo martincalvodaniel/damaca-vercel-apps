@@ -1,4 +1,4 @@
 export const navigationDestinations = [
-  { id: "home", label: "Vault", href: "/" },
-  { id: "settings", label: "Settings", href: "/settings" },
+  { id: "home", href: "/" },
+  { id: "settings", href: "/settings" },
 ] as const
