@@ -26,7 +26,7 @@ export default async function Settings() {
   ])
   const avatars = await readMemberAvatars(members.map(({ id }) => id))
   const available = members.flatMap(({ id, alias, email }) =>
-    email ? [] : [{ id, alias }]
+    email ? [] : [{ id, alias, image: avatars.get(id) ?? null }]
   )
 
   return (
@@ -74,7 +74,13 @@ export default async function Settings() {
                       members={available}
                       request={{ email: _id, name }}
                     />
-                    <EmailChangeForm email={_id} members={members} />
+                    <EmailChangeForm
+                      email={_id}
+                      members={members.map((member) => ({
+                        ...member,
+                        image: avatars.get(member.id) ?? null,
+                      }))}
+                    />
                   </li>
                 ))}
               </ul>
@@ -92,6 +98,7 @@ export default async function Settings() {
                   <div className="member-row">
                     <span>
                       <MemberAvatar
+                        compact
                         alias={alias}
                         image={avatars.get(id) ?? null}
                       />

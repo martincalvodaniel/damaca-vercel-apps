@@ -54,7 +54,13 @@ export function ContestForm({
   return (
     <>
       <form
-        className={iconLabel ? styles.entryAction : styles.form}
+        className={
+          header
+            ? styles.ballotReview
+            : iconLabel
+              ? styles.entryAction
+              : styles.form
+        }
         action={submit}
         onSubmit={confirmation ? controls.request : undefined}
       >
@@ -62,13 +68,14 @@ export function ContestForm({
         {confirmation ? (
           <input type="hidden" name="confirm" value="yes" />
         ) : null}
-        {children}
         {header ? (
-          <header className="action-dialog-heading">
+          <header>
             <h2 id={header.titleId}>Revisa tu papeleta</h2>
             <DialogActions cancel={header.cancel} pending={pending} />
           </header>
-        ) : (
+        ) : null}
+        {children}
+        {!header ? (
           <button
             type="submit"
             disabled={pending}
@@ -93,7 +100,7 @@ export function ContestForm({
               String(label)
             )}
           </button>
-        )}
+        ) : null}
       </form>
       {confirmation ? (
         <Confirmation controls={controls} title={label}>
@@ -341,16 +348,17 @@ export function Ballot({
           >
             {round === "rubric" ? (
               options.map(({ id, name }) => (
-                <div key={id}>
-                  <strong>{name}</strong>
-                  <ul>
+                <fieldset key={id}>
+                  <legend>{name}</legend>
+                  <dl className={styles.rubricGrid}>
                     {categories.map(([key, label]) => (
-                      <li key={key}>
-                        {label}: {review[`score:${id}:${key}`]}/10
-                      </li>
+                      <Fragment key={key}>
+                        <dt>{label}:</dt>
+                        <dd>{review[`score:${id}:${key}`]}</dd>
+                      </Fragment>
                     ))}
-                  </ul>
-                </div>
+                  </dl>
+                </fieldset>
               ))
             ) : (
               <p>{options.find(({ id }) => id === review.choice)?.name}</p>
@@ -372,10 +380,12 @@ export function Ballot({
 
 export function EntryControls({
   authors,
+  authorNames,
   edit,
   remove,
 }: {
   authors: string
+  authorNames: ReactNode
   edit?: ReactNode
   remove?: ReactNode
 }) {
@@ -384,7 +394,7 @@ export function EntryControls({
   return (
     <>
       <div className={styles.entryRow}>
-        <strong>{authors}</strong>
+        <strong>{authorNames}</strong>
         {edit ? (
           <button
             type="button"

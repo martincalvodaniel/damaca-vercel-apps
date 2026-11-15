@@ -14,7 +14,10 @@ import {
   getEventRoster,
   letuxEvent,
 } from "@/features/members/attendance"
-import { getMemberDirectory } from "@/features/members/directory"
+import {
+  getMemberDirectory,
+  readMemberAvatars,
+} from "@/features/members/directory"
 import { getCarBoard, unassignedCar } from "@/features/members/event-cars"
 import { ShoppingList } from "@/features/shopping/shopping-list"
 import { readShoppingList } from "@/features/shopping/store"
@@ -48,6 +51,20 @@ export default async function NewYearsEve() {
     ])
 
   const members = canManage ? await getMemberDirectory() : []
+
+  const avatars = await readMemberAvatars([
+    ...roster.flatMap(({ memberId }) => (memberId ? [memberId] : [])),
+    ...members.map(({ id }) => id),
+  ])
+  const guests = roster.map((guest) => ({
+    ...guest,
+    image: avatars.get(guest.memberId ?? "") ?? null,
+  }))
+  const memberOptions = members.map(({ id, alias }) => ({
+    id,
+    alias,
+    image: avatars.get(id) ?? null,
+  }))
 
   return (
     <LumosGate>
@@ -84,8 +101,8 @@ export default async function NewYearsEve() {
             <AttendanceBlocksSection canManage={canManage}>
               <AttendanceBoard
                 blocks={blocks}
-                roster={roster}
-                members={members}
+                roster={guests}
+                members={memberOptions}
                 canManage={canManage}
               />
             </AttendanceBlocksSection>
@@ -93,7 +110,7 @@ export default async function NewYearsEve() {
               <AttendanceBoard
                 mode="cars"
                 blocks={cars.blocks}
-                roster={roster.map((guest) => ({
+                roster={guests.map((guest) => ({
                   ...guest,
                   status: cars.assigned.get(guest.id) ?? unassignedCar,
                 }))}

@@ -510,3 +510,24 @@
 - Rutas: confirmación de borrado de compra.
 - Aceptación: texto singular para un producto y lista anidada para un grupo.
 - Validación: Biome, tipos y build.
+
+## EPJ-70 — Avatares compactos en Ebrias
+
+- Estado: `in_progress`.
+- Rutas: asistencia, coches, Tapas, Ajustes y componentes de miembros.
+- Aceptación: fotos o iniciales en las listas y selectores, con avatares compactos.
+- Validación: Biome, tipos y build.
+
+## EPJ-71 — Filas compactas de asistentes y coches
+
+- Estado: `validated`.
+- Rutas: filas compartidas de asistencia y coches de Letux.
+- Aceptación: dos columnas, avatares junto al nombre y controles de borrado alineados al borde derecho, con texto completo.
+- Validación: Biome incremental, tipos, build y comprobación en móvil estrecho y escritorio.
+
+## EPJ-72 — Revisión compacta de la papeleta
+
+- Estado: `validated`.
+- Rutas: modal de revisión de Tapas, en la rúbrica y el desempate.
+- Aceptación: cruz y tick del encabezado compartido, revisiones de rúbrica en dos filas y cuatro columnas.
+- Validación: Biome incremental, tipos, pruebas, build y comprobación del modal a distintos anchos.

@@ -5,6 +5,7 @@ import {
   useConfirmation,
 } from "@/features/feedback/actions-client"
 import { Confirmation } from "@/features/feedback/feedback"
+import { PersonSelect } from "@/features/members/person-select"
 import { changeMemberEmail } from "./actions"
 
 export function EmailChangeForm({
@@ -12,7 +13,12 @@ export function EmailChangeForm({
   members,
 }: {
   email: string
-  members: { id: string; alias: string; email?: string }[]
+  members: {
+    id: string
+    alias: string
+    email?: string
+    image?: string | null
+  }[]
 }) {
   const [, action, pending] = useActionFeedback(changeMemberEmail)
   const controls = useConfirmation()
@@ -25,24 +31,23 @@ export function EmailChangeForm({
         className="account admission-form"
       >
         <input type="hidden" name="email" value={email} />
-        <label>
-          Miembro y correo anterior
-          <select
-            className="member-select"
-            name="memberToChange"
-            required
-            defaultValue=""
-          >
-            <option value="">Selecciona un miembro</option>
-            {members.map((member) =>
-              member.email ? (
-                <option key={member.id} value={`${member.id}|${member.email}`}>
-                  {member.alias} · {member.email}
-                </option>
-              ) : null
-            )}
-          </select>
-        </label>
+        <PersonSelect
+          name="memberToChange"
+          required
+          label="Miembro y correo anterior"
+          placeholder="Selecciona un miembro"
+          options={members.flatMap((member) =>
+            member.email
+              ? [
+                  {
+                    ...member,
+                    value: `${member.id}|${member.email}`,
+                    detail: member.email,
+                  },
+                ]
+              : []
+          )}
+        />
         <input type="hidden" name="confirm" value="on" />
         <button type="submit" disabled={pending}>
           Cambiar correo
