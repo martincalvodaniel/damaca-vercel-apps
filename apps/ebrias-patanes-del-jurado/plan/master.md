@@ -33,3 +33,5 @@ Durante la inscripción de Tapas, el listado muestra solo autores. El nombre se 
 La ficha de Letux incluye una lista de la compra compartida debajo de los coches. Los miembros pueden añadir y editar productos, marcarlos, reordenarlos y borrarlos con confirmación. Marcar un producto conserva su posición.
 
 Las descripciones de la guía de Letux admiten Markdown. Alojamiento conserva su texto editable y forma parte del grupo de desplegables.
+
+La compra admite un nivel de subelementos. Las marcas son independientes y el borrado de un padre requiere confirmar la lista de productos que se eliminarán.

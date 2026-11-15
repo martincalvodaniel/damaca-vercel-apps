@@ -293,3 +293,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Capacidad inicial disponible de 68% en 5 h y 95% en 7 días.
 - El administrador puede rellenar el borrador en ambas rondas desde su papeleta o una asistida. Se conserva el flujo de revisión y envío.
 - Biome, tipos, nueve pruebas de Tapas y build correctos. El botón nuevo queda pendiente de comprobar en un navegador autenticado.
+
+## EPJ-58 — Selector de notas y revelación del podio
+
+- Capacidad inicial disponible de 61% en 5 h y 94% en 7 días.
+- La rúbrica usa un selector de 0 a 10. Los atajos quedan en la papeleta propia del administrador. Los puestos se revelan de tercero a primero por puntuación distinta y el primer paso correspondiente inicia el desempate si hace falta.
+- Biome, tipos, diez pruebas de Tapas y build correctos. Pendiente revisar el selector y el podio en un navegador autenticado.

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { canManageAttendance } from "@/lib/session"
-import { moveItem } from "./list"
+import { moveItem, removalGroup, removalSnapshot } from "./list"
 import { readShoppingList, updateShoppingList } from "./store"
 
 export async function changeShoppingList(form: FormData) {
@@ -38,7 +38,15 @@ export async function changeShoppingList(form: FormData) {
         item.id === id ? { ...item, checked: checked === "true" } : item
       )
     } else if (intent === "remove" && form.get("confirm") === "yes") {
-      updated = items.filter((item) => item.id !== id)
+      const item = items.find((entry) => entry.id === id)
+      if (!item) return "El elemento ya no está en la lista."
+      const group = removalGroup(items, item)
+      if (form.get("snapshot") !== removalSnapshot(group)) {
+        revalidatePath("/eventos/26-12-30-nochevieja-letux")
+        return "El grupo ha cambiado. Revisa los elementos y confirma de nuevo."
+      }
+      const removed = new Set(group.map((entry) => entry.id))
+      updated = items.filter((entry) => !removed.has(entry.id))
     } else if (
       intent === "move" &&
       typeof id === "string" &&
@@ -46,7 +54,16 @@ export async function changeShoppingList(form: FormData) {
     ) {
       if (!items.some((item) => item.id === target))
         return "El destino ya no está en la lista."
-      updated = moveItem(items, id, target)
+      const placement = form.get("placement")
+      if (
+        placement !== "before" &&
+        placement !== "after" &&
+        placement !== "inside"
+      )
+        return "Destino no válido."
+      const moved = moveItem(items, id, { id: target, placement })
+      if (!moved) return "No se puede mover el elemento a ese destino."
+      updated = moved
     } else {
       return "Acción no válida."
     }

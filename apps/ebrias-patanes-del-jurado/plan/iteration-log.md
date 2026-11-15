@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-57 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-58 — Selector de notas y revelación del podio
-
-- Capacidad inicial disponible de 61% en 5 h y 94% en 7 días.
-- La rúbrica usa un selector de 0 a 10. Los atajos quedan en la papeleta propia del administrador. Los puestos se revelan de tercero a primero por puntuación distinta y el primer paso correspondiente inicia el desempate si hace falta.
-- Biome, tipos, diez pruebas de Tapas y build correctos. Pendiente revisar el selector y el podio en un navegador autenticado.
+[Entregas EPJ-08 a EPJ-58 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-59 — Podio sincronizado y medallas
 
@@ -52,3 +46,8 @@
 ## EPJ-67 — Dos pasajeros por fila
 
 - Capacidad inicial de 53% en 5 h y 81% en 7 días. Los coches reutilizan las dos columnas de asistencia. Biome, tipos y build correctos.
+
+## EPJ-68 — Arrastre y subelementos de compra
+
+- Capacidad inicial de 40% en 5 h y 78% en 7 días. El arrastre muestra una copia y el destino. La anidación admite un nivel y el modal confirma el grupo exacto.
+- Biome, tipos, tres pruebas de la lista y build correctos. Pendiente la comprobación del arrastre en navegador autenticado con ratón y pantalla táctil.
