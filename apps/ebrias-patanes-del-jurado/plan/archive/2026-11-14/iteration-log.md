@@ -299,3 +299,9 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Capacidad inicial disponible de 61% en 5 h y 94% en 7 días.
 - La rúbrica usa un selector de 0 a 10. Los atajos quedan en la papeleta propia del administrador. Los puestos se revelan de tercero a primero por puntuación distinta y el primer paso correspondiente inicia el desempate si hace falta.
 - Biome, tipos, diez pruebas de Tapas y build correctos. Pendiente revisar el selector y el podio en un navegador autenticado.
+
+## EPJ-59 — Podio sincronizado y medallas
+
+- Capacidad inicial de 52% en 5 h y 93% en 7 días. Medallas por puntuación final, diamante para la ganadora y recuentos de finalistas tras publicar.
+- Las pantallas visibles consultan el progreso cada dos segundos mediante una ruta autenticada que devuelve solo una versión.
+- Biome, tipos, once pruebas de Tapas y build correctos. Pendiente la comprobación con dos sesiones autenticadas.

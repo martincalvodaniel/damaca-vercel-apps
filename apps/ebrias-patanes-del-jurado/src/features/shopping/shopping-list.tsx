@@ -339,8 +339,23 @@ function ShoppingRow({
         </button>
       </form>
       <Confirmation controls={confirmation} title="Borrar producto">
-        Se eliminarán:{" "}
-        {confirmedGroup.map(({ name }) => `«${name}»`).join(", ")}.
+        {confirmedGroup.length === 1 ? (
+          <>Se eliminará: «{confirmedGroup[0].name}».</>
+        ) : (
+          <div className={styles.removalList}>
+            Se eliminarán:
+            <ul>
+              <li>
+                {confirmedGroup[0].name}
+                <ul>
+                  {confirmedGroup.slice(1).map(({ id, name }) => (
+                    <li key={id}>{name}</li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          </div>
+        )}
       </Confirmation>
     </>
   )

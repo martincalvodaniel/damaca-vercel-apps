@@ -473,7 +473,8 @@ body:has(.club-nav) {
   margin: 0;
 }
 
-.action-confirmation p {
+.action-confirmation p,
+.action-confirmation-copy {
   margin: 0.5rem 0 0;
 }
 

@@ -2,13 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-58 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-59 — Podio sincronizado y medallas
-
-- Capacidad inicial de 52% en 5 h y 93% en 7 días. Medallas por puntuación final, diamante para la ganadora y recuentos de finalistas tras publicar.
-- Las pantallas visibles consultan el progreso cada dos segundos mediante una ruta autenticada que devuelve solo una versión.
-- Biome, tipos, once pruebas de Tapas y build correctos. Pendiente la comprobación con dos sesiones autenticadas.
+[Entregas EPJ-08 a EPJ-59 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-60 — Cuenta atrás del podio
 
@@ -51,3 +45,7 @@
 
 - Capacidad inicial de 40% en 5 h y 78% en 7 días. El arrastre muestra una copia y el destino. La anidación admite un nivel y el modal confirma el grupo exacto.
 - Biome, tipos, tres pruebas de la lista y build correctos. Pendiente la comprobación del arrastre en navegador autenticado con ratón y pantalla táctil.
+
+## EPJ-69 — Lista de productos en la confirmación
+
+- Capacidad inicial de 30% en 5 h y 77% en 7 días. El modal usa texto singular o una lista anidada según el contenido. Biome, tipos y build correctos.

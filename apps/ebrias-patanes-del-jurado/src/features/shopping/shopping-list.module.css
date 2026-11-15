@@ -131,3 +131,14 @@
   overflow-wrap: anywhere;
   pointer-events: none;
 }
+
+.item .removalList ul {
+  display: block;
+  margin-block: 0.2rem 0;
+  padding-inline-start: 1.25rem;
+  list-style: disc;
+}
+
+.item .removalList ul ul {
+  list-style: circle;
+}
