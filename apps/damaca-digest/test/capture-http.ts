@@ -423,7 +423,7 @@ try {
     await (
       await fetch(withTopics.detailUrl, { headers: { cookie: first.cookie } })
     ).text(),
-    /Topics:.*Engineering/
+    /aria-label="Topics".*Engineering/
   )
 
   await revokeUserAccess("reader@example.com")

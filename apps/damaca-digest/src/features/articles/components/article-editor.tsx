@@ -60,7 +60,11 @@ export function ArticleEditor({
   ] as const
 
   return (
-    <form action={save} onSubmit={submitEdits} className="space-y-3 text-sm">
+    <form
+      action={save}
+      onSubmit={submitEdits}
+      className="digest-panel space-y-3 rounded-xl p-4 text-sm sm:p-6"
+    >
       <div className="grid gap-2 min-[420px]:grid-cols-2">
         {fields.map(([key, label, type, max]) => (
           <label key={key} className="min-w-0">
@@ -125,7 +129,7 @@ export function ArticleEditor({
       <button
         type="submit"
         disabled={saving}
-        className="min-h-11 rounded-lg bg-emerald-800 px-4 font-medium text-white"
+        className="min-h-11 rounded-lg bg-teal-800 px-4 hover:bg-teal-900 font-medium text-white"
       >
         {saving ? "Saving…" : "Save changes"}
       </button>

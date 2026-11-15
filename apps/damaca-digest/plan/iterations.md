@@ -76,3 +76,16 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Rutas: app, pruebas, documentación y CI.
 - Dependencia: biblioteca y entorno de preproducción autorizado.
 - Aceptación: CI, recorrido OAuth real, revisión móvil y escritorio y restauración de prueba en una base separada.
+
+## 06 — Refinar biblioteca y lectura
+
+- Estado: `validated`.
+- Rutas: navegación, biblioteca, filtros, ficha y estilos globales de Digest.
+- Aceptación: jerarquía de lectura clara, resumen y procedencia fáciles de escanear, filtros activos visibles y removibles, y controles accesibles en móvil y escritorio.
+- Validación: Biome, tipos, pruebas, build, integración HTTP y revisión real de la interfaz a 320 y 1280 px.
+
+## 07 — Abrir Digest desde Compartir en Android
+
+- Estado: `pending`.
+- Rutas: documentación, manifiesto y ruta de recepción de enlaces.
+- Aceptación: verificar la oferta oficial de ChatGPT y Android. Si procede, permitir que la PWA instalada reciba un enlace y prepare su captura en ChatGPT con una acción explícita del usuario.

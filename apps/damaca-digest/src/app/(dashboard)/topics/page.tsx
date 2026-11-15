@@ -20,12 +20,14 @@ export default async function TopicsPage({
         ? "The topic could not be changed. Check the selected topics and existing aliases."
         : undefined
   return (
-    <section className="mx-auto max-w-2xl space-y-3">
+    <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Topics</h1>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          Topics
+        </h1>
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center text-sm underline"
+          className="digest-panel inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
         >
           Library
         </Link>
@@ -38,11 +40,11 @@ export default async function TopicsPage({
             {topics.map((topic) => (
               <li
                 key={topic.id}
-                className="min-w-0 break-words rounded-lg border border-zinc-300 px-3 dark:border-zinc-700"
+                className="digest-panel min-w-0 break-words rounded-xl px-3"
               >
                 <Link
                   href={`/?${new URLSearchParams({ topic: topic.label })}`}
-                  className="flex min-h-11 items-center justify-between gap-3"
+                  className="flex min-h-11 items-center justify-between gap-3 font-medium hover:text-teal-800 dark:hover:text-teal-300"
                 >
                   <span>{topic.label}</span>
                   <span className="shrink-0 text-sm">

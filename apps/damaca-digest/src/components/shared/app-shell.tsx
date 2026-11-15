@@ -15,7 +15,7 @@ export function AppShell({
   return (
     <>
       <AppNavigation name={name} email={email} image={image} />
-      <div className="pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-0">
+      <div className="px-3 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:px-5 md:pb-0">
         {children}
       </div>
     </>
