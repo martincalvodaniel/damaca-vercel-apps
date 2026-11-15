@@ -59,6 +59,14 @@ export const mcpLibraryQuery = z
   })
   .refine(validRanges, "Invalid date range.")
 
+export const mcpReadingDigestQuery = z
+  .strictObject({
+    capturedFrom: z.iso.date(),
+    capturedTo: z.iso.date(),
+    page: z.number().int().min(1).max(99_999).default(1),
+  })
+  .refine(validRanges, "Invalid date range.")
+
 export type LibraryQuery = z.output<typeof libraryQuery>
 
 export function parseLibraryQuery(

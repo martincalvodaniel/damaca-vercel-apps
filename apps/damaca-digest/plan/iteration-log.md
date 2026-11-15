@@ -2,13 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 04b — Consolidar topics
-
-- Inicio en `int`, base `eeebcf4`, tras renovar la ventana de 5 h. El despliegue Production `adc0093` de los cortes 04 y 04a quedó READY y verificado en el dominio estable.
-- Topics con IDs estables por propietario, nombres, alias y fusiones. Las etiquetas históricas se resuelven sin una migración previa. La fusión conserva las referencias y cuenta cada artículo una vez. La edición de fichas admite temas manuales y una recaptura conserva esos cambios.
-- Pasaron Biome, TypeScript, 45 pruebas, build e integración HTTP. Se verificaron descubrimiento de topics vía MCP, exclusión de otra cuenta, edición, alias, fusión, recuento y filtro por alias con artículos nuevos e históricos.
-- Chrome comprobó los controles de temas y edición a 320 y 1280 px. Un backup de MongoDB de prueba se restauró en otra base y conservó el artículo, el vocabulario, sus referencias y el índice textual.
-
 ## 05 — Validar preproducción
 
 - [CI del commit `0a8cb16`](https://github.com/martincalvodaniel/damaca-vercel-apps/actions/runs/43770107401) terminó correctamente, incluido `digest-capture`. La revisión a dos anchos y la restauración con MongoDB desechable constan en 04b.
@@ -55,3 +48,8 @@
 
 - Cada tarjeta enlaza al original, muestra hasta dos temas que activan su filtro y añade la fecha de captura cuando se conoce la de publicación. El vocabulario de la página se resuelve una vez.
 - Pasaron Biome, tipos, build e integración HTTP con topics fusionados. Chrome confirmó biblioteca, ficha, edición y topics sin desbordamiento a 320 y 1280 px.
+
+## 14 — Consultar capturas de un periodo desde ChatGPT
+
+- `get_reading_digest` agrupa capturas por fecha UTC con paginación y el permiso `articles:read`. Distingue fecha de captura de publicación y estado de lectura.
+- La integración HTTP verificó dos páginas, el permiso y el aislamiento entre cuentas con MongoDB desechable. El build y la compilación de tipos pasaron.

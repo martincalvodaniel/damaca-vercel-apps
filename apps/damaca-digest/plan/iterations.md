@@ -128,3 +128,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: biblioteca, tarjetas y pruebas HTTP.
 - Aceptación: filtrar por los temas visibles en una tarjeta y abrir la fuente directamente. Mostrar también la fecha de captura cuando exista fecha de publicación. Mantener la vista legible a 320 px.
+
+## 14 — Consultar capturas de un periodo desde ChatGPT
+
+- Estado: `validated`.
+- Rutas: contrato y herramientas MCP de lectura.
+- Aceptación: consultar capturas por intervalo UTC inclusivo, paginadas y agrupadas por día. Exigir permiso de lectura, aislar por propietario y excluir notas personales.

@@ -547,6 +547,33 @@ try {
     ["Pagination Fixture 20"]
   )
   assert.equal(searched.structuredContent.nextPage, null)
+  const captureDate = readByUrl.structuredContent.article.capturedAt.slice(
+    0,
+    10
+  )
+  const digestInput = { capturedFrom: captureDate, capturedTo: captureDate }
+  const digest = await invoke(reader, "get_reading_digest", digestInput)
+  assert.equal(digest.structuredContent.days[0]?.date, captureDate)
+  assert.equal(digest.structuredContent.days[0]?.articles.length, 20)
+  assert.equal(digest.structuredContent.nextPage, 2)
+  const remainingDigest = await invoke(reader, "get_reading_digest", {
+    ...digestInput,
+    page: 2,
+  })
+  assert.equal(remainingDigest.structuredContent.days[0]?.articles.length, 3)
+  assert.equal(remainingDigest.structuredContent.nextPage, null)
+  const otherDigest = await invoke(
+    otherReader,
+    "get_reading_digest",
+    digestInput
+  )
+  assert.ok(
+    otherDigest.structuredContent.days[0]?.articles.every(
+      ({ id }: { id: string }) => id !== article.articleId
+    )
+  )
+  const writerDigest = await invoke(token, "get_reading_digest", digestInput)
+  assert.match(writerDigest._meta["mcp/www_authenticate"][0], /articles:read/)
   const readerWrite = await invoke(reader, "save_article", {
     url: "https://example.com/readonly-attempt",
     accessStatus: "unavailable",

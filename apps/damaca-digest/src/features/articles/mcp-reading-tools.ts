@@ -18,7 +18,7 @@ import {
   readingStatus,
   webUrl,
 } from "@/schemas/article"
-import { mcpLibraryQuery } from "@/schemas/library"
+import { mcpLibraryQuery, mcpReadingDigestQuery } from "@/schemas/library"
 
 const summaryResult = z.object({
   id: articleId,
@@ -205,6 +205,51 @@ export function registerReadingTools(
         })
       } catch {
         return readingError("Digest could not retrieve related articles.")
+      }
+    }
+  )
+
+  server.registerTool(
+    "get_reading_digest",
+    {
+      description:
+        "List the user's saved articles captured during an inclusive UTC date range, grouped by capture day. Results describe captures, regardless of when an article was published or read. Use nextPage to continue the same date range.",
+      inputSchema: mcpReadingDigestQuery,
+      outputSchema: {
+        days: z.array(
+          z.object({
+            date: z.iso.date(),
+            articles: z.array(summaryResult),
+          })
+        ),
+        nextPage: z.number().int().nullable(),
+      },
+      annotations,
+      _meta: metadata,
+    },
+    async (query) => {
+      if (!canRead) return scopeRequired(readScope)
+      try {
+        const page = await listArticles(ownerId, { ...query, sort: "capture" })
+        const byDay = new Map<string, ReturnType<typeof summary>[]>()
+        for (const article of page.items) {
+          const date = article.capturedAt.toISOString().slice(0, 10)
+          const item = {
+            ...summary(article, base),
+            summary: article.summary?.slice(0, 480),
+          }
+          const items = byDay.get(date)
+          if (items) items.push(item)
+          else byDay.set(date, [item])
+        }
+        return result({
+          days: Array.from(byDay, ([date, articles]) => ({ date, articles })),
+          nextPage: page.hasNext ? query.page + 1 : null,
+        })
+      } catch {
+        return readingError(
+          "Digest could not retrieve captures for the requested period."
+        )
       }
     }
   )
