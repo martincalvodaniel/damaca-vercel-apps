@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 03d — Deduplicar URLs con el parámetro utm
-
-- El usuario mostró un duplicado de Proton al recapturar la URL con `?utm=fake`. La regla anterior eliminaba claves `utm_*` y conservaba la clave exacta `utm`. Una prueba con esa misma URL reprodujo el fallo antes del cambio.
-- Se añadió `utm` como parámetro de tracking. La prueba HTTP de OAuth/MCP confirma que la recaptura devuelve `already_exists` y el mismo ID. Pasaron Biome, tipos, 42 pruebas, build y pruebas HTTP contra MongoDB desechable. La corrección se aplica a nuevas capturas y no modifica documentos existentes.
-
 ## 04 — Encontrar artículos en la biblioteca
 
 - Inicio en `int`, base `bc133ee`, con capacidad del 26% en 5h y 47% en 7d.
@@ -58,3 +53,7 @@
 
 - La descarga privada de Ajustes transmite Markdown o JSON con los artículos y notas del propietario. Resuelve topics fusionados usando el vocabulario del propietario.
 - Biome, tipos, 49 pruebas, build e integración HTTP con MongoDB pasaron. La integración verificó 23 artículos, el aislamiento entre dos cuentas, la respuesta privada y ambos formatos.
+
+## 11 — Consultar lecturas relacionadas desde ChatGPT
+
+- `find_related_articles` reutiliza la consulta de la ficha y exige `articles:read`. La integración HTTP verificó resultados tras fusionar topics, el aislamiento entre propietarios y el rechazo de un token de solo escritura.

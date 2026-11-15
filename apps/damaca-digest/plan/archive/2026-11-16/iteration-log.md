@@ -39,3 +39,8 @@
 ## 02 — Validar la viabilidad externa
 
 - El usuario confirmó en producción el guardado de una fuente pública desde ChatGPT. Las capturas muestran las fichas de Proton (`full`), Heraldo de Aragón (`partial`) y El Mundo (`unavailable`). El caso parcial expone el límite de acceso. El caso inaccesible conserva la fuente y la nota sin resumen.
+
+## 03d — Deduplicar URLs con el parámetro utm
+
+- El usuario mostró un duplicado de Proton al recapturar la URL con `?utm=fake`. La regla anterior eliminaba claves `utm_*` y conservaba la clave exacta `utm`. Una prueba con esa misma URL reprodujo el fallo antes del cambio.
+- Se añadió `utm` como parámetro de tracking. La prueba HTTP de OAuth/MCP confirma que la recaptura devuelve `already_exists` y el mismo ID. Pasaron Biome, tipos, 42 pruebas, build y pruebas HTTP contra MongoDB desechable. La corrección se aplica a nuevas capturas y no modifica documentos existentes.

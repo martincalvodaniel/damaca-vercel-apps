@@ -110,3 +110,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Rutas: ajustes, exportación de artículos y repositorios de biblioteca y topics.
 - Aceptación: descargar todos los artículos y notas del propietario en Markdown o JSON. Conservar los nombres de topics resueltos y enviar la descarga sin cargar la biblioteca completa en memoria ni cachear datos privados.
 - Validación: Biome, tipos, pruebas, build e integración HTTP de las dos descargas con propietarios aislados.
+
+## 11 — Consultar lecturas relacionadas desde ChatGPT
+
+- Estado: `validated`.
+- Rutas: herramientas MCP y pruebas de captura HTTP.
+- Aceptación: resolver por ID los mismos artículos relacionados que muestra la ficha, con el permiso de lectura y el aislamiento por propietario.

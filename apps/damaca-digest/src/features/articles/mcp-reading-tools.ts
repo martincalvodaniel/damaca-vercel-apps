@@ -9,8 +9,9 @@ import {
   findArticle,
   findArticleByUrl,
   listArticles,
+  listRelatedArticles,
 } from "@/lib/db/articles"
-import { articleTopicLabels } from "@/lib/db/topics"
+import { articleTopicContext, articleTopicLabels } from "@/lib/db/topics"
 import {
   accessStatus,
   articleId,
@@ -162,6 +163,48 @@ export function registerReadingTools(
         })
       } catch {
         return readingError("Digest could not search the library.")
+      }
+    }
+  )
+
+  server.registerTool(
+    "find_related_articles",
+    {
+      description:
+        "Find up to three recent Digest articles that share topics with a saved article. Use the Digest article ID returned by get_article or search_articles.",
+      inputSchema: z.strictObject({ id: articleId }),
+      outputSchema: {
+        articles: z.array(
+          summaryResult.pick({
+            id: true,
+            title: true,
+            source: true,
+            detailUrl: true,
+          })
+        ),
+      },
+      annotations,
+      _meta: metadata,
+    },
+    async ({ id }) => {
+      if (!canRead) return scopeRequired(readScope)
+      try {
+        const article = await findArticle(ownerId, id)
+        if (!article) return result({ articles: [] })
+        const { matches } = await articleTopicContext(
+          ownerId,
+          article.topicIds,
+          article.proposedTopics ?? []
+        )
+        const articles = await listRelatedArticles(ownerId, id, matches)
+        return result({
+          articles: articles.map((item) => ({
+            ...item,
+            detailUrl: new URL(`/articles/${item.id}`, base).href,
+          })),
+        })
+      } catch {
+        return readingError("Digest could not retrieve related articles.")
       }
     }
   )

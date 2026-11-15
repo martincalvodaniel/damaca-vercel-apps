@@ -517,6 +517,25 @@ try {
       .structuredContent.article,
     null
   )
+  const relatedInput = { id: withTopics.articleId }
+  const relatedRead = await invoke(
+    reader,
+    "find_related_articles",
+    relatedInput
+  )
+  assert.equal(relatedRead.structuredContent.articles[0]?.id, article.articleId)
+  const otherRelated = await invoke(
+    otherReader,
+    "find_related_articles",
+    relatedInput
+  )
+  assert.deepEqual(otherRelated.structuredContent.articles, [])
+  const writerRelated = await invoke(
+    token,
+    "find_related_articles",
+    relatedInput
+  )
+  assert.match(writerRelated._meta["mcp/www_authenticate"][0], /articles:read/)
   const query = { q: "Pagination", author: "A. Writer", page: 2, sort: "title" }
   const searched = await invoke(reader, "search_articles", query)
   assert.deepEqual(
