@@ -1,4 +1,5 @@
 .guide {
+  grid-template-columns: minmax(0, 1fr);
   display: grid;
   gap: 0.65rem;
   margin-top: 0.65rem;
@@ -41,7 +42,8 @@
 
 .copy {
   margin: 0.25rem 0;
-  white-space: pre-wrap;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .fields,
@@ -161,4 +163,29 @@
 
 .blockButtons button:enabled:hover {
   background: #95653826;
+}
+
+.copy > :first-child {
+  margin-block-start: 0;
+}
+
+.copy > :last-child {
+  margin-block-end: 0;
+}
+
+.copy a {
+  color: var(--wax);
+  text-decoration: underline;
+}
+
+.copy pre,
+.tableScroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.copy th,
+.copy td {
+  padding: 0.2rem 0.4rem;
+  border: 1px solid #95653880;
 }

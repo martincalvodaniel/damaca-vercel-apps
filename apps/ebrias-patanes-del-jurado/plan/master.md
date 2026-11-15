@@ -31,3 +31,5 @@ La suma de las cuatro medias determina la clasificación inicial. Los empates po
 Durante la inscripción de Tapas, el listado muestra solo autores. El nombre se desvela al votar y sigue disponible para quien puede editar la inscripción. Desde la barra de navegación, el administrador puede usar la vista de miembro para consultar la app con los permisos habituales de su cuenta como miembro. El mismo botón permite recuperar la vista de administrador.
 
 La ficha de Letux incluye una lista de la compra compartida debajo de los coches. Los miembros pueden añadir y editar productos, marcarlos, reordenarlos y borrarlos con confirmación. Marcar un producto conserva su posición.
+
+Las descripciones de la guía de Letux admiten Markdown. Alojamiento conserva su texto editable y forma parte del grupo de desplegables.

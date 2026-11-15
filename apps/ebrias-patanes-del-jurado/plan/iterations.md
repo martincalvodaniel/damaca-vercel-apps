@@ -475,3 +475,10 @@
 - Rutas: revelación de Tapas, avatares, Ajustes y avisos de Letux.
 - Aceptación: votos de la ganadora tras la cuenta atrás, avatares en Miembros y eliminación de los avisos genéricos de guardado.
 - Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-65 — Markdown y alojamiento desplegable
+
+- Estado: `validated`.
+- Rutas: guía de Letux, pruebas y catálogo Bun.
+- Aceptación: las descripciones admiten Markdown seguro y Alojamiento comparte el grupo de desplegables.
+- Validación: Biome, tipos, pruebas de la guía y build.

@@ -26,6 +26,7 @@ import {
 } from "./attendance-form"
 import guideStyles from "./guide.module.css"
 import { GuideEditor } from "./guide-editor"
+import { GuideText } from "./guide-text"
 import { LumosGate } from "./lumos-gate"
 import styles from "./page.module.css"
 
@@ -73,10 +74,12 @@ export default async function NewYearsEve() {
               <GuideEditor guide={guide} revision={revision} />
             ) : null}
             {guide.notes.lodging ? (
-              <section className={guideStyles.panel}>
-                <h2>Alojamiento</h2>
-                <GuideText text={guide.notes.lodging} />
-              </section>
+              <details name="letux-sections" className={styles.attendees}>
+                <summary>Alojamiento</summary>
+                <div className={styles.card}>
+                  <GuideText text={guide.notes.lodging} />
+                </div>
+              </details>
             ) : null}
             <AttendanceBlocksSection canManage={canManage}>
               <AttendanceBoard
@@ -122,10 +125,6 @@ export default async function NewYearsEve() {
       </main>
     </LumosGate>
   )
-}
-
-function GuideText({ text }: { text: string }) {
-  return text ? <p className={guideStyles.copy}>{text}</p> : null
 }
 
 function ProgramDay({

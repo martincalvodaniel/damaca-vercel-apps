@@ -2,12 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-54 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-55 — Lista de la compra de Letux
-
-- Capacidad inicial de 89% en 5 h y 98% en 7 días. Lista compartida con orden persistente, marcas independientes, edición y borrado confirmado.
-- Biome, tipos, diez pruebas de compra y Tapas y build correctos. La comprobación en Chrome quedó pendiente porque la sesión ficticia redirigía a la portada antes de abrir la ficha.
+[Entregas EPJ-08 a EPJ-55 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-56 — Ajustes de compra, inscripciones y avisos
 
@@ -56,3 +51,8 @@
 
 - Capacidad inicial de 87% en 5 h y 86% en 7 días. La animación muestra el recuento de la ganadora tras la cuenta atrás. Ajustes y Tapas comparten el avatar con iniciales de respaldo. Se retiran los avisos genéricos de guardado.
 - Biome, tipos, catorce pruebas de Tapas y build correctos. Las pruebas cubren cero, uno, varios votos y ausencia de desempate. Pendiente la revisión visual con una sesión autenticada.
+
+## EPJ-65 — Markdown y alojamiento desplegable
+
+- Capacidad inicial de 76% en 5 h y 84% en 7 días. Las descripciones se renderizan como Markdown y Alojamiento comparte el grupo de desplegables de Letux.
+- Biome, tipos, cinco pruebas de guía y renderizado y build correctos. Se verificó en código que el editor solo emite avisos de error. Pendiente la revisión visual con una sesión autenticada.

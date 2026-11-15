@@ -84,6 +84,11 @@ function GuideForm({
     <form aria-label="Editar guía" className={styles.panel} onSubmit={submit}>
       <fieldset className={styles.fields} disabled={pending}>
         <legend>Editar guía</legend>
+        <p className={styles.copy}>
+          Las descripciones admiten Markdown: <code>**negrita**</code>,{" "}
+          <code>*cursiva*</code> y <code>[Cómo llegar](https://…)</code>.
+          También puedes pegar una URL directamente.
+        </p>
         <label>
           Alojamiento
           <textarea
