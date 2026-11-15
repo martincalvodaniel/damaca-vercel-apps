@@ -146,3 +146,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: Topics, catálogo y pruebas HTTP.
 - Aceptación: buscar un tema por nombre o alias con la misma normalización que MCP. Mantener los recuentos y las opciones de gestión del catálogo.
+
+## 17 — Recuperarse de errores de biblioteca
+
+- Estado: `validated`.
+- Rutas: estados de error del panel, ficha no encontrada y validación de acciones rápidas.
+- Aceptación: ofrecer reintento ante fallos del panel y volver a la biblioteca desde una ficha inexistente, con el mismo 404 para IDs ajenos. Validar el selector de acción rápida con el esquema del artículo.

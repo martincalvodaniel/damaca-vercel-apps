@@ -2,12 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 07 — Abrir Digest desde Compartir en Android
-
-- Inicio en `int`, base `fd455de`, con 61% en 5 h y 36% en 7 d.
-- Chrome documenta destinos Compartir para PWAs instaladas. OpenAI documenta seleccionar el conector con `@` en el compositor. No se encontró un enlace o intent documentado que preseleccione un MCP privado y envíe el mensaje. Digest registra `/share`, valida un enlace, prepara el prompt y lo copia antes de abrir ChatGPT. La pantalla es una vista de preparación sin persistencia.
-- Pasaron Biome, tipos, 48 pruebas, build e integración HTTP. Los manifiestos servidos de `main` e `int` anuncian el destino. En Chrome a 320 px se verificaron preparación, apertura de ChatGPT (interceptada en la prueba) y modo de copia manual si falla el portapapeles. No hubo un dispositivo Android disponible.
-
 ## 08 — Encontrar relacionados y exportar fichas
 
 - Artículos relacionados del mismo propietario, por coincidencia con topics activos, fusionados e históricos. Las fichas descargan una copia Markdown o JSON con las notas mediante un endpoint privado.
@@ -51,3 +45,8 @@
 
 - Topics permite buscar por nombre o alias con el mismo filtro normalizado que MCP. Las operaciones y recuentos siguen disponibles.
 - Biome, tipos y build pasaron. La integración HTTP buscó un alias fusionado en mayúsculas y un término sin coincidencias. Chrome verificó la vista a 320 y 1280 px.
+
+## 17 — Recuperarse de errores de biblioteca
+
+- El panel muestra un reintento seguro y la ficha inexistente ofrece volver a la biblioteca. Una ficha ajena responde con el mismo 404. Las acciones rápidas validan el selector con Zod.
+- Biome, tipos, build e integración HTTP pasaron. En Chrome a 320 px, la búsqueda se recuperó al pulsar el reintento tras restaurar un índice eliminado del MongoDB desechable.

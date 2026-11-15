@@ -2,6 +2,12 @@ import { z } from "zod"
 
 export const articleId = z.string().regex(/^[a-f\d]{24}$/i)
 export const accessStatus = z.enum(["unavailable", "partial", "full"])
+export const articleReadingChange = z.enum([
+  "favorite",
+  "unfavorite",
+  "read",
+  "unread",
+])
 export const readingStatus = z.enum(["unread", "reading", "read", "archived"])
 export const contentType = z.enum(["article", "news", "blog", "documentation"])
 const text = (limit: number) => z.string().trim().min(1).max(limit)

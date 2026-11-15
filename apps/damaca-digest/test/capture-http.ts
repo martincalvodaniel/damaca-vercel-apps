@@ -294,6 +294,7 @@ try {
     headers: { cookie: first.cookie },
   })
   assert.equal(wrongEditor.status, 404)
+  assert.match(await wrongEditor.text(), /Article not found/)
   const editor = await fetch(editUrl, { headers: { cookie: second.cookie } })
   assert.equal(editor.status, 200)
   const editorHtml = await editor.text()
@@ -636,6 +637,12 @@ try {
       signal: AbortSignal.timeout(10_000),
     })
   }
+  const invalidReading = await changeReading(
+    readingForm,
+    first.cookie,
+    "unknown"
+  )
+  assert.equal(invalidReading.status, 303)
   const deniedReading = await changeReading(
     readingForm,
     second.cookie,

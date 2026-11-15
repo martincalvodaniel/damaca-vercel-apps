@@ -8,7 +8,12 @@ import {
   editArticle,
   updateArticleReading,
 } from "@/lib/db/articles"
-import { articleEdit, articleId, articleRevision } from "@/schemas/article"
+import {
+  articleEdit,
+  articleId,
+  articleReadingChange,
+  articleRevision,
+} from "@/schemas/article"
 
 function lines(value: FormDataEntryValue | null) {
   return typeof value === "string"
@@ -95,28 +100,19 @@ export async function setArticleReading(
   )
     redirect("/")
   const path = `/articles/${id}`
-  const change = form.get("readingChange")
-  switch (change) {
-    case "favorite":
-    case "unfavorite":
-    case "read":
-    case "unread": {
-      const update =
-        change === "read" || change === "unread"
-          ? { readingStatus: change }
-          : { favorite: change === "favorite" }
-      const saved = await updateArticleReading(
-        user.id,
-        id,
-        revision,
-        update
-      ).catch(() => false)
-      if (!saved) redirect(`${path}?readingUpdate=failed`)
-      revalidatePath("/")
-      revalidatePath(path)
-      return redirect(path)
-    }
-    default:
-      redirect(path)
-  }
+  const operation = articleReadingChange.safeParse(form.get("readingChange"))
+  if (!operation.success) redirect(path)
+
+  const change = operation.data
+  const update =
+    change === "read" || change === "unread"
+      ? { readingStatus: change }
+      : { favorite: change === "favorite" }
+  const saved = await updateArticleReading(user.id, id, revision, update).catch(
+    () => false
+  )
+  if (!saved) redirect(`${path}?readingUpdate=failed`)
+  revalidatePath("/")
+  revalidatePath(path)
+  redirect(path)
 }
