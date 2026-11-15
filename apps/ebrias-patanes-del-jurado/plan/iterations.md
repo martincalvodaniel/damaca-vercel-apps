@@ -524,3 +524,10 @@
 - Rutas: filas compartidas de asistencia y coches de Letux.
 - Aceptación: dos columnas, avatares junto al nombre y controles de borrado alineados al borde derecho, con texto completo.
 - Validación: Biome incremental, tipos, build y comprobación en móvil estrecho y escritorio.
+
+## EPJ-72 — Revisión compacta de la papeleta
+
+- Estado: `validated`.
+- Rutas: modal de revisión de Tapas, en la rúbrica y el desempate.
+- Aceptación: cruz y tick del encabezado compartido, revisiones de rúbrica en dos filas y cuatro columnas.
+- Validación: Biome incremental, tipos, pruebas, build y comprobación del modal a distintos anchos.

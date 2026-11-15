@@ -60,3 +60,8 @@
 - Capacidad inicial de 100% en 5 h y 73% en 7 días. La X queda a 5 px del borde de la fila y el avatar conserva sus 16 px cuando el nombre se reparte en varias líneas.
 - Chromium con HTML aislado y estilos de Ebrias a 320, 390 y 1280 px. Asistentes, coches y solo lectura muestran los nombres del pantallazo en una línea y los alias largos completos, sin desbordamiento. La comprobación cubre filas con y sin botón.
 - Biome en los dos archivos de código modificados, tipos, 22 pruebas y build correctos. El build registró un aviso DNS al inicializar la autenticación. La revisión de espaciado se hizo sin sesión autenticada.
+
+## EPJ-72 — Revisión compacta de la papeleta
+
+- Capacidad inicial de 96% en 5 h y 72% en 7 días. La rúbrica de revisión reutiliza la cuadrícula de edición y el encabezado de ambos tipos de papeleta usa los controles compartidos.
+- Biome, tipos, 22 pruebas y build correctos. Una prueba aislada en Chromium a 320, 390 y 1280 px confirmó cuatro columnas y dos filas sin desbordamiento, con el tick y la cruz de 28 px en sus colores habituales. La comprobación visual se hizo sin sesión autenticada.
