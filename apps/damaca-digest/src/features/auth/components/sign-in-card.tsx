@@ -38,19 +38,16 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
   }, [callbackUrl])
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-zinc-950">
-      <section className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="mb-7 text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400">
-            {"Damaca Digest"}
-          </p>
-          <h1 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-            Welcome back
+    <main className="flex min-h-dvh items-center justify-center p-3 sm:p-6">
+      <section className="digest-panel w-full max-w-sm space-y-4 rounded-2xl p-4 sm:p-6">
+        <header>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            Damaca Digest
           </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            Sign in to access.
+            Sign in with your Google account to open your reading library.
           </p>
-        </div>
+        </header>
 
         {error ? <ErrorBanner>{error}</ErrorBanner> : null}
 
@@ -58,7 +55,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
           type="button"
           onClick={handleSignIn}
           disabled={isPending}
-          className="mt-5 flex w-full items-center justify-center gap-3 rounded-lg border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
+          className="flex min-h-11 w-full items-center justify-center gap-3 rounded-lg border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:focus:ring-offset-zinc-900"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
             <path

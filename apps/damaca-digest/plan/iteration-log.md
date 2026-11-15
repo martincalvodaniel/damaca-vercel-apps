@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 08 — Encontrar relacionados y exportar fichas
-
-- Artículos relacionados del mismo propietario, por coincidencia con topics activos, fusionados e históricos. Las fichas descargan una copia Markdown o JSON con las notas mediante un endpoint privado.
-- Pasaron Biome, tipos, 49 pruebas, build e integración HTTP. Se verificaron relacionados tras fusionar topics, descarga de notas por su propietario, rechazo de otra cuenta y escapado de contenido en Markdown. Chrome confirmó la ficha a 320 y 1280 px.
-
 ## 09 — Consultar la biblioteca desde MCP
 
 - `get_article` por ID o URL y `search_articles` con filtros y paginación comparten el repositorio de biblioteca. Las fichas devueltas excluyen notas personales. El permiso `articles:read` se pide por separado y el consentimiento muestra los permisos solicitados.
@@ -50,3 +45,8 @@
 
 - El panel muestra un reintento seguro y la ficha inexistente ofrece volver a la biblioteca. Una ficha ajena responde con el mismo 404. Las acciones rápidas validan el selector con Zod.
 - Biome, tipos, build e integración HTTP pasaron. En Chrome a 320 px, la búsqueda se recuperó al pulsar el reintento tras restaurar un índice eliminado del MongoDB desechable.
+
+## 18 — Unificar la interfaz de acceso y conexión
+
+- Inicio de sesión, solicitud de acceso y consentimiento usan paneles y controles acordes a la biblioteca.
+- Biome, tipos, build, integración HTTP de acceso y OAuth pasaron. Chrome verificó las tres pantallas a 320 y 1280 px, los controles táctiles de al menos 44 px y el permiso de lectura visible en el consentimiento.

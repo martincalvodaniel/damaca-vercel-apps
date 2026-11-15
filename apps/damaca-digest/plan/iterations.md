@@ -152,3 +152,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: estados de error del panel, ficha no encontrada y validación de acciones rápidas.
 - Aceptación: ofrecer reintento ante fallos del panel y volver a la biblioteca desde una ficha inexistente, con el mismo 404 para IDs ajenos. Validar el selector de acción rápida con el esquema del artículo.
+
+## 18 — Unificar la interfaz de acceso y conexión
+
+- Estado: `validated`.
+- Rutas: inicio de sesión, solicitud de acceso y consentimiento de ChatGPT.
+- Aceptación: aplicar el estilo de Digest a las pantallas de entrada y mostrar con claridad la acción principal y los permisos, con controles de tamaño táctil en móvil.

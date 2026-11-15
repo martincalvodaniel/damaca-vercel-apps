@@ -9,8 +9,8 @@ interface AccessRequestCardProps {
 
 export function AccessRequestCard({ email, status }: AccessRequestCardProps) {
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-lg items-center p-4">
-      <section className="flex w-full min-w-0 flex-col gap-5 rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+    <main className="mx-auto flex min-h-dvh w-full max-w-lg items-center p-3 sm:p-6">
+      <section className="digest-panel flex w-full min-w-0 flex-col gap-3 rounded-2xl p-4 sm:gap-4 sm:p-6">
         <header>
           <h1 className="text-2xl font-semibold tracking-tight">
             Your account does not have access
