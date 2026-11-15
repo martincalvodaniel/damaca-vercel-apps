@@ -15,10 +15,13 @@ import { useLocale } from "@/lib/i18n/client"
 
 export function VaultScreen() {
   const { t } = useLocale()
-  const vault = useVault()
+  const vault = useVault(true)
   const { busy, error, open, prepared, snapshot } = vault
   const [mode, setMode] = useState<Extract<SetupMode, "recover">>()
-  const recover = useCallback(() => setMode("recover"), [])
+  const recover = useCallback(() => {
+    vault.dismissAutomaticPasskey()
+    setMode("recover")
+  }, [vault.dismissAutomaticPasskey])
   const resetMode = useCallback(() => setMode(undefined), [])
   const cancel = useCallback(() => {
     vault.cancelPreparation()
@@ -81,6 +84,7 @@ export function VaultScreen() {
         <UnlockForm
           busy={busy}
           hasPasskey={snapshot.encrypted.passkeys.length > 0}
+          onChoosePassword={vault.dismissAutomaticPasskey}
           onRecover={recover}
           onUnlock={vault.unlock}
         />

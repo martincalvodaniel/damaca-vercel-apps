@@ -15,3 +15,10 @@
 - Vercel reported zero deployments. The Google OAuth client, MongoDB URI restricted to the preview database, and administrator allowlist are needed before deploying the validated `int` SHA.
 
 - On 2026-11-13, the owner reported successful installation from Preview (`int`) in Chrome on Android and real Google sign-in as an administrator. The owner then confirmed all four acceptance scenarios: request, approval and account isolation, vault synchronization and passkey unlock, airplane-mode consultation and revocation with local copy removal after reconnecting, and recovery with a new master password. The local ciphertext and viewport checks are recorded in iterations 01–03.
+
+## 05 — Local development startup
+
+- Starting capacity: 100% of 5 hours and 39% of 7 days.
+- Reproduced HTTP 500 on the active local server and twice on a cold copy of the workspace. Bun running Turbopack failed to resolve the generated MongoDB external alias. Running Next.js dev with Node resolved the driver. Session lookup also skips Better Auth initialization when the session cookie is absent.
+- The root dev command served Google sign-in with HTTP 200 from a cold Node and Turbopack start in 1.85 seconds with MongoDB deliberately unreachable. Scoped Biome, TypeScript, 42 Bun tests, the Webpack production build, and the compiled HTTP integration with disposable MongoDB passed.
+- Publication remains pending because local `int` already includes the unrelated unpublished commit `44e6431`. The remote was verified at `cd939db` before preparing this fix.

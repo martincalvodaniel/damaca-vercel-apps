@@ -19,11 +19,13 @@ function credentialResult(credential: Credential | null) {
 }
 
 export async function authenticatePasskey(
-  passkeys: Pick<Passkey, "id" | "salt">[]
+  passkeys: Pick<Passkey, "id" | "salt">[],
+  signal?: AbortSignal
 ) {
   if (!canUsePasskeys()) throw new Error("Passkeys are unavailable")
   return credentialResult(
     await navigator.credentials.get({
+      signal,
       publicKey: {
         challenge: crypto.getRandomValues(new Uint8Array(32)),
         allowCredentials: passkeys.map(({ id }) => ({

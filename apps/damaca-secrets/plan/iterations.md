@@ -34,7 +34,7 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 - Status: `validated`.
 - Paths: app development script and server session lookup.
-- Acceptance: the normal workspace dev command serves Google sign-in on a cold start without an external MongoDB module error or waiting on MongoDB for anonymous requests. Requests carrying a session still use Better Auth and MongoDB to validate identity.
+- Acceptance: the normal workspace dev command serves Google sign-in on a cold start without an external MongoDB module error or waiting on MongoDB for anonymous requests. Requests carrying a session still use Better Auth and MongoDB to validate identity. [Archived evidence](archive/2026-11-15/iteration-log.md#05--local-development-startup).
 
 ## 06 — Compact controls
 
@@ -94,3 +94,12 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Dependencies: encrypted offline shell and server-issued lease from iteration 03.
 - Acceptance: successful online unlock prepares the encrypted copy automatically, saves do not renew the lease, and a browser-level opt-out removes the copy.
 - Validation: incremental Biome, types, storage regression tests, production build, and Chrome offline acceptance at narrow and desktop widths.
+
+## 15 — Passkey prompt at vault entry
+
+- Status: `validated`.
+- Paths: main vault unlock flow, WebAuthn request, browser-local passkey preference, and app plans.
+- Dependencies: existing WebAuthn PRF vault unlock and authenticated snapshot.
+- Acceptance: try the known passkey once on online vault entry, retain manual unlock and password fallback, and cancel pending verification on dismissal, navigation, or locking.
+- Validation: incremental Biome, types, passkey and storage regressions, production build, and Chrome virtual WebAuthn verification.
+- Device acceptance pending: verify the visible biometric prompt in Chrome for Android (browser and installed app) and Safari desktop.

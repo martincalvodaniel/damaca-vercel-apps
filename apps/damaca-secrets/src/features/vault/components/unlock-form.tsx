@@ -17,6 +17,7 @@ const noPasskeys = () => false
 interface UnlockFormProps {
   busy: boolean
   hasPasskey: boolean
+  onChoosePassword?: () => void
   onRecover?: () => void
   onUnlock: VaultController["unlock"]
 }
@@ -24,6 +25,7 @@ interface UnlockFormProps {
 export function UnlockForm({
   busy,
   hasPasskey,
+  onChoosePassword,
   onRecover,
   onUnlock,
 }: UnlockFormProps) {
@@ -56,6 +58,7 @@ export function UnlockForm({
         {t.masterPassword}
         <input
           name="password"
+          onFocus={onChoosePassword}
           type="password"
           required
           minLength={15}

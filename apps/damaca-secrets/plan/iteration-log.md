@@ -1,6 +1,13 @@
 # Delivery log
 
-Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline and preview acceptance](archive/2026-11-15/iteration-log.md) for iterations 03 and 04.
+Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline, preview, and startup evidence](archive/2026-11-15/iteration-log.md) for iterations 03 through 05.
+
+## 15 — Passkey prompt at vault entry
+
+- Starting capacity: 58% of 5 hours and 66% of 7 days.
+- Online vault entry offers the browser's remembered passkey once and keeps password and manual unlock available. The reference is scoped to the vault owner. Pending requests are aborted on manual selection, locking, and navigation.
+- Passed staged Biome, TypeScript, 49 Bun tests, and the scoped Webpack build. A Chrome virtual authenticator exercised real PRF registration and automatic unlock without a gesture at 320 and 1200 CSS pixels. Simulated pending or dismissed requests verified cancellation, password fallback, manual replacement, route exit, and no retry. Also verified manual lock, settings, removing a passkey, and offline password-only reopening.
+- Physical biometric prompts on Chrome for Android, including installed mode, and Safari desktop are pending device acceptance.
 
 ## 14 — Automatic offline vault
 
@@ -26,13 +33,6 @@ Record observed evidence for completed iterations here. See [archived evidence](
 
 - Documented browser-side AES-GCM encryption, the MongoDB snapshot, password/passkey/recovery key wrapping, and security boundaries in the README; added Mermaid storage and unlock diagrams.
 - Checked implementation details against `crypto.ts`, `use-vault.ts`, the API route, and Mongo repository. `git diff --check` passed. No application tests were run for this documentation-only change.
-
-## 05 — Local development startup
-
-- Starting capacity: 100% of 5 hours and 39% of 7 days.
-- Reproduced HTTP 500 on the active local server and twice on a cold copy of the workspace. Bun running Turbopack failed to resolve the generated MongoDB external alias. Running Next.js dev with Node resolved the driver. Session lookup also skips Better Auth initialization when the session cookie is absent.
-- The root dev command served Google sign-in with HTTP 200 from a cold Node and Turbopack start in 1.85 seconds with MongoDB deliberately unreachable. Scoped Biome, TypeScript, 42 Bun tests, the Webpack production build, and the compiled HTTP integration with disposable MongoDB passed.
-- Publication remains pending because local `int` already includes the unrelated unpublished commit `44e6431`. The remote was verified at `cd939db` before preparing this fix.
 
 ## 06 — Compact controls
 

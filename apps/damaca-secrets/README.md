@@ -77,6 +77,10 @@ bun run build --filter=@damaca/damaca-secrets
 
 El servidor local usa Node.js en el puerto 3007. Bun gestiona las dependencias y ejecuta los comandos del monorepo. Las pruebas de integración `src/lib/db/user-access.integration.ts` y `test/access-http.ts` se ejecutan desde la raíz con `bun --no-env-file --conditions=react-server run` y la ruta del script. Usan un MongoDB desechable en loopback y una base nueva `template_access_test_<identificador>` por ejecución. Para la prueba HTTP, configura también el servidor de prueba con el mismo entorno, un origen `http://127.0.0.1:<puerto>` y el administrador ficticio `admin@example.com`.
 
+## Desbloqueo con llave de acceso
+
+Tras añadir una llave de acceso o usarla correctamente en un navegador, Secrets intenta abrir el diálogo del dispositivo la próxima vez que entres en la bóveda con conexión. Si tienes una llave de una versión anterior, usa primero **Desbloquear con una llave de acceso**. Ese botón y la contraseña maestra quedan disponibles si cierras el diálogo o el navegador no lo abre.
+
 ## Consulta sin conexión
 
 Al desbloquear la bóveda con conexión, la app prepara una copia cifrada en ese navegador. En **Ajustes → Acceso sin conexión** puedes comprobar si está lista, ver cuándo caduca o desactivar las copias en ese navegador. Al volver a abrir la URL sin red, puedes desbloquear con la contraseña maestra para buscar, ver y copiar credenciales.
