@@ -3,16 +3,17 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import type { ReactNode } from "react"
+import { letuxEventListing } from "@/features/events/catalog"
 import { AdmissionAlert } from "./admission-alert"
 
 export function Navigation({
   children,
   image,
-  showAdmissionAlerts,
+  isAdmin,
 }: {
   children?: ReactNode
   image?: string | null
-  showAdmissionAlerts: boolean
+  isAdmin: boolean
 }) {
   const pathname = usePathname()
 
@@ -32,9 +33,10 @@ export function Navigation({
         Inicio
       </Link>
       <Link
-        href="/eventos/26-12-30-nochevieja-letux"
+        href={letuxEventListing.href}
         aria-current={
-          pathname.startsWith("/eventos/26-12-30-nochevieja-letux")
+          pathname === letuxEventListing.href ||
+          pathname.startsWith(`${letuxEventListing.href}/`)
             ? "page"
             : undefined
         }
@@ -50,6 +52,23 @@ export function Navigation({
         </svg>
         Nochevieja 26
       </Link>
+      {isAdmin ? (
+        <Link
+          href="/eventos"
+          aria-current={pathname === "/eventos" ? "page" : undefined}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
+            <path d="M4 5h16v14H4zM4 9h16m-11 4h6" />
+          </svg>
+          Eventos
+        </Link>
+      ) : null}
       <Link
         href="/settings"
         aria-current={pathname === "/settings" ? "page" : undefined}
@@ -76,7 +95,7 @@ export function Navigation({
           </svg>
         )}
         Ajustes
-        {showAdmissionAlerts ? <AdmissionAlert /> : null}
+        {isAdmin ? <AdmissionAlert /> : null}
       </Link>
     </nav>
   )
