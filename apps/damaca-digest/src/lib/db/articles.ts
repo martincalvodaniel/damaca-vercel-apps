@@ -315,6 +315,15 @@ export async function listRelatedArticles(
   }))
 }
 
+export async function* iterateLibraryArticles(ownerId: string) {
+  const cursor = (await articles()).find({ ownerId }).sort(librarySorts.capture)
+  try {
+    for await (const document of cursor) yield serialize(document)
+  } finally {
+    await cursor.close()
+  }
+}
+
 export async function listArticles(ownerId: string, query: LibraryQuery) {
   const filter: Filter<ArticleDocument> = { ownerId }
   if (query.q) filter.$text = { $search: query.q }

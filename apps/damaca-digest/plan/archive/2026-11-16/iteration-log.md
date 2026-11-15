@@ -35,3 +35,7 @@
 - El filtro escrito en la terminal integrada era `@damaca/dacama-digest`. El workspace registrado es `@damaca/damaca-digest`.
 - El driver confirmó `ECONNREFUSED` en el MongoDB configurado en loopback, antes de iniciar OAuth. Se creó y arrancó una instancia MongoDB 8 local, dedicada, con volumen persistente y puerto 27017 limitado a loopback. El ping pasó y el Next ya en marcha devolvió HTTP 200 con una URL de autorización de Google. No se navegó a esa URL.
 - La pantalla de acceso distingue el 503 del fallo general y la guía documenta cómo arrancar MongoDB. Pasaron Biome, tipos, 41 pruebas y el build Webpack con valores de prueba.
+
+## 02 — Validar la viabilidad externa
+
+- El usuario confirmó en producción el guardado de una fuente pública desde ChatGPT. Las capturas muestran las fichas de Proton (`full`), Heraldo de Aragón (`partial`) y El Mundo (`unavailable`). El caso parcial expone el límite de acceso. El caso inaccesible conserva la fuente y la nota sin resumen.

@@ -46,9 +46,11 @@ function markdownLink(label: string, rawUrl: string) {
   return `[${inlineText(label)}](<${href}>)`
 }
 
-export function articleMarkdown(article: ArticleExport) {
+export function articleMarkdown(article: ArticleExport, headingLevel = 1) {
+  const heading = "#".repeat(headingLevel)
+  const section = "#".repeat(headingLevel + 1)
   const blocks = [
-    `# ${inlineText(article.title)}`,
+    `${heading} ${inlineText(article.title)}`,
     [
       markdownLink(article.source, article.url),
       ...article.authors.map(inlineText),
@@ -58,15 +60,15 @@ export function articleMarkdown(article: ArticleExport) {
       .join(" · "),
     `Source access reported by ChatGPT: ${article.accessStatus}`,
     article.accessNotes && markdownText(article.accessNotes),
-    article.summary && `## Summary\n\n${markdownText(article.summary)}`,
+    article.summary && `${section} Summary\n\n${markdownText(article.summary)}`,
     article.keyTakeaways.length &&
-      `## Key takeaways\n\n${article.keyTakeaways.map((item) => `- ${inlineText(item)}`).join("\n")}`,
+      `${section} Key takeaways\n\n${article.keyTakeaways.map((item) => `- ${inlineText(item)}`).join("\n")}`,
     article.topics.length &&
-      `## Topics\n\n${article.topics.map(inlineText).join(", ")}`,
+      `${section} Topics\n\n${article.topics.map(inlineText).join(", ")}`,
     article.relatedLinks.length &&
-      `## Links\n\n${article.relatedLinks.map(({ title, url, origin }) => `- ${markdownLink(title ?? url, url)} (${origin === "source" ? "Source reference" : "AI suggestion"})`).join("\n")}`,
+      `${section} Links\n\n${article.relatedLinks.map(({ title, url, origin }) => `- ${markdownLink(title ?? url, url)} (${origin === "source" ? "Source reference" : "AI suggestion"})`).join("\n")}`,
     article.personalNotes &&
-      `## Personal notes\n\n${markdownText(article.personalNotes)}`,
+      `${section} Personal notes\n\n${markdownText(article.personalNotes)}`,
     `Captured ${article.capturedAt.slice(0, 10)} · Reading status: ${article.readingStatus}${article.favorite ? " · Favorite" : ""}`,
   ]
   return `${blocks.filter(Boolean).join("\n\n")}\n`

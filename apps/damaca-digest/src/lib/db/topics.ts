@@ -128,16 +128,20 @@ function referencedTopics(
   ]
 }
 
+export async function createTopicLabelResolver(ownerId: string) {
+  const catalog = await readCatalog(ownerId)
+  return (topicIds: string[], legacyLabels: string[]) =>
+    referencedTopics(catalog, topicIds, legacyLabels).map(({ label }) => label)
+}
+
 export async function articleTopicLabels(
   ownerId: string,
   topicIds: string[],
   legacyLabels: string[]
 ) {
   if (!topicIds.length && !legacyLabels.length) return []
-  const catalog = await readCatalog(ownerId)
-  return referencedTopics(catalog, topicIds, legacyLabels).map(
-    ({ label }) => label
-  )
+  const resolve = await createTopicLabelResolver(ownerId)
+  return resolve(topicIds, legacyLabels)
 }
 
 export type TopicMatches = { ids: ObjectId[]; legacyLabels: string[] }

@@ -2,6 +2,7 @@ import {
   articleExport,
   articleMarkdown,
 } from "@/features/articles/article-export"
+import { exportHeaders } from "@/features/articles/library-export"
 import { getAuthorizedSession } from "@/lib/auth/session"
 import { findArticle } from "@/lib/db/articles"
 import { articleTopicLabels } from "@/lib/db/topics"
@@ -33,14 +34,7 @@ export async function GET(
   return new Response(
     json ? JSON.stringify(snapshot, null, 2) : articleMarkdown(snapshot),
     {
-      headers: {
-        "Content-Type": json
-          ? "application/json; charset=utf-8"
-          : "text/markdown; charset=utf-8",
-        "Content-Disposition": `attachment; filename="digest-${article.id}.${format}"`,
-        "Cache-Control": "private, no-store",
-        "X-Content-Type-Options": "nosniff",
-      },
+      headers: exportHeaders(format, `digest-${article.id}`),
     }
   )
 }

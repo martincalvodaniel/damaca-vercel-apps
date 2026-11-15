@@ -533,6 +533,34 @@ try {
   assert.equal(readerWrite.isError, true)
   assert.match(readerWrite._meta["mcp/www_authenticate"][0], /articles:write/)
 
+  const libraryJson = await fetch(`${origin}/settings/export?format=json`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(libraryJson.status, 200)
+  assert.equal(libraryJson.headers.get("cache-control"), "private, no-store")
+  const backup = (await libraryJson.json()) as {
+    id: string
+    title: string
+    topics: string[]
+  }[]
+  assert.equal(backup.length, 23)
+  assert.equal(
+    backup.some(({ title }) => title.includes("Other Owner")),
+    false
+  )
+  assert.deepEqual(
+    backup.find(({ id }) => id === withTopics.articleId)?.topics,
+    ["Engineering"]
+  )
+  const libraryMarkdown = await fetch(`${origin}/settings/export?format=md`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(libraryMarkdown.status, 200)
+  const backupMarkdown = await libraryMarkdown.text()
+  assert.match(backupMarkdown, /^# Damaca Digest/)
+  assert.match(backupMarkdown, /## Topic fixture/)
+  assert.doesNotMatch(backupMarkdown, /Other Owner/)
+
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)
   assert.equal(

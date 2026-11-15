@@ -103,3 +103,10 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Rutas: permisos OAuth, metadatos, herramientas MCP de lectura, repositorio y documentación.
 - Aceptación: buscar y recuperar artículos del propietario por ID o URL. Las herramientas exigen un permiso de lectura separado. Los clientes con solo escritura conservan su captura y no pueden leer fichas. Las respuestas excluyen notas personales.
 - Validación: tipos, pruebas, build e integración OAuth/MCP con tokens de lectura y escritura de dos cuentas.
+
+## 10 — Exportar la biblioteca
+
+- Estado: `validated`.
+- Rutas: ajustes, exportación de artículos y repositorios de biblioteca y topics.
+- Aceptación: descargar todos los artículos y notas del propietario en Markdown o JSON. Conservar los nombres de topics resueltos y enviar la descarga sin cargar la biblioteca completa en memoria ni cachear datos privados.
+- Validación: Biome, tipos, pruebas, build e integración HTTP de las dos descargas con propietarios aislados.

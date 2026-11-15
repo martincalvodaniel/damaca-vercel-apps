@@ -140,7 +140,7 @@ Las pruebas HTTP usan un MongoDB desechable en loopback, credenciales ficticias 
 
 ## Relacionados y descargas
 
-La ficha muestra hasta tres lecturas recientes con topics en común. **Download Markdown** y **Download JSON** exportan la ficha y sus notas personales mediante una descarga autenticada.
+La ficha muestra hasta tres lecturas recientes con topics en común. **Download Markdown** y **Download JSON** exportan la ficha y sus notas personales mediante una descarga autenticada. En **Settings → Export library** se pueden descargar todos los artículos y notas de la cuenta en cualquiera de los dos formatos.
 
 ## Compartir un enlace desde Android
 

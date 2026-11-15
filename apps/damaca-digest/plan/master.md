@@ -16,6 +16,6 @@ La captura MCP, la biblioteca con búsqueda ponderada, filtros y paginación, la
 
 ## Verificaciones pendientes
 
-El usuario confirmó el flujo de escritura MCP desde ChatGPT en producción con fuentes de acceso completo, parcial y no disponible. Quedan por verificar el aislamiento entre entornos y la restauración de backups. La PWA puede recibir enlaces de Compartir y preparar su envío con el conector de ChatGPT. Queda por verificar el registro del destino en un Android real. Las fichas muestran artículos relacionados por topic y se pueden exportar en Markdown y JSON. Las herramientas MCP de lectura permiten consultar fichas y buscar con un permiso OAuth explícito. Embeddings e integraciones de publicación quedan para entregas posteriores.
+El usuario confirmó el flujo de escritura MCP desde ChatGPT en producción con fuentes de acceso completo, parcial y no disponible. Quedan por verificar el aislamiento entre entornos y la restauración de backups. La PWA puede recibir enlaces de Compartir y preparar su envío con el conector de ChatGPT. Queda por verificar el registro del destino en un Android real. Las fichas muestran artículos relacionados por topic y se pueden exportar en Markdown y JSON. Ajustes permite descargar la biblioteca completa en los mismos formatos. Las herramientas MCP de lectura permiten consultar fichas y buscar con un permiso OAuth explícito. Embeddings e integraciones de publicación quedan para entregas posteriores.
 
 Consultar las [iteraciones](iterations.md), el [registro](iteration-log.md) y las [reglas de la app](../AGENTS.md).

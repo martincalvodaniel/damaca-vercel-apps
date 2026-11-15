@@ -2,10 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 02 — Validar la viabilidad externa
-
-- El usuario confirmó en producción el guardado de una fuente pública desde ChatGPT. Las capturas muestran las fichas de Proton (`full`), Heraldo de Aragón (`partial`) y El Mundo (`unavailable`). El caso parcial expone el límite de acceso. El caso inaccesible conserva la fuente y la nota sin resumen.
-
 ## 03d — Deduplicar URLs con el parámetro utm
 
 - El usuario mostró un duplicado de Proton al recapturar la URL con `?utm=fake`. La regla anterior eliminaba claves `utm_*` y conservaba la clave exacta `utm`. Una prueba con esa misma URL reprodujo el fallo antes del cambio.
@@ -57,3 +53,8 @@
 
 - `get_article` por ID o URL y `search_articles` con filtros y paginación comparten el repositorio de biblioteca. Las fichas devueltas excluyen notas personales. El permiso `articles:read` se pide por separado y el consentimiento muestra los permisos solicitados.
 - Pasaron Biome, tipos, 49 pruebas, build y la integración HTTP. Con dos cuentas, se verificaron permisos de lectura y escritura separados, desafío para permisos insuficientes, búsqueda paginada y rechazo del ID de otra cuenta. El conector real necesitará actualizar sus herramientas y conceder el nuevo permiso tras el despliegue.
+
+## 10 — Exportar la biblioteca
+
+- La descarga privada de Ajustes transmite Markdown o JSON con los artículos y notas del propietario. Resuelve topics fusionados usando el vocabulario del propietario.
+- Biome, tipos, 49 pruebas, build e integración HTTP con MongoDB pasaron. La integración verificó 23 artículos, el aislamiento entre dos cuentas, la respuesta privada y ambos formatos.
