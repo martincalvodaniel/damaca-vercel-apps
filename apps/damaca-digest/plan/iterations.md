@@ -52,12 +52,23 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Rutas: normalización de URL, pruebas y registro de Digest.
 - Aceptación: una recaptura con `?utm=fake` conserva el ID de la URL limpia y se mantiene el tratamiento de parámetros funcionales.
 
-## 04 — Entregar biblioteca y topics
+## 04 — Encontrar artículos en la biblioteca
+
+- Estado: `validated`.
+- Rutas: página de biblioteca, esquema de consulta, repositorio e índices.
+- Dependencia: captura y ficha.
+- Aceptación: búsqueda ponderada, filtros combinables y paginación con desempate por ID. Las consultas y los resultados quedan acotados al propietario.
+- Validación: Biome, tipos, tests, build, prueba HTTP con MongoDB y revisión responsive.
+
+## 04a — Editar y organizar artículos
 
 - Estado: `pending`.
-- Rutas: biblioteca, ficha, repositorios, topics y herramientas MCP.
-- Dependencia: captura y ficha.
-- Aceptación: búsqueda, filtros, paginación, edición, borrado, estados, favoritos, alias y fusión, con conservación de ediciones ante recaptura.
+- Aceptación: editar metadatos, notas, favoritos y estado, y borrar la ficha. Proteger cambios manuales ante recapturas y comprobar el propietario en cada mutación.
+
+## 04b — Consolidar topics
+
+- Estado: `pending`.
+- Aceptación: IDs estables, alias y fusión por propietario, recuentos, edición de asignaciones y herramienta MCP `list_topics`.
 
 ## 05 — Validar preproducción
 

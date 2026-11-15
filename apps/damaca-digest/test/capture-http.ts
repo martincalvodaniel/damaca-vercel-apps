@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { getAuthEnv, getChatGptClient, getDatabaseEnv } from "@/config/env"
 import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
+import { saveArticle } from "@/lib/db/articles"
 import { closeDatabaseConnection } from "@/lib/db/client"
 import { grantUserAccess, revokeUserAccess } from "@/lib/db/user-access"
 import { createFixtureSession } from "./session-fixture"
@@ -194,6 +195,51 @@ try {
   assert.equal(notOwned.status, 404)
   const other = await save(otherToken, { url, accessStatus: "unavailable" })
   assert.notEqual(other.articleId, article.articleId)
+  for (let index = 0; index < 21; index += 1) {
+    await saveArticle(first.ownerId, {
+      url: `https://example.com/library-${index}`,
+      title: `Pagination Fixture ${String(index).padStart(2, "0")}`,
+      authors: ["A. Writer"],
+      source: "Fixture source",
+      publishedAt: "2026-11-15T15:00:00.000Z",
+      accessStatus: "full",
+    })
+  }
+  await saveArticle(second.ownerId, {
+    url: "https://example.com/library-private",
+    title: "Pagination Fixture Other Owner",
+    authors: ["A. Writer"],
+    source: "Fixture source",
+    publishedAt: "2026-11-15T15:00:00.000Z",
+    accessStatus: "full",
+  })
+  const libraryUrl = `${origin}/?q=Pagination&author=A.+Writer&source=Fixture+source&access=full&publishedTo=2026-11-15&sort=title`
+  const firstPage = await fetch(libraryUrl, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(firstPage.status, 200)
+  const firstHtml = await firstPage.text()
+  assert.match(firstHtml, /Pagination Fixture 00/)
+  assert.match(firstHtml, /Pagination Fixture 19/)
+  assert.doesNotMatch(firstHtml, /Pagination Fixture 20|Other Owner/)
+  const secondPage = await fetch(`${libraryUrl}&page=2`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(secondPage.status, 200)
+  const secondHtml = await secondPage.text()
+  assert.match(secondHtml, /Pagination Fixture 20/)
+  assert.doesNotMatch(secondHtml, /Pagination Fixture 19|Other Owner/)
+  const relevance = await fetch(`${origin}/?q=Pagination&sort=relevance`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(relevance.status, 200)
+  assert.match(await relevance.text(), /Pagination Fixture/)
+  const invalid = await fetch(
+    `${origin}/?publishedFrom=2026-12-01&publishedTo=2026-11-01`,
+    { headers: { cookie: first.cookie } }
+  )
+  assert.match(await invalid.text(), /Check the search filters and date ranges/)
+
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)
   assert.equal(

@@ -4,7 +4,7 @@ Biblioteca privada de lecturas para consultar y corregir desde la web. ChatGPT p
 
 ## Estado de la app
 
-La captura MCP, la biblioteca reciente y la ficha privada funcionan contra Next.js compilado y MongoDB local. Better Auth persiste usuarios, cuentas, sesiones y estado OAuth en MongoDB. El usuario persistido conserva el mismo ID en web y MCP. Se comprueba el grant vigente al autorizar y al invocar el MCP, incluso si el token sigue vigente.
+La captura MCP, la biblioteca con búsqueda ponderada, filtros y paginación y la ficha privada funcionan contra Next.js compilado y MongoDB local. Better Auth persiste usuarios, cuentas, sesiones y estado OAuth en MongoDB. El usuario persistido conserva el mismo ID en web y MCP. Se comprueba el grant vigente al autorizar y al invocar el MCP, incluso si el token sigue vigente.
 
 ## Alcance aprobado
 

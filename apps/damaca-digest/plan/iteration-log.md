@@ -44,3 +44,9 @@
 
 - El usuario mostró un duplicado de Proton al recapturar la URL con `?utm=fake`. La regla anterior eliminaba claves `utm_*` y conservaba la clave exacta `utm`. Una prueba con esa misma URL reprodujo el fallo antes del cambio.
 - Se añadió `utm` como parámetro de tracking. La prueba HTTP de OAuth/MCP confirma que la recaptura devuelve `already_exists` y el mismo ID. Pasaron Biome, tipos, 42 pruebas, build y pruebas HTTP contra MongoDB desechable. La corrección se aplica a nuevas capturas y no modifica documentos existentes.
+
+## 04 — Encontrar artículos en la biblioteca
+
+- Inicio en `int`, base `bc133ee`, con capacidad del 26% en 5h y 47% en 7d.
+- Búsqueda MongoDB ponderada y limitada por propietario, filtros en la URL, orden y páginas de 20 con desempate por ID. El filtro de topics usa las propuestas históricas hasta integrar IDs estables.
+- Pasaron Biome, tipos, 42 pruebas, build y la prueba HTTP con dos páginas, filtros combinados, relevancia y datos aislados por propietario. Chrome verificó la biblioteca con filtros abiertos y sin desbordamiento horizontal a 320 y 1280 px.
