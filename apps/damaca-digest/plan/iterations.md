@@ -12,7 +12,7 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 02 — Validar la viabilidad externa
 
-- Estado: `blocked`. Falta un entorno HTTPS autorizado con Google, MongoDB y un conector privado de ChatGPT con escritura.
+- Estado: `validated`. El usuario confirmó la captura MCP desde ChatGPT en producción y aportó fichas de los tres niveles de acceso.
 - Rutas: configuración aislada de Digest y pruebas de OAuth/MCP.
 - Dependencias: workspace ChatGPT con escritura habilitada, un entorno Vercel autorizado y MongoDB aislado.
 - Aceptación: validar descubrimiento, consentimiento, intercambio y llamada de prueba desde ChatGPT, con una fuente pública y datos desechables.
@@ -45,6 +45,12 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Rutas: pantalla de acceso y guía de arranque local.
 - Aceptación: un 503 de autenticación muestra indisponibilidad temporal y la guía explica cómo arrancar MongoDB en loopback.
 - Validación: ping al MongoDB local, inicio del flujo OAuth, Biome, tipos y pruebas.
+
+## 03d — Deduplicar URLs con el parámetro utm
+
+- Estado: `validated`.
+- Rutas: normalización de URL, pruebas y registro de Digest.
+- Aceptación: una recaptura con `?utm=fake` conserva el ID de la URL limpia y se mantiene el tratamiento de parámetros funcionales.
 
 ## 04 — Entregar biblioteca y topics
 
