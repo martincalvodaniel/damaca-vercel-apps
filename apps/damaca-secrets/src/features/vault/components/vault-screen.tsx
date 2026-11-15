@@ -11,12 +11,17 @@ import {
 import { UnlockForm } from "@/features/vault/components/unlock-form"
 import { VaultEntries } from "@/features/vault/components/vault-entries"
 import { useVault } from "@/features/vault/use-vault"
+import { useLocale } from "@/lib/i18n/client"
 
 export function VaultScreen() {
-  const vault = useVault()
+  const { t } = useLocale()
+  const vault = useVault(true)
   const { busy, error, open, prepared, snapshot } = vault
   const [mode, setMode] = useState<Extract<SetupMode, "recover">>()
-  const recover = useCallback(() => setMode("recover"), [])
+  const recover = useCallback(() => {
+    vault.dismissAutomaticPasskey()
+    setMode("recover")
+  }, [vault.dismissAutomaticPasskey])
   const resetMode = useCallback(() => setMode(undefined), [])
   const cancel = useCallback(() => {
     vault.cancelPreparation()
@@ -38,18 +43,18 @@ export function VaultScreen() {
     >
       {!open || prepared ? (
         <header className="flex min-h-9 items-center gap-2">
-          <h1 className="text-xl font-semibold tracking-tight">Vault</h1>
+          <h1 className="text-xl font-semibold tracking-tight">{t.vault}</h1>
           {open || prepared ? (
             <IconButton
               icon="lock"
               tone="security"
-              label="Lock vault"
+              label={t.lockVault}
               onClick={lock}
             />
           ) : null}
         </header>
       ) : null}
-      {error ? <ErrorBanner>{error}</ErrorBanner> : null}
+      {error ? <ErrorBanner>{t[error]}</ErrorBanner> : null}
       {prepared ? (
         <RecoveryConfirmation
           busy={busy}
@@ -79,13 +84,14 @@ export function VaultScreen() {
         <UnlockForm
           busy={busy}
           hasPasskey={snapshot.encrypted.passkeys.length > 0}
+          onChoosePassword={vault.dismissAutomaticPasskey}
           onRecover={recover}
           onUnlock={vault.unlock}
         />
       ) : null}
       {!snapshot && !error ? (
         <p role="status" className="text-sm">
-          Loading vault…
+          {t.loadingVault}
         </p>
       ) : null}
       {!snapshot && error ? (
@@ -94,13 +100,13 @@ export function VaultScreen() {
           disabled={busy}
           onClick={vault.reload}
           icon="refresh"
-          label="Reload vault"
+          label={t.reloadVault}
           className="justify-self-start"
         />
       ) : null}
       {busy ? (
         <p role="status" className="text-sm text-zinc-600 dark:text-zinc-400">
-          Working…
+          {t.working}
         </p>
       ) : null}
     </main>

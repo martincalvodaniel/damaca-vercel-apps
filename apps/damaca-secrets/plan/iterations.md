@@ -21,20 +21,20 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: app PWA shell and service worker, browser storage, vault UI and API.
 - Dependencies: 02.
-- Acceptance: opt-in encrypted snapshot, password unlock in airplane mode, configurable 24-hour validity, cleanup on logout and denial, online revalidation, and read-only offline use.
+- Acceptance: opt-in encrypted snapshot, password unlock in airplane mode, configurable 24-hour validity, cleanup on logout and denial, online revalidation, and read-only offline use. [Archived evidence](archive/2026-11-15/iteration-log.md#03--offline-consultation).
 
 ## 04 — Vercel preview and device acceptance
 
 - Status: `validated`.
 - Paths: app deployment configuration and acceptance evidence.
 - Dependencies: 01–03, dedicated Google OAuth credentials, a MongoDB URI restricted to the preview database, test administrators, and an Android device. The Vercel project and branch origin are configured. See [deployments](../README.md#despliegues).
-- Acceptance: verify end-to-end Google, permission, vault, passkey, and offline flows with synthetic accounts, narrow viewport and desktop, Android Chrome, and no plaintext leakage. Record actual results and gaps.
+- Acceptance: verify end-to-end Google, permission, vault, passkey, and offline flows with synthetic accounts, narrow viewport and desktop, Android Chrome, and no plaintext leakage. Record actual results and gaps. [Archived evidence](archive/2026-11-15/iteration-log.md#04--vercel-preview-and-device-acceptance).
 
 ## 05 — Local development startup
 
 - Status: `validated`.
 - Paths: app development script and server session lookup.
-- Acceptance: the normal workspace dev command serves Google sign-in on a cold start without an external MongoDB module error or waiting on MongoDB for anonymous requests. Requests carrying a session still use Better Auth and MongoDB to validate identity.
+- Acceptance: the normal workspace dev command serves Google sign-in on a cold start without an external MongoDB module error or waiting on MongoDB for anonymous requests. Requests carrying a session still use Better Auth and MongoDB to validate identity. [Archived evidence](archive/2026-11-15/iteration-log.md#05--local-development-startup).
 
 ## 06 — Compact controls
 
@@ -78,3 +78,28 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Paths: app README and planning records.
 - Dependencies: preview acceptance in iteration 04.
 - Acceptance: replace the completed first-preview checklist with current deployment links and preserve the observed acceptance evidence. Verify local links and `git diff --check`.
+
+## 13 — Spanish and English interface
+
+- Status: `validated`.
+- Paths: Damaca Secrets UI, locale preference, offline shell, metadata, and app plans.
+- Dependencies: existing settings, access flows, and offline shell.
+- Acceptance: Spanish default, persistent English or Spanish selection, localized visible and accessible copy throughout the app, and offline read-only access in the selected language.
+- Validation: incremental Biome, types, tests, build, manifests for both branches, and mobile, desktop, and offline browser checks.
+
+## 14 — Automatic offline vault
+
+- Status: `validated`.
+- Paths: vault unlock and save flows, browser offline storage and settings, localized copy, and app plans.
+- Dependencies: encrypted offline shell and server-issued lease from iteration 03.
+- Acceptance: successful online unlock prepares the encrypted copy automatically, saves do not renew the lease, and a browser-level opt-out removes the copy.
+- Validation: incremental Biome, types, storage regression tests, production build, and Chrome offline acceptance at narrow and desktop widths.
+
+## 15 — Passkey prompt at vault entry
+
+- Status: `validated`.
+- Paths: main vault unlock flow, WebAuthn request, browser-local passkey preference, and app plans.
+- Dependencies: existing WebAuthn PRF vault unlock and authenticated snapshot.
+- Acceptance: try the known passkey once on online vault entry, retain manual unlock and password fallback, and cancel pending verification on dismissal, navigation, or locking.
+- Validation: incremental Biome, types, passkey and storage regressions, production build, and Chrome virtual WebAuthn verification.
+- Device acceptance pending: verify the visible biometric prompt in Chrome for Android (browser and installed app) and Safari desktop.

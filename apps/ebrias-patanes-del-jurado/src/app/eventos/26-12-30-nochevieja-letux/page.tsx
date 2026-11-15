@@ -9,6 +9,7 @@ import {
   guideSections,
 } from "@/features/event-guide/guide"
 import { readGuide } from "@/features/event-guide/store"
+import { formatEventDate, letuxEventListing } from "@/features/events/catalog"
 import {
   getAttendanceBlocks,
   getEventRoster,
@@ -34,7 +35,9 @@ import { LumosGate } from "./lumos-gate"
 import styles from "./page.module.css"
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Next.js requires this page export.
-export const metadata: Metadata = { title: "Nochevieja en Letux · Ebrias" }
+export const metadata: Metadata = {
+  title: `${letuxEventListing.title} · Ebrias`,
+}
 
 export default async function NewYearsEve() {
   const user = await getAuthorizedUser()
@@ -76,13 +79,18 @@ export default async function NewYearsEve() {
                 <path d="M14.5 0 4 18h6.5L8 32l12-20h-7L14.5 0Z" />
               </svg>
             </div>
-            <h1 className={styles.title}>Nochevieja en Letux</h1>
+            <h1 className={styles.title}>{letuxEventListing.title}</h1>
             <p className={styles.date}>
-              <time dateTime="2026-12-30">30 dic 2026</time> –{" "}
-              <time dateTime="2027-01-01">1 ene 2027</time>
+              <time dateTime={letuxEventListing.startDate}>
+                {formatEventDate(letuxEventListing.startDate)}
+              </time>{" "}
+              –{" "}
+              <time dateTime={letuxEventListing.endDate}>
+                {formatEventDate(letuxEventListing.endDate)}
+              </time>
             </p>
             <p className={styles.details}>
-              Casa rural en Letux · Disfraces de Harry Potter
+              {letuxEventListing.location} · Disfraces de Harry Potter
             </p>
           </header>
 

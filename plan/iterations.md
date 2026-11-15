@@ -280,3 +280,16 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Aceptación: instalación reproducible y compatibilidad de la actualización con los workspaces y el envío Web Push. El Hub local conserva callbacks HTTP de loopback registrados y los demás requieren HTTPS.
 - Validación: Biome, tipos, suites y builds, más envío Web Push contra un servidor local.
 - Evidencia: [AGW-29](iteration-log.md#agw-29--actualizar-dependencias-del-monorepo).
+
+## AGW-30 — Generar los iconos de Damaca Digest
+
+- Estado: `validated`.
+- Rutas: generador raíz, recursos de Digest y documentación.
+- Aceptación: favicon nítido en tres tamaños, PNG cuadrado para Vercel e iconos públicos para Chrome, incluida la variante maskable. Verificar las variantes `main` e `int` del manifiesto y los vínculos en el HTML.
+
+## AGW-31 — Hacer recuperable la inicialización de la plantilla MongoDB
+
+- Estado: `validated`.
+- Rutas: autenticación, reglas y pruebas de la plantilla `mongo-google`.
+- Aceptación: las apps generadas inicializan Better Auth de forma diferida, comparten el intento concurrente y lo descartan si falla. Mantener el modo de sesión por cookie del starter y documentar la conexión previa para adaptadores persistentes.
+- Validación: pruebas del generador y de una app recién generada. Comprobar el acceso habitual y la recuperación local al activar un adaptador MongoDB en una copia de prueba.

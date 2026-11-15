@@ -20,6 +20,7 @@ jobs:
           - "@damaca/card-wars"
           - "@damaca/dalis-home-management"
           - "@damaca/dalis-tasks-events"
+          - "@damaca/damaca-digest"
           - "@damaca/damaca-hub"
           - "@damaca/pocha-score"
           - "@damaca/lbdp"
@@ -75,3 +76,26 @@ jobs:
         run: bun run type-check
       - name: Test
         run: bun run test
+
+  digest-capture:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:8
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.adminCommand({ ping: 1 }).ok'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: bun install --frozen-lockfile
+      - run: bash apps/damaca-digest/test/run-capture-http.sh

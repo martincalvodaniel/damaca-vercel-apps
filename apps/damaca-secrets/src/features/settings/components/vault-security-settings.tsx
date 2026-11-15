@@ -8,8 +8,10 @@ import { SetupForm } from "@/features/vault/components/setup-form"
 import { UnlockForm } from "@/features/vault/components/unlock-form"
 import { VaultControls } from "@/features/vault/components/vault-controls"
 import { useVault } from "@/features/vault/use-vault"
+import { useLocale } from "@/lib/i18n/client"
 
 export function VaultSecuritySettings() {
+  const { t } = useLocale()
   const headingId = useId()
   const vault = useVault()
   const { busy, error, open, prepared, snapshot } = vault
@@ -35,33 +37,33 @@ export function VaultSecuritySettings() {
     >
       <header className="flex min-h-9 items-center justify-between gap-2">
         <h2 id={headingId} className="text-lg font-semibold">
-          Vault security
+          {t.vaultSecurity}
         </h2>
         {open || prepared ? (
           <IconButton
             icon="lock"
             tone="security"
-            label="Lock vault"
+            label={t.lockVault}
             onClick={lock}
           />
         ) : null}
       </header>
-      {error ? <ErrorBanner>{error}</ErrorBanner> : null}
+      {error ? <ErrorBanner>{t[error]}</ErrorBanner> : null}
       {!snapshot && !error ? (
         <p role="status" className="text-sm">
-          Loading vault…
+          {t.loadingVault}
         </p>
       ) : null}
       {!snapshot && error ? (
         <IconButton
           icon="refresh"
-          label="Reload vault"
+          label={t.reloadVault}
           onClick={vault.reload}
           disabled={busy}
         />
       ) : null}
       {snapshot && !snapshot.encrypted ? (
-        <p className="text-sm">Create your vault to manage its security.</p>
+        <p className="text-sm">{t.createForSecurity}</p>
       ) : null}
       {snapshot?.encrypted && !open && !prepared ? (
         <UnlockForm

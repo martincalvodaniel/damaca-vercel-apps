@@ -4,15 +4,20 @@ import { useActionState, useId } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { IconButton } from "@/components/ui/icon-button"
 import { changeUserAccess } from "@/features/admin/actions"
+import { useLocale } from "@/lib/i18n/client"
+import { useFormValidation } from "@/lib/i18n/form-validation"
+import { formatMessage } from "@/lib/i18n/messages"
 import type { AccessActionState } from "@/types/access"
 
 interface AccessFormProps {
   email?: string
 }
 
-const initialState: AccessActionState = { status: "idle", message: "" }
+const initialState: AccessActionState = { status: "idle" }
 
 export function AccessForm({ email }: AccessFormProps) {
+  const { t } = useLocale()
+  const formValidation = useFormValidation()
   const [state, action, pending] = useActionState(
     changeUserAccess,
     initialState
@@ -21,7 +26,11 @@ export function AccessForm({ email }: AccessFormProps) {
   const isRevoke = email !== undefined
 
   return (
-    <form action={action} className="flex min-w-0 flex-col gap-3">
+    <form
+      {...formValidation}
+      action={action}
+      className="flex min-w-0 flex-col gap-3"
+    >
       <input
         type="hidden"
         name="operation"
@@ -32,7 +41,7 @@ export function AccessForm({ email }: AccessFormProps) {
       ) : (
         <div className="flex flex-col gap-2">
           <label htmlFor={emailId} className="text-sm font-medium">
-            Google email address
+            {t.googleEmail}
           </label>
           <input
             id={emailId}
@@ -50,24 +59,26 @@ export function AccessForm({ email }: AccessFormProps) {
         type="submit"
         disabled={pending}
         icon={isRevoke ? "close" : "check"}
-        label={isRevoke ? `Revoke access for ${email}` : "Grant access"}
+        label={
+          isRevoke ? formatMessage(t.revokeAccessFor, { email }) : t.grantAccess
+        }
         tone={isRevoke ? "danger" : "primary"}
         className="self-start"
       />
       {pending ? (
         <p role="status" className="text-sm">
-          Saving…
+          {t.saving}
         </p>
       ) : null}
       {state.status === "error" ? (
-        <ErrorBanner>{state.message}</ErrorBanner>
+        <ErrorBanner>{t[state.code]}</ErrorBanner>
       ) : null}
       {state.status === "success" ? (
         <p
           role="status"
           className="text-sm text-emerald-700 dark:text-emerald-400"
         >
-          {state.message}
+          {t[state.code]}
         </p>
       ) : null}
     </form>

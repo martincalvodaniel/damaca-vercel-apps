@@ -32,10 +32,7 @@ export default async function RootLayout({
     <html lang="es">
       <body>
         {user ? (
-          <Navigation
-            image={user.image}
-            showAdmissionAlerts={user.role === "admin"}
-          >
+          <Navigation image={user.image} isAdmin={user.role === "admin"}>
             {user.isAccountAdmin ? (
               <form action={toggleMemberView} className="member-view-form">
                 <button

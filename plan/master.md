@@ -19,7 +19,9 @@ Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y f
 
 ## Instalación de webapps
 
-Todas las apps sirven un manifiesto para instalarse en modo independiente. Los nombres base vigentes son `billing`, `card-wars`, `dalis-home`, `dalis-tasks`, `damaca-hub`, `damaca-pocs`, `damaca-secrets`, `ebrias`, `lbdp` y `pocha-score`. La rama `int` añade `-int`. Las apps nuevas usan el identificador del generador. La regla operativa está en [AGENTS.md](../AGENTS.md#web-app-installation) y la entrega transversal en [AGW-28](iterations.md#agw-28--instalación-uniforme-de-webapps).
+Todas las apps sirven un manifiesto para instalarse en modo independiente. Los nombres base vigentes son `billing`, `card-wars`, `dalis-home`, `dalis-tasks`, `damaca-digest`, `damaca-hub`, `damaca-pocs`, `damaca-secrets`, `ebrias`, `lbdp` y `pocha-score`. La rama `int` añade `-int`. Las apps nuevas usan el identificador del generador. La regla operativa está en [AGENTS.md](../AGENTS.md#web-app-installation) y la entrega transversal en [AGW-28](iterations.md#agw-28--instalación-uniforme-de-webapps).
+
+Damaca Digest dispone de un origen vectorial propio y usa el generador raíz para publicar favicon e iconos de instalación. [AGW-30](iterations.md#agw-30--generar-los-iconos-de-damaca-digest).
 
 ## Aplicaciones
 
@@ -84,3 +86,5 @@ La interfaz de las aplicaciones prioriza el contenido útil y la densidad en mó
 ## Selección de base de datos MongoDB
 
 Las aplicaciones con MongoDB y la plantilla `mongo-google` usan `MONGODB_DB` para seleccionar la base dentro del clúster indicado por `MONGODB_URI`. Cada app conserva sus valores predeterminados por entorno. [AGW-26](iterations.md#agw-26--verificar-la-selección-de-base-mongodb).
+
+La plantilla `mongo-google` inicializa Better Auth bajo demanda y vuelve a intentarlo después de un fallo. Sigue usando sesiones por cookie. Las apps que adopten un adaptador persistente deben esperar al cliente MongoDB conectado dentro de esa inicialización. [AGW-31](iterations.md#agw-31--hacer-recuperable-la-inicialización-de-la-plantilla-mongodb).

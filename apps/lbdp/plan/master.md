@@ -4,7 +4,7 @@
 
 Esqueleto público independiente de La Bottega di Pali. Identidad verde oliva y crema, fotos del negocio, portada, talleres y fichas, clases, bonos, celebraciones, servicios y contacto. Contenido editorial estático y navegación responsive. La web actual conserva fechas, precios y compra mediante enlaces explícitos.
 
-Investigación de referencia: [dossier](../../../docs/research/la-bottega-di-pali/README.md). Las decisiones pendientes siguen abiertas: no se elige base de datos, pasarela, reglas de bonos/aforo ni contrato API. No hay conexión a billing, cuentas, formularios enviados, carrito, reservas o cobros locales. No cambiar las otras aplicaciones.
+Investigación de referencia: [dossier](../../../docs/research/la-bottega-di-pali/README.md). Las decisiones pendientes siguen abiertas: siguen por decidir la base de datos, la pasarela de producción, las reglas de bonos/aforo y el contrato API. No hay conexión a billing, cuentas, formularios enviados, carrito, reservas o cobros reales. No cambiar las otras aplicaciones.
 
 ## Decisiones del esqueleto
 
@@ -27,3 +27,7 @@ Proyecto `lbdp` del equipo `martincalvodaniels-projects`, raíz `apps/lbdp`, Nex
 [LBDP-04](iterations.md#lbdp-04--desactivar-deployments-automáticos-de-git) incorpora `vercel.ts` con `git.deploymentEnabled: false` y dependencia de configuración del catálogo; publicación manual bajo petición.
 
 La configuración de despliegue y acceso geográfico se rige por [AGW-22](../../../plan/iterations.md#agw-22--align-vercel-configuration).
+
+## Pagos de prueba
+
+[LBDP-05](iterations.md#lbdp-05--producto-de-prueba-con-redsys) prioriza la integración Redsys por redirección. Un producto de 1 € permite probar autorizaciones y denegaciones con la pasarela sandbox. El resultado firmado queda en los logs locales, sin base de datos ni historial de pedidos.

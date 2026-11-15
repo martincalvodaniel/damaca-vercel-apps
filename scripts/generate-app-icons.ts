@@ -14,6 +14,7 @@ const applications = [
     source: "public/damaca-pocs-logo.png",
   },
   { name: "lbdp", background: "#ffffff", source: "src/app/icon.png" },
+  { name: "damaca-digest", background: "#172554", copyCatalogIcon: false },
   { name: "damaca-secrets", background: "#047857" },
   { name: "billing-poc", background: "#fafafa" },
   { name: "dalis-home-management", background: "#1d4f40" },
@@ -77,7 +78,8 @@ export async function generateApplicationIcons(
       resolve(directory, "source" in app ? app.source : "src/app/icon.svg")
     )
     const usesRasterArtwork = "source" in app && app.source.endsWith(".png")
-    if (app.name !== "damaca-hub" && !usesRasterArtwork) {
+    const copyCatalogIcon = !("copyCatalogIcon" in app) || app.copyCatalogIcon
+    if (app.name !== "damaca-hub" && !usesRasterArtwork && copyCatalogIcon) {
       const catalogDirectory = resolve(
         rootDirectory,
         "apps/damaca-hub/public/app-icons"
@@ -112,7 +114,10 @@ export async function generateApplicationIcons(
     )
     const appleIcon = await createSafeIcon(source, 180, app.background)
     const hasManifest =
-      isTasks || app.name === "pocha-score" || app.name === "card-wars"
+      isTasks ||
+      app.name === "pocha-score" ||
+      app.name === "card-wars" ||
+      app.name === "damaca-digest"
     if (app.name !== "damaca-pocs")
       await writeFile(
         resolve(

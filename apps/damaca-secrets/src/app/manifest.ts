@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next"
 import { installName } from "@/config/install-name"
+import { defaultLocale } from "@/lib/i18n/locale"
+import { messages } from "@/lib/i18n/messages"
 
 export const dynamic = "force-static"
 
@@ -8,8 +10,8 @@ export default function manifest(): MetadataRoute.Manifest {
     id: "/",
     name: installName,
     short_name: installName,
-    description: "A private vault for your account credentials.",
-    lang: "en",
+    description: messages[defaultLocale].description,
+    lang: defaultLocale,
     start_url: "/",
     scope: "/",
     display: "standalone",

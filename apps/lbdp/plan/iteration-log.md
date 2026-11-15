@@ -40,3 +40,11 @@
 - Configuración versionada: Git deployments desactivados para los commits que incluyen este archivo; otras ramas con configuración anterior no quedan modificadas por este commit. No se pausa el proyecto ni se cambia el tráfico actual.
 - Validación: instalación offline completa, type-check filtrado de LBDP, Biome y diff check correctos. El primer intento usó solo `--lockfile-only`, que no instala enlaces locales; `bun install --offline` resuelve la dependencia. No se ejecutan pruebas de producto ni un deployment. Publicación en int y SHA remoto comprobados al cierre.
 - Limitación: no se ha podido actualizar la opción remota mediante `vercel api`; el endpoint de proyecto rechazó `gitProviderOptions` en el intento anterior. El push de este cambio podría activar el Git deployment existente de LBDP antes de que la configuración entre en vigor.
+
+## LBDP-05 — Producto de prueba con Redsys
+
+- [Aceptación](iterations.md#lbdp-05--producto-de-prueba-con-redsys). Demo local de 1,00 € por redirección a Redsys, sin persistencia. El retorno es informativo y el resultado firmado queda en el log de servidor.
+- Sandbox oficial, 15/11/2026. Autorización `1693VNRUMMVR` (CVV 123), respuesta `0000`. Denegación `635491X5NPIV` (CVV 172), respuesta `0172` tras tres intentos en el mismo pedido. Los dos POST de Redsys atravesaron el relay HTTPS, validaron la firma y obtuvieron HTTP 200. En ambos casos se comprobó el retorno del navegador. Un intento denegado que se cerró pulsando «Cancelar» produjo `9915`, registrado por separado como cancelación.
+- Pruebas automatizadas con Bun, cuatro casos correctos, incluido el vector oficial. Prueba HTTP con importe de cliente manipulado, firma inválida, POST de otro origen y recepción duplicada. El relay solo aceptó POST a la notificación. Se cerró el túnel al terminar.
+- Chrome a 390 y 1440 px, ruta de producto y retorno informativo comprobados sin desbordamiento horizontal. Build local de producción devuelve HTTP 404 en las cuatro rutas de la demo incluso con la configuración de pruebas presente.
+- Biome incremental, tipos, pruebas, build y `git diff --check` correctos. Capacidad antes de cerrar, 25% de 5h y 61% de 7d.

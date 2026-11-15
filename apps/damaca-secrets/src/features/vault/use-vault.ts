@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { loadOnlineSnapshot } from "@/features/offline/online-snapshot"
+import { prepareOfflineCopy } from "@/features/offline/prepare-copy"
 import {
   isTransportFailure,
   saveVault,
@@ -16,9 +17,19 @@ import {
   unlockRecovery,
   wrapPasskey,
 } from "@/features/vault/crypto"
-import { authenticatePasskey, registerPasskey } from "@/features/vault/passkeys"
-import { useIdleLock } from "@/features/vault/use-idle-lock"
 import {
+  getRememberedPasskey,
+  rememberPasskey,
+} from "@/features/vault/passkey-preference"
+import {
+  authenticatePasskey,
+  canUsePasskeys,
+  registerPasskey,
+} from "@/features/vault/passkeys"
+import { useIdleLock } from "@/features/vault/use-idle-lock"
+import type { MessageKey } from "@/lib/i18n/messages"
+import {
+  captureOfflineMarker,
   clearOfflineVault,
   readOfflineVault,
   refreshOfflineVault,
@@ -29,23 +40,40 @@ import type { EncryptedVault, VaultEntry, VaultRead } from "@/schemas/vault"
 type OpenVault = { key: CryptoKey; entries: VaultEntry[] }
 type PreparedVault = Awaited<ReturnType<typeof prepareVault>> & {
   entries: VaultEntry[]
+  renewOfflineLease: boolean
 }
 
-export function useVault() {
+type PasskeyAssertion = Awaited<ReturnType<typeof authenticatePasskey>>
+type UnlockInput = { password: string } | { credential: PasskeyAssertion }
+
+export function useVault(offerPasskeyOnEntry = false) {
   const [snapshot, setSnapshot] = useState<VaultRead>()
   const [open, setOpen] = useState<OpenVault>()
   const [prepared, setPrepared] = useState<PreparedVault>()
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState("")
+  const [error, setError] = useState<MessageKey>()
   const epoch = useRef(0)
   const running = useRef(false)
+  const passkeyPrompt = useRef<AbortController | null>(null)
+  const automaticAttempted = useRef(false)
+
+  const cancelPasskeyPrompt = useCallback(() => {
+    passkeyPrompt.current?.abort()
+    passkeyPrompt.current = null
+  }, [])
+
+  const dismissAutomaticPasskey = useCallback(() => {
+    automaticAttempted.current = true
+    cancelPasskeyPrompt()
+  }, [cancelPasskeyPrompt])
 
   const lock = useCallback(() => {
     epoch.current++
+    dismissAutomaticPasskey()
     setOpen(undefined)
     setPrepared(undefined)
-    setError("")
-  }, [])
+    setError(undefined)
+  }, [dismissAutomaticPasskey])
 
   const offline = useCallback(async () => {
     lock()
@@ -54,9 +82,7 @@ export function useVault() {
       window.location.replace("/offline-vault")
       return
     }
-    setError(
-      "You are offline. Enable offline access when connected to consult this vault without coverage."
-    )
+    setError("vaultOffline")
   }, [lock])
 
   useEffect(() => {
@@ -74,35 +100,36 @@ export function useVault() {
           return
         }
         setError(
-          error instanceof VaultRequestError
-            ? error.message
-            : "Could not load the vault."
+          error instanceof VaultRequestError ? error.code : "loadVaultFailed"
         )
       })
     const onOffline = () => void offline()
     window.addEventListener("offline", onOffline)
+    window.addEventListener("pagehide", dismissAutomaticPasskey)
     const stop = subscribeToOfflineReset(lock)
     return () => {
       epoch.current++
+      cancelPasskeyPrompt()
       controller.abort()
       window.removeEventListener("offline", onOffline)
+      window.removeEventListener("pagehide", dismissAutomaticPasskey)
       stop()
     }
-  }, [lock, offline])
+  }, [cancelPasskeyPrompt, dismissAutomaticPasskey, lock, offline])
 
   useIdleLock(Boolean(open || prepared), lock)
 
   const run = useCallback(
     async (
       operation: (current: () => boolean) => Promise<void>,
-      message = "Could not open or update the vault."
+      message: MessageKey = "vaultOperationFailed"
     ) => {
       if (running.current) return false
       running.current = true
       const previous = epoch.current
       const current = () => epoch.current === previous
       setBusy(true)
-      setError("")
+      setError(undefined)
       try {
         await operation(current)
         return current()
@@ -118,9 +145,8 @@ export function useVault() {
           ) {
             lock()
             setSnapshot(undefined)
-            if (error.status !== 409) await clearOfflineVault().catch(() => {})
           }
-          setError(error instanceof VaultRequestError ? error.message : message)
+          setError(error instanceof VaultRequestError ? error.code : message)
         }
         return false
       } finally {
@@ -136,51 +162,129 @@ export function useVault() {
       run(async (current) => {
         const data = await loadOnlineSnapshot()
         if (current()) setSnapshot(data)
-      }, "Could not load the vault."),
+      }, "loadVaultFailed"),
     [run]
   )
 
+  const finishUnlock = useCallback(
+    async (
+      input: UnlockInput,
+      current: () => boolean,
+      marker: ReturnType<typeof captureOfflineMarker>,
+      signal?: AbortSignal
+    ) => {
+      if (!snapshot?.encrypted || !current() || signal?.aborted) return
+      const { ownerId, encrypted } = snapshot
+      const latest = await loadOnlineSnapshot(
+        signal
+          ? AbortSignal.any([signal, AbortSignal.timeout(8000)])
+          : undefined
+      )
+      if (!current() || signal?.aborted) return
+      if (latest.ownerId !== ownerId || latest.revision !== snapshot.revision) {
+        throw new VaultRequestError(409)
+      }
+
+      let key: CryptoKey
+      if ("credential" in input) {
+        const { id, result } = input.credential
+        const passkey = encrypted.passkeys.find((stored) => stored.id === id)
+        if (!passkey) throw new Error("Unknown passkey")
+        key = await unlockPasskey(ownerId, passkey, result)
+      } else {
+        key = await unlockPassword(ownerId, input.password, encrypted.password)
+      }
+      const entries = await decryptEntries(ownerId, key, encrypted.entries)
+      if (!current() || signal?.aborted) return
+      if ("credential" in input) rememberPasskey(ownerId, input.credential.id)
+      setOpen({ key, entries })
+      void marker.then((ticket) => prepareOfflineCopy(latest, ticket))
+    },
+    [snapshot]
+  )
+
+  const requestPasskey = useCallback(
+    async (
+      passkeys: EncryptedVault["passkeys"],
+      complete: (
+        credential: PasskeyAssertion,
+        signal: AbortSignal
+      ) => Promise<unknown>
+    ) => {
+      const controller = new AbortController()
+      passkeyPrompt.current = controller
+      let credential: PasskeyAssertion | undefined
+      try {
+        credential = await authenticatePasskey(passkeys, controller.signal)
+        if (!controller.signal.aborted)
+          await complete(credential, controller.signal)
+      } catch (error) {
+        if (!controller.signal.aborted) throw error
+      } finally {
+        if (credential) new Uint8Array(credential.result).fill(0)
+        if (passkeyPrompt.current === controller) passkeyPrompt.current = null
+      }
+    },
+    []
+  )
+
   const unlock = useCallback(
-    (method: "password" | "passkey", password = "") =>
-      run(
+    (method: "password" | "passkey", password = "") => {
+      if (running.current) return Promise.resolve(false)
+      dismissAutomaticPasskey()
+      return run(
         async (current) => {
           if (!snapshot?.encrypted) return
-          const { ownerId, encrypted } = snapshot
-          const credential =
-            method === "passkey"
-              ? await authenticatePasskey(encrypted.passkeys)
-              : undefined
-          try {
-            const latest = await loadOnlineSnapshot()
-            if (
-              latest.ownerId !== ownerId ||
-              latest.revision !== snapshot.revision
-            ) {
-              throw new VaultRequestError(409)
-            }
-          } catch (error) {
-            if (credential) new Uint8Array(credential.result).fill(0)
-            throw error
+          const marker = captureOfflineMarker().catch(() => undefined)
+          if (method === "password") {
+            await finishUnlock({ password }, current, marker)
+            return
           }
-          let key: CryptoKey
-          if (credential) {
-            const passkey = encrypted.passkeys.find(
-              ({ id }) => id === credential.id
-            )
-            if (!passkey) throw new Error("Unknown passkey")
-            key = await unlockPasskey(ownerId, passkey, credential.result)
-          } else {
-            key = await unlockPassword(ownerId, password, encrypted.password)
-          }
-          const entries = await decryptEntries(ownerId, key, encrypted.entries)
-          if (current()) setOpen({ key, entries })
+
+          await requestPasskey(
+            snapshot.encrypted.passkeys,
+            (credential, signal) =>
+              finishUnlock({ credential }, current, marker, signal)
+          )
         },
-        method === "password"
-          ? "Could not unlock with that master password."
-          : "Could not unlock with this passkey. You can use your master password."
-      ),
-    [run, snapshot]
+        method === "password" ? "unlockPasswordFailed" : "unlockPasskeyFailed"
+      )
+    },
+    [dismissAutomaticPasskey, finishUnlock, requestPasskey, run, snapshot]
   )
+
+  useEffect(() => {
+    if (!offerPasskeyOnEntry || !snapshot || automaticAttempted.current) return
+
+    // Defer until after mounting so development effect replay cannot open two prompts.
+    const timer = window.setTimeout(() => {
+      if (automaticAttempted.current) return
+      automaticAttempted.current = true
+      if (
+        document.visibilityState !== "visible" ||
+        !navigator.onLine ||
+        !canUsePasskeys()
+      )
+        return
+      const rememberedId = getRememberedPasskey(snapshot.ownerId)
+      const passkey = snapshot.encrypted?.passkeys.find(
+        ({ id }) => id === rememberedId
+      )
+      if (!passkey) return
+
+      const marker = captureOfflineMarker().catch(() => undefined)
+      void requestPasskey([passkey], (credential, signal) =>
+        run(
+          (current) => finishUnlock({ credential }, current, marker, signal),
+          "unlockPasskeyFailed"
+        )
+      ).catch(() => {
+        // Automatic prompts can be declined or blocked by the browser.
+      })
+    }, 0)
+
+    return () => window.clearTimeout(timer)
+  }, [finishUnlock, offerPasskeyOnEntry, requestPasskey, run, snapshot])
 
   const prepare = useCallback(
     (password: string, previous: string, recoveryCode: string) =>
@@ -197,11 +301,15 @@ export function useVault() {
           }
           if (!current()) return
           const next = await prepareVault(ownerId, password, entries)
-          if (current()) setPrepared({ ...next, entries })
+          if (current()) {
+            setPrepared({
+              ...next,
+              entries,
+              renewOfflineLease: !encrypted || Boolean(recoveryCode),
+            })
+          }
         },
-        recoveryCode
-          ? "Could not recover with that code."
-          : "Check the master password and try again."
+        recoveryCode ? "recoverFailed" : "checkMasterPassword"
       ),
     [run, snapshot]
   )
@@ -209,10 +317,23 @@ export function useVault() {
   const persist = useCallback(
     async (encrypted: EncryptedVault) => {
       if (!snapshot) throw new Error("Vault is unavailable")
-      const saved = await saveVault(snapshot.revision, encrypted)
-      const next = { ...snapshot, ...saved, encrypted }
-      await refreshOfflineVault(next).catch(() => {})
-      setSnapshot(next)
+      const marker = await captureOfflineMarker().catch(() => undefined)
+      try {
+        const saved = await saveVault(snapshot.revision, encrypted)
+        const next = { ...snapshot, ...saved, encrypted }
+        if (marker) await refreshOfflineVault(next, marker).catch(() => {})
+        setSnapshot(next)
+        return { next, marker }
+      } catch (error) {
+        if (
+          marker &&
+          error instanceof VaultRequestError &&
+          [401, 403].includes(error.status)
+        ) {
+          await clearOfflineVault({ marker }).catch(() => {})
+        }
+        throw error
+      }
     },
     [snapshot]
   )
@@ -221,10 +342,11 @@ export function useVault() {
     () =>
       run(async (current) => {
         if (!prepared) return
-        await persist(prepared.encrypted)
+        const { next, marker } = await persist(prepared.encrypted)
         if (current()) {
           setOpen({ key: prepared.key, entries: prepared.entries })
           setPrepared(undefined)
+          if (prepared.renewOfflineLease) void prepareOfflineCopy(next, marker)
         }
       }),
     [persist, prepared, run]
@@ -254,12 +376,13 @@ export function useVault() {
           encrypted.passkeys
         )
         const wrapper = await wrapPasskey(ownerId, id, salt, result, open.key)
-        if (current())
-          await persist({
-            ...encrypted,
-            passkeys: [...encrypted.passkeys, wrapper],
-          })
-      }, "Passkey setup failed. Choose a device or provider that supports WebAuthn PRF."),
+        if (!current()) return
+        await persist({
+          ...encrypted,
+          passkeys: [...encrypted.passkeys, wrapper],
+        })
+        if (current()) rememberPasskey(ownerId, id)
+      }, "passkeySetupFailed"),
     [open, persist, run, snapshot]
   )
 
@@ -277,6 +400,7 @@ export function useVault() {
     busy,
     cancelPreparation,
     confirm,
+    dismissAutomaticPasskey,
     error,
     lock,
     open,

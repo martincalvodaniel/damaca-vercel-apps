@@ -531,3 +531,12 @@
 - Rutas: modal de revisión de Tapas, en la rúbrica y el desempate.
 - Aceptación: cruz y tick del encabezado compartido, revisiones de rúbrica en dos filas y cuatro columnas.
 - Validación: Biome incremental, tipos, pruebas, build y comprobación del modal a distintos anchos.
+
+## EPJ-73 — Índice de eventos
+
+- Estado: `validated`.
+- Objetivo: consultar las fichas de próximos eventos y eventos pasados desde un índice privado.
+- Rutas: `src/app/eventos`, navegación, estilos compartidos, catálogo de eventos y `plan`.
+- Dependencias: sesión admitida, rol efectivo y ficha existente de Letux.
+- Aceptación: enlace de Eventos visible en la barra solo para administradores en su vista de administrador, enlace directo a Nochevieja 26 para todas las cuentas admitidas y archivo agrupado por fecha local. Estilos de Inicio y Ajustes, con barra usable en un móvil estrecho.
+- Validación: Biome, tipos, pruebas de fechas, build y comprobación a 320 px y en escritorio.

@@ -4,9 +4,10 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
 import { getAccessRole } from "@/lib/auth/access"
-import { auth } from "@/lib/auth/auth"
+import { getAuth } from "@/lib/auth/auth"
 
 export const getVerifiedSession = cache(async () => {
+  const auth = await getAuth()
   const session = await auth.api.getSession({ headers: await headers() })
 
   if (!session?.user.email || !session.user.emailVerified) {

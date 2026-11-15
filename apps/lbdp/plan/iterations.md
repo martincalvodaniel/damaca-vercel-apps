@@ -40,3 +40,12 @@
 - Dependencias: configuración `VercelConfig` existente y compatibilidad documentada de `git.deploymentEnabled`.
 - Aceptación: `git.deploymentEnabled` es `false`; build e instalación conservan la configuración actual; no se pausa el tráfico ni se despliega producción.
 - Validación: Biome del archivo, validación de configuración/tipos disponible, `git diff --check`, publicación y SHA remoto conforme al flujo raíz. La configuración se publica en int; no se inicia un deployment manual en esta iteración ni se acredita el comportamiento de otras ramas con configuraciones anteriores.
+
+## LBDP-05 — Producto de prueba con Redsys
+
+- Estado: `validated`.
+- Objetivo y rutas: implementar el pago de prueba de 1 € y verificar la notificación en servidor. Cambios limitados a `apps/lbdp/**`. Evidencia en [el registro de entregas](iteration-log.md#lbdp-05--producto-de-prueba-con-redsys).
+- Dependencias: terminal sandbox de Redsys, configuración local explícita y endpoint HTTPS temporal que exponga solo la notificación.
+- Aceptación: formulario al sandbox con precio fijo, retornos informativos y recepción verificada de una autorización y una denegación reales del sandbox. Sin persistencia ni cobros reales.
+- Validación: vector oficial de firma, casos de manipulación y repetición, rutas de prueba desactivadas por defecto, revisión móvil y escritorio, Biome incremental, tipos, build y publicación en int.
+- Capacidad inicial: 33% de 5h y 62% de 7d.

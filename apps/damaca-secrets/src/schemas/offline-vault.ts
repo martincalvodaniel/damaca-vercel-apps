@@ -16,6 +16,8 @@ const offlineSnapshot = z.strictObject({
 
 export const offlineStateSchema = z.strictObject({
   marker: z.uuid(),
+  disabled: z.literal(true).optional(),
+  preparationFailed: z.literal(true).optional(),
   snapshot: offlineSnapshot.optional(),
 })
 

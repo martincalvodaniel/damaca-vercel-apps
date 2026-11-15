@@ -6,6 +6,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react"
+import { useLocale } from "@/lib/i18n/client"
 import {
   getServerThemeSnapshot,
   getThemeSnapshot,
@@ -14,6 +15,7 @@ import {
 } from "@/lib/theme/client"
 
 export function ThemeSettings() {
+  const { t } = useLocale()
   const id = useId()
   const theme = useSyncExternalStore(
     subscribeTheme,
@@ -28,7 +30,7 @@ export function ThemeSettings() {
     <section className="mb-3 rounded-xl border border-zinc-200 bg-white p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-center justify-between gap-3">
         <label htmlFor={id} className="font-medium">
-          Theme
+          {t.theme}
         </label>
         <select
           id={id}
@@ -36,9 +38,9 @@ export function ThemeSettings() {
           onChange={handleChange}
           className="min-h-9 rounded-lg border border-zinc-300 bg-transparent px-3 dark:border-zinc-700"
         >
-          <option value="system">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
+          <option value="system">{t.systemTheme}</option>
+          <option value="light">{t.lightTheme}</option>
+          <option value="dark">{t.darkTheme}</option>
         </select>
       </div>
       {notSaved ? (
@@ -46,8 +48,7 @@ export function ThemeSettings() {
           role="status"
           className="mt-2 text-xs text-zinc-600 dark:text-zinc-400"
         >
-          Theme applied, but it could not be saved in this browser. You will
-          need to select it again when you reopen the app.
+          {t.themeNotSaved}
         </p>
       ) : null}
     </section>

@@ -88,7 +88,7 @@ describe("access management", () => {
       dependencies
     )
     expect(result.status).toBe("error")
-    expect(result.message).not.toContain("secret")
+    expect(result).toEqual({ status: "error", code: "saveAccessFailed" })
     dependencies.getActorRole = async () => {
       throw new Error("session secret")
     }

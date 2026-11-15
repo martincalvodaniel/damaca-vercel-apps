@@ -1,6 +1,27 @@
 # Delivery log
 
-Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02.
+Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline, preview, and startup evidence](archive/2026-11-15/iteration-log.md) for iterations 03 through 05.
+
+## 15 — Passkey prompt at vault entry
+
+- Starting capacity: 58% of 5 hours and 66% of 7 days.
+- Online vault entry offers the browser's remembered passkey once and keeps password and manual unlock available. The reference is scoped to the vault owner. Pending requests are aborted on manual selection, locking, and navigation.
+- Passed staged Biome, TypeScript, 49 Bun tests, and the scoped Webpack build. A Chrome virtual authenticator exercised real PRF registration and automatic unlock without a gesture at 320 and 1200 CSS pixels. Simulated pending or dismissed requests verified cancellation, password fallback, manual replacement, route exit, and no retry. Also verified manual lock, settings, removing a passkey, and offline password-only reopening.
+- Physical biometric prompts on Chrome for Android, including installed mode, and Safari desktop are pending device acceptance.
+
+## 14 — Automatic offline vault
+
+- Starting capacity: 73% of 5 hours and 69% of 7 days.
+- A successful online unlock or vault creation prepares the encrypted read-only copy. Online saves update the copy without extending its server-issued lease. Settings now exposes the browser opt-out, copy readiness, and expiration in both languages.
+- Passed scoped Biome, TypeScript, 47 Bun tests, the compiled HTTP integration against disposable MongoDB, and the scoped Webpack build. Tests cover stale writes after clearing or opting out, account mismatch, expiry, and revision ordering.
+- Chrome at 320 and 1200 CSS pixels verified automatic preparation, reopening with the server stopped, keeping the original expiration after edits, browser opt-out and reactivation, and continued online unlock with IndexedDB unavailable. Desktop also revealed a stored password while offline and verified copy cleanup after the server denied the session and after choosing another account. Browser checks used a synthetic session and password unlock.
+
+## 13 — Spanish and English interface
+
+- Starting capacity on 2026-11-15 at approximately 15:49 CET: 89% of 5 hours and 71% of 7 days.
+- Added the browser language selector, Spanish default, typed catalogs, translated forms and feedback, and locale-aware document metadata. The cached offline shell stays public and reads the browser preference.
+- Passed Biome for the changed source and integration files, TypeScript, 45 Bun tests, compiled HTTP integration against disposable MongoDB, and Webpack builds for the default and int installation names. Checked served manifest links, names, and icon dimensions.
+- Chrome at 320 and 1200 CSS pixels confirmed both languages, accessible labels and validation, persistence after reload and account switch, and read-only offline reopening and unlock after stopping the server. The checks used synthetic sessions. Physical Android installation and live Google consent were outside these local checks.
 
 ## 12 — Deployment README cleanup
 
@@ -12,29 +33,6 @@ Record observed evidence for completed iterations here. See [archived evidence](
 
 - Documented browser-side AES-GCM encryption, the MongoDB snapshot, password/passkey/recovery key wrapping, and security boundaries in the README; added Mermaid storage and unlock diagrams.
 - Checked implementation details against `crypto.ts`, `use-vault.ts`, the API route, and Mongo repository. `git diff --check` passed. No application tests were run for this documentation-only change.
-
-## 03 — Offline consultation
-
-- Starting capacity: 75% of 5 hours and 42% of 7 days.
-- Added opt-in IndexedDB storage for the encrypted password-unlock snapshot, a build-versioned neutral shell, and a runtime lease with a 24-hour default. Account changes, denied access, sign-out, and opt-out clear the snapshot.
-- Passed scoped Biome, TypeScript, 42 Bun tests, and the Webpack production build. Chrome at 320 CSS pixels reopened the normal URL after stopping the server, unlocked read-only data, expired a shortened configurable lease, and removed the snapshot after online denial. Cache Storage contained only the neutral shell and build assets. The IndexedDB fixture contained neither plaintext nor passkey and recovery wrappers.
-
-## 04 — Vercel preview and device acceptance
-
-- Preparation capacity: 63% of 5 hours and 40% of 7 days.
-- Created and verified the Vercel project in the configured team, linked to the monorepo with root `apps/damaca-secrets` and access to workspace sources outside that directory. Verified `damaca-secrets-int.vercel.app` is assigned to `int`, and set the Preview-only origin, database name, and generated session secret.
-- Enabled Better Auth OAuth token encryption. The final Webpack production build, TypeScript, 42 unit tests, and compiled integration passed with synthetic data. Integration confirmed a Google authorization redirect with the expected callback, state, and PKCE.
-- Chrome's virtual WebAuthn PRF authenticator registered and unlocked a vault on `localhost`. Chrome rejected the raw loopback IP as a relying-party domain. Physical Android and the real Google callback remain pending.
-- Vercel reported zero deployments. The Google OAuth client, MongoDB URI restricted to the preview database, and administrator allowlist are needed before deploying the validated `int` SHA.
-
-- On 2026-11-13, the owner reported successful installation from Preview (`int`) in Chrome on Android and real Google sign-in as an administrator. The owner then confirmed all four acceptance scenarios: request, approval and account isolation, vault synchronization and passkey unlock, airplane-mode consultation and revocation with local copy removal after reconnecting, and recovery with a new master password. The local ciphertext and viewport checks are recorded in iterations 01–03.
-
-## 05 — Local development startup
-
-- Starting capacity: 100% of 5 hours and 39% of 7 days.
-- Reproduced HTTP 500 on the active local server and twice on a cold copy of the workspace. Bun running Turbopack failed to resolve the generated MongoDB external alias. Running Next.js dev with Node resolved the driver. Session lookup also skips Better Auth initialization when the session cookie is absent.
-- The root dev command served Google sign-in with HTTP 200 from a cold Node and Turbopack start in 1.85 seconds with MongoDB deliberately unreachable. Scoped Biome, TypeScript, 42 Bun tests, the Webpack production build, and the compiled HTTP integration with disposable MongoDB passed.
-- Publication remains pending because local `int` already includes the unrelated unpublished commit `44e6431`. The remote was verified at `cd939db` before preparing this fix.
 
 ## 06 — Compact controls
 

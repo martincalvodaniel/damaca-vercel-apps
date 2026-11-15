@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import { SignInCard } from "@/features/auth/components/sign-in-card"
 import { getSafeCallbackUrl } from "@/lib/auth/callback-url"
 import { getAuthorizedSession, getVerifiedSession } from "@/lib/auth/session"
+import type { MessageKey } from "@/lib/i18n/messages"
 
 interface SignInPageProps {
   searchParams: Promise<{
@@ -16,14 +17,12 @@ function getFirstValue(
   return Array.isArray(value) ? value[0] : value
 }
 
-function getErrorMessage(error: string | undefined): string | undefined {
+function getErrorCode(error: string | undefined): MessageKey | undefined {
   if (!error) {
     return undefined
   }
 
-  return error === "AccessDenied"
-    ? "Your account does not have access to this application."
-    : "Could not sign in. Please try again."
+  return error === "AccessDenied" ? "signInDenied" : "signInFailed"
 }
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
@@ -40,7 +39,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   return (
     <SignInCard
       callbackUrl={callbackUrl}
-      initialError={getErrorMessage(getFirstValue(query.error))}
+      initialError={getErrorCode(getFirstValue(query.error))}
     />
   )
 }

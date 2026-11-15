@@ -2,14 +2,19 @@
 
 import { useCallback, useState } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
+import { OfflineSessionCleanup } from "@/features/offline/offline-session-cleanup"
+import { LanguageSettings } from "@/features/settings/components/language-settings"
 import { authClient } from "@/lib/auth/auth-client"
+import { useLocale } from "@/lib/i18n/client"
+import type { MessageKey } from "@/lib/i18n/messages"
 
 interface SignInCardProps {
   callbackUrl: string
-  initialError?: string
+  initialError?: MessageKey
 }
 
 export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
+  const { t } = useLocale()
   const [error, setError] = useState(initialError)
   const [isPending, setIsPending] = useState(false)
 
@@ -24,28 +29,29 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
       })
 
       if (result.error) {
-        setError("Could not connect to Google. Please try again.")
+        setError("googleConnectionFailed")
         setIsPending(false)
       }
     } catch {
-      setError("Could not connect to Google. Please try again.")
+      setError("googleConnectionFailed")
       setIsPending(false)
     }
   }, [callbackUrl])
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-zinc-950">
+      <OfflineSessionCleanup />
       <section className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="mb-3 text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400">
             {"Damaca Secrets"}
           </p>
           <h1 className="mt-1 text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-            Welcome back
+            {t.welcomeBack}
           </h1>
         </div>
 
-        {error ? <ErrorBanner>{error}</ErrorBanner> : null}
+        {error ? <ErrorBanner>{t[error]}</ErrorBanner> : null}
 
         <button
           type="button"
@@ -71,8 +77,11 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
               fill="#EA4335"
             />
           </svg>
-          {isPending ? "Connecting…" : "Continue with Google"}
+          {isPending ? t.connecting : t.continueGoogle}
         </button>
+        <div className="mt-4">
+          <LanguageSettings />
+        </div>
       </section>
     </main>
   )

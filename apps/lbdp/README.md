@@ -1,6 +1,6 @@
 # La Bottega di Pali — LBDP
 
-Esqueleto público independiente. Interfaz española, contenido editorial estático y fotos locales del negocio. No utiliza billing, bases de datos, autenticación ni secretos.
+Esqueleto público independiente. Interfaz española, contenido editorial estático y fotos locales del negocio. La web editorial funciona sin Billing, bases de datos ni autenticación.
 
 Desde la raíz del monorepo:
 
@@ -11,7 +11,7 @@ bun run build --filter=@damaca/lbdp
 bun run type-check --filter=@damaca/lbdp
 ```
 
-Desarrollo: `http://localhost:3006`. Las páginas se generan estáticamente durante el build; el servidor Next también sirve y optimiza las imágenes locales. No requiere variables de entorno ni fuentes remotas.
+Desarrollo: `http://localhost:3006`. Las páginas editoriales se generan estáticamente durante el build; el servidor Next también sirve y optimiza las imágenes locales. La web editorial funciona sin variables de entorno ni fuentes remotas.
 
 ## Estructura
 
@@ -25,6 +25,20 @@ Desarrollo: `http://localhost:3006`. Las páginas se generan estáticamente dura
 Las fechas, condiciones y compras se consultan mediante enlaces explícitos a la web vigente. Contacto abre correo, teléfono o WhatsApp; no existe un formulario que finja enviar datos. La dirección pendiente de confirmar no se duplica.
 
 Las páginas legales y de financiación enlazan al sitio vigente. Robots y metadatos conservan `noindex` mientras se prepara la sustitución. Publicar esta app no constituye migración del comercio.
+
+## Pago de prueba con Redsys
+
+La demo solo está disponible en desarrollo y se abre desde `http://localhost:3006/pruebas/pago/`. El botón inicia una autorización de 1,00 € en el sandbox. El retorno solo informa del fin de la sesión. Busca la misma referencia en los logs `Redsys sandbox payment started` y `Redsys sandbox notification verified` para comprobar el resultado.
+
+Configura estas variables privadas en `apps/lbdp/.env.local`:
+
+- `LBDP_REDSYS_SANDBOX=1`
+- `LBDP_REDSYS_MERCHANT_CODE`, `LBDP_REDSYS_TERMINAL` y `LBDP_REDSYS_SIGNING_KEY` con los datos del terminal **sandbox**.
+- `LBDP_REDSYS_CALLBACK_URL` con la URL HTTPS del relay de prueba y la ruta exacta `/api/redsys/notification/`.
+
+El relay debe limitarse a reenviar el POST de esa ruta, con su cuerpo y tipo de contenido, a `http://localhost:3006/api/redsys/notification/`. Arranca LBDP con `bun run dev --filter=@damaca/lbdp -- --hostname localhost`. Usa la tarjeta VISA genérica del [sandbox de Redsys](https://pagosonline.redsys.es/desarrolladores-inicio/integrate-con-nosotros/tarjetas-y-entornos-de-prueba/) con CVV 123 para autorizar y CVV 172 para reproducir la denegación verificada. Selecciona «Autenticación con éxito» en el simulador. Si el terminal ofrece reintentar, repite el pago del mismo pedido hasta el resultado final. Con el terminal genérico, la notificación `0172` llegó al tercer intento. Pulsar «Cancelar» cierra el pago con `9915`. Cierra el relay al terminar.
+
+Las pruebas automatizadas se ejecutan con `bun run test --filter=@damaca/lbdp`.
 
 ## Vercel
 
