@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { loadOnlineSnapshot } from "@/features/offline/online-snapshot"
+import { prepareOfflineCopy } from "@/features/offline/prepare-copy"
 import {
   isTransportFailure,
   saveVault,
@@ -20,6 +21,7 @@ import { authenticatePasskey, registerPasskey } from "@/features/vault/passkeys"
 import { useIdleLock } from "@/features/vault/use-idle-lock"
 import type { MessageKey } from "@/lib/i18n/messages"
 import {
+  captureOfflineMarker,
   clearOfflineVault,
   readOfflineVault,
   refreshOfflineVault,
@@ -30,6 +32,7 @@ import type { EncryptedVault, VaultEntry, VaultRead } from "@/schemas/vault"
 type OpenVault = { key: CryptoKey; entries: VaultEntry[] }
 type PreparedVault = Awaited<ReturnType<typeof prepareVault>> & {
   entries: VaultEntry[]
+  renewOfflineLease: boolean
 }
 
 export function useVault() {
@@ -115,7 +118,6 @@ export function useVault() {
           ) {
             lock()
             setSnapshot(undefined)
-            if (error.status !== 409) await clearOfflineVault().catch(() => {})
           }
           setError(error instanceof VaultRequestError ? error.code : message)
         }
@@ -143,12 +145,14 @@ export function useVault() {
         async (current) => {
           if (!snapshot?.encrypted) return
           const { ownerId, encrypted } = snapshot
+          const marker = captureOfflineMarker().catch(() => undefined)
           const credential =
             method === "passkey"
               ? await authenticatePasskey(encrypted.passkeys)
               : undefined
+          let latest: VaultRead
           try {
-            const latest = await loadOnlineSnapshot()
+            latest = await loadOnlineSnapshot()
             if (
               latest.ownerId !== ownerId ||
               latest.revision !== snapshot.revision
@@ -170,7 +174,9 @@ export function useVault() {
             key = await unlockPassword(ownerId, password, encrypted.password)
           }
           const entries = await decryptEntries(ownerId, key, encrypted.entries)
-          if (current()) setOpen({ key, entries })
+          if (!current()) return
+          setOpen({ key, entries })
+          void marker.then((ticket) => prepareOfflineCopy(latest, ticket))
         },
         method === "password" ? "unlockPasswordFailed" : "unlockPasskeyFailed"
       ),
@@ -192,7 +198,13 @@ export function useVault() {
           }
           if (!current()) return
           const next = await prepareVault(ownerId, password, entries)
-          if (current()) setPrepared({ ...next, entries })
+          if (current()) {
+            setPrepared({
+              ...next,
+              entries,
+              renewOfflineLease: !encrypted || Boolean(recoveryCode),
+            })
+          }
         },
         recoveryCode ? "recoverFailed" : "checkMasterPassword"
       ),
@@ -202,10 +214,23 @@ export function useVault() {
   const persist = useCallback(
     async (encrypted: EncryptedVault) => {
       if (!snapshot) throw new Error("Vault is unavailable")
-      const saved = await saveVault(snapshot.revision, encrypted)
-      const next = { ...snapshot, ...saved, encrypted }
-      await refreshOfflineVault(next).catch(() => {})
-      setSnapshot(next)
+      const marker = await captureOfflineMarker().catch(() => undefined)
+      try {
+        const saved = await saveVault(snapshot.revision, encrypted)
+        const next = { ...snapshot, ...saved, encrypted }
+        if (marker) await refreshOfflineVault(next, marker).catch(() => {})
+        setSnapshot(next)
+        return { next, marker }
+      } catch (error) {
+        if (
+          marker &&
+          error instanceof VaultRequestError &&
+          [401, 403].includes(error.status)
+        ) {
+          await clearOfflineVault({ marker }).catch(() => {})
+        }
+        throw error
+      }
     },
     [snapshot]
   )
@@ -214,10 +239,11 @@ export function useVault() {
     () =>
       run(async (current) => {
         if (!prepared) return
-        await persist(prepared.encrypted)
+        const { next, marker } = await persist(prepared.encrypted)
         if (current()) {
           setOpen({ key: prepared.key, entries: prepared.entries })
           setPrepared(undefined)
+          if (prepared.renewOfflineLease) void prepareOfflineCopy(next, marker)
         }
       }),
     [persist, prepared, run]

@@ -3,8 +3,9 @@ export const en = {
   mainNavigation: "Main navigation",
   vault: "Vault",
   settings: "Settings",
-  reconnect: "Reconnect to sync this vault.",
-  offlineExpired: "Offline access expired. Reconnect to sync this vault.",
+  reconnect: "Reconnect and unlock the vault to prepare an offline copy.",
+  offlineExpired:
+    "Offline access expired. Reconnect and unlock the vault to prepare a new copy.",
   checkingOffline: "Checking offline access…",
   accessEnded: "Your access has ended. Sign in again to continue.",
   verifyAccessFailed: "Could not verify access. Try again when connected.",
@@ -17,7 +18,11 @@ export const en = {
   disableOffline: "Disable offline access",
   enableOffline: "Enable offline access",
   offlineExplanation:
-    "Save an encrypted copy for read-only access on this trusted browser.",
+    "Unlock the vault while online to prepare an encrypted, read-only copy in this browser.",
+  offlineDisabled: "Automatic offline copies are disabled in this browser.",
+  offlinePreparationFailed:
+    "Could not prepare an offline copy. Check browser storage and unlock again while online.",
+  offlineStorageUnavailable: "Offline storage is unavailable in this browser.",
   updatingOffline: "Updating offline access…",
   googleEmail: "Google email address",
   grantAccess: "Grant access",
@@ -151,7 +156,7 @@ export const en = {
   vaultLimit: "The vault has reached its storage limit.",
   vaultUnreachable: "The vault could not be reached. Try again.",
   vaultOffline:
-    "You are offline. Enable offline access when connected to consult this vault without coverage.",
+    "No connection. Unlock the vault while online to prepare an offline copy.",
   loadVaultFailed: "Could not load the vault.",
   vaultOperationFailed: "Could not open or update the vault.",
   unlockPasskeyFailed:
@@ -166,9 +171,8 @@ export const en = {
   approveRequestFrom: "Approve request from {email}",
   rejectRequestFrom: "Reject request from {email}",
   removePasskeys: "Remove passkeys ({count})",
-  offlineDates: "Synced {synced}. Available until {expires}.",
-  offlineReadOnlyDates:
-    "Read-only copy. Synced {synced}. Available until {expires}.",
+  offlineDates: "Offline copy ready. Available until {expires}.",
+  offlineReadOnlyDates: "Read-only copy. Available until {expires}.",
   requiredField: "Fill in this field.",
   requiredCheckbox: "Select this checkbox to continue.",
   invalidEmail: "Enter a valid email address.",

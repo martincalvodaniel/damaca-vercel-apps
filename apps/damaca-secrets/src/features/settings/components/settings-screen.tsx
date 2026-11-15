@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { AccountAvatar } from "@/components/shared/account-avatar"
 import { AccountSwitchButton } from "@/features/auth/components/account-switch-button"
+import { OfflineSettings } from "@/features/offline/offline-settings"
 import { LanguageSettings } from "@/features/settings/components/language-settings"
 import { ThemeSettings } from "@/features/settings/components/theme-settings"
 import { VaultSecuritySettings } from "@/features/settings/components/vault-security-settings"
@@ -40,6 +41,7 @@ export async function SettingsScreen() {
         </div>
       </section>
       <VaultSecuritySettings />
+      <OfflineSettings ownerId={session.user.id} />
       <ThemeSettings />
       <section className="rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
         <LanguageSettings />

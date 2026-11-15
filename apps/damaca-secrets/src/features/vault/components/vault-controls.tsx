@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback } from "react"
-import { OfflineSettings } from "@/features/offline/offline-settings"
 import { buttonClass } from "@/features/vault/components/styles"
 import { canUsePasskeys } from "@/features/vault/passkeys"
 import type { VaultController } from "@/features/vault/use-vault"
@@ -23,40 +22,35 @@ export function VaultControls({ vault, onChangePassword }: VaultControlsProps) {
   }, [removePasskeys, t.confirmRemovePasskeys])
 
   return (
-    <>
-      <div className="flex flex-wrap gap-2 pb-2">
+    <div className="flex flex-wrap gap-2 pb-2">
+      <button
+        type="button"
+        onClick={onChangePassword}
+        disabled={busy}
+        className={buttonClass}
+      >
+        {t.changeMasterPassword}
+      </button>
+      {canUsePasskeys() && count < MAX_PASSKEYS ? (
         <button
           type="button"
-          onClick={onChangePassword}
+          onClick={addPasskey}
           disabled={busy}
           className={buttonClass}
         >
-          {t.changeMasterPassword}
+          {t.addPasskey}
         </button>
-        {canUsePasskeys() && count < MAX_PASSKEYS ? (
-          <button
-            type="button"
-            onClick={addPasskey}
-            disabled={busy}
-            className={buttonClass}
-          >
-            {t.addPasskey}
-          </button>
-        ) : null}
-        {count > 0 ? (
-          <button
-            type="button"
-            onClick={remove}
-            disabled={busy}
-            className={buttonClass}
-          >
-            {formatMessage(t.removePasskeys, { count })}
-          </button>
-        ) : null}
-      </div>
-      {vault.snapshot ? (
-        <OfflineSettings ownerId={vault.snapshot.ownerId} />
       ) : null}
-    </>
+      {count > 0 ? (
+        <button
+          type="button"
+          onClick={remove}
+          disabled={busy}
+          className={buttonClass}
+        >
+          {formatMessage(t.removePasskeys, { count })}
+        </button>
+      ) : null}
+    </div>
   )
 }

@@ -5,9 +5,10 @@ export const es = {
   mainNavigation: "Navegación principal",
   vault: "Bóveda",
   settings: "Ajustes",
-  reconnect: "Vuelve a conectarte para sincronizar la bóveda.",
+  reconnect:
+    "Conéctate y desbloquea la bóveda para preparar una copia sin conexión.",
   offlineExpired:
-    "El acceso sin conexión ha caducado. Vuelve a conectarte para sincronizar la bóveda.",
+    "El acceso sin conexión ha caducado. Conéctate y desbloquea la bóveda para preparar otra copia.",
   checkingOffline: "Comprobando el acceso sin conexión…",
   accessEnded: "Tu acceso ha terminado. Inicia sesión de nuevo para continuar.",
   verifyAccessFailed:
@@ -21,7 +22,13 @@ export const es = {
   disableOffline: "Desactivar acceso sin conexión",
   enableOffline: "Activar acceso sin conexión",
   offlineExplanation:
-    "Guarda una copia cifrada de solo lectura en este navegador de confianza.",
+    "Desbloquea la bóveda con conexión para preparar una copia cifrada de solo lectura en este navegador.",
+  offlineDisabled:
+    "Las copias automáticas sin conexión están desactivadas en este navegador.",
+  offlinePreparationFailed:
+    "No se pudo preparar la copia sin conexión. Comprueba el almacenamiento del navegador y vuelve a desbloquear la bóveda con conexión.",
+  offlineStorageUnavailable:
+    "El almacenamiento sin conexión no está disponible en este navegador.",
   updatingOffline: "Actualizando el acceso sin conexión…",
   googleEmail: "Correo de Google",
   grantAccess: "Conceder acceso",
@@ -158,7 +165,7 @@ export const es = {
   vaultLimit: "La bóveda ha alcanzado su límite de almacenamiento.",
   vaultUnreachable: "No se pudo conectar con la bóveda. Inténtalo de nuevo.",
   vaultOffline:
-    "No tienes conexión. Activa el acceso sin conexión cuando vuelvas a conectarte para consultar la bóveda sin cobertura.",
+    "No tienes conexión. Desbloquea la bóveda con conexión para preparar una copia sin conexión.",
   loadVaultFailed: "No se pudo cargar la bóveda.",
   vaultOperationFailed: "No se pudo abrir o actualizar la bóveda.",
   unlockPasskeyFailed:
@@ -173,9 +180,8 @@ export const es = {
   approveRequestFrom: "Aprobar solicitud de {email}",
   rejectRequestFrom: "Rechazar solicitud de {email}",
   removePasskeys: "Eliminar llaves de acceso ({count})",
-  offlineDates: "Sincronizada el {synced}. Disponible hasta el {expires}.",
-  offlineReadOnlyDates:
-    "Copia de solo lectura. Sincronizada el {synced}. Disponible hasta el {expires}.",
+  offlineDates: "Copia sin conexión lista. Disponible hasta el {expires}.",
+  offlineReadOnlyDates: "Copia de solo lectura. Disponible hasta el {expires}.",
   requiredField: "Rellena este campo.",
   requiredCheckbox: "Marca esta casilla para continuar.",
   invalidEmail: "Introduce una dirección de correo válida.",

@@ -17,7 +17,6 @@ export function formatMessage(
 
 export function formatOfflineDates(
   locale: Locale,
-  synced: number,
   expires: number,
   readOnly = false
 ) {
@@ -25,7 +24,6 @@ export function formatOfflineDates(
     ? messages[locale].offlineReadOnlyDates
     : messages[locale].offlineDates
   return formatMessage(message, {
-    synced: new Date(synced).toLocaleString(locale),
     expires: new Date(expires).toLocaleString(locale),
   })
 }

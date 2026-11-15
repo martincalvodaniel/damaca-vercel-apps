@@ -26,7 +26,7 @@ La clave de datos se puede desenvolver en el navegador mediante uno de estos mé
 - **Passkey compatible:** el resultado PRF de WebAuthn se usa con HKDF para derivar una clave de envoltura. Mongo guarda el identificador, la sal de PRF y la clave de datos envuelta; el resultado PRF no se envía ni persiste.
 - **Código de recuperación:** se genera localmente una clave aleatoria de 32 bytes. Mongo guarda la clave de datos envuelta por ella; la persona conserva el código.
 
-Las claves en claro y las entradas solo están disponibles en el cliente mientras se desbloquea y usa el vault. La app opcionalmente mantiene una copia cifrada en IndexedDB para consulta sin conexión; véase [Consulta sin conexión](#consulta-sin-conexión).
+Las claves en claro y las entradas solo están disponibles en el cliente mientras se desbloquea y usa el vault. La app prepara por defecto una copia cifrada en IndexedDB para consulta sin conexión; véase [Consulta sin conexión](#consulta-sin-conexión).
 
 ### Flujo de desbloqueo
 
@@ -62,6 +62,7 @@ Esta descripción documenta el diseño de la aplicación; no es una auditoría d
 ## Desarrollo
 
 Desde la raíz, instala dependencias con `bun install --frozen-lockfile`. Copia [el ejemplo de entorno](.env.example) a un archivo `.env.local` dentro de la app y configura las credenciales localmente.
+
 - **Google**. Configura un cliente OAuth web con origen `http://localhost:3007` y retorno `http://localhost:3007/api/auth/callback/google`.
 - **Better Auth**. Usa un secreto exclusivo de la app y establece `BETTER_AUTH_URL` en el origen usado por el navegador.
 - **MongoDB**. Configura `MONGODB_URI` y una base `MONGODB_DB` exclusiva del entorno. Better Auth guarda identidades, sesiones, cuentas y verificaciones en colecciones propias. La aplicación guarda solicitudes y permisos en `user_access`.
@@ -78,13 +79,13 @@ El servidor local usa Node.js en el puerto 3007. Bun gestiona las dependencias y
 
 ## Consulta sin conexión
 
-En **Settings**, abre **Vault security**, desbloquea la caja y activa **Enable offline access** en un navegador de confianza. Espera a que aparezcan la última sincronización y el vencimiento. Al volver a abrir la URL sin red, puedes desbloquear con la contraseña maestra para buscar, ver y copiar credenciales de la última copia sincronizada.
+Al desbloquear la bóveda con conexión, la app prepara una copia cifrada en ese navegador. En **Ajustes → Acceso sin conexión** puedes comprobar si está lista, ver cuándo caduca o desactivar las copias en ese navegador. Al volver a abrir la URL sin red, puedes desbloquear con la contraseña maestra para buscar, ver y copiar credenciales.
 
-El navegador conserva la copia cifrada en IndexedDB. La interfaz sin conexión se prepara en builds de producción. `OFFLINE_VAULT_HOURS` cambia la vigencia de las nuevas copias, con 24 horas por defecto. Las escrituras, passkeys y recuperación requieren conexión. Desactivar el acceso o cerrar sesión borra la copia. Una revocación remota se aplica cuando se comprueba la conexión, o cuando vence el plazo local si el navegador sigue desconectado.
+El navegador conserva la copia cifrada en IndexedDB. La interfaz sin conexión se prepara en builds de producción. `OFFLINE_VAULT_HOURS` cambia la vigencia de las nuevas copias, con 24 horas por defecto desde el desbloqueo con conexión. Guardar cambios actualiza la copia sin renovar ese plazo. Las escrituras, passkeys y recuperación requieren conexión. Desactivar el acceso o cerrar sesión borra la copia. Una revocación remota se aplica cuando se comprueba la conexión, o cuando vence el plazo local si el navegador sigue desconectado.
 
 ## Despliegues
 
 - [Producción](https://damaca-secrets.vercel.app) sigue la rama `main`.
 - [Preproducción](https://damaca-secrets-int.vercel.app) sigue la rama `int` y usa una base de datos separada.
 
-Los dos entornos pertenecen al mismo [proyecto de Vercel](https://vercel.com/martincalvodaniels-projects/damaca-secrets). Consulta el [flujo de despliegue del monorepo](../../.agents/skills/vercel-deploy-alias/SKILL.md) para publicar una revisión y el [registro de aceptación de preproducción](plan/iteration-log.md#04--vercel-preview-and-device-acceptance) para ver las comprobaciones ya realizadas.
+Los dos entornos pertenecen al mismo [proyecto de Vercel](https://vercel.com/martincalvodaniels-projects/damaca-secrets). Consulta el [flujo de despliegue del monorepo](../../.agents/skills/vercel-deploy-alias/SKILL.md) para publicar una revisión y el [registro de aceptación de preproducción](plan/archive/2026-11-15/iteration-log.md#04--vercel-preview-and-device-acceptance) para ver las comprobaciones ya realizadas.

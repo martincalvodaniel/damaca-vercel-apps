@@ -1,6 +1,13 @@
 # Delivery log
 
-Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline consultation](archive/2026-11-15/iteration-log.md#03--offline-consultation) for iteration 03.
+Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline and preview acceptance](archive/2026-11-15/iteration-log.md) for iterations 03 and 04.
+
+## 14 — Automatic offline vault
+
+- Starting capacity: 73% of 5 hours and 69% of 7 days.
+- A successful online unlock or vault creation prepares the encrypted read-only copy. Online saves update the copy without extending its server-issued lease. Settings now exposes the browser opt-out, copy readiness, and expiration in both languages.
+- Passed scoped Biome, TypeScript, 47 Bun tests, the compiled HTTP integration against disposable MongoDB, and the scoped Webpack build. Tests cover stale writes after clearing or opting out, account mismatch, expiry, and revision ordering.
+- Chrome at 320 and 1200 CSS pixels verified automatic preparation, reopening with the server stopped, keeping the original expiration after edits, browser opt-out and reactivation, and continued online unlock with IndexedDB unavailable. Desktop also revealed a stored password while offline and verified copy cleanup after the server denied the session and after choosing another account. Browser checks used a synthetic session and password unlock.
 
 ## 13 — Spanish and English interface
 
@@ -19,16 +26,6 @@ Record observed evidence for completed iterations here. See [archived evidence](
 
 - Documented browser-side AES-GCM encryption, the MongoDB snapshot, password/passkey/recovery key wrapping, and security boundaries in the README; added Mermaid storage and unlock diagrams.
 - Checked implementation details against `crypto.ts`, `use-vault.ts`, the API route, and Mongo repository. `git diff --check` passed. No application tests were run for this documentation-only change.
-
-## 04 — Vercel preview and device acceptance
-
-- Preparation capacity: 63% of 5 hours and 40% of 7 days.
-- Created and verified the Vercel project in the configured team, linked to the monorepo with root `apps/damaca-secrets` and access to workspace sources outside that directory. Verified `damaca-secrets-int.vercel.app` is assigned to `int`, and set the Preview-only origin, database name, and generated session secret.
-- Enabled Better Auth OAuth token encryption. The final Webpack production build, TypeScript, 42 unit tests, and compiled integration passed with synthetic data. Integration confirmed a Google authorization redirect with the expected callback, state, and PKCE.
-- Chrome's virtual WebAuthn PRF authenticator registered and unlocked a vault on `localhost`. Chrome rejected the raw loopback IP as a relying-party domain. Physical Android and the real Google callback remain pending.
-- Vercel reported zero deployments. The Google OAuth client, MongoDB URI restricted to the preview database, and administrator allowlist are needed before deploying the validated `int` SHA.
-
-- On 2026-11-13, the owner reported successful installation from Preview (`int`) in Chrome on Android and real Google sign-in as an administrator. The owner then confirmed all four acceptance scenarios: request, approval and account isolation, vault synchronization and passkey unlock, airplane-mode consultation and revocation with local copy removal after reconnecting, and recovery with a new master password. The local ciphertext and viewport checks are recorded in iterations 01–03.
 
 ## 05 — Local development startup
 

@@ -1,99 +1,117 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { loadOnlineSnapshot } from "@/features/offline/online-snapshot"
 import { buttonClass } from "@/features/vault/components/styles"
 import { useLocale } from "@/lib/i18n/client"
 import { formatOfflineDates, type MessageKey } from "@/lib/i18n/messages"
-import { prepareOfflineShell } from "@/lib/offline/client"
 import {
-  clearOfflineVault,
-  enableOfflineVault,
-  getOfflineMarker,
-  readOfflineVault,
+  readOfflineState,
+  setOfflineEnabled,
   subscribeToOfflineChanges,
 } from "@/lib/offline/storage"
 import {
-  type OfflineSnapshot,
-  toOfflineSnapshot,
+  isOfflineSnapshotUsable,
+  type OfflineState,
 } from "@/schemas/offline-vault"
 
 export function OfflineSettings({ ownerId }: { ownerId: string }) {
   const { locale, t } = useLocale()
-  const [snapshot, setSnapshot] = useState<OfflineSnapshot>()
+  const [state, setState] = useState<OfflineState>()
+  const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<MessageKey>()
+  const [now, setNow] = useState(Date.now)
+  const snapshot =
+    state?.snapshot?.ownerId === ownerId ? state.snapshot : undefined
+  const expiresAt = snapshot?.expiresAt
+
   useEffect(() => {
     let active = true
-    function read() {
-      void readOfflineVault()
-        .then((local) => {
-          if (active)
-            setSnapshot(local?.ownerId === ownerId ? local : undefined)
-        })
-        .catch(() => {})
+    let sequence = 0
+    async function read() {
+      const request = ++sequence
+      try {
+        const stored = await readOfflineState()
+        if (active && request === sequence) {
+          setState(stored)
+          setNow(Date.now())
+          setError((current) =>
+            current === "offlineStorageUnavailable" ? undefined : current
+          )
+        }
+      } catch {
+        if (active && request === sequence)
+          setError("offlineStorageUnavailable")
+      } finally {
+        if (active && request === sequence) setLoading(false)
+      }
     }
-    read()
-    const stop = subscribeToOfflineChanges(read)
+
+    void read()
+    const unsubscribe = subscribeToOfflineChanges(() => void read())
+    const onFocus = () => void read()
+    window.addEventListener("focus", onFocus)
     return () => {
       active = false
-      stop()
+      unsubscribe()
+      window.removeEventListener("focus", onFocus)
     }
-  }, [ownerId])
+  }, [])
 
+  useEffect(() => {
+    if (!expiresAt || expiresAt <= now) return
+    const timer = setTimeout(
+      () => setNow(Date.now()),
+      Math.min(2147483647, expiresAt - now)
+    )
+    return () => clearTimeout(timer)
+  }, [expiresAt, now])
+
+  const disabled = Boolean(state?.disabled)
   const toggle = useCallback(async () => {
     setBusy(true)
     setError(undefined)
     try {
-      if (snapshot) {
-        await clearOfflineVault()
-        setSnapshot(undefined)
-      } else {
-        const marker = await getOfflineMarker()
-        await prepareOfflineShell()
-        const fresh = await loadOnlineSnapshot(AbortSignal.timeout(8000))
-        const copy = toOfflineSnapshot(fresh)
-        if (!copy || copy.ownerId !== ownerId)
-          throw new Error("No matching vault")
-        setSnapshot(await enableOfflineVault(copy, marker))
-      }
+      await setOfflineEnabled(disabled)
+      setState(await readOfflineState())
+      setNow(Date.now())
     } catch {
       setError("offlineUpdateFailed")
     } finally {
       setBusy(false)
     }
-  }, [ownerId, snapshot])
+  }, [disabled])
+
+  let status = t.offlineExplanation
+  if (busy) status = t.updatingOffline
+  else if (loading) status = t.checkingOffline
+  else if (disabled) status = t.offlineDisabled
+  else if (state?.preparationFailed) status = t.offlinePreparationFailed
+  else if (snapshot) {
+    status = isOfflineSnapshotUsable(snapshot, now)
+      ? formatOfflineDates(locale, snapshot.expiresAt)
+      : t.offlineExpired
+  }
 
   return (
     <section
       aria-label={t.offlineAccess}
-      className="grid gap-2 border-t border-zinc-200 pt-2 dark:border-zinc-800"
+      className="grid gap-2 rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-medium">{t.offlineAccess}</h2>
         <button
           type="button"
           onClick={toggle}
-          disabled={busy}
+          disabled={busy || loading || error === "offlineStorageUnavailable"}
           className={buttonClass}
         >
-          {snapshot ? t.disableOffline : t.enableOffline}
+          {disabled ? t.enableOffline : t.disableOffline}
         </button>
       </div>
-      {snapshot ? (
-        <p className="text-xs text-zinc-600 dark:text-zinc-400">
-          {formatOfflineDates(locale, snapshot.checkedAt, snapshot.expiresAt)}
-        </p>
-      ) : (
-        <p className="text-xs text-zinc-600 dark:text-zinc-400">
-          {t.offlineExplanation}
-        </p>
-      )}
-      {busy ? (
-        <p role="status" className="text-xs">
-          {t.updatingOffline}
-        </p>
-      ) : null}
+      <p role="status" className="text-xs text-zinc-600 dark:text-zinc-400">
+        {status}
+      </p>
       {error ? (
         <p role="alert" className="text-xs text-red-700 dark:text-red-400">
           {t[error]}

@@ -28,7 +28,7 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Status: `validated`.
 - Paths: app deployment configuration and acceptance evidence.
 - Dependencies: 01–03, dedicated Google OAuth credentials, a MongoDB URI restricted to the preview database, test administrators, and an Android device. The Vercel project and branch origin are configured. See [deployments](../README.md#despliegues).
-- Acceptance: verify end-to-end Google, permission, vault, passkey, and offline flows with synthetic accounts, narrow viewport and desktop, Android Chrome, and no plaintext leakage. Record actual results and gaps.
+- Acceptance: verify end-to-end Google, permission, vault, passkey, and offline flows with synthetic accounts, narrow viewport and desktop, Android Chrome, and no plaintext leakage. Record actual results and gaps. [Archived evidence](archive/2026-11-15/iteration-log.md#04--vercel-preview-and-device-acceptance).
 
 ## 05 — Local development startup
 
@@ -86,3 +86,11 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Dependencies: existing settings, access flows, and offline shell.
 - Acceptance: Spanish default, persistent English or Spanish selection, localized visible and accessible copy throughout the app, and offline read-only access in the selected language.
 - Validation: incremental Biome, types, tests, build, manifests for both branches, and mobile, desktop, and offline browser checks.
+
+## 14 — Automatic offline vault
+
+- Status: `validated`.
+- Paths: vault unlock and save flows, browser offline storage and settings, localized copy, and app plans.
+- Dependencies: encrypted offline shell and server-issued lease from iteration 03.
+- Acceptance: successful online unlock prepares the encrypted copy automatically, saves do not renew the lease, and a browser-level opt-out removes the copy.
+- Validation: incremental Biome, types, storage regression tests, production build, and Chrome offline acceptance at narrow and desktop widths.

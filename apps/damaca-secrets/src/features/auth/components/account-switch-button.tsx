@@ -19,6 +19,8 @@ export function AccountSwitchButton() {
       await clearOfflineVault()
       const result = await authClient.signOut()
       if (result.error) throw new Error("Sign-out failed")
+      // Invalidate any work that began while sign-out was in flight.
+      await clearOfflineVault()
       router.replace("/auth/signin")
       router.refresh()
     } catch {

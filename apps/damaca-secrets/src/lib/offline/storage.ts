@@ -2,6 +2,7 @@
 
 import { type DBSchema, openDB } from "idb"
 import {
+  isOfflineSnapshotUsable,
   type OfflineSnapshot,
   type OfflineState,
   offlineStateSchema,
@@ -75,51 +76,112 @@ export function subscribeToOfflineReset(reset: () => void) {
   })
 }
 
-export async function clearOfflineVault() {
+function resetState(state: OfflineState | undefined): OfflineState {
+  return {
+    marker: crypto.randomUUID(),
+    ...(state?.disabled ? { disabled: true } : {}),
+  }
+}
+
+export async function clearOfflineVault(expected?: { marker: string }) {
   if (typeof indexedDB === "undefined") return
-  await edit(() => ({ marker: crypto.randomUUID() }))
-  notify("reset")
+  const cleared = await edit((state) =>
+    !expected || state?.marker === expected.marker
+      ? resetState(state)
+      : undefined
+  )
+  if (cleared) notify("reset")
+}
+
+export async function readOfflineState() {
+  return getState()
 }
 
 export async function readOfflineVault() {
   if (typeof indexedDB === "undefined") return undefined
-  return (await getState())?.snapshot
+  const state = await getState()
+  return state?.disabled ? undefined : state?.snapshot
 }
 
-export async function getOfflineMarker() {
-  return (await getState())?.marker
-}
-
-export async function enableOfflineVault(
-  snapshot: OfflineSnapshot,
-  marker: string | undefined
-) {
-  const next = await edit((state) =>
-    state?.marker === marker
-      ? { marker: crypto.randomUUID(), snapshot }
-      : undefined
-  )
-  if (!next?.snapshot)
-    throw new Error("Offline settings changed in another tab")
-  notify("updated")
-  return next.snapshot
-}
-
-export async function refreshOfflineVault(vault: VaultRead) {
-  let cleared = false
+export async function setOfflineEnabled(enabled: boolean) {
   const updated = await edit((state) => {
-    if (!state?.snapshot) return
-    if (vault.ownerId !== state.snapshot.ownerId || !vault.encrypted) {
-      cleared = true
-      return { marker: crypto.randomUUID() }
+    if (Boolean(state?.disabled) === !enabled) return undefined
+    return {
+      marker: crypto.randomUUID(),
+      ...(!enabled ? { disabled: true } : {}),
     }
+  })
+  if (updated) notify(enabled ? "updated" : "reset")
+}
+
+export async function captureOfflineMarker() {
+  const state =
+    (await getState()) ??
+    (await edit((current) => current ?? resetState(undefined)))
+  return state?.marker
+}
+
+export async function storeOfflineVault(
+  snapshot: OfflineSnapshot,
+  marker: string
+) {
+  const updated = await edit((state) => {
+    if (state?.marker !== marker || state.disabled) return
+    const stored = state.snapshot
+    if (stored?.ownerId === snapshot.ownerId) {
+      if (stored.checkedAt > snapshot.checkedAt) return
+      if (stored.revision > snapshot.revision) {
+        return {
+          marker,
+          snapshot: {
+            ...stored,
+            checkedAt: snapshot.checkedAt,
+            expiresAt: snapshot.expiresAt,
+          },
+        }
+      }
+    } else if (stored) {
+      return
+    }
+    return { marker, snapshot }
+  })
+  if (updated) notify("updated")
+  return Boolean(updated)
+}
+
+export async function markOfflinePreparationFailed(marker: string) {
+  const updated = await edit((state) => {
     if (
-      vault.revision < state.snapshot.revision ||
-      vault.checkedAt < state.snapshot.checkedAt
+      state?.marker !== marker ||
+      state.disabled ||
+      (state.snapshot && isOfflineSnapshotUsable(state.snapshot))
     )
       return
-    const snapshot = toOfflineSnapshot(vault)
-    return { ...state, snapshot }
+    return { ...state, preparationFailed: true }
+  })
+  if (updated) notify("updated")
+}
+
+export async function refreshOfflineVault(vault: VaultRead, marker: string) {
+  let cleared = false
+  const updated = await edit((state) => {
+    if (state?.marker !== marker || state.disabled || !state.snapshot) return
+    const copy = toOfflineSnapshot(vault)
+    const stored = state.snapshot
+    if (vault.ownerId !== stored.ownerId || !copy) {
+      cleared = true
+      return resetState(state)
+    }
+    if (copy.revision <= stored.revision || !isOfflineSnapshotUsable(stored))
+      return
+    return {
+      ...state,
+      snapshot: {
+        ...copy,
+        checkedAt: stored.checkedAt,
+        expiresAt: stored.expiresAt,
+      },
+    }
   })
   if (cleared) notify("reset")
   else if (updated) notify("updated")

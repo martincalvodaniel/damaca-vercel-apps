@@ -210,12 +210,7 @@ export function OfflineScreen() {
       ) : null}
       {snapshot ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {formatOfflineDates(
-            locale,
-            snapshot.checkedAt,
-            snapshot.expiresAt,
-            true
-          )}
+          {formatOfflineDates(locale, snapshot.expiresAt, true)}
         </p>
       ) : null}
       {error ? <ErrorBanner>{t[error]}</ErrorBanner> : null}
