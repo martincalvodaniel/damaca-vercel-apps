@@ -482,3 +482,10 @@
 - Rutas: guía de Letux, pruebas y catálogo Bun.
 - Aceptación: las descripciones admiten Markdown seguro y Alojamiento comparte el grupo de desplegables.
 - Validación: Biome, tipos, pruebas de la guía y build.
+
+## EPJ-66 — Dos asistentes por fila
+
+- Estado: `validated`.
+- Rutas: lista de asistentes de Letux.
+- Aceptación: dos columnas por bloque de asistencia. Las listas de coches conservan una columna.
+- Validación: Biome, tipos y build.

@@ -264,7 +264,9 @@ function AttendanceSection({
         </dialog>
       ) : null}
       {guests.length ? (
-        <ul>
+        <ul
+          className={mode === "attendance" ? styles.attendanceGrid : undefined}
+        >
           {guests.map((guest) => (
             <AttendeeRow
               key={guest.id}
