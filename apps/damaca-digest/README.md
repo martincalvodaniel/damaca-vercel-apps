@@ -1,21 +1,21 @@
 # Damaca Digest
 
-Biblioteca privada de lecturas con Next.js 16, React 19 y TypeScript. La entrega inicial incorpora la base de la aplicación. El estado de la captura MCP y la biblioteca se sigue en [las iteraciones](plan/iterations.md). Incluye acceso con Google mediante Better Auth, administradores definidos por entorno y usuarios autorizados en MongoDB, rutas protegidas, una capa MongoDB con conexión compartida y un flujo de desarrollo agéntico por iteraciones.
+Biblioteca privada de lecturas con Next.js 16, React 19 y TypeScript. La aplicación incluye captura de artículos por MCP, biblioteca reciente y ficha privada. El estado de la captura MCP y la biblioteca se sigue en [las iteraciones](plan/iterations.md). Incluye acceso con Google mediante Better Auth, administradores definidos por entorno y usuarios autorizados en MongoDB, rutas protegidas, una capa MongoDB con conexión compartida y un flujo de desarrollo agéntico por iteraciones.
 
 ## Qué incluye realmente
 
 - App Router con Server Components; `src/app/**` contiene las entradas de rutas y layouts.
-- Better Auth configurado sin adaptador de base de datos: cookies JWT y estado OAuth en cookies. **MongoDB no persiste identidades, cuentas ni sesiones de Better Auth; sí persiste los permisos de acceso normales.** Cambiar este modelo requiere una decisión específica del proyecto.
+- Better Auth persiste identidades, sesiones y el estado OAuth en MongoDB. El identificador persistido se usa en la biblioteca web y en MCP. La aplicación comprueba los permisos actuales en cada operación.
 - Autorización en el layout protegido mediante `requireAuthorizedSession()`. El proxy comprueba la presencia de una cookie como optimización de redirección; no sustituye la autorización de cada operación.
 - Driver nativo MongoDB, conexión compartida, registro central de colecciones e índices. La colección `user_access` registra los usuarios normales autorizados y tiene un índice único por correo normalizado.
 - Tailwind CSS 4, Biome, pruebas con Bun y comprobación de TypeScript. SWR y Zod están instalados para las funcionalidades que los requieran.
-- Pantallas iniciales de acceso e inicio. No incluye dominio de negocio, modo offline, sincronización, generación de PDF ni despliegue activo configurado.
+- Pantallas de acceso, biblioteca reciente y ficha de artículo. El roadmap recoge búsqueda, edición y topics.
 
 Las versiones exactas están en `package.json` y `bun.lock`. Bun es el gestor de paquetes de este repositorio; mantener un único lockfile evita instalaciones divergentes.
 
 ## Configuración de Vercel
 
-[vercel.ts](vercel.ts) contiene la configuración solicitada: región `cdg1` y una regla para todas las rutas que deniega las peticiones cuando `x-vercel-ip-country` no coincide con `ES`, incluida su ausencia. Usa `@vercel/config` con versión exacta en el lockfile Bun. El formato se describe en la [documentación oficial](https://vercel.com/docs/project-configuration/vercel-ts).
+[vercel.ts](vercel.ts) contiene la configuración solicitada: región `cdg1` y una regla que deniega las peticiones cuando `x-vercel-ip-country` no coincide con `ES`, incluida su ausencia. MCP, tokens, JWKS y los dos documentos de descubrimiento tienen excepciones de ruta exacta. Usa `@vercel/config` con versión exacta en el lockfile Bun. El formato se describe en la [documentación oficial](https://vercel.com/docs/project-configuration/vercel-ts).
 
 La regla corresponde al despliegue en Vercel; no se aplica al servidor local de Next. Añadir este archivo no crea un proyecto, conecta el repositorio ni ejecuta un despliegue. La comprobación efectiva del filtro geográfico queda para un despliegue autorizado en Vercel.
 
@@ -48,23 +48,13 @@ bun run dev
 
 Abre [localhost:3009](http://localhost:3009). La ruta `/` requiere sesión y redirige a `/auth/signin`. Las variables de autenticación se leen al cargar su configuración: deben estar disponibles también durante la compilación. Los archivos `.env.local` y demás credenciales quedan fuera de Git; `.env.example` contiene únicamente ejemplos públicos.
 
-## Convertir la plantilla en una aplicación
-
-1. Crea el repositorio de destino y configura su remoto e historial según tus necesidades.
-2. Cambia `name` en `package.json` y actualiza `bun.lock` con Bun. Adapta la marca en `src/app/layout.tsx`, `src/features/home/components/home-screen.tsx`, `src/components/shared/app-navigation.tsx`, `src/features/auth/components/sign-in-card.tsx` y el favicon. Añade los recursos de marca propios en `public/` cuando los necesites.
-3. La UI de la plantilla está íntegramente en inglés y declara `lang="en"`. Si cambias el idioma del producto, alinea todos los textos visibles y accesibles; no hay un sistema de traducciones.
-4. Crea secretos y credenciales OAuth propios. Configura al menos un administrador en `ALLOWED_EMAILS` y una base de datos independiente; no reutilices datos ni credenciales del repositorio de origen.
-5. Completa [el plan del producto](plan/master.md) y la iteración `01` en [el orden de entregas](plan/iterations.md) antes de desarrollar funcionalidades.
-6. Implementa el dominio bajo `src/features/<feature>/`, valida entradas con esquemas compartidos y registra colecciones e índices junto con las consultas que los necesitan.
-7. Configura hosting, variables y verificaciones del entorno de destino. El flujo autoriza commit y push a `origin/int`; el merge y push de `main` corresponden al usuario. Hosting, producción y automatizaciones requieren su configuración y autorización específicas.
-
 ## Navegación y ajustes
 
 Las rutas autorizadas comparten una barra inferior en móvil y superior desde 768px. Los destinos son **Home** (`/`), con icono de casa, y **Settings** (`/settings`), con la foto del perfil de Google y estado activo accesible. Si falta la imagen o no carga, se muestran las iniciales como respaldo. Los destinos se definen una sola vez en `src/config/navigation.ts`. La barra móvil respeta el área segura y el contenido reserva espacio para no quedar cubierto.
 
 Ajustes muestra el nombre, correo y rol de la sesión verificada y autorizada. Incluye cambio de cuenta y, para administradores, enlace a la gestión del sitio. La ruta mantiene las comprobaciones de autorización en servidor.
 
-El selector **Theme** ofrece Sistema, Claro y Oscuro. La preferencia se guarda en este navegador, no en MongoDB ni en la cuenta, con la clave `webapp:theme:v1`. Se aplica antes de hidratar React y se sincroniza entre pestañas del mismo origen que tengan Ajustes abierto. Sistema sigue la preferencia del dispositivo mediante CSS; si el almacenamiento está bloqueado, el cambio sigue funcionando y se informa de que no se conservará. Al reutilizar la plantilla, puedes personalizar la clave y el evento en `src/config/theme.ts`.
+El selector **Theme** ofrece Sistema, Claro y Oscuro. La preferencia se guarda en este navegador, no en MongoDB ni en la cuenta, con la clave `webapp:theme:v1`. Se aplica antes de hidratar React y se sincroniza entre pestañas del mismo origen que tengan Ajustes abierto. Sistema sigue la preferencia del dispositivo mediante CSS; si el almacenamiento está bloqueado, el cambio sigue funcionando y se informa de que no se conservará. La clave y el evento se definen en `src/config/theme.ts`.
 
 ## Administración y acceso
 
@@ -118,15 +108,21 @@ Otros comandos: `bun run lint:fix`, `bun run format`, `bun run test:watch` y `bu
 ## Pruebas de acceso con recursos aislados
 
 - `src/lib/db/user-access.integration.ts`: ejecutar explícitamente con `bun --no-env-file --conditions=react-server src/lib/db/user-access.integration.ts`, proporcionando `MONGODB_URI` de un MongoDB desechable en `127.0.0.1:<puerto>` y `MONGODB_DB=template_access_test_<identificador>`. Comprueba concurrencia, reconexión, revocación, solicitudes idempotentes, decisiones atómicas/obsoletas, compatibilidad con permisos anteriores, paginación e índices. Usa una base nueva por ejecución y elimina únicamente los recursos de prueba al terminar.
-- `test/access-http.ts`: ejecutar con `bun --no-env-file --conditions=react-server test/access-http.ts` contra un `next start` compilado y aislado. Ambos procesos deben compartir las variables de prueba: base/origen loopback, secreto aleatorio exclusivo, credenciales Google ficticias y `ALLOWED_EMAILS=admin@example.com`. Crea cookies firmadas de prueba y verifica rutas, solicitudes propias, rechazo/reenvío, aprobación y Server Actions reales sin llamar a Google. Nunca ejecutarlo contra una aplicación o base de usuario.
+- `test/access-http.ts`: ejecutar con `bun --no-env-file --conditions=react-server test/access-http.ts` contra un `next start` compilado y aislado. Ambos procesos deben compartir las variables de prueba: base/origen loopback, secreto aleatorio exclusivo, credenciales Google ficticias y `ALLOWED_EMAILS=admin@example.com`. Crea sesiones persistidas y cookies firmadas de prueba y verifica rutas, solicitudes propias, rechazo/reenvío, aprobación y Server Actions reales sin llamar a Google. Nunca ejecutarlo contra una aplicación o base de usuario.
 
 Las dos entradas rechazan destinos que no cumplan sus guardias de aislamiento y no forman parte de `bun run test`. Se necesita aportar las variables al proceso explícitamente: `--no-env-file` evita cargar credenciales locales. Estas pruebas no hacen limpieza destructiva automática; elimina el contenedor o base desechable que hayas creado.
+
+## Captura con ChatGPT
+
+En cada entorno autorizado, configura `CHATGPT_CLIENT_ID`, `CHATGPT_CLIENT_SECRET` y `CHATGPT_REDIRECT_URI` con un cliente estático y la URL de retorno HTTPS que indique ChatGPT. Configura el MCP privado con OAuth en `/api/integrations/mcp` y usa las credenciales de ese entorno. La cuenta de Google debe tener acceso vigente a Digest. Para comprobar el flujo, pide guardar una fuente pública y verifica el contenido, el nivel de acceso y la ficha que devuelve `save_article`.
+
+Las pruebas HTTP usan un MongoDB desechable en loopback, credenciales ficticias y sesiones persistidas de prueba. Ejecutar desde la raíz con `DIGEST_TEST_MONGO_PORT=<puerto> bash apps/damaca-digest/test/run-capture-http.sh`. El runner compila y arranca Next, comprueba OAuth/MCP y el control de acceso web y termina el proceso local. El contenedor MongoDB desechable se elimina por separado. La prueba de Google y ChatGPT reales requiere un entorno HTTPS autorizado.
 
 ## Trabajar con agentes
 
 Empieza por [AGENTS.md](AGENTS.md), el [plan maestro](plan/master.md), las [iteraciones](plan/iterations.md), el [registro](plan/iteration-log.md) y el [workflow común](../../plan/workflow.md). El flujo define alcance y aceptación antes de editar, entrega cambios pequeños, registra las pruebas y deja el siguiente paso listo para otra sesión. `CLAUDE.md` remite a las mismas reglas.
 
-Consulta el [flujo agéntico común](../../plan/workflow.md) para delegación, capacidad, cierre y publicación. Este documento mantiene únicamente los límites del producto de la plantilla.
+Consulta el [flujo agéntico común](../../plan/workflow.md) para delegación, capacidad, cierre y publicación.
 
 ### Compatibilidad del registro de acceso
 

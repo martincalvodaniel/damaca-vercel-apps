@@ -3,7 +3,14 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "passThroughEnv": ["ALLOWED_EMAILS", "BETTER_AUTH_URL", "MONGODB_DB"]
+      "passThroughEnv": [
+        "ALLOWED_EMAILS",
+        "BETTER_AUTH_URL",
+        "MONGODB_DB",
+        "CHATGPT_CLIENT_ID",
+        "CHATGPT_CLIENT_SECRET",
+        "CHATGPT_REDIRECT_URI"
+      ]
     }
   }
 }

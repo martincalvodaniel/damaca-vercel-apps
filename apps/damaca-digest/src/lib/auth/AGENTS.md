@@ -1,7 +1,7 @@
 # Authentication Rules
 
 - `auth.ts` and `session.ts` are server-only. `auth-client.ts` is client-only. Pure helpers must remain usable in isolated tests without importing server configuration.
-- The current Better Auth configuration has no database adapter: do not assume users, accounts, or sessions are persisted in MongoDB. Cookie cache and OAuth state settings are deliberate; changing them requires a documented security decision.
+- Better Auth persists users, accounts, sessions, and OAuth state in the Digest MongoDB database. Use the persisted user ID for web and MCP ownership. Resolve membership from the verified identity on each access. Changes to persistence or OAuth state require a documented security decision.
 - `ALLOWED_EMAILS` defines administrators only; MongoDB `user_access` grants normal access. Keep deny-by-default authorization and verify `session.user.emailVerified` before resolving access. `getAuthorizedSession()` attaches the current server-derived role, `requireAuthorizedSession()` redirects anonymous identities to sign-in and verified non-members to `/auth/access`, and `requireAdminSession()` rejects normal users from administration.
 - Resolve admin membership before a database lookup, and check normal-user membership per request. Revocation must affect existing cookies on the next server access; do not persist roles in cookies or cache grants across requests. Only environment configuration may grant administrator access.
 - For API handlers and Server Actions, return an appropriate unauthorized result and authorize resource ownership before accessing data. Do not rely solely on a layout or cookie presence in the proxy.

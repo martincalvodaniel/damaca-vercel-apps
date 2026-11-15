@@ -12,17 +12,17 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 02 — Validar la viabilidad externa
 
-- Estado: `pending`.
+- Estado: `blocked`. Falta un entorno HTTPS autorizado con Google, MongoDB y un conector privado de ChatGPT con escritura.
 - Rutas: configuración aislada de Digest y pruebas de OAuth/MCP.
 - Dependencias: workspace ChatGPT con escritura habilitada, un entorno Vercel autorizado y MongoDB aislado.
 - Aceptación: validar descubrimiento, consentimiento, intercambio y llamada de prueba desde ChatGPT, con una fuente pública y datos desechables.
 
-## 03 — Entregar captura y ficha
+## 03 — Entregar captura y ficha en local
 
-- Estado: `pending`.
+- Estado: `validated`.
 - Rutas: autenticación, MCP, repositorio y ficha de Digest.
-- Dependencia: viabilidad de OAuth y acceso al entorno.
-- Aceptación: recorrido ChatGPT → MongoDB → ficha para acceso completo, parcial y no disponible, con aislamiento entre cuentas y deduplicación concurrente.
+- Dependencia: starter y validación local de protocolos y persistencia con un MongoDB desechable.
+- Aceptación: recorrido cliente OAuth/MCP de prueba → MongoDB → ficha para acceso completo, parcial y no disponible, con aislamiento entre cuentas y deduplicación concurrente. La aceptación con ChatGPT real queda en el corte 02.
 
 ## 04 — Entregar biblioteca y topics
 

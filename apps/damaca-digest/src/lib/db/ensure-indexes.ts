@@ -16,8 +16,22 @@ export interface IndexSpec {
   options: CreateIndexesOptions & { name: string }
 }
 
-// The unique email index also supports membership lookups and cursor pagination.
 export const INDEX_SPECS: readonly IndexSpec[] = [
+  {
+    collection: "articles",
+    keys: { ownerId: 1, canonicalUrl: 1 },
+    options: { name: "owner_canonical_url_unique", unique: true },
+  },
+  {
+    collection: "articles",
+    keys: { ownerId: 1, capturedAt: -1, _id: -1 },
+    options: { name: "owner_capture_id_desc" },
+  },
+  {
+    collection: "capture_limits",
+    keys: { expiresAt: 1 },
+    options: { name: "capture_limit_ttl", expireAfterSeconds: 0 },
+  },
   {
     collection: "user_access",
     keys: { status: 1, email: 1 },

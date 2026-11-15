@@ -123,6 +123,8 @@
       "name": "@damaca/damaca-digest",
       "version": "0.1.0",
       "dependencies": {
+        "@better-auth/oauth-provider": "catalog:",
+        "@modelcontextprotocol/sdk": "catalog:",
         "@vercel/config": "catalog:",
         "better-auth": "catalog:",
         "mongodb": "catalog:",

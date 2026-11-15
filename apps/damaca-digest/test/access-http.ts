@@ -1,5 +1,4 @@
 import assert from "node:assert/strict"
-import { makeSignature, signJWT } from "better-auth/crypto"
 import { getAuthEnv, getDatabaseEnv } from "@/config/env"
 import { closeDatabaseConnection } from "@/lib/db/client"
 import {
@@ -9,12 +8,19 @@ import {
   revokeUserAccess,
 } from "@/lib/db/user-access"
 
+import {
+  createFixtureSession,
+  setFixtureEmailVerified,
+} from "./session-fixture"
+
 const configuration = getAuthEnv()
 const database = getDatabaseEnv()
 const origin = configuration.baseUrl
 if (
   !/^http:\/\/127\.0\.0\.1:\d+$/.test(origin) ||
-  !/^template_access_test_[a-z0-9_]+$/.test(database.databaseName) ||
+  !/^(?:template_access_test|digest_capture_test)_[a-z0-9_]+$/.test(
+    database.databaseName
+  ) ||
   !/^mongodb:\/\/(127\.0\.0\.1|localhost):\d+\/?$/.test(database.uri) ||
   configuration.allowedEmails !== "admin@example.com"
 ) {
@@ -23,35 +29,8 @@ if (
   )
 }
 
-async function createCookie(email: string, emailVerified = true) {
-  const now = new Date().toISOString()
-  const token = crypto.randomUUID()
-  const id = crypto.randomUUID()
-  const jwt = await signJWT(
-    {
-      session: {
-        id: crypto.randomUUID(),
-        token,
-        userId: id,
-        createdAt: now,
-        updatedAt: now,
-        expiresAt: new Date(Date.now() + 3600000).toISOString(),
-      },
-      user: {
-        id,
-        name: "Fixture",
-        email,
-        emailVerified,
-        createdAt: now,
-        updatedAt: now,
-      },
-      updatedAt: Date.now(),
-      version: "1",
-    },
-    configuration.secret,
-    3600
-  )
-  return `better-auth.session_token=${encodeURIComponent(`${token}.${await makeSignature(token, configuration.secret)}`)}; better-auth.session_data=${jwt}`
+async function createCookie(email: string) {
+  return (await createFixtureSession(email)).cookie
 }
 
 async function request(path: string, cookie?: string, body?: FormData) {
@@ -113,7 +92,6 @@ function actionForm(
 try {
   const admin = await createCookie("admin@example.com")
   const user = await createCookie("normal@example.com")
-  const unverifiedAdmin = await createCookie("admin@example.com", false)
   await revokeUserAccess("normal@example.com")
   assert.equal((await request("/admin")).status, 307)
   const adminResponse = await request("/admin", admin)
@@ -127,11 +105,13 @@ try {
   assert.ok(adminSettingsHtml.includes('href="/admin"'))
   assert.ok(adminSettingsHtml.includes('aria-current="page"'))
   assert.equal((await request("/settings")).status, 307)
+  await setFixtureEmailVerified("admin@example.com", false)
   assert.ok(
-    (await request("/admin", unverifiedAdmin)).headers
+    (await request("/admin", admin)).headers
       .get("location")
       ?.includes("/auth/signin")
   )
+  await setFixtureEmailVerified("admin@example.com", true)
   assert.ok(
     (await request("/", user)).headers.get("location")?.includes("/auth/access")
   )
@@ -144,7 +124,7 @@ try {
   const home = await request("/", user)
   assert.equal(home.status, 200)
   const homeHtml = await home.text()
-  assert.ok(homeHtml.includes("user"))
+  assert.ok(homeHtml.includes("Library"))
   assert.ok(!homeHtml.includes('href="/admin"'))
   const userSettings = await request("/settings", user)
   assert.equal(userSettings.status, 200)
@@ -272,7 +252,8 @@ try {
     ),
     false
   )
-  const unverifiedRequest = await createCookie("unverified@example.com", false)
+  const unverifiedRequest = await createCookie("unverified@example.com")
+  await setFixtureEmailVerified("unverified@example.com", false)
   await request(
     "/auth/access",
     unverifiedRequest,

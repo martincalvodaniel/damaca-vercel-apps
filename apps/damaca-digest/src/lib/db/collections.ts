@@ -5,6 +5,8 @@ import { getDatabase } from "@/lib/db/client"
 
 // Register collection names here alongside the feature that introduces them.
 export const COLLECTION_NAMES = {
+  articles: "articles",
+  captureLimits: "capture_limits",
   userAccess: "user_access",
 } as const satisfies Record<string, string>
 

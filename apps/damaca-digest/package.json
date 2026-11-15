@@ -13,6 +13,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@better-auth/oauth-provider": "catalog:",
+    "@modelcontextprotocol/sdk": "catalog:",
     "@vercel/config": "catalog:",
     "better-auth": "catalog:",
     "mongodb": "catalog:",

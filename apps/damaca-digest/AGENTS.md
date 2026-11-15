@@ -21,7 +21,7 @@ Follow the [root agent workflow](../../plan/workflow.md) for branch, planning, c
 ## Authoritative Stack
 
 - Next.js 16 App Router, React 19, React DOM 19, and TypeScript.
-- Better Auth for Google authentication; the current configuration has no persistent database adapter.
+- Better Auth for Google authentication and MCP OAuth with the MongoDB adapter.
 - Native `mongodb` driver, `server-only`, SWR, and Zod.
 - Tailwind CSS 4, Biome, and Bun for package management and tests.
 - Exact versions belong to `package.json` and `bun.lock`. Use `bun install --frozen-lockfile` for a reproducible installation. Keep Bun as the single lockfile source.

@@ -33,6 +33,14 @@ describe("MongoDB index specifications", () => {
     })
   })
 
+  it("enforces one capture per owner and canonical URL", () => {
+    expect(
+      INDEX_SPECS.find(
+        (spec) => spec.collection === "articles" && spec.options.unique
+      )?.keys
+    ).toEqual({ ownerId: 1, canonicalUrl: 1 })
+  })
+
   it("rejects duplicate names within a collection", () => {
     const specs: IndexSpec[] = [
       {

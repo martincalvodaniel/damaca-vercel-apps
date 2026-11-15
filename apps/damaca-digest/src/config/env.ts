@@ -65,3 +65,26 @@ export function getDatabaseEnv() {
     uri: getRequiredEnv("MONGODB_URI"),
   }
 }
+
+export function getChatGptClient() {
+  const {
+    CHATGPT_CLIENT_ID: id,
+    CHATGPT_CLIENT_SECRET: secret,
+    CHATGPT_REDIRECT_URI: redirectUri,
+  } = process.env
+
+  if (!id && !secret && !redirectUri) return
+  if (!id || !secret || !redirectUri) {
+    throw new Error("Incomplete ChatGPT client configuration")
+  }
+  const url = URL.parse(redirectUri)
+  if (
+    url?.origin !== "https://chatgpt.com" ||
+    url.username ||
+    url.password ||
+    url.hash
+  ) {
+    throw new Error("Invalid ChatGPT redirect URI")
+  }
+  return { id, secret, redirectUri }
+}
