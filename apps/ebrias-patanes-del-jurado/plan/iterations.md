@@ -517,3 +517,10 @@
 - Rutas: asistencia, coches, Tapas, Ajustes y componentes de miembros.
 - Aceptación: fotos o iniciales en las listas y selectores, con avatares compactos.
 - Validación: Biome, tipos y build.
+
+## EPJ-71 — Filas compactas de asistentes y coches
+
+- Estado: `validated`.
+- Rutas: filas compartidas de asistencia y coches de Letux.
+- Aceptación: dos columnas, avatares junto al nombre y controles de borrado alineados al borde derecho, con texto completo.
+- Validación: Biome incremental, tipos, build y comprobación en móvil estrecho y escritorio.

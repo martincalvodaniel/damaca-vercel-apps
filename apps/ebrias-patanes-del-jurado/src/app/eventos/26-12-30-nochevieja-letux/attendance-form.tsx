@@ -309,7 +309,7 @@ function AttendeeRow({
       {canManage ? <span aria-hidden="true">⠿</span> : null}
       <span className={styles.attendeeName}>
         <MemberAvatar compact alias={guest.alias} image={guest.image ?? null} />
-        {guest.alias}
+        <span>{guest.alias}</span>
       </span>
       {canManage && (mode === "attendance" || guest.status !== "unassigned") ? (
         <RemoveEntry

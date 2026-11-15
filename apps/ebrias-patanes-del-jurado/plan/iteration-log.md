@@ -54,3 +54,9 @@
 
 - Capacidad inicial de 13% en 5 h y 74% en 7 días. Avatares de 16 px en las filas y selectores, con iniciales cuando falta la foto o falla su carga.
 - Biome incremental, tipos, 22 pruebas y build correctos. El build registró un aviso de DNS al inicializar la autenticación. Queda pendiente comprobar las rutas autenticadas en móvil y escritorio. Chrome terminó al iniciar la comprobación aislada del selector.
+
+## EPJ-71 — Filas compactas de asistentes y coches
+
+- Capacidad inicial de 100% en 5 h y 73% en 7 días. La X queda a 5 px del borde de la fila y el avatar conserva sus 16 px cuando el nombre se reparte en varias líneas.
+- Chromium con HTML aislado y estilos de Ebrias a 320, 390 y 1280 px. Asistentes, coches y solo lectura muestran los nombres del pantallazo en una línea y los alias largos completos, sin desbordamiento. La comprobación cubre filas con y sin botón.
+- Biome en los dos archivos de código modificados, tipos, 22 pruebas y build correctos. El build registró un aviso DNS al inicializar la autenticación. La revisión de espaciado se hizo sin sesión autenticada.
