@@ -10,6 +10,7 @@ Monorepo for independent web applications. Applications stay in their own worksp
 | `@damaca/card-wars`                 | [`apps/card-wars`](apps/card-wars/)                                 |             3004 |
 | `@damaca/dalis-home-management`     | [`apps/dalis-home-management`](apps/dalis-home-management/)         |             3001 |
 | `@damaca/dalis-tasks-events`        | [`apps/dalis-tasks-events`](apps/dalis-tasks-events/)               |             3002 |
+| `@damaca/damaca-digest`             | [`apps/damaca-digest`](apps/damaca-digest/)                         |             3009 |
 | `@damaca/damaca-hub`                | [`apps/damaca-hub`](apps/damaca-hub/)                               |             3005 |
 | `@damaca/damaca-pocs`               | [`apps/damaca-pocs`](apps/damaca-pocs/)                             |             3008 |
 | `@damaca/damaca-secrets`            | [`apps/damaca-secrets`](apps/damaca-secrets/)                       |             3007 |

@@ -20,6 +20,7 @@ jobs:
           - "@damaca/card-wars"
           - "@damaca/dalis-home-management"
           - "@damaca/dalis-tasks-events"
+          - "@damaca/damaca-digest"
           - "@damaca/damaca-hub"
           - "@damaca/pocha-score"
           - "@damaca/lbdp"
