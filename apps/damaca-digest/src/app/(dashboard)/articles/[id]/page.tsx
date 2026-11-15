@@ -7,12 +7,15 @@ import { articleId } from "@/schemas/article"
 
 export default async function ArticlePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ readingUpdate?: string | string[] }>
 }) {
-  const [{ user }, { id }] = await Promise.all([
+  const [{ user }, { id }, { readingUpdate }] = await Promise.all([
     requireAuthorizedSession(),
     params,
+    searchParams,
   ])
   if (!articleId.safeParse(id).success) notFound()
   const article = await findArticle(user.id, id)
@@ -23,5 +26,12 @@ export default async function ArticlePage({
     article.proposedTopics ?? []
   )
   const related = await listRelatedArticles(user.id, id, matches)
-  return <ArticleDetail article={article} topics={labels} related={related} />
+  return (
+    <ArticleDetail
+      article={article}
+      topics={labels}
+      related={related}
+      readingUpdateFailed={readingUpdate === "failed"}
+    />
+  )
 }

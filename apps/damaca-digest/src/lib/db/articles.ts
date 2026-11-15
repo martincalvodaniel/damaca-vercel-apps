@@ -241,6 +241,19 @@ export async function editArticle(
   return result.matchedCount === 1
 }
 
+export async function updateArticleReading(
+  ownerId: string,
+  id: string,
+  revision: number,
+  change: { favorite: boolean } | { readingStatus: "read" | "unread" }
+) {
+  const result = await (await articles()).updateOne(
+    { ownerId, _id: new ObjectId(id), revision },
+    { $set: { ...change, updatedAt: new Date() }, $inc: { revision: 1 } }
+  )
+  return result.matchedCount === 1
+}
+
 export async function deleteArticle(
   ownerId: string,
   id: string,

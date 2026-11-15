@@ -580,6 +580,50 @@ try {
   assert.match(backupMarkdown, /## Topic fixture/)
   assert.doesNotMatch(backupMarkdown, /Other Owner/)
 
+  const readingForm = [...relatedHtml.matchAll(/<form[\s\S]*?<\/form>/g)]
+    .map(([form]) => form)
+    .find((form) => form.includes('name="readingChange"'))
+  assert.ok(readingForm)
+  async function changeReading(
+    form: string,
+    cookie: string,
+    operation: string
+  ) {
+    const body = serverActionForm(form)
+    body.set("readingChange", operation)
+    return fetch(withTopics.detailUrl, {
+      method: "POST",
+      headers: { cookie, origin },
+      body,
+      redirect: "manual",
+      signal: AbortSignal.timeout(10_000),
+    })
+  }
+  const deniedReading = await changeReading(
+    readingForm,
+    second.cookie,
+    "favorite"
+  )
+  assert.match(
+    deniedReading.headers.get("location") ?? "",
+    /readingUpdate=failed/
+  )
+  const changedReading = await changeReading(readingForm, first.cookie, "read")
+  assert.equal(changedReading.status, 303)
+  assert.doesNotMatch(changedReading.headers.get("location") ?? "", /failed/)
+  const staleReading = await changeReading(
+    readingForm,
+    first.cookie,
+    "favorite"
+  )
+  assert.match(
+    staleReading.headers.get("location") ?? "",
+    /readingUpdate=failed/
+  )
+  const updatedReading = await invoke(reader, "get_article", relatedInput)
+  assert.equal(updatedReading.structuredContent.article.readingStatus, "read")
+  assert.equal(updatedReading.structuredContent.article.favorite, false)
+
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)
   assert.equal(

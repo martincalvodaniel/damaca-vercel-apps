@@ -116,3 +116,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: herramientas MCP y pruebas de captura HTTP.
 - Aceptación: resolver por ID los mismos artículos relacionados que muestra la ficha, con el permiso de lectura y el aislamiento por propietario.
+
+## 12 — Organizar una lectura desde su ficha
+
+- Estado: `validated`.
+- Rutas: ficha, acciones de artículo y repositorio.
+- Aceptación: cambiar favorito y estado leído desde la ficha, sin abrir el editor. Las acciones respetan el propietario y la revisión.

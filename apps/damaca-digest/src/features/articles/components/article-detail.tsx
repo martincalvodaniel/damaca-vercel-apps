@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { setArticleReading } from "@/features/articles/actions"
 import { AccessBadge } from "@/features/articles/components/access-badge"
 import type { Article, RelatedArticle } from "@/lib/db/articles"
 
@@ -10,10 +11,12 @@ export function ArticleDetail({
   article,
   topics,
   related,
+  readingUpdateFailed,
 }: {
   article: Article
   topics: string[]
   related: RelatedArticle[]
+  readingUpdateFailed: boolean
 }) {
   const details = [
     article.source ?? article.sourceDomain,
@@ -22,6 +25,11 @@ export function ArticleDetail({
   ]
     .filter(Boolean)
     .join(" · ")
+  const readingAction = setArticleReading.bind(
+    null,
+    article.id,
+    article.revision
+  )
   const captured = article.capturedAt.toISOString()
   const links = new Map(
     article.relatedLinks?.map((link) => [`${link.origin}:${link.url}`, link])
@@ -63,6 +71,31 @@ export function ArticleDetail({
             </span>
           </a>
         </div>
+        <form action={readingAction} className="mt-2 flex flex-wrap gap-2">
+          <button
+            className={`digest-panel ${actionLink} hover:border-teal-600`}
+            type="submit"
+            name="readingChange"
+            value={article.favorite ? "unfavorite" : "favorite"}
+          >
+            {article.favorite ? "Remove favorite" : "Add to favorites"}
+          </button>
+          <button
+            className={`digest-panel ${actionLink} hover:border-teal-600`}
+            type="submit"
+            name="readingChange"
+            value={article.readingStatus === "read" ? "unread" : "read"}
+          >
+            {article.readingStatus === "read"
+              ? "Mark as unread"
+              : "Mark as read"}
+          </button>
+        </form>
+        {readingUpdateFailed ? (
+          <p role="alert" className="mt-2 text-sm">
+            The reading update could not be saved. Try again.
+          </p>
+        ) : null}
         {article.accessNotes ? (
           <p className="mt-3 border-s-2 border-amber-500 ps-3 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
             {article.accessNotes}
