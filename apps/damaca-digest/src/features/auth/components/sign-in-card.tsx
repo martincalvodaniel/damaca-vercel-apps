@@ -24,11 +24,15 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
       })
 
       if (result.error) {
-        setError("Could not connect to Google. Please try again.")
+        setError(
+          result.error.status === 503
+            ? "Sign-in is temporarily unavailable. Please try again."
+            : "Could not start sign-in. Please try again."
+        )
         setIsPending(false)
       }
     } catch {
-      setError("Could not connect to Google. Please try again.")
+      setError("Could not start sign-in. Please try again.")
       setIsPending(false)
     }
   }, [callbackUrl])

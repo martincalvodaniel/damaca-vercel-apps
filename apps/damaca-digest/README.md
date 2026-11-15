@@ -21,7 +21,7 @@ La regla corresponde al despliegue en Vercel; no se aplica al servidor local de 
 
 ## Arranque local
 
-Requisitos: Bun, Node.js (24 en CI) y credenciales OAuth de Google. MongoDB es necesario para gestionar usuarios normales y comprobar su acceso.
+Requisitos: Bun, Node.js (24 en CI) y credenciales OAuth de Google. MongoDB debe estar accesible antes de iniciar sesión, porque Better Auth persiste el estado de OAuth en la base.
 
 ```bash
 bun install --frozen-lockfile
@@ -39,6 +39,16 @@ Completa `.env.local` con valores propios de esta aplicación:
 | `ALLOWED_EMAILS`                            | Correos de administradores, separados por comas. Los usuarios normales se gestionan en `/admin`; no reciben permisos de administración. |
 | `MONGODB_URI`                               | URI de MongoDB para permisos de usuarios y demás datos de la aplicación.                                                                |
 | `MONGODB_DB`                                | Base independiente por aplicación y entorno; valor de ejemplo: `damaca-digest`.                                                         |
+
+Si usas MongoDB local y el puerto 27017 está libre, puedes crear una instancia persistente que escuche solo en loopback:
+
+```bash
+docker run -d --name damaca-digest-mongo \
+  -p 127.0.0.1:27017:27017 \
+  -v damaca-digest-mongo-data:/data/db mongo:8
+```
+
+Usa `MONGODB_URI=mongodb://127.0.0.1:27017`. En sesiones posteriores arranca la instancia con `docker start damaca-digest-mongo` si está detenida. Un `MongoServerSelectionError` seguido de un 503 de inicio de sesión indica que el servidor no pudo seleccionar un servidor MongoDB antes de iniciar OAuth.
 
 Configura en Google el origen `http://localhost:3009` y la URI de retorno `http://localhost:3009/api/auth/callback/google`. Añade los orígenes y retornos correspondientes cuando despliegues y configura los usuarios de prueba si la pantalla de consentimiento lo requiere.
 

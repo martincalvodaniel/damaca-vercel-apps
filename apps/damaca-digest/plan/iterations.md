@@ -39,6 +39,13 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Aceptación: una consulta de sesión durante el fallo inicial devuelve 503 y se recupera tras arrancar MongoDB sin reiniciar Next.
 - Validación: prueba bajo Next local con MongoDB detenida y restaurada, más Biome, tipos, tests y recorrido OAuth/MCP.
 
+## 03c — Aclarar fallos de inicio de sesión en local
+
+- Estado: `validated`.
+- Rutas: pantalla de acceso y guía de arranque local.
+- Aceptación: un 503 de autenticación muestra indisponibilidad temporal y la guía explica cómo arrancar MongoDB en loopback.
+- Validación: ping al MongoDB local, inicio del flujo OAuth, Biome, tipos y pruebas.
+
 ## 04 — Entregar biblioteca y topics
 
 - Estado: `pending`.

@@ -28,3 +28,10 @@
 - Se reprodujo el fallo en Next local con una cookie firmada de prueba. Antes del cambio, la consulta devolvió 500 con MongoDB detenida y siguió devolviendo 500 al arrancarla, con `MongoTopologyClosedError`.
 - Better Auth espera al cliente conectado, comparte una inicialización y descarta los intentos fallidos. Después del cambio, el fallo inicial produjo HTTP 503 y las tres consultas siguientes devolvieron 200 en el mismo proceso tras arrancar MongoDB. La prueba usó MongoDB 8 desechable.
 - Pasaron Biome, TypeScript, 41 pruebas, el build y las integraciones HTTP locales de OAuth/MCP y control de acceso. El servidor y la configuración local del usuario quedaron fuera de la prueba.
+
+## 03c — Aclarar fallos de inicio de sesión en local
+
+- [Aceptación](iterations.md#03c--aclarar-fallos-de-inicio-de-sesión-en-local). Inicio en `int`, base `2a3d834`, árbol limpio. Capacidad inicial del 73% en 5h y 54% en 7d.
+- El filtro escrito en la terminal integrada era `@damaca/dacama-digest`. El workspace registrado es `@damaca/damaca-digest`.
+- El driver confirmó `ECONNREFUSED` en el MongoDB configurado en loopback, antes de iniciar OAuth. Se creó y arrancó una instancia MongoDB 8 local, dedicada, con volumen persistente y puerto 27017 limitado a loopback. El ping pasó y el Next ya en marcha devolvió HTTP 200 con una URL de autorización de Google. No se navegó a esa URL.
+- La pantalla de acceso distingue el 503 del fallo general y la guía documenta cómo arrancar MongoDB. Pasaron Biome, tipos, 41 pruebas y el build Webpack con valores de prueba.
