@@ -12,6 +12,16 @@ export function topicKey(label: string) {
   return label.normalize("NFKC").trim().replace(/\s+/g, " ").toLowerCase()
 }
 
+export function filterTopicLabels<
+  T extends Pick<TopicEntry, "label" | "aliases">,
+>(topics: T[], query?: string) {
+  const term = topicKey(query ?? "")
+  if (!term) return topics
+  return topics.filter(({ label, aliases }) =>
+    [label, ...aliases].some((text) => topicKey(text).includes(term))
+  )
+}
+
 function topicId(ownerId: string, label: string) {
   return createHash("sha256")
     .update(JSON.stringify([ownerId, topicKey(label)]))

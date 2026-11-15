@@ -477,6 +477,14 @@ try {
     headers: { cookie: first.cookie },
   })
   assert.match(await mergedPage.text(), /2(?:<!-- -->)? articles/)
+  const matchingTopics = await fetch(`${topicsUrl}?q=ARTIFICIAL+INTELLIGENCE`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.match(await matchingTopics.text(), /href="\/\?topic=Engineering"/)
+  const noTopics = await fetch(`${topicsUrl}?q=missing-fixture-label`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.match(await noTopics.text(), /No matching topics/)
   const byAlias = await fetch(`${origin}/?topic=Artificial+intelligence`, {
     headers: { cookie: first.cookie },
   })

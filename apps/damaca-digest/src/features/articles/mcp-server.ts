@@ -3,9 +3,10 @@ import "server-only"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
 import { scopeRequired } from "@/features/articles/mcp-scope"
-import { topicKey } from "@/features/topics/catalog"
+import { filterTopicLabels } from "@/features/topics/catalog"
 import { captureScope } from "@/lib/auth/mcp-config"
 import { type ArticleCapture, captureArticle } from "@/schemas/article"
+import { topicSearch } from "@/schemas/topic"
 
 const captureResult = z.object({
   articleId: z.string(),
@@ -79,7 +80,7 @@ export function createArticleServer(
       description:
         "List existing topics and aliases in the user's private library before proposing labels for a capture.",
       inputSchema: {
-        query: z.string().trim().max(100).optional(),
+        query: topicSearch,
         page: z.number().int().min(1).max(10_000).default(1),
       },
       outputSchema: {
@@ -103,10 +104,7 @@ export function createArticleServer(
     async ({ query, page }) => {
       if (!canCapture) return scopeRequired(captureScope)
       try {
-        const term = topicKey(query ?? "")
-        const matches = (await list()).filter(({ label, aliases }) =>
-          [label, ...aliases].some((text) => topicKey(text).includes(term))
-        )
+        const matches = filterTopicLabels(await list(), query)
         const pageSize = 40
         const result = {
           topics: matches.slice((page - 1) * pageSize, page * pageSize),

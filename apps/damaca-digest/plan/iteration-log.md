@@ -2,12 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 06 — Refinar biblioteca y lectura
-
-- Inicio en `int`, base `ffa9b0d`, con 70% en 5 h y 38% en 7 d. Se dejó Preview fuera del alcance por indicación del usuario.
-- Biblioteca con resúmenes visibles, procedencia, niveles de acceso y filtros activos que se pueden quitar individualmente. Ficha con jerarquía de lectura, topics enlazados, llamadas a la acción claras y bloques para resumen, notas y referencias. Navegación y superficies coherentes en biblioteca, ficha, edición y topics.
-- Pasaron Biome, tipos, 45 pruebas, build e integración HTTP de OAuth/MCP y acceso. Chrome revisó las cuatro pantallas y los controles desplegados a 320 y 1280 px, sin desbordamiento horizontal. Se inspeccionaron capturas de la biblioteca en claro y de la ficha en oscuro.
-
 ## 07 — Abrir Digest desde Compartir en Android
 
 - Inicio en `int`, base `fd455de`, con 61% en 5 h y 36% en 7 d.
@@ -52,3 +46,8 @@
 
 - La recepción de enlaces permite copiar el prompt sin abrir otra sesión de ChatGPT y conserva la selección manual como alternativa.
 - Biome, tipos, 49 pruebas y build pasaron. Chrome a 320 px verificó copia sin navegación, copia con apertura interceptada y mensaje cuando el portapapeles devuelve un error.
+
+## 16 — Buscar en el vocabulario de la biblioteca
+
+- Topics permite buscar por nombre o alias con el mismo filtro normalizado que MCP. Las operaciones y recuentos siguen disponibles.
+- Biome, tipos y build pasaron. La integración HTTP buscó un alias fusionado en mayúsculas y un término sin coincidencias. Chrome verificó la vista a 320 y 1280 px.

@@ -140,3 +140,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: formulario para compartir y documentación.
 - Aceptación: copiar el prompt con o sin abrir ChatGPT. Confirmar la copia sin navegación y conservar la opción de copiar manualmente si se deniega el permiso.
+
+## 16 — Buscar en el vocabulario de la biblioteca
+
+- Estado: `validated`.
+- Rutas: Topics, catálogo y pruebas HTTP.
+- Aceptación: buscar un tema por nombre o alias con la misma normalización que MCP. Mantener los recuentos y las opciones de gestión del catálogo.

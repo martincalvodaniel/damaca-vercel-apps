@@ -1,6 +1,8 @@
 import { z } from "zod"
 import { articleId } from "@/schemas/article"
 
+export const topicSearch = z.string().trim().max(100).optional()
+
 export const topicLabel = z.string().trim().min(1).max(100)
 
 export const topicChange = z.discriminatedUnion("operation", [
