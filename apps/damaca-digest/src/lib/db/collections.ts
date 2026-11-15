@@ -7,6 +7,7 @@ import { getDatabase } from "@/lib/db/client"
 export const COLLECTION_NAMES = {
   articles: "articles",
   captureLimits: "capture_limits",
+  topics: "topics",
   userAccess: "user_access",
 } as const satisfies Record<string, string>
 

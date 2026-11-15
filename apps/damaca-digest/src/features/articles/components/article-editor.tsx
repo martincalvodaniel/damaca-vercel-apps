@@ -49,6 +49,13 @@ export function ArticleEditor({
       31000,
       3,
     ],
+    [
+      "topics",
+      "Topics, one per line",
+      values.topics?.join("\n") ?? "",
+      1514,
+      3,
+    ],
     ["personalNotes", "Personal notes", values.personalNotes, 12000, 4],
   ] as const
 

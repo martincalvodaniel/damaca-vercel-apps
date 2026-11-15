@@ -4,6 +4,11 @@ import { type Filter, MongoServerError, ObjectId, type Sort } from "mongodb"
 import type { z } from "zod"
 import { normalizeArticleUrl } from "@/features/articles/normalize-url"
 import { COLLECTION_NAMES, getCollection } from "@/lib/db/collections"
+import {
+  articleTopicLabels,
+  findTopicReferences,
+  registerTopics,
+} from "@/lib/db/topics"
 import type {
   ArticleCapture,
   ArticleEdit,
@@ -18,6 +23,7 @@ type ArticleDetails = Omit<
   publishedAt?: Date
   suggestedCanonicalUrl?: string
   proposedTopics?: string[]
+  topicIds?: ObjectId[]
   sourceDomain: string
 }
 
@@ -31,7 +37,6 @@ type ArticleDocument = ArticleDetails & {
   readingStatus: z.infer<typeof readingStatus>
   favorite: boolean
   personalNotes?: string
-  topicIds?: ObjectId[]
   editedFields?: (keyof ArticleDetails)[]
   revision: number
 }
@@ -78,10 +83,25 @@ export async function saveArticle(ownerId: string, input: ArticleCapture) {
       ? { suggestedCanonicalUrl: suggested }
       : {}),
     ...(publishedAt ? { publishedAt: new Date(publishedAt) } : {}),
-    ...(topics?.length ? { proposedTopics: topics } : {}),
     sourceDomain: new URL(url).hostname,
   }
   const identity = { ownerId, canonicalUrl }
+  if (topics?.length) {
+    const existing = await collection.findOne(identity)
+    if (
+      existing &&
+      accessRank[input.accessStatus] <= accessRank[existing.accessStatus]
+    ) {
+      return {
+        articleId: existing._id.toHexString(),
+        status: "already_exists" as const,
+        canonicalUrl,
+      }
+    }
+    if (!existing?.editedFields?.includes("topicIds")) {
+      details.topicIds = await registerTopics(ownerId, topics)
+    }
+  }
 
   try {
     const result = await collection.insertOne({
@@ -155,8 +175,14 @@ export async function editArticle(
   const existing = await collection.findOne(identity)
   if (!existing) return false
 
-  const { favorite, readingStatus, personalNotes, publishedAt, ...metadata } =
-    input
+  const {
+    favorite,
+    readingStatus,
+    personalNotes,
+    publishedAt,
+    topics,
+    ...metadata
+  } = input
   const set: Partial<ArticleDocument> = {
     favorite,
     readingStatus,
@@ -175,7 +201,7 @@ export async function editArticle(
           ? new Date(`${publishedAt}T00:00:00.000Z`)
           : undefined,
   }
-  const edited: (keyof typeof values)[] = []
+  const edited: (keyof ArticleDetails)[] = []
   for (const field of Object.keys(values) as (keyof typeof values)[]) {
     const value = values[field]
     const normalized =
@@ -184,6 +210,18 @@ export async function editArticle(
     edited.push(field)
     if (normalized === undefined) unset[field] = ""
     else Object.assign(set, { [field]: normalized })
+  }
+  if (topics) {
+    const previousLabels = await articleTopicLabels(
+      ownerId,
+      existing.topicIds?.map((id) => id.toHexString()) ?? [],
+      existing.proposedTopics ?? []
+    )
+    if (JSON.stringify(topics) !== JSON.stringify(previousLabels)) {
+      set.topicIds = await registerTopics(ownerId, topics)
+      unset.proposedTopics = ""
+      edited.push("topicIds")
+    }
   }
   const result = await collection.updateOne(identity, {
     $set: set,
@@ -236,7 +274,23 @@ export async function listArticles(ownerId: string, query: LibraryQuery) {
     const source = exactText(query.source)
     filter.$or = [{ source }, { sourceDomain: source }]
   }
-  if (query.topic) filter.proposedTopics = exactText(query.topic)
+  if (query.topic) {
+    const { ids, legacyLabels } = await findTopicReferences(
+      ownerId,
+      query.topic
+    )
+    filter.$and = [
+      {
+        $or: [
+          { topicIds: { $in: ids } },
+          {
+            topicIds: { $exists: false },
+            proposedTopics: { $in: legacyLabels },
+          },
+        ],
+      },
+    ]
+  }
   if (query.language) filter.language = exactText(query.language)
   if (query.type) filter.contentType = query.type
   if (query.access) filter.accessStatus = query.access

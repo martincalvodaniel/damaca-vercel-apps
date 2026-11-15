@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { ArticleDetail } from "@/features/articles/components/article-detail"
 import { requireAuthorizedSession } from "@/lib/auth/session"
 import { findArticle } from "@/lib/db/articles"
+import { articleTopicLabels } from "@/lib/db/topics"
 import { articleId } from "@/schemas/article"
 
 export default async function ArticlePage({
@@ -16,5 +17,10 @@ export default async function ArticlePage({
   if (!articleId.safeParse(id).success) notFound()
   const article = await findArticle(user.id, id)
   if (!article) notFound()
-  return <ArticleDetail article={article} />
+  const topics = await articleTopicLabels(
+    user.id,
+    article.topicIds,
+    article.proposedTopics ?? []
+  )
+  return <ArticleDetail article={article} topics={topics} />
 }

@@ -75,13 +75,25 @@ it("registers the capture schema and returns structured results over MCP", async
     detailUrl: "https://digest.example.com/articles/0123456789abcdef01234567",
     warnings: [],
   }
-  const server = createArticleServer(async () => result)
+  const server = createArticleServer(
+    async () => result,
+    async () => [{ id: "fixture", label: "Engineering", aliases: [] }]
+  )
   await server.connect(serverTransport)
   await client.connect(clientTransport)
   try {
     expect((await client.listTools()).tools.map((tool) => tool.name)).toEqual([
       "save_article",
+      "list_topics",
     ])
+    const topics = await client.callTool({
+      name: "list_topics",
+      arguments: { query: "engine" },
+    })
+    expect(topics.structuredContent).toEqual({
+      topics: [{ id: "fixture", label: "Engineering", aliases: [] }],
+      nextPage: null,
+    })
     const save = (args: Record<string, unknown>) =>
       client.callTool({ name: "save_article", arguments: args })
     expect(

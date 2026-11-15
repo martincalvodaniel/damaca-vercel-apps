@@ -37,6 +37,7 @@ export async function saveArticleEdits(
     contentType: form.get("contentType"),
     summary: form.get("summary"),
     keyTakeaways: lines(form.get("keyTakeaways")),
+    topics: form.has("topics") ? lines(form.get("topics")) : undefined,
     personalNotes: form.get("personalNotes"),
     readingStatus: form.get("readingStatus"),
     favorite: form.get("favorite") === "true",

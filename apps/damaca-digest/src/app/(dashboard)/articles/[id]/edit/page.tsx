@@ -4,6 +4,7 @@ import { removeArticle } from "@/features/articles/actions"
 import { ArticleEditor } from "@/features/articles/components/article-editor"
 import { requireAuthorizedSession } from "@/lib/auth/session"
 import { findArticle } from "@/lib/db/articles"
+import { articleTopicLabels } from "@/lib/db/topics"
 import { articleId } from "@/schemas/article"
 
 export default async function EditArticlePage({
@@ -22,6 +23,11 @@ export default async function EditArticlePage({
   if (!articleId.safeParse(id).success) notFound()
   const article = await findArticle(user.id, id)
   if (!article) notFound()
+  const topics = await articleTopicLabels(
+    user.id,
+    article.topicIds,
+    article.proposedTopics ?? []
+  )
   const deleteThisArticle = removeArticle.bind(null, id, article.revision)
   return (
     <section className="mx-auto max-w-2xl space-y-3">
@@ -44,6 +50,7 @@ export default async function EditArticlePage({
           contentType: article.contentType ?? "",
           summary: article.summary ?? "",
           keyTakeaways: article.keyTakeaways ?? [],
+          topics,
           personalNotes: article.personalNotes ?? "",
           readingStatus: article.readingStatus,
           favorite: article.favorite,

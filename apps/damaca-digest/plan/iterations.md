@@ -67,12 +67,12 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 04b — Consolidar topics
 
-- Estado: `pending`.
+- Estado: `validated`.
 - Aceptación: IDs estables, alias y fusión por propietario, recuentos, edición de asignaciones y herramienta MCP `list_topics`.
 
 ## 05 — Validar preproducción
 
-- Estado: `pending`.
+- Estado: `blocked`. CI, build Preview, comprobaciones responsive y restauración local completados. La protección SSO de Vercel intercepta el descubrimiento desde ChatGPT en Preview.
 - Rutas: app, pruebas, documentación y CI.
 - Dependencia: biblioteca y entorno de preproducción autorizado.
 - Aceptación: CI, recorrido OAuth real, revisión móvil y escritorio y restauración de prueba en una base separada.
