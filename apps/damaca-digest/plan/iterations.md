@@ -122,3 +122,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: ficha, acciones de artículo y repositorio.
 - Aceptación: cambiar favorito y estado leído desde la ficha, sin abrir el editor. Las acciones respetan el propietario y la revisión.
+
+## 13 — Mostrar temas y enlaces originales en la biblioteca
+
+- Estado: `validated`.
+- Rutas: biblioteca, tarjetas y pruebas HTTP.
+- Aceptación: filtrar por los temas visibles en una tarjeta y abrir la fuente directamente. Mostrar también la fecha de captura cuando exista fecha de publicación. Mantener la vista legible a 320 px.

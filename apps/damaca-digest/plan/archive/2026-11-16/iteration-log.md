@@ -50,3 +50,9 @@
 - Inicio en `int`, base `bc133ee`, con capacidad del 26% en 5h y 47% en 7d.
 - Búsqueda MongoDB ponderada y limitada por propietario, filtros en la URL, orden y páginas de 20 con desempate por ID. El filtro de topics usa las propuestas históricas hasta integrar IDs estables.
 - Pasaron Biome, tipos, 42 pruebas, build y la prueba HTTP con dos páginas, filtros combinados, relevancia y datos aislados por propietario. Chrome verificó la biblioteca con filtros abiertos y sin desbordamiento horizontal a 320 y 1280 px.
+
+## 04a — Editar y organizar artículos
+
+- La ficha permite editar metadatos, resumen, puntos clave, notas, estado de lectura y favorito, y borrar con confirmación. Las mutaciones usan el propietario y una revisión optimista. Una recaptura conserva los campos corregidos y los datos personales.
+- Pasaron Biome, 42 pruebas, build con tipos e integración HTTP de las Server Actions. La prueba rechazó edición y borrado desde otra cuenta y borrado sin confirmación, y verificó la conservación de cambios en una recaptura. La revisión de la biblioteca a dos anchos está en el corte 04.
+- El siguiente corte es 04b, vocabulario de topics, alias, fusión y `list_topics`. Se difiere para respetar la reserva de capacidad de la ventana de cinco horas.

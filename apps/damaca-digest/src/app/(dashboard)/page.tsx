@@ -4,6 +4,7 @@ import { LibraryArticle } from "@/features/articles/components/library-article"
 import { LibraryFilters } from "@/features/articles/components/library-filters"
 import { requireAuthorizedSession } from "@/lib/auth/session"
 import { listArticles } from "@/lib/db/articles"
+import { createTopicLabelResolver } from "@/lib/db/topics"
 import {
   libraryPageHref,
   libraryQuery,
@@ -26,6 +27,11 @@ export default async function LibraryPage({
   const result = parsed.success
     ? await listArticles(user.id, query)
     : { items: [], hasNext: false }
+  const labels = result.items.some(
+    (article) => article.topicIds.length || article.proposedTopics?.length
+  )
+    ? await createTopicLabelResolver(user.id)
+    : undefined
   const filtered = Object.keys(params).some(
     (key) => key !== "sort" && !!params[key]
   )
@@ -65,7 +71,13 @@ export default async function LibraryPage({
       ) : (
         <ul className="space-y-2">
           {result.items.map((article) => (
-            <LibraryArticle key={article.id} article={article} />
+            <LibraryArticle
+              key={article.id}
+              article={article}
+              topics={
+                labels?.(article.topicIds, article.proposedTopics ?? []) ?? []
+              }
+            />
           ))}
         </ul>
       )}

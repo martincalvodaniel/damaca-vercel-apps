@@ -2,13 +2,20 @@ import Link from "next/link"
 import { AccessBadge } from "@/features/articles/components/access-badge"
 import type { Article } from "@/lib/db/articles"
 
-export function LibraryArticle({ article }: { article: Article }) {
+export function LibraryArticle({
+  article,
+  topics,
+}: {
+  article: Article
+  topics: string[]
+}) {
   const date = (article.publishedAt ?? article.capturedAt).toISOString()
+  const captured = article.capturedAt.toISOString()
   return (
-    <li>
+    <li className="digest-panel min-w-0 rounded-xl px-3.5 pt-3.5 sm:px-4 sm:pt-4">
       <Link
         href={`/articles/${article.id}`}
-        className="digest-panel group block min-w-0 rounded-xl p-3.5 transition-colors hover:border-teal-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 sm:p-4"
+        className="group block min-w-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
       >
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-600 dark:text-zinc-400">
           <span className="min-w-0 break-all font-medium">
@@ -44,6 +51,34 @@ export function LibraryArticle({ article }: { article: Article }) {
           ) : null}
         </div>
       </Link>
+      <div className="mt-1 flex flex-wrap items-center gap-x-2">
+        {topics.slice(0, 2).map((topic) => (
+          <Link
+            key={topic}
+            href={`/?${new URLSearchParams({ topic })}`}
+            className="inline-flex min-h-11 max-w-full items-center text-xs"
+          >
+            <span className="min-w-0 break-words rounded-full bg-teal-50 px-2 py-1 text-teal-950 hover:underline dark:bg-teal-950 dark:text-teal-100">
+              {topic}
+            </span>
+          </Link>
+        ))}
+        <a
+          href={article.url}
+          rel="noreferrer"
+          className="inline-flex min-h-11 items-center text-xs font-semibold underline underline-offset-4"
+        >
+          Original{" "}
+          <span aria-hidden="true" className="ms-1">
+            ↗
+          </span>
+        </a>
+        {!!article.publishedAt && (
+          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            Captured <time dateTime={captured}>{captured.slice(0, 10)}</time>
+          </p>
+        )}
+      </div>
     </li>
   )
 }

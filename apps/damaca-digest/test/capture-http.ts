@@ -482,6 +482,8 @@ try {
   })
   const byAliasHtml = await byAlias.text()
   assert.match(byAliasHtml, /Topic fixture/)
+  assert.match(byAliasHtml, /href="\/\?topic=Engineering"/)
+  assert.match(byAliasHtml, /href="https:\/\/example\.com\//)
   assert.match(byAliasHtml, /HTTP capture fixture/)
   const related = await fetch(withTopics.detailUrl, {
     headers: { cookie: first.cookie },

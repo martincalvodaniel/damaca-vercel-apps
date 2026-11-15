@@ -2,12 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 04a — Editar y organizar artículos
-
-- La ficha permite editar metadatos, resumen, puntos clave, notas, estado de lectura y favorito, y borrar con confirmación. Las mutaciones usan el propietario y una revisión optimista. Una recaptura conserva los campos corregidos y los datos personales.
-- Pasaron Biome, 42 pruebas, build con tipos e integración HTTP de las Server Actions. La prueba rechazó edición y borrado desde otra cuenta y borrado sin confirmación, y verificó la conservación de cambios en una recaptura. La revisión de la biblioteca a dos anchos está en el corte 04.
-- El siguiente corte es 04b, vocabulario de topics, alias, fusión y `list_topics`. Se difiere para respetar la reserva de capacidad de la ventana de cinco horas.
-
 ## 04b — Consolidar topics
 
 - Inicio en `int`, base `eeebcf4`, tras renovar la ventana de 5 h. El despliegue Production `adc0093` de los cortes 04 y 04a quedó READY y verificado en el dominio estable.
@@ -56,3 +50,8 @@
 
 - La ficha permite añadir o quitar favoritos y marcar una lectura como leída o pendiente. La acción actualiza solo el campo elegido.
 - Biome, tipos, build e integración HTTP pasaron. Se verificó que una cuenta distinta y un formulario con una revisión anterior no pueden aplicar el cambio. Chrome confirmó el diseño a 320 y 1280 px.
+
+## 13 — Mostrar temas y enlaces originales en la biblioteca
+
+- Cada tarjeta enlaza al original, muestra hasta dos temas que activan su filtro y añade la fecha de captura cuando se conoce la de publicación. El vocabulario de la página se resuelve una vez.
+- Pasaron Biome, tipos, build e integración HTTP con topics fusionados. Chrome confirmó biblioteca, ficha, edición y topics sin desbordamiento a 320 y 1280 px.
