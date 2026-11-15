@@ -1,18 +1,35 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState, useTransition } from "react"
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react"
 import type {
-  RevealCountdown,
+  publicCountdown,
   revealAnnouncement,
 } from "@/features/tapas/contest"
 import styles from "./tapas.module.css"
 
+type Award = NonNullable<ReturnType<typeof revealAnnouncement>>
+type AwardAuthor = Award["tapas"][number]["authors"][number] & {
+  image: string | null
+}
+type AwardPayload = Omit<Award, "tapas"> & {
+  tapas: (Omit<Award["tapas"][number], "authors"> & {
+    authors: AwardAuthor[]
+  })[]
+}
+
 type RevealProgress = {
   version: string
-  countdown: RevealCountdown | null
+  countdown: ReturnType<typeof publicCountdown>
   serverNow: number
-  announcement?: ReturnType<typeof revealAnnouncement>
+  announcement?: AwardPayload | null
 }
 
 const labels: Record<number, string> = {
@@ -22,6 +39,51 @@ const labels: Record<number, string> = {
 }
 
 const medals = ["", "🥇 💎", "🥈", "🥉"]
+
+const scoreFormat = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 2 })
+
+function RevealPoints({ points }: { points: number | null }) {
+  return points === null ? null : (
+    <span className={styles.revealPoints}>
+      {scoreFormat.format(points)} / 40 puntos
+    </span>
+  )
+}
+
+function AuthorAvatar({ author }: { author: AwardAuthor }) {
+  const [brokenImage, setBrokenImage] = useState<string | null>(null)
+  const onError = useCallback(
+    () => setBrokenImage(author.image),
+    [author.image]
+  )
+  const initials = author.alias
+    .trim()
+    .split(/\s+/u)
+    .slice(0, 2)
+    .map((word) => Array.from(word)[0])
+    .join("")
+    .toLocaleUpperCase("es")
+  return (
+    <span className={styles.awardAuthor}>
+      {author.image && author.image !== brokenImage ? (
+        // biome-ignore lint/performance/noImgElement: Google avatars are small external images.
+        <img
+          src={author.image}
+          width={24}
+          height={24}
+          alt=""
+          referrerPolicy="no-referrer"
+          onError={onError}
+        />
+      ) : (
+        <span className={styles.awardInitials} aria-hidden="true">
+          {initials || "?"}
+        </span>
+      )}
+      {author.alias}
+    </span>
+  )
+}
 
 export function RevealSync({
   version,
@@ -112,12 +174,24 @@ export function RevealSync({
     return (
       <div className={styles.countdownOverlay} role="status" aria-live="polite">
         <div className={styles.awardAnnouncement}>
-          <span aria-hidden="true">{medals[award.place]}</span>
-          <strong>{labels[award.place]}</strong>
+          <span aria-hidden="true">
+            {award.tie ? "🥇" : medals[award.place]}
+          </span>
+          <strong>
+            {award.tie ? "¡Empate en el primer puesto!" : labels[award.place]}
+          </strong>
+          <RevealPoints points={award.points} />
           <ul>
             {award.tapas.map(({ id, name, authors }) => (
               <li key={id}>
-                <strong>{name}</strong> ({authors.join(" y ")})
+                <strong>{name}</strong> (
+                {authors.map((author, index) => (
+                  <Fragment key={author.id}>
+                    {index > 0 ? " y " : null}
+                    <AuthorAvatar author={author} />
+                  </Fragment>
+                ))}
+                )
               </li>
             ))}
           </ul>
@@ -131,6 +205,7 @@ export function RevealSync({
   return (
     <div className={styles.countdownOverlay} role="status" aria-live="polite">
       <strong>{labels[clock.countdown.place]}</strong>
+      <RevealPoints points={clock.countdown.points} />
       {seconds > 0 ? (
         <span className={styles.countdownNumber} key={seconds}>
           {seconds}

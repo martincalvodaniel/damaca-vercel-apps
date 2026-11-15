@@ -45,7 +45,7 @@ export function ContestForm({
     async (previous: string, data: FormData) => {
       const message = await submitContest(previous, data)
       if (!message) onSaved?.()
-      notifyAction(message || "Guardado.")
+      if (message || intent !== "reveal") notifyAction(message || "Guardado.")
       if (!message && completed) router.replace(completed)
       return message
     },

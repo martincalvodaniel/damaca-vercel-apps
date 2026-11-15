@@ -239,3 +239,29 @@
     animation: none;
   }
 }
+
+.revealPoints {
+  font: 700 clamp(1rem, 4vw, 1.5rem) system-ui;
+}
+
+.awardAuthor {
+  display: inline;
+}
+
+.awardAuthor img,
+.awardInitials {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  margin-inline-end: 0.25rem;
+  vertical-align: middle;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.awardInitials {
+  place-items: center;
+  color: #382116;
+  background: #ffe3a6;
+  font: 700 0.65rem system-ui;
+}

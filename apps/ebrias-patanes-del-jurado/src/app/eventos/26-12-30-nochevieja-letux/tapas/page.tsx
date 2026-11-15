@@ -10,6 +10,7 @@ import {
   nextReveal,
   type Person,
   podium,
+  publicCountdown,
   results,
   revealAnnouncement,
   revealedPodium,
@@ -240,9 +241,7 @@ function Management({ contest }: { contest: Contest }) {
         <ContestForm
           key={next.token}
           intent="reveal"
-          label={
-            next.needsRunoff ? "Preparar primer puesto" : labels[next.place]
-          }
+          label={labels[next.place]}
         >
           <input type="hidden" name="step" value={next.token} />
         </ContestForm>
@@ -310,7 +309,7 @@ export default async function TapasContest({
       <RevealSync
         version={revealVersion(contest)}
         announcing={announcing}
-        countdown={contest.countdown ?? null}
+        countdown={publicCountdown(stored.contest, serverNow)}
         serverNow={serverNow}
       />
       <div className={eventStyles.content}>

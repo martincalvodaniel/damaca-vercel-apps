@@ -2,12 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-52 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-53 — Controles compactos de confirmación
-
-- Capacidad inicial de 66% en 5 h y 4% en 7 días. Los controles pasan a 28 px sin relleno ni margen y se reduce el hueco de cabecera.
-- Biome, tipos y build correctos.
+[Entregas EPJ-08 a EPJ-53 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-54 — Recuperar el acceso tras un fallo inicial de MongoDB
 
@@ -58,3 +53,8 @@
 ## EPJ-62 — Formato del anuncio de Tapas
 
 - Capacidad inicial de 27% en 5 h y 89% en 7 días. El anuncio pone los autores entre paréntesis tras el nombre. Biome, tipos y build correctos.
+
+## EPJ-63 — Puntuación, avatares y empate en la revelación
+
+- Capacidad inicial de 98% en 5 h y 87% en 7 días. La animación muestra los puntos y solo al llegar a cero anuncia los autores con sus avatares. El empate en cabeza abre la votación tras el anuncio.
+- Biome, tipos, trece pruebas de Tapas y build correctos. La prueba cubre la ocultación de finalistas y la apertura del desempate al expirar el anuncio. Pendiente la comprobación visual con dos sesiones.

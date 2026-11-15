@@ -264,3 +264,8 @@ Inicio: 19% de 5 h y 86% de 7 d disponibles.
 - Capacidad inicial de 72% en 5 h y 5% en 7 días. Las casillas y la confirmación nativa de borrado usan modales con controles en cabecera. La revisión de papeletas también se muestra en un modal.
 - El aviso flotante común recoge respuestas de Tapas, Disfraces, la guía, asistencia, coches y los formularios de Ajustes. El aviso persistente de intentos agotados permanece visible.
 - Biome, tipos, nueve pruebas de Tapas y build correctos. Sin comprobación del recorrido en un navegador autenticado.
+
+## EPJ-53 — Controles compactos de confirmación
+
+- Capacidad inicial de 66% en 5 h y 4% en 7 días. Los controles pasan a 28 px sin relleno ni margen y se reduce el hueco de cabecera.
+- Biome, tipos y build correctos.

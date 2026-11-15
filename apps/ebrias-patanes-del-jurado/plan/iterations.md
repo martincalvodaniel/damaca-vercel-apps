@@ -461,3 +461,10 @@
 - Estado: `validated`.
 - Aceptación: el anuncio muestra el nombre de la tapa seguido de sus autores entre paréntesis.
 - Validación: Biome, tipos y build.
+
+## EPJ-63 — Puntuación, avatares y empate en la revelación
+
+- Estado: `validated`.
+- Rutas: revelación, papeletas y resultados de Tapas.
+- Aceptación: puntuación durante toda la animación, avatares al anunciar y cuenta atrás para el empate en cabeza. Los avances no muestran el aviso «Guardado».
+- Validación: Biome, tipos, pruebas de Tapas y build.

@@ -9,6 +9,7 @@ import {
   emptyContest,
   finalRunoffCounts,
   nextReveal,
+  publicCountdown,
   results,
   revealAnnouncement,
   revealedPodium,
@@ -54,7 +55,7 @@ function advance(contest: Contest, actor = admin) {
   if (!next) throw new Error("No pending reveal")
   return settleReveal(
     submit(contest, actor, "reveal", { step: next.token }),
-    15000
+    18000
   )
 }
 
@@ -434,9 +435,11 @@ it("keeps the winner hidden until the shared deadline and blocks duplicate revea
   expect(revealAnnouncement(scheduled, 24999)).toBeNull()
   expect(revealAnnouncement(scheduled, 25000)).toEqual({
     place: 1,
+    tie: false,
+    points: 20,
     revealedAt: 25000,
     expiresAt: 28000,
-    tapas: [{ id: "First", name: "First", authors: ["a", "b"] }],
+    tapas: [{ id: "First", name: "First", authors: [people[0], people[1]] }],
   })
   expect(revealAnnouncement(scheduled, 28000)).toBeNull()
   expect(() => submit(scheduled, admin, "reveal", { step }, 27999)).toThrow(
@@ -445,4 +448,32 @@ it("keeps the winner hidden until the shared deadline and blocks duplicate revea
   expect(() => submit(scheduled, admin, "reveal", { step }, 28000)).toThrow(
     "disponible"
   )
+})
+
+it("announces tied finalists after zero and opens runoff only after the announcement", () => {
+  const fixture = runoffFixture()
+  const closed: Contest = { ...fixture, phase: "preview" }
+  const token = nextReveal(closed)?.token ?? ""
+  const scheduled = submit(closed, admin, "reveal", { step: token }, 20000)
+  expect(publicCountdown(scheduled, 24999)).toEqual({
+    place: 1,
+    startsAt: 22000,
+    endsAt: 25000,
+    points: 20,
+  })
+  expect(revealAnnouncement(scheduled, 24999)).toBeNull()
+  expect(revealAnnouncement(scheduled, 25000)).toMatchObject({
+    tie: true,
+    points: 20,
+  })
+  expect(
+    revealAnnouncement(scheduled, 25000)
+      ?.tapas.map(({ id }) => id)
+      .sort()
+  ).toEqual(["First", "Second", "Third"])
+  expect(ballotOptions(settleReveal(scheduled, 27999), roster[4])).toEqual([])
+  const opened = settleReveal(scheduled, 28000)
+  expect(opened.phase).toBe("runoff")
+  expect(ballotOptions(opened, roster[4])).toHaveLength(3)
+  expect(canSeeResults(opened)).toBe(false)
 })

@@ -156,9 +156,22 @@ export function podium(contest: Contest) {
 export function settleReveal(contest: Contest, now: number): Contest {
   if (!contest.countdown || now < contest.countdown.endsAt) return contest
   const { countdown, ...rest } = contest
+  if (countdown.place === 1 && contest.phase === "preview") {
+    return now < countdown.endsAt + 3000
+      ? contest
+      : { ...rest, phase: "runoff" }
+  }
   return countdown.place > 1
     ? { ...rest, revealedPlaces: (rest.revealedPlaces ?? 0) + 1 }
     : { ...rest, phase: "published" }
+}
+
+export function publicCountdown(contest: Contest, now: number) {
+  const countdown = contest.countdown
+  if (!countdown || now >= countdown.endsAt) return null
+  const score = podium(contest).find(({ place }) => place === countdown.place)
+    ?.tapas[0]
+  return { ...countdown, points: score ? score.total / score.count : null }
 }
 
 export function revealAnnouncement(stored: Contest, now: number) {
@@ -167,18 +180,22 @@ export function revealAnnouncement(stored: Contest, now: number) {
     return null
   const contest = settleReveal(stored, now)
   const award = podium(contest).find(({ place }) => place === countdown.place)
+  const tie = countdown.place === 1 && stored.phase === "preview"
+  const score = award?.tapas[0]
   const tapas =
     award?.tapas.filter(
-      ({ id }) => countdown.place !== 1 || id === contest.winner
+      ({ id }) => tie || countdown.place !== 1 || id === contest.winner
     ) ?? []
   return {
     place: countdown.place,
+    tie,
+    points: score ? score.total / score.count : null,
     revealedAt: countdown.endsAt,
     expiresAt: countdown.endsAt + 3000,
     tapas: tapas.map(({ id, name, authors }) => ({
       id,
       name,
-      authors: authors.map(({ alias }) => alias),
+      authors: authors.map(({ id, alias }) => ({ id, alias })),
     })),
   }
 }
@@ -458,7 +475,6 @@ export function applyContestAction(
   if (action === "reveal") {
     const next = nextReveal(contest)
     if (next && field(form, "step") === next.token) {
-      if (next.needsRunoff) return { ...contest, phase: "runoff" }
       if (!next.place) return { ...contest, phase: "published" }
       const startsAt = context.now + 2000
       return {
