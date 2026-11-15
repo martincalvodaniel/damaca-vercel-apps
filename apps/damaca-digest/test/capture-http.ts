@@ -133,6 +133,28 @@ async function save(token: string, entry: Record<string, unknown>) {
 }
 
 try {
+  const manifest = await (await fetch(`${origin}/manifest.webmanifest`)).json()
+  assert.deepEqual(manifest.share_target, {
+    action: "/share",
+    method: "GET",
+    params: { url: "url", text: "text" },
+  })
+  const shared = await fetch(
+    `${origin}/share?text=${encodeURIComponent("Article title\nhttps://example.com/shared")}`,
+    { redirect: "manual" }
+  )
+  assert.equal(shared.status, 200)
+  const sharedHtml = await shared.text()
+  assert.match(sharedHtml, /Copy prompt and open ChatGPT/)
+  assert.match(sharedHtml, /Use @damaca-digest/)
+  assert.match(sharedHtml, /https:\/\/example.com\/shared/)
+  const rejectedShare = await fetch(
+    `${origin}/share?url=javascript%3Aalert%281%29`
+  )
+  const rejectedHtml = await rejectedShare.text()
+  assert.match(rejectedHtml, /Share or paste a single HTTP or HTTPS link/)
+  assert.doesNotMatch(rejectedHtml, /Copy prompt and open ChatGPT/)
+
   assert.equal((await fetch(metadata)).status, 200)
   assert.equal(
     (await fetch(`${origin}/.well-known/oauth-authorization-server/api/auth`))

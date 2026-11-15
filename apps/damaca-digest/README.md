@@ -136,6 +136,12 @@ ChatGPT puede invocar `list_topics` con una búsqueda opcional y una página par
 
 Las pruebas HTTP usan un MongoDB desechable en loopback, credenciales ficticias y sesiones persistidas de prueba. Ejecutar desde la raíz con `DIGEST_TEST_MONGO_PORT=<puerto> bash apps/damaca-digest/test/run-capture-http.sh`. El runner compila y arranca Next, comprueba OAuth/MCP y el control de acceso web y termina el proceso local. El contenedor MongoDB desechable se elimina por separado. La prueba de Google y ChatGPT reales requiere un entorno HTTPS autorizado.
 
+## Compartir un enlace desde Android
+
+Instala Damaca Digest desde Chrome. En la app de origen, abre **Compartir** y selecciona **Damaca Digest**. La página **Capture a link** prepara un prompt con el enlace. Pulsa **Copy prompt and open ChatGPT**, selecciona el conector **@damaca-digest**, pega el prompt y confirma el envío. También puedes abrir **Capture link** desde la biblioteca y pegar una URL. La recepción prepara el prompt y deja el guardado para el flujo OAuth/MCP habitual. [Web Share Target en Chrome](https://developer.chrome.com/docs/capabilities/web-apis/web-share-target).
+
+La documentación de OpenAI describe la selección del conector con `@` en el compositor. No encontramos una API documentada para preseleccionar un MCP privado de ChatGPT a partir de un intent de Android o un enlace externo, ni para enviar automáticamente ese mensaje. El asistente de captura usa el enlace público a ChatGPT y el portapapeles. Si el navegador impide copiar, el prompt sigue seleccionable. [Conectar y usar un servidor MCP en ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server).
+
 ## Trabajar con agentes
 
 Empieza por [AGENTS.md](AGENTS.md), el [plan maestro](plan/master.md), las [iteraciones](plan/iterations.md), el [registro](plan/iteration-log.md) y el [workflow común](../../plan/workflow.md). El flujo define alcance y aceptación antes de editar, entrega cambios pequeños, registra las pruebas y deja el siguiente paso listo para otra sesión. `CLAUDE.md` remite a las mismas reglas.

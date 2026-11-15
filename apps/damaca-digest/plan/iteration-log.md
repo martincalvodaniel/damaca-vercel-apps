@@ -75,3 +75,9 @@
 - Inicio en `int`, base `ffa9b0d`, con 70% en 5 h y 38% en 7 d. Se dejó Preview fuera del alcance por indicación del usuario.
 - Biblioteca con resúmenes visibles, procedencia, niveles de acceso y filtros activos que se pueden quitar individualmente. Ficha con jerarquía de lectura, topics enlazados, llamadas a la acción claras y bloques para resumen, notas y referencias. Navegación y superficies coherentes en biblioteca, ficha, edición y topics.
 - Pasaron Biome, tipos, 45 pruebas, build e integración HTTP de OAuth/MCP y acceso. Chrome revisó las cuatro pantallas y los controles desplegados a 320 y 1280 px, sin desbordamiento horizontal. Se inspeccionaron capturas de la biblioteca en claro y de la ficha en oscuro.
+
+## 07 — Abrir Digest desde Compartir en Android
+
+- Inicio en `int`, base `fd455de`, con 61% en 5 h y 36% en 7 d.
+- Chrome documenta destinos Compartir para PWAs instaladas. OpenAI documenta seleccionar el conector con `@` en el compositor. No se encontró un enlace o intent documentado que preseleccione un MCP privado y envíe el mensaje. Digest registra `/share`, valida un enlace, prepara el prompt y lo copia antes de abrir ChatGPT. La pantalla es una vista de preparación sin persistencia.
+- Pasaron Biome, tipos, 48 pruebas, build e integración HTTP. Los manifiestos servidos de `main` e `int` anuncian el destino. En Chrome a 320 px se verificaron preparación, apertura de ChatGPT (interceptada en la prueba) y modo de copia manual si falla el portapapeles. No hubo un dispositivo Android disponible.

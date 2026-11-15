@@ -86,6 +86,6 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 07 — Abrir Digest desde Compartir en Android
 
-- Estado: `pending`.
+- Estado: `validated`.
 - Rutas: documentación, manifiesto y ruta de recepción de enlaces.
 - Aceptación: verificar la oferta oficial de ChatGPT y Android. Si procede, permitir que la PWA instalada reciba un enlace y prepare su captura en ChatGPT con una acción explícita del usuario.

@@ -35,12 +35,20 @@ export default async function LibraryPage({
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
           Library
         </h1>
-        <Link
-          href="/topics"
-          className="digest-panel inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
-        >
-          Topics
-        </Link>
+        <div className="flex flex-wrap justify-end gap-2">
+          <Link
+            href="/share"
+            className="inline-flex min-h-11 items-center rounded-lg bg-teal-800 px-2.5 text-sm font-semibold text-white hover:bg-teal-900"
+          >
+            Capture link
+          </Link>
+          <Link
+            href="/topics"
+            className="digest-panel inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm font-semibold hover:border-teal-600"
+          >
+            Topics
+          </Link>
+        </div>
       </div>
       <LibraryFilters query={query} />
       <LibraryActiveFilters query={query} />

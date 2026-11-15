@@ -8,6 +8,7 @@ export function proxy(request: NextRequest) {
     pathname.startsWith("/auth") ||
     pathname.startsWith("/api/auth") ||
     pathname === "/api/integrations/mcp" ||
+    pathname === "/share" ||
     pathname.startsWith("/connect/")
   ) {
     return NextResponse.next()
