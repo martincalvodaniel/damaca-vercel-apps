@@ -2,13 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 03c — Aclarar fallos de inicio de sesión en local
-
-- [Aceptación](iterations.md#03c--aclarar-fallos-de-inicio-de-sesión-en-local). Inicio en `int`, base `2a3d834`, árbol limpio. Capacidad inicial del 73% en 5h y 54% en 7d.
-- El filtro escrito en la terminal integrada era `@damaca/dacama-digest`. El workspace registrado es `@damaca/damaca-digest`.
-- El driver confirmó `ECONNREFUSED` en el MongoDB configurado en loopback, antes de iniciar OAuth. Se creó y arrancó una instancia MongoDB 8 local, dedicada, con volumen persistente y puerto 27017 limitado a loopback. El ping pasó y el Next ya en marcha devolvió HTTP 200 con una URL de autorización de Google. No se navegó a esa URL.
-- La pantalla de acceso distingue el 503 del fallo general y la guía documenta cómo arrancar MongoDB. Pasaron Biome, tipos, 41 pruebas y el build Webpack con valores de prueba.
-
 ## 02 — Validar la viabilidad externa
 
 - El usuario confirmó en producción el guardado de una fuente pública desde ChatGPT. Las capturas muestran las fichas de Proton (`full`), Heraldo de Aragón (`partial`) y El Mundo (`unavailable`). El caso parcial expone el límite de acceso. El caso inaccesible conserva la fuente y la nota sin resumen.
@@ -59,3 +52,8 @@
 
 - Artículos relacionados del mismo propietario, por coincidencia con topics activos, fusionados e históricos. Las fichas descargan una copia Markdown o JSON con las notas mediante un endpoint privado.
 - Pasaron Biome, tipos, 49 pruebas, build e integración HTTP. Se verificaron relacionados tras fusionar topics, descarga de notas por su propietario, rechazo de otra cuenta y escapado de contenido en Markdown. Chrome confirmó la ficha a 320 y 1280 px.
+
+## 09 — Consultar la biblioteca desde MCP
+
+- `get_article` por ID o URL y `search_articles` con filtros y paginación comparten el repositorio de biblioteca. Las fichas devueltas excluyen notas personales. El permiso `articles:read` se pide por separado y el consentimiento muestra los permisos solicitados.
+- Pasaron Biome, tipos, 49 pruebas, build y la integración HTTP. Con dos cuentas, se verificaron permisos de lectura y escritura separados, desafío para permisos insuficientes, búsqueda paginada y rechazo del ID de otra cuenta. El conector real necesitará actualizar sus herramientas y conceder el nuevo permiso tras el despliegue.

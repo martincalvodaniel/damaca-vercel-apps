@@ -2,6 +2,7 @@ import "server-only"
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
+import { scopeRequired } from "@/features/articles/mcp-scope"
 import { topicKey } from "@/features/topics/catalog"
 import { captureScope } from "@/lib/auth/mcp-config"
 import { type ArticleCapture, captureArticle } from "@/schemas/article"
@@ -18,7 +19,8 @@ type CaptureResult = z.infer<typeof captureResult>
 
 export function createArticleServer(
   save: (entry: ArticleCapture) => Promise<CaptureResult | null>,
-  list: () => Promise<{ id: string; label: string; aliases: string[] }[]>
+  list: () => Promise<{ id: string; label: string; aliases: string[] }[]>,
+  canCapture: boolean
 ) {
   const server = new McpServer(
     { name: "Damaca Digest", version: "1.0.0" },
@@ -43,6 +45,7 @@ export function createArticleServer(
       _meta: { securitySchemes: [{ type: "oauth2", scopes: [captureScope] }] },
     },
     async (entry) => {
+      if (!canCapture) return scopeRequired(captureScope)
       try {
         const result = await save(entry)
         if (!result) {
@@ -98,6 +101,7 @@ export function createArticleServer(
       _meta: { securitySchemes: [{ type: "oauth2", scopes: [captureScope] }] },
     },
     async ({ query, page }) => {
+      if (!canCapture) return scopeRequired(captureScope)
       try {
         const term = topicKey(query ?? "")
         const matches = (await list()).filter(({ label, aliases }) =>

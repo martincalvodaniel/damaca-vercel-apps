@@ -6,7 +6,13 @@ import { useCallback, useState } from "react"
 
 const authClient = createAuthClient({ plugins: [oauthProviderClient()] })
 
-export function ConnectCard({ step }: { step: "sign-in" | "consent" }) {
+export function ConnectCard({
+  step,
+  permissions = [],
+}: {
+  step: "sign-in" | "consent"
+  permissions?: string[]
+}) {
   const [pending, setPending] = useState(false)
   const [failed, setFailed] = useState(false)
 
@@ -47,8 +53,15 @@ export function ConnectCard({ step }: { step: "sign-in" | "consent" }) {
         <p>
           {step === "sign-in"
             ? "Sign in to connect ChatGPT to your Damaca Digest account."
-            : "Allow ChatGPT to save articles in your private library."}
+            : "Allow the requested ChatGPT access to Damaca Digest."}
         </p>
+        {step === "consent" && permissions.length > 0 ? (
+          <ul className="list-disc space-y-1 ps-5 text-sm">
+            {permissions.map((permission) => (
+              <li key={permission}>{permission}</li>
+            ))}
+          </ul>
+        ) : null}
         <button
           className="mr-2 min-h-11 rounded-lg border border-zinc-400 px-4"
           type="button"

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { getAuthEnv, getChatGptClient, getDatabaseEnv } from "@/config/env"
-import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
+import { captureScope, getMcpUrls, readScope } from "@/lib/auth/mcp-config"
 import { saveArticle } from "@/lib/db/articles"
 import { closeDatabaseConnection, getDatabase } from "@/lib/db/client"
 import { grantUserAccess, revokeUserAccess } from "@/lib/db/user-access"
@@ -27,7 +27,11 @@ if (
 const { issuer, resource, metadata } = getMcpUrls()
 const fixtureClient = client
 
-async function authorize(cookie: string, method: "post" | "basic") {
+async function authorize(
+  cookie: string,
+  method: "post" | "basic",
+  scope: string = captureScope
+) {
   const verifier = crypto.randomUUID() + crypto.randomUUID()
   const url = new URL(`${issuer}/oauth2/authorize`)
   url.search = new URLSearchParams({
@@ -35,7 +39,7 @@ async function authorize(cookie: string, method: "post" | "basic") {
     redirect_uri: fixtureClient.redirectUri,
     response_type: "code",
     state: "fixture-state",
-    scope: `${captureScope} offline_access`,
+    scope: `${scope} offline_access`,
     resource,
   }).toString()
   const noPkce = await fetch(url, { headers: { cookie }, redirect: "manual" })
@@ -53,6 +57,17 @@ async function authorize(cookie: string, method: "post" | "basic") {
   assert.equal(authorization.status, 302)
   const consent = new URL(authorization.headers.get("location") ?? "", origin)
   assert.equal(consent.pathname, "/connect/consent")
+  const consentPage = await fetch(consent, { headers: { cookie } })
+  assert.equal(consentPage.status, 200)
+  const consentHtml = await consentPage.text()
+  assert.equal(
+    consentHtml.includes("Search and read saved articles"),
+    scope.includes(readScope)
+  )
+  assert.equal(
+    consentHtml.includes("Save articles in your private library"),
+    scope.includes(captureScope)
+  )
   const decision = await fetch(`${issuer}/oauth2/consent`, {
     method: "POST",
     headers: { origin, cookie, "content-type": "application/json" },
@@ -475,6 +490,48 @@ try {
   assert.match(relatedHtml, /aria-label="Topics".*Engineering/)
   assert.match(relatedHtml, /Related articles/)
   assert.match(relatedHtml, new RegExp(`/articles/${article.articleId}`))
+
+  async function invoke(
+    bearer: string,
+    tool: string,
+    input: Record<string, unknown>
+  ) {
+    const response = await call("tools/call", bearer, input, tool)
+    assert.equal(response.status, 200)
+    return (await response.json()).result
+  }
+  const writerRead = await invoke(token, "get_article", {
+    id: article.articleId,
+  })
+  assert.equal(writerRead.isError, true)
+  assert.match(writerRead._meta["mcp/www_authenticate"][0], /articles:read/)
+  const reader = await authorize(first.cookie, "basic", readScope)
+  const otherReader = await authorize(second.cookie, "post", readScope)
+  const readByUrl = await invoke(reader, "get_article", {
+    url: `${url}&utm=fake`,
+  })
+  assert.equal(readByUrl.structuredContent.article.id, article.articleId)
+  assert.equal("personalNotes" in readByUrl.structuredContent.article, false)
+  assert.equal(
+    (await invoke(otherReader, "get_article", { id: article.articleId }))
+      .structuredContent.article,
+    null
+  )
+  const query = { q: "Pagination", author: "A. Writer", page: 2, sort: "title" }
+  const searched = await invoke(reader, "search_articles", query)
+  assert.deepEqual(
+    searched.structuredContent.articles.map(
+      ({ title }: { title: string }) => title
+    ),
+    ["Pagination Fixture 20"]
+  )
+  assert.equal(searched.structuredContent.nextPage, null)
+  const readerWrite = await invoke(reader, "save_article", {
+    url: "https://example.com/readonly-attempt",
+    accessStatus: "unavailable",
+  })
+  assert.equal(readerWrite.isError, true)
+  assert.match(readerWrite._meta["mcp/www_authenticate"][0], /articles:write/)
 
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)

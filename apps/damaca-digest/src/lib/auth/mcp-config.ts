@@ -3,6 +3,7 @@ import "server-only"
 import { getAuthBaseUrl } from "@/config/env"
 
 export const captureScope = "articles:write"
+export const readScope = "articles:read"
 export const authPath = "/api/auth"
 export const mcpPath = "/api/integrations/mcp"
 

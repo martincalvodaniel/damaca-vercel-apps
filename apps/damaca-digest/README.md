@@ -134,6 +134,8 @@ En cada entorno autorizado, configura `CHATGPT_CLIENT_ID`, `CHATGPT_CLIENT_SECRE
 
 ChatGPT puede invocar `list_topics` con una búsqueda opcional y una página para reutilizar nombres y alias antes de guardar. En la web, **Topics** muestra los recuentos y permite renombrar, añadir alias y fusionar equivalencias. La ficha permite cambiar sus topics en **Edit article**. Las etiquetas capturadas antes de este cambio siguen visibles y se resuelven junto al vocabulario nuevo.
 
+Para buscar por texto y filtros desde ChatGPT, habilita `search_articles` y `get_article`. Esas herramientas necesitan el scope `articles:read`. Después de desplegarlas, actualiza el conector y concede el nuevo permiso. Mantén `articles:write` para capturar y listar los topics de la captura. Las respuestas de las herramientas de lectura excluyen las notas personales.
+
 Las pruebas HTTP usan un MongoDB desechable en loopback, credenciales ficticias y sesiones persistidas de prueba. Ejecutar desde la raíz con `DIGEST_TEST_MONGO_PORT=<puerto> bash apps/damaca-digest/test/run-capture-http.sh`. El runner compila y arranca Next, comprueba OAuth/MCP y el control de acceso web y termina el proceso local. El contenedor MongoDB desechable se elimina por separado. La prueba de Google y ChatGPT reales requiere un entorno HTTPS autorizado.
 
 ## Relacionados y descargas

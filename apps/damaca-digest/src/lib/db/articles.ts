@@ -165,6 +165,14 @@ export async function findArticle(ownerId: string, id: string) {
   return document ? serialize(document) : null
 }
 
+export async function findArticleByUrl(ownerId: string, url: string) {
+  const document = await (await articles()).findOne({
+    ownerId,
+    canonicalUrl: normalizeArticleUrl(url),
+  })
+  return document ? serialize(document) : null
+}
+
 export async function editArticle(
   ownerId: string,
   id: string,

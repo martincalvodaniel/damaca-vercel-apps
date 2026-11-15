@@ -96,3 +96,10 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Rutas: ficha, consultas de topics y endpoint de exportación.
 - Aceptación: una ficha muestra otras lecturas del propietario con topics en común, incluidas equivalencias fusionadas. El propietario puede exportar su ficha en Markdown y JSON con descarga privada.
 - Validación: Biome, tipos, pruebas, build, integración HTTP de acceso y comprobación responsive de la ficha.
+
+## 09 — Consultar la biblioteca desde MCP
+
+- Estado: `validated`.
+- Rutas: permisos OAuth, metadatos, herramientas MCP de lectura, repositorio y documentación.
+- Aceptación: buscar y recuperar artículos del propietario por ID o URL. Las herramientas exigen un permiso de lectura separado. Los clientes con solo escritura conservan su captura y no pueden leer fichas. Las respuestas excluyen notas personales.
+- Validación: tipos, pruebas, build e integración OAuth/MCP con tokens de lectura y escritura de dos cuentas.

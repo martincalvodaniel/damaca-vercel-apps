@@ -3,23 +3,29 @@ import "server-only"
 import { createHash } from "node:crypto"
 import { oauthProvider } from "@better-auth/oauth-provider"
 import { getChatGptClient } from "@/config/env"
-import { authPath, captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
+import {
+  authPath,
+  captureScope,
+  getMcpUrls,
+  readScope,
+} from "@/lib/auth/mcp-config"
 
 export function createDigestOAuthProvider() {
   const { resource } = getMcpUrls()
   const hashSecret = (value: string) =>
     createHash("sha256").update(value).digest("base64url")
+  const scopes = [captureScope, readScope, "offline_access"]
   return oauthProvider({
     loginPage: "/connect/sign-in",
     consentPage: "/connect/consent",
-    scopes: [captureScope, "offline_access"],
+    scopes,
     // The resolver admits one client and this provider has one resource.
     enforcePerClientResources: false,
     resources: getChatGptClient()
       ? [
           {
             identifier: resource,
-            allowedScopes: [captureScope, "offline_access"],
+            allowedScopes: scopes,
           },
         ]
       : [],
@@ -48,7 +54,7 @@ export function createDigestOAuthProvider() {
               clientId: client.id,
               clientSecret: hashSecret(client.secret),
               redirectUris: [client.redirectUri],
-              scopes: [captureScope, "offline_access"],
+              scopes,
               grantTypes: ["authorization_code", "refresh_token"],
               responseTypes: ["code"],
               applicationType: "web",
