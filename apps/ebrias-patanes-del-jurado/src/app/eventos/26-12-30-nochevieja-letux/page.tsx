@@ -16,6 +16,8 @@ import {
 } from "@/features/members/attendance"
 import { getMemberDirectory } from "@/features/members/directory"
 import { getCarBoard, unassignedCar } from "@/features/members/event-cars"
+import { ShoppingList } from "@/features/shopping/shopping-list"
+import { readShoppingList } from "@/features/shopping/store"
 import { canManageAttendance, getAuthorizedUser } from "@/lib/session"
 import {
   AttendanceBlocksSection,
@@ -24,6 +26,7 @@ import {
 } from "./attendance-form"
 import guideStyles from "./guide.module.css"
 import { GuideEditor } from "./guide-editor"
+import { GuideText } from "./guide-text"
 import { LumosGate } from "./lumos-gate"
 import styles from "./page.module.css"
 
@@ -34,13 +37,14 @@ export default async function NewYearsEve() {
   const user = await getAuthorizedUser()
   if (!user) redirect("/")
 
-  const [roster, blocks, cars, { guide, revision }, canManage] =
+  const [roster, blocks, cars, { guide, revision }, canManage, shopping] =
     await Promise.all([
       getEventRoster(letuxEvent),
       getAttendanceBlocks(letuxEvent),
       getCarBoard(letuxEvent),
       readGuide(),
       canManageAttendance(),
+      readShoppingList(),
     ])
 
   const members = canManage ? await getMemberDirectory() : []
@@ -70,10 +74,12 @@ export default async function NewYearsEve() {
               <GuideEditor guide={guide} revision={revision} />
             ) : null}
             {guide.notes.lodging ? (
-              <section className={guideStyles.panel}>
-                <h2>Alojamiento</h2>
-                <GuideText text={guide.notes.lodging} />
-              </section>
+              <details name="letux-sections" className={styles.attendees}>
+                <summary>Alojamiento</summary>
+                <div className={styles.card}>
+                  <GuideText text={guide.notes.lodging} />
+                </div>
+              </details>
             ) : null}
             <AttendanceBlocksSection canManage={canManage}>
               <AttendanceBoard
@@ -95,6 +101,7 @@ export default async function NewYearsEve() {
                 canManage={canManage}
               />
             </CarSection>
+            <ShoppingList items={shopping.items} canEdit={canManage} />
             <ProgramDay
               day="dec30"
               label={guideSections[0].label}
@@ -118,10 +125,6 @@ export default async function NewYearsEve() {
       </main>
     </LumosGate>
   )
-}
-
-function GuideText({ text }: { text: string }) {
-  return text ? <p className={guideStyles.copy}>{text}</p> : null
 }
 
 function ProgramDay({

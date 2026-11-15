@@ -54,12 +54,10 @@ export function AttendanceBoard({
       form.set("member", id)
       form.set("status", status)
       try {
-        notifyAction(
-          (await (mode === "cars" ? updateEventCar : updateAttendance)(
-            "",
-            form
-          )) || "Guardado."
-        )
+        const message = await (mode === "cars"
+          ? updateEventCar
+          : updateAttendance)("", form)
+        if (message) notifyAction(message)
       } catch {
         notifyAction("No se pudo mover el asistente.")
       }
@@ -339,7 +337,7 @@ export function CarSection({
     async (previous: string, form: FormData) => {
       const result = await addEventCar(previous, form)
       if (!result) dialog.current?.close()
-      notifyAction(result || "Guardado.")
+      if (result) notifyAction(result)
       return result
     },
     ""
@@ -412,7 +410,7 @@ export function AttendanceBlocksSection({
     async (previous: string, form: FormData) => {
       const result = await addAttendanceBlock(previous, form)
       if (!result) dialog.current?.close()
-      notifyAction(result || "Guardado.")
+      if (result) notifyAction(result)
       return result
     },
     ""
@@ -487,7 +485,7 @@ function RemoveEntry({
           ? await removeEventBlock(previous, form)
           : await removeEventAttendee(previous, form)
       if (!result || result === "Bloque eliminado.") closeDialog()
-      notifyAction(result || "Guardado.")
+      if (result) notifyAction(result)
       return result
     },
     ""
@@ -568,7 +566,7 @@ function EditBlock({
     async (previous: string, form: FormData) => {
       const result = await renameEventBlock(previous, form)
       if (!result) closeDialog()
-      notifyAction(result || "Guardado.")
+      if (result) notifyAction(result)
       return result
     },
     ""

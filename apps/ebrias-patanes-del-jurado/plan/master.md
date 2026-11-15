@@ -26,6 +26,10 @@ Los administradores pueden cambiar el correo de un miembro desde una solicitud v
 
 El 30 de diciembre hay un concurso con tapas individuales o en pareja. El administrador abre la votación, que fija participantes y tapas. Los asistentes puntúan todas las tapas ajenas de 0 a 10 en sabor, presentación, originalidad y calidad de los ingredientes. Un administrador puede facilitar el voto a un asistente desde su móvil. Se conserva una papeleta por persona y ronda, modificable hasta el cierre.
 
-La suma de las cuatro medias determina la clasificación inicial. Los empates por el primer puesto se resuelven en una ronda extra sin los autores finalistas; si persisten, se comparan sabor, calidad, originalidad y presentación, y finalmente se recurre al sorteo presencial. El administrador revisa los resultados antes de publicarlos y puede retirar la publicación para volver a la vista privada sin perder las papeletas. Ver [EPJ-31](iterations.md#epj-31--concurso-de-tapas-en-letux).
+La suma de las cuatro medias determina la clasificación inicial. Los empates por el primer puesto se resuelven en una ronda extra sin los autores finalistas; si persisten, se comparan sabor, calidad, originalidad y presentación, y finalmente se recurre al sorteo presencial. El administrador revela públicamente el podio de tercero a primero sin vista previa. Cada puesto agrupa las tapas con la misma puntuación; el empate en cabeza se resuelve al llegar al primer puesto. El administrador puede retirar los resultados y reiniciar la revelación sin perder las papeletas. Ver [EPJ-31](iterations.md#epj-31--concurso-de-tapas-en-letux).
 
 Durante la inscripción de Tapas, el listado muestra solo autores. El nombre se desvela al votar y sigue disponible para quien puede editar la inscripción. Desde la barra de navegación, el administrador puede usar la vista de miembro para consultar la app con los permisos habituales de su cuenta como miembro. El mismo botón permite recuperar la vista de administrador.
+
+La ficha de Letux incluye una lista de la compra compartida debajo de los coches. Los miembros pueden añadir y editar productos, marcarlos, reordenarlos y borrarlos con confirmación. Marcar un producto conserva su posición.
+
+Las descripciones de la guía de Letux admiten Markdown. Alojamiento conserva su texto editable y forma parte del grupo de desplegables.

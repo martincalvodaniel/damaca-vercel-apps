@@ -22,9 +22,17 @@ type Phase =
 type Ballot<T> = { voter: string; value: T }
 type Rubric = { tapa: string; scores: Scores }[]
 
+export type RevealCountdown = {
+  place: number
+  startsAt: number
+  endsAt: number
+}
+
 export type Contest = {
+  countdown?: RevealCountdown
   phase: Phase
   votingGeneration?: number
+  revealedPlaces?: number
   tapas: Tapa[]
   roster: Attendee[]
   rubric: Ballot<Rubric>[]
@@ -127,11 +135,111 @@ export function selectVoter(
     : undefined
 }
 
-export function canSeeResults(contest: Contest, admin: boolean) {
-  return (
-    contest.phase === "published" ||
-    (admin && ["preview", "runoff", "draw", "resolved"].includes(contest.phase))
+export function canSeeResults(contest: Contest) {
+  return contest.phase === "published"
+}
+
+export function podium(contest: Contest) {
+  const levels: Result[][] = []
+  for (const row of results(contest)) {
+    if (!row.count) break
+    const last = levels.at(-1)
+    if (last && compareScore(last[0], row, "total") === 0) last.push(row)
+    else {
+      if (levels.length === 3) break
+      levels.push([row])
+    }
+  }
+  return levels.map((tapas, index) => ({ place: index + 1, tapas })).reverse()
+}
+
+export function settleReveal(contest: Contest, now: number): Contest {
+  if (!contest.countdown || now < contest.countdown.endsAt) return contest
+  const { countdown, ...rest } = contest
+  if (countdown.place === 1 && contest.phase === "preview") {
+    return now < countdown.endsAt + 3000
+      ? contest
+      : { ...rest, phase: "runoff" }
+  }
+  return countdown.place > 1
+    ? { ...rest, revealedPlaces: (rest.revealedPlaces ?? 0) + 1 }
+    : { ...rest, phase: "published" }
+}
+
+export function publicCountdown(contest: Contest, now: number) {
+  const countdown = contest.countdown
+  if (!countdown || now >= countdown.endsAt) return null
+  const score = podium(contest).find(({ place }) => place === countdown.place)
+    ?.tapas[0]
+  return { ...countdown, points: score ? score.total / score.count : null }
+}
+
+export function revealAnnouncement(stored: Contest, now: number) {
+  const countdown = stored.countdown
+  if (!countdown || now < countdown.endsAt || now >= countdown.endsAt + 3000)
+    return null
+  const contest = settleReveal(stored, now)
+  const award = podium(contest).find(({ place }) => place === countdown.place)
+  const tie = countdown.place === 1 && stored.phase === "preview"
+  const score = award?.tapas[0]
+  const tapas =
+    award?.tapas.filter(
+      ({ id }) => tie || countdown.place !== 1 || id === contest.winner
+    ) ?? []
+  return {
+    place: countdown.place,
+    tie,
+    runoffVotes:
+      countdown.place === 1 && !tie && contest.winner
+        ? (finalRunoffCounts(contest).get(contest.winner) ?? null)
+        : null,
+    points: score ? score.total / score.count : null,
+    revealedAt: countdown.endsAt,
+    expiresAt: countdown.endsAt + 3000,
+    tapas: tapas.map(({ id, name, authors }) => ({
+      id,
+      name,
+      authors: authors.map(({ id, alias }) => ({ id, alias })),
+    })),
+  }
+}
+
+export function revealVersion(contest: Contest) {
+  return `${contest.votingGeneration ?? 0}:${contest.phase}:${contest.revealedPlaces ?? 0}`
+}
+
+export function finalRunoffCounts(contest: Contest) {
+  const counts = new Map<string, number>()
+  if (!canSeeResults(contest)) return counts
+  const tied = finalists(contest)
+  if (tied.length < 2) return counts
+  for (const { id } of tied) counts.set(id, 0)
+  for (const { value } of contest.runoff) {
+    const count = counts.get(value)
+    if (count !== undefined) counts.set(value, count + 1)
+  }
+  return counts
+}
+
+export function revealedPodium(contest: Contest) {
+  return podium(contest)
+    .filter(({ place }) => place > 1)
+    .slice(0, contest.revealedPlaces ?? 0)
+}
+
+export function nextReveal(contest: Contest) {
+  if (
+    contest.countdown ||
+    (contest.phase !== "resolved" && contest.phase !== "preview")
   )
+    return null
+  const places = podium(contest)
+  const place = places[contest.revealedPlaces ?? 0]?.place ?? 0
+  return {
+    place,
+    token: `${contest.votingGeneration ?? 0}:${contest.phase}:${place}`,
+    needsRunoff: place === 1 && contest.phase === "preview",
+  }
 }
 
 export class ContestError extends Error {}
@@ -156,8 +264,16 @@ export function applyContestAction(
   contest: Contest,
   actor: Actor,
   form: FormData,
-  context: { people: Person[]; roster: Attendee[]; newId: string }
+  context: { people: Person[]; roster: Attendee[]; newId: string; now: number }
 ): Contest {
+  if (
+    actor.admin &&
+    contest.countdown &&
+    context.now < contest.countdown.endsAt + 3000
+  )
+    fail("Hay una revelación en curso.")
+  contest = settleReveal(contest, context.now)
+  if (contest.countdown) fail("Hay una revelación en curso.")
   const action = field(form, "intent")
   if (action === "rename-own") {
     const target = field(form, "tapa")
@@ -278,7 +394,12 @@ export function applyContestAction(
     contest.phase === "published" &&
     field(form, "confirm") === "yes"
   ) {
-    return { ...contest, phase: "resolved" }
+    return {
+      ...contest,
+      phase: "resolved",
+      revealedPlaces: 0,
+      votingGeneration: (contest.votingGeneration ?? 0) + 1,
+    }
   }
   if (
     action === "reopen-registration" &&
@@ -322,8 +443,6 @@ export function applyContestAction(
       winner: tied.length === 1 ? tied[0].id : null,
     }
   }
-  if (action === "open-runoff" && contest.phase === "preview")
-    return { ...contest, phase: "runoff" }
   if (action === "resolve-runoff" && contest.phase === "runoff") {
     const votes = new Map<string, number>()
     for (const { value } of contest.runoff)
@@ -357,11 +476,16 @@ export function applyContestAction(
       fail("Elige una de las tapas que entraron en el sorteo.")
     return { ...contest, phase: "resolved", winner, reason: "draw" }
   }
-  if (
-    action === "publish" &&
-    contest.phase === "resolved" &&
-    field(form, "confirm") === "yes"
-  )
-    return { ...contest, phase: "published" }
+  if (action === "reveal") {
+    const next = nextReveal(contest)
+    if (next && field(form, "step") === next.token) {
+      if (!next.place) return { ...contest, phase: "published" }
+      const startsAt = context.now + 2000
+      return {
+        ...contest,
+        countdown: { place: next.place, startsAt, endsAt: startsAt + 3000 },
+      }
+    }
+  }
   fail("Esta acción ya no está disponible.")
 }

@@ -7,7 +7,14 @@ import {
   canSeeResults,
   categories,
   emptyContest,
+  finalRunoffCounts,
+  nextReveal,
+  publicCountdown,
   results,
+  revealAnnouncement,
+  revealedPodium,
+  revealVersion,
+  settleReveal,
 } from "./contest"
 
 const people = ["a", "b", "c", "d", "e"].map((id) => ({ id, alias: id }))
@@ -29,7 +36,8 @@ function submit(
   contest: Contest,
   actor: Actor,
   intent: string,
-  fields: Record<string, string> = {}
+  fields: Record<string, string> = {},
+  now = 10000
 ) {
   const form = new FormData()
   for (const [key, value] of Object.entries({ intent, ...fields }))
@@ -38,7 +46,23 @@ function submit(
     people,
     roster,
     newId: fields.name ?? "new",
+    now,
   })
+}
+
+function advance(contest: Contest, actor = admin) {
+  const next = nextReveal(contest)
+  if (!next) throw new Error("No pending reveal")
+  return settleReveal(
+    submit(contest, actor, "reveal", { step: next.token }),
+    18000
+  )
+}
+
+function publish(contest: Contest) {
+  let current = contest
+  while (nextReveal(current)) current = advance(current)
+  return current
 }
 
 function register(
@@ -113,20 +137,18 @@ it("direct and assisted submissions share one ballot, enforce exclusions, and cl
     ...first,
     ...second,
   })
-  expect(canSeeResults(contest, true)).toBe(false)
+  expect(canSeeResults(contest)).toBe(false)
   expect(() => submit(contest, member("d"), "resolve")).toThrow("administrador")
   contest = submit(contest, admin, "resolve")
   expect(contest.winner).toBe("First")
   expect(results(contest, "taste")[0].id).toBe("Second")
-  expect(canSeeResults(contest, false)).toBe(false)
+  expect(canSeeResults(contest)).toBe(false)
   expect(() =>
     submit(contest, member("b"), "vote", { round: "rubric", ...second })
   ).toThrow("abierta")
-  expect(() =>
-    submit(contest, member("a"), "publish", { confirm: "yes" })
-  ).toThrow("administrador")
-  contest = submit(contest, admin, "publish", { confirm: "yes" })
-  expect(canSeeResults(contest, false)).toBe(true)
+  expect(() => advance(contest, member("a"))).toThrow("administrador")
+  contest = publish(contest)
+  expect(canSeeResults(contest)).toBe(true)
   expect(() => submit(contest, admin, "open")).toThrow("disponible")
 })
 
@@ -144,7 +166,7 @@ function runoffFixture(third = [5, 5, 5, 5]) {
     ...scores("Third", third),
   })
   contest = submit(contest, admin, "resolve")
-  return submit(contest, admin, "open-runoff")
+  return publish(contest)
 }
 
 it("runoff excludes all finalists, leaks no scores and accepts an assisted replacement", () => {
@@ -198,9 +220,7 @@ it("a runoff without votes uses category priority, then a recorded draw if neede
 it("a contest with no votes can publish without a winner", () => {
   const opened = submit(register(emptyContest(), "a", "First"), admin, "open")
   const resolved = submit(opened, admin, "resolve")
-  expect(
-    submit(resolved, admin, "publish", { confirm: "yes" }).winner
-  ).toBeNull()
+  expect(publish(resolved).winner).toBeNull()
   expect(results(resolved)[0].count).toBe(0)
 })
 
@@ -218,7 +238,7 @@ it("reopens registration only with admin confirmation and discards old ballots",
   expect(() => submit(resolved, admin, "reopen-registration")).toThrow(
     "disponible"
   )
-  const published = submit(resolved, admin, "publish", confirmation)
+  const published = publish(resolved)
   expect(() =>
     submit(published, admin, "reopen-registration", confirmation)
   ).toThrow("disponible")
@@ -288,16 +308,24 @@ it("lets only an admin withdraw a published result with confirmation", () => {
     choice: "First",
   })
   const resolved = submit(voted, admin, "resolve-runoff")
-  const published = submit(resolved, admin, "publish", confirmation)
+  const published = publish(resolved)
   expect(() =>
     submit(published, member("e"), "unpublish", confirmation)
   ).toThrow("administrador")
   expect(() => submit(published, admin, "unpublish")).toThrow("disponible")
   const withdrawn = submit(published, admin, "unpublish", confirmation)
-  expect(withdrawn).toEqual(resolved)
-  expect(canSeeResults(withdrawn, false)).toBe(false)
-  expect(canSeeResults(withdrawn, true)).toBe(true)
-  expect(submit(withdrawn, admin, "publish", confirmation)).toEqual(published)
+  expect(withdrawn).toMatchObject({
+    phase: "resolved",
+    rubric: published.rubric,
+    winner: published.winner,
+    revealedPlaces: 0,
+  })
+  expect(canSeeResults(withdrawn)).toBe(false)
+  expect(revealedPodium(withdrawn)).toEqual([])
+  expect(publish(withdrawn)).toMatchObject({
+    phase: "published",
+    winner: published.winner,
+  })
 })
 
 it("lets coauthors rename their tapa without changing its authors", () => {
@@ -315,4 +343,189 @@ it("lets coauthors rename their tapa without changing its authors", () => {
   expect(() => submit(opened, member("b"), "rename-own", update)).toThrow(
     "disponible"
   )
+})
+
+it("reveals tied score levels from third to first and rejects a repeated step", () => {
+  let contest = people.reduce(
+    (current, person) => register(current, person.id, person.id),
+    emptyContest()
+  )
+  contest = submit(contest, admin, "open")
+  contest = submit(contest, admin, "vote", {
+    assisted: "guest",
+    round: "rubric",
+    ...scores("a", [10, 10, 10, 10]),
+    ...scores("b", [8, 8, 8, 8]),
+    ...scores("c", [8, 8, 8, 8]),
+    ...scores("d", [5, 5, 5, 5]),
+    ...scores("e", [5, 5, 5, 5]),
+  })
+  const closed = submit(contest, admin, "resolve")
+  expect(revealedPodium(closed)).toEqual([])
+  expect(canSeeResults(closed)).toBe(false)
+  const step = nextReveal(closed)?.token ?? ""
+  const third = advance(closed)
+  expect(
+    revealedPodium(third).map(({ place, tapas }) => [
+      place,
+      tapas.map(({ id }) => id),
+    ])
+  ).toEqual([[3, ["d", "e"]]])
+  expect(() => submit(third, admin, "reveal", { step })).toThrow("disponible")
+  const second = advance(third)
+  expect(
+    revealedPodium(second).map(({ place, tapas }) => [
+      place,
+      tapas.map(({ id }) => id),
+    ])
+  ).toEqual([
+    [3, ["d", "e"]],
+    [2, ["b", "c"]],
+  ])
+  expect(canSeeResults(second)).toBe(false)
+  expect(canSeeResults(advance(second))).toBe(true)
+})
+
+it("shows final runoff totals including zero without changing the reveal version on votes", () => {
+  const runoff = runoffFixture()
+  const voted = submit(runoff, member("e"), "vote", {
+    round: "runoff",
+    choice: "First",
+  })
+  expect(revealVersion(voted)).toBe(revealVersion(runoff))
+  expect(finalRunoffCounts(voted).size).toBe(0)
+  const resolved = submit(voted, admin, "resolve-runoff")
+  expect(finalRunoffCounts(resolved).size).toBe(0)
+  const published = publish(resolved)
+  expect(finalRunoffCounts(published)).toEqual(
+    new Map([
+      ["First", 1],
+      ["Second", 0],
+      ["Third", 0],
+    ])
+  )
+  const withdrawn = submit(published, admin, "unpublish", { confirm: "yes" })
+  expect(revealVersion(withdrawn)).not.toBe(revealVersion(resolved))
+  expect(finalRunoffCounts(withdrawn).size).toBe(0)
+})
+
+it("keeps the winner hidden until the shared deadline and blocks duplicate reveals", () => {
+  const runoff = runoffFixture()
+  const voted = submit(runoff, member("e"), "vote", {
+    round: "runoff",
+    choice: "First",
+  })
+  const resolved = submit(voted, admin, "resolve-runoff")
+  const step = nextReveal(resolved)?.token ?? ""
+  const scheduled = submit(resolved, admin, "reveal", { step }, 20000)
+  expect(scheduled.countdown).toEqual({
+    place: 1,
+    startsAt: 22000,
+    endsAt: 25000,
+  })
+  expect(nextReveal(scheduled)).toBeNull()
+  expect(canSeeResults(settleReveal(scheduled, 24999))).toBe(false)
+  expect(() => submit(scheduled, admin, "reveal", { step }, 24999)).toThrow(
+    "en curso"
+  )
+  const finished = settleReveal(scheduled, 25000)
+  expect(finished.countdown).toBeUndefined()
+  expect(canSeeResults(finished)).toBe(true)
+  expect(finished.winner).toBe("First")
+  expect(revealAnnouncement(scheduled, 24999)).toBeNull()
+  expect(revealAnnouncement(scheduled, 25000)).toEqual({
+    place: 1,
+    tie: false,
+    runoffVotes: 1,
+    points: 20,
+    revealedAt: 25000,
+    expiresAt: 28000,
+    tapas: [{ id: "First", name: "First", authors: [people[0], people[1]] }],
+  })
+  expect(revealAnnouncement(scheduled, 28000)).toBeNull()
+  expect(() => submit(scheduled, admin, "reveal", { step }, 27999)).toThrow(
+    "en curso"
+  )
+  expect(() => submit(scheduled, admin, "reveal", { step }, 28000)).toThrow(
+    "disponible"
+  )
+})
+
+it("announces tied finalists after zero and opens runoff only after the announcement", () => {
+  const fixture = runoffFixture()
+  const closed: Contest = { ...fixture, phase: "preview" }
+  const token = nextReveal(closed)?.token ?? ""
+  const scheduled = submit(closed, admin, "reveal", { step: token }, 20000)
+  expect(publicCountdown(scheduled, 24999)).toEqual({
+    place: 1,
+    startsAt: 22000,
+    endsAt: 25000,
+    points: 20,
+  })
+  expect(revealAnnouncement(scheduled, 24999)).toBeNull()
+  expect(revealAnnouncement(scheduled, 25000)).toMatchObject({
+    tie: true,
+    points: 20,
+  })
+  expect(
+    revealAnnouncement(scheduled, 25000)
+      ?.tapas.map(({ id }) => id)
+      .sort()
+  ).toEqual(["First", "Second", "Third"])
+  expect(ballotOptions(settleReveal(scheduled, 27999), roster[4])).toEqual([])
+  const opened = settleReveal(scheduled, 28000)
+  expect(opened.phase).toBe("runoff")
+  expect(ballotOptions(opened, roster[4])).toHaveLength(3)
+  expect(canSeeResults(opened)).toBe(false)
+})
+
+it("shows only the winning runoff tally, including zero, in the final animation", () => {
+  const withoutRunoff: Contest = {
+    ...emptyContest(),
+    phase: "resolved",
+    winner: "First",
+  }
+  expect(
+    revealAnnouncement(
+      {
+        ...withoutRunoff,
+        countdown: { place: 1, startsAt: 12000, endsAt: 15000 },
+      },
+      15000
+    )?.runoffVotes
+  ).toBeNull()
+
+  const runoff = runoffFixture()
+  const zero = submit(
+    submit(runoff, admin, "resolve-runoff"),
+    admin,
+    "record-draw",
+    { winner: "First" }
+  )
+  const voted = submit(
+    submit(runoff, member("e"), "vote", {
+      round: "runoff",
+      choice: "First",
+    }),
+    admin,
+    "vote",
+    {
+      round: "runoff",
+      choice: "First",
+      assisted: "guest",
+    }
+  )
+  for (const [resolved, expected] of [
+    [zero, 0],
+    [submit(voted, admin, "resolve-runoff"), 2],
+  ] as const) {
+    const scheduled = submit(resolved, admin, "reveal", {
+      step: nextReveal(resolved)?.token ?? "",
+    })
+    expect(revealAnnouncement(scheduled, 14999)).toBeNull()
+    expect(revealAnnouncement(scheduled, 15000)?.runoffVotes).toBe(expected)
+    expect(
+      revealAnnouncement(scheduled, 15000)?.tapas.map(({ id }) => id)
+    ).toEqual(["First"])
+  }
 })

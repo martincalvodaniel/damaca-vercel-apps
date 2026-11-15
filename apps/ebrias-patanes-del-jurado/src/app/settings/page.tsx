@@ -3,7 +3,9 @@ import { AccountControl } from "@/features/landing/account-control"
 import {
   getDisplayAlias,
   getMemberDirectory,
+  readMemberAvatars,
 } from "@/features/members/directory"
+import { MemberAvatar } from "@/features/members/member-avatar"
 import { AdmissionForm } from "@/features/settings/admission-form"
 import { AdmissionPushToggle } from "@/features/settings/admission-push-toggle"
 import { AliasForm } from "@/features/settings/alias-form"
@@ -22,6 +24,7 @@ export default async function Settings() {
     isAdmin ? listPendingAdmissions() : [],
     isAdmin ? getMemberDirectory() : [],
   ])
+  const avatars = await readMemberAvatars(members.map(({ id }) => id))
   const available = members.flatMap(({ id, alias, email }) =>
     email ? [] : [{ id, alias }]
   )
@@ -88,6 +91,10 @@ export default async function Settings() {
                 <li key={id}>
                   <div className="member-row">
                     <span>
+                      <MemberAvatar
+                        alias={alias}
+                        image={avatars.get(id) ?? null}
+                      />
                       <strong>{alias}</strong> ·{" "}
                       {email ?? "Sin correo asociado"}
                     </span>

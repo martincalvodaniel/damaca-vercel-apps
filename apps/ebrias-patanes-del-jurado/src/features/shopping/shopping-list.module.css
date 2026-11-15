@@ -1,0 +1,78 @@
+.item {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 36px;
+  gap: 0.3rem;
+  border-bottom: 1px solid #95653855;
+}
+
+.item[data-drop="true"] {
+  background: #fff6d9;
+}
+
+.handle,
+.name,
+.remove button {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+}
+
+.handle {
+  min-width: 28px;
+  min-height: 34px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  text-align: start;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.checked {
+  text-decoration: line-through;
+}
+
+.remove {
+  margin: 0 0 0 auto;
+}
+
+.remove button {
+  width: 26px;
+  height: 26px;
+  color: #a02130;
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+.item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  accent-color: #176b35;
+}
+
+.add,
+.rename {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.3rem;
+}
+
+.rename {
+  flex: 1;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.add input,
+.rename input {
+  min-width: 0;
+}

@@ -6,9 +6,17 @@ import {
   type Contest,
   canSeeResults,
   categories,
+  finalRunoffCounts,
+  nextReveal,
   type Person,
+  podium,
+  publicCountdown,
   results,
+  revealAnnouncement,
+  revealedPodium,
+  revealVersion,
   selectVoter,
+  settleReveal,
   type Tapa,
 } from "@/features/tapas/contest"
 import {
@@ -19,6 +27,7 @@ import {
 } from "@/features/tapas/store"
 import eventStyles from "../page.module.css"
 import { Ballot, ContestForm, EntryControls } from "./controls"
+import { RevealSync } from "./reveal-sync"
 import styles from "./tapas.module.css"
 
 const reasons = {
@@ -27,15 +36,34 @@ const reasons = {
   draw: "Sorteo presencial",
 }
 
+const medals: Record<number, { icon: string; label: string }> = {
+  1: { icon: "🥇", label: "Primer puesto" },
+  2: { icon: "🥈", label: "Segundo puesto" },
+  3: { icon: "🥉", label: "Tercer puesto" },
+}
+
+function Medal({ place }: { place: number }) {
+  const medal = medals[place]
+  return medal ? (
+    <span role="img" aria-label={medal.label}>
+      {medal.icon}
+    </span>
+  ) : null
+}
+
 function Results({ contest, sort }: { contest: Contest; sort?: string }) {
   const key = categories.find(([category]) => category === sort)?.[0] ?? "total"
+  const places = new Map(
+    podium(contest).flatMap(({ place, tapas }) =>
+      tapas.map(({ id }) => [id, place] as const)
+    )
+  )
+  const runoffCounts = finalRunoffCounts(contest)
   const winner = contest.tapas.find(({ id }) => id === contest.winner)
   const format = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 2 })
   return (
     <section className={styles.panel}>
-      <h2>
-        {contest.phase === "published" ? "Resultados" : "Vista previa privada"}
-      </h2>
+      <h2>Resultados</h2>
       {winner ? (
         <p>
           <strong>Ganadora: {winner.name}</strong>
@@ -65,6 +93,12 @@ function Results({ contest, sort }: { contest: Contest; sort?: string }) {
         {results(contest, key).map(
           ({ id, name, authors, count, total, sums }) => (
             <li key={id}>
+              <Medal place={places.get(id) ?? 0} />
+              {id === contest.winner ? (
+                <span role="img" aria-label="Ganadora del concurso">
+                  💎
+                </span>
+              ) : null}{" "}
               <strong>{name}</strong> ·{" "}
               {authors.map(({ alias }) => alias).join(" y ")}
               {count ? (
@@ -73,6 +107,12 @@ function Results({ contest, sort }: { contest: Contest; sort?: string }) {
                     <strong>{format.format(total / count)} / 40</strong> ·{" "}
                     {count} {count === 1 ? "valoración" : "valoraciones"}
                   </p>
+                  {runoffCounts.has(id) ? (
+                    <p>
+                      Votos de desempate:{" "}
+                      <strong>{runoffCounts.get(id)}</strong>
+                    </p>
+                  ) : null}
                   <dl className={styles.scores}>
                     {categories.map(([category, label]) => (
                       <div key={category}>
@@ -135,6 +175,7 @@ function AdminEntry({ tapa, people }: { tapa?: Tapa; people: Person[] }) {
 }
 
 function Management({ contest }: { contest: Contest }) {
+  if (contest.countdown) return <p>Revelación en curso…</p>
   switch (contest.phase) {
     case "registration":
       return (
@@ -147,14 +188,8 @@ function Management({ contest }: { contest: Contest }) {
         <ContestForm intent="resolve" label="Resolver votación">
           <p>
             {contest.rubric.length} papeletas recibidas. Al resolver, se cierra
-            la rúbrica y se abre la vista previa privada.
+            la rúbrica y queda listo el podio para revelarlo.
           </p>
-        </ContestForm>
-      )
-    case "preview":
-      return (
-        <ContestForm intent="open-runoff" label="Abrir desempate">
-          <p>Hay un empate en el primer puesto.</p>
         </ContestForm>
       )
     case "runoff":
@@ -192,14 +227,26 @@ function Management({ contest }: { contest: Contest }) {
           confirmation="Los resultados volverán a ser privados."
         ></ContestForm>
       )
-    case "resolved":
+    case "preview":
+    case "resolved": {
+      const next = nextReveal(contest)
+      if (!next) return null
+      const labels = [
+        "Publicar cierre sin ganadora",
+        "Revelar primer puesto",
+        "Revelar segundo puesto",
+        "Revelar tercer puesto",
+      ]
       return (
         <ContestForm
-          intent="publish"
-          label="Publicar resultados"
-          confirmation="Los miembros podrán ver la clasificación."
-        ></ContestForm>
+          key={next.token}
+          intent="reveal"
+          label={labels[next.place]}
+        >
+          <input type="hidden" name="step" value={next.token} />
+        </ContestForm>
       )
+    }
     default:
       return null
   }
@@ -212,10 +259,13 @@ export default async function TapasContest({
 }) {
   const actor = await getContestActor()
   if (!actor) redirect("/")
-  const [{ contest }, { sort, assisted, handoff }] = await Promise.all([
+  const [stored, { sort, assisted, handoff }] = await Promise.all([
     readContest(),
     searchParams,
   ])
+  const serverNow = Date.now()
+  const contest = settleReveal(stored.contest, serverNow)
+  const announcing = Boolean(revealAnnouncement(stored.contest, serverNow))
   const round =
     contest.phase === "rubric" || contest.phase === "runoff"
       ? contest.phase
@@ -256,6 +306,12 @@ export default async function TapasContest({
 
   return (
     <main className={eventStyles.event}>
+      <RevealSync
+        version={revealVersion(contest)}
+        announcing={announcing}
+        countdown={publicCountdown(stored.contest, serverNow)}
+        serverNow={serverNow}
+      />
       <div className={eventStyles.content}>
         <header className={eventStyles.header}>
           <h1 className={eventStyles.title}>
@@ -275,6 +331,7 @@ export default async function TapasContest({
                   key={`${contest.votingGeneration}:${round}:${voter.id}`}
                   options={options}
                   round={round}
+                  canRandomize={false}
                   generation={contest.votingGeneration}
                   assisted={voter.id}
                   completed={`${contestPath}?handoff=done`}
@@ -304,7 +361,7 @@ export default async function TapasContest({
               </Link>
               {contest.phase === "registration" && (
                 <section className={styles.panel}>
-                  <h2>Inscripciones</h2>
+                  <h2>Inscripciones ({contest.tapas.length})</h2>
                   {contest.tapas.length ? (
                     <ul>
                       {contest.tapas.map((tapa) => (
@@ -325,13 +382,17 @@ export default async function TapasContest({
                                   label="Guardar cambios"
                                 >
                                   <label>
-                                    Nombre de la tapa
+                                    Nombre de tu tapa
                                     <input
                                       name="name"
                                       maxLength={80}
                                       required
                                       defaultValue={tapa.name}
                                     />
+                                    <small>
+                                      El resto de participantes no verá el
+                                      nombre hasta que se abra la votación.
+                                    </small>
                                   </label>
                                   <label>
                                     Coautor o coautora (opcional)
@@ -365,13 +426,17 @@ export default async function TapasContest({
                                     value={tapa.id}
                                   />
                                   <label>
-                                    Nombre de la tapa
+                                    Nombre de tu tapa
                                     <input
                                       name="name"
                                       maxLength={80}
                                       required
                                       defaultValue={tapa.name}
                                     />
+                                    <small>
+                                      El resto de participantes no verá el
+                                      nombre hasta que se abra la votación.
+                                    </small>
                                   </label>
                                 </ContestForm>
                               ) : null
@@ -384,6 +449,7 @@ export default async function TapasContest({
                                     actor.admin ? "admin-remove" : "remove"
                                   }
                                   label="Borrar tapa"
+                                  iconLabel={`Borrar tapa de ${tapa.authors.map(({ alias }) => alias).join(" y ")}`}
                                   confirmation="Se eliminará esta inscripción."
                                 >
                                   <input
@@ -401,30 +467,34 @@ export default async function TapasContest({
                   ) : (
                     <p>Todavía no hay tapas inscritas.</p>
                   )}
-                  {actor.admin ? (
-                    <details>
-                      <summary>Inscribir una tapa</summary>
-                      <AdminEntry people={available()} />
-                    </details>
-                  ) : actor.member && !registered ? (
-                    <ContestForm intent="save" label="Inscribir mi tapa">
-                      <label>
-                        Nombre de la tapa
-                        <input name="name" maxLength={80} required />
-                      </label>
-                      <label>
-                        Coautor o coautora (opcional)
-                        <select name="partner" defaultValue="">
-                          <option value="">En solitario</option>
-                          {people.map(({ id, alias }) => (
-                            <option key={id} value={id}>
-                              {alias}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </ContestForm>
-                  ) : actor.member ? null : (
+                  {!actor.admin && actor.member && !registered ? (
+                    <>
+                      {contest.tapas.length > 0 ? (
+                        <hr className={styles.entryDivider} />
+                      ) : null}
+                      <ContestForm intent="save" label="Inscribir mi tapa">
+                        <label>
+                          Nombre de tu tapa
+                          <input name="name" maxLength={80} required />
+                          <small>
+                            El resto de participantes no verá el nombre hasta
+                            que se abra la votación.
+                          </small>
+                        </label>
+                        <label>
+                          Coautor o coautora (opcional)
+                          <select name="partner" defaultValue="">
+                            <option value="">En solitario</option>
+                            {people.map(({ id, alias }) => (
+                              <option key={id} value={id}>
+                                {alias}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </ContestForm>
+                    </>
+                  ) : actor.admin || actor.member ? null : (
                     <p>
                       Para inscribir una tapa necesitas una cuenta vinculada al
                       club.
@@ -450,6 +520,7 @@ export default async function TapasContest({
                       <Ballot
                         key={`${contest.votingGeneration}:${round}`}
                         round={round}
+                        canRandomize={actor.admin}
                         generation={contest.votingGeneration}
                         options={options}
                         initial={
@@ -479,12 +550,31 @@ export default async function TapasContest({
                   )}
                 </section>
               )}
-              {canSeeResults(contest, actor.admin) && (
+              {canSeeResults(contest) && (
                 <Results contest={contest} sort={sort} />
               )}
+              {!canSeeResults(contest) &&
+                revealedPodium(contest)
+                  .reverse()
+                  .map(({ place, tapas }) => (
+                    <section key={place} className={styles.panel}>
+                      <h2>
+                        <span aria-hidden="true">{medals[place]?.icon}</span>{" "}
+                        {medals[place]?.label}
+                      </h2>
+                      <ul>
+                        {tapas.map(({ id, name, authors }) => (
+                          <li key={id}>
+                            <strong>{name}</strong> ·{" "}
+                            {authors.map(({ alias }) => alias).join(" y ")}
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
               {!actor.admin &&
                 !round &&
-                !canSeeResults(contest, false) &&
+                !canSeeResults(contest) &&
                 contest.phase !== "registration" && (
                   <section className={styles.panel}>
                     <p>
@@ -496,8 +586,20 @@ export default async function TapasContest({
               {actor.admin ? (
                 <section className={styles.panel}>
                   <h2>Administración</h2>
-                  <Management key={contest.phase} contest={contest} />
-                  {contest.phase !== "registration" &&
+                  {announcing ? (
+                    <p>Revelación en curso…</p>
+                  ) : (
+                    <Management key={contest.phase} contest={contest} />
+                  )}
+                  {contest.phase === "registration" ? (
+                    <details>
+                      <summary>Inscribir una tapa</summary>
+                      <AdminEntry people={available()} />
+                    </details>
+                  ) : null}
+                  {!announcing &&
+                    !contest.countdown &&
+                    contest.phase !== "registration" &&
                     contest.phase !== "published" && (
                       <ContestForm
                         key={`reopen:${contest.phase}`}

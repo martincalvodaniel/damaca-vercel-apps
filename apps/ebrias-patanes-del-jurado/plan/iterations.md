@@ -406,3 +406,79 @@
 - Dependencias: Better Auth y el cliente de MongoDB de Ebrias.
 - Aceptación: si la primera conexión falla, la siguiente petición puede restaurar una sesión válida sin reiniciar el proceso. Las peticiones concurrentes comparten el intento de conexión.
 - Validación: reproducir el fallo con MongoDB local, verificar la recuperación, ejecutar Biome, tipos, pruebas y build. La comprobación con Google requiere una cuenta autorizada en integración.
+
+## EPJ-55 — Lista de la compra de Letux
+
+- Estado: `blocked`.
+- Rutas: ficha de Letux y lista compartida de la compra.
+- Aceptación: los miembros pueden añadir, editar, marcar, reordenar y borrar con confirmación. Marcar no mueve un elemento.
+- Validación: Biome, tipos, pruebas de orden y build.
+
+## EPJ-56 — Ajustes de compra, inscripciones y avisos
+
+- Estado: `validated`.
+- Rutas: desplegables de Letux, Tapas y avisos globales.
+- Aceptación: sangría compartida, contador y separación de inscripciones, borrado directo mediante modal y avisos de hasta cinco segundos.
+- Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-57 — Relleno aleatorio de papeletas
+
+- Estado: `validated`.
+- Rutas: papeletas de Tapas.
+- Aceptación: el administrador puede rellenar un borrador propio o asistido en ambas rondas, con revisión antes de enviar.
+- Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-58 — Selector de notas y revelación del podio
+
+- Estado: `validated`.
+- Rutas: papeletas, resultados y reglas de Tapas.
+- Aceptación: selector de 0 a 10, atajos solo en la papeleta propia del admin y podio público revelado en orden descendente por pasos.
+- Validación: Biome, tipos, pruebas de transiciones y build.
+
+## EPJ-59 — Podio sincronizado y medallas
+
+- Estado: `validated`.
+- Rutas: resultados de Tapas y consulta autenticada de progreso.
+- Aceptación: medallas y votos finales de desempate, con actualización automática al avanzar el podio.
+- Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-60 — Cuenta atrás del podio
+
+- Estado: `validated`.
+- Rutas: Tapas y consulta de revelación.
+- Aceptación: cuenta atrás compartida tras dos segundos de preparación, sin revelar datos antes del plazo.
+- Validación: Biome, tipos, pruebas temporales y build.
+
+## EPJ-61 — Anuncio del premio en la cuenta atrás
+
+- Estado: `validated`.
+- Rutas: revelación y podio de Tapas.
+- Aceptación: mostrar los premiados durante tres segundos al terminar la cuenta atrás y ordenar la plata encima del bronce.
+- Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-62 — Formato del anuncio de Tapas
+
+- Estado: `validated`.
+- Aceptación: el anuncio muestra el nombre de la tapa seguido de sus autores entre paréntesis.
+- Validación: Biome, tipos y build.
+
+## EPJ-63 — Puntuación, avatares y empate en la revelación
+
+- Estado: `validated`.
+- Rutas: revelación, papeletas y resultados de Tapas.
+- Aceptación: puntuación durante toda la animación, avatares al anunciar y cuenta atrás para el empate en cabeza. Los avances no muestran el aviso «Guardado».
+- Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-64 — Votos de la ganadora y avatares de miembros
+
+- Estado: `validated`.
+- Rutas: revelación de Tapas, avatares, Ajustes y avisos de Letux.
+- Aceptación: votos de la ganadora tras la cuenta atrás, avatares en Miembros y eliminación de los avisos genéricos de guardado.
+- Validación: Biome, tipos, pruebas de Tapas y build.
+
+## EPJ-65 — Markdown y alojamiento desplegable
+
+- Estado: `validated`.
+- Rutas: guía de Letux, pruebas y catálogo Bun.
+- Aceptación: las descripciones admiten Markdown seguro y Alojamiento comparte el grupo de desplegables.
+- Validación: Biome, tipos, pruebas de la guía y build.
