@@ -148,6 +148,10 @@ Instala Damaca Digest desde Chrome. En la app de origen, abre **Compartir** y se
 
 La documentación de OpenAI describe la selección del conector con `@` en el compositor. No encontramos una API documentada para preseleccionar un MCP privado de ChatGPT a partir de un intent de Android o un enlace externo, ni para enviar automáticamente ese mensaje. El asistente de captura usa el enlace público a ChatGPT y el portapapeles. Si el navegador impide copiar, el prompt sigue seleccionable. [Conectar y usar un servidor MCP en ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server).
 
+### Comprobación en un dispositivo
+
+Tras publicar los cambios, instala Digest desde Chrome en Android y comparte una fuente pública desde Chrome y desde otra app. Comprueba que **Damaca Digest** aparece en el menú de compartir y que el prompt conserva el enlace esperado. Completa el envío con **@damaca-digest** en ChatGPT y abre la ficha que devuelve. Repite el enlace con un parámetro de tracking y confirma que devuelve el mismo `articleId`. La revisión a 320 px y la inspección de manifiestos se hicieron en local. Esta comprobación requiere el registro real de la PWA en Android y el conector del entorno donde se publique.
+
 ## Trabajar con agentes
 
 Empieza por [AGENTS.md](AGENTS.md), el [plan maestro](plan/master.md), las [iteraciones](plan/iterations.md), el [registro](plan/iteration-log.md) y el [workflow común](../../plan/workflow.md). El flujo define alcance y aceptación antes de editar, entrega cambios pequeños, registra las pruebas y deja el siguiente paso listo para otra sesión. `CLAUDE.md` remite a las mismas reglas.

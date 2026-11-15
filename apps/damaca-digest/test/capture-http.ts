@@ -244,7 +244,7 @@ try {
       accessStatus: "full",
     })
   }
-  await saveArticle(second.ownerId, {
+  const otherOwnerFixture = await saveArticle(second.ownerId, {
     url: "https://example.com/library-private",
     title: "Pagination Fixture Other Owner",
     authors: ["A. Writer"],
@@ -556,31 +556,38 @@ try {
     ["Pagination Fixture 20"]
   )
   assert.equal(searched.structuredContent.nextPage, null)
-  const captureDate = readByUrl.structuredContent.article.capturedAt.slice(
-    0,
-    10
-  )
-  const digestInput = { capturedFrom: captureDate, capturedTo: captureDate }
+  const capturedAt = Date.parse(readByUrl.structuredContent.article.capturedAt)
+  const dates = (offset: number) =>
+    new Date(capturedAt + offset * 86_400_000).toISOString().slice(0, 10)
+  const digestInput = { capturedFrom: dates(-1), capturedTo: dates(1) }
+  type DigestDay = {
+    date: string
+    articles: { id: string; capturedAt: string }[]
+  }
   const digest = await invoke(reader, "get_reading_digest", digestInput)
-  assert.equal(digest.structuredContent.days[0]?.date, captureDate)
-  assert.equal(digest.structuredContent.days[0]?.articles.length, 20)
+  const firstDays: DigestDay[] = digest.structuredContent.days
+  assert.equal(firstDays.flatMap(({ articles }) => articles).length, 20)
   assert.equal(digest.structuredContent.nextPage, 2)
   const remainingDigest = await invoke(reader, "get_reading_digest", {
     ...digestInput,
     page: 2,
   })
-  assert.equal(remainingDigest.structuredContent.days[0]?.articles.length, 3)
+  const remainingDays: DigestDay[] = remainingDigest.structuredContent.days
+  assert.equal(remainingDays.flatMap(({ articles }) => articles).length, 3)
   assert.equal(remainingDigest.structuredContent.nextPage, null)
+  for (const { date, articles } of [...firstDays, ...remainingDays]) {
+    assert.ok(articles.every((item) => item.capturedAt.startsWith(date)))
+  }
   const otherDigest = await invoke(
     otherReader,
     "get_reading_digest",
     digestInput
   )
-  assert.ok(
-    otherDigest.structuredContent.days[0]?.articles.every(
-      ({ id }: { id: string }) => id !== article.articleId
-    )
+  const otherDays: DigestDay[] = otherDigest.structuredContent.days
+  const otherIds = otherDays.flatMap(({ articles }) =>
+    articles.map(({ id }) => id)
   )
+  assert.deepEqual(otherIds, [otherOwnerFixture.articleId])
   const writerDigest = await invoke(token, "get_reading_digest", digestInput)
   assert.match(writerDigest._meta["mcp/www_authenticate"][0], /articles:read/)
   const readerWrite = await invoke(reader, "save_article", {
