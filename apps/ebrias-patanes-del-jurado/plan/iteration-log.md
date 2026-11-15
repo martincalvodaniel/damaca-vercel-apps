@@ -2,19 +2,7 @@
 
 [Entregas EPJ-01 a EPJ-07 archivadas](archive/2026-11-08/iteration-log.md).
 
-[Entregas EPJ-08 a EPJ-55 archivadas](archive/2026-11-14/iteration-log.md).
-
-## EPJ-56 — Ajustes de compra, inscripciones y avisos
-
-- Capacidad inicial disponible de 74% en 5 h y 96% en 7 días.
-- La compra comparte la sangría móvil. Tapas muestra el total, separa el formulario personal y abre la confirmación desde la papelera. El formulario de alta del administrador se mueve a Administración.
-- Los avisos se cierran a los cinco segundos y reinician el plazo al recibir otro mensaje. Biome, tipos, diez pruebas y build correctos. Pendiente comprobar el recorrido con una sesión autenticada.
-
-## EPJ-57 — Relleno aleatorio de papeletas
-
-- Capacidad inicial disponible de 68% en 5 h y 95% en 7 días.
-- El administrador puede rellenar el borrador en ambas rondas desde su papeleta o una asistida. Se conserva el flujo de revisión y envío.
-- Biome, tipos, nueve pruebas de Tapas y build correctos. El botón nuevo queda pendiente de comprobar en un navegador autenticado.
+[Entregas EPJ-08 a EPJ-57 archivadas](archive/2026-11-14/iteration-log.md).
 
 ## EPJ-58 — Selector de notas y revelación del podio
 
@@ -56,3 +44,11 @@
 
 - Capacidad inicial de 76% en 5 h y 84% en 7 días. Las descripciones se renderizan como Markdown y Alojamiento comparte el grupo de desplegables de Letux.
 - Biome, tipos, cinco pruebas de guía y renderizado y build correctos. Se verificó en código que el editor solo emite avisos de error. Pendiente la revisión visual con una sesión autenticada.
+
+## EPJ-66 — Dos asistentes por fila
+
+- Capacidad inicial de 60% en 5 h y 82% en 7 días. Los bloques de asistencia muestran dos columnas y los coches mantienen su lista. Biome, tipos y build correctos. Sin comprobación en navegador autenticado.
+
+## EPJ-67 — Dos pasajeros por fila
+
+- Capacidad inicial de 53% en 5 h y 81% en 7 días. Los coches reutilizan las dos columnas de asistencia. Biome, tipos y build correctos.
