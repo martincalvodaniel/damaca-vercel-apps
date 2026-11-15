@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { AccessBadge } from "@/features/articles/components/access-badge"
-import type { Article } from "@/lib/db/articles"
+import type { Article, RelatedArticle } from "@/lib/db/articles"
 
 const sectionTitle = "mb-2 text-lg font-semibold tracking-tight"
 const actionLink =
@@ -9,9 +9,11 @@ const actionLink =
 export function ArticleDetail({
   article,
   topics,
+  related,
 }: {
   article: Article
   topics: string[]
+  related: RelatedArticle[]
 }) {
   const details = [
     article.source ?? article.sourceDomain,
@@ -146,6 +148,40 @@ export function ArticleDetail({
           </p>
         </section>
       ) : null}
+      {related.length ? (
+        <section className="digest-panel rounded-xl p-4 sm:p-6">
+          <h2 className={sectionTitle}>Related articles</h2>
+          <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            {related.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={`/articles/${item.id}`}
+                  className="block min-h-11 py-2 text-sm hover:text-teal-800 dark:hover:text-teal-300"
+                >
+                  <span className="block font-semibold">{item.title}</span>
+                  <span className="text-xs text-zinc-600 dark:text-zinc-400">
+                    {item.source}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+      <nav className="flex flex-wrap gap-2" aria-label="Download article">
+        <a
+          href={`/articles/${article.id}/export?format=md`}
+          className={`digest-panel ${actionLink} hover:border-teal-600`}
+        >
+          Download Markdown
+        </a>
+        <a
+          href={`/articles/${article.id}/export?format=json`}
+          className={`digest-panel ${actionLink} hover:border-teal-600`}
+        >
+          Download JSON
+        </a>
+      </nav>
       <footer className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-600 dark:text-zinc-400">
         <p>
           Reading status: {article.readingStatus}

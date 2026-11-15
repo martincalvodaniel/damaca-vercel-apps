@@ -136,6 +136,10 @@ ChatGPT puede invocar `list_topics` con una búsqueda opcional y una página par
 
 Las pruebas HTTP usan un MongoDB desechable en loopback, credenciales ficticias y sesiones persistidas de prueba. Ejecutar desde la raíz con `DIGEST_TEST_MONGO_PORT=<puerto> bash apps/damaca-digest/test/run-capture-http.sh`. El runner compila y arranca Next, comprueba OAuth/MCP y el control de acceso web y termina el proceso local. El contenedor MongoDB desechable se elimina por separado. La prueba de Google y ChatGPT reales requiere un entorno HTTPS autorizado.
 
+## Relacionados y descargas
+
+La ficha muestra hasta tres lecturas recientes con topics en común. **Download Markdown** y **Download JSON** exportan la ficha y sus notas personales mediante una descarga autenticada.
+
 ## Compartir un enlace desde Android
 
 Instala Damaca Digest desde Chrome. En la app de origen, abre **Compartir** y selecciona **Damaca Digest**. La página **Capture a link** prepara un prompt con el enlace. Pulsa **Copy prompt and open ChatGPT**, selecciona el conector **@damaca-digest**, pega el prompt y confirma el envío. También puedes abrir **Capture link** desde la biblioteca y pegar una URL. La recepción prepara el prompt y deja el guardado para el flujo OAuth/MCP habitual. [Web Share Target en Chrome](https://developer.chrome.com/docs/capabilities/web-apis/web-share-target).

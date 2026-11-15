@@ -89,3 +89,10 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: documentación, manifiesto y ruta de recepción de enlaces.
 - Aceptación: verificar la oferta oficial de ChatGPT y Android. Si procede, permitir que la PWA instalada reciba un enlace y prepare su captura en ChatGPT con una acción explícita del usuario.
+
+## 08 — Encontrar relacionados y exportar fichas
+
+- Estado: `validated`.
+- Rutas: ficha, consultas de topics y endpoint de exportación.
+- Aceptación: una ficha muestra otras lecturas del propietario con topics en común, incluidas equivalencias fusionadas. El propietario puede exportar su ficha en Markdown y JSON con descarga privada.
+- Validación: Biome, tipos, pruebas, build, integración HTTP de acceso y comprobación responsive de la ficha.

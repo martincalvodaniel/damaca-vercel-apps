@@ -8,6 +8,7 @@ import {
   articleTopicLabels,
   findTopicReferences,
   registerTopics,
+  type TopicMatches,
 } from "@/lib/db/topics"
 import type {
   ArticleCapture,
@@ -266,6 +267,46 @@ function dateRange(from?: string, to?: string) {
   }
 }
 
+function topicFilters({
+  ids,
+  legacyLabels,
+}: TopicMatches): Filter<ArticleDocument>[] {
+  return [
+    { topicIds: { $in: ids } },
+    { topicIds: { $exists: false }, proposedTopics: { $in: legacyLabels } },
+  ]
+}
+
+export type RelatedArticle = { id: string; title: string; source: string }
+
+export async function listRelatedArticles(
+  ownerId: string,
+  id: string,
+  matches: TopicMatches
+): Promise<RelatedArticle[]> {
+  if (!matches.ids.length && !matches.legacyLabels.length) return []
+  const documents = await (await articles())
+    .find({
+      ownerId,
+      _id: { $ne: new ObjectId(id) },
+      $or: topicFilters(matches),
+    })
+    .project<{
+      _id: ObjectId
+      title?: string
+      source?: string
+      sourceDomain: string
+    }>({ title: 1, source: 1, sourceDomain: 1 })
+    .sort(librarySorts.capture)
+    .limit(3)
+    .toArray()
+  return documents.map((article) => ({
+    id: article._id.toHexString(),
+    title: article.title ?? article.sourceDomain,
+    source: article.source ?? article.sourceDomain,
+  }))
+}
+
 export async function listArticles(ownerId: string, query: LibraryQuery) {
   const filter: Filter<ArticleDocument> = { ownerId }
   if (query.q) filter.$text = { $search: query.q }
@@ -274,23 +315,10 @@ export async function listArticles(ownerId: string, query: LibraryQuery) {
     const source = exactText(query.source)
     filter.$or = [{ source }, { sourceDomain: source }]
   }
-  if (query.topic) {
-    const { ids, legacyLabels } = await findTopicReferences(
-      ownerId,
-      query.topic
-    )
+  if (query.topic)
     filter.$and = [
-      {
-        $or: [
-          { topicIds: { $in: ids } },
-          {
-            topicIds: { $exists: false },
-            proposedTopics: { $in: legacyLabels },
-          },
-        ],
-      },
+      { $or: topicFilters(await findTopicReferences(ownerId, query.topic)) },
     ]
-  }
   if (query.language) filter.language = exactText(query.language)
   if (query.type) filter.contentType = query.type
   if (query.access) filter.accessStatus = query.access

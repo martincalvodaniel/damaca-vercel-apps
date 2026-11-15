@@ -323,6 +323,33 @@ try {
   assert.match(enrichedHtml, /Personal topic/)
   assert.doesNotMatch(enrichedHtml, /ChatGPT topic/)
   assert.match(enrichedHtml, /read · Favorite|read<!-- --> · Favorite/)
+  const jsonUrl = `${other.detailUrl}/export?format=json`
+  const privateExport = await fetch(jsonUrl, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(privateExport.status, 404)
+  const exported = await fetch(jsonUrl, { headers: { cookie: second.cookie } })
+  assert.equal(exported.status, 200)
+  assert.equal(exported.headers.get("cache-control"), "private, no-store")
+  assert.match(
+    exported.headers.get("content-disposition") ?? "",
+    /attachment.*\.json/
+  )
+  const snapshot = await exported.json()
+  assert.equal(snapshot.title, "Manually corrected title")
+  assert.equal(snapshot.personalNotes, "Reader's private note")
+  assert.deepEqual(snapshot.topics, ["Personal topic"])
+  assert.equal("ownerId" in snapshot, false)
+  assert.equal("revision" in snapshot, false)
+  const markdown = await fetch(`${other.detailUrl}/export?format=md`, {
+    headers: { cookie: second.cookie },
+  })
+  assert.equal(markdown.status, 200)
+  assert.match(
+    await markdown.text(),
+    /## Personal notes\n\nReader's private note/
+  )
+
   console.info("Verified that recapture preserves manual edits.")
   const updatedEditor = await fetch(editUrl, {
     headers: { cookie: second.cookie },
@@ -441,12 +468,13 @@ try {
   const byAliasHtml = await byAlias.text()
   assert.match(byAliasHtml, /Topic fixture/)
   assert.match(byAliasHtml, /HTTP capture fixture/)
-  assert.match(
-    await (
-      await fetch(withTopics.detailUrl, { headers: { cookie: first.cookie } })
-    ).text(),
-    /aria-label="Topics".*Engineering/
-  )
+  const related = await fetch(withTopics.detailUrl, {
+    headers: { cookie: first.cookie },
+  })
+  const relatedHtml = await related.text()
+  assert.match(relatedHtml, /aria-label="Topics".*Engineering/)
+  assert.match(relatedHtml, /Related articles/)
+  assert.match(relatedHtml, new RegExp(`/articles/${article.articleId}`))
 
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)
