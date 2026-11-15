@@ -5,6 +5,7 @@ import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
 import { saveArticle } from "@/lib/db/articles"
 import { closeDatabaseConnection } from "@/lib/db/client"
 import { grantUserAccess, revokeUserAccess } from "@/lib/db/user-access"
+import { serverActionForm } from "./server-action-form"
 import { createFixtureSession } from "./session-fixture"
 
 const { baseUrl: origin, allowedEmails } = getAuthEnv()
@@ -239,6 +240,89 @@ try {
     { headers: { cookie: first.cookie } }
   )
   assert.match(await invalid.text(), /Check the search filters and date ranges/)
+
+  console.info("Verified library search and pagination.")
+  const editUrl = `${other.detailUrl}/edit`
+  function submit(cookie: string, body: FormData) {
+    return fetch(editUrl, {
+      method: "POST",
+      headers: { cookie, origin },
+      body,
+      redirect: "manual",
+      signal: AbortSignal.timeout(10_000),
+    })
+  }
+  const wrongEditor = await fetch(editUrl, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(wrongEditor.status, 404)
+  const editor = await fetch(editUrl, { headers: { cookie: second.cookie } })
+  assert.equal(editor.status, 200)
+  const editorHtml = await editor.text()
+  const [editForm] = [...editorHtml.matchAll(/<form[\s\S]*?<\/form>/g)]
+    .map(([form]) => form)
+    .filter((form) => form.includes('name="personalNotes"'))
+  assert.ok(editForm)
+  const edits = serverActionForm(editForm)
+  for (const [key, value] of Object.entries({
+    title: "Manually corrected title",
+    authors: "Fixture Editor",
+    source: "Fixture source",
+    publishedAt: "2026-11-15",
+    language: "en",
+    contentType: "article",
+    summary: "",
+    keyTakeaways: "",
+    personalNotes: "Reader's private note",
+    readingStatus: "read",
+    favorite: "true",
+  }))
+    edits.set(key, value)
+  assert.notEqual((await submit(first.cookie, edits)).status, 303)
+  console.info("Verified editor isolation.")
+  const savedEdits = await submit(second.cookie, edits)
+  assert.equal(savedEdits.status, 303)
+  await save(otherToken, {
+    url,
+    accessStatus: "full",
+    title: "ChatGPT title",
+    summary: "New capture summary",
+  })
+  const enriched = await fetch(other.detailUrl, {
+    headers: { cookie: second.cookie },
+  })
+  const enrichedHtml = await enriched.text()
+  assert.match(enrichedHtml, /Manually corrected title/)
+  assert.match(enrichedHtml, /Reader.*private note/)
+  assert.match(enrichedHtml, /New capture summary/)
+  assert.match(enrichedHtml, /read · Favorite|read<!-- --> · Favorite/)
+  console.info("Verified that recapture preserves manual edits.")
+  const updatedEditor = await fetch(editUrl, {
+    headers: { cookie: second.cookie },
+  })
+  const updatedHtml = await updatedEditor.text()
+  const [deleteForm] = [...updatedHtml.matchAll(/<form[\s\S]*?<\/form>/g)]
+    .map(([form]) => form)
+    .filter((form) => form.includes('name="confirm"'))
+  assert.ok(deleteForm)
+  function confirmDeletion() {
+    const data = serverActionForm(deleteForm)
+    data.set("confirm", "true")
+    return data
+  }
+  const unconfirmed = await submit(second.cookie, serverActionForm(deleteForm))
+  assert.match(unconfirmed.headers.get("location") ?? "", /deletion=confirm$/)
+  await unconfirmed.body?.cancel()
+  const wrongDeletion = await submit(first.cookie, confirmDeletion())
+  assert.match(wrongDeletion.headers.get("location") ?? "", /deletion=failed$/)
+  await wrongDeletion.body?.cancel()
+  const deleted = await submit(second.cookie, confirmDeletion())
+  assert.equal(deleted.status, 303)
+  assert.equal(
+    (await fetch(other.detailUrl, { headers: { cookie: second.cookie } }))
+      .status,
+    404
+  )
 
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)

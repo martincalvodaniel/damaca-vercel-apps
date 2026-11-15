@@ -62,7 +62,7 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 04a — Editar y organizar artículos
 
-- Estado: `pending`.
+- Estado: `validated`.
 - Aceptación: editar metadatos, notas, favoritos y estado, y borrar la ficha. Proteger cambios manuales ante recapturas y comprobar el propietario en cada mutación.
 
 ## 04b — Consolidar topics

@@ -4,7 +4,11 @@ import { type Filter, MongoServerError, ObjectId, type Sort } from "mongodb"
 import type { z } from "zod"
 import { normalizeArticleUrl } from "@/features/articles/normalize-url"
 import { COLLECTION_NAMES, getCollection } from "@/lib/db/collections"
-import type { ArticleCapture, readingStatus } from "@/schemas/article"
+import type {
+  ArticleCapture,
+  ArticleEdit,
+  readingStatus,
+} from "@/schemas/article"
 import type { LibraryQuery } from "@/schemas/library"
 
 type ArticleDetails = Omit<
@@ -138,6 +142,69 @@ export async function findArticle(ownerId: string, id: string) {
     _id: new ObjectId(id),
   })
   return document ? serialize(document) : null
+}
+
+export async function editArticle(
+  ownerId: string,
+  id: string,
+  revision: number,
+  input: ArticleEdit
+) {
+  const collection = await articles()
+  const identity = { ownerId, _id: new ObjectId(id), revision }
+  const existing = await collection.findOne(identity)
+  if (!existing) return false
+
+  const { favorite, readingStatus, personalNotes, publishedAt, ...metadata } =
+    input
+  const set: Partial<ArticleDocument> = {
+    favorite,
+    readingStatus,
+    updatedAt: new Date(),
+  }
+  const unset: Partial<Record<keyof ArticleDocument, "">> = {}
+  if (personalNotes) set.personalNotes = personalNotes
+  else unset.personalNotes = ""
+
+  const values = {
+    ...metadata,
+    publishedAt:
+      publishedAt === existing.publishedAt?.toISOString().slice(0, 10)
+        ? existing.publishedAt
+        : publishedAt
+          ? new Date(`${publishedAt}T00:00:00.000Z`)
+          : undefined,
+  }
+  const edited: (keyof typeof values)[] = []
+  for (const field of Object.keys(values) as (keyof typeof values)[]) {
+    const value = values[field]
+    const normalized =
+      value && (!Array.isArray(value) || value.length) ? value : undefined
+    if (JSON.stringify(existing[field]) === JSON.stringify(normalized)) continue
+    edited.push(field)
+    if (normalized === undefined) unset[field] = ""
+    else Object.assign(set, { [field]: normalized })
+  }
+  const result = await collection.updateOne(identity, {
+    $set: set,
+    $unset: unset,
+    $inc: { revision: 1 },
+    ...(edited.length && { $addToSet: { editedFields: { $each: edited } } }),
+  })
+  return result.matchedCount === 1
+}
+
+export async function deleteArticle(
+  ownerId: string,
+  id: string,
+  revision: number
+) {
+  const result = await (await articles()).deleteOne({
+    ownerId,
+    _id: new ObjectId(id),
+    revision,
+  })
+  return result.deletedCount === 1
 }
 
 const librarySorts = {

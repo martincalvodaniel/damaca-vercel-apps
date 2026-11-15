@@ -67,3 +67,29 @@ export const captureArticle = z
   })
 
 export type ArticleCapture = z.infer<typeof captureArticle>
+
+const editLine = (max: number) => z.string().trim().max(max)
+
+export const articleEdit = z.object({
+  title: editLine(350),
+  authors: z.array(text(150)).max(25),
+  source: editLine(180),
+  publishedAt: z.union([z.literal(""), z.iso.date()]),
+  language: z.union([
+    z.literal(""),
+    text(35).regex(/^[a-z]{2,8}(?:-[a-z\d]{1,8})*$/i),
+  ]),
+  contentType: z.union([z.literal(""), contentType]),
+  summary: editLine(12_000),
+  keyTakeaways: z.array(text(1500)).max(20),
+  personalNotes: editLine(12_000),
+  readingStatus,
+  favorite: z.boolean(),
+})
+
+export type ArticleEdit = z.infer<typeof articleEdit>
+
+export const articleRevision = z
+  .string()
+  .regex(/^\d{1,15}$/)
+  .transform(Number)

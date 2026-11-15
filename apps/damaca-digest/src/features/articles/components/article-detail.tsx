@@ -4,9 +4,17 @@ import type { Article } from "@/lib/db/articles"
 export function ArticleDetail({ article }: { article: Article }) {
   return (
     <article className="mx-auto max-w-2xl space-y-4 break-words">
-      <Link className="inline-flex min-h-11 items-center underline" href="/">
-        Library
-      </Link>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Link className="inline-flex min-h-11 items-center underline" href="/">
+          Library
+        </Link>
+        <Link
+          className="inline-flex min-h-11 items-center underline"
+          href={`/articles/${article.id}/edit`}
+        >
+          Edit article
+        </Link>
+      </div>
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold">
           {article.title ?? article.sourceDomain}
@@ -75,6 +83,16 @@ export function ArticleDetail({ article }: { article: Article }) {
       {!!article.proposedTopics?.length && (
         <p>Topics: {article.proposedTopics.join(", ")}</p>
       )}
+      {article.personalNotes ? (
+        <section>
+          <h2 className="font-semibold">Personal notes</h2>
+          <p className="whitespace-pre-wrap">{article.personalNotes}</p>
+        </section>
+      ) : null}
+      <p className="text-sm">
+        Reading status: {article.readingStatus}
+        {article.favorite ? " · Favorite" : ""}
+      </p>
       <p className="text-sm">
         Captured{" "}
         <time dateTime={article.capturedAt.toISOString()}>

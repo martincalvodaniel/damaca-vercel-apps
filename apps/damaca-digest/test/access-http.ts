@@ -7,6 +7,7 @@ import {
   listAccessRequests,
   revokeUserAccess,
 } from "@/lib/db/user-access"
+import { serverActionForm } from "./server-action-form"
 
 import {
   createFixtureSession,
@@ -42,13 +43,6 @@ async function request(path: string, cookie?: string, body?: FormData) {
   })
 }
 
-function decodeHtml(value: string) {
-  return value
-    .replaceAll("&quot;", '"')
-    .replaceAll("&#x27;", "'")
-    .replaceAll("&amp;", "&")
-}
-
 function actionForm(
   html: string,
   email: string,
@@ -70,17 +64,7 @@ function actionForm(
     form,
     `Rendered form required for ${operation}; request ID supplied: ${Boolean(requestId)}; forms: ${forms.length}`
   )
-  const data = new FormData()
-  for (const input of form.matchAll(/<input[^>]*>/g)) {
-    const name = input[0].match(/name="([^"]+)"/)?.[1]
-    const value = input[0].match(/value="([^"]*)"/)?.[1] ?? ""
-    if (name?.startsWith("$ACTION"))
-      data.append(decodeHtml(name), decodeHtml(value))
-  }
-  assert.ok(
-    [...data.keys()].length > 0,
-    "Rendered Server Action metadata is required"
-  )
+  const data = serverActionForm(form)
   data.set("email", email)
   if (requestId) {
     data.set("decision", operation)
