@@ -1,4 +1,5 @@
 const trackingParameters = new Set([
+  "utm",
   "fbclid",
   "gclid",
   "msclkid",

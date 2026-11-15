@@ -13,6 +13,12 @@ it("strips only known tracking parameters and preserves functional encoding and 
   ).toBe("https://example.com/?q=a%20b&q=c#section")
 })
 
+it("treats the bare utm parameter as tracking", () => {
+  expect(
+    normalizeArticleUrl("https://proton.me/blog/ai-manifesto?utm=fake")
+  ).toBe("https://proton.me/blog/ai-manifesto")
+})
+
 it("validates access limitations, references, URLs and ownership", () => {
   const link = { url: "https://example.com" }
   const unavailable = { ...link, accessStatus: "unavailable" }

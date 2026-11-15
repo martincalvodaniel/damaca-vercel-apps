@@ -16,6 +16,6 @@ La captura MCP, la biblioteca reciente y la ficha privada funcionan contra Next.
 
 ## Verificaciones pendientes
 
-Capacidad de escritura y comportamiento del flujo en ChatGPT web, conectividad y aislamiento de MongoDB desde Vercel, backups y restauración. La captura directa desde Android, herramientas de lectura, exportación, embeddings e integraciones de publicación quedan para entregas posteriores.
+El usuario confirmó el flujo de escritura MCP desde ChatGPT en producción con fuentes de acceso completo, parcial y no disponible. Quedan por verificar el aislamiento entre entornos y la restauración de backups. La captura directa desde Android, herramientas de lectura, exportación, embeddings e integraciones de publicación quedan para entregas posteriores.
 
 Consultar las [iteraciones](iterations.md), el [registro](iteration-log.md) y las [reglas de la app](../AGENTS.md).

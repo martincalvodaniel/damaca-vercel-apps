@@ -177,8 +177,12 @@ try {
   })
   assert.equal(full.status, "updated")
   assert.equal(full.articleId, article.articleId)
-  const duplicate = await save(token, { url, accessStatus: "unavailable" })
+  const duplicate = await save(token, {
+    url: `${url}&utm=fake`,
+    accessStatus: "unavailable",
+  })
   assert.equal(duplicate.status, "already_exists")
+  assert.equal(duplicate.articleId, article.articleId)
   const owned = await fetch(article.detailUrl, {
     headers: { cookie: first.cookie },
   })
