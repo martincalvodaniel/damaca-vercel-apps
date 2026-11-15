@@ -280,3 +280,9 @@ Este archivo es la única fuente de estado de cada iteración transversal. `vali
 - Aceptación: instalación reproducible y compatibilidad de la actualización con los workspaces y el envío Web Push. El Hub local conserva callbacks HTTP de loopback registrados y los demás requieren HTTPS.
 - Validación: Biome, tipos, suites y builds, más envío Web Push contra un servidor local.
 - Evidencia: [AGW-29](iteration-log.md#agw-29--actualizar-dependencias-del-monorepo).
+
+## AGW-30 — Generar los iconos de Damaca Digest
+
+- Estado: `validated`.
+- Rutas: generador raíz, recursos de Digest y documentación.
+- Aceptación: favicon nítido en tres tamaños, PNG cuadrado para Vercel e iconos públicos para Chrome, incluida la variante maskable. Verificar las variantes `main` e `int` del manifiesto y los vínculos en el HTML.

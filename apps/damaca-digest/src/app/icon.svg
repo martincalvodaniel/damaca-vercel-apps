@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Damaca Digest</title>
+  <rect width="64" height="64" rx="14" fill="#172554"/>
+  <path d="M12 20c8-2 14-1 18 3v24c-5-4-11-5-18-3zM34 23c4-4 10-5 18-3v24c-7-2-13-1-18 3z" fill="#eff6ff"/>
+  <path d="M39 17h9v17l-4.5-3-4.5 3z" fill="#34d399"/>
+</svg>

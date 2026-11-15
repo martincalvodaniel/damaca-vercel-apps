@@ -145,3 +145,9 @@ Inicio: 75% de 5 h y 95% de 7 d disponibles (10:10 CET).
 
 - Resolución: la actualización exige HTTPS para los callbacks web. Se conserva el flujo HTTP local con una excepción que solo se activa cuando la URL del Hub es HTTP de loopback y el destino también es de loopback. Better Auth sigue exigiendo que el callback esté registrado. La prueba rechaza destinos HTTP externos y rutas de loopback sin registrar.
 - Validación final: instalación congelada, Biome, tipos en los 12 workspaces, 18 pruebas de identidad, 10 suites, 6 pruebas del generador y builds de las diez apps y los paquetes compartidos. Las pruebas que requieren MongoDB aislado conservan sus omisiones. La autenticación se probó con servidores locales.
+
+## AGW-30 — Generar los iconos de Damaca Digest
+
+- [Aceptación](iterations.md#agw-30--generar-los-iconos-de-damaca-digest). Inicio en `int`, árbol limpio, base `8571cd0` y capacidad inicial del 68% en 5h y 53% en 7d.
+- El generador raíz produjo ICO 16/32/48, PNG de 192/512, variante maskable opaca y Apple Touch de 180 px desde un SVG de Digest. El PNG de 512 px queda disponible para el avatar de Vercel.
+- Pasaron Biome y tipos. Los builds Webpack de `main` e `int` sirvieron por HTTP los manifiestos, vínculos HTML, favicon, SVG y los PNG con sus dimensiones esperadas. La instalación en Android y la carga del avatar a Vercel no se realizaron.

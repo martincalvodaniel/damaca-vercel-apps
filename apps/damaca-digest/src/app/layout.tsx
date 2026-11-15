@@ -7,7 +7,10 @@ import "./globals.css"
 export const metadata: Metadata = {
   applicationName: installName,
   appleWebApp: { capable: true, title: installName },
-  icons: { apple: "/icons/apple-touch-icon.png" },
+  icons: {
+    icon: { url: "/icon.svg", type: "image/svg+xml" },
+    apple: "/icons/apple-touch-icon.png",
+  },
   title: "Damaca Digest",
   description: "A private app with Google sign-in and MongoDB-backed access.",
 }

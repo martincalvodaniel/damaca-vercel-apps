@@ -19,7 +19,9 @@ Aplicar un único protocolo de trabajo para todas las aplicaciones presentes y f
 
 ## Instalación de webapps
 
-Todas las apps sirven un manifiesto para instalarse en modo independiente. Los nombres base vigentes son `billing`, `card-wars`, `dalis-home`, `dalis-tasks`, `damaca-hub`, `damaca-pocs`, `damaca-secrets`, `ebrias`, `lbdp` y `pocha-score`. La rama `int` añade `-int`. Las apps nuevas usan el identificador del generador. La regla operativa está en [AGENTS.md](../AGENTS.md#web-app-installation) y la entrega transversal en [AGW-28](iterations.md#agw-28--instalación-uniforme-de-webapps).
+Todas las apps sirven un manifiesto para instalarse en modo independiente. Los nombres base vigentes son `billing`, `card-wars`, `dalis-home`, `dalis-tasks`, `damaca-digest`, `damaca-hub`, `damaca-pocs`, `damaca-secrets`, `ebrias`, `lbdp` y `pocha-score`. La rama `int` añade `-int`. Las apps nuevas usan el identificador del generador. La regla operativa está en [AGENTS.md](../AGENTS.md#web-app-installation) y la entrega transversal en [AGW-28](iterations.md#agw-28--instalación-uniforme-de-webapps).
+
+Damaca Digest dispone de un origen vectorial propio y usa el generador raíz para publicar favicon e iconos de instalación. [AGW-30](iterations.md#agw-30--generar-los-iconos-de-damaca-digest).
 
 ## Aplicaciones
 

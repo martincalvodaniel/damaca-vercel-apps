@@ -19,6 +19,10 @@ Las versiones exactas están en `package.json` y `bun.lock`. Bun es el gestor de
 
 La regla corresponde al despliegue en Vercel; no se aplica al servidor local de Next. Añadir este archivo no crea un proyecto, conecta el repositorio ni ejecuta un despliegue. La comprobación efectiva del filtro geográfico queda para un despliegue autorizado en Vercel.
 
+## Iconos
+
+Regenera el favicon y los iconos de instalación desde la raíz con `bun run icons:generate damaca-digest`. El [PNG de 512 px](public/icons/icon-512.png) está listo para usar como avatar del proyecto en Vercel.
+
 ## Arranque local
 
 Requisitos: Bun, Node.js (24 en CI) y credenciales OAuth de Google. MongoDB debe estar accesible antes de iniciar sesión, porque Better Auth persiste el estado de OAuth en la base.
