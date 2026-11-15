@@ -38,7 +38,7 @@ export default async function SharePage({
             <p className="break-all text-sm font-medium text-teal-800 dark:text-teal-300">
               {url}
             </p>
-            <ChatGptHandoff prompt={capturePrompt(url)} />
+            <ChatGptHandoff key={url} prompt={capturePrompt(url)} />
           </>
         ) : (
           <form action="/share" className="space-y-3">

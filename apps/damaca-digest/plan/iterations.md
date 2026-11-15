@@ -134,3 +134,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: contrato y herramientas MCP de lectura.
 - Aceptación: consultar capturas por intervalo UTC inclusivo, paginadas y agrupadas por día. Exigir permiso de lectura, aislar por propietario y excluir notas personales.
+
+## 15 — Copiar una captura para una sesión de ChatGPT abierta
+
+- Estado: `validated`.
+- Rutas: formulario para compartir y documentación.
+- Aceptación: copiar el prompt con o sin abrir ChatGPT. Confirmar la copia sin navegación y conservar la opción de copiar manualmente si se deniega el permiso.

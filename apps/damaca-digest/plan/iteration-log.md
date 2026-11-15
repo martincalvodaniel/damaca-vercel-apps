@@ -2,12 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 05 — Validar preproducción
-
-- [CI del commit `0a8cb16`](https://github.com/martincalvodaniel/damaca-vercel-apps/actions/runs/43770107401) terminó correctamente, incluido `digest-capture`. La revisión a dos anchos y la restauración con MongoDB desechable constan en 04b.
-- Verificado [Preview estable de int](https://damaca-digest-git-int-martincalvodaniels-projects.vercel.app) en READY, con origen `int@0a8cb16`. Los metadatos anunciaron el emisor y recurso del mismo host, scope `articles:write` y PKCE S256. MCP devolvió 401 sin token OAuth en una solicitud autenticada en Vercel mediante `vercel curl`.
-- Una petición pública de descubrimiento recibió 302 a `vercel.com/sso-api`. La protección sigue activa. El cliente real de ChatGPT aún necesita una vía de acceso a Preview para completar la prueba OAuth.
-
 ## 06 — Refinar biblioteca y lectura
 
 - Inicio en `int`, base `ffa9b0d`, con 70% en 5 h y 38% en 7 d. Se dejó Preview fuera del alcance por indicación del usuario.
@@ -53,3 +47,8 @@
 
 - `get_reading_digest` agrupa capturas por fecha UTC con paginación y el permiso `articles:read`. Distingue fecha de captura de publicación y estado de lectura.
 - La integración HTTP verificó dos páginas, el permiso y el aislamiento entre cuentas con MongoDB desechable. El build y la compilación de tipos pasaron.
+
+## 15 — Copiar una captura para una sesión de ChatGPT abierta
+
+- La recepción de enlaces permite copiar el prompt sin abrir otra sesión de ChatGPT y conserva la selección manual como alternativa.
+- Biome, tipos, 49 pruebas y build pasaron. Chrome a 320 px verificó copia sin navegación, copia con apertura interceptada y mensaje cuando el portapapeles devuelve un error.
