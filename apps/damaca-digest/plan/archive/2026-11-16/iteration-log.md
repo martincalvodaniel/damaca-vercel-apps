@@ -101,3 +101,8 @@
 ## 11 — Consultar lecturas relacionadas desde ChatGPT
 
 - `find_related_articles` reutiliza la consulta de la ficha y exige `articles:read`. La integración HTTP verificó resultados tras fusionar topics, el aislamiento entre propietarios y el rechazo de un token de solo escritura.
+
+## 12 — Organizar una lectura desde su ficha
+
+- La ficha permite añadir o quitar favoritos y marcar una lectura como leída o pendiente. La acción actualiza solo el campo elegido.
+- Biome, tipos, build e integración HTTP pasaron. Se verificó que una cuenta distinta y un formulario con una revisión anterior no pueden aplicar el cambio. Chrome confirmó el diseño a 320 y 1280 px.

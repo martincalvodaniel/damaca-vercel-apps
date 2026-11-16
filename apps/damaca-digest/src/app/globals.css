@@ -13,6 +13,8 @@
 
 :root {
   color-scheme: light;
+  --digest-desktop-nav: 3.5rem;
+  --digest-mobile-nav: calc(3.0625rem + env(safe-area-inset-bottom));
   --background: #f5f7fa;
   --surface: #ffffff;
   --panel-line: #dbe2ea;
@@ -51,12 +53,20 @@ body {
 }
 
 html {
-  scroll-padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+  scroll-padding-bottom: calc(var(--digest-mobile-nav) + 0.5rem);
+}
+
+html:has(.digest-editor-toolbar) {
+  scroll-padding-top: 3.25rem;
 }
 
 @media (min-width: 768px) {
+  html:has(.digest-editor-toolbar) {
+    scroll-padding-top: calc(var(--digest-desktop-nav) + 3.25rem);
+  }
+
   html {
-    scroll-padding-top: 6rem;
+    scroll-padding-top: calc(var(--digest-desktop-nav) + 0.5rem);
     scroll-padding-bottom: 0;
   }
 }
@@ -77,6 +87,24 @@ html {
 }
 
 @layer components {
+  .digest-icon-button {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    border-radius: 0.5rem;
+  }
+
+  .digest-icon-button:hover {
+    background: light-dark(#e6f4f0, #203944);
+  }
+
+  .digest-icon-button[aria-pressed="true"] {
+    color: light-dark(#115e59, #99f6e4);
+    background: light-dark(#ccfbf1, #153d3c);
+  }
+
   .digest-panel {
     background: var(--surface);
     border: 1px solid var(--panel-line);

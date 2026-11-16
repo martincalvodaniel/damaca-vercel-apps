@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 12 — Organizar una lectura desde su ficha
-
-- La ficha permite añadir o quitar favoritos y marcar una lectura como leída o pendiente. La acción actualiza solo el campo elegido.
-- Biome, tipos, build e integración HTTP pasaron. Se verificó que una cuenta distinta y un formulario con una revisión anterior no pueden aplicar el cambio. Chrome confirmó el diseño a 320 y 1280 px.
-
 ## 13 — Mostrar temas y enlaces originales en la biblioteca
 
 - Cada tarjeta enlaza al original, muestra hasta dos temas que activan su filtro y añade la fecha de captura cuando se conoce la de publicación. El vocabulario de la página se resuelve una vez.
@@ -54,3 +49,8 @@
 
 - La ruta Compartir sirve un enlace directo al esquema de la app para Android y conserva la alternativa HTTPS. Si copiar agota la activación, muestra que el prompt se copió y permite tocar el enlace.
 - Biome, 50 pruebas, build e integración HTTP de int pasaron. La prueba HTTP comprobó el intent renderizado al simular Chrome para Android. Falta confirmar que la app lo resuelve en un dispositivo real.
+
+## 22 — Compactar la interfaz de Digest
+
+- Topics pasa a la navegación. La captura ocupa el icono a la izquierda del buscador. La ficha agrupa sus acciones y el editor las mantiene arriba, con confirmación de borrado.
+- Pasaron Biome, tipos, 50 pruebas, build e integración HTTP con MongoDB. Chrome a 320 y 1280 px comprobó la alineación del buscador, la navegación, la barra sticky, el foco inicial del diálogo, la cancelación, el guardado de favorito y la confirmación del borrado.
