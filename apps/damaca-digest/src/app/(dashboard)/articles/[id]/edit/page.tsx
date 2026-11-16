@@ -30,14 +30,16 @@ export default async function EditArticlePage({
   )
   const deleteThisArticle = removeArticle.bind(null, id, article.revision)
   return (
-    <section className="mx-auto max-w-2xl space-y-3">
+    <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
       <Link
         className="inline-flex min-h-11 items-center underline"
         href={`/articles/${id}`}
       >
         Back to article
       </Link>
-      <h1 className="text-2xl font-semibold">Edit article</h1>
+      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        Edit article
+      </h1>
       <ArticleEditor
         id={article.id}
         revision={article.revision}
@@ -58,7 +60,7 @@ export default async function EditArticlePage({
       />
       <details
         open={deletion === "confirm" || deletion === "failed"}
-        className="rounded-lg border border-zinc-300 px-3 dark:border-zinc-700"
+        className="digest-panel rounded-xl px-3"
       >
         <summary className="min-h-11 py-3 text-sm">Delete article</summary>
         <form action={deleteThisArticle} className="space-y-2 pb-3 text-sm">

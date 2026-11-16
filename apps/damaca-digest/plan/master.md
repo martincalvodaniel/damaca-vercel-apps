@@ -14,8 +14,14 @@ La captura MCP, la biblioteca con búsqueda ponderada, filtros y paginación, la
 - Biblioteca con búsqueda ponderada mediante `$text`, filtros, orden y paginación. Ficha con edición, notas, favoritos, estado de lectura y borrado. Vocabulario por propietario con IDs estables, alias y `list_topics`.
 - Instalación web con manifiesto e iconos locales. Configuración de Vercel independiente y excepciones geográficas limitadas a endpoints MCP y OAuth de máquina.
 
+## Entregas de la segunda fase
+
+La biblioteca y la ficha incluyen temas, enlaces al original, acciones rápidas de lectura, relacionados y descargas en Markdown y JSON. Ajustes permite exportar toda la biblioteca. Las herramientas MCP permiten recuperar, buscar y relacionar fichas y agrupar capturas por periodo con el permiso OAuth `articles:read`.
+
+La PWA recibe enlaces de Compartir y prepara un prompt para ChatGPT. El usuario selecciona el conector y confirma el envío en el compositor. La copia puede abrir ChatGPT o dejar que el usuario vuelva a una sesión ya abierta.
+
 ## Verificaciones pendientes
 
-El usuario confirmó el flujo de escritura MCP desde ChatGPT en producción con fuentes de acceso completo, parcial y no disponible. Quedan por verificar el aislamiento entre entornos y la restauración de backups. La captura directa desde Android, herramientas de lectura, exportación, embeddings e integraciones de publicación quedan para entregas posteriores.
+El usuario confirmó la escritura MCP desde ChatGPT en producción con fuentes de acceso completo, parcial y no disponible. Tras publicar la segunda fase, queda comprobar que el destino aparezca en Compartir en un Android real y que el enlace llegue a la ficha desde una sesión de ChatGPT con el conector actualizado. Quedan también por verificar el aislamiento entre entornos y la restauración de backups de infraestructura. Embeddings e integraciones de publicación quedan para entregas posteriores.
 
 Consultar las [iteraciones](iterations.md), el [registro](iteration-log.md) y las [reglas de la app](../AGENTS.md).

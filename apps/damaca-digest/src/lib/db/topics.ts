@@ -128,31 +128,60 @@ function referencedTopics(
   ]
 }
 
+export async function createTopicLabelResolver(ownerId: string) {
+  const catalog = await readCatalog(ownerId)
+  return (topicIds: string[], legacyLabels: string[]) =>
+    referencedTopics(catalog, topicIds, legacyLabels).map(({ label }) => label)
+}
+
 export async function articleTopicLabels(
   ownerId: string,
   topicIds: string[],
   legacyLabels: string[]
 ) {
   if (!topicIds.length && !legacyLabels.length) return []
-  const catalog = await readCatalog(ownerId)
-  return referencedTopics(catalog, topicIds, legacyLabels).map(
-    ({ label }) => label
-  )
+  const resolve = await createTopicLabelResolver(ownerId)
+  return resolve(topicIds, legacyLabels)
+}
+
+export type TopicMatches = { ids: ObjectId[]; legacyLabels: string[] }
+
+function matchesForIds(
+  catalog: Awaited<ReturnType<typeof readCatalog>>,
+  selected: Set<string>
+): TopicMatches {
+  return {
+    ids: catalog.entries.flatMap((entry) => {
+      const canonical = catalog.resolve(entry.id)
+      return canonical && selected.has(canonical.id)
+        ? [new ObjectId(entry.id)]
+        : []
+    }),
+    legacyLabels: catalog.legacyLabels.filter((legacy) => {
+      const canonical = catalog.find(legacy)
+      return !!canonical && selected.has(canonical.id)
+    }),
+  }
 }
 
 export async function findTopicReferences(ownerId: string, label: string) {
   const catalog = await readCatalog(ownerId)
-  const selected = catalog.find(label)
-  if (!selected) return { ids: [], legacyLabels: [] }
+  const entry = catalog.find(label)
+  return matchesForIds(catalog, new Set(entry ? [entry.id] : []))
+}
+
+export async function articleTopicContext(
+  ownerId: string,
+  topicIds: string[],
+  legacyLabels: string[]
+) {
+  if (!topicIds.length && !legacyLabels.length)
+    return { labels: [], matches: { ids: [], legacyLabels: [] } }
+  const catalog = await readCatalog(ownerId)
+  const entries = referencedTopics(catalog, topicIds, legacyLabels)
   return {
-    ids: catalog.entries.flatMap((entry) =>
-      catalog.resolve(entry.id)?.id === selected.id
-        ? [new ObjectId(entry.id)]
-        : []
-    ),
-    legacyLabels: catalog.legacyLabels.filter(
-      (legacy) => catalog.find(legacy)?.id === selected.id
-    ),
+    labels: entries.map((entry) => entry.label),
+    matches: matchesForIds(catalog, new Set(entries.map((entry) => entry.id))),
   }
 }
 

@@ -134,7 +134,23 @@ En cada entorno autorizado, configura `CHATGPT_CLIENT_ID`, `CHATGPT_CLIENT_SECRE
 
 ChatGPT puede invocar `list_topics` con una búsqueda opcional y una página para reutilizar nombres y alias antes de guardar. En la web, **Topics** muestra los recuentos y permite renombrar, añadir alias y fusionar equivalencias. La ficha permite cambiar sus topics en **Edit article**. Las etiquetas capturadas antes de este cambio siguen visibles y se resuelven junto al vocabulario nuevo.
 
+Para buscar por texto y filtros desde ChatGPT, habilita `search_articles` y `get_article`. Usa `find_related_articles` para buscar lecturas con temas en común a partir de un ID. Esas herramientas necesitan el scope `articles:read`. Después de desplegarlas, actualiza el conector y concede el nuevo permiso. Mantén `articles:write` para capturar y listar los topics de la captura. Las respuestas de las herramientas de lectura excluyen las notas personales. `get_reading_digest` agrupa las capturas de un intervalo inclusivo por fecha UTC y devuelve hasta 20 registros por página.
+
 Las pruebas HTTP usan un MongoDB desechable en loopback, credenciales ficticias y sesiones persistidas de prueba. Ejecutar desde la raíz con `DIGEST_TEST_MONGO_PORT=<puerto> bash apps/damaca-digest/test/run-capture-http.sh`. El runner compila y arranca Next, comprueba OAuth/MCP y el control de acceso web y termina el proceso local. El contenedor MongoDB desechable se elimina por separado. La prueba de Google y ChatGPT reales requiere un entorno HTTPS autorizado.
+
+## Relacionados y descargas
+
+La ficha muestra hasta tres lecturas recientes con topics en común. **Download Markdown** y **Download JSON** exportan la ficha y sus notas personales mediante una descarga autenticada. En **Settings → Export library** se pueden descargar todos los artículos y notas de la cuenta en cualquiera de los dos formatos.
+
+## Compartir un enlace desde Android
+
+Instala Damaca Digest desde Chrome. En la app de origen, abre **Compartir** y selecciona **Damaca Digest**. La página **Capture a link** prepara un prompt con el enlace. Pulsa **Copy prompt** para pegarlo en una sesión de ChatGPT que ya tengas abierta. Selecciona **@damaca-digest-int** para `int` o **@damaca-digest** para producción y confirma el envío. **Copy prompt and open ChatGPT** y **Open ChatGPT** intentan abrir la app en Android y iOS y recurren a la web si el enlace no lo gestiona la app. También puedes abrir **Capture link** desde la biblioteca y pegar una URL. La recepción prepara el prompt y deja el guardado para el flujo OAuth/MCP habitual. [Web Share Target en Chrome](https://developer.chrome.com/docs/capabilities/web-apis/web-share-target).
+
+La documentación de OpenAI describe la selección del conector con `@` en el compositor. No encontramos una API documentada para preseleccionar un MCP privado de ChatGPT a partir de un intent de Android o un enlace externo, ni para enviar automáticamente ese mensaje. La captura usa el portapapeles y abre ChatGPT con un intent en Chrome para Android o un enlace universal en iOS. Si el navegador impide copiar, el prompt sigue seleccionable. [Conectar y usar un servidor MCP en ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server).
+
+### Comprobación en un dispositivo
+
+Tras publicar los cambios, instala Digest desde Chrome en Android y comparte una fuente pública desde Chrome y desde otra app. Comprueba que **Damaca Digest** aparece en el menú de compartir y que el prompt conserva el enlace esperado. Completa el envío con el complemento del entorno en ChatGPT y abre la ficha que devuelve. Repite el enlace con un parámetro de tracking y confirma que devuelve el mismo `articleId`. La revisión a 320 px y la inspección de manifiestos se hicieron en local. Esta comprobación requiere el registro real de la PWA en Android y el conector del entorno donde se publique.
 
 ## Trabajar con agentes
 

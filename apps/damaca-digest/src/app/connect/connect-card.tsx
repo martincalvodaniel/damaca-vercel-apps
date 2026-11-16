@@ -6,7 +6,13 @@ import { useCallback, useState } from "react"
 
 const authClient = createAuthClient({ plugins: [oauthProviderClient()] })
 
-export function ConnectCard({ step }: { step: "sign-in" | "consent" }) {
+export function ConnectCard({
+  step,
+  permissions = [],
+}: {
+  step: "sign-in" | "consent"
+  permissions?: string[]
+}) {
   const [pending, setPending] = useState(false)
   const [failed, setFailed] = useState(false)
 
@@ -41,34 +47,45 @@ export function ConnectCard({ step }: { step: "sign-in" | "consent" }) {
   const deny = useCallback(() => submit(false), [submit])
 
   return (
-    <main className="grid min-h-screen place-items-center p-4">
-      <section className="w-full max-w-sm space-y-4 rounded-xl border border-zinc-300 p-4 dark:border-zinc-700">
-        <h1 className="text-xl font-semibold">Connect Damaca Digest</h1>
-        <p>
+    <main className="grid min-h-dvh place-items-center p-3 sm:p-6">
+      <section className="digest-panel w-full max-w-sm space-y-3 rounded-2xl p-4 sm:space-y-4 sm:p-6">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Connect Damaca Digest
+        </h1>
+        <p className="text-sm text-zinc-700 dark:text-zinc-300">
           {step === "sign-in"
             ? "Sign in to connect ChatGPT to your Damaca Digest account."
-            : "Allow ChatGPT to save articles in your private library."}
+            : "Review the permissions ChatGPT is requesting."}
         </p>
-        <button
-          className="mr-2 min-h-11 rounded-lg border border-zinc-400 px-4"
-          type="button"
-          disabled={pending}
-          onClick={accept}
-        >
-          {step === "sign-in" ? "Continue with Google" : "Allow"}
-        </button>
-        {step === "consent" ? (
+        {step === "consent" && permissions.length > 0 ? (
+          <ul className="list-disc space-y-1 ps-5 text-sm">
+            {permissions.map((permission) => (
+              <li key={permission}>{permission}</li>
+            ))}
+          </ul>
+        ) : null}
+        <div className="flex flex-wrap gap-2">
           <button
-            className="mr-2 min-h-11 rounded-lg border border-zinc-400 px-4"
+            className="min-h-11 rounded-lg bg-teal-800 px-4 text-sm font-semibold text-white hover:bg-teal-900 disabled:opacity-60"
             type="button"
             disabled={pending}
-            onClick={deny}
+            onClick={accept}
           >
-            Deny
+            {step === "sign-in" ? "Continue with Google" : "Allow"}
           </button>
-        ) : null}
+          {step === "consent" ? (
+            <button
+              className="digest-panel min-h-11 rounded-lg px-4 text-sm font-semibold hover:border-teal-600 disabled:opacity-60"
+              type="button"
+              disabled={pending}
+              onClick={deny}
+            >
+              Deny
+            </button>
+          ) : null}
+        </div>
         {failed ? (
-          <p role="alert">
+          <p role="alert" className="text-sm">
             Could not connect. Restart the connection from ChatGPT.
           </p>
         ) : null}

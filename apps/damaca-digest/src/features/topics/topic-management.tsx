@@ -2,7 +2,8 @@ import { updateTopic } from "@/features/topics/actions"
 
 const field =
   "block min-h-11 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
-const button = "min-h-11 rounded-lg bg-emerald-800 px-3 font-medium text-white"
+const button =
+  "min-h-11 rounded-lg bg-teal-800 px-3 hover:bg-teal-900 font-medium text-white"
 
 type TopicChoice = { id: string; label: string }
 
@@ -19,10 +20,7 @@ export function TopicManagement({
     </option>
   ))
   return (
-    <details
-      open={open}
-      className="rounded-lg border border-zinc-300 px-3 dark:border-zinc-700"
-    >
+    <details open={open} className="digest-panel rounded-xl px-3">
       <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
         Manage topics
       </summary>

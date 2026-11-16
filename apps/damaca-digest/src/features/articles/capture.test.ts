@@ -77,7 +77,8 @@ it("registers the capture schema and returns structured results over MCP", async
   }
   const server = createArticleServer(
     async () => result,
-    async () => [{ id: "fixture", label: "Engineering", aliases: [] }]
+    async () => [{ id: "fixture", label: "Engineering", aliases: [] }],
+    true
   )
   await server.connect(serverTransport)
   await client.connect(clientTransport)

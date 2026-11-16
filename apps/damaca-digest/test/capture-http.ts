@@ -1,7 +1,8 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { getAuthEnv, getChatGptClient, getDatabaseEnv } from "@/config/env"
-import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
+import { installName } from "@/config/install-name"
+import { captureScope, getMcpUrls, readScope } from "@/lib/auth/mcp-config"
 import { saveArticle } from "@/lib/db/articles"
 import { closeDatabaseConnection, getDatabase } from "@/lib/db/client"
 import { grantUserAccess, revokeUserAccess } from "@/lib/db/user-access"
@@ -27,7 +28,11 @@ if (
 const { issuer, resource, metadata } = getMcpUrls()
 const fixtureClient = client
 
-async function authorize(cookie: string, method: "post" | "basic") {
+async function authorize(
+  cookie: string,
+  method: "post" | "basic",
+  scope: string = captureScope
+) {
   const verifier = crypto.randomUUID() + crypto.randomUUID()
   const url = new URL(`${issuer}/oauth2/authorize`)
   url.search = new URLSearchParams({
@@ -35,7 +40,7 @@ async function authorize(cookie: string, method: "post" | "basic") {
     redirect_uri: fixtureClient.redirectUri,
     response_type: "code",
     state: "fixture-state",
-    scope: `${captureScope} offline_access`,
+    scope: `${scope} offline_access`,
     resource,
   }).toString()
   const noPkce = await fetch(url, { headers: { cookie }, redirect: "manual" })
@@ -53,6 +58,17 @@ async function authorize(cookie: string, method: "post" | "basic") {
   assert.equal(authorization.status, 302)
   const consent = new URL(authorization.headers.get("location") ?? "", origin)
   assert.equal(consent.pathname, "/connect/consent")
+  const consentPage = await fetch(consent, { headers: { cookie } })
+  assert.equal(consentPage.status, 200)
+  const consentHtml = await consentPage.text()
+  assert.equal(
+    consentHtml.includes("Search and read saved articles"),
+    scope.includes(readScope)
+  )
+  assert.equal(
+    consentHtml.includes("Save articles in your private library"),
+    scope.includes(captureScope)
+  )
   const decision = await fetch(`${issuer}/oauth2/consent`, {
     method: "POST",
     headers: { origin, cookie, "content-type": "application/json" },
@@ -133,6 +149,36 @@ async function save(token: string, entry: Record<string, unknown>) {
 }
 
 try {
+  const manifest = await (await fetch(`${origin}/manifest.webmanifest`)).json()
+  assert.deepEqual(manifest.share_target, {
+    action: "/share",
+    method: "GET",
+    params: { url: "url", text: "text" },
+  })
+  const shared = await fetch(
+    `${origin}/share?text=${encodeURIComponent("Article title\nhttps://example.com/shared")}`,
+    {
+      redirect: "manual",
+      headers: { "User-Agent": "Mozilla/5.0 (Linux; Android 15) Chrome/140.0" },
+    }
+  )
+  assert.equal(shared.status, 200)
+  const sharedHtml = await shared.text()
+  assert.match(sharedHtml, /Copy prompt and open ChatGPT/)
+  assert.match(
+    sharedHtml,
+    /href="intent:\/\/#Intent;scheme=chatgpt;package=com.openai.chatgpt;S\.browser_fallback_url=https%3A%2F%2Fchatgpt.com%2F;end"/
+  )
+  assert.ok(sharedHtml.includes(`Use @${installName} to read`))
+  assert.ok(sharedHtml.includes(`<strong>@${installName}</strong>`))
+  assert.match(sharedHtml, /https:\/\/example.com\/shared/)
+  const rejectedShare = await fetch(
+    `${origin}/share?url=javascript%3Aalert%281%29`
+  )
+  const rejectedHtml = await rejectedShare.text()
+  assert.match(rejectedHtml, /Share or paste a single HTTP or HTTPS link/)
+  assert.doesNotMatch(rejectedHtml, /Copy prompt and open ChatGPT/)
+
   assert.equal((await fetch(metadata)).status, 200)
   assert.equal(
     (await fetch(`${origin}/.well-known/oauth-authorization-server/api/auth`))
@@ -207,7 +253,7 @@ try {
       accessStatus: "full",
     })
   }
-  await saveArticle(second.ownerId, {
+  const otherOwnerFixture = await saveArticle(second.ownerId, {
     url: "https://example.com/library-private",
     title: "Pagination Fixture Other Owner",
     authors: ["A. Writer"],
@@ -257,6 +303,7 @@ try {
     headers: { cookie: first.cookie },
   })
   assert.equal(wrongEditor.status, 404)
+  assert.match(await wrongEditor.text(), /Article not found/)
   const editor = await fetch(editUrl, { headers: { cookie: second.cookie } })
   assert.equal(editor.status, 200)
   const editorHtml = await editor.text()
@@ -301,6 +348,33 @@ try {
   assert.match(enrichedHtml, /Personal topic/)
   assert.doesNotMatch(enrichedHtml, /ChatGPT topic/)
   assert.match(enrichedHtml, /read · Favorite|read<!-- --> · Favorite/)
+  const jsonUrl = `${other.detailUrl}/export?format=json`
+  const privateExport = await fetch(jsonUrl, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(privateExport.status, 404)
+  const exported = await fetch(jsonUrl, { headers: { cookie: second.cookie } })
+  assert.equal(exported.status, 200)
+  assert.equal(exported.headers.get("cache-control"), "private, no-store")
+  assert.match(
+    exported.headers.get("content-disposition") ?? "",
+    /attachment.*\.json/
+  )
+  const snapshot = await exported.json()
+  assert.equal(snapshot.title, "Manually corrected title")
+  assert.equal(snapshot.personalNotes, "Reader's private note")
+  assert.deepEqual(snapshot.topics, ["Personal topic"])
+  assert.equal("ownerId" in snapshot, false)
+  assert.equal("revision" in snapshot, false)
+  const markdown = await fetch(`${other.detailUrl}/export?format=md`, {
+    headers: { cookie: second.cookie },
+  })
+  assert.equal(markdown.status, 200)
+  assert.match(
+    await markdown.text(),
+    /## Personal notes\n\nReader's private note/
+  )
+
   console.info("Verified that recapture preserves manual edits.")
   const updatedEditor = await fetch(editUrl, {
     headers: { cookie: second.cookie },
@@ -413,18 +487,202 @@ try {
     headers: { cookie: first.cookie },
   })
   assert.match(await mergedPage.text(), /2(?:<!-- -->)? articles/)
+  const matchingTopics = await fetch(`${topicsUrl}?q=ARTIFICIAL+INTELLIGENCE`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.match(await matchingTopics.text(), /href="\/\?topic=Engineering"/)
+  const noTopics = await fetch(`${topicsUrl}?q=missing-fixture-label`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.match(await noTopics.text(), /No matching topics/)
   const byAlias = await fetch(`${origin}/?topic=Artificial+intelligence`, {
     headers: { cookie: first.cookie },
   })
   const byAliasHtml = await byAlias.text()
   assert.match(byAliasHtml, /Topic fixture/)
+  assert.match(byAliasHtml, /href="\/\?topic=Engineering"/)
+  assert.match(byAliasHtml, /href="https:\/\/example\.com\//)
   assert.match(byAliasHtml, /HTTP capture fixture/)
-  assert.match(
-    await (
-      await fetch(withTopics.detailUrl, { headers: { cookie: first.cookie } })
-    ).text(),
-    /Topics:.*Engineering/
+  const related = await fetch(withTopics.detailUrl, {
+    headers: { cookie: first.cookie },
+  })
+  const relatedHtml = await related.text()
+  assert.match(relatedHtml, /aria-label="Topics".*Engineering/)
+  assert.match(relatedHtml, /Related articles/)
+  assert.match(relatedHtml, new RegExp(`/articles/${article.articleId}`))
+
+  async function invoke(
+    bearer: string,
+    tool: string,
+    input: Record<string, unknown>
+  ) {
+    const response = await call("tools/call", bearer, input, tool)
+    assert.equal(response.status, 200)
+    return (await response.json()).result
+  }
+  const writerRead = await invoke(token, "get_article", {
+    id: article.articleId,
+  })
+  assert.equal(writerRead.isError, true)
+  assert.match(writerRead._meta["mcp/www_authenticate"][0], /articles:read/)
+  const reader = await authorize(first.cookie, "basic", readScope)
+  const otherReader = await authorize(second.cookie, "post", readScope)
+  const readByUrl = await invoke(reader, "get_article", {
+    url: `${url}&utm=fake`,
+  })
+  assert.equal(readByUrl.structuredContent.article.id, article.articleId)
+  assert.equal("personalNotes" in readByUrl.structuredContent.article, false)
+  assert.equal(
+    (await invoke(otherReader, "get_article", { id: article.articleId }))
+      .structuredContent.article,
+    null
   )
+  const relatedInput = { id: withTopics.articleId }
+  const relatedRead = await invoke(
+    reader,
+    "find_related_articles",
+    relatedInput
+  )
+  assert.equal(relatedRead.structuredContent.articles[0]?.id, article.articleId)
+  const otherRelated = await invoke(
+    otherReader,
+    "find_related_articles",
+    relatedInput
+  )
+  assert.deepEqual(otherRelated.structuredContent.articles, [])
+  const writerRelated = await invoke(
+    token,
+    "find_related_articles",
+    relatedInput
+  )
+  assert.match(writerRelated._meta["mcp/www_authenticate"][0], /articles:read/)
+  const query = { q: "Pagination", author: "A. Writer", page: 2, sort: "title" }
+  const searched = await invoke(reader, "search_articles", query)
+  assert.deepEqual(
+    searched.structuredContent.articles.map(
+      ({ title }: { title: string }) => title
+    ),
+    ["Pagination Fixture 20"]
+  )
+  assert.equal(searched.structuredContent.nextPage, null)
+  const capturedAt = Date.parse(readByUrl.structuredContent.article.capturedAt)
+  const dates = (offset: number) =>
+    new Date(capturedAt + offset * 86_400_000).toISOString().slice(0, 10)
+  const digestInput = { capturedFrom: dates(-1), capturedTo: dates(1) }
+  type DigestDay = {
+    date: string
+    articles: { id: string; capturedAt: string }[]
+  }
+  const digest = await invoke(reader, "get_reading_digest", digestInput)
+  const firstDays: DigestDay[] = digest.structuredContent.days
+  assert.equal(firstDays.flatMap(({ articles }) => articles).length, 20)
+  assert.equal(digest.structuredContent.nextPage, 2)
+  const remainingDigest = await invoke(reader, "get_reading_digest", {
+    ...digestInput,
+    page: 2,
+  })
+  const remainingDays: DigestDay[] = remainingDigest.structuredContent.days
+  assert.equal(remainingDays.flatMap(({ articles }) => articles).length, 3)
+  assert.equal(remainingDigest.structuredContent.nextPage, null)
+  for (const { date, articles } of [...firstDays, ...remainingDays]) {
+    assert.ok(articles.every((item) => item.capturedAt.startsWith(date)))
+  }
+  const otherDigest = await invoke(
+    otherReader,
+    "get_reading_digest",
+    digestInput
+  )
+  const otherDays: DigestDay[] = otherDigest.structuredContent.days
+  const otherIds = otherDays.flatMap(({ articles }) =>
+    articles.map(({ id }) => id)
+  )
+  assert.deepEqual(otherIds, [otherOwnerFixture.articleId])
+  const writerDigest = await invoke(token, "get_reading_digest", digestInput)
+  assert.match(writerDigest._meta["mcp/www_authenticate"][0], /articles:read/)
+  const readerWrite = await invoke(reader, "save_article", {
+    url: "https://example.com/readonly-attempt",
+    accessStatus: "unavailable",
+  })
+  assert.equal(readerWrite.isError, true)
+  assert.match(readerWrite._meta["mcp/www_authenticate"][0], /articles:write/)
+
+  const libraryJson = await fetch(`${origin}/settings/export?format=json`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(libraryJson.status, 200)
+  assert.equal(libraryJson.headers.get("cache-control"), "private, no-store")
+  const backup = (await libraryJson.json()) as {
+    id: string
+    title: string
+    topics: string[]
+  }[]
+  assert.equal(backup.length, 23)
+  assert.equal(
+    backup.some(({ title }) => title.includes("Other Owner")),
+    false
+  )
+  assert.deepEqual(
+    backup.find(({ id }) => id === withTopics.articleId)?.topics,
+    ["Engineering"]
+  )
+  const libraryMarkdown = await fetch(`${origin}/settings/export?format=md`, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(libraryMarkdown.status, 200)
+  const backupMarkdown = await libraryMarkdown.text()
+  assert.match(backupMarkdown, /^# Damaca Digest/)
+  assert.match(backupMarkdown, /## Topic fixture/)
+  assert.doesNotMatch(backupMarkdown, /Other Owner/)
+
+  const readingForm = [...relatedHtml.matchAll(/<form[\s\S]*?<\/form>/g)]
+    .map(([form]) => form)
+    .find((form) => form.includes('name="readingChange"'))
+  assert.ok(readingForm)
+  async function changeReading(
+    form: string,
+    cookie: string,
+    operation: string
+  ) {
+    const body = serverActionForm(form)
+    body.set("readingChange", operation)
+    return fetch(withTopics.detailUrl, {
+      method: "POST",
+      headers: { cookie, origin },
+      body,
+      redirect: "manual",
+      signal: AbortSignal.timeout(10_000),
+    })
+  }
+  const invalidReading = await changeReading(
+    readingForm,
+    first.cookie,
+    "unknown"
+  )
+  assert.equal(invalidReading.status, 303)
+  const deniedReading = await changeReading(
+    readingForm,
+    second.cookie,
+    "favorite"
+  )
+  assert.match(
+    deniedReading.headers.get("location") ?? "",
+    /readingUpdate=failed/
+  )
+  const changedReading = await changeReading(readingForm, first.cookie, "read")
+  assert.equal(changedReading.status, 303)
+  assert.doesNotMatch(changedReading.headers.get("location") ?? "", /failed/)
+  const staleReading = await changeReading(
+    readingForm,
+    first.cookie,
+    "favorite"
+  )
+  assert.match(
+    staleReading.headers.get("location") ?? "",
+    /readingUpdate=failed/
+  )
+  const updatedReading = await invoke(reader, "get_article", relatedInput)
+  assert.equal(updatedReading.structuredContent.article.readingStatus, "read")
+  assert.equal(updatedReading.structuredContent.article.favorite, false)
 
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)

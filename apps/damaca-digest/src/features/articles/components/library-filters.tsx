@@ -3,7 +3,7 @@ import { accessStatus, contentType, readingStatus } from "@/schemas/article"
 import type { LibraryQuery } from "@/schemas/library"
 
 const inputClass =
-  "block min-h-10 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
+  "block min-h-11 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 focus-visible:outline-2 focus-visible:outline-teal-600 dark:border-zinc-700"
 
 export function LibraryFilters({ query }: { query: LibraryQuery }) {
   const dateFields = [
@@ -25,7 +25,7 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
   ] as const
 
   return (
-    <form action="/" className="space-y-2">
+    <form action="/" className="digest-panel space-y-2 rounded-xl p-3 sm:p-4">
       <div className="flex items-end gap-2">
         <label className="min-w-0 flex-1 text-sm">
           Search articles
@@ -33,18 +33,19 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
             type="search"
             name="q"
             defaultValue={query.q}
+            placeholder="Title, author, or keyword"
             maxLength={200}
             className={inputClass}
           />
         </label>
         <button
           type="submit"
-          className="min-h-11 rounded-lg bg-emerald-800 px-3 font-medium text-white"
+          className="min-h-11 rounded-lg bg-teal-800 hover:bg-teal-900 px-3 font-medium text-white"
         >
           Search
         </button>
       </div>
-      <details className="rounded-lg border border-zinc-300 px-3 dark:border-zinc-700">
+      <details className="rounded-lg border-t border-zinc-200 px-1 dark:border-zinc-800">
         <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
           Filters and sort
         </summary>
@@ -112,7 +113,7 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
           </label>
           <button
             type="submit"
-            className="min-h-11 rounded-lg bg-emerald-800 px-3 font-medium text-white"
+            className="min-h-11 rounded-lg bg-teal-800 hover:bg-teal-900 px-3 font-medium text-white"
           >
             Apply filters
           </button>

@@ -8,6 +8,7 @@ import {
   articleTopicLabels,
   findTopicReferences,
   registerTopics,
+  type TopicMatches,
 } from "@/lib/db/topics"
 import type {
   ArticleCapture,
@@ -164,6 +165,14 @@ export async function findArticle(ownerId: string, id: string) {
   return document ? serialize(document) : null
 }
 
+export async function findArticleByUrl(ownerId: string, url: string) {
+  const document = await (await articles()).findOne({
+    ownerId,
+    canonicalUrl: normalizeArticleUrl(url),
+  })
+  return document ? serialize(document) : null
+}
+
 export async function editArticle(
   ownerId: string,
   id: string,
@@ -232,6 +241,19 @@ export async function editArticle(
   return result.matchedCount === 1
 }
 
+export async function updateArticleReading(
+  ownerId: string,
+  id: string,
+  revision: number,
+  change: { favorite: boolean } | { readingStatus: "read" | "unread" }
+) {
+  const result = await (await articles()).updateOne(
+    { ownerId, _id: new ObjectId(id), revision },
+    { $set: { ...change, updatedAt: new Date() }, $inc: { revision: 1 } }
+  )
+  return result.matchedCount === 1
+}
+
 export async function deleteArticle(
   ownerId: string,
   id: string,
@@ -266,6 +288,55 @@ function dateRange(from?: string, to?: string) {
   }
 }
 
+function topicFilters({
+  ids,
+  legacyLabels,
+}: TopicMatches): Filter<ArticleDocument>[] {
+  return [
+    { topicIds: { $in: ids } },
+    { topicIds: { $exists: false }, proposedTopics: { $in: legacyLabels } },
+  ]
+}
+
+export type RelatedArticle = { id: string; title: string; source: string }
+
+export async function listRelatedArticles(
+  ownerId: string,
+  id: string,
+  matches: TopicMatches
+): Promise<RelatedArticle[]> {
+  if (!matches.ids.length && !matches.legacyLabels.length) return []
+  const documents = await (await articles())
+    .find({
+      ownerId,
+      _id: { $ne: new ObjectId(id) },
+      $or: topicFilters(matches),
+    })
+    .project<{
+      _id: ObjectId
+      title?: string
+      source?: string
+      sourceDomain: string
+    }>({ title: 1, source: 1, sourceDomain: 1 })
+    .sort(librarySorts.capture)
+    .limit(3)
+    .toArray()
+  return documents.map((article) => ({
+    id: article._id.toHexString(),
+    title: article.title ?? article.sourceDomain,
+    source: article.source ?? article.sourceDomain,
+  }))
+}
+
+export async function* iterateLibraryArticles(ownerId: string) {
+  const cursor = (await articles()).find({ ownerId }).sort(librarySorts.capture)
+  try {
+    for await (const document of cursor) yield serialize(document)
+  } finally {
+    await cursor.close()
+  }
+}
+
 export async function listArticles(ownerId: string, query: LibraryQuery) {
   const filter: Filter<ArticleDocument> = { ownerId }
   if (query.q) filter.$text = { $search: query.q }
@@ -274,23 +345,10 @@ export async function listArticles(ownerId: string, query: LibraryQuery) {
     const source = exactText(query.source)
     filter.$or = [{ source }, { sourceDomain: source }]
   }
-  if (query.topic) {
-    const { ids, legacyLabels } = await findTopicReferences(
-      ownerId,
-      query.topic
-    )
+  if (query.topic)
     filter.$and = [
-      {
-        $or: [
-          { topicIds: { $in: ids } },
-          {
-            topicIds: { $exists: false },
-            proposedTopics: { $in: legacyLabels },
-          },
-        ],
-      },
+      { $or: topicFilters(await findTopicReferences(ownerId, query.topic)) },
     ]
-  }
   if (query.language) filter.language = exactText(query.language)
   if (query.type) filter.contentType = query.type
   if (query.access) filter.accessStatus = query.access

@@ -1,26 +1,37 @@
 import { notFound } from "next/navigation"
 import { ArticleDetail } from "@/features/articles/components/article-detail"
 import { requireAuthorizedSession } from "@/lib/auth/session"
-import { findArticle } from "@/lib/db/articles"
-import { articleTopicLabels } from "@/lib/db/topics"
+import { findArticle, listRelatedArticles } from "@/lib/db/articles"
+import { articleTopicContext } from "@/lib/db/topics"
 import { articleId } from "@/schemas/article"
 
 export default async function ArticlePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ readingUpdate?: string | string[] }>
 }) {
-  const [{ user }, { id }] = await Promise.all([
+  const [{ user }, { id }, { readingUpdate }] = await Promise.all([
     requireAuthorizedSession(),
     params,
+    searchParams,
   ])
   if (!articleId.safeParse(id).success) notFound()
   const article = await findArticle(user.id, id)
   if (!article) notFound()
-  const topics = await articleTopicLabels(
+  const { labels, matches } = await articleTopicContext(
     user.id,
     article.topicIds,
     article.proposedTopics ?? []
   )
-  return <ArticleDetail article={article} topics={topics} />
+  const related = await listRelatedArticles(user.id, id, matches)
+  return (
+    <ArticleDetail
+      article={article}
+      topics={labels}
+      related={related}
+      readingUpdateFailed={readingUpdate === "failed"}
+    />
+  )
 }

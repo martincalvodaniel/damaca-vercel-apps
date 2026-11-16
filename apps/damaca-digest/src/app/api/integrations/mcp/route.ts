@@ -1,4 +1,5 @@
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js"
+import { registerReadingTools } from "@/features/articles/mcp-reading-tools"
 import { createArticleServer } from "@/features/articles/mcp-server"
 import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
 import { getMcpOwner } from "@/lib/auth/mcp-owner"
@@ -41,8 +42,10 @@ export async function POST(request: Request) {
           id,
           label,
           aliases,
-        }))
+        })),
+      owner.canCapture
     )
+    registerReadingTools(server, owner.ownerId, owner.canRead, resource)
     const transport = new WebStandardStreamableHTTPServerTransport({
       enableJsonResponse: true,
       maxRequestBodySize: 131_072,

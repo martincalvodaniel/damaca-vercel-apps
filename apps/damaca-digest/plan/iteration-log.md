@@ -1,71 +1,56 @@
 # Registro de entregas de Damaca Digest
 
-## 01 — Incorporar el workspace
+[Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-- [Aceptación](iterations.md#01--incorporar-el-workspace). Inicio en `int` con árbol limpio. Capacidad inicial del 14% en 5h y 59% en 7d.
-- La CLI de Turbo devolvió EPERM. Se generó el workspace mediante la misma función del generador. Bun actualizó el lockfile usando su caché local.
-- Biome sin hallazgos en la app y el inventario. Pasaron TypeScript, 37 pruebas de Digest y 6 del generador. Se ajustó la firma del mock del starter al driver MongoDB del catálogo.
-- Builds Webpack con valores ficticios para Google y MongoDB. Se comprobaron por HTTP el manifiesto, los metadatos HTML y las dimensiones de los iconos para `main` e `int`. Una restauración desde caché llegó a servir el nombre de `main` para `int`; el build limpio de `int` sirvió el nombre correcto.
-- Quedan pendientes OAuth real, MongoDB, ChatGPT y la instalación en Android. Los cortes 02 a 05 recogen las verificaciones y funcionalidades restantes.
+## 12 — Organizar una lectura desde su ficha
 
-## 03 — Entregar captura y ficha en local
+- La ficha permite añadir o quitar favoritos y marcar una lectura como leída o pendiente. La acción actualiza solo el campo elegido.
+- Biome, tipos, build e integración HTTP pasaron. Se verificó que una cuenta distinta y un formulario con una revisión anterior no pueden aplicar el cambio. Chrome confirmó el diseño a 320 y 1280 px.
 
-- [Aceptación](iterations.md#03--entregar-captura-y-ficha-en-local). Inicio en `int`, árbol limpio y base `4953da4`. Capacidad inicial del 100% en 5h y 58% en 7d.
-- OAuth con PKCE y consentimiento, cliente estático, sesiones persistidas, comprobación de identidad y grant vigente, escritura MCP con límite por propietario y ficha web privada. Los topics capturados quedan como propuestas hasta el corte 04.
-- Pasaron Biome, tipos y 41 pruebas de Digest. La prueba HTTP arrancó Next compilado con MongoDB 8 desechable. Verificó descubrimiento, JWT, intercambio OAuth con credenciales Basic y en formulario, captura completa/parcial/no disponible, revocación con token vigente, aislamiento de dos propietarios y seis escrituras concurrentes a la misma URL. Pasó también la prueba HTTP de roles y solicitudes de acceso. Se añadió el runner a CI.
-- El entorno de Digest carece de configuración Vercel y credenciales locales. El corte 02 queda bloqueado hasta disponer de un entorno HTTPS autorizado y de acceso a ChatGPT con escritura. Las pruebas locales usaron identidades y credenciales de prueba. Quedan por verificar Google y ChatGPT reales y el comportamiento geográfico en Vercel.
-- Better Auth ya crea su índice único de correo. La prueba con MongoDB detectó un conflicto al registrar un segundo índice equivalente y se retiró ese registro redundante.
+## 13 — Mostrar temas y enlaces originales en la biblioteca
 
-## 03a — Corregir la carga de MongoDB en desarrollo
+- Cada tarjeta enlaza al original, muestra hasta dos temas que activan su filtro y añade la fecha de captura cuando se conoce la de publicación. El vocabulario de la página se resuelve una vez.
+- Pasaron Biome, tipos, build e integración HTTP con topics fusionados. Chrome confirmó biblioteca, ficha, edición y topics sin desbordamiento a 320 y 1280 px.
 
-- [Aceptación](iterations.md#03a--corregir-la-carga-de-mongodb-en-desarrollo). Inicio en `int`, base `3639e81`, con una edición local ajena en `.env.example`. Capacidad inicial del 87% en 5h y 56% en 7d.
-- En el servidor local, `/` redirigía con 307 y `/auth/signin` devolvía 500 al resolver `mongodb-339f4168658c3edd`. Con los mismos módulos instalados y salidas nuevas, Next 16.4.6 reprodujo el 500 bajo Bun y Turbopack. Node y Turbopack devolvieron 200, al igual que Bun y Webpack.
-- Digest arranca Next con Node en desarrollo. El comando corregido se verificó en una copia aislada con credenciales ficticias y un puerto alternativo. `/` devolvió 307 y la página de acceso devolvió 200 con el botón de Google. Pasaron Biome, TypeScript y 41 pruebas. La prueba cubrió la carga de la pantalla de acceso.
+## 14 — Consultar capturas de un periodo desde ChatGPT
 
-## 03b — Recuperar autenticación tras un fallo de MongoDB
+- `get_reading_digest` agrupa capturas por fecha UTC con paginación y el permiso `articles:read`. Distingue fecha de captura de publicación y estado de lectura.
+- La integración HTTP verificó dos páginas, el permiso y el aislamiento entre cuentas con MongoDB desechable. El build y la compilación de tipos pasaron.
 
-- [Aceptación](iterations.md#03b--recuperar-autenticación-tras-un-fallo-de-mongodb). Inicio en `int`, base `00225a0`, con un cambio local ajeno en `.env.example`. Capacidad inicial del 82% en 5h y 55% en 7d.
-- Se reprodujo el fallo en Next local con una cookie firmada de prueba. Antes del cambio, la consulta devolvió 500 con MongoDB detenida y siguió devolviendo 500 al arrancarla, con `MongoTopologyClosedError`.
-- Better Auth espera al cliente conectado, comparte una inicialización y descarta los intentos fallidos. Después del cambio, el fallo inicial produjo HTTP 503 y las tres consultas siguientes devolvieron 200 en el mismo proceso tras arrancar MongoDB. La prueba usó MongoDB 8 desechable.
-- Pasaron Biome, TypeScript, 41 pruebas, el build y las integraciones HTTP locales de OAuth/MCP y control de acceso. El servidor y la configuración local del usuario quedaron fuera de la prueba.
+## 15 — Copiar una captura para una sesión de ChatGPT abierta
 
-## 03c — Aclarar fallos de inicio de sesión en local
+- La recepción de enlaces permite copiar el prompt sin abrir otra sesión de ChatGPT y conserva la selección manual como alternativa.
+- Biome, tipos, 49 pruebas y build pasaron. Chrome a 320 px verificó copia sin navegación, copia con apertura interceptada y mensaje cuando el portapapeles devuelve un error.
 
-- [Aceptación](iterations.md#03c--aclarar-fallos-de-inicio-de-sesión-en-local). Inicio en `int`, base `2a3d834`, árbol limpio. Capacidad inicial del 73% en 5h y 54% en 7d.
-- El filtro escrito en la terminal integrada era `@damaca/dacama-digest`. El workspace registrado es `@damaca/damaca-digest`.
-- El driver confirmó `ECONNREFUSED` en el MongoDB configurado en loopback, antes de iniciar OAuth. Se creó y arrancó una instancia MongoDB 8 local, dedicada, con volumen persistente y puerto 27017 limitado a loopback. El ping pasó y el Next ya en marcha devolvió HTTP 200 con una URL de autorización de Google. No se navegó a esa URL.
-- La pantalla de acceso distingue el 503 del fallo general y la guía documenta cómo arrancar MongoDB. Pasaron Biome, tipos, 41 pruebas y el build Webpack con valores de prueba.
+## 16 — Buscar en el vocabulario de la biblioteca
 
-## 02 — Validar la viabilidad externa
+- Topics permite buscar por nombre o alias con el mismo filtro normalizado que MCP. Las operaciones y recuentos siguen disponibles.
+- Biome, tipos y build pasaron. La integración HTTP buscó un alias fusionado en mayúsculas y un término sin coincidencias. Chrome verificó la vista a 320 y 1280 px.
 
-- El usuario confirmó en producción el guardado de una fuente pública desde ChatGPT. Las capturas muestran las fichas de Proton (`full`), Heraldo de Aragón (`partial`) y El Mundo (`unavailable`). El caso parcial expone el límite de acceso. El caso inaccesible conserva la fuente y la nota sin resumen.
+## 17 — Recuperarse de errores de biblioteca
 
-## 03d — Deduplicar URLs con el parámetro utm
+- El panel muestra un reintento seguro y la ficha inexistente ofrece volver a la biblioteca. Una ficha ajena responde con el mismo 404. Las acciones rápidas validan el selector con Zod.
+- Biome, tipos, build e integración HTTP pasaron. En Chrome a 320 px, la búsqueda se recuperó al pulsar el reintento tras restaurar un índice eliminado del MongoDB desechable.
 
-- El usuario mostró un duplicado de Proton al recapturar la URL con `?utm=fake`. La regla anterior eliminaba claves `utm_*` y conservaba la clave exacta `utm`. Una prueba con esa misma URL reprodujo el fallo antes del cambio.
-- Se añadió `utm` como parámetro de tracking. La prueba HTTP de OAuth/MCP confirma que la recaptura devuelve `already_exists` y el mismo ID. Pasaron Biome, tipos, 42 pruebas, build y pruebas HTTP contra MongoDB desechable. La corrección se aplica a nuevas capturas y no modifica documentos existentes.
+## 18 — Unificar la interfaz de acceso y conexión
 
-## 04 — Encontrar artículos en la biblioteca
+- Inicio de sesión, solicitud de acceso y consentimiento usan paneles y controles acordes a la biblioteca.
+- Biome, tipos, build, integración HTTP de acceso y OAuth pasaron. Chrome verificó las tres pantallas a 320 y 1280 px, los controles táctiles de al menos 44 px y el permiso de lectura visible en el consentimiento.
 
-- Inicio en `int`, base `bc133ee`, con capacidad del 26% en 5h y 47% en 7d.
-- Búsqueda MongoDB ponderada y limitada por propietario, filtros en la URL, orden y páginas de 20 con desempate por ID. El filtro de topics usa las propuestas históricas hasta integrar IDs estables.
-- Pasaron Biome, tipos, 42 pruebas, build y la prueba HTTP con dos páginas, filtros combinados, relevancia y datos aislados por propietario. Chrome verificó la biblioteca con filtros abiertos y sin desbordamiento horizontal a 320 y 1280 px.
+- La comprobación final amplió el intervalo de la fixture del digest para cubrir ejecuciones que crucen medianoche UTC. Verificó agrupación por día y que la segunda cuenta recibe únicamente su lectura. El README recoge la comprobación pendiente en Android.
 
-## 04a — Editar y organizar artículos
+## 19 — Navegar Digest con el teclado
 
-- La ficha permite editar metadatos, resumen, puntos clave, notas, estado de lectura y favorito, y borrar con confirmación. Las mutaciones usan el propietario y una revisión optimista. Una recaptura conserva los campos corregidos y los datos personales.
-- Pasaron Biome, 42 pruebas, build con tipos e integración HTTP de las Server Actions. La prueba rechazó edición y borrado desde otra cuenta y borrado sin confirmación, y verificó la conservación de cambios en una recaptura. La revisión de la biblioteca a dos anchos está en el corte 04.
-- El siguiente corte es 04b, vocabulario de topics, alias, fusión y `list_topics`. Se difiere para respetar la reserva de capacidad de la ventana de cinco horas.
+- El panel expone un único contenido principal. El primer Tab revela el enlace para saltar al contenido y Enter mueve allí el foco. Los controles muestran un contorno visible y la navegación diferencia la página actual de la sección activa.
+- Biome, tipos, 49 pruebas, build e integración HTTP con MongoDB pasaron. Chrome a 320 y 1280 px verificó el salto y la navegación con Tab hasta los controles principales de biblioteca, ficha, Topics y Compartir.
+- El registro en el menú Compartir y el envío desde el conector siguen pendientes en un Android real con una versión publicada.
 
-## 04b — Consolidar topics
+## 20 — Usar el complemento del entorno al compartir
 
-- Inicio en `int`, base `eeebcf4`, tras renovar la ventana de 5 h. El despliegue Production `adc0093` de los cortes 04 y 04a quedó READY y verificado en el dominio estable.
-- Topics con IDs estables por propietario, nombres, alias y fusiones. Las etiquetas históricas se resuelven sin una migración previa. La fusión conserva las referencias y cuenta cada artículo una vez. La edición de fichas admite temas manuales y una recaptura conserva esos cambios.
-- Pasaron Biome, TypeScript, 45 pruebas, build e integración HTTP. Se verificaron descubrimiento de topics vía MCP, exclusión de otra cuenta, edición, alias, fusión, recuento y filtro por alias con artículos nuevos e históricos.
-- Chrome comprobó los controles de temas y edición a 320 y 1280 px. Un backup de MongoDB de prueba se restauró en otra base y conservó el artículo, el vocabulario, sus referencias y el índice textual.
+- Compartir usa el nombre de la instalación en el prompt y en las instrucciones. Android utiliza el intent de Chrome con alternativa web. iOS usa el enlace universal de ChatGPT.
+- Pasaron Biome, 50 pruebas, builds de main e int, verificación de HTML y portapapeles en Chrome a 320 px e integración HTTP de int con MongoDB aislado. La apertura nativa queda por comprobar en dispositivos móviles.
 
-## 05 — Validar preproducción
+## 21 — Abrir ChatGPT desde Chrome para Android
 
-- [CI del commit `0a8cb16`](https://github.com/martincalvodaniel/damaca-vercel-apps/actions/runs/43770107401) terminó correctamente, incluido `digest-capture`. La revisión a dos anchos y la restauración con MongoDB desechable constan en 04b.
-- Verificado [Preview estable de int](https://damaca-digest-git-int-martincalvodaniels-projects.vercel.app) en READY, con origen `int@0a8cb16`. Los metadatos anunciaron el emisor y recurso del mismo host, scope `articles:write` y PKCE S256. MCP devolvió 401 sin token OAuth en una solicitud autenticada en Vercel mediante `vercel curl`.
-- Una petición pública de descubrimiento recibió 302 a `vercel.com/sso-api`. La protección sigue activa. El cliente real de ChatGPT aún necesita una vía de acceso a Preview para completar la prueba OAuth.
+- La ruta Compartir sirve un enlace directo al esquema de la app para Android y conserva la alternativa HTTPS. Si copiar agota la activación, muestra que el prompt se copió y permite tocar el enlace.
+- Biome, 50 pruebas, build e integración HTTP de int pasaron. La prueba HTTP comprobó el intent renderizado al simular Chrome para Android. Falta confirmar que la app lo resuelve en un dispositivo real.

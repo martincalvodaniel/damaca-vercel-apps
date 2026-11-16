@@ -3,8 +3,17 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { requireAuthorizedSession } from "@/lib/auth/session"
-import { deleteArticle, editArticle } from "@/lib/db/articles"
-import { articleEdit, articleId, articleRevision } from "@/schemas/article"
+import {
+  deleteArticle,
+  editArticle,
+  updateArticleReading,
+} from "@/lib/db/articles"
+import {
+  articleEdit,
+  articleId,
+  articleReadingChange,
+  articleRevision,
+} from "@/schemas/article"
 
 function lines(value: FormDataEntryValue | null) {
   return typeof value === "string"
@@ -77,4 +86,33 @@ export async function removeArticle(
 
   revalidatePath("/")
   redirect("/")
+}
+
+export async function setArticleReading(
+  id: string,
+  revision: number,
+  form: FormData
+) {
+  const { user } = await requireAuthorizedSession()
+  if (
+    !articleId.safeParse(id).success ||
+    !articleRevision.safeParse(String(revision)).success
+  )
+    redirect("/")
+  const path = `/articles/${id}`
+  const operation = articleReadingChange.safeParse(form.get("readingChange"))
+  if (!operation.success) redirect(path)
+
+  const change = operation.data
+  const update =
+    change === "read" || change === "unread"
+      ? { readingStatus: change }
+      : { favorite: change === "favorite" }
+  const saved = await updateArticleReading(user.id, id, revision, update).catch(
+    () => false
+  )
+  if (!saved) redirect(`${path}?readingUpdate=failed`)
+  revalidatePath("/")
+  revalidatePath(path)
+  redirect(path)
 }

@@ -1,7 +1,10 @@
 import Link from "next/link"
+import { LibraryActiveFilters } from "@/features/articles/components/library-active-filters"
+import { LibraryArticle } from "@/features/articles/components/library-article"
 import { LibraryFilters } from "@/features/articles/components/library-filters"
 import { requireAuthorizedSession } from "@/lib/auth/session"
 import { listArticles } from "@/lib/db/articles"
+import { createTopicLabelResolver } from "@/lib/db/topics"
 import {
   libraryPageHref,
   libraryQuery,
@@ -24,25 +27,43 @@ export default async function LibraryPage({
   const result = parsed.success
     ? await listArticles(user.id, query)
     : { items: [], hasNext: false }
+  const labels = result.items.some(
+    (article) => article.topicIds.length || article.proposedTopics?.length
+  )
+    ? await createTopicLabelResolver(user.id)
+    : undefined
   const filtered = Object.keys(params).some(
     (key) => key !== "sort" && !!params[key]
   )
   return (
-    <section className="mx-auto max-w-2xl space-y-3">
+    <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="text-2xl font-semibold">Library</h1>
-        <Link
-          href="/topics"
-          className="inline-flex min-h-11 items-center text-sm underline"
-        >
-          Topics
-        </Link>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          Library
+        </h1>
+        <div className="flex flex-wrap justify-end gap-2">
+          <Link
+            href="/share"
+            className="inline-flex min-h-11 items-center rounded-lg bg-teal-800 px-2.5 text-sm font-semibold text-white hover:bg-teal-900"
+          >
+            Capture link
+          </Link>
+          <Link
+            href="/topics"
+            className="digest-panel inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm font-semibold hover:border-teal-600"
+          >
+            Topics
+          </Link>
+        </div>
       </div>
       <LibraryFilters query={query} />
+      <LibraryActiveFilters query={query} />
       {!parsed.success ? (
-        <p role="alert">Check the search filters and date ranges.</p>
+        <p role="alert" className="digest-panel rounded-xl p-4">
+          Check the search filters and date ranges.
+        </p>
       ) : result.items.length === 0 ? (
-        <p>
+        <p className="digest-panel rounded-xl p-4 text-sm">
           {filtered
             ? "No articles match this page or its filters."
             : "Save an article from ChatGPT to start your library."}
@@ -50,20 +71,13 @@ export default async function LibraryPage({
       ) : (
         <ul className="space-y-2">
           {result.items.map((article) => (
-            <li key={article.id}>
-              <Link
-                href={`/articles/${article.id}`}
-                className="block min-h-11 break-words rounded-lg border border-zinc-300 p-3 dark:border-zinc-700"
-              >
-                <span className="block font-medium">
-                  {article.title ?? article.sourceDomain}
-                </span>
-                <span className="text-sm">
-                  {article.source ?? article.sourceDomain} ·{" "}
-                  {article.accessStatus}
-                </span>
-              </Link>
-            </li>
+            <LibraryArticle
+              key={article.id}
+              article={article}
+              topics={
+                labels?.(article.topicIds, article.proposedTopics ?? []) ?? []
+              }
+            />
           ))}
         </ul>
       )}
