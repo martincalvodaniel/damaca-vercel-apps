@@ -8,7 +8,7 @@ import {
   useCallback,
   useRef,
 } from "react"
-import { swipeDestinations } from "@/config/navigation"
+import { navigationDestinations } from "@/config/navigation"
 
 const excludedTargets =
   "button, input, select, textarea, label, summary, dialog, [contenteditable], [role=button], [role=slider]"
@@ -16,7 +16,7 @@ const excludedTargets =
 export function TabSwipeContent({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
-  const tab = swipeDestinations.findIndex(({ href }) => href === pathname)
+  const tab = navigationDestinations.findIndex(({ href }) => href === pathname)
   const start = useRef<{ id: number; x: number; y: number } | null>(null)
   const suppressClick = useRef(false)
 
@@ -60,7 +60,8 @@ export function TabSwipeContent({ children }: { children: ReactNode }) {
         return
 
       suppressClick.current = true
-      const destination = swipeDestinations[tab + (horizontal < 0 ? 1 : -1)]
+      const destination =
+        navigationDestinations[tab + (horizontal < 0 ? 1 : -1)]
       if (destination) router.push(destination.href)
     },
     [router, tab]

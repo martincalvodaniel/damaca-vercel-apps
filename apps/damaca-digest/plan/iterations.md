@@ -212,3 +212,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: Captura es el primer destino, Library muestra libros como icono y los gestos siguen entre las tres pestañas de contenido.
+
+## 29 — Incluir Capture en el gesto horizontal
+
+- Estado: `validated`.
+- Aceptación: el gesto recorre las cuatro pestañas en el orden de la barra y Library sigue siendo el inicio.

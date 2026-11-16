@@ -138,3 +138,9 @@
 - Biome, tipos, build, integración HTTP de acceso y OAuth pasaron. Chrome verificó las tres pantallas a 320 y 1280 px, los controles táctiles de al menos 44 px y el permiso de lectura visible en el consentimiento.
 
 - La comprobación final amplió el intervalo de la fixture del digest para cubrir ejecuciones que crucen medianoche UTC. Verificó agrupación por día y que la segunda cuenta recibe únicamente su lectura. El README recoge la comprobación pendiente en Android.
+
+## 19 — Navegar Digest con el teclado
+
+- El panel expone un único contenido principal. El primer Tab revela el enlace para saltar al contenido y Enter mueve allí el foco. Los controles muestran un contorno visible y la navegación diferencia la página actual de la sección activa.
+- Biome, tipos, 49 pruebas, build e integración HTTP con MongoDB pasaron. Chrome a 320 y 1280 px verificó el salto y la navegación con Tab hasta los controles principales de biblioteca, ficha, Topics y Compartir.
+- El registro en el menú Compartir y el envío desde el conector siguen pendientes en un Android real con una versión publicada.
