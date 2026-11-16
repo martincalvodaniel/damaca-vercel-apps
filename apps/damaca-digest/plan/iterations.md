@@ -182,3 +182,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: navegación, biblioteca, Topics, ficha, editor y ajustes.
 - Aceptación: navegación compacta, captura alineada con el buscador, acciones por icono y editor con barra fija al desplazarse. Verificar a 320 y 1280 px y conservar la confirmación de borrado.
+
+## 23 — Compactar controles y facilitar filtros
+
+- Estado: `validated`.
+- Aceptación: controles más compactos, estado de lectura en la barra del editor, navegación en Captura pública y autores del listado que añaden un filtro.

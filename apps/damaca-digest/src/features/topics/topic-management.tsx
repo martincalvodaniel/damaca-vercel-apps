@@ -1,9 +1,9 @@
 import { updateTopic } from "@/features/topics/actions"
 
 const field =
-  "block min-h-9 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
+  "block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
 const button =
-  "min-h-9 rounded-lg bg-teal-800 px-3 hover:bg-teal-900 font-medium text-white"
+  "min-h-8 rounded-lg bg-teal-800 px-2 hover:bg-teal-900 font-medium text-white"
 
 type TopicChoice = { id: string; label: string }
 
@@ -20,8 +20,8 @@ export function TopicManagement({
     </option>
   ))
   return (
-    <details open={open} className="digest-panel rounded-xl px-3">
-      <summary className="min-h-9 cursor-pointer py-2 text-sm font-medium">
+    <details open={open} className="digest-panel rounded-xl px-2">
+      <summary className="min-h-8 cursor-pointer py-1 text-sm font-medium">
         Manage topics
       </summary>
       <form action={updateTopic} className="space-y-2 pb-3 text-sm">

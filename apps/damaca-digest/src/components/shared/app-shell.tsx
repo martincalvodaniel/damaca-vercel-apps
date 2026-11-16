@@ -8,8 +8,8 @@ export function AppShell({
   image,
 }: {
   children: ReactNode
-  name: string
-  email: string
+  name?: string
+  email?: string
   image?: string | null
 }) {
   return (

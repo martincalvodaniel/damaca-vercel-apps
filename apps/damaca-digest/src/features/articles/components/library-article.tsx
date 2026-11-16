@@ -1,18 +1,21 @@
 import Link from "next/link"
 import { AccessBadge } from "@/features/articles/components/access-badge"
 import type { Article } from "@/lib/db/articles"
+import { type LibraryQuery, libraryPageHref } from "@/schemas/library"
 
 export function LibraryArticle({
   article,
   topics,
+  query,
 }: {
   article: Article
   topics: string[]
+  query: LibraryQuery
 }) {
   const date = (article.publishedAt ?? article.capturedAt).toISOString()
   const captured = article.capturedAt.toISOString()
   return (
-    <li className="digest-panel min-w-0 rounded-xl px-3.5 pt-3.5 sm:px-4 sm:pt-4">
+    <li className="digest-panel min-w-0 rounded-xl px-2 pt-2 sm:px-3">
       <Link
         href={`/articles/${article.id}`}
         className="group block min-w-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
@@ -37,28 +40,32 @@ export function LibraryArticle({
             {article.summary}
           </p>
         ) : null}
-        <div className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
           <AccessBadge status={article.accessStatus} />
           {article.readingStatus !== "unread" ? (
             <span className="text-xs capitalize text-zinc-600 dark:text-zinc-400">
               {article.readingStatus}
             </span>
           ) : null}
-          {article.authors?.length ? (
-            <span className="min-w-0 break-words text-xs text-zinc-600 dark:text-zinc-400">
-              {article.authors.join(", ")}
-            </span>
-          ) : null}
         </div>
       </Link>
       <div className="mt-1 flex flex-wrap items-center gap-x-2">
+        {[...new Set(article.authors)].map((author) => (
+          <Link
+            key={author}
+            href={libraryPageHref({ ...query, author }, 1)}
+            className="inline-flex min-h-8 max-w-full items-center break-words text-xs text-zinc-700 underline underline-offset-2 dark:text-zinc-300"
+          >
+            <span className="min-w-0 break-words">{author}</span>
+          </Link>
+        ))}
         {topics.slice(0, 2).map((topic) => (
           <Link
             key={topic}
             href={`/?${new URLSearchParams({ topic })}`}
-            className="inline-flex min-h-11 max-w-full items-center text-xs"
+            className="inline-flex min-h-8 max-w-full items-center text-xs"
           >
-            <span className="min-w-0 break-words rounded-full bg-teal-50 px-2 py-1 text-teal-950 hover:underline dark:bg-teal-950 dark:text-teal-100">
+            <span className="min-w-0 break-words rounded-full bg-teal-50 px-1.5 py-0.5 text-teal-950 hover:underline dark:bg-teal-950 dark:text-teal-100">
               {topic}
             </span>
           </Link>
@@ -66,7 +73,7 @@ export function LibraryArticle({
         <a
           href={article.url}
           rel="noreferrer"
-          className="inline-flex min-h-11 items-center text-xs font-semibold underline underline-offset-4"
+          className="inline-flex min-h-8 items-center text-xs font-semibold underline underline-offset-4"
         >
           Original{" "}
           <span aria-hidden="true" className="ms-1">

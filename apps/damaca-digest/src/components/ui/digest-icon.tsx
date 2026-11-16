@@ -1,4 +1,9 @@
 const paths = {
+  account:
+    "M16 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 21v-2a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v2",
+  reading:
+    "M4 5h6a2 2 0 0 1 2 2v13a3 3 0 0 0-3-3H4V5Zm16 0h-6a2 2 0 0 0-2 2v13a3 3 0 0 1 3-3h5V5Z",
+  archived: "M4 4h16v4H4V4Zm2 4v12h12V8m-8 4h4",
   capture: "M12 5v14m-7-7h14",
   topics: "M4 4h8l8 8-8 8-8-8V4Zm4 4h.01",
   original: "M13 5h6v6m0-6-9 9m7-1v6H5V7h6",

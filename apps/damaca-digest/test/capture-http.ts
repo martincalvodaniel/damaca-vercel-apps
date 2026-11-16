@@ -165,6 +165,8 @@ try {
   assert.equal(shared.status, 200)
   const sharedHtml = await shared.text()
   assert.match(sharedHtml, /Copy prompt and open ChatGPT/)
+  assert.match(sharedHtml, /aria-label="Main navigation"/)
+  assert.doesNotMatch(sharedHtml, /← Library/)
   assert.match(
     sharedHtml,
     /href="intent:\/\/#Intent;scheme=chatgpt;package=com.openai.chatgpt;S\.browser_fallback_url=https%3A%2F%2Fchatgpt.com%2F;end"/
@@ -276,6 +278,10 @@ try {
   assert.equal(secondPage.status, 200)
   const secondHtml = await secondPage.text()
   assert.match(secondHtml, /Pagination Fixture 20/)
+  assert.match(
+    secondHtml,
+    /href="[^"]*author=A\.\+Writer[^"]*">(?:<[^>]+>)*A\. Writer/
+  )
   assert.doesNotMatch(secondHtml, /Pagination Fixture 19|Other Owner/)
   const relevance = await fetch(`${origin}/?q=Pagination&sort=relevance`, {
     headers: { cookie: first.cookie },
@@ -308,6 +314,10 @@ try {
   assert.equal(editor.status, 200)
   const editorHtml = await editor.text()
   assert.match(editorHtml, /aria-label="Edit article actions"/)
+  assert.match(
+    editorHtml,
+    /<select[^>]*name="readingStatus"[^>]*aria-label="Reading status"/
+  )
   assert.match(editorHtml, /aria-label="Save changes"/)
   assert.match(editorHtml, /aria-label="Delete article"/)
   assert.match(editorHtml, /<dialog[^>]*aria-labelledby=/)

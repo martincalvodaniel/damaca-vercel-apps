@@ -42,12 +42,12 @@ export default async function TopicsPage({
                 name="q"
                 maxLength={100}
                 defaultValue={query.success ? query.data : undefined}
-                className="digest-panel block min-h-9 w-full min-w-0 rounded-lg px-2.5"
+                className="digest-panel block min-h-8 w-full min-w-0 rounded-lg px-2"
               />
             </label>
             <button
               type="submit"
-              className="digest-panel min-h-9 rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
+              className="digest-panel min-h-8 rounded-lg px-2 text-sm font-semibold hover:border-teal-600"
             >
               Search
             </button>
@@ -67,11 +67,11 @@ export default async function TopicsPage({
             {filtered.map((topic) => (
               <li
                 key={topic.id}
-                className="digest-panel min-w-0 break-words rounded-xl px-3"
+                className="digest-panel min-w-0 break-words rounded-xl px-2"
               >
                 <Link
                   href={`/?${new URLSearchParams({ topic: topic.label })}`}
-                  className="flex min-h-9 items-center justify-between gap-3 font-medium hover:text-teal-800 dark:hover:text-teal-300"
+                  className="flex min-h-8 items-center justify-between gap-3 font-medium hover:text-teal-800 dark:hover:text-teal-300"
                 >
                   <span>{topic.label}</span>
                   <span className="shrink-0 text-sm">

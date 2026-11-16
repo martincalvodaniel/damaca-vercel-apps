@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { headers } from "next/headers"
-import Link from "next/link"
+import { AppShell } from "@/components/shared/app-shell"
 import { installName } from "@/config/install-name"
 import { ChatGptHandoff } from "@/features/sharing/chatgpt-handoff"
 import { chatGptOpenUrl } from "@/features/sharing/chatgpt-link"
@@ -25,14 +25,8 @@ export default async function SharePage({
   const url = resolveSharedLink(params)
 
   return (
-    <main className="mx-auto max-w-lg space-y-3 px-3 py-4 sm:px-5 sm:py-8">
-      <Link
-        href="/"
-        className="inline-flex min-h-11 items-center text-sm font-medium underline-offset-4 hover:underline"
-      >
-        ← Library
-      </Link>
-      <section className="digest-panel space-y-3 rounded-xl p-4 sm:p-6">
+    <AppShell>
+      <section className="digest-panel mx-auto mt-2 max-w-lg space-y-2 rounded-xl p-2 sm:p-3">
         <h1 className="text-3xl font-semibold tracking-tight">
           Capture a link
         </h1>
@@ -51,7 +45,7 @@ export default async function SharePage({
             />
           </>
         ) : (
-          <form action="/share" className="space-y-3">
+          <form action="/share" className="space-y-2">
             {params.url || params.text ? (
               <p role="alert" className="text-sm">
                 Share or paste a single HTTP or HTTPS link.
@@ -64,18 +58,18 @@ export default async function SharePage({
                 type="url"
                 required
                 maxLength={4096}
-                className="mt-1 block min-h-11 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2.5 dark:border-zinc-700"
+                className="mt-1 block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
               />
             </label>
             <button
               type="submit"
-              className="min-h-11 rounded-lg bg-teal-800 px-3 text-sm font-semibold text-white hover:bg-teal-900"
+              className="min-h-8 rounded-lg bg-teal-800 px-2 text-sm font-semibold text-white hover:bg-teal-900"
             >
               Prepare prompt
             </button>
           </form>
         )}
       </section>
-    </main>
+    </AppShell>
   )
 }

@@ -9,14 +9,17 @@ import { HomeIcon } from "@/components/ui/home-icon"
 import { navigationDestinations } from "@/config/navigation"
 
 interface AppNavigationProps {
-  name: string
-  email: string
+  name?: string
+  email?: string
   image?: string | null
 }
 
 export function AppNavigation({ name, email, image }: AppNavigationProps) {
   const pathname = usePathname()
-  const inLibrary = pathname === "/" || pathname.startsWith("/articles/")
+  const inLibrary =
+    pathname === "/" ||
+    pathname === "/share" ||
+    pathname.startsWith("/articles/")
   return (
     <nav
       aria-label="Main navigation"
@@ -47,7 +50,15 @@ export function AppNavigation({ name, email, image }: AppNavigationProps) {
                 >
                   {destination.id === "settings" ? (
                     <span className="grid size-4 shrink-0 place-items-center [&>*]:size-full [&>*]:text-[9px]">
-                      <AccountAvatar name={name} email={email} image={image} />
+                      {email ? (
+                        <AccountAvatar
+                          name={name ?? email}
+                          email={email}
+                          image={image}
+                        />
+                      ) : (
+                        <DigestIcon name="account" />
+                      )}
                     </span>
                   ) : destination.id === "topics" ? (
                     <DigestIcon name="topics" />

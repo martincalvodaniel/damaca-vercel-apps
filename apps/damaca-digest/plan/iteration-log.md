@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 13 — Mostrar temas y enlaces originales en la biblioteca
-
-- Cada tarjeta enlaza al original, muestra hasta dos temas que activan su filtro y añade la fecha de captura cuando se conoce la de publicación. El vocabulario de la página se resuelve una vez.
-- Pasaron Biome, tipos, build e integración HTTP con topics fusionados. Chrome confirmó biblioteca, ficha, edición y topics sin desbordamiento a 320 y 1280 px.
-
 ## 14 — Consultar capturas de un periodo desde ChatGPT
 
 - `get_reading_digest` agrupa capturas por fecha UTC con paginación y el permiso `articles:read`. Distingue fecha de captura de publicación y estado de lectura.
@@ -54,3 +49,8 @@
 
 - Topics pasa a la navegación. La captura ocupa el icono a la izquierda del buscador. La ficha agrupa sus acciones y el editor las mantiene arriba, con confirmación de borrado.
 - Pasaron Biome, tipos, 50 pruebas, build e integración HTTP con MongoDB. Chrome a 320 y 1280 px comprobó la alineación del buscador, la navegación, la barra sticky, el foco inicial del diálogo, la cancelación, el guardado de favorito y la confirmación del borrado.
+
+## 23 — Compactar controles y facilitar filtros
+
+- Captura reutiliza la navegación y sigue siendo pública. Cada autor del listado añade su filtro manteniendo la búsqueda y los filtros activos. El selector de estado de lectura pasa a la barra sticky del editor.
+- Biome, tipos, 50 pruebas, build e integración HTTP con MongoDB pasaron. Chrome a 320 y 1280 px comprobó la navegación de Captura, el filtro por autor y el guardado de estados.

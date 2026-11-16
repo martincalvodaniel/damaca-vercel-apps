@@ -4,7 +4,7 @@ import { accessStatus, contentType, readingStatus } from "@/schemas/article"
 import type { LibraryQuery } from "@/schemas/library"
 
 const inputClass =
-  "block min-h-9 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 focus-visible:outline-2 focus-visible:outline-teal-600 dark:border-zinc-700"
+  "block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 focus-visible:outline-2 focus-visible:outline-teal-600 dark:border-zinc-700"
 
 export function LibraryFilters({ query }: { query: LibraryQuery }) {
   const dateFields = [
@@ -26,7 +26,7 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
   ] as const
 
   return (
-    <form action="/" className="digest-panel space-y-1 rounded-xl p-2">
+    <form action="/" className="digest-panel space-y-1 rounded-xl p-1.5">
       <div className="flex items-center gap-1">
         <Link
           href="/share"
@@ -34,7 +34,7 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
           title="Capture link"
           className="digest-icon-button"
         >
-          <span className="digest-panel grid size-9 place-items-center rounded-lg">
+          <span className="digest-panel grid size-8 place-items-center rounded-lg">
             <DigestIcon name="capture" />
           </span>
         </Link>
@@ -51,13 +51,13 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
         </label>
         <button
           type="submit"
-          className="h-9 rounded-lg bg-teal-800 hover:bg-teal-900 px-3 font-medium text-white"
+          className="h-8 rounded-lg bg-teal-800 hover:bg-teal-900 px-2 font-medium text-white"
         >
           Search
         </button>
       </div>
       <details className="rounded-lg border-t border-zinc-200 px-1 dark:border-zinc-800">
-        <summary className="min-h-9 cursor-pointer py-2 text-sm font-medium">
+        <summary className="min-h-8 cursor-pointer py-1 text-sm font-medium">
           Filters and sort
         </summary>
         <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2 pb-2 text-sm">
@@ -113,7 +113,7 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
               />
             </label>
           ))}
-          <label className="col-span-full inline-flex min-h-11 items-center gap-2">
+          <label className="col-span-full inline-flex min-h-11 items-center gap-1.5">
             <input
               type="checkbox"
               name="favorite"
@@ -124,7 +124,7 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
           </label>
           <button
             type="submit"
-            className="h-9 rounded-lg bg-teal-800 hover:bg-teal-900 px-3 font-medium text-white"
+            className="h-8 rounded-lg bg-teal-800 hover:bg-teal-900 px-2 font-medium text-white"
           >
             Apply filters
           </button>
