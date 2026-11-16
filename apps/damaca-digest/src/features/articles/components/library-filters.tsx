@@ -52,7 +52,6 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
           label="Filters and sort"
           icon="filters"
           applyLabel="Apply filters"
-          clearLabel="Clear filters"
           clearHref={query.q ? `/?${new URLSearchParams({ q: query.q })}` : "/"}
         >
           <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2 pb-2 text-sm">

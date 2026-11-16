@@ -19,7 +19,6 @@ export function TopicManagement({
       setOperation(event.currentTarget.value),
     []
   )
-  const reset = useCallback(() => setOperation("rename"), [])
   const options = topics.map((topic) => (
     <option key={topic.id} value={topic.id}>
       {topic.label}
@@ -27,12 +26,11 @@ export function TopicManagement({
   ))
 
   return (
-    <form action={updateTopic} onReset={reset}>
+    <form action={updateTopic}>
       <SearchDialog
         label="Manage topics"
         icon="topics"
         applyLabel="Apply topic change"
-        clearLabel="Clear topic form"
         openOnError={!!error}
       >
         <div className="grid gap-2 text-sm">

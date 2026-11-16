@@ -121,3 +121,8 @@
 
 - La recepción de enlaces permite copiar el prompt sin abrir otra sesión de ChatGPT y conserva la selección manual como alternativa.
 - Biome, tipos, 49 pruebas y build pasaron. Chrome a 320 px verificó copia sin navegación, copia con apertura interceptada y mensaje cuando el portapapeles devuelve un error.
+
+## 16 — Buscar en el vocabulario de la biblioteca
+
+- Topics permite buscar por nombre o alias con el mismo filtro normalizado que MCP. Las operaciones y recuentos siguen disponibles.
+- Biome, tipos y build pasaron. La integración HTTP buscó un alias fusionado en mayúsculas y un término sin coincidencias. Chrome verificó la vista a 320 y 1280 px.

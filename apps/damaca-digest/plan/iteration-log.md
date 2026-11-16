@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 16 — Buscar en el vocabulario de la biblioteca
-
-- Topics permite buscar por nombre o alias con el mismo filtro normalizado que MCP. Las operaciones y recuentos siguen disponibles.
-- Biome, tipos y build pasaron. La integración HTTP buscó un alias fusionado en mayúsculas y un término sin coincidencias. Chrome verificó la vista a 320 y 1280 px.
-
 ## 17 — Recuperarse de errores de biblioteca
 
 - El panel muestra un reintento seguro y la ficha inexistente ofrece volver a la biblioteca. Una ficha ajena responde con el mismo 404. Las acciones rápidas validan el selector con Zod.
@@ -54,3 +49,8 @@
 
 - Los disparadores se sitúan a la izquierda de la lupa. Ambas modales usan una barra sticky para aplicar, limpiar y cerrar. Limpiar filtros conserva el término de búsqueda y limpiar la gestión de topics restablece el formulario.
 - Biome, tipos, 50 pruebas, build e integración HTTP pasaron. Chrome a 320 y 1280 px comprobó la pantalla completa, el foco, la barra sticky y las acciones de filtros y limpieza.
+
+## 26 — Fijar los buscadores y alinear las acciones
+
+- Los buscadores quedan arriba al desplazarse y debajo de la navegación en escritorio. La papelera de filtros queda a la izquierda de aplicar. La gestión de topics conserva aplicar y cerrar en las mismas posiciones.
+- Biome, tipos, 50 pruebas y build pasaron. Chrome verificó el desplazamiento y las coordenadas de las acciones a 320 y 1280 px.

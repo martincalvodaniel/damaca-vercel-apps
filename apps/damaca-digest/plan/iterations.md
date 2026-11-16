@@ -197,3 +197,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: disparadores junto a la lupa y modales de pantalla completa con acciones visibles al desplazarse.
+
+## 26 — Fijar los buscadores y alinear las acciones
+
+- Estado: `validated`.
+- Aceptación: Library y Topics mantienen el buscador arriba al desplazarse. La papelera aparece solo en filtros y a la izquierda del tick. Aplicar y cerrar conservan la misma posición en ambas modales.

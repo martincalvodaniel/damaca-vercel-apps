@@ -15,7 +15,6 @@ export function SearchDialog({
   label,
   icon,
   applyLabel,
-  clearLabel,
   clearHref,
   openOnError,
   children,
@@ -23,7 +22,6 @@ export function SearchDialog({
   label: string
   icon: "filters" | "topics"
   applyLabel: string
-  clearLabel: string
   clearHref?: string
   openOnError?: boolean
   children: ReactNode
@@ -68,9 +66,23 @@ export function SearchDialog({
       >
         <header className="sticky top-0 z-10 border-b border-(--panel-line) bg-(--surface)">
           <div className="mx-auto flex max-w-3xl items-center gap-1 px-3">
-            <h2 id={id} className="mr-auto text-sm font-semibold">
+            <h2
+              id={id}
+              className="mr-auto min-w-0 break-words text-sm font-semibold"
+            >
               {label}
             </h2>
+            {clearHref ? (
+              <Link
+                href={clearHref}
+                onClick={dismiss}
+                aria-label="Clear filters"
+                title="Clear filters"
+                className="digest-icon-button"
+              >
+                <DigestIcon name="delete" />
+              </Link>
+            ) : null}
             <button
               type="submit"
               aria-label={applyLabel}
@@ -79,26 +91,6 @@ export function SearchDialog({
             >
               <DigestIcon name="read" />
             </button>
-            {clearHref ? (
-              <Link
-                href={clearHref}
-                onClick={dismiss}
-                aria-label={clearLabel}
-                title={clearLabel}
-                className="digest-icon-button"
-              >
-                <DigestIcon name="delete" />
-              </Link>
-            ) : (
-              <button
-                type="reset"
-                aria-label={clearLabel}
-                title={clearLabel}
-                className="digest-icon-button"
-              >
-                <DigestIcon name="delete" />
-              </button>
-            )}
             <button
               ref={close}
               type="button"

@@ -88,7 +88,7 @@ html:has(.digest-editor-toolbar) {
 
 @layer components {
   .digest-search-panel {
-    @apply space-y-1 rounded-xl p-1.5;
+    @apply sticky top-0 z-20 space-y-1 rounded-xl p-1.5 md:top-(--digest-desktop-nav);
   }
 
   .digest-search-row {
