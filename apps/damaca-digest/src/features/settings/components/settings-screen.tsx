@@ -7,15 +7,13 @@ import { requireAuthorizedSession } from "@/lib/auth/session"
 export async function SettingsScreen() {
   const session = await requireAuthorizedSession()
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-3 py-2 sm:gap-4 sm:py-5">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-        Settings
-      </h1>
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-2 py-2 sm:gap-3 sm:py-3">
+      <h1 className="sr-only">Settings</h1>
       <section
         aria-label="Your account"
-        className="digest-panel rounded-xl p-4 sm:p-5"
+        className="digest-panel rounded-xl p-3 sm:p-4"
       >
-        <h2 className="mb-4 text-lg font-semibold">Your account</h2>
+        <h2 className="mb-2 text-lg font-semibold">Your account</h2>
         <div className="flex min-w-0 items-center gap-3">
           <AccountAvatar
             name={session.user.name}
@@ -28,39 +26,39 @@ export async function SettingsScreen() {
               {session.user.email}
             </p>
             <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
-              <section className="digest-panel space-y-2 rounded-xl p-4 sm:p-5">
-                <h2 className="text-lg font-semibold">Export library</h2>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Download your articles, topics, and personal notes.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <a
-                    href="/settings/export?format=json"
-                    className="inline-flex min-h-11 items-center rounded-lg bg-teal-800 px-3 text-sm font-semibold text-white hover:bg-teal-900"
-                  >
-                    Download JSON
-                  </a>
-                  <a
-                    href="/settings/export?format=md"
-                    className="digest-panel inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
-                  >
-                    Download Markdown
-                  </a>
-                </div>
-              </section>
               {session.role === "admin" ? "Administrator" : "User"}
             </p>
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-2">
           <AccountSwitchButton />
+        </div>
+      </section>
+      <section className="digest-panel space-y-2 rounded-xl p-3 sm:p-4">
+        <h2 className="text-lg font-semibold">Export library</h2>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          Download your articles, topics, and personal notes.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href="/settings/export?format=json"
+            className="inline-flex min-h-9 items-center rounded-lg bg-teal-800 px-3 text-sm font-semibold text-white hover:bg-teal-900"
+          >
+            Download JSON
+          </a>
+          <a
+            href="/settings/export?format=md"
+            className="digest-panel inline-flex min-h-9 items-center rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
+          >
+            Download Markdown
+          </a>
         </div>
       </section>
       <ThemeSettings />
       {session.role === "admin" ? (
         <Link
           href="/admin"
-          className="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-zinc-700"
+          className="inline-flex min-h-9 items-center justify-center rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-zinc-700"
         >
           Site administration
         </Link>

@@ -307,6 +307,10 @@ try {
   const editor = await fetch(editUrl, { headers: { cookie: second.cookie } })
   assert.equal(editor.status, 200)
   const editorHtml = await editor.text()
+  assert.match(editorHtml, /aria-label="Edit article actions"/)
+  assert.match(editorHtml, /aria-label="Save changes"/)
+  assert.match(editorHtml, /aria-label="Delete article"/)
+  assert.match(editorHtml, /<dialog[^>]*aria-labelledby=/)
   const [editForm] = [...editorHtml.matchAll(/<form[\s\S]*?<\/form>/g)]
     .map(([form]) => form)
     .filter((form) => form.includes('name="personalNotes"'))
@@ -509,6 +513,9 @@ try {
   const relatedHtml = await related.text()
   assert.match(relatedHtml, /aria-label="Topics".*Engineering/)
   assert.match(relatedHtml, /Related articles/)
+  assert.match(relatedHtml, /aria-label="Article actions"/)
+  assert.match(relatedHtml, /aria-label="Open original"/)
+  assert.match(relatedHtml, /aria-label="Download JSON"/)
   assert.match(relatedHtml, new RegExp(`/articles/${article.articleId}`))
 
   async function invoke(

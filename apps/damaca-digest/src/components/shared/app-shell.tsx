@@ -25,7 +25,7 @@ export function AppShell({
       <main
         id="main-content"
         tabIndex={-1}
-        className="px-3 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:px-5 md:pb-0"
+        className="px-3 pb-(--digest-mobile-nav) sm:px-5 md:pb-0"
       >
         {children}
       </main>

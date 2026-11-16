@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { removeArticle } from "@/features/articles/actions"
 import { ArticleEditor } from "@/features/articles/components/article-editor"
@@ -18,7 +17,6 @@ export default async function EditArticlePage({
     requireAuthorizedSession(),
     params,
     searchParams,
-    searchParams,
   ])
   if (!articleId.safeParse(id).success) notFound()
   const article = await findArticle(user.id, id)
@@ -31,18 +29,12 @@ export default async function EditArticlePage({
   const deleteThisArticle = removeArticle.bind(null, id, article.revision)
   return (
     <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
-      <Link
-        className="inline-flex min-h-11 items-center underline"
-        href={`/articles/${id}`}
-      >
-        Back to article
-      </Link>
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-        Edit article
-      </h1>
+      <h1 className="sr-only">Edit article</h1>
       <ArticleEditor
         id={article.id}
         revision={article.revision}
+        deleteAction={deleteThisArticle}
+        deletion={deletion}
         values={{
           title: article.title ?? "",
           authors: article.authors ?? [],
@@ -58,32 +50,6 @@ export default async function EditArticlePage({
           favorite: article.favorite,
         }}
       />
-      <details
-        open={deletion === "confirm" || deletion === "failed"}
-        className="digest-panel rounded-xl px-3"
-      >
-        <summary className="min-h-11 py-3 text-sm">Delete article</summary>
-        <form action={deleteThisArticle} className="space-y-2 pb-3 text-sm">
-          <label className="flex min-h-11 items-center gap-2">
-            <input type="checkbox" name="confirm" value="true" required />{" "}
-            Permanently delete this article and its notes
-          </label>
-          {deletion === "confirm" ? (
-            <p role="alert">Confirm that you want to delete this article.</p>
-          ) : null}
-          {deletion === "failed" ? (
-            <p role="alert">
-              The article could not be deleted. Reload and try again.
-            </p>
-          ) : null}
-          <button
-            type="submit"
-            className="min-h-11 rounded-lg bg-red-800 px-4 font-medium text-white"
-          >
-            Delete article
-          </button>
-        </form>
-      </details>
     </section>
   )
 }

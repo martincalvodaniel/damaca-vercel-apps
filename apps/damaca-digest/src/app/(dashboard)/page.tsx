@@ -37,25 +37,7 @@ export default async function LibraryPage({
   )
   return (
     <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
-      <div className="flex items-center justify-between gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Library
-        </h1>
-        <div className="flex flex-wrap justify-end gap-2">
-          <Link
-            href="/share"
-            className="inline-flex min-h-11 items-center rounded-lg bg-teal-800 px-2.5 text-sm font-semibold text-white hover:bg-teal-900"
-          >
-            Capture link
-          </Link>
-          <Link
-            href="/topics"
-            className="digest-panel inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm font-semibold hover:border-teal-600"
-          >
-            Topics
-          </Link>
-        </div>
-      </div>
+      <h1 className="sr-only">Library</h1>
       <LibraryFilters query={query} />
       <LibraryActiveFilters query={query} />
       {!parsed.success ? (

@@ -25,17 +25,7 @@ export default async function TopicsPage({
         : undefined
   return (
     <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Topics
-        </h1>
-        <Link
-          href="/"
-          className="digest-panel inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
-        >
-          Library
-        </Link>
-      </div>
+      <h1 className="sr-only">Topics</h1>
       {error ? <p role="alert">{error}</p> : null}
       {topics.length ? (
         <>
@@ -45,18 +35,19 @@ export default async function TopicsPage({
             aria-label="Search topics"
           >
             <label className="min-w-0 flex-1 text-sm font-medium">
-              Topic or alias
               <input
                 type="search"
+                aria-label="Topic or alias"
+                placeholder="Topic or alias"
                 name="q"
                 maxLength={100}
                 defaultValue={query.success ? query.data : undefined}
-                className="digest-panel mt-1 block min-h-11 w-full min-w-0 rounded-lg px-2.5"
+                className="digest-panel block min-h-9 w-full min-w-0 rounded-lg px-2.5"
               />
             </label>
             <button
               type="submit"
-              className="digest-panel min-h-11 rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
+              className="digest-panel min-h-9 rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
             >
               Search
             </button>
@@ -80,7 +71,7 @@ export default async function TopicsPage({
               >
                 <Link
                   href={`/?${new URLSearchParams({ topic: topic.label })}`}
-                  className="flex min-h-11 items-center justify-between gap-3 font-medium hover:text-teal-800 dark:hover:text-teal-300"
+                  className="flex min-h-9 items-center justify-between gap-3 font-medium hover:text-teal-800 dark:hover:text-teal-300"
                 >
                   <span>{topic.label}</span>
                   <span className="shrink-0 text-sm">

@@ -176,3 +176,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: destino y controles de Compartir.
 - Aceptación: renderizar un enlace directo al intent de la app en Android con alternativa web. Si se pierde la activación al copiar, el usuario puede abrir ChatGPT con un segundo toque. Verificar la apertura nativa en dispositivo por separado.
+
+## 22 — Compactar la interfaz de Digest
+
+- Estado: `validated`.
+- Rutas: navegación, biblioteca, Topics, ficha, editor y ajustes.
+- Aceptación: navegación compacta, captura alineada con el buscador, acciones por icono y editor con barra fija al desplazarse. Verificar a 320 y 1280 px y conservar la confirmación de borrado.

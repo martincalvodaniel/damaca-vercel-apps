@@ -1,12 +1,10 @@
 import Link from "next/link"
+import { DigestIcon } from "@/components/ui/digest-icon"
 import { setArticleReading } from "@/features/articles/actions"
 import { AccessBadge } from "@/features/articles/components/access-badge"
 import type { Article, RelatedArticle } from "@/lib/db/articles"
 
 const sectionTitle = "mb-2 text-lg font-semibold tracking-tight"
-const actionLink =
-  "inline-flex min-h-11 items-center justify-center rounded-lg px-3 text-sm font-semibold"
-
 export function ArticleDetail({
   article,
   topics,
@@ -37,60 +35,84 @@ export function ArticleDetail({
 
   return (
     <article className="mx-auto max-w-3xl space-y-3 break-words py-2 sm:space-y-4 sm:py-5">
-      <div className="flex items-center justify-between gap-2">
-        <Link
-          className="inline-flex min-h-11 items-center gap-2 text-sm font-medium underline-offset-4 hover:underline"
-          href="/"
-        >
-          <span aria-hidden="true">←</span> Library
-        </Link>
-        <Link
-          className={`digest-panel ${actionLink} hover:border-teal-600`}
-          href={`/articles/${article.id}/edit`}
-        >
-          Edit article
-        </Link>
-      </div>
-      <header className="digest-panel rounded-xl p-4 sm:p-6">
+      <header className="digest-panel rounded-xl p-3 sm:p-4">
         <p className="text-sm font-medium text-teal-800 dark:text-teal-300">
           {details}
         </p>
-        <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+        <h1 className="mt-1 text-xl font-semibold leading-tight tracking-tight sm:text-2xl">
           {article.title ?? article.sourceDomain}
         </h1>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+        <div className="mt-1">
           <AccessBadge status={article.accessStatus} />
+        </div>
+        <fieldset
+          aria-label="Article actions"
+          className="mt-1 flex min-w-0 flex-wrap items-center"
+        >
           <a
-            className={`${actionLink} bg-teal-800 text-white hover:bg-teal-900`}
+            className="digest-icon-button"
             href={article.url}
             rel="noreferrer"
+            aria-label="Open original"
+            title="Open original"
           >
-            Open original{" "}
-            <span aria-hidden="true" className="ms-1.5">
-              ↗
-            </span>
+            <DigestIcon name="original" />
           </a>
-        </div>
-        <form action={readingAction} className="mt-2 flex flex-wrap gap-2">
-          <button
-            className={`digest-panel ${actionLink} hover:border-teal-600`}
-            type="submit"
-            name="readingChange"
-            value={article.favorite ? "unfavorite" : "favorite"}
+          <Link
+            className="digest-icon-button"
+            href={`/articles/${article.id}/edit`}
+            aria-label="Edit article"
+            title="Edit article"
           >
-            {article.favorite ? "Remove favorite" : "Add to favorites"}
-          </button>
-          <button
-            className={`digest-panel ${actionLink} hover:border-teal-600`}
-            type="submit"
-            name="readingChange"
-            value={article.readingStatus === "read" ? "unread" : "read"}
+            <DigestIcon name="edit" />
+          </Link>
+          <form action={readingAction} className="flex">
+            <button
+              className="digest-icon-button"
+              type="submit"
+              name="readingChange"
+              value={article.favorite ? "unfavorite" : "favorite"}
+              aria-label="Favorite"
+              aria-pressed={article.favorite}
+              title={article.favorite ? "Remove favorite" : "Add to favorites"}
+            >
+              <DigestIcon name="favorite" filled={article.favorite} />
+            </button>
+            <button
+              className="digest-icon-button"
+              type="submit"
+              name="readingChange"
+              value={article.readingStatus === "read" ? "unread" : "read"}
+              aria-label="Read"
+              aria-pressed={article.readingStatus === "read"}
+              title={
+                article.readingStatus === "read"
+                  ? "Mark as unread"
+                  : "Mark as read"
+              }
+            >
+              <DigestIcon
+                name={article.readingStatus === "read" ? "read" : "unread"}
+              />
+            </button>
+          </form>
+          <a
+            href={`/articles/${article.id}/export?format=md`}
+            className="digest-icon-button"
+            aria-label="Download Markdown"
+            title="Download Markdown"
           >
-            {article.readingStatus === "read"
-              ? "Mark as unread"
-              : "Mark as read"}
-          </button>
-        </form>
+            <DigestIcon name="markdown" />
+          </a>
+          <a
+            href={`/articles/${article.id}/export?format=json`}
+            className="digest-icon-button"
+            aria-label="Download JSON"
+            title="Download JSON"
+          >
+            <DigestIcon name="json" />
+          </a>
+        </fieldset>
         {readingUpdateFailed ? (
           <p role="alert" className="mt-2 text-sm">
             The reading update could not be saved. Try again.
@@ -201,20 +223,6 @@ export function ArticleDetail({
           </ul>
         </section>
       ) : null}
-      <nav className="flex flex-wrap gap-2" aria-label="Download article">
-        <a
-          href={`/articles/${article.id}/export?format=md`}
-          className={`digest-panel ${actionLink} hover:border-teal-600`}
-        >
-          Download Markdown
-        </a>
-        <a
-          href={`/articles/${article.id}/export?format=json`}
-          className={`digest-panel ${actionLink} hover:border-teal-600`}
-        >
-          Download JSON
-        </a>
-      </nav>
       <footer className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-600 dark:text-zinc-400">
         <p>
           Reading status: {article.readingStatus}
