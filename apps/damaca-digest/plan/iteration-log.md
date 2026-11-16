@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 17 — Recuperarse de errores de biblioteca
-
-- El panel muestra un reintento seguro y la ficha inexistente ofrece volver a la biblioteca. Una ficha ajena responde con el mismo 404. Las acciones rápidas validan el selector con Zod.
-- Biome, tipos, build e integración HTTP pasaron. En Chrome a 320 px, la búsqueda se recuperó al pulsar el reintento tras restaurar un índice eliminado del MongoDB desechable.
-
 ## 18 — Unificar la interfaz de acceso y conexión
 
 - Inicio de sesión, solicitud de acceso y consentimiento usan paneles y controles acordes a la biblioteca.
@@ -54,3 +49,8 @@
 
 - Los buscadores quedan arriba al desplazarse y debajo de la navegación en escritorio. La papelera de filtros queda a la izquierda de aplicar. La gestión de topics conserva aplicar y cerrar en las mismas posiciones.
 - Biome, tipos, 50 pruebas y build pasaron. Chrome verificó el desplazamiento y las coordenadas de las acciones a 320 y 1280 px.
+
+## 27 — Cambiar de pestaña con un gesto horizontal
+
+- Las tres pestañas admiten gestos táctiles hacia la pestaña contigua, con límites en Library y Settings. La lupa de Topics queda centrada con el campo y el icono de gestión.
+- Biome, tipos, 50 pruebas y build pasaron. Chrome verificó los gestos en ambas direcciones, los límites, el desplazamiento vertical, los controles y las pantallas excluidas. La alineación se comprobó en móvil y escritorio.

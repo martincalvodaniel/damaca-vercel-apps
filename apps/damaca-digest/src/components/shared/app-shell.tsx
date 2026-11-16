@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import { AppNavigation } from "@/components/shared/app-navigation"
+import { TabSwipeContent } from "@/components/shared/tab-swipe-content"
 
 export function AppShell({
   children,
@@ -21,14 +22,7 @@ export function AppShell({
         Skip to main content
       </a>
       <AppNavigation name={name} email={email} image={image} />
-      {/* biome-ignore lint/correctness/useUniqueElementIds: The dashboard layout renders one main landmark and its skip link. */}
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="px-3 pb-(--digest-mobile-nav) sm:px-5 md:pb-0"
-      >
-        {children}
-      </main>
+      <TabSwipeContent>{children}</TabSwipeContent>
     </>
   )
 }

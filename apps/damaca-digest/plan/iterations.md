@@ -202,3 +202,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: Library y Topics mantienen el buscador arriba al desplazarse. La papelera aparece solo en filtros y a la izquierda del tick. Aplicar y cerrar conservan la misma posición en ambas modales.
+
+## 27 — Cambiar de pestaña con un gesto horizontal
+
+- Estado: `validated`.
+- Aceptación: Library, Topics y Settings permiten desplazarse horizontalmente a la pestaña contigua. El gesto respeta los controles, el desplazamiento vertical y los extremos de la navegación.
