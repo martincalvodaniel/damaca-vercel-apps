@@ -1,6 +1,7 @@
 "use client"
 
 import { type MouseEvent, useCallback, useState } from "react"
+import { DigestIcon } from "@/components/ui/digest-icon"
 
 import { chatGptWebUrl } from "./chatgpt-link"
 
@@ -46,9 +47,9 @@ export function ChatGptHandoff({
         paste the prompt, and send it.
       </p>
       <label className="block text-sm font-medium">
-        Prompt
         <textarea
-          className="mt-1 block w-full min-w-0 resize-y rounded-lg border border-zinc-300 bg-transparent p-1.5 text-sm dark:border-zinc-700"
+          className="digest-search-field mt-1 resize-y py-1.5 text-sm"
+          aria-label="Prompt"
           readOnly
           rows={5}
           value={prompt}
@@ -68,24 +69,32 @@ export function ChatGptHandoff({
           type="button"
           onClick={copyPrompt}
           value="copy"
-          className="min-h-8 rounded-lg bg-teal-800 px-2 text-sm font-semibold text-white hover:bg-teal-900"
+          aria-label="Copy prompt"
+          title="Copy prompt"
+          className="group digest-icon-button text-white"
         >
-          Copy prompt
+          <span className="grid size-8 place-items-center rounded-lg bg-teal-800 group-hover:bg-teal-900">
+            <DigestIcon name="copy" />
+          </span>
         </button>
         <button
           type="button"
           onClick={copyPrompt}
           value="open"
-          className="digest-panel min-h-8 rounded-lg px-2 text-sm font-semibold hover:border-teal-600"
+          aria-label="Copy prompt and open ChatGPT"
+          title="Copy prompt and open ChatGPT"
+          className="digest-icon-button"
         >
-          Copy prompt and open ChatGPT
+          <DigestIcon name="copyOpen" />
         </button>
         <a
           href={openUrl}
           rel="noreferrer"
-          className="inline-flex min-h-8 items-center px-2 text-sm underline underline-offset-4"
+          aria-label="Open ChatGPT"
+          title="Open ChatGPT"
+          className="digest-icon-button"
         >
-          Open ChatGPT
+          <DigestIcon name="original" />
         </a>
       </div>
     </div>

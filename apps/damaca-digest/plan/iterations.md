@@ -217,3 +217,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: el gesto recorre las cuatro pestañas en el orden de la barra y Library sigue siendo el inicio.
+
+## 30 — Alinear el diseño de Capture
+
+- Estado: `validated`.
+- Aceptación: Capture mantiene el ancho, espaciado y estilo de la fila de entrada de Library y Topics, con un encabezado accesible y el flujo de captura operativo.

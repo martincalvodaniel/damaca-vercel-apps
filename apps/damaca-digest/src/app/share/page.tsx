@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { headers } from "next/headers"
 import { AppShell } from "@/components/shared/app-shell"
+import { DigestIcon } from "@/components/ui/digest-icon"
 import { installName } from "@/config/install-name"
 import { ChatGptHandoff } from "@/features/sharing/chatgpt-handoff"
 import { chatGptOpenUrl } from "@/features/sharing/chatgpt-link"
@@ -26,13 +27,11 @@ export default async function SharePage({
 
   return (
     <AppShell>
-      <section className="digest-panel mx-auto mt-2 max-w-lg space-y-2 rounded-xl p-2 sm:p-3">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Capture a link
-        </h1>
+      <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
+        <h1 className="sr-only">Capture a link</h1>
         {url ? (
-          <>
-            <p className="break-all text-sm font-medium text-teal-800 dark:text-teal-300">
+          <div className="digest-panel space-y-2 rounded-xl p-3">
+            <p className="break-words text-sm font-medium text-teal-800 dark:text-teal-300">
               {url}
             </p>
             <ChatGptHandoff
@@ -43,31 +42,39 @@ export default async function SharePage({
               )}
               prompt={capturePrompt(url, installName)}
             />
-          </>
+          </div>
         ) : (
-          <form action="/share" className="space-y-2">
+          <>
             {params.url || params.text ? (
               <p role="alert" className="text-sm">
                 Share or paste a single HTTP or HTTPS link.
               </p>
             ) : null}
-            <label className="block text-sm font-medium">
-              Article URL
+            <form
+              action="/share"
+              className="digest-panel digest-search-panel digest-search-row"
+            >
               <input
                 name="url"
                 type="url"
+                aria-label="Article URL"
+                placeholder="Article URL"
                 required
                 maxLength={4096}
-                className="mt-1 block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
+                className="digest-search-field flex-1 text-sm"
               />
-            </label>
-            <button
-              type="submit"
-              className="min-h-8 rounded-lg bg-teal-800 px-2 text-sm font-semibold text-white hover:bg-teal-900"
-            >
-              Prepare prompt
-            </button>
-          </form>
+              <button
+                type="submit"
+                aria-label="Prepare prompt"
+                title="Prepare prompt"
+                className="group grid size-11 shrink-0 place-items-center rounded-lg text-white"
+              >
+                <span className="grid size-8 place-items-center rounded-lg bg-teal-800 group-hover:bg-teal-900">
+                  <DigestIcon name="forward" />
+                </span>
+              </button>
+            </form>
+          </>
         )}
       </section>
     </AppShell>

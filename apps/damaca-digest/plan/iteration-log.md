@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 20 — Usar el complemento del entorno al compartir
-
-- Compartir usa el nombre de la instalación en el prompt y en las instrucciones. Android utiliza el intent de Chrome con alternativa web. iOS usa el enlace universal de ChatGPT.
-- Pasaron Biome, 50 pruebas, builds de main e int, verificación de HTML y portapapeles en Chrome a 320 px e integración HTTP de int con MongoDB aislado. La apertura nativa queda por comprobar en dispositivos móviles.
-
 ## 21 — Abrir ChatGPT desde Chrome para Android
 
 - La ruta Compartir sirve un enlace directo al esquema de la app para Android y conserva la alternativa HTTPS. Si copiar agota la activación, muestra que el prompt se copió y permite tocar el enlace.
@@ -51,3 +46,8 @@
 
 - El gesto usa el mismo orden que la barra y ahora incluye Capture. El inicio sigue siendo Library.
 - Biome, tipos, 50 pruebas y build pasaron. Chrome verificó Capture y Library en ambos sentidos, el límite en Capture y el recorrido previo.
+
+## 30 — Alinear el diseño de Capture
+
+- El formulario usa la misma fila y panel que los buscadores. Los encabezados quedan disponibles para lectores de pantalla y las acciones de captura y ChatGPT son iconos etiquetados.
+- Biome, tipos, 50 pruebas y build pasaron. Chrome comprobó la alineación del panel y los iconos al preparar un enlace a 320 y 1280 px.

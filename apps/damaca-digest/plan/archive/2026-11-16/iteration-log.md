@@ -144,3 +144,8 @@
 - El panel expone un único contenido principal. El primer Tab revela el enlace para saltar al contenido y Enter mueve allí el foco. Los controles muestran un contorno visible y la navegación diferencia la página actual de la sección activa.
 - Biome, tipos, 49 pruebas, build e integración HTTP con MongoDB pasaron. Chrome a 320 y 1280 px verificó el salto y la navegación con Tab hasta los controles principales de biblioteca, ficha, Topics y Compartir.
 - El registro en el menú Compartir y el envío desde el conector siguen pendientes en un Android real con una versión publicada.
+
+## 20 — Usar el complemento del entorno al compartir
+
+- Compartir usa el nombre de la instalación en el prompt y en las instrucciones. Android utiliza el intent de Chrome con alternativa web. iOS usa el enlace universal de ChatGPT.
+- Pasaron Biome, 50 pruebas, builds de main e int, verificación de HTML y portapapeles en Chrome a 320 px e integración HTTP de int con MongoDB aislado. La apertura nativa queda por comprobar en dispositivos móviles.
