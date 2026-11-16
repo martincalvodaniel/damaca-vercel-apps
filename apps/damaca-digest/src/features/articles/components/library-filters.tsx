@@ -1,5 +1,3 @@
-import Link from "next/link"
-import { DigestIcon } from "@/components/ui/digest-icon"
 import { SearchButton } from "@/components/ui/search-button"
 import { SearchDialog } from "@/components/ui/search-dialog"
 import { accessStatus, contentType, readingStatus } from "@/schemas/article"
@@ -27,16 +25,6 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
   return (
     <form action="/" className="digest-panel digest-search-panel">
       <div className="digest-search-row">
-        <Link
-          href="/share"
-          aria-label="Capture link"
-          title="Capture link"
-          className="digest-icon-button"
-        >
-          <span className="digest-panel grid size-8 place-items-center rounded-lg">
-            <DigestIcon name="capture" />
-          </span>
-        </Link>
         <label className="min-w-0 flex-1 text-sm">
           <input
             type="search"

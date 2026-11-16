@@ -7,6 +7,7 @@ const paths = {
   close: "m6 6 12 12M18 6 6 18",
   filters: "M4 7h16M7 12h10m-7 5h4",
   search: "M16 10a6 6 0 1 1-12 0 6 6 0 0 1 12 0Zm-1.8 4.2L20 20",
+  library: "M4 4h4v16H4zM8 4h4v16H8zM15 5l4-1 4 15-4 1z",
   capture: "M12 5v14m-7-7h14",
   topics: "M4 4h8l8 8-8 8-8-8V4Zm4 4h.01",
   original: "M13 5h6v6m0-6-9 9m7-1v6H5V7h6",

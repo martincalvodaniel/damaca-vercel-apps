@@ -5,7 +5,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AccountAvatar } from "@/components/shared/account-avatar"
 import { DigestIcon } from "@/components/ui/digest-icon"
-import { HomeIcon } from "@/components/ui/home-icon"
 import { navigationDestinations } from "@/config/navigation"
 
 interface AppNavigationProps {
@@ -16,10 +15,7 @@ interface AppNavigationProps {
 
 export function AppNavigation({ name, email, image }: AppNavigationProps) {
   const pathname = usePathname()
-  const inLibrary =
-    pathname === "/" ||
-    pathname === "/share" ||
-    pathname.startsWith("/articles/")
+  const inLibrary = pathname === "/" || pathname.startsWith("/articles/")
   return (
     <nav
       aria-label="Main navigation"
@@ -63,7 +59,11 @@ export function AppNavigation({ name, email, image }: AppNavigationProps) {
                   ) : destination.id === "topics" ? (
                     <DigestIcon name="topics" />
                   ) : (
-                    <HomeIcon />
+                    <DigestIcon
+                      name={
+                        destination.id === "capture" ? "capture" : "library"
+                      }
+                    />
                   )}
                   <span>{destination.label}</span>
                 </Link>

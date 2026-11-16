@@ -207,3 +207,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: Library, Topics y Settings permiten desplazarse horizontalmente a la pestaña contigua. El gesto respeta los controles, el desplazamiento vertical y los extremos de la navegación.
+
+## 28 — Mover Captura a la navegación
+
+- Estado: `validated`.
+- Aceptación: Captura es el primer destino, Library muestra libros como icono y los gestos siguen entre las tres pestañas de contenido.
