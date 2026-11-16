@@ -2,9 +2,15 @@
 
 import { type MouseEvent, useCallback, useState } from "react"
 
-const chatGptUrl = "https://chatgpt.com/"
+import { chatGptOpenUrl, chatGptUniversalUrl } from "./chatgpt-link"
 
-export function ChatGptHandoff({ prompt }: { prompt: string }) {
+export function ChatGptHandoff({
+  connector,
+  prompt,
+}: {
+  connector: string
+  prompt: string
+}) {
   const [copyStatus, setCopyStatus] = useState<"copied" | "failed" | null>(null)
 
   const copyPrompt = useCallback(
@@ -12,7 +18,8 @@ export function ChatGptHandoff({ prompt }: { prompt: string }) {
       const openChatGpt = event.currentTarget.value === "open"
       try {
         await navigator.clipboard.writeText(prompt)
-        if (openChatGpt) window.location.assign(chatGptUrl)
+        if (openChatGpt)
+          window.location.assign(chatGptOpenUrl(navigator.userAgent))
         else setCopyStatus("copied")
       } catch {
         setCopyStatus("failed")
@@ -21,11 +28,18 @@ export function ChatGptHandoff({ prompt }: { prompt: string }) {
     [prompt]
   )
 
+  const openChatGpt = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    const target = chatGptOpenUrl(navigator.userAgent)
+    if (!target.startsWith("intent:")) return
+    event.preventDefault()
+    window.location.assign(target)
+  }, [])
+
   return (
     <div className="space-y-3">
       <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-        In ChatGPT, select <strong>@damaca-digest</strong>, paste the prompt,
-        and send it.
+        In your ChatGPT session, select <strong>{`@${connector}`}</strong>,
+        paste the prompt, and send it.
       </p>
       <label className="block text-sm font-medium">
         Prompt
@@ -47,21 +61,22 @@ export function ChatGptHandoff({ prompt }: { prompt: string }) {
         <button
           type="button"
           onClick={copyPrompt}
-          value="open"
+          value="copy"
           className="min-h-11 rounded-lg bg-teal-800 px-3 text-sm font-semibold text-white hover:bg-teal-900"
         >
-          Copy prompt and open ChatGPT
+          Copy prompt
         </button>
         <button
           type="button"
           onClick={copyPrompt}
-          value="copy"
+          value="open"
           className="digest-panel min-h-11 rounded-lg px-3 text-sm font-semibold hover:border-teal-600"
         >
-          Copy prompt only
+          Copy prompt and open ChatGPT
         </button>
         <a
-          href={chatGptUrl}
+          href={chatGptUniversalUrl}
+          onClick={openChatGpt}
           rel="noreferrer"
           className="inline-flex min-h-11 items-center px-2 text-sm underline underline-offset-4"
         >

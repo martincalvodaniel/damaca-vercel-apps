@@ -27,6 +27,6 @@ export function resolveSharedLink({ url, text }: SharedLinkInput) {
   return urls.values().next().value ?? null
 }
 
-export function capturePrompt(url: string) {
-  return `Use @damaca-digest to read this article and save it in my library. Report any access limitations.\n\n${url}`
+export function capturePrompt(url: string, connector: string) {
+  return `Use @${connector} to read this article and save it in my library. Report any access limitations.\n\n${url}`
 }

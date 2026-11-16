@@ -164,3 +164,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: estructura del panel, navegación y foco visible.
 - Aceptación: saltar al contenido principal, identificar correctamente una sección activa y navegar con Tab por biblioteca, ficha, Topics y Compartir en móvil estrecho y escritorio.
+
+## 20 — Usar el complemento del entorno al compartir
+
+- Estado: `validated`.
+- Rutas: Compartir, nombre de instalación y documentación.
+- Aceptación: el prompt y la ayuda muestran el mismo complemento, según la rama. Las acciones de apertura intentan usar la app de ChatGPT en móvil y tienen alternativa web.

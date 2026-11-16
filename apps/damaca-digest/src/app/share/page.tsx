@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { installName } from "@/config/install-name"
 import { ChatGptHandoff } from "@/features/sharing/chatgpt-handoff"
 import {
   capturePrompt,
@@ -38,7 +39,11 @@ export default async function SharePage({
             <p className="break-all text-sm font-medium text-teal-800 dark:text-teal-300">
               {url}
             </p>
-            <ChatGptHandoff key={url} prompt={capturePrompt(url)} />
+            <ChatGptHandoff
+              key={url}
+              connector={installName}
+              prompt={capturePrompt(url, installName)}
+            />
           </>
         ) : (
           <form action="/share" className="space-y-3">

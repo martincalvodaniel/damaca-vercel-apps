@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { getAuthEnv, getChatGptClient, getDatabaseEnv } from "@/config/env"
+import { installName } from "@/config/install-name"
 import { captureScope, getMcpUrls, readScope } from "@/lib/auth/mcp-config"
 import { saveArticle } from "@/lib/db/articles"
 import { closeDatabaseConnection, getDatabase } from "@/lib/db/client"
@@ -161,7 +162,8 @@ try {
   assert.equal(shared.status, 200)
   const sharedHtml = await shared.text()
   assert.match(sharedHtml, /Copy prompt and open ChatGPT/)
-  assert.match(sharedHtml, /Use @damaca-digest/)
+  assert.ok(sharedHtml.includes(`Use @${installName} to read`))
+  assert.ok(sharedHtml.includes(`<strong>@${installName}</strong>`))
   assert.match(sharedHtml, /https:\/\/example.com\/shared/)
   const rejectedShare = await fetch(
     `${origin}/share?url=javascript%3Aalert%281%29`
