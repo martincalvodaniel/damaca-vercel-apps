@@ -192,3 +192,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: ambos buscadores usan un botón verde de lupa y Topics agrupa búsqueda y gestión en el mismo panel, con los estilos de Library.
+
+## 25 — Abrir filtros y gestión de topics en modales
+
+- Estado: `validated`.
+- Aceptación: disparadores junto a la lupa y modales de pantalla completa con acciones visibles al desplazarse.

@@ -463,7 +463,7 @@ try {
     const html = await page.text()
     const form = [...html.matchAll(/<form[\s\S]*?<\/form>/g)]
       .map(([value]) => value)
-      .find((value) => value.includes(`value="${fields.operation}"`))
+      .find((value) => value.includes('name="operation"'))
     assert.ok(form)
     const body = serverActionForm(form)
     for (const [key, value] of Object.entries(fields)) body.set(key, value)

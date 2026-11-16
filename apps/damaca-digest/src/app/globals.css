@@ -99,14 +99,6 @@ html:has(.digest-editor-toolbar) {
     @apply block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 focus-visible:outline-2 focus-visible:outline-teal-600 dark:border-zinc-700;
   }
 
-  .digest-search-details {
-    @apply rounded-lg border-t border-zinc-200 px-1 dark:border-zinc-800;
-  }
-
-  .digest-search-summary {
-    @apply min-h-8 cursor-pointer py-1 text-sm font-medium;
-  }
-
   .digest-icon-button {
     display: inline-grid;
     place-items: center;

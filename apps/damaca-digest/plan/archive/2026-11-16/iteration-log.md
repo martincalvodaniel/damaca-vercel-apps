@@ -116,3 +116,8 @@
 
 - `get_reading_digest` agrupa capturas por fecha UTC con paginación y el permiso `articles:read`. Distingue fecha de captura de publicación y estado de lectura.
 - La integración HTTP verificó dos páginas, el permiso y el aislamiento entre cuentas con MongoDB desechable. El build y la compilación de tipos pasaron.
+
+## 15 — Copiar una captura para una sesión de ChatGPT abierta
+
+- La recepción de enlaces permite copiar el prompt sin abrir otra sesión de ChatGPT y conserva la selección manual como alternativa.
+- Biome, tipos, 49 pruebas y build pasaron. Chrome a 320 px verificó copia sin navegación, copia con apertura interceptada y mensaje cuando el portapapeles devuelve un error.

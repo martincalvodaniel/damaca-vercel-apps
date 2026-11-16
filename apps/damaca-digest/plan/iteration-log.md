@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 15 — Copiar una captura para una sesión de ChatGPT abierta
-
-- La recepción de enlaces permite copiar el prompt sin abrir otra sesión de ChatGPT y conserva la selección manual como alternativa.
-- Biome, tipos, 49 pruebas y build pasaron. Chrome a 320 px verificó copia sin navegación, copia con apertura interceptada y mensaje cuando el portapapeles devuelve un error.
-
 ## 16 — Buscar en el vocabulario de la biblioteca
 
 - Topics permite buscar por nombre o alias con el mismo filtro normalizado que MCP. Las operaciones y recuentos siguen disponibles.
@@ -54,3 +49,8 @@
 
 - Búsqueda y gestión de Topics ahora comparten un panel con los estilos de Library. Ambos buscadores usan la misma lupa verde.
 - Biome, tipos, 50 pruebas, build e integración HTTP pasaron. Chrome comparó los estilos y comprobó los desplegables a 320 y 1280 px.
+
+## 25 — Abrir filtros y gestión de topics en modales
+
+- Los disparadores se sitúan a la izquierda de la lupa. Ambas modales usan una barra sticky para aplicar, limpiar y cerrar. Limpiar filtros conserva el término de búsqueda y limpiar la gestión de topics restablece el formulario.
+- Biome, tipos, 50 pruebas, build e integración HTTP pasaron. Chrome a 320 y 1280 px comprobó la pantalla completa, el foco, la barra sticky y las acciones de filtros y limpieza.

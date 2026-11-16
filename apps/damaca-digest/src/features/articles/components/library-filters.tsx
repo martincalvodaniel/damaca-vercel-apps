@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { DigestIcon } from "@/components/ui/digest-icon"
 import { SearchButton } from "@/components/ui/search-button"
+import { SearchDialog } from "@/components/ui/search-dialog"
 import { accessStatus, contentType, readingStatus } from "@/schemas/article"
 import type { LibraryQuery } from "@/schemas/library"
 
@@ -47,86 +48,79 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
             className="digest-search-field"
           />
         </label>
-        <SearchButton label="Search articles" />
-      </div>
-      <details className="digest-search-details">
-        <summary className="digest-search-summary">Filters and sort</summary>
-        <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2 pb-2 text-sm">
-          {textFields.map(([key, label, max]) => (
-            <label key={key}>
-              {label}
-              <input
-                name={key}
-                defaultValue={query[key]}
-                maxLength={max}
-                className="digest-search-field"
-              />
-            </label>
-          ))}
-          {selectFields.map(([key, label, options]) => (
-            <label key={key}>
-              {label}
+        <SearchDialog
+          label="Filters and sort"
+          icon="filters"
+          applyLabel="Apply filters"
+          clearLabel="Clear filters"
+          clearHref={query.q ? `/?${new URLSearchParams({ q: query.q })}` : "/"}
+        >
+          <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2 pb-2 text-sm">
+            {textFields.map(([key, label, max]) => (
+              <label key={key}>
+                {label}
+                <input
+                  name={key}
+                  defaultValue={query[key]}
+                  maxLength={max}
+                  className="digest-search-field"
+                />
+              </label>
+            ))}
+            {selectFields.map(([key, label, options]) => (
+              <label key={key}>
+                {label}
+                <select
+                  name={key}
+                  defaultValue={query[key] ?? ""}
+                  className="digest-search-field"
+                >
+                  <option value="">Any</option>
+                  {options.map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ))}
+            <label>
+              Sort
               <select
-                name={key}
-                defaultValue={query[key] ?? ""}
+                name="sort"
+                defaultValue={query.sort}
                 className="digest-search-field"
               >
-                <option value="">Any</option>
-                {options.map((value) => (
-                  <option key={value} value={value}>
-                    {value}
-                  </option>
-                ))}
+                <option value="capture">Newest capture</option>
+                <option value="publication">Newest publication</option>
+                <option value="title">Title</option>
+                <option value="relevance">Search relevance</option>
               </select>
             </label>
-          ))}
-          <label>
-            Sort
-            <select
-              name="sort"
-              defaultValue={query.sort}
-              className="digest-search-field"
-            >
-              <option value="capture">Newest capture</option>
-              <option value="publication">Newest publication</option>
-              <option value="title">Title</option>
-              <option value="relevance">Search relevance</option>
-            </select>
-          </label>
-          {dateFields.map(([key, label]) => (
-            <label key={key} className="min-w-0">
-              {label}
+            {dateFields.map(([key, label]) => (
+              <label key={key} className="min-w-0">
+                {label}
+                <input
+                  type="date"
+                  name={key}
+                  defaultValue={query[key]}
+                  className="digest-search-field"
+                />
+              </label>
+            ))}
+            <label className="col-span-full inline-flex min-h-11 items-center gap-1.5">
               <input
-                type="date"
-                name={key}
-                defaultValue={query[key]}
-                className="digest-search-field"
+                type="checkbox"
+                name="favorite"
+                value="true"
+                defaultChecked={!!query.favorite}
               />
+              Favorites only
             </label>
-          ))}
-          <label className="col-span-full inline-flex min-h-11 items-center gap-1.5">
-            <input
-              type="checkbox"
-              name="favorite"
-              value="true"
-              defaultChecked={!!query.favorite}
-            />
-            Favorites only
-          </label>
-          <button
-            type="submit"
-            className="h-8 rounded-lg bg-teal-800 hover:bg-teal-900 px-2 font-medium text-white"
-          >
-            Apply filters
-          </button>
-          <Link
-            href="/"
-            className="inline-flex min-h-11 items-center justify-center underline"
-          >
-            Clear
-          </Link>
-        </div>
-      </details>
+          </div>
+        </SearchDialog>
+        <SearchButton label="Search articles" />
+      </div>
     </form>
   )
 }
