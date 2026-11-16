@@ -86,3 +86,8 @@
 
 - Artículos relacionados del mismo propietario, por coincidencia con topics activos, fusionados e históricos. Las fichas descargan una copia Markdown o JSON con las notas mediante un endpoint privado.
 - Pasaron Biome, tipos, 49 pruebas, build e integración HTTP. Se verificaron relacionados tras fusionar topics, descarga de notas por su propietario, rechazo de otra cuenta y escapado de contenido en Markdown. Chrome confirmó la ficha a 320 y 1280 px.
+
+## 09 — Consultar la biblioteca desde MCP
+
+- `get_article` por ID o URL y `search_articles` con filtros y paginación comparten el repositorio de biblioteca. Las fichas devueltas excluyen notas personales. El permiso `articles:read` se pide por separado y el consentimiento muestra los permisos solicitados.
+- Pasaron Biome, tipos, 49 pruebas, build y la integración HTTP. Con dos cuentas, se verificaron permisos de lectura y escritura separados, desafío para permisos insuficientes, búsqueda paginada y rechazo del ID de otra cuenta. El conector real necesitará actualizar sus herramientas y conceder el nuevo permiso tras el despliegue.

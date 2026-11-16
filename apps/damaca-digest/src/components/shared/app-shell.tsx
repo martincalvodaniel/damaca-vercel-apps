@@ -14,10 +14,21 @@ export function AppShell({
 }) {
   return (
     <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-teal-800 focus:px-4 focus:py-3 focus:text-white"
+      >
+        Skip to main content
+      </a>
       <AppNavigation name={name} email={email} image={image} />
-      <div className="px-3 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:px-5 md:pb-0">
+      {/* biome-ignore lint/correctness/useUniqueElementIds: The dashboard layout renders one main landmark and its skip link. */}
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="px-3 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:px-5 md:pb-0"
+      >
         {children}
-      </div>
+      </main>
     </>
   )
 }

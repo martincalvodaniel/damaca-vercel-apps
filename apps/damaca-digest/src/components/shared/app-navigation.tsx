@@ -38,11 +38,12 @@ export function AppNavigation({ name, email, image }: AppNavigationProps) {
               destination.id === "home"
                 ? inLibrary
                 : pathname.startsWith("/settings")
+            const current = pathname === destination.href ? "page" : "location"
             return (
               <li key={destination.id} className="min-w-0 flex-1 md:flex-none">
                 <Link
                   href={destination.href}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={active ? current : undefined}
                   className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 text-xs font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 md:flex-row md:gap-2 md:text-sm ${active ? "bg-teal-100 text-teal-950 dark:bg-teal-950 dark:text-teal-200" : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-slate-800"}`}
                 >
                   {destination.id === "settings" ? (

@@ -7,7 +7,7 @@ import { requireAuthorizedSession } from "@/lib/auth/session"
 export async function SettingsScreen() {
   const session = await requireAuthorizedSession()
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-col gap-3 py-2 sm:gap-4 sm:py-5">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-3 py-2 sm:gap-4 sm:py-5">
       <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
         Settings
       </h1>
@@ -65,6 +65,6 @@ export async function SettingsScreen() {
           Site administration
         </Link>
       ) : null}
-    </main>
+    </div>
   )
 }

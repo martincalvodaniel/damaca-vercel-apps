@@ -158,3 +158,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: inicio de sesión, solicitud de acceso y consentimiento de ChatGPT.
 - Aceptación: aplicar el estilo de Digest a las pantallas de entrada y mostrar con claridad la acción principal y los permisos, con controles de tamaño táctil en móvil.
+
+## 19 — Navegar Digest con el teclado
+
+- Estado: `validated`.
+- Rutas: estructura del panel, navegación y foco visible.
+- Aceptación: saltar al contenido principal, identificar correctamente una sección activa y navegar con Tab por biblioteca, ficha, Topics y Compartir en móvil estrecho y escritorio.
