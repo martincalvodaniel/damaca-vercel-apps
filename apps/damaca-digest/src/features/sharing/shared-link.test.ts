@@ -39,7 +39,7 @@ it("rejects ambiguous, credentialed, or unsafe input", () => {
 
 it("targets the installed mobile app with a web fallback", () => {
   const android = chatGptOpenUrl("Mozilla/5.0 (Linux; Android 15)")
-  expect(android).toStartWith("intent://chatgpt.com/#Intent;scheme=https;")
+  expect(android).toStartWith("intent://#Intent;scheme=chatgpt;")
   expect(android).toContain("package=com.openai.chatgpt;")
   expect(android).toEndWith(
     `S.browser_fallback_url=${encodeURIComponent(chatGptWebUrl)};end`

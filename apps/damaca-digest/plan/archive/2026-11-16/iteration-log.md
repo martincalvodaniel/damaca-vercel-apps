@@ -97,3 +97,7 @@
 - La descarga privada de Ajustes transmite Markdown o JSON con los artículos y notas del propietario. Resuelve topics fusionados usando el vocabulario del propietario.
 - Biome, tipos, 49 pruebas, build e integración HTTP con MongoDB pasaron. La integración verificó 23 artículos, el aislamiento entre dos cuentas, la respuesta privada y ambos formatos.
 - La descarga cierra el cursor de MongoDB también si falla la generación del archivo. Biome, tipos y la integración HTTP de ambos formatos pasaron tras el ajuste.
+
+## 11 — Consultar lecturas relacionadas desde ChatGPT
+
+- `find_related_articles` reutiliza la consulta de la ficha y exige `articles:read`. La integración HTTP verificó resultados tras fusionar topics, el aislamiento entre propietarios y el rechazo de un token de solo escritura.

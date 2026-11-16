@@ -157,11 +157,18 @@ try {
   })
   const shared = await fetch(
     `${origin}/share?text=${encodeURIComponent("Article title\nhttps://example.com/shared")}`,
-    { redirect: "manual" }
+    {
+      redirect: "manual",
+      headers: { "User-Agent": "Mozilla/5.0 (Linux; Android 15) Chrome/140.0" },
+    }
   )
   assert.equal(shared.status, 200)
   const sharedHtml = await shared.text()
   assert.match(sharedHtml, /Copy prompt and open ChatGPT/)
+  assert.match(
+    sharedHtml,
+    /href="intent:\/\/#Intent;scheme=chatgpt;package=com.openai.chatgpt;S\.browser_fallback_url=https%3A%2F%2Fchatgpt.com%2F;end"/
+  )
   assert.ok(sharedHtml.includes(`Use @${installName} to read`))
   assert.ok(sharedHtml.includes(`<strong>@${installName}</strong>`))
   assert.match(sharedHtml, /https:\/\/example.com\/shared/)

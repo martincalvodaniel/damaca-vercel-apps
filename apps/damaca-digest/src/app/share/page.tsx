@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
+import { headers } from "next/headers"
 import Link from "next/link"
 import { installName } from "@/config/install-name"
 import { ChatGptHandoff } from "@/features/sharing/chatgpt-handoff"
+import { chatGptOpenUrl } from "@/features/sharing/chatgpt-link"
 import {
   capturePrompt,
   resolveSharedLink,
@@ -42,6 +44,9 @@ export default async function SharePage({
             <ChatGptHandoff
               key={url}
               connector={installName}
+              openUrl={chatGptOpenUrl(
+                (await headers()).get("user-agent") ?? ""
+              )}
               prompt={capturePrompt(url, installName)}
             />
           </>

@@ -170,3 +170,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: Compartir, nombre de instalación y documentación.
 - Aceptación: el prompt y la ayuda muestran el mismo complemento, según la rama. Las acciones de apertura intentan usar la app de ChatGPT en móvil y tienen alternativa web.
+
+## 21 — Abrir ChatGPT desde Chrome para Android
+
+- Estado: `validated`.
+- Rutas: destino y controles de Compartir.
+- Aceptación: renderizar un enlace directo al intent de la app en Android con alternativa web. Si se pierde la activación al copiar, el usuario puede abrir ChatGPT con un segundo toque. Verificar la apertura nativa en dispositivo por separado.

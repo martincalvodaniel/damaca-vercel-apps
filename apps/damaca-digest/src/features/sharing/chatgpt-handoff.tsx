@@ -2,38 +2,42 @@
 
 import { type MouseEvent, useCallback, useState } from "react"
 
-import { chatGptOpenUrl, chatGptUniversalUrl } from "./chatgpt-link"
+import { chatGptWebUrl } from "./chatgpt-link"
 
 export function ChatGptHandoff({
   connector,
+  openUrl,
   prompt,
 }: {
   connector: string
+  openUrl: string
   prompt: string
 }) {
-  const [copyStatus, setCopyStatus] = useState<"copied" | "failed" | null>(null)
+  const [copyStatus, setCopyStatus] = useState<
+    "copied" | "tap-to-open" | "failed" | null
+  >(null)
 
   const copyPrompt = useCallback(
     async (event: MouseEvent<HTMLButtonElement>) => {
       const openChatGpt = event.currentTarget.value === "open"
       try {
         await navigator.clipboard.writeText(prompt)
-        if (openChatGpt)
-          window.location.assign(chatGptOpenUrl(navigator.userAgent))
-        else setCopyStatus("copied")
+        if (!openChatGpt) {
+          setCopyStatus("copied")
+        } else if (
+          openUrl !== chatGptWebUrl &&
+          navigator.userActivation?.isActive === false
+        ) {
+          setCopyStatus("tap-to-open")
+        } else {
+          window.location.assign(openUrl)
+        }
       } catch {
         setCopyStatus("failed")
       }
     },
-    [prompt]
+    [openUrl, prompt]
   )
-
-  const openChatGpt = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
-    const target = chatGptOpenUrl(navigator.userAgent)
-    if (!target.startsWith("intent:")) return
-    event.preventDefault()
-    window.location.assign(target)
-  }, [])
 
   return (
     <div className="space-y-3">
@@ -53,9 +57,11 @@ export function ChatGptHandoff({
       <p role="status" className={copyStatus ? "text-sm" : "sr-only"}>
         {copyStatus === "copied"
           ? "Prompt copied. Paste it into your ChatGPT conversation."
-          : copyStatus === "failed"
-            ? "The browser could not copy the prompt. Select and copy it above."
-            : ""}
+          : copyStatus === "tap-to-open"
+            ? "Prompt copied. Tap Open ChatGPT to continue."
+            : copyStatus === "failed"
+              ? "The browser could not copy the prompt. Select and copy it above."
+              : ""}
       </p>
       <div className="flex flex-wrap items-center gap-2">
         <button
@@ -75,8 +81,7 @@ export function ChatGptHandoff({
           Copy prompt and open ChatGPT
         </button>
         <a
-          href={chatGptUniversalUrl}
-          onClick={openChatGpt}
+          href={openUrl}
           rel="noreferrer"
           className="inline-flex min-h-11 items-center px-2 text-sm underline underline-offset-4"
         >
