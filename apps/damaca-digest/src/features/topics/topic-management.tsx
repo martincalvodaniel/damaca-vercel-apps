@@ -20,10 +20,8 @@ export function TopicManagement({
     </option>
   ))
   return (
-    <details open={open} className="digest-panel rounded-xl px-2">
-      <summary className="min-h-8 cursor-pointer py-1 text-sm font-medium">
-        Manage topics
-      </summary>
+    <details open={open} className="digest-search-details">
+      <summary className="digest-search-summary">Manage topics</summary>
       <form action={updateTopic} className="space-y-2 pb-3 text-sm">
         <label className="block">
           Topic

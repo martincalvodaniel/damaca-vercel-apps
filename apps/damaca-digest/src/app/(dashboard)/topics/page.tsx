@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { SearchButton } from "@/components/ui/search-button"
 import { filterTopicLabels } from "@/features/topics/catalog"
 import { TopicManagement } from "@/features/topics/topic-management"
 import { requireAuthorizedSession } from "@/lib/auth/session"
@@ -29,30 +30,27 @@ export default async function TopicsPage({
       {error ? <p role="alert">{error}</p> : null}
       {topics.length ? (
         <>
-          <form
-            action="/topics"
-            className="flex flex-wrap items-end gap-2"
-            aria-label="Search topics"
-          >
-            <label className="min-w-0 flex-1 text-sm font-medium">
-              <input
-                type="search"
-                aria-label="Topic or alias"
-                placeholder="Topic or alias"
-                name="q"
-                maxLength={100}
-                defaultValue={query.success ? query.data : undefined}
-                className="digest-panel block min-h-8 w-full min-w-0 rounded-lg px-2"
-              />
-            </label>
-            <button
-              type="submit"
-              className="digest-panel min-h-8 rounded-lg px-2 text-sm font-semibold hover:border-teal-600"
+          <div className="digest-panel digest-search-panel">
+            <form
+              action="/topics"
+              className="digest-search-row"
+              aria-label="Search topics"
             >
-              Search
-            </button>
-          </form>
-          <TopicManagement topics={topics} open={!!error} />
+              <label className="min-w-0 flex-1 text-sm">
+                <input
+                  type="search"
+                  aria-label="Topic or alias"
+                  placeholder="Topic or alias"
+                  name="q"
+                  maxLength={100}
+                  defaultValue={query.success ? query.data : undefined}
+                  className="digest-search-field"
+                />
+              </label>
+              <SearchButton label="Search topics" />
+            </form>
+            <TopicManagement topics={topics} open={!!error} />
+          </div>
           {!query.success ? (
             <p role="alert">Use a topic or alias of up to 100 characters.</p>
           ) : filtered.length === 0 ? (

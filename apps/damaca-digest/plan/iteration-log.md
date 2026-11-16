@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 14 — Consultar capturas de un periodo desde ChatGPT
-
-- `get_reading_digest` agrupa capturas por fecha UTC con paginación y el permiso `articles:read`. Distingue fecha de captura de publicación y estado de lectura.
-- La integración HTTP verificó dos páginas, el permiso y el aislamiento entre cuentas con MongoDB desechable. El build y la compilación de tipos pasaron.
-
 ## 15 — Copiar una captura para una sesión de ChatGPT abierta
 
 - La recepción de enlaces permite copiar el prompt sin abrir otra sesión de ChatGPT y conserva la selección manual como alternativa.
@@ -54,3 +49,8 @@
 
 - Captura reutiliza la navegación y sigue siendo pública. Cada autor del listado añade su filtro manteniendo la búsqueda y los filtros activos. El selector de estado de lectura pasa a la barra sticky del editor.
 - Biome, tipos, 50 pruebas, build e integración HTTP con MongoDB pasaron. Chrome a 320 y 1280 px comprobó la navegación de Captura, el filtro por autor y el guardado de estados.
+
+## 24 — Unificar los buscadores de Library y Topics
+
+- Búsqueda y gestión de Topics ahora comparten un panel con los estilos de Library. Ambos buscadores usan la misma lupa verde.
+- Biome, tipos, 50 pruebas, build e integración HTTP pasaron. Chrome comparó los estilos y comprobó los desplegables a 320 y 1280 px.

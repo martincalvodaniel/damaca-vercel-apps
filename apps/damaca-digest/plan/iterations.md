@@ -187,3 +187,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: controles más compactos, estado de lectura en la barra del editor, navegación en Captura pública y autores del listado que añaden un filtro.
+
+## 24 — Unificar los buscadores de Library y Topics
+
+- Estado: `validated`.
+- Aceptación: ambos buscadores usan un botón verde de lupa y Topics agrupa búsqueda y gestión en el mismo panel, con los estilos de Library.

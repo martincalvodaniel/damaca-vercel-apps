@@ -4,6 +4,7 @@ const paths = {
   reading:
     "M4 5h6a2 2 0 0 1 2 2v13a3 3 0 0 0-3-3H4V5Zm16 0h-6a2 2 0 0 0-2 2v13a3 3 0 0 1 3-3h5V5Z",
   archived: "M4 4h16v4H4V4Zm2 4v12h12V8m-8 4h4",
+  search: "M16 10a6 6 0 1 1-12 0 6 6 0 0 1 12 0Zm-1.8 4.2L20 20",
   capture: "M12 5v14m-7-7h14",
   topics: "M4 4h8l8 8-8 8-8-8V4Zm4 4h.01",
   original: "M13 5h6v6m0-6-9 9m7-1v6H5V7h6",
