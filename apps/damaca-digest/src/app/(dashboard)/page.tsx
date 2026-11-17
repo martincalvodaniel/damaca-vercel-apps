@@ -56,6 +56,7 @@ export default async function LibraryPage({
             <LibraryArticle
               key={article.id}
               article={article}
+              query={query}
               topics={
                 labels?.(article.topicIds, article.proposedTopics ?? []) ?? []
               }

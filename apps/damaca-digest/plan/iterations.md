@@ -182,3 +182,43 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Estado: `validated`.
 - Rutas: navegación, biblioteca, Topics, ficha, editor y ajustes.
 - Aceptación: navegación compacta, captura alineada con el buscador, acciones por icono y editor con barra fija al desplazarse. Verificar a 320 y 1280 px y conservar la confirmación de borrado.
+
+## 23 — Compactar controles y facilitar filtros
+
+- Estado: `validated`.
+- Aceptación: controles más compactos, estado de lectura en la barra del editor, navegación en Captura pública y autores del listado que añaden un filtro.
+
+## 24 — Unificar los buscadores de Library y Topics
+
+- Estado: `validated`.
+- Aceptación: ambos buscadores usan un botón verde de lupa y Topics agrupa búsqueda y gestión en el mismo panel, con los estilos de Library.
+
+## 25 — Abrir filtros y gestión de topics en modales
+
+- Estado: `validated`.
+- Aceptación: disparadores junto a la lupa y modales de pantalla completa con acciones visibles al desplazarse.
+
+## 26 — Fijar los buscadores y alinear las acciones
+
+- Estado: `validated`.
+- Aceptación: Library y Topics mantienen el buscador arriba al desplazarse. La papelera aparece solo en filtros y a la izquierda del tick. Aplicar y cerrar conservan la misma posición en ambas modales.
+
+## 27 — Cambiar de pestaña con un gesto horizontal
+
+- Estado: `validated`.
+- Aceptación: Library, Topics y Settings permiten desplazarse horizontalmente a la pestaña contigua. El gesto respeta los controles, el desplazamiento vertical y los extremos de la navegación.
+
+## 28 — Mover Captura a la navegación
+
+- Estado: `validated`.
+- Aceptación: Captura es el primer destino, Library muestra libros como icono y los gestos siguen entre las tres pestañas de contenido.
+
+## 29 — Incluir Capture en el gesto horizontal
+
+- Estado: `validated`.
+- Aceptación: el gesto recorre las cuatro pestañas en el orden de la barra y Library sigue siendo el inicio.
+
+## 30 — Alinear el diseño de Capture
+
+- Estado: `validated`.
+- Aceptación: Capture mantiene el ancho, espaciado y estilo de la fila de entrada de Library y Topics, con un encabezado accesible y el flujo de captura operativo.

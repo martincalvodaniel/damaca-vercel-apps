@@ -87,6 +87,18 @@ html:has(.digest-editor-toolbar) {
 }
 
 @layer components {
+  .digest-search-panel {
+    @apply sticky top-0 z-20 rounded-xl p-1.5 md:top-(--digest-desktop-nav);
+  }
+
+  .digest-search-row {
+    @apply flex items-center gap-1;
+  }
+
+  .digest-search-field {
+    @apply block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 focus-visible:outline-2 focus-visible:outline-teal-600 dark:border-zinc-700;
+  }
+
   .digest-icon-button {
     display: inline-grid;
     place-items: center;

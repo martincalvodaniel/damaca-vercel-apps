@@ -1,4 +1,16 @@
 const paths = {
+  account:
+    "M16 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 21v-2a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v2",
+  reading:
+    "M4 5h6a2 2 0 0 1 2 2v13a3 3 0 0 0-3-3H4V5Zm16 0h-6a2 2 0 0 0-2 2v13a3 3 0 0 1 3-3h5V5Z",
+  archived: "M4 4h16v4H4V4Zm2 4v12h12V8m-8 4h4",
+  close: "m6 6 12 12M18 6 6 18",
+  filters: "M4 7h16M7 12h10m-7 5h4",
+  search: "M16 10a6 6 0 1 1-12 0 6 6 0 0 1 12 0Zm-1.8 4.2L20 20",
+  library: "M4 4h4v16H4zM8 4h4v16H8zM15 5l4-1 4 15-4 1z",
+  copy: "M8 8h12v12H8V8ZM4 16V4h12",
+  copyOpen: "M7 9v11h13v-7M7 16H4V4h11m0 8 5-5m-5 0h5v5",
+  forward: "M4 12h15m-6-6 6 6-6 6",
   capture: "M12 5v14m-7-7h14",
   topics: "M4 4h8l8 8-8 8-8-8V4Zm4 4h.01",
   original: "M13 5h6v6m0-6-9 9m7-1v6H5V7h6",

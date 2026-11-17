@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  type ChangeEvent,
   type SubmitEvent,
   startTransition,
   useActionState,
@@ -14,7 +15,7 @@ import { saveArticleEdits } from "@/features/articles/actions"
 import { type ArticleEdit, contentType, readingStatus } from "@/schemas/article"
 
 const inputClass =
-  "block min-h-9 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
+  "block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
 
 export function ArticleEditor({
   id,
@@ -29,10 +30,15 @@ export function ArticleEditor({
   deleteAction: (form: FormData) => Promise<void>
   deletion?: string
 }) {
+  const [status, setStatus] = useState(values.readingStatus)
   const [favorite, setFavorite] = useState(values.favorite)
   const dialog = useRef<HTMLDialogElement>(null)
   const cancelDelete = useRef<HTMLButtonElement>(null)
   const dialogTitle = useId()
+  const changeStatus = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    const selected = readingStatus.safeParse(event.currentTarget.value)
+    if (selected.success) setStatus(selected.data)
+  }, [])
   const toggleFavorite = useCallback(() => setFavorite((value) => !value), [])
   const openDelete = useCallback(() => {
     dialog.current?.showModal()
@@ -82,12 +88,32 @@ export function ArticleEditor({
       <form
         action={save}
         onSubmit={submitEdits}
-        className="digest-panel space-y-2 rounded-xl px-3 pb-3 text-sm sm:px-4"
+        className="digest-panel space-y-1.5 rounded-xl px-2 pb-2 text-sm sm:px-3"
       >
         <fieldset
           aria-label="Edit article actions"
-          className="digest-editor-toolbar sticky top-0 z-20 -mx-3 flex justify-end gap-1 rounded-t-xl border-b border-(--panel-line) bg-(--surface) px-3 sm:-mx-4 sm:px-4 md:top-(--digest-desktop-nav)"
+          className="digest-editor-toolbar sticky top-0 z-20 -mx-2 flex justify-end gap-1 rounded-t-xl border-b border-(--panel-line) bg-(--surface) px-2 sm:-mx-3 sm:px-3 md:top-(--digest-desktop-nav)"
         >
+          <label
+            className="digest-icon-button relative focus-within:outline-2 focus-within:outline-offset-2"
+            title={`Reading status: ${status}`}
+          >
+            <DigestIcon name={status} />
+            <select
+              name="readingStatus"
+              aria-label="Reading status"
+              value={status}
+              onChange={changeStatus}
+              className="absolute inset-0 size-full cursor-pointer opacity-0"
+            >
+              {readingStatus.options.map((value) => (
+                <option key={value} value={value}>
+                  {value[0]?.toUpperCase()}
+                  {value.slice(1)}
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             type="button"
             className="digest-icon-button"
@@ -164,18 +190,6 @@ export function ArticleEditor({
               ))}
             </select>
           </label>
-          <label>
-            Reading status
-            <select
-              name="readingStatus"
-              defaultValue={values.readingStatus}
-              className={inputClass}
-            >
-              {readingStatus.options.map((value) => (
-                <option key={value}>{value}</option>
-              ))}
-            </select>
-          </label>
         </div>
         {longFields.map(([key, label, value, max, rows]) => (
           <label key={key} className="block">
@@ -185,7 +199,7 @@ export function ArticleEditor({
               rows={rows}
               maxLength={max}
               defaultValue={value}
-              className={`${inputClass} py-2`}
+              className={`${inputClass} py-1`}
             />
           </label>
         ))}
