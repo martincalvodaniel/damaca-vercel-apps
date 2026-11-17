@@ -222,3 +222,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: Capture mantiene el ancho, espaciado y estilo de la fila de entrada de Library y Topics, con un encabezado accesible y el flujo de captura operativo.
+
+## 31 — Abrir artículos en otra pestaña y aclarar los iconos de ChatGPT
+
+- Estado: `validated`.
+- Aceptación: las fichas, los originales y las referencias se abren en otra pestaña. Las acciones de Capture muestran el icono de ChatGPT y la acción combinada incorpora un distintivo de copia.
