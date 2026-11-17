@@ -87,6 +87,12 @@ html:has(.digest-editor-toolbar) {
 }
 
 @layer components {
+  .digest-chatgpt-mark {
+    display: block;
+    background-color: currentColor;
+    mask: url("/icons/chatgpt-mark.png") center / contain no-repeat;
+  }
+
   .digest-search-panel {
     @apply sticky top-0 z-20 rounded-xl p-1.5 md:top-(--digest-desktop-nav);
   }

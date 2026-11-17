@@ -85,7 +85,12 @@ export function ChatGptHandoff({
           title="Copy prompt and open ChatGPT"
           className="digest-icon-button"
         >
-          <DigestIcon name="copyOpen" />
+          <span aria-hidden="true" className="relative block size-7">
+            <span className="digest-chatgpt-mark absolute start-0 top-0 size-5" />
+            <span className="absolute -end-0.5 -bottom-0.5 grid size-4 place-items-center rounded-sm bg-(--surface) ring-1 ring-current [&>svg]:size-3">
+              <DigestIcon name="copy" />
+            </span>
+          </span>
         </button>
         <a
           href={openUrl}
@@ -94,7 +99,8 @@ export function ChatGptHandoff({
           title="Open ChatGPT"
           className="digest-icon-button"
         >
-          <DigestIcon name="original" />
+          <span aria-hidden="true" className="digest-chatgpt-mark size-5" />
+          <span className="sr-only">Open ChatGPT</span>
         </a>
       </div>
     </div>

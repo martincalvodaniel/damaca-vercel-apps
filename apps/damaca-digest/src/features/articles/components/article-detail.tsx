@@ -52,7 +52,8 @@ export function ArticleDetail({
           <a
             className="digest-icon-button"
             href={article.url}
-            rel="noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Open original"
             title="Open original"
           >
@@ -179,7 +180,8 @@ export function ArticleDetail({
                     <a
                       className="inline-flex min-h-11 min-w-0 items-center text-sm underline underline-offset-4"
                       href={link.url}
-                      rel="noreferrer"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       {link.title ?? link.url}
                     </a>
@@ -211,6 +213,8 @@ export function ArticleDetail({
               <li key={item.id}>
                 <Link
                   href={`/articles/${item.id}`}
+                  target="_blank"
+                  rel="noopener"
                   className="block min-h-11 py-2 text-sm hover:text-teal-800 dark:hover:text-teal-300"
                 >
                   <span className="block font-semibold">{item.title}</span>

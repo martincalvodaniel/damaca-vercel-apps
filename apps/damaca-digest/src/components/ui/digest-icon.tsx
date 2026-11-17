@@ -9,7 +9,6 @@ const paths = {
   search: "M16 10a6 6 0 1 1-12 0 6 6 0 0 1 12 0Zm-1.8 4.2L20 20",
   library: "M4 4h4v16H4zM8 4h4v16H8zM15 5l4-1 4 15-4 1z",
   copy: "M8 8h12v12H8V8ZM4 16V4h12",
-  copyOpen: "M7 9v11h13v-7M7 16H4V4h11m0 8 5-5m-5 0h5v5",
   forward: "M4 12h15m-6-6 6 6-6 6",
   capture: "M12 5v14m-7-7h14",
   topics: "M4 4h8l8 8-8 8-8-8V4Zm4 4h.01",
