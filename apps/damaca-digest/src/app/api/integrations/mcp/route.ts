@@ -1,4 +1,5 @@
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js"
+import { registerFetchTool } from "@/features/articles/mcp-fetch-tool"
 import { registerReadingTools } from "@/features/articles/mcp-reading-tools"
 import { createArticleServer } from "@/features/articles/mcp-server"
 import { captureScope, getMcpUrls } from "@/lib/auth/mcp-config"
@@ -8,6 +9,7 @@ import { allowCapture } from "@/lib/db/capture-rate"
 import { listTopics } from "@/lib/db/topics"
 
 export const runtime = "nodejs"
+export const maxDuration = 45
 
 export async function POST(request: Request) {
   const headers = new Headers({ "Cache-Control": "no-store" })
@@ -45,6 +47,7 @@ export async function POST(request: Request) {
         })),
       owner.canCapture
     )
+    registerFetchTool(server, owner.ownerId, owner.canCapture, request.signal)
     registerReadingTools(server, owner.ownerId, owner.canRead, resource)
     const transport = new WebStandardStreamableHTTPServerTransport({
       enableJsonResponse: true,

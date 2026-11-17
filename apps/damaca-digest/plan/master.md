@@ -20,6 +20,10 @@ La biblioteca y la ficha incluyen temas, enlaces al original, acciones rápidas 
 
 La PWA recibe enlaces de Compartir y prepara un prompt para ChatGPT. El usuario selecciona el conector y confirma el envío en el compositor. La copia puede abrir ChatGPT o dejar que el usuario vuelva a una sesión ya abierta.
 
+## Recuperación de fuentes
+
+`fetch_article` añade respaldo de lectura a ChatGPT mediante HTTP directo, Jina Reader y Firecrawl. Mantiene el permiso de captura, los límites de red y el presupuesto de cada entorno. `save_article` admite diagnósticos opcionales declarados por el cliente sin conservar el cuerpo recuperado. La adopción de proveedores depende de las pruebas de recuperación y latencia en `int`.
+
 ## Verificaciones pendientes
 
 El usuario confirmó la escritura MCP desde ChatGPT en producción con fuentes de acceso completo, parcial y no disponible. Tras publicar la segunda fase, queda comprobar que el destino aparezca en Compartir en un Android real y que el enlace llegue a la ficha desde una sesión de ChatGPT con el conector actualizado. Quedan también por verificar el aislamiento entre entornos y la restauración de backups de infraestructura. Embeddings e integraciones de publicación quedan para entregas posteriores.

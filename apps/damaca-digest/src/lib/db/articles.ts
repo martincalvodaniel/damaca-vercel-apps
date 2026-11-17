@@ -19,7 +19,7 @@ import type { LibraryQuery } from "@/schemas/library"
 
 type ArticleDetails = Omit<
   ArticleCapture,
-  "url" | "canonicalUrl" | "publishedAt" | "topics"
+  "url" | "canonicalUrl" | "publishedAt" | "topics" | "fetchDiagnostics"
 > & {
   publishedAt?: Date
   suggestedCanonicalUrl?: string
@@ -34,7 +34,11 @@ type ArticleDocument = ArticleDetails & {
   canonicalUrl: string
   capturedAt: Date
   updatedAt: Date
-  provenance: { method: "chatgpt"; processedAt: Date }
+  provenance: {
+    method: "chatgpt"
+    processedAt: Date
+    fetchDiagnostics?: ArticleCapture["fetchDiagnostics"]
+  }
   readingStatus: z.infer<typeof readingStatus>
   favorite: boolean
   personalNotes?: string
@@ -72,12 +76,17 @@ export async function saveArticle(ownerId: string, input: ArticleCapture) {
     canonicalUrl: suggested,
     publishedAt,
     topics,
+    fetchDiagnostics,
     ...content
   } = input
   const canonicalUrl = normalizeArticleUrl(url)
   const collection = await articles()
   const now = new Date()
-  const provenance = { method: "chatgpt" as const, processedAt: now }
+  const provenance = {
+    method: "chatgpt" as const,
+    processedAt: now,
+    ...(fetchDiagnostics && { fetchDiagnostics }),
+  }
   const details: ArticleDetails = {
     ...content,
     ...(suggested && normalizeArticleUrl(suggested) !== canonicalUrl

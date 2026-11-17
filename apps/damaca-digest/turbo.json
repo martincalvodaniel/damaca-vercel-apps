@@ -9,7 +9,10 @@
         "MONGODB_DB",
         "CHATGPT_CLIENT_ID",
         "CHATGPT_CLIENT_SECRET",
-        "CHATGPT_REDIRECT_URI"
+        "CHATGPT_REDIRECT_URI",
+        "ARTICLE_FETCH_*",
+        "FIRECRAWL_API_KEY",
+        "JINA_API_KEY"
       ]
     }
   }

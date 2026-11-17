@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { fetchDiagnostics } from "@/schemas/article-fetch"
 
 export const articleId = z.string().regex(/^[a-f\d]{24}$/i)
 export const accessStatus = z.enum(["unavailable", "partial", "full"])
@@ -48,6 +49,7 @@ export const captureArticle = z
       .optional(),
     accessStatus,
     accessNotes: text(2000).optional(),
+    fetchDiagnostics: fetchDiagnostics.optional(),
   })
   .superRefine((article, ctx) => {
     if (article.accessStatus === "partial" && !article.accessNotes) {

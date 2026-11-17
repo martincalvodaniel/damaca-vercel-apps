@@ -28,5 +28,5 @@ export function resolveSharedLink({ url, text }: SharedLinkInput) {
 }
 
 export function capturePrompt(url: string, connector: string) {
-  return `Use @${connector} to read this article and save it in my library. Report any access limitations.\n\n${url}`
+  return `Use @${connector} to read this article and save it in my library. If web reading fails or is partial, try fetch_article if available. Report any access limitations.\n\n${url}`
 }
