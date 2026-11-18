@@ -26,7 +26,12 @@ export default async function EditArticlePage({
     article.topicIds,
     article.proposedTopics ?? []
   )
-  const deleteThisArticle = removeArticle.bind(null, id, article.revision)
+  const deleteThisArticle = removeArticle.bind(
+    null,
+    id,
+    article.revision,
+    "editor"
+  )
   return (
     <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
       <h1 className="sr-only">Edit article</h1>

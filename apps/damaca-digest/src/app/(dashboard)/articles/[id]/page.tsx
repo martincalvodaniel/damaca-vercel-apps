@@ -10,9 +10,12 @@ export default async function ArticlePage({
   searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ readingUpdate?: string | string[] }>
+  searchParams: Promise<{
+    readingUpdate?: string | string[]
+    deletion?: string | string[]
+  }>
 }) {
-  const [{ user }, { id }, { readingUpdate }] = await Promise.all([
+  const [{ user }, { id }, { readingUpdate, deletion }] = await Promise.all([
     requireAuthorizedSession(),
     params,
     searchParams,
@@ -31,6 +34,7 @@ export default async function ArticlePage({
       article={article}
       topics={labels}
       related={related}
+      deletion={deletion}
       readingUpdateFailed={readingUpdate === "failed"}
     />
   )

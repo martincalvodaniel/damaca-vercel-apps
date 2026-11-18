@@ -254,7 +254,7 @@ export async function updateArticleReading(
   ownerId: string,
   id: string,
   revision: number,
-  change: { favorite: boolean } | { readingStatus: "read" | "unread" }
+  change: { favorite: boolean } | { readingStatus: Article["readingStatus"] }
 ) {
   const result = await (await articles()).updateOne(
     { ownerId, _id: new ObjectId(id), revision },

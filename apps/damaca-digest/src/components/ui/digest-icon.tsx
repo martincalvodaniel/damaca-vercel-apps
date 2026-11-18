@@ -16,7 +16,8 @@ const paths = {
   edit: "m4 16 11-11 4 4L8 20H4v-4Zm9-9 4 4",
   favorite:
     "m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z",
-  read: "M4 12l5 5L20 6",
+  confirm: "M4 12l5 5L20 6",
+  read: "M6 4h12v16H6zM9 8h6m-6 4h6m-6 4h4",
   unread: "M6 5h12v14l-6-4-6 4V5Z",
   markdown: "M3 6h18v12H3V6Zm3 9V9l3 3 3-3v6m4-6v6m-2-2 2 2 2-2",
   json: "M9 4H7v4l-2 4 2 4v4h2m6-16h2v4l2 4-2 4v4h-2",

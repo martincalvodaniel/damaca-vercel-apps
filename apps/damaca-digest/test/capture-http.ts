@@ -355,7 +355,7 @@ try {
   assert.match(editorHtml, /aria-label="Edit article actions"/)
   assert.match(
     editorHtml,
-    /<select[^>]*name="readingStatus"[^>]*aria-label="Reading status"/
+    /aria-label="Reading status: unread\. Change to reading"/
   )
   assert.match(editorHtml, /aria-label="Save changes"/)
   assert.match(editorHtml, /aria-label="Delete article"/)
@@ -755,6 +755,26 @@ try {
   const updatedReading = await invoke(reader, "get_article", relatedInput)
   assert.equal(updatedReading.structuredContent.article.readingStatus, "read")
   assert.equal(updatedReading.structuredContent.article.favorite, false)
+
+  for (const [current, next] of [
+    ["read", "archived"],
+    ["archived", "unread"],
+    ["unread", "reading"],
+    ["reading", "read"],
+  ]) {
+    const page = await fetch(withTopics.detailUrl, {
+      headers: { cookie: first.cookie },
+    })
+    const html = await page.text()
+    const form = [...html.matchAll(/<form[\s\S]*?<\/form>/g)]
+      .map(([markup]) => markup)
+      .find((markup) => markup.includes('name="readingChange"'))
+    assert.ok(form)
+    assert.ok(form.includes(`Reading status: ${current}. Change to ${next}`))
+    const response = await changeReading(form, first.cookie, next)
+    assert.equal(response.status, 303)
+    assert.doesNotMatch(response.headers.get("location") ?? "", /failed/)
+  }
 
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)

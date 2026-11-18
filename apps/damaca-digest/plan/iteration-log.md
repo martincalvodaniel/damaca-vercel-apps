@@ -52,3 +52,8 @@
 - Una fixture formada por controles de vídeo, publicidad y navegación reprodujo el falso positivo: el clasificador anterior devolvía `full` al superar doce palabras. La limpieza compartida ahora elimina controles y enlaces aislados antes del recorte y exige prosa editorial; los títulos y menús no cuentan como evidencia. Un resultado sin cuerpo útil deja disponible el parcial de un proveedor anterior.
 - Pasaron Biome incremental, tipos, 60 pruebas y build con integración HTTP/OAuth sobre MongoDB 8 desechable. Se cubren artículo breve, referencias inline, controles de vídeo y cookies, navegación extensa antes del cuerpo y conservación del parcial.
 - La URL pública exacta facilitada por el usuario se probó con Jina: 42.069 caracteres de entrada, 30.052 tras la limpieza, clasificados como `full` sin recorte. El cuerpo real de Firecrawl no estaba disponible para reproducirlo localmente; la regresión reproduce el contenido de interfaz descrito en la captura. Falta la comprobación en ChatGPT tras desplegar.
+
+## 35 — Unificar las acciones de lectura y edición
+
+- Lectura y edición comparten la secuencia de estados. El editor permite volver a la ficha sin guardar. La confirmación de borrado y el borrado de filtros usan botones de icono accesibles.
+- Pasaron Biome, tipos, 60 pruebas y la integración HTTP con build y MongoDB desechable. La integración recorre las cuatro transiciones desde la vista de lectura.

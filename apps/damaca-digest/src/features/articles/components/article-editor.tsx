@@ -1,18 +1,22 @@
 "use client"
 
+import Link from "next/link"
 import {
-  type ChangeEvent,
   type SubmitEvent,
   startTransition,
   useActionState,
   useCallback,
-  useId,
   useRef,
   useState,
 } from "react"
 import { DigestIcon } from "@/components/ui/digest-icon"
 import { saveArticleEdits } from "@/features/articles/actions"
-import { type ArticleEdit, contentType, readingStatus } from "@/schemas/article"
+import {
+  type ArticleEdit,
+  contentType,
+  nextReadingStatus,
+} from "@/schemas/article"
+import { ArticleDeleteDialog } from "./article-delete-dialog"
 
 const inputClass =
   "block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
@@ -33,18 +37,11 @@ export function ArticleEditor({
   const [status, setStatus] = useState(values.readingStatus)
   const [favorite, setFavorite] = useState(values.favorite)
   const dialog = useRef<HTMLDialogElement>(null)
-  const cancelDelete = useRef<HTMLButtonElement>(null)
-  const dialogTitle = useId()
-  const changeStatus = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-    const selected = readingStatus.safeParse(event.currentTarget.value)
-    if (selected.success) setStatus(selected.data)
-  }, [])
+  const changeStatus = useCallback(() => setStatus(nextReadingStatus), [])
   const toggleFavorite = useCallback(() => setFavorite((value) => !value), [])
   const openDelete = useCallback(() => {
     dialog.current?.showModal()
-    cancelDelete.current?.focus()
   }, [])
-  const closeDelete = useCallback(() => dialog.current?.close(), [])
   const [error, save, saving] = useActionState(
     saveArticleEdits.bind(null, id, revision),
     null
@@ -94,26 +91,16 @@ export function ArticleEditor({
           aria-label="Edit article actions"
           className="digest-editor-toolbar sticky top-0 z-20 -mx-2 flex justify-end gap-1 rounded-t-xl border-b border-(--panel-line) bg-(--surface) px-2 sm:-mx-3 sm:px-3 md:top-(--digest-desktop-nav)"
         >
-          <label
-            className="digest-icon-button relative focus-within:outline-2 focus-within:outline-offset-2"
+          <button
+            type="button"
+            className="digest-icon-button"
+            aria-label={`Reading status: ${status}. Change to ${nextReadingStatus(status)}`}
             title={`Reading status: ${status}`}
+            disabled={saving}
+            onClick={changeStatus}
           >
             <DigestIcon name={status} />
-            <select
-              name="readingStatus"
-              aria-label="Reading status"
-              value={status}
-              onChange={changeStatus}
-              className="absolute inset-0 size-full cursor-pointer opacity-0"
-            >
-              {readingStatus.options.map((value) => (
-                <option key={value} value={value}>
-                  {value[0]?.toUpperCase()}
-                  {value.slice(1)}
-                </option>
-              ))}
-            </select>
-          </label>
+          </button>
           <button
             type="button"
             className="digest-icon-button"
@@ -132,8 +119,16 @@ export function ArticleEditor({
             title="Save changes"
             disabled={saving}
           >
-            <DigestIcon name="read" />
+            <DigestIcon name="confirm" />
           </button>
+          <Link
+            href={`/articles/${id}`}
+            className="digest-icon-button text-red-700 dark:text-red-300"
+            aria-label="Close without saving"
+            title="Close without saving"
+          >
+            <DigestIcon name="close" />
+          </Link>
           <button
             type="button"
             className="digest-icon-button text-red-700 dark:text-red-300"
@@ -145,6 +140,7 @@ export function ArticleEditor({
             <DigestIcon name="delete" />
           </button>
         </fieldset>
+        <input type="hidden" name="readingStatus" value={status} />
         <input
           type="hidden"
           name="favorite"
@@ -204,39 +200,7 @@ export function ArticleEditor({
           </label>
         ))}
       </form>
-      <dialog
-        ref={dialog}
-        aria-labelledby={dialogTitle}
-        className="digest-panel m-auto w-[calc(100%-1.5rem)] max-w-sm rounded-xl p-4 text-foreground backdrop:bg-black/60"
-      >
-        <h2 id={dialogTitle} className="font-semibold">
-          Delete article?
-        </h2>
-        <p className="mt-1 text-sm">
-          This permanently deletes the article and its notes.
-        </p>
-        <form
-          action={deleteAction}
-          className="mt-3 flex flex-wrap justify-end gap-2"
-        >
-          <button
-            ref={cancelDelete}
-            type="button"
-            onClick={closeDelete}
-            className="min-h-9 rounded-lg px-3"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            name="confirm"
-            value="true"
-            className="min-h-9 rounded-lg bg-red-800 px-3 text-white"
-          >
-            Delete article
-          </button>
-        </form>
-      </dialog>
+      <ArticleDeleteDialog dialog={dialog} deleteAction={deleteAction} />
     </>
   )
 }

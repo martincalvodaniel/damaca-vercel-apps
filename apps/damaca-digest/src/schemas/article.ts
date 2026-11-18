@@ -3,13 +3,17 @@ import { fetchDiagnostics } from "@/schemas/article-fetch"
 
 export const articleId = z.string().regex(/^[a-f\d]{24}$/i)
 export const accessStatus = z.enum(["unavailable", "partial", "full"])
+export const readingStatus = z.enum(["unread", "reading", "read", "archived"])
 export const articleReadingChange = z.enum([
   "favorite",
   "unfavorite",
-  "read",
-  "unread",
+  ...readingStatus.options,
 ])
-export const readingStatus = z.enum(["unread", "reading", "read", "archived"])
+
+export function nextReadingStatus(status: z.infer<typeof readingStatus>) {
+  const order = readingStatus.options
+  return order[(order.indexOf(status) + 1) % order.length] ?? "unread"
+}
 export const contentType = z.enum(["article", "news", "blog", "documentation"])
 const text = (limit: number) => z.string().trim().min(1).max(limit)
 export const webUrl = text(4096).refine((value) => {

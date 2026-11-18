@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { DigestIcon } from "@/components/ui/digest-icon"
 import { type LibraryQuery, libraryPageHref } from "@/schemas/library"
 
 const labels = {
@@ -47,9 +48,11 @@ export function LibraryActiveFilters({ query }: { query: LibraryQuery }) {
       })}
       <Link
         href="/"
-        className="inline-flex min-h-11 items-center px-1 text-xs underline underline-offset-4"
+        aria-label="Clear all filters"
+        title="Clear all filters"
+        className="digest-icon-button text-red-700 dark:text-red-300"
       >
-        Clear all
+        <DigestIcon name="close" />
       </Link>
     </section>
   )

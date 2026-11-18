@@ -1,8 +1,10 @@
 import Link from "next/link"
 import { DigestIcon } from "@/components/ui/digest-icon"
-import { setArticleReading } from "@/features/articles/actions"
+import { removeArticle, setArticleReading } from "@/features/articles/actions"
 import { AccessBadge } from "@/features/articles/components/access-badge"
 import type { Article, RelatedArticle } from "@/lib/db/articles"
+import { nextReadingStatus } from "@/schemas/article"
+import { ArticleDeleteButton } from "./article-delete-button"
 
 const sectionTitle = "mb-2 text-lg font-semibold tracking-tight"
 export function ArticleDetail({
@@ -10,11 +12,13 @@ export function ArticleDetail({
   topics,
   related,
   readingUpdateFailed,
+  deletion,
 }: {
   article: Article
   topics: string[]
   related: RelatedArticle[]
   readingUpdateFailed: boolean
+  deletion?: string | string[]
 }) {
   const details = [
     article.source ?? article.sourceDomain,
@@ -27,6 +31,12 @@ export function ArticleDetail({
     null,
     article.id,
     article.revision
+  )
+  const deleteAction = removeArticle.bind(
+    null,
+    article.id,
+    article.revision,
+    "reading"
   )
   const captured = article.capturedAt.toISOString()
   const links = new Map(
@@ -59,14 +69,6 @@ export function ArticleDetail({
           >
             <DigestIcon name="original" />
           </a>
-          <Link
-            className="digest-icon-button"
-            href={`/articles/${article.id}/edit`}
-            aria-label="Edit article"
-            title="Edit article"
-          >
-            <DigestIcon name="edit" />
-          </Link>
           <form action={readingAction} className="flex">
             <button
               className="digest-icon-button"
@@ -83,18 +85,11 @@ export function ArticleDetail({
               className="digest-icon-button"
               type="submit"
               name="readingChange"
-              value={article.readingStatus === "read" ? "unread" : "read"}
-              aria-label="Read"
-              aria-pressed={article.readingStatus === "read"}
-              title={
-                article.readingStatus === "read"
-                  ? "Mark as unread"
-                  : "Mark as read"
-              }
+              value={nextReadingStatus(article.readingStatus)}
+              aria-label={`Reading status: ${article.readingStatus}. Change to ${nextReadingStatus(article.readingStatus)}`}
+              title={`Reading status: ${article.readingStatus}`}
             >
-              <DigestIcon
-                name={article.readingStatus === "read" ? "read" : "unread"}
-              />
+              <DigestIcon name={article.readingStatus} />
             </button>
           </form>
           <a
@@ -113,7 +108,23 @@ export function ArticleDetail({
           >
             <DigestIcon name="json" />
           </a>
+          <Link
+            className="digest-icon-button"
+            href={`/articles/${article.id}/edit`}
+            aria-label="Edit article"
+            title="Edit article"
+          >
+            <DigestIcon name="edit" />
+          </Link>
+          <ArticleDeleteButton deleteAction={deleteAction} />
         </fieldset>
+        {deletion ? (
+          <p role="alert" className="mt-2 text-sm">
+            {deletion === "confirm"
+              ? "Confirm that you want to delete this article."
+              : "The article could not be deleted. Reload and try again."}
+          </p>
+        ) : null}
         {readingUpdateFailed ? (
           <p role="alert" className="mt-2 text-sm">
             The reading update could not be saved. Try again.
