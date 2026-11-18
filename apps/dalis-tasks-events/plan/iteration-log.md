@@ -2,9 +2,20 @@
 
 La integración temporal AGW-11 queda retirada por [AGW-13](../../../plan/iteration-log.md#agw-13-restore-independent-tasks-authentication-and-suspend-database-refresh), registro principal de la reversión a Google directo.
 
-La evidencia reciente se mantiene aquí; las entregas anteriores se conservan en los archivos [2026-10-31](archive/2026-10-31/README.md), [2026-10-26](archive/2026-10-26/README.md) y [2026-10-24](archive/2026-10-24/README.md). Los porcentajes y decisiones operativas de registros históricos no son políticas vigentes.
+La evidencia reciente se mantiene aquí; las entregas anteriores se conservan en los archivos [2026-11-18](archive/2026-11-18/README.md), [2026-10-31](archive/2026-10-31/README.md), [2026-10-26](archive/2026-10-26/README.md) y [2026-10-24](archive/2026-10-24/README.md). Los porcentajes y decisiones operativas de registros históricos no son políticas vigentes.
+
+<a id="23r"></a>
+
+## 23r — Diagnóstico local de sincronización
+
+Ajustes genera un informe de lectura local con versión del paquete, protocolo, fase y resultado del último intento en la sesión y grafo de la cola. Las operaciones y entidades se numeran dentro de la captura. Para cada bloqueo se cuentan sus descendientes sin confirmar una sola vez, aunque varias ramas lleguen al mismo cambio. El informe solo incluye metadatos explícitos, incluida la revisión de partida, y se puede seleccionar manualmente si el portapapeles falla.
+
+Validación observada: suite filtrada 1393 aprobadas, 225 opt-in omitidas y 0 fallos. Tipos y build Webpack con valores ficticios correctos. Biome de archivos tocados sin avisos. En navegador, componente productivo de Ajustes con cuenta e IndexedDB de prueba, escritorio y 360 px: envío al adaptador de portapapeles y alternativa manual cuando se deniega, conteo exacto, ausencia de identificadores originales, cola idéntica y sin desbordamiento horizontal. La prueba usó un adaptador simulado para el portapapeles.
+
+Pendiente para recuperación: obtener informes del móvil y escritorio reales, reproducir su grafo con dos clientes y validar el cambio que confirme la reproducción. La validación local acredita el diagnóstico y no la convergencia del caso real.
 
 <a id="23q"></a>
+
 ## 23q — Ocultar categorías vacías durante el arrastre
 
 Aceptación: [23q](iterations.md#23q--ocultar-categorías-vacías-durante-el-arrastre). `PlanList`, compartido por Mi espacio y Calendario, deja de incluir grupos vacíos al habilitar el movimiento entre categorías. Tanto las secciones renderizadas como los destinos del gesto se derivan ahora solo de grupos con planes visibles; también se excluye «Sin categoría» vacía. Aplica a días y Sin fecha. Conserva el orden y movimiento entre grupos con contenido y el arrastre a fechas del calendario. Sin cambios de datos ni dependencias.
@@ -14,6 +25,7 @@ Validación: `bun run type-check --filter=@damaca/dalis-tasks-events`, `bun run 
 Entrada: 62%/94% (5h/7d), reservas 7%/2%; trabajo secuencial en `int`. La entrega 23g se conserva íntegra en el [archivo](archive/2026-10-31/README.md#23g) para mantener diez entregas recientes. Commit, publicación y coincidencia de SHA remoto se verifican en Git al cierre.
 
 <a id="23p"></a>
+
 ## 23p — Planes sin fecha
 
 Aceptación: [23p](iterations.md#23p--planes-sin-fecha). Todas las variantes permiten activar «Sin fecha» al crear o editar. Se guarda `schedule: null`, conservando contenido, categoría, checklist y estado; una serie requiere inicio fechado. El calendario, Atrasadas y Próximas excluyen estos planes. Mi espacio muestra «Sin fecha» encima de Atrasadas, plegada al montar, con contador y las mismas categorías, controles de orden y movimiento entre categorías, incluidas vacías. No se persiste la apertura de esta sección.
@@ -27,6 +39,7 @@ Build final: `bun run build --filter=@damaca/dalis-tasks-events -- --webpack`, c
 Capacidad: entrada 78%/97% (5h/7d); control de cierre 68%/95%, por encima de reservas 7%/2%. Trabajo secuencial en `int`; publicación y coincidencia del SHA remoto se comprueban en Git al cierre. Sin dependencias nuevas, secretos versionados, cambios de credenciales ni promoción a `main`. La evidencia íntegra de `23f` pasa al [archivo](archive/2026-10-31/README.md), manteniendo diez entregas recientes.
 
 <a id="23o"></a>
+
 ## 23o — Login transparente con Google
 
 El acceso visible ahora presenta “Continuar con Google” y mensajes genéricos de inicio de sesión. Los estados sin permiso o con verificación fallida explican cómo solicitar acceso o reintentar sin exponer Damaca Hub. Ajustes del dispositivo usan el mismo texto; la configuración OIDC y el flujo de identidad permanecen sin cambios.
@@ -36,6 +49,7 @@ Validación: Biome en 11 archivos, `type-check` y suite completa (1384 pass/222 
 La validación de inicio de sesión real se hizo previamente en Preview al resolver la protección de Vercel; esta entrega cambia solo textos y fue validada con build. Sin cambios de credenciales, permisos, datos, base de datos ni producción.
 
 <a id="23n"></a>
+
 ## 23n — Compatibilidad de Intl en calendario civil
 
 Implementación: `civil-date.ts` y `zoned-time.ts` fijan locale `en-US` y calendario `gregory`, para que ICU exponga era `AD`/`BC` incluso cuando Bun ejecuta en Linux. La guardia de calendario civil sigue rechazando fechas antes del año 0001; el resolver zoned-time reconoce muestras auxiliares BC sin confundirlas con el año 1.
@@ -46,8 +60,8 @@ Validación: focalizadas28pass/163skip/0fail/173 expect; suite completa1386pass/
 
 La ejecución remota de Actions no se ha vuelto a lanzar: este checkout está en `main`, que permanece human-managed; no se hizo push ni despliegue. Sin DB, dependencias, esquema, cambios de zona por host ni artefactos de build versionados.
 
-
 <a id="23m"></a>
+
 ## 23m — Tipado oficial de vercel.ts
 
 vercel.ts importa type VercelConfig desde @vercel/config/v1 y anota config con el contrato oficial, sin casts ni tipos manuales. @vercel/config0.13.0 añadido como devDependency con versión exacta y bun.lock actualizado; instalación frozen aprobada sin cambios. No dependencia core ni import runtime: TypeScript elimina importtype. Export serializado comparado con23l idéntico (España/París/missing/deny), tipos del proyecto aprobados. Mismo esquema oficial validado en23l aplicable al objeto idéntico; no se atribuye despliegue ni prueba geográfica remota.
@@ -56,8 +70,8 @@ DoD:1386pass/225opt-in skip/0fail/15104aserciones, lint1117sinavisos/tipos/Webpa
 
 Entrada28%5h/70%7d, reservas10%/1%, secuencial. Rama main conservada; commit local sin push ni despliegue. Sin cambios de aplicación/datos/índices/panel/permisos.
 
-
 <a id="23l"></a>
+
 ## 23l — Vercel TypeScript: España y París
 
 Nuevo vercel.ts con export config, regions:[cdg1] y routes/mitigate:deny para cualquier ruta cuyo header de geolocalización Vercel x-vercel-ip-country no coincida con ES (missing). España continúa al enrutado del framework; otros países y país ausente quedan bloqueados. No se añade nombreOnlySpain no admitido por rutas: es la equivalencia declarativa de la regla del screenshot, no una creación de regla nombrada en el panel. Funciones en París; recursos estáticos conservan distribución global. Mismo alcance en despliegues Preview/Production que incluyan el archivo, sin distinción de rama. No excepciones para API, auth o assets; no implementación de bloqueo en desarrollo local. Sin dependencias nuevas ni cambios de aplicación/datos/índices.
@@ -68,8 +82,8 @@ DoD final:1386pass/225opt-in skip/0fail/15104aserciones, lint1117sinavisos/tipos
 
 Rama actual main conservada, sin push ni despliegue productivo. Entrada33%5h/71%7d y control30/71; reservas10%/1%, secuencial. Dependencias existentes restauradas con install frozen sin cambios de manifests/lockfile para DoD.
 
-
 <a id="23k"></a>
+
 ## 23k — Categorías sin desplegable e iconos directos
 
 TagCard elimina details/summary y muestra lápiz SVG y cruz roja SVG a la derecha. RowActions extrae las acciones existentes de PlanCard para compartir iconos, estilos y áreas táctiles de44px; ambos mantienen nombres accesibles españoles y disabled mientras guardan. Nombre flexible, color y orderControl se conservan. TagManager mantiene sus callbacks y confirmación de borrado sin cambios.
@@ -78,8 +92,8 @@ Dos tests SSR cubren ausencia de desplegable, SVG/labels/color/orden, nombre lar
 
 Entrada67%5h/76%7d, control54%/74%, reservas10%/1%, secuencial. Sin datos/índices/protocolo/dependencias/DBusuario/producción. Mismo commit/pushint/SHA/cuotas.
 
-
 <a id="23j"></a>
+
 ## 23j — Sin espacios verticales sobrantes ni Ver más en agenda
 
 Mi espacio elimina margen superior de Atrasadas mediante flushTop; separación de Hoy/Próximas se mantiene. Calendario usa padding horizontal y0vertical también en escritorio. usePlanAppearances elimina estado/botones de paginación y lee todas las páginas con modo all y tamaño500, conservando cursor/guardia de avance del lector puro. PlanList retira Ver más y aviso de página parcial de este consumidor. Modo numérico y tope mensual de otros callers se conservan.
@@ -90,8 +104,8 @@ Prueba de61series×2días: modoall entrega122slots únicos/sincursor y conserva 
 
 Bases/particiones/control propios eliminados con ownership; pestañas/servidores retirados y viewport restablecido. Sin prueba física/Google/RPC nueva ni DBusuario/producción/índices/protocolo/dependencias. Entrada24%5h/88%7d, controles22/88 y19/87, reservas10%/1%, secuencial; mismo commit/pushint/SHA/cuotas.
 
-
 <a id="23i"></a>
+
 ## 23i — Filas directas e iconos de acción; H1 móvil sin duplicar navegación
 
 PlanCard elimina details/summary, flecha y selector de categoría de la fila. Título/fecha/estado, descripción compacta y checklist quedan visibles sin abrir un desplegable; contexto de serie permanece accesible. Lápiz SVG y cruz SVG roja aparecen directamente a la derecha, cada botón con área44px, nombre/título español y disabled mientras guarda. Se conservan editor y diálogos de eliminar/cancelar aparición; categoría se cambia por arrastre o editor. PlanList retira estado de expansión y mutación/foco exclusivos del antiguo selector, sin alterar colapsado de Atrasadas/Hoy/Próximas ni sus contadores.
@@ -101,11 +115,3 @@ WorkspaceHeading de las cuatro pantallas de navegación usa sr-only en móvil y 
 Seis pruebas focalizadas/142aserciones de cuatro variantes/checklist/iconos/labels/busy y cuatro títulos responsive. DoD1383pass/225opt-in skip/0fail/15084aserciones, lint1114sinavisos/tipos/Webpack16.4.2/worker46/diff aprobados. UI productiva propia a390px: cero details/select en filas, accionesSVG de44px, editor abierto directamente con Categoría disponible y cancelado sin cambios; cruz abre confirmación y Conservar plan no borra. Cambio a Calendario y Touch sintetizado ordena Plan3→Plan1→Plan2: un task.move pending/attempt0, padres/slots/preferencias intactos. Captura /private/tmp/dalis-23i-plan-actions.png. No se atribuye prueba física ni nueva matriz RPC/remota.
 
 Fixture de navegación sin DB: H1 móvil de1×1px/positionabsolute, Categorías recibe foco tras navegación; a1024px vuelve apositionstatic/altura36px. Bases/partición de planes propias eliminadas, pestañas/servidores retirados y viewport restablecido. Sin datos/índices/protocolo/dependencias/DBusuario/producción. Entrada34%5h/90%7d y control27%/89%, reservas10%/1%, secuencial; mismo commit/pushint/SHA/cuotas.
-
-
-<a id="23h"></a>
-## 23h — Calendario más compacto
-
-Altura mínima de cada día reducida de56a44px (min-h-14→min-h-11), conservando superficie táctil de44px, bordes, colores/estado, selección, navegación y destinos de arrastre. Sólo cambia esta claseCSS. Sin nuevas pruebas que reflejen literalmente la implementación. Suite vigente1381pass/225opt-in skip/0fail/15041aserciones, lint1113sinavisos/tipos/Webpack16.4.2/worker46/diff aprobados.
-
-QA de PlanCalendarBoard productivo con cuenta/IndexedDB propios a390px:35celdas renderizadas, altura real44px uniforme; captura /private/tmp/dalis-23h-calendar-compact.png. Datos/bases propios eliminados, pestaña/servidor retirados y viewport restablecido. Sin nueva prueba de gestos/RPC/Google/dispositivo físico ni cambios de datos/protocolo/índices/dependencias. Entrada39%5h/90%7d, reservas10%/1%, secuencial; mismo commit/pushint/SHA/cuotas, sin DBusuario/producción.

@@ -55,6 +55,7 @@ export interface SyncPassResultV2 {
   uploaded: number
   downloaded: number
   diagnostics: PersonalQueueDiagnostics | null
+  phase?: "identity" | "recover_sends" | "pull" | "queue" | "push"
 }
 class CoordinatorGuardError extends Error {
   constructor(readonly status: "stopped" | "account_changed") {
@@ -95,11 +96,13 @@ export class SyncCoordinatorV2 {
     let pushCount = 0
     let claimCount = 0
     let diagnostics: PersonalQueueDiagnostics | null = null
+    let phase: NonNullable<SyncPassResultV2["phase"]> = "identity"
     const finish = (status: SyncPassResultV2["status"]): SyncPassResultV2 => ({
       status,
       uploaded,
       downloaded,
       diagnostics,
+      phase,
     })
     const guard = async () => {
       if (this.stopped) {
@@ -116,6 +119,7 @@ export class SyncCoordinatorV2 {
     }
     const readQueue = async () => {
       await guard()
+      phase = "queue"
       const snapshot = structuredClone(await this.ports.readQueueState())
       await guard()
       diagnostics = diagnosePersonalQueue(
@@ -125,6 +129,7 @@ export class SyncCoordinatorV2 {
       return { snapshot, diagnostics }
     }
     const download = async () => {
+      phase = "pull"
       while (pullCount < 4) {
         await guard()
         const cursor = localPullCursorSchema.parse(
@@ -161,6 +166,7 @@ export class SyncCoordinatorV2 {
         diagnostics = null
         return finish("account_changed")
       }
+      phase = "recover_sends"
       await this.ports.recoverExpiredSends()
       await guard()
       if (!(await download())) return finish("more_work")
@@ -225,6 +231,7 @@ export class SyncCoordinatorV2 {
               operations: [claimed.operation],
             })
             await guard()
+            phase = "push"
             pushCount++
             const raw = await this.ports.push(structuredClone(request))
             await guard()

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import type { SyncPassResult } from "@/features/sync/coordinator"
 import { OfflineUpdateCheck } from "@/features/workspace/components/offline-update-check"
 import type { SyncQueueSummary } from "@/lib/sync/queue-summary"
@@ -15,6 +16,7 @@ interface SyncStatusPanelProps {
   error: boolean
   busy: boolean
   result: SyncPassResult | null
+  diagnostic?: ReactNode
   onSync(): void
 }
 const messages: Record<SyncPassResult["status"], string> = {
@@ -39,6 +41,7 @@ export function SyncStatusPanel({
   busy,
   result,
   onSync,
+  diagnostic,
   scope = "own_content",
 }: SyncStatusPanelProps) {
   const unresolved = summary
@@ -130,6 +133,7 @@ export function SyncStatusPanel({
         )}
         {result ? <p className="mt-1">{messages[result.status]}</p> : null}
       </div>
+      {diagnostic}
       {result?.status === "update_required" ? <OfflineUpdateCheck /> : null}
       {result?.status === "unauthorized" ? (
         <a

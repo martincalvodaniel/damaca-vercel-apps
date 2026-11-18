@@ -6,6 +6,17 @@ Este archivo es la única fuente del estado de las entregas. Las diez iteracione
 
 La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). AGW-11 ya no es una dependencia vigente.
 
+## 23r — Diagnóstico local de sincronización
+
+- Estado: `validated`.
+- Objetivo: Identificar las operaciones que bloquean la sincronización entre móvil y escritorio.
+- Rutas: `src/features/sync/**`, `src/lib/sync/**` y `plan/**`.
+- Dependencias: Cola local y coordinador mixto existentes. La recuperación del caso real depende de obtener el informe del móvil afectado.
+- Aceptación: Leer sin modificar la cola, copiar un informe sin contenido ni identificadores originales y mostrar el alcance de los bloqueos en Ajustes.
+- Validación prevista: Pruebas de grafos, privacidad y coordinador, revisión móvil y escritorio, Biome, tipos, suite y build.
+- Capacidad inicial: 2026-11-18, 57% en 5h y 85% en 7d. Estimación 18%/5%, reservas 7%/2%.
+- Evidencia: [registro](iteration-log.md#23r).
+
 ## 23q — Ocultar categorías vacías durante el arrastre
 
 - Estado: `validated`.
@@ -98,16 +109,6 @@ La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.
 - Validación prevista: SSR, interacción móvil, regresión de gesto y suite.
 - Evidencia: [registro](iteration-log.md#23i).
 
-## 23h — Calendario compacto
-
-- Estado: `validated`.
-- Objetivo: Reducir altura de celda sin reducir la superficie táctil.
-- Rutas: Componente de cuadrícula mensual y estilos.
-- Dependencias: Diseño y gestos del calendario existentes.
-- Aceptación: Celda de 44 px con navegación, colores, selección y arrastre preservados.
-- Validación prevista: Suite, tipos, build y medida visual móvil.
-- Evidencia: [registro](iteration-log.md#23h).
-
 ## Historial anterior
 
-Las iteraciones `23g` y `23f` y su evidencia se conservan en el [archivo del 2026-10-31](archive/2026-10-31/README.md). La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).
+La evidencia de `23h` (calendario compacto) está en el [archivo del 2026-11-18](archive/2026-11-18/README.md#23h). Las iteraciones `23g` y `23f` y su evidencia se conservan en el [archivo del 2026-10-31](archive/2026-10-31/README.md). La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).
