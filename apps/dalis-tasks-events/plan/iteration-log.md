@@ -4,6 +4,14 @@ La integración temporal AGW-11 queda retirada por [AGW-13](../../../plan/iterat
 
 La evidencia reciente se mantiene aquí; las entregas anteriores se conservan en los archivos [2026-11-18](archive/2026-11-18/README.md), [2026-10-31](archive/2026-10-31/README.md), [2026-10-26](archive/2026-10-26/README.md) y [2026-10-24](archive/2026-10-24/README.md). Los porcentajes y decisiones operativas de registros históricos no son políticas vigentes.
 
+<a id="23s"></a>
+
+## 23s — Descarga del diagnóstico completo
+
+Ajustes ofrece descarga directa del informe anonimizado como `dalis-diagnostico-sync.json`. Reutiliza el mecanismo local de descarga de copias. Se conserva la opción de copiar.
+
+Validación: navegador en escritorio y a 360 px con IndexedDB sintético. El JSON entregado al enlace de descarga incluye las 107 operaciones completas, 106 dependientes y ningún identificador original de la cuenta. Sin desbordamiento horizontal. Suite filtrada con 1393 pruebas aprobadas, 225 opt-in omitidas y 0 fallos, tipos y build Webpack correctos.
+
 <a id="23r"></a>
 
 ## 23r — Diagnóstico local de sincronización
@@ -103,15 +111,3 @@ Atrasadas materializa su rango histórico finito completo; Próximas materializa
 Prueba de61series×2días: modoall entrega122slots únicos/sincursor y conserva entrada; modo numérico1 sigue paginado. DoD1384pass/225opt-in skip/0fail/15090aserciones, lint1114sinavisos/tipos/Webpack16.4.2/worker46/diff aprobados. UI productiva propia390px con52seriesextra: Atrasadas1fila, Hoy62, Próximas5; cero botones Ver más y margen superior de primera sección0px (resto16px). La fixture de52extras termina cada una en su primera fecha, por eso no se atribuyen52extras a Próximas; regresión122slots acredita drenaje de intervalo. Captura /private/tmp/dalis-23j-full-agenda.png. Segunda fixture confirma paddingTop/paddingBottom0px del calendario; captura /private/tmp/dalis-23j-calendar-spacing.png.
 
 Bases/particiones/control propios eliminados con ownership; pestañas/servidores retirados y viewport restablecido. Sin prueba física/Google/RPC nueva ni DBusuario/producción/índices/protocolo/dependencias. Entrada24%5h/88%7d, controles22/88 y19/87, reservas10%/1%, secuencial; mismo commit/pushint/SHA/cuotas.
-
-<a id="23i"></a>
-
-## 23i — Filas directas e iconos de acción; H1 móvil sin duplicar navegación
-
-PlanCard elimina details/summary, flecha y selector de categoría de la fila. Título/fecha/estado, descripción compacta y checklist quedan visibles sin abrir un desplegable; contexto de serie permanece accesible. Lápiz SVG y cruz SVG roja aparecen directamente a la derecha, cada botón con área44px, nombre/título español y disabled mientras guarda. Se conservan editor y diálogos de eliminar/cancelar aparición; categoría se cambia por arrastre o editor. PlanList retira estado de expansión y mutación/foco exclusivos del antiguo selector, sin alterar colapsado de Atrasadas/Hoy/Próximas ni sus contadores.
-
-WorkspaceHeading de las cuatro pantallas de navegación usa sr-only en móvil y md:not-sr-only en escritorio; H1 semántico, document.title y foco de navegación se conservan. No se ocultan encabezados de autenticación o avisos que no duplican la navegación. Nueva superficie no interactiva data-plan-drag-surface sustituye summary en fixture del gesto.
-
-Seis pruebas focalizadas/142aserciones de cuatro variantes/checklist/iconos/labels/busy y cuatro títulos responsive. DoD1383pass/225opt-in skip/0fail/15084aserciones, lint1114sinavisos/tipos/Webpack16.4.2/worker46/diff aprobados. UI productiva propia a390px: cero details/select en filas, accionesSVG de44px, editor abierto directamente con Categoría disponible y cancelado sin cambios; cruz abre confirmación y Conservar plan no borra. Cambio a Calendario y Touch sintetizado ordena Plan3→Plan1→Plan2: un task.move pending/attempt0, padres/slots/preferencias intactos. Captura /private/tmp/dalis-23i-plan-actions.png. No se atribuye prueba física ni nueva matriz RPC/remota.
-
-Fixture de navegación sin DB: H1 móvil de1×1px/positionabsolute, Categorías recibe foco tras navegación; a1024px vuelve apositionstatic/altura36px. Bases/partición de planes propias eliminadas, pestañas/servidores retirados y viewport restablecido. Sin datos/índices/protocolo/dependencias/DBusuario/producción. Entrada34%5h/90%7d y control27%/89%, reservas10%/1%, secuencial; mismo commit/pushint/SHA/cuotas.

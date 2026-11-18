@@ -8,7 +8,7 @@ Aplicación personal mobile-first para planificación, operable offline con sinc
 
 - Mantener las variantes de planes, calendario, offline, Google y aislamiento de cuentas, categorías, asignaciones, orden, repetición, apariciones, zona personal, tema, copias y recuperación ordinaria aceptadas para la versión.
 - Padre recurrente eliminado, remoto desconocido y cadenas externas no admitidas siguen pospuestos, con guardias/evidencia preservadas. Copia de serie completa y cumpleaños están fuera; compartir por Gmail excluido.
-- Sincronización necesita app abierta y conexión para confirmar. Ajustes permite copiar un diagnóstico local con las dependencias y el alcance de cada bloqueo para investigar colas entre dispositivos. Push a `int` no equivale a promoción ni valida producción.
+- Sincronización necesita app abierta y conexión para confirmar. Ajustes permite copiar o descargar un diagnóstico local con las dependencias y el alcance de cada bloqueo para investigar colas entre dispositivos. Push a `int` no equivale a promoción ni valida producción.
 - Restricciones técnicas, almacenamiento y seguridad en [AGENTS.md](../AGENTS.md), guía de usuario y checklist operativo.
 
 - Los planes pueden no tener fecha; se muestran en «Sin fecha», encima de Atrasadas y plegada por defecto en cada entrada. Conservan categorías y orden manual. Las series requieren fecha de inicio.
@@ -21,7 +21,7 @@ Tasks vuelve a autenticar directamente con Google y autoriza mediante `ALLOWED_E
 
 ## Evidencia y trabajo previo
 
-Las diez entregas recientes son `23r`–`23i` en [iteraciones](iterations.md) y [registro](iteration-log.md). Las decisiones y registros anteriores se conservan en el [archivo](archive/2026-10-24/README.md).
+Las diez entregas recientes son `23s`–`23j` en [iteraciones](iterations.md) y [registro](iteration-log.md). Las decisiones y registros anteriores se conservan en el [archivo](archive/2026-10-24/README.md).
 
 ## Application icons
 
