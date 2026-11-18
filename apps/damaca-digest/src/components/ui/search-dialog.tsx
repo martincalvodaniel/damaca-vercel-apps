@@ -89,7 +89,7 @@ export function SearchDialog({
               title={applyLabel}
               className="digest-icon-button text-teal-800 dark:text-teal-300"
             >
-              <DigestIcon name="read" />
+              <DigestIcon name="confirm" />
             </button>
             <button
               ref={close}

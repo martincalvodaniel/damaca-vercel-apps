@@ -249,3 +249,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Rutas: clasificación y limpieza en `src/features/articles/recovery`, pruebas y documentación de la app.
 - Aceptación: conservar artículos breves y enlaces editoriales, eliminar controles y navegación antes de medir el cuerpo, rechazar páginas sin texto editorial y seleccionar el parcial útil anterior.
 - Validación: regresión con proveedor simulado, tipos, Biome incremental, pruebas, build e integración HTTP aislada.
+
+## 35 — Unificar las acciones de lectura y edición
+
+- Estado: `validated`.
+- Aceptación: las dos fichas recorren el mismo ciclo de lectura, el editor permite salir sin guardar y las acciones de borrado y limpieza usan iconos accesibles.

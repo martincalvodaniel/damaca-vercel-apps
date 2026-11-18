@@ -106,9 +106,9 @@ export async function setArticleReading(
 
   const change = operation.data
   const update =
-    change === "read" || change === "unread"
-      ? { readingStatus: change }
-      : { favorite: change === "favorite" }
+    change === "favorite" || change === "unfavorite"
+      ? { favorite: change === "favorite" }
+      : { readingStatus: change }
   const saved = await updateArticleReading(user.id, id, revision, update).catch(
     () => false
   )
