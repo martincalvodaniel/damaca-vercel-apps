@@ -6,13 +6,13 @@ import {
   startTransition,
   useActionState,
   useCallback,
-  useId,
   useRef,
   useState,
 } from "react"
 import { DigestIcon } from "@/components/ui/digest-icon"
 import { saveArticleEdits } from "@/features/articles/actions"
 import { type ArticleEdit, contentType, readingStatus } from "@/schemas/article"
+import { ArticleDeleteDialog } from "./article-delete-dialog"
 
 const inputClass =
   "block min-h-8 w-full min-w-0 rounded-lg border border-zinc-300 bg-transparent px-2 dark:border-zinc-700"
@@ -33,8 +33,6 @@ export function ArticleEditor({
   const [status, setStatus] = useState(values.readingStatus)
   const [favorite, setFavorite] = useState(values.favorite)
   const dialog = useRef<HTMLDialogElement>(null)
-  const cancelDelete = useRef<HTMLButtonElement>(null)
-  const dialogTitle = useId()
   const changeStatus = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     const selected = readingStatus.safeParse(event.currentTarget.value)
     if (selected.success) setStatus(selected.data)
@@ -42,9 +40,7 @@ export function ArticleEditor({
   const toggleFavorite = useCallback(() => setFavorite((value) => !value), [])
   const openDelete = useCallback(() => {
     dialog.current?.showModal()
-    cancelDelete.current?.focus()
   }, [])
-  const closeDelete = useCallback(() => dialog.current?.close(), [])
   const [error, save, saving] = useActionState(
     saveArticleEdits.bind(null, id, revision),
     null
@@ -204,39 +200,7 @@ export function ArticleEditor({
           </label>
         ))}
       </form>
-      <dialog
-        ref={dialog}
-        aria-labelledby={dialogTitle}
-        className="digest-panel m-auto w-[calc(100%-1.5rem)] max-w-sm rounded-xl p-4 text-foreground backdrop:bg-black/60"
-      >
-        <h2 id={dialogTitle} className="font-semibold">
-          Delete article?
-        </h2>
-        <p className="mt-1 text-sm">
-          This permanently deletes the article and its notes.
-        </p>
-        <form
-          action={deleteAction}
-          className="mt-3 flex flex-wrap justify-end gap-2"
-        >
-          <button
-            ref={cancelDelete}
-            type="button"
-            onClick={closeDelete}
-            className="min-h-9 rounded-lg px-3"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            name="confirm"
-            value="true"
-            className="min-h-9 rounded-lg bg-red-800 px-3 text-white"
-          >
-            Delete article
-          </button>
-        </form>
-      </dialog>
+      <ArticleDeleteDialog dialog={dialog} deleteAction={deleteAction} />
     </>
   )
 }

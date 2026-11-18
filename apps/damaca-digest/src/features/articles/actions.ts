@@ -70,6 +70,7 @@ export async function saveArticleEdits(
 export async function removeArticle(
   id: string,
   revision: number,
+  surface: "reading" | "editor",
   form: FormData
 ) {
   const { user } = await requireAuthorizedSession()
@@ -78,11 +79,11 @@ export async function removeArticle(
     !articleRevision.safeParse(String(revision)).success
   )
     redirect("/")
-  const editPath = `/articles/${id}/edit`
-  if (form.get("confirm") !== "true") redirect(`${editPath}?deletion=confirm`)
+  const returnPath = `/articles/${id}${surface === "editor" ? "/edit" : ""}`
+  if (form.get("confirm") !== "true") redirect(`${returnPath}?deletion=confirm`)
 
   const deleted = await deleteArticle(user.id, id, revision).catch(() => false)
-  if (!deleted) redirect(`${editPath}?deletion=failed`)
+  if (!deleted) redirect(`${returnPath}?deletion=failed`)
 
   revalidatePath("/")
   redirect("/")

@@ -1,8 +1,9 @@
 import Link from "next/link"
 import { DigestIcon } from "@/components/ui/digest-icon"
-import { setArticleReading } from "@/features/articles/actions"
+import { removeArticle, setArticleReading } from "@/features/articles/actions"
 import { AccessBadge } from "@/features/articles/components/access-badge"
 import type { Article, RelatedArticle } from "@/lib/db/articles"
+import { ArticleDeleteButton } from "./article-delete-button"
 
 const sectionTitle = "mb-2 text-lg font-semibold tracking-tight"
 export function ArticleDetail({
@@ -10,11 +11,13 @@ export function ArticleDetail({
   topics,
   related,
   readingUpdateFailed,
+  deletion,
 }: {
   article: Article
   topics: string[]
   related: RelatedArticle[]
   readingUpdateFailed: boolean
+  deletion?: string | string[]
 }) {
   const details = [
     article.source ?? article.sourceDomain,
@@ -27,6 +30,12 @@ export function ArticleDetail({
     null,
     article.id,
     article.revision
+  )
+  const deleteAction = removeArticle.bind(
+    null,
+    article.id,
+    article.revision,
+    "reading"
   )
   const captured = article.capturedAt.toISOString()
   const links = new Map(
@@ -113,7 +122,15 @@ export function ArticleDetail({
           >
             <DigestIcon name="json" />
           </a>
+          <ArticleDeleteButton deleteAction={deleteAction} />
         </fieldset>
+        {deletion ? (
+          <p role="alert" className="mt-2 text-sm">
+            {deletion === "confirm"
+              ? "Confirm that you want to delete this article."
+              : "The article could not be deleted. Reload and try again."}
+          </p>
+        ) : null}
         {readingUpdateFailed ? (
           <p role="alert" className="mt-2 text-sm">
             The reading update could not be saved. Try again.
