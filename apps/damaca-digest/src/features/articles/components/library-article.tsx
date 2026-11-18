@@ -18,8 +18,6 @@ export function LibraryArticle({
     <li className="digest-panel min-w-0 rounded-xl px-2 pt-2 sm:px-3">
       <Link
         href={`/articles/${article.id}`}
-        target="_blank"
-        rel="noopener"
         className="group block min-w-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
       >
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-600 dark:text-zinc-400">
