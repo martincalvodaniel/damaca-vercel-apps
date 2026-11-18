@@ -6,6 +6,17 @@ Este archivo es la única fuente del estado de las entregas. Las diez iteracione
 
 La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.md#agw-13--restore-independent-tasks-authentication-and-suspend-database-refresh). AGW-11 ya no es una dependencia vigente.
 
+## 23s — Descarga del diagnóstico completo
+
+- Estado: `validated`.
+- Objetivo: Compartir informes largos como archivo JSON.
+- Rutas: Diagnóstico en Ajustes, descarga local compartida y `plan/**`.
+- Dependencias: Informe anonimizado de 23r.
+- Aceptación: Descargar todas las operaciones sin pasar por el portapapeles y conservar la opción de copiar.
+- Validación prevista: Prueba de descarga, Biome, tipos, suite y build.
+- Capacidad inicial: 46% en 5h y 83% en 7d. Estimación 10%/3%.
+- Evidencia: [registro](iteration-log.md#23s).
+
 ## 23r — Diagnóstico local de sincronización
 
 - Estado: `validated`.
@@ -99,16 +110,6 @@ La reversión a Google directo se registra en [AGW-13](../../../plan/iterations.
 - Validación prevista: Pruebas sobre >50 series, paginación y revisión UI.
 - Evidencia: [registro](iteration-log.md#23j).
 
-## 23i — Filas directas y títulos móviles discretos
-
-- Estado: `validated`.
-- Objetivo: Mostrar datos/acciones de plan sin desplegable y conservar H1 accesible en móvil.
-- Rutas: PlanCard, PlanList, encabezados de navegación, pruebas.
-- Dependencias: Diseño de interacción vigente de agenda.
-- Aceptación: Conservar edición, checklist, contexto de serie, confirmaciones, acciones táctiles y foco/título semántico.
-- Validación prevista: SSR, interacción móvil, regresión de gesto y suite.
-- Evidencia: [registro](iteration-log.md#23i).
-
 ## Historial anterior
 
-La evidencia de `23h` (calendario compacto) está en el [archivo del 2026-11-18](archive/2026-11-18/README.md#23h). Las iteraciones `23g` y `23f` y su evidencia se conservan en el [archivo del 2026-10-31](archive/2026-10-31/README.md). La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).
+La evidencia de `23i` (acciones directas de planes) y de `23h` (calendario compacto) está en el [archivo del 2026-11-18](archive/2026-11-18/README.md#23h). Las iteraciones `23g` y `23f` y su evidencia se conservan en el [archivo del 2026-10-31](archive/2026-10-31/README.md). La iteración `23e` se conserva en el [archivo del 2026-10-26](archive/2026-10-26/README.md). Las anteriores permanecen en el [archivo histórico](archive/2026-10-24/README.md).

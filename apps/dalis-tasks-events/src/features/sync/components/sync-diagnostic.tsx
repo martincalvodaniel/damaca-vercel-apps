@@ -7,6 +7,8 @@ import type { readSyncDiagnostic } from "@/features/sync/read-sync-diagnostic"
 import type { LocalAccount } from "@/features/workspace/local-account"
 import { requireActiveAccount } from "@/features/workspace/require-active-account"
 
+import { downloadJson } from "@/lib/download-json"
+
 type Report = Awaited<ReturnType<typeof readSyncDiagnostic>>
 
 const operationLabels: Record<string, string> = {
@@ -45,47 +47,80 @@ export function SyncDiagnostic({
   const [manualCopy, setManualCopy] = useState(false)
   const [reading, setReading] = useState(false)
 
-  const copy = useCallback(async () => {
-    setReading(true)
-    setNotice("")
-    setManualCopy(false)
-    setReport(null)
-    try {
-      const { readSyncDiagnostic } = await import(
-        "@/features/sync/read-sync-diagnostic"
-      )
-      const snapshot = await readSyncDiagnostic(
-        account,
-        activeProductSyncProtocol,
-        busy,
-        result
-      )
-      await requireActiveAccount(account)
-      setReport(snapshot)
+  const exportReport = useCallback(
+    async (method: "copy" | "download") => {
+      setReading(true)
+      setNotice("")
+      setManualCopy(false)
+      setReport(null)
       try {
-        await navigator.clipboard.writeText(JSON.stringify(snapshot))
-        setNotice("Diagnóstico copiado.")
+        const { readSyncDiagnostic } = await import(
+          "@/features/sync/read-sync-diagnostic"
+        )
+        const snapshot = await readSyncDiagnostic(
+          account,
+          activeProductSyncProtocol,
+          busy,
+          result
+        )
+        await requireActiveAccount(account)
+        setReport(snapshot)
+        const json = JSON.stringify(snapshot)
+        if (method === "download") {
+          try {
+            downloadJson(json, "dalis-diagnostico-sync.json")
+            setNotice("Descarga solicitada.")
+          } catch {
+            setNotice(
+              "No se pudo descargar el diagnóstico. Vuelve a intentarlo."
+            )
+          }
+          return
+        }
+        try {
+          await navigator.clipboard.writeText(json)
+          setNotice("Diagnóstico copiado.")
+        } catch {
+          setManualCopy(true)
+          setNotice("Selecciona el informe y cópialo.")
+        }
       } catch {
-        setManualCopy(true)
-        setNotice("Selecciona el informe y cópialo.")
+        setNotice("No se pudo leer el diagnóstico local. Vuelve a intentarlo.")
+      } finally {
+        setReading(false)
       }
-    } catch {
-      setNotice("No se pudo leer el diagnóstico local. Vuelve a intentarlo.")
-    } finally {
-      setReading(false)
-    }
-  }, [account, busy, result])
+    },
+    [account, busy, result]
+  )
+
+  const copy = useCallback(() => exportReport("copy"), [exportReport])
+  const download = useCallback(() => exportReport("download"), [exportReport])
 
   return (
     <div className="mt-2">
-      <button
-        type="button"
-        onClick={copy}
-        disabled={reading}
-        className="min-h-11 rounded-lg border border-zinc-300 px-3 font-medium disabled:opacity-50 dark:border-zinc-700"
-      >
-        {reading ? "Preparando diagnóstico…" : "Copiar diagnóstico"}
-      </button>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={copy}
+          disabled={reading}
+          className="min-h-11 rounded-lg border border-zinc-300 px-3 font-medium disabled:opacity-50 dark:border-zinc-700"
+        >
+          Copiar diagnóstico
+        </button>
+        <button
+          type="button"
+          onClick={download}
+          disabled={reading}
+          className="min-h-11 rounded-lg border border-zinc-300 px-3 font-medium disabled:opacity-50 dark:border-zinc-700"
+        >
+          Descargar diagnóstico
+        </button>
+      </div>
+      {reading ? (
+        <p role="status" className="mt-1">
+          Preparando diagnóstico…
+        </p>
+      ) : null}
       {notice ? (
         <p role="status" className="mt-1">
           {notice}
