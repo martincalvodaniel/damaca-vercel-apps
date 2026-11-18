@@ -13,6 +13,7 @@ export MONGODB_DB="digest_capture_test_$(date +%s)_$$"
 export CHATGPT_CLIENT_ID=digest-test
 export CHATGPT_CLIENT_SECRET="$(openssl rand -hex 32)"
 export CHATGPT_REDIRECT_URI=https://chatgpt.com/connector/oauth/test
+export ARTICLE_FETCH_DIRECT_ENABLED=false ARTICLE_FETCH_JINA_ENABLED=false ARTICLE_FETCH_FIRECRAWL_ENABLED=false
 
 cd "$(dirname "$0")/../../.."
 bun run build --filter=@damaca/damaca-digest --cache=local:w -- --webpack

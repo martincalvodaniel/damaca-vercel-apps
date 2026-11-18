@@ -227,3 +227,25 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: las fichas, los originales y las referencias se abren en otra pestaña. Las acciones de Capture muestran el icono de ChatGPT y la acción combinada incorpora un distintivo de copia.
+
+## 32 — Recuperar fuentes de artículos desde MCP
+
+- Estado: `validated` (código e integración local).
+- Rutas: servidor MCP, recuperación en `src/features/articles`, esquema y procedencia, contadores MongoDB, prompt de Capture, configuración y pruebas.
+- Dependencias: Readability, jsdom, Turndown e ipaddr.js en el catálogo Bun.
+- Validación: Biome incremental, tipos, pruebas con proveedores simulados, build e integración HTTP con MongoDB aislado.
+- Aceptación: recuperar fuentes públicas con Directo, Jina y Firecrawl en orden, con límites, protección de red, diagnóstico y guardado explícito compatible. [Evidencia local](iteration-log.md#32--recuperar-fuentes-de-artículos-desde-mcp).
+
+## 33 — Medir el piloto de recuperación en int
+
+- Estado: `in_progress`.
+- Evidencia: el usuario confirmó llamadas reales de Jina y Firecrawl desde ChatGPT. Firecrawl entregó un falso positivo con controles de vídeo; la corrección se registra en la iteración 34. Falta contrastar el resultado corregido y una recaptura.
+- Aceptación: comparar la lectura nativa con Directo y Jina desde el conector real de ChatGPT, comprobar una lectura sin guardado y una recaptura, medir tiempos y probar Firecrawl si hay clave de prueba.
+
+## 34 — Rechazar interfaces como contenido editorial
+
+- Estado: `validated`.
+- Objetivo: evitar que un resultado HTTP 200 de un extractor con controles de vídeo, anuncios o navegación reemplace una recuperación parcial útil.
+- Rutas: clasificación y limpieza en `src/features/articles/recovery`, pruebas y documentación de la app.
+- Aceptación: conservar artículos breves y enlaces editoriales, eliminar controles y navegación antes de medir el cuerpo, rechazar páginas sin texto editorial y seleccionar el parcial útil anterior.
+- Validación: regresión con proveedor simulado, tipos, Biome incremental, pruebas, build e integración HTTP aislada.

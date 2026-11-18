@@ -88,3 +88,62 @@ export function getChatGptClient() {
   }
   return { id, secret, redirectUri }
 }
+
+function boundedInteger(
+  value: string | undefined,
+  fallback: number,
+  max: number
+) {
+  const parsed = Number(value)
+  return value && Number.isInteger(parsed) && parsed > 0 && parsed <= max
+    ? parsed
+    : fallback
+}
+
+export function getArticleFetchEnv() {
+  const firecrawlKey = process.env.FIRECRAWL_API_KEY?.trim()
+  return {
+    enabled: {
+      direct: process.env.ARTICLE_FETCH_DIRECT_ENABLED === "true",
+      jina: process.env.ARTICLE_FETCH_JINA_ENABLED === "true",
+      firecrawl:
+        process.env.ARTICLE_FETCH_FIRECRAWL_ENABLED === "true" &&
+        !!firecrawlKey,
+    },
+    hosts: new Set(
+      (process.env.ARTICLE_FETCH_PROVIDER_HOSTS ?? "")
+        .split(",")
+        .map((host) => host.trim().toLowerCase())
+        .filter(Boolean)
+    ),
+    totalMs: boundedInteger(
+      process.env.ARTICLE_FETCH_TOTAL_TIMEOUT_MS,
+      30_000,
+      30_000
+    ),
+    providerMs: {
+      direct: boundedInteger(
+        process.env.ARTICLE_FETCH_DIRECT_TIMEOUT_MS,
+        5_000,
+        30_000
+      ),
+      jina: boundedInteger(
+        process.env.ARTICLE_FETCH_JINA_TIMEOUT_MS,
+        10_000,
+        30_000
+      ),
+      firecrawl: boundedInteger(
+        process.env.ARTICLE_FETCH_FIRECRAWL_TIMEOUT_MS,
+        15_000,
+        30_000
+      ),
+    },
+    firecrawlDailyLimit: boundedInteger(
+      process.env.ARTICLE_FETCH_FIRECRAWL_DAILY_LIMIT,
+      10,
+      10
+    ),
+    jinaKey: process.env.JINA_API_KEY?.trim(),
+    firecrawlKey,
+  }
+}

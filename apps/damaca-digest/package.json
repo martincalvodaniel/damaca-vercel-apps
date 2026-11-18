@@ -13,6 +13,10 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@mozilla/readability": "catalog:",
+    "jsdom": "catalog:",
+    "turndown": "catalog:",
+    "ipaddr.js": "catalog:",
     "@better-auth/oauth-provider": "catalog:",
     "@modelcontextprotocol/sdk": "catalog:",
     "@vercel/config": "catalog:",
@@ -26,6 +30,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@types/jsdom": "catalog:",
+    "@types/turndown": "catalog:",
     "@biomejs/biome": "catalog:",
     "@tailwindcss/postcss": "catalog:",
     "@types/bun": "catalog:",

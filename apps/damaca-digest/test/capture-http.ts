@@ -3,6 +3,11 @@ import { createHash } from "node:crypto"
 import { getAuthEnv, getChatGptClient, getDatabaseEnv } from "@/config/env"
 import { installName } from "@/config/install-name"
 import { captureScope, getMcpUrls, readScope } from "@/lib/auth/mcp-config"
+import {
+  acquireArticleFetch,
+  allowArticleFetch,
+  allowFirecrawl,
+} from "@/lib/db/article-fetch-rate"
 import { saveArticle } from "@/lib/db/articles"
 import { closeDatabaseConnection, getDatabase } from "@/lib/db/client"
 import { grantUserAccess, revokeUserAccess } from "@/lib/db/user-access"
@@ -221,10 +226,19 @@ try {
     accessNotes: "Only the introduction was available",
   })
   assert.equal(partial.status, "updated")
+  const fetchDiagnostics = {
+    provider: "direct",
+    attempts: [
+      { provider: "direct", status: "full", durationMs: 12, httpStatus: 200 },
+    ],
+    durationMs: 14,
+    truncated: false,
+  }
   const full = await save(token, {
     url,
     accessStatus: "full",
     summary: "Fixture summary",
+    fetchDiagnostics,
   })
   assert.equal(full.status, "updated")
   assert.equal(full.articleId, article.articleId)
@@ -234,6 +248,31 @@ try {
   })
   assert.equal(duplicate.status, "already_exists")
   assert.equal(duplicate.articleId, article.articleId)
+  const persisted = await (await getDatabase())
+    .collection("articles")
+    .findOne({ canonicalUrl: url })
+  assert.deepEqual(persisted?.provenance.fetchDiagnostics, fetchDiagnostics)
+  assert.equal(persisted?.content, undefined)
+
+  const owner = crypto.randomUUID()
+  const leases = await Promise.all([
+    acquireArticleFetch(owner),
+    acquireArticleFetch(owner),
+  ])
+  assert.equal(leases.filter(Boolean).length, 1)
+  await leases.find(Boolean)?.()
+  const renewed = await acquireArticleFetch(owner)
+  assert.ok(renewed)
+  await renewed()
+  const clock = Date.now()
+  const usage = await Promise.all(
+    Array.from({ length: 6 }, () => allowArticleFetch(owner, clock))
+  )
+  assert.equal(usage.filter(Boolean).length, 5)
+  assert.equal(await allowArticleFetch(owner, clock + 60_000), true)
+  assert.equal(await allowFirecrawl(1, clock), true)
+  assert.equal(await allowFirecrawl(1, clock), false)
+  assert.equal(await allowFirecrawl(1, clock + 86_400_000), true)
   const owned = await fetch(article.detailUrl, {
     headers: { cookie: first.cookie },
   })
@@ -544,6 +583,22 @@ try {
   assert.match(writerRead._meta["mcp/www_authenticate"][0], /articles:read/)
   const reader = await authorize(first.cookie, "basic", readScope)
   const otherReader = await authorize(second.cookie, "post", readScope)
+  const recoveryUrl = "https://www.xda-developers.com/digest-http-fixture"
+  const deniedFetch = await invoke(reader, "fetch_article", {
+    url: recoveryUrl,
+  })
+  assert.equal(deniedFetch.isError, true)
+  assert.match(deniedFetch._meta["mcp/www_authenticate"][0], /articles:write/)
+  const deniedDestination = await invoke(token, "fetch_article", {
+    url: "http://169.254.169.254/",
+  })
+  assert.equal(deniedDestination.isError, true)
+  const recovery = await invoke(token, "fetch_article", { url: recoveryUrl })
+  assert.equal(recovery.structuredContent.accessStatus, "unavailable")
+  assert.equal(recovery.structuredContent.content, undefined)
+  assert.equal(recovery.structuredContent.attempts.length, 3)
+  const unsaved = await invoke(reader, "get_article", { url: recoveryUrl })
+  assert.equal(unsaved.structuredContent.article, null)
   const readByUrl = await invoke(reader, "get_article", {
     url: `${url}&utm=fake`,
   })
