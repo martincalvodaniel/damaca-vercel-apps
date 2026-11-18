@@ -6,6 +6,7 @@ import {
   commonPlanReleaseEnabled,
   recurringSyncReleaseEnabled,
 } from "@/config/common-plan-release"
+import { SyncDiagnostic } from "@/features/sync/components/sync-diagnostic"
 import { SyncIncidentDetails } from "@/features/sync/components/sync-incident-details"
 import { SyncStatusPanel } from "@/features/sync/components/sync-status-panel"
 import { SyncContext } from "@/features/sync/sync-context"
@@ -32,9 +33,15 @@ export function DeviceSyncSettings({ account }: { account: LocalAccount }) {
                 ? "own_plans_preferences_and_order"
                 : "own_content_preferences_and_task_order"
         }
-        onSync={() => {
-          void state.synchronize()
-        }}
+        diagnostic={
+          <SyncDiagnostic
+            key={`${account.userId}:${account.epoch}`}
+            account={account}
+            busy={state.busy}
+            result={state.result}
+          />
+        }
+        onSync={state.synchronize}
       />
       {state.summary && state.summary.conflicts + state.summary.rejected > 0 ? (
         <SyncIncidentDetails

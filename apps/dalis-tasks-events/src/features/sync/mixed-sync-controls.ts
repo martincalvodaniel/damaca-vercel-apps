@@ -24,6 +24,7 @@ class MixedResultAdapter {
 
   retain(result: SyncPassResultV2): SyncPassResult {
     const value: SyncPassResultV2 = {
+      ...(result.phase ? { phase: result.phase } : {}),
       status: result.status,
       uploaded: result.uploaded,
       downloaded: result.downloaded,
