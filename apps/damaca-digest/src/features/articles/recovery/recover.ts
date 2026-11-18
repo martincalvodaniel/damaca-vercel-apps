@@ -2,6 +2,7 @@ import "server-only"
 
 import type { getArticleFetchEnv } from "@/config/env"
 import { type FetchAttempt, fetchProvider } from "@/schemas/article-fetch"
+import { editorialContent } from "./content"
 import { providerUrl, RecoveryError, recoveryUrl } from "./network"
 import { type Candidate, fetchCandidate } from "./providers"
 
@@ -18,26 +19,23 @@ const preview =
 const contentLimit = 40_000
 
 export function classify(candidate: Candidate) {
-  const content = candidate.content?.trim() ?? ""
-  const visible = content
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[\s#*_`>|-]+/g, " ")
-    .trim()
+  const raw = candidate.content?.trim() ?? ""
+  const { content, score } = editorialContent(raw)
   const challengePage =
     candidate.challenge ||
-    challenge.test(content) ||
+    challenge.test(raw) ||
     challenge.test(candidate.title ?? "")
   const protectedPage =
     challengePage ||
     blocked.test(candidate.evidence ?? "") ||
-    blocked.test(content.slice(0, 600)) ||
+    blocked.test(raw.slice(0, 600)) ||
     blocked.test(candidate.title ?? "")
   const editorial =
     !challengePage &&
     !errorPage.test(content) &&
     !errorPage.test(candidate.title ?? "") &&
-    visible.split(/\s+/).length >= 12 &&
-    !(protectedPage && visible.length < 200)
+    score > 0 &&
+    !(protectedPage && score < 200)
   const truncated = content.length > contentLimit
   if (!editorial)
     return {
@@ -46,17 +44,12 @@ export function classify(candidate: Candidate) {
       protectedPage,
       score: 0,
     } as const
-  if (
-    protectedPage ||
-    candidate.partial ||
-    preview.test(content) ||
-    truncated
-  ) {
+  if (protectedPage || candidate.partial || preview.test(raw) || truncated) {
     return {
       status: "partial",
       reason: protectedPage ? "blocked" : truncated ? "truncated" : "partial",
       protectedPage,
-      score: Math.min(visible.length, contentLimit),
+      score: Math.min(score, contentLimit),
       truncated,
       content: content.slice(0, contentLimit),
     } as const
@@ -64,7 +57,7 @@ export function classify(candidate: Candidate) {
   return {
     status: "full",
     protectedPage,
-    score: visible.length,
+    score,
     truncated: false,
     content,
   } as const

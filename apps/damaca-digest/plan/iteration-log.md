@@ -2,11 +2,6 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 23 — Compactar controles y facilitar filtros
-
-- Captura reutiliza la navegación y sigue siendo pública. Cada autor del listado añade su filtro manteniendo la búsqueda y los filtros activos. El selector de estado de lectura pasa a la barra sticky del editor.
-- Biome, tipos, 50 pruebas, build e integración HTTP con MongoDB pasaron. Chrome a 320 y 1280 px comprobó la navegación de Captura, el filtro por autor y el guardado de estados.
-
 ## 24 — Unificar los buscadores de Library y Topics
 
 - Búsqueda y gestión de Topics ahora comparten un panel con los estilos de Library. Ambos buscadores usan la misma lupa verde.
@@ -51,3 +46,9 @@
 
 - Pasaron tipos, 57 pruebas, build con Turbopack e integración HTTP con Webpack, OAuth y MongoDB 8 desechable. Las fixtures cubren caché de proveedor desactivada, redirección hacia metadata, DNS mixto y fijación de IP, longitud HTML descomprimida, páginas de bloqueo, cuotas y cancelación. MongoDB confirmó el diagnóstico persistido, la ausencia de escritura al recuperar y que las recapturas conservan las ediciones.
 - El piloto externo requiere comprobar el tiempo efectivo en ChatGPT, la comparación con lectura nativa y Firecrawl con una clave de prueba. Los flags de fábrica quedan desactivados.
+
+## 34 — Rechazar interfaces como contenido editorial
+
+- Una fixture formada por controles de vídeo, publicidad y navegación reprodujo el falso positivo: el clasificador anterior devolvía `full` al superar doce palabras. La limpieza compartida ahora elimina controles y enlaces aislados antes del recorte y exige prosa editorial; los títulos y menús no cuentan como evidencia. Un resultado sin cuerpo útil deja disponible el parcial de un proveedor anterior.
+- Pasaron Biome incremental, tipos, 60 pruebas y build con integración HTTP/OAuth sobre MongoDB 8 desechable. Se cubren artículo breve, referencias inline, controles de vídeo y cookies, navegación extensa antes del cuerpo y conservación del parcial.
+- La URL pública exacta facilitada por el usuario se probó con Jina: 42.069 caracteres de entrada, 30.052 tras la limpieza, clasificados como `full` sin recorte. El cuerpo real de Firecrawl no estaba disponible para reproducirlo localmente; la regresión reproduce el contenido de interfaz descrito en la captura. Falta la comprobación en ChatGPT tras desplegar.

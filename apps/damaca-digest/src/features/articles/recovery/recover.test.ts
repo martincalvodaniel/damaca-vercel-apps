@@ -312,3 +312,87 @@ function assertPinned(lookup: import("node:http").RequestOptions["lookup"]) {
     }
   )
 }
+
+it("rejects player controls and retains a useful partial from the previous provider", async () => {
+  const controls = [
+    "# I asked VS Code, Claude Code, and Google Antigravity to build an app",
+    "Play Video",
+    "Pause",
+    "Mute",
+    "Current Time 0:00 / Duration 1:23",
+    "Loaded: 0%",
+    "Playback Rate 1x",
+    "Captions",
+    "Picture-in-Picture",
+    "Fullscreen",
+    "Advertisement",
+    "This is a modal window. Beginning of dialog window. Escape will cancel and close the window.",
+    "We and our partners use cookies to personalize advertisements and analyse the traffic on this website.",
+    "[Home](https://www.xda-developers.com/)",
+    "[News](https://www.xda-developers.com/news/)",
+    "[Sign in](https://www.xda-developers.com/login/)",
+  ].join("\n\n")
+  expect(
+    classify({ finalUrl: url, title: "An article", content: controls }).status
+  ).toBe("failed")
+  const recovered = await recoverArticle(
+    url,
+    config,
+    signal,
+    async () => true,
+    async (provider) => ({
+      finalUrl: url,
+      content: provider === "jina" ? excerpt.repeat(4) : controls,
+      partial: provider === "jina",
+    })
+  )
+  expect(recovered.accessStatus).toBe("partial")
+  expect("provider" in recovered && recovered.provider).toBe("jina")
+  expect(recovered.attempts.map(({ status }) => status)).toEqual([
+    "failed",
+    "partial",
+    "failed",
+  ])
+})
+
+it("ignores headlines and linked menus while retaining brief prose and inline references", () => {
+  const menu = Array.from(
+    { length: 50 },
+    (_, index) =>
+      `[An interesting article number ${index}](https://example.org/${index})`
+  ).join("\n\n")
+  expect(classify({ finalUrl: url, content: menu }).status).toBe("failed")
+  expect(
+    classify({
+      finalUrl: url,
+      content:
+        "# The city's new reading room opened on Tuesday, restoring access to historic maps.",
+    }).status
+  ).toBe("failed")
+  const article = `Play Video\n\n# A reading room\n\n${excerpt} Readers can [browse the maps](https://example.org/maps).\n\nFullscreen`
+  const result = classify({ finalUrl: url, content: article })
+  expect(result.status).toBe("full")
+  expect("content" in result && result.content).toContain("[browse the maps]")
+  expect("content" in result && result.content).not.toContain("Play Video")
+  expect("content" in result && result.content).not.toContain("Fullscreen")
+  expect(
+    classify({
+      finalUrl: url,
+      content: "El museo abrió hoy sus puertas tras las obras de restauración.",
+    }).status
+  ).toBe("full")
+})
+
+it("removes navigation before applying the output limit", () => {
+  const navigation = Array.from(
+    { length: 1000 },
+    (_, index) =>
+      `[Another related article number ${index}](https://example.org/article-${index})`
+  ).join("\n\n")
+  const result = classify({
+    finalUrl: url,
+    content: `${navigation}\n\n${excerpt}`,
+  })
+  expect(result.status).toBe("full")
+  expect("content" in result && result.content).toBe(excerpt)
+})
