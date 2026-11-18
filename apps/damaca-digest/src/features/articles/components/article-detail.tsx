@@ -213,8 +213,6 @@ export function ArticleDetail({
               <li key={item.id}>
                 <Link
                   href={`/articles/${item.id}`}
-                  target="_blank"
-                  rel="noopener"
                   className="block min-h-11 py-2 text-sm hover:text-teal-800 dark:hover:text-teal-300"
                 >
                   <span className="block font-semibold">{item.title}</span>
