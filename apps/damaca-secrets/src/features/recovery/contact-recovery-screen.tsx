@@ -273,7 +273,7 @@ export function ContactRecoveryScreen({ returned }: { returned: boolean }) {
 
   return (
     <main className="mx-auto grid max-w-3xl gap-3 p-4 text-sm">
-      <h1 className="text-xl font-semibold">{t.trustedContacts}</h1>
+      <h1 className="sr-only">{t.trustedContacts}</h1>
       {error ? <p role="alert">{t.contactError}</p> : null}
       <button
         className={buttonClass}

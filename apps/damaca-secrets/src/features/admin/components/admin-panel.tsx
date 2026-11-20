@@ -28,7 +28,7 @@ export async function AdminPanel({
         {t.backHome}
       </Link>
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">{t.siteAdmin}</h1>
+        <h1 className="sr-only">{t.siteAdmin}</h1>
       </header>
       <PendingRequests requests={requests} hasCursor={hasRequestsCursor} />
       <section

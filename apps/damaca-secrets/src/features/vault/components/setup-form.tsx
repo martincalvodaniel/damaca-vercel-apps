@@ -2,6 +2,7 @@
 
 import { type FormEvent, useCallback, useState } from "react"
 import { IconButton } from "@/components/ui/icon-button"
+import { PasswordInput } from "@/components/ui/password-input"
 import { inputClass, primaryClass } from "@/features/vault/components/styles"
 import type { VaultController } from "@/features/vault/use-vault"
 import { useLocale } from "@/lib/i18n/client"
@@ -47,51 +48,43 @@ export function SetupForm({ busy, mode, onCancel, onPrepare }: SetupFormProps) {
       className="grid max-w-md gap-3"
     >
       {mode === "recover" ? (
-        <label className="grid gap-1 text-sm font-medium">
-          {t.recoveryCode}
-          <input
-            name="code"
-            type="password"
-            required
-            maxLength={64}
-            className={inputClass}
-          />
-        </label>
+        <PasswordInput
+          fieldClassName="text-sm font-medium"
+          label={t.recoveryCode}
+          name="code"
+          required
+          maxLength={64}
+          className={inputClass}
+        />
       ) : null}
       {mode === "change" ? (
-        <label className="grid gap-1 text-sm font-medium">
-          {t.currentMasterPassword}
-          <input
-            name="previous"
-            type="password"
-            required
-            maxLength={256}
-            className={inputClass}
-          />
-        </label>
+        <PasswordInput
+          fieldClassName="text-sm font-medium"
+          label={t.currentMasterPassword}
+          name="previous"
+          required
+          maxLength={256}
+          className={inputClass}
+        />
       ) : null}
-      <label className="grid gap-1 text-sm font-medium">
-        {t.newMasterPassword}
-        <input
-          name="password"
-          type="password"
-          required
-          minLength={15}
-          maxLength={256}
-          className={inputClass}
-        />
-      </label>
-      <label className="grid gap-1 text-sm font-medium">
-        {t.confirmMasterPassword}
-        <input
-          name="confirm"
-          type="password"
-          required
-          minLength={15}
-          maxLength={256}
-          className={inputClass}
-        />
-      </label>
+      <PasswordInput
+        fieldClassName="text-sm font-medium"
+        label={t.newMasterPassword}
+        name="password"
+        required
+        minLength={15}
+        maxLength={256}
+        className={inputClass}
+      />
+      <PasswordInput
+        fieldClassName="text-sm font-medium"
+        label={t.confirmMasterPassword}
+        name="confirm"
+        required
+        minLength={15}
+        maxLength={256}
+        className={inputClass}
+      />
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
         {t.passwordLengthHelp}
       </p>

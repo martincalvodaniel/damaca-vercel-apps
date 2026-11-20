@@ -14,7 +14,7 @@ export async function SettingsScreen() {
   const session = await requireAuthorizedSession()
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-4 sm:p-8">
-      <h1 className="text-2xl font-semibold tracking-tight">{t.settings}</h1>
+      <h1 className="sr-only">{t.settings}</h1>
       <section
         aria-label={t.yourAccount}
         className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900"

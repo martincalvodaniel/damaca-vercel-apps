@@ -118,6 +118,8 @@ export const en = {
   username: "Username",
   password: "Password",
   hidePassword: "Hide password",
+  otherUnlockOptions: "Other options",
+  showPasswordBriefly: "Show password for one second",
   showPassword: "Show password",
   copyUsername: "Copy username",
   copyPassword: "Copy password",

@@ -1,5 +1,6 @@
 const paths = {
   add: "M12 5v14M5 12h14",
+  forward: "M5 12h14m-7-7 7 7-7 7",
   back: "m12 19-7-7 7-7M5 12h14",
   check: "m5 12 4 4L19 6",
   close: "m6 6 12 12M18 6 6 18",

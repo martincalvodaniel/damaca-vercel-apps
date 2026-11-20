@@ -2,6 +2,7 @@
 
 import { type FormEvent, useCallback, useRef, useState } from "react"
 import { IconButton } from "@/components/ui/icon-button"
+import { PasswordInput } from "@/components/ui/password-input"
 import { inputClass } from "@/features/vault/components/styles"
 import { generatePassword } from "@/features/vault/crypto"
 import { useLocale } from "@/lib/i18n/client"
@@ -70,18 +71,16 @@ export function EntryForm({ busy, entry, formId, onSave }: EntryFormProps) {
         />
       </label>
       <div className="flex items-end gap-2">
-        <label className="grid min-w-0 flex-1 gap-1 text-sm">
-          {t.password}
-          <input
-            className={inputClass}
-            ref={password}
-            name="password"
-            type="password"
-            onChange={clearGenerated}
-            defaultValue={entry?.password}
-            maxLength={1024}
-          />
-        </label>
+        <PasswordInput
+          fieldClassName="min-w-0 flex-1 text-sm"
+          label={t.password}
+          className={inputClass}
+          ref={password}
+          name="password"
+          onChange={clearGenerated}
+          defaultValue={entry?.password}
+          maxLength={1024}
+        />
         <IconButton
           type="button"
           disabled={busy}

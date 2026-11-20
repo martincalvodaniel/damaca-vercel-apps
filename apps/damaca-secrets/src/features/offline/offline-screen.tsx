@@ -190,19 +190,17 @@ export function OfflineScreen() {
       data-offline-shell="damaca-secrets"
       className="mx-auto grid w-full max-w-3xl gap-3 px-3 py-3 sm:px-6 sm:py-5"
     >
-      <header className="flex min-h-9 items-center justify-between gap-2">
-        <h1 className="text-xl font-semibold tracking-tight">
-          {t.offlineVault}
-        </h1>
-        {entries ? (
+      <h1 className="sr-only">{t.offlineVault}</h1>
+      {entries ? (
+        <div className="flex justify-end">
           <IconButton
             icon="lock"
             tone="security"
             label={t.lockVault}
             onClick={lock}
           />
-        ) : null}
-      </header>
+        </div>
+      ) : null}
       {status ? (
         <p role="status" className="text-sm">
           {t[status]}

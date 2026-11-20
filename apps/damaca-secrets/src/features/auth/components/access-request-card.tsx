@@ -19,9 +19,8 @@ export async function AccessRequestCard({
     <main className="mx-auto flex min-h-screen w-full max-w-lg items-center p-4">
       <section className="flex w-full min-w-0 flex-col gap-5 rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
         <header>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t.accountWithoutAccess}
-          </h1>
+          <h1 className="sr-only">{t.accountWithoutAccess}</h1>
+          <p aria-hidden="true">{t.accountWithoutAccess}</p>
           <p className="mt-2 break-all text-sm text-zinc-600 dark:text-zinc-400">
             {email}
           </p>

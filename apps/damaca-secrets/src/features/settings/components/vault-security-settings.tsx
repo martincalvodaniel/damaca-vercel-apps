@@ -17,18 +17,19 @@ export function VaultSecuritySettings() {
   const headingId = useId()
   const vault = useVault()
   const { busy, error, open, prepared, snapshot } = vault
-  const [changing, setChanging] = useState(false)
-  const change = useCallback(() => setChanging(true), [])
+  const [mode, setMode] = useState<"change" | "recover">()
+  const change = useCallback(() => setMode("change"), [])
+  const recover = useCallback(() => setMode("recover"), [])
   const cancel = useCallback(() => {
     vault.cancelPreparation()
-    setChanging(false)
+    setMode(undefined)
   }, [vault.cancelPreparation])
   const lock = useCallback(() => {
     vault.lock()
-    setChanging(false)
+    setMode(undefined)
   }, [vault.lock])
   const confirm = useCallback(async () => {
-    if (await vault.confirm()) setChanging(false)
+    if (await vault.confirm()) setMode(undefined)
   }, [vault.confirm])
 
   return (
@@ -67,10 +68,11 @@ export function VaultSecuritySettings() {
       {snapshot && !snapshot.encrypted ? (
         <p className="text-sm">{t.createForSecurity}</p>
       ) : null}
-      {snapshot?.encrypted && !open && !prepared ? (
+      {snapshot?.encrypted && !open && !prepared && !mode ? (
         <UnlockForm
           busy={busy}
           hasPasskey={snapshot.encrypted.passkeys.length > 0}
+          onRecover={recover}
           onUnlock={vault.unlock}
         />
       ) : null}
@@ -82,25 +84,26 @@ export function VaultSecuritySettings() {
           onConfirm={confirm}
         />
       ) : null}
-      {open && !prepared ? (
-        changing ? (
-          <SetupForm
-            busy={busy}
-            mode="change"
-            onCancel={cancel}
-            onPrepare={vault.prepare}
-          />
-        ) : (
-          <VaultControls vault={vault} onChangePassword={change} />
-        )
+      {!prepared && mode ? (
+        <SetupForm
+          busy={busy}
+          mode={mode}
+          onCancel={cancel}
+          onPrepare={vault.prepare}
+        />
       ) : null}
-      <Link
-        href="/trusted-contacts"
-        className="min-h-9 w-fit text-sm underline"
-      >
-        {t.trustedContacts}
-      </Link>
-      {open && snapshot && !changing && !prepared ? (
+      {open && !prepared && !mode ? (
+        <VaultControls vault={vault} onChangePassword={change} />
+      ) : null}
+      {open && !mode && !prepared ? (
+        <Link
+          href="/trusted-contacts"
+          className="min-h-9 w-fit text-sm underline"
+        >
+          {t.trustedContacts}
+        </Link>
+      ) : null}
+      {open && snapshot && !mode && !prepared ? (
         <ContactEnrollment vaultKey={open.key} revision={snapshot.revision} />
       ) : null}
     </section>

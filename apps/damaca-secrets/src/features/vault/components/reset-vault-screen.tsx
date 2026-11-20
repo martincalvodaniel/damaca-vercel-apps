@@ -106,7 +106,7 @@ export function ResetVaultScreen({ returned }: { returned: boolean }) {
 
   return (
     <main className="mx-auto grid max-w-3xl gap-3 p-4">
-      <h1 className="text-xl font-semibold">{t.resetVault}</h1>
+      <h1 className="sr-only">{t.resetVault}</h1>
       <p className="text-sm">{t.resetExplanation}</p>
       {failed ? <ErrorBanner>{t.resetFailed}</ErrorBanner> : null}
       {prepared ? (
