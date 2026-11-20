@@ -85,3 +85,11 @@ export function getOfflineVaultDuration() {
   }
   return duration
 }
+
+export function getRecoveryEmailEnv() {
+  // biome-ignore lint/suspicious/noUndeclaredEnvVars: Runtime-only transactional email credential.
+  const token = process.env.RECOVERY_EMAIL_API_KEY?.trim()
+  // biome-ignore lint/suspicious/noUndeclaredEnvVars: Runtime-only verified transactional sender.
+  const from = process.env.RECOVERY_EMAIL_FROM?.trim()
+  return token && from ? { token, from } : undefined
+}

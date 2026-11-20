@@ -40,13 +40,13 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 - Status: `validated`.
 - Paths: app navigation, shared controls, and vault, access, and settings screens.
-- Acceptance: reduce control height across the app, prefer recognizable icons with accessible action names, and keep meaningful text on workflow choices. Verify narrow mobile and desktop layouts.
+- Acceptance: reduce control height across the app, prefer recognizable icons with accessible action names, and keep meaningful text on workflow choices. Verify narrow mobile and desktop layouts. [Archived evidence](archive/2026-11-20/iteration-log.md#06--compact-controls).
 
 ## 07 — Password generation
 
 - Status: `validated`.
 - Paths: vault generator and credential form.
-- Acceptance: every generated password has 24 valid characters and the form confirms generation while keeping the value masked.
+- Acceptance: every generated password has 24 valid characters and the form confirms generation while keeping the value masked. [Archived evidence](archive/2026-11-20/iteration-log.md#07--password-generation).
 
 ## 08 — Vault settings and editor actions
 
@@ -112,7 +112,8 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 ## 17 — Trusted contacts
 
-- Status: `pending`.
+- Status: `validated`.
 - Paths: recovery configuration, requests, browser key storage, notifications and settings.
 - Acceptance: two of three enrolled contacts can approve recovery for the same device and vault generation. Recovery preserves entries and rotates keys.
-- Pending dependency approval: audited `shamir-secret-sharing@0.0.4` from Privy, per the app dependency rules.
+- Approved dependency: audited `shamir-secret-sharing@0.0.4` from Privy.
+- Validation passed for cryptography, device storage, authenticated HTTP flow and the production build. Live Google, browser visual checks and delivery through a configured Resend account remain pending.

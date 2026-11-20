@@ -281,3 +281,23 @@ export function generatePassword() {
   }
   return value
 }
+
+export async function wrapVaultForContacts(
+  ownerId: string,
+  policyId: string,
+  key: CryptoKey,
+  secret: Uint8Array<ArrayBuffer>
+) {
+  const wrappingKey = await importKey(secret)
+  return wrap(ownerId, `contacts:${policyId}`, key, wrappingKey)
+}
+
+export async function unwrapVaultFromContacts(
+  ownerId: string,
+  policyId: string,
+  box: Box,
+  secret: Uint8Array<ArrayBuffer>
+) {
+  const wrappingKey = await importKey(secret)
+  return unwrap(ownerId, `contacts:${policyId}`, box, wrappingKey)
+}

@@ -13,6 +13,7 @@ const proofSchema = z.strictObject({
   session: z.string(),
   revision: z.number().int().positive(),
   expires: z.number().int(),
+  purpose: z.enum(["reset", "contacts"]),
   stage: z.enum(["intent", "grant"]),
 })
 

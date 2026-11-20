@@ -1,6 +1,12 @@
 # Delivery log
 
-Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline, preview, and startup evidence](archive/2026-11-15/iteration-log.md) for iterations 03 through 05.
+Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline, preview, and startup evidence](archive/2026-11-15/iteration-log.md) for iterations 03 through 05. See [controls and generation evidence](archive/2026-11-20/iteration-log.md) for iterations 06 and 07.
+
+## 17 — Trusted contacts
+
+- Added the approved audited Shamir dependency, browser-local device keys, encrypted shares, enrollment, approvals, and verified recovery. Reset and contact recovery use separate OAuth authorization scopes.
+- Passed Biome, TypeScript, 52 tests, the Webpack production build and compiled HTTP integration on disposable MongoDB with synthetic identities. The HTTP flow confirmed invitation acceptance, cancellation, duplicate and outsider rejection, reconstruction, preservation of an entry and key rotation.
+- Resend notices use optional runtime configuration. Live email delivery, real Google consent and visual browser acceptance were not exercised.
 
 ## 16 — Start a new vault
 
@@ -39,20 +45,6 @@ Record observed evidence for completed iterations here. See [archived evidence](
 
 - Documented browser-side AES-GCM encryption, the MongoDB snapshot, password/passkey/recovery key wrapping, and security boundaries in the README; added Mermaid storage and unlock diagrams.
 - Checked implementation details against `crypto.ts`, `use-vault.ts`, the API route, and Mongo repository. `git diff --check` passed. No application tests were run for this documentation-only change.
-
-## 06 — Compact controls
-
-- Starting capacity: 87% of 5 hours and 37% of 7 days.
-- Added shared, accessible icon buttons and compact controls across the vault, sign-in, settings, access administration, and offline screens. The mobile navigation now places icons beside their labels. The app instructions record the default preference for recognizable icon actions.
-- Biome, TypeScript, 42 tests, the Webpack build, and the compiled HTTP integration passed. Chrome completed setup, create, show, lock, recovery, and unlock at 320px, plus unlock at 1200px. Measured 36px icon buttons, 44px two-line credential rows, and 49px mobile navigation. Both widths had no horizontal overflow.
-- The commit remains local because publishing the current `int` would include the unrelated unpublished commit `44e6431`.
-
-## 07 — Password generation
-
-- Starting capacity: 77% of 5 hours and 35% of 7 days.
-- Reproduced out-of-range alphabet indices that appended `undefined`. Mapped accepted random bytes into the alphabet while keeping unbiased sampling. The entry form now confirms generation and keeps the field masked.
-- Passed a deterministic regression, 1,000 generated samples of exactly 24 characters, 43 tests, TypeScript, Biome, and the Webpack build. Chrome at 320px confirmed generation, masking, and saving the exact generated value. Desktop unlock passed at 1200px.
-- Publication is pending because `int` still contains the unrelated local commit `44e6431`.
 
 ## 08 — Vault settings and editor actions
 

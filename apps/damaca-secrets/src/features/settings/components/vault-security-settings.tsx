@@ -1,8 +1,10 @@
 "use client"
 
+import Link from "next/link"
 import { useCallback, useId, useState } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { IconButton } from "@/components/ui/icon-button"
+import { ContactEnrollment } from "@/features/recovery/contact-enrollment"
 import { RecoveryConfirmation } from "@/features/vault/components/recovery-confirmation"
 import { SetupForm } from "@/features/vault/components/setup-form"
 import { UnlockForm } from "@/features/vault/components/unlock-form"
@@ -91,6 +93,15 @@ export function VaultSecuritySettings() {
         ) : (
           <VaultControls vault={vault} onChangePassword={change} />
         )
+      ) : null}
+      <Link
+        href="/trusted-contacts"
+        className="min-h-9 w-fit text-sm underline"
+      >
+        {t.trustedContacts}
+      </Link>
+      {open && snapshot && !changing && !prepared ? (
+        <ContactEnrollment vaultKey={open.key} revision={snapshot.revision} />
       ) : null}
     </section>
   )

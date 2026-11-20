@@ -6,6 +6,8 @@ App administrators approve and revoke access. Vault data and wrapped keys are en
 
 A user with an inaccessible vault can start over from the locked screen. A new Google sign-in and confirmation authorize an atomic replacement with an empty vault. The reset keeps account access and invalidates older offline generations on reconnect.
 
+An unlocked vault owner can enroll three authorized Secrets users for two-of-three trusted contact recovery. Each share is sealed for the enrolled browser, and approvals forward shares to the requesting browser. Completion replaces the vault encryption key and invalidates the old policy and offline generation.
+
 A successful online vault unlock or creation automatically prepares a password-protected read-only copy for 24 hours by default, configurable by deployment. The browser can opt out in Settings and delete its copy. Online saves update an existing copy without extending its lease. Writes and passkeys require connectivity, and reconnecting checks current access. A disconnected browser applies its local expiration policy.
 
 The first release passed owner acceptance on Vercel Preview (`int`) and Chrome on Android. See [iteration 04 evidence](archive/2026-11-15/iteration-log.md#04--vercel-preview-and-device-acceptance). Sharing, import, export, TOTP, and autofill are outside the first release.

@@ -96,7 +96,13 @@ export async function PUT(request: Request) {
   return Response.json({ revision: revision + 1, ...lease }, { headers })
 }
 
-const resetAction = z.enum(["start", "claim", "cancel"])
+const resetAction = z.enum([
+  "start",
+  "claim",
+  "cancel",
+  "start-contacts",
+  "claim-contacts",
+])
 
 export async function POST(request: Request) {
   if (request.headers.get("origin") !== new URL(getAuthBaseUrl()).origin)
@@ -113,14 +119,17 @@ export async function POST(request: Request) {
     store.delete(resetCookie)
     return Response.json({}, { headers })
   }
+  const purpose = action.data.endsWith("-contacts") ? "contacts" : "reset"
+  const claiming = action.data.startsWith("claim")
   const owner = session.user.id
   const current = await readVault(owner)
   if (!current.encrypted) return failure(409)
   const activeSession = session.session.id
   const now = Date.now()
-  if (action.data === "claim") {
+  if (claiming) {
     if (
       !previous ||
+      previous.purpose !== purpose ||
       previous.owner !== owner ||
       previous.revision !== current.revision
     )
@@ -134,15 +143,13 @@ export async function POST(request: Request) {
         return failure(403)
     } else if (previous.session !== activeSession) return failure(403)
   }
-  const resetId =
-    action.data === "claim" && previous ? previous.resetId : crypto.randomUUID()
+  const resetId = claiming && previous ? previous.resetId : crypto.randomUUID()
   if (
-    action.data === "start" &&
+    !claiming &&
     !(await setVaultResetIntent(owner, current.revision, resetId))
   )
     return failure(409)
-  const expires =
-    action.data === "claim" && previous ? previous.expires : now + resetDuration
+  const expires = claiming && previous ? previous.expires : now + resetDuration
   store.set(
     resetCookie,
     signResetProof({
@@ -151,7 +158,8 @@ export async function POST(request: Request) {
       session: activeSession,
       revision: current.revision,
       expires,
-      stage: action.data === "claim" ? "grant" : "intent",
+      purpose,
+      stage: claiming ? "grant" : "intent",
     }),
     {
       httpOnly: true,
@@ -181,6 +189,7 @@ export async function PATCH(request: Request) {
   const owner = session.user.id
   if (
     proof?.stage !== "grant" ||
+    proof.purpose !== "reset" ||
     proof.owner !== owner ||
     proof.session !== session.session.id ||
     proof.revision !== payload.data.revision

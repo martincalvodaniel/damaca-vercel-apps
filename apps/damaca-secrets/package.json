@@ -22,6 +22,7 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "server-only": "catalog:",
+    "shamir-secret-sharing": "catalog:",
     "swr": "catalog:",
     "zod": "catalog:"
   },

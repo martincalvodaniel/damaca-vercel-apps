@@ -95,6 +95,14 @@ export function VaultScreen() {
           {t.resetVault}
         </Link>
       ) : null}
+      {!prepared && !open && snapshot?.encrypted ? (
+        <Link
+          href="/trusted-contacts"
+          className="min-h-9 w-fit text-sm underline"
+        >
+          {t.contactsRecover}
+        </Link>
+      ) : null}
       {!snapshot && !error ? (
         <p role="status" className="text-sm">
           {t.loadingVault}
