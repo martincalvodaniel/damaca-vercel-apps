@@ -19,6 +19,11 @@ export interface IndexSpec {
 // The unique email index also supports membership lookups and cursor pagination.
 export const INDEX_SPECS: readonly IndexSpec[] = [
   {
+    collection: "vaults",
+    keys: { "contactRecovery.contacts.email": 1 },
+    options: { name: "recovery_contact_email" },
+  },
+  {
     collection: "auth_users",
     keys: { email: 1 },
     options: { name: "email_unique", unique: true },

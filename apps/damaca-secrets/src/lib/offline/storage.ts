@@ -172,6 +172,10 @@ export async function refreshOfflineVault(vault: VaultRead, marker: string) {
       cleared = true
       return resetState(state)
     }
+    if ((copy.generation ?? 0) > (stored.generation ?? 0)) {
+      cleared = true
+      return resetState(state)
+    }
     if (copy.revision <= stored.revision || !isOfflineSnapshotUsable(stored))
       return
     return {

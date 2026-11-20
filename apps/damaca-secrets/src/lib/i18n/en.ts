@@ -1,4 +1,37 @@
 export const en = {
+  resetVault: "Start over",
+  resetExplanation:
+    "Starting over replaces this vault with an empty vault. Your Google account and access to Secrets stay available.",
+  resetFailed:
+    "The reset could not be completed. Restart the Google verification to try again.",
+  resetContinue: "Continue with a new empty vault",
+  resetVerify: "Verify again with Google",
+  resetRestart: "Restart verification",
+  trustedContacts: "Trusted contacts",
+  contactError:
+    "Could not update recovery. Refresh or verify with Google again.",
+  contactsActive:
+    "Recovery is active. Changing your master password clears this configuration.",
+  contactPending: "Pending acceptance",
+  contactsRefresh: "Refresh status",
+  contactsConfirmKeys: "I verified these fingerprints with the three contacts.",
+  contactsActivate: "Activate recovery",
+  contactsInviteHelp:
+    "Choose three people who already have access to Secrets. Two can recover this vault together.",
+  contactEmail: "Contact email",
+  contactsInvite: "Invite contacts",
+  contactApprovalHelp:
+    "Approve only after checking the person and this fingerprint with them by a known channel.",
+  contactsRecover: "Recover with trusted contacts",
+  contactsShareRequest:
+    "Compare this fingerprint with each contact before they approve.",
+  contactCancelRequest: "Cancel request",
+  contactRequest: "Request recovery",
+  contactFingerprint: "Device fingerprint",
+  contactAccept: "Accept invitation on this device",
+  contactApprove: "Review recovery request",
+  contactNothing:
+    "There are no trusted contact invitations or active recovery settings.",
   description: "A private vault for your account credentials.",
   mainNavigation: "Main navigation",
   vault: "Vault",

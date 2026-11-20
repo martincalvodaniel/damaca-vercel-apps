@@ -40,13 +40,13 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 - Status: `validated`.
 - Paths: app navigation, shared controls, and vault, access, and settings screens.
-- Acceptance: reduce control height across the app, prefer recognizable icons with accessible action names, and keep meaningful text on workflow choices. Verify narrow mobile and desktop layouts.
+- Acceptance: reduce control height across the app, prefer recognizable icons with accessible action names, and keep meaningful text on workflow choices. Verify narrow mobile and desktop layouts. [Archived evidence](archive/2026-11-20/iteration-log.md#06--compact-controls).
 
 ## 07 — Password generation
 
 - Status: `validated`.
 - Paths: vault generator and credential form.
-- Acceptance: every generated password has 24 valid characters and the form confirms generation while keeping the value masked.
+- Acceptance: every generated password has 24 valid characters and the form confirms generation while keeping the value masked. [Archived evidence](archive/2026-11-20/iteration-log.md#07--password-generation).
 
 ## 08 — Vault settings and editor actions
 
@@ -103,3 +103,17 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Acceptance: try the known passkey once on online vault entry, retain manual unlock and password fallback, and cancel pending verification on dismissal, navigation, or locking.
 - Validation: incremental Biome, types, passkey and storage regressions, production build, and Chrome virtual WebAuthn verification.
 - Device acceptance pending: verify the visible biometric prompt in Chrome for Android (browser and installed app) and Safari desktop.
+
+## 16 — Start a new vault
+
+- Status: `validated`.
+- Paths: vault reset, session proof, repository, browser offline storage and unlock UI.
+- Acceptance: the verified owner can replace a locked vault after a new Google login and explicit confirmation. The reset is revision-bound and invalidates old offline copies on reconnect.
+
+## 17 — Trusted contacts
+
+- Status: `validated`.
+- Paths: recovery configuration, requests, browser key storage, notifications and settings.
+- Acceptance: two of three enrolled contacts can approve recovery for the same device and vault generation. Recovery preserves entries and rotates keys.
+- Approved dependency: audited `shamir-secret-sharing@0.0.4` from Privy.
+- Validation passed for cryptography, device storage, authenticated HTTP flow and the production build. Live Google, browser visual checks and delivery through a configured Resend account remain pending.

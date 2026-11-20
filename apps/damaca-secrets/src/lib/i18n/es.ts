@@ -1,6 +1,39 @@
 import type { MessageKey } from "./en"
 
 export const es = {
+  resetVault: "Empezar de cero",
+  resetExplanation:
+    "Esta operación sustituye la bóveda por una vacía y perderás el acceso a las credenciales anteriores. Conservarás tu cuenta de Google y el acceso a Secrets.",
+  resetFailed:
+    "No se pudo completar el reinicio. Vuelve a iniciar la verificación con Google.",
+  resetContinue: "Continuar con una bóveda vacía",
+  resetVerify: "Volver a verificar con Google",
+  resetRestart: "Reiniciar la verificación",
+  trustedContacts: "Contactos de confianza",
+  contactError:
+    "No se pudo actualizar la recuperación. Actualiza o vuelve a verificarte con Google.",
+  contactsActive:
+    "La recuperación está activa. Cambiar la contraseña maestra elimina esta configuración.",
+  contactPending: "Pendiente de aceptación",
+  contactsRefresh: "Actualizar estado",
+  contactsConfirmKeys: "He comprobado estas huellas con los tres contactos.",
+  contactsActivate: "Activar recuperación",
+  contactsInviteHelp:
+    "Elige a tres personas con acceso a Secrets. Dos de ellas podrán recuperar juntas esta bóveda.",
+  contactEmail: "Correo del contacto",
+  contactsInvite: "Invitar contactos",
+  contactApprovalHelp:
+    "Aprueba solo si has verificado la identidad y esta huella con la persona por un canal conocido.",
+  contactsRecover: "Recuperar con contactos de confianza",
+  contactsShareRequest:
+    "Compara esta huella con cada contacto antes de que apruebe la solicitud.",
+  contactCancelRequest: "Cancelar solicitud",
+  contactRequest: "Solicitar recuperación",
+  contactFingerprint: "Huella del dispositivo",
+  contactAccept: "Aceptar invitación en este dispositivo",
+  contactApprove: "Revisar solicitud de recuperación",
+  contactNothing:
+    "No hay invitaciones ni una configuración activa de recuperación.",
   description: "Una bóveda privada para las credenciales de tus cuentas.",
   mainNavigation: "Navegación principal",
   vault: "Bóveda",

@@ -81,6 +81,14 @@ El servidor local usa Node.js en el puerto 3007. Bun gestiona las dependencias y
 
 Tras añadir una llave de acceso o usarla correctamente en un navegador, Secrets intenta abrir el diálogo del dispositivo la próxima vez que entres en la bóveda con conexión. Si tienes una llave de una versión anterior, usa primero **Desbloquear con una llave de acceso**. Ese botón y la contraseña maestra quedan disponibles si cierras el diálogo o el navegador no lo abre.
 
+## Contactos de confianza
+
+En Ajustes, desbloquea la bóveda e invita a tres personas que ya tengan acceso a Secrets. Cada persona acepta la invitación en el navegador que usará para aprobar recuperaciones. Compara sus huellas por un canal conocido y confirma las tres antes de activar la opción.
+
+Si pierdes el acceso, abre **Recuperar con contactos de confianza**, verifica tu cuenta con Google y solicita la recuperación desde el navegador que recibirá el acceso. Compara la huella de la solicitud con los contactos que aprueben. Con dos aprobaciones, podrás establecer una contraseña nueva y recibir un código de recuperación nuevo. La solicitud caduca en 48 horas. Tras recuperar la bóveda o cambiar la contraseña maestra, configura de nuevo los contactos.
+
+Los avisos por correo utilizan Resend cuando el entorno tiene configurados `RECOVERY_EMAIL_API_KEY` y `RECOVERY_EMAIL_FROM` con un remitente verificado. También puedes consultar las invitaciones y las solicitudes dentro de Secrets.
+
 ## Consulta sin conexión
 
 Al desbloquear la bóveda con conexión, la app prepara una copia cifrada en ese navegador. En **Ajustes → Acceso sin conexión** puedes comprobar si está lista, ver cuándo caduca o desactivar las copias en ese navegador. Al volver a abrir la URL sin red, puedes desbloquear con la contraseña maestra para buscar, ver y copiar credenciales.
