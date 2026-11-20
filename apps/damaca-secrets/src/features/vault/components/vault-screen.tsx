@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { useCallback, useState } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { IconButton } from "@/components/ui/icon-button"
@@ -42,9 +41,9 @@ export function VaultScreen() {
       className="mx-auto grid w-full max-w-3xl gap-3 px-3 py-3 sm:px-6 sm:py-5"
       aria-busy={busy}
     >
-      {!open || prepared ? (
+      <h1 className="sr-only">{t.vault}</h1>
+      {prepared ? (
         <header className="flex min-h-9 items-center gap-2">
-          <h1 className="text-xl font-semibold tracking-tight">{t.vault}</h1>
           {open || prepared ? (
             <IconButton
               icon="lock"
@@ -89,19 +88,6 @@ export function VaultScreen() {
           onRecover={recover}
           onUnlock={vault.unlock}
         />
-      ) : null}
-      {!prepared && !open && snapshot?.encrypted ? (
-        <Link href="/reset-vault" className="min-h-9 w-fit text-sm underline">
-          {t.resetVault}
-        </Link>
-      ) : null}
-      {!prepared && !open && snapshot?.encrypted ? (
-        <Link
-          href="/trusted-contacts"
-          className="min-h-9 w-fit text-sm underline"
-        >
-          {t.contactsRecover}
-        </Link>
       ) : null}
       {!snapshot && !error ? (
         <p role="status" className="text-sm">

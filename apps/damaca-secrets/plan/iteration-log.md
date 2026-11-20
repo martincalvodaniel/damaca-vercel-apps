@@ -1,6 +1,13 @@
 # Delivery log
 
-Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline, preview, and startup evidence](archive/2026-11-15/iteration-log.md) for iterations 03 through 05. See [controls and generation evidence](archive/2026-11-20/iteration-log.md) for iterations 06 and 07.
+Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline, preview, and startup evidence](archive/2026-11-15/iteration-log.md) for iterations 03 through 05. See [controls and generation evidence](archive/2026-11-20/iteration-log.md) for iterations 06 through 08.
+
+## 18 — Compact unlock and password reveal
+
+- Starting capacity was 61% of 5 hours and 76% of 7 days.
+- Added one-second password reveal, compact unlock controls, ordered recovery options on both online unlock screens, and visually hidden page headings.
+- Passed staged Biome, TypeScript, 52 Bun tests, the Webpack build and compiled integration with synthetic MongoDB. Integration exercised the existing contact and reset routes.
+- Chrome at 320 and 1200 CSS px verified layout, option order, cancellation, timed reveal and restart, focus, keyboard unlock, password generation, virtual WebAuthn PRF, offline unlock, and code recovery in Settings. Real Google consent was outside the local browser run.
 
 ## 17 — Trusted contacts
 
@@ -45,13 +52,6 @@ Record observed evidence for completed iterations here. See [archived evidence](
 
 - Documented browser-side AES-GCM encryption, the MongoDB snapshot, password/passkey/recovery key wrapping, and security boundaries in the README; added Mermaid storage and unlock diagrams.
 - Checked implementation details against `crypto.ts`, `use-vault.ts`, the API route, and Mongo repository. `git diff --check` passed. No application tests were run for this documentation-only change.
-
-## 08 — Vault settings and editor actions
-
-- Starting capacity: 71% of 5 hours and 35% of 7 days.
-- Moved vault security and offline controls to Settings, where the user unlocks the vault before managing them. The entry editor puts save and cancel beside lock. Shared icon buttons have filled backgrounds and keep accessible action names.
-- Biome, TypeScript, 43 tests, and the Webpack build passed. Chrome verified the editor header, cancel, generation and save at 320px, plus Settings unlock and access to password change and offline controls at 1200px.
-- Publication remains pending because `int` includes the unrelated local commit `44e6431`.
 
 ## 09 — Vault header alignment
 

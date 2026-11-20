@@ -1,11 +1,10 @@
 "use client"
 
+import Link from "next/link"
 import { type FormEvent, useCallback, useSyncExternalStore } from "react"
-import {
-  buttonClass,
-  inputClass,
-  primaryClass,
-} from "@/features/vault/components/styles"
+import { IconButton } from "@/components/ui/icon-button"
+import { PasswordInput } from "@/components/ui/password-input"
+import { buttonClass, inputClass } from "@/features/vault/components/styles"
 import { canUsePasskeys } from "@/features/vault/passkeys"
 import type { VaultController } from "@/features/vault/use-vault"
 import { useLocale } from "@/lib/i18n/client"
@@ -54,43 +53,62 @@ export function UnlockForm({
       autoComplete="off"
       className="flex max-w-md flex-col gap-2"
     >
-      <label className="grid gap-1 text-sm font-medium">
-        {t.masterPassword}
-        <input
+      <div className="flex items-end gap-2">
+        <PasswordInput
+          fieldClassName="flex-1 text-sm font-medium"
+          label={t.masterPassword}
           name="password"
           onFocus={onChoosePassword}
-          type="password"
           required
           minLength={15}
           maxLength={256}
           className={inputClass}
         />
-      </label>
-      <div className="flex flex-wrap items-center gap-2">
-        <button type="submit" disabled={busy} className={primaryClass}>
-          {t.unlock}
+        <IconButton
+          type="submit"
+          disabled={busy}
+          label={t.unlock}
+          icon="forward"
+          tone="primary"
+        />
+      </div>
+      {passkeys && hasPasskey ? (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={unlockWithPasskey}
+          className={`${buttonClass} self-start`}
+        >
+          {t.unlockWithPasskey}
         </button>
-        {passkeys && hasPasskey ? (
+      ) : null}
+      {onRecover ? (
+        <fieldset
+          className="mt-1 grid min-w-0 gap-0 rounded-lg border border-zinc-200 px-2 pb-1 text-sm dark:border-zinc-800"
+          disabled={busy}
+        >
+          <legend className="px-1 font-medium">{t.otherUnlockOptions}</legend>
           <button
             type="button"
-            disabled={busy}
-            onClick={unlockWithPasskey}
-            className={buttonClass}
-          >
-            {t.unlockWithPasskey}
-          </button>
-        ) : null}
-        {onRecover ? (
-          <button
-            type="button"
-            disabled={busy}
             onClick={onRecover}
-            className="min-h-9 px-1 text-sm underline"
+            className="min-h-9 w-fit text-start underline"
           >
             {t.useRecoveryCode}
           </button>
-        ) : null}
-      </div>
+          <Link
+            href="/trusted-contacts"
+            className="flex min-h-9 w-fit items-center underline"
+          >
+            {t.contactsRecover}
+          </Link>
+          <Link
+            href="/reset-vault"
+            className="flex min-h-9 w-fit items-center underline"
+          >
+            {t.resetVault}
+          </Link>
+        </fieldset>
+      ) : null}
     </form>
   )
 }

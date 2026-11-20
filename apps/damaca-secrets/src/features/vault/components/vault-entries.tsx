@@ -83,7 +83,6 @@ export function VaultEntries({
     onLock ? (
       <header className="flex min-h-9 items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-semibold tracking-tight">{t.vault}</h1>
           <IconButton
             icon="lock"
             tone="security"

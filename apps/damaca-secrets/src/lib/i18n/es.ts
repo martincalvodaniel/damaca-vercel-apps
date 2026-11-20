@@ -125,6 +125,8 @@ export const es = {
   username: "Usuario",
   password: "Contraseña",
   hidePassword: "Ocultar contraseña",
+  otherUnlockOptions: "Otras opciones",
+  showPasswordBriefly: "Mostrar contraseña durante un segundo",
   showPassword: "Mostrar contraseña",
   copyUsername: "Copiar nombre de usuario",
   copyPassword: "Copiar contraseña",

@@ -52,7 +52,7 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 
 - Status: `validated`.
 - Paths: vault editor, Settings security section, and shared icon buttons.
-- Acceptance: security controls are reachable through Settings and require vault unlock. Save and cancel sit beside lock in the editor header. Icon actions have filled backgrounds, with green for save, red for cancel, and blue for generation.
+- Acceptance: security controls are reachable through Settings and require vault unlock. Save and cancel sit beside lock in the editor header. Icon actions have filled backgrounds, with green for save, red for cancel, and blue for generation. [Archived evidence](archive/2026-11-20/iteration-log.md#08--vault-settings-and-editor-actions).
 
 ## 09 — Vault header alignment
 
@@ -117,3 +117,10 @@ This file is the source of iteration status. Follow the [root workflow](../../..
 - Acceptance: two of three enrolled contacts can approve recovery for the same device and vault generation. Recovery preserves entries and rotates keys.
 - Approved dependency: audited `shamir-secret-sharing@0.0.4` from Privy.
 - Validation passed for cryptography, device storage, authenticated HTTP flow and the production build. Live Google, browser visual checks and delivery through a configured Resend account remain pending.
+
+## 18 — Compact unlock and password reveal
+
+- Status: `validated`.
+- Paths: password fields, unlock and recovery UI, page headings, and app plans.
+- Acceptance: one-second reveal, compact online and offline unlock, ordered recovery options online, and accessible visually hidden page headings.
+- Validation: Biome, types, tests, build, and browser checks at 320 px and desktop.

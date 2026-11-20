@@ -46,9 +46,7 @@ export function SignInCard({ callbackUrl, initialError }: SignInCardProps) {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400">
             {"Damaca Secrets"}
           </p>
-          <h1 className="mt-1 text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-            {t.welcomeBack}
-          </h1>
+          <h1 className="sr-only">{t.welcomeBack}</h1>
         </div>
 
         {error ? <ErrorBanner>{t[error]}</ErrorBanner> : null}
