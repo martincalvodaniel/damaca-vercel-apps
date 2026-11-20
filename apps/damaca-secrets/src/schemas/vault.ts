@@ -44,6 +44,13 @@ export const vaultWriteSchema = z.strictObject({
   encrypted: encryptedVaultSchema,
 })
 
+export const vaultResetSchema = vaultWriteSchema.extend({
+  encrypted: encryptedVaultSchema.extend({
+    entries: encryptedBoxSchema.extend({ ciphertext: bytes(18) }),
+    passkeys: z.tuple([]),
+  }),
+})
+
 export const offlineLeaseFields = {
   checkedAt: z.number().int().nonnegative(),
   expiresAt: z.number().int().positive(),
@@ -52,6 +59,7 @@ export const offlineLeaseFields = {
 export const vaultReadSchema = z.strictObject({
   ...offlineLeaseFields,
   ownerId: z.string().min(1),
+  generation: z.number().int().nonnegative().optional(),
   revision: z.number().int().nonnegative(),
   encrypted: encryptedVaultSchema.nullable(),
 })

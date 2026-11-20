@@ -4,6 +4,8 @@ A personal password vault for approved Google accounts. Each user manages their 
 
 App administrators approve and revoke access. Vault data and wrapped keys are encrypted in the browser before storage. The trusted web deployment serves the client. A database or app administrator cannot decrypt another user's vault through their role. The master password, a compatible WebAuthn PRF passkey, or a personal recovery code unlocks the vault. The recovery code requires current Google access and is stored by the user. On online vault entry the browser can offer a passkey automatically after it has successfully registered or used that passkey on the same browser. Password and manual passkey unlock remain available.
 
+A user with an inaccessible vault can start over from the locked screen. A new Google sign-in and confirmation authorize an atomic replacement with an empty vault. The reset keeps account access and invalidates older offline generations on reconnect.
+
 A successful online vault unlock or creation automatically prepares a password-protected read-only copy for 24 hours by default, configurable by deployment. The browser can opt out in Settings and delete its copy. Online saves update an existing copy without extending its lease. Writes and passkeys require connectivity, and reconnecting checks current access. A disconnected browser applies its local expiration policy.
 
 The first release passed owner acceptance on Vercel Preview (`int`) and Chrome on Android. See [iteration 04 evidence](archive/2026-11-15/iteration-log.md#04--vercel-preview-and-device-acceptance). Sharing, import, export, TOTP, and autofill are outside the first release.

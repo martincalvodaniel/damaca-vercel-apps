@@ -7,6 +7,8 @@ import type { EncryptedVault, VaultRead } from "@/schemas/vault"
 interface VaultDocument {
   _id: string
   revision: number
+  generation?: number
+  resetId?: string
   encrypted: EncryptedVault
 }
 
@@ -16,10 +18,13 @@ function vaults() {
 
 export async function readVault(
   ownerId: string
-): Promise<Pick<VaultRead, "ownerId" | "revision" | "encrypted">> {
+): Promise<
+  Pick<VaultRead, "ownerId" | "revision" | "generation" | "encrypted">
+> {
   const result = await (await vaults()).findOne({ _id: ownerId })
   return {
     ownerId,
+    generation: result?.generation ?? 0,
     revision: result?.revision ?? 0,
     encrypted: result?.encrypted ?? null,
   }
@@ -45,6 +50,42 @@ export async function writeVault(
   const result = await collection.updateOne(
     { _id: ownerId, revision },
     { $set: { encrypted }, $inc: { revision: 1 } }
+  )
+  return result.modifiedCount === 1
+}
+
+export async function setVaultResetIntent(
+  ownerId: string,
+  revision: number,
+  resetId: string
+) {
+  const result = await (await vaults()).updateOne(
+    { _id: ownerId, revision },
+    { $set: { resetId } }
+  )
+  return result.matchedCount === 1
+}
+
+export async function cancelVaultResetIntent(ownerId: string, resetId: string) {
+  await (await vaults()).updateOne(
+    { _id: ownerId, resetId },
+    { $unset: { resetId: "" } }
+  )
+}
+
+export async function replaceVault(
+  ownerId: string,
+  revision: number,
+  resetId: string,
+  encrypted: EncryptedVault
+) {
+  const result = await (await vaults()).updateOne(
+    { _id: ownerId, revision, resetId },
+    {
+      $set: { encrypted },
+      $inc: { revision: 1, generation: 1 },
+      $unset: { resetId: "" },
+    }
   )
   return result.modifiedCount === 1
 }

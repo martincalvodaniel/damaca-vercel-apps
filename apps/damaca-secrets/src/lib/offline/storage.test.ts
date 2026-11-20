@@ -131,6 +131,14 @@ describe("offline vault storage", () => {
     })
   })
 
+  it("invalidates an old offline generation on reconnect", async () => {
+    const marker = await captureMarker()
+    await storeOfflineVault(snapshot, marker)
+    await refreshOfflineVault({ ...vault, revision: 2, generation: 1 }, marker)
+    expect(await readOfflineVault()).toBeUndefined()
+    expect(await storeOfflineVault(snapshot, marker)).toBe(false)
+  })
+
   it("never renews an expired copy through an online read or save", async () => {
     const marker = await captureMarker()
     const expired = {

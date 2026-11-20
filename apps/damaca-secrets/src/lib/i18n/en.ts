@@ -1,4 +1,12 @@
 export const en = {
+  resetVault: "Start over",
+  resetExplanation:
+    "Starting over replaces this vault with an empty vault. Your Google account and access to Secrets stay available.",
+  resetFailed:
+    "The reset could not be completed. Restart the Google verification to try again.",
+  resetContinue: "Continue with a new empty vault",
+  resetVerify: "Verify again with Google",
+  resetRestart: "Restart verification",
   description: "A private vault for your account credentials.",
   mainNavigation: "Main navigation",
   vault: "Vault",

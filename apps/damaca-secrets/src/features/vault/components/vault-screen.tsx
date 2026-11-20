@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useCallback, useState } from "react"
 import { ErrorBanner } from "@/components/ui/error-banner"
 import { IconButton } from "@/components/ui/icon-button"
@@ -88,6 +89,11 @@ export function VaultScreen() {
           onRecover={recover}
           onUnlock={vault.unlock}
         />
+      ) : null}
+      {!prepared && !open && snapshot?.encrypted ? (
+        <Link href="/reset-vault" className="min-h-9 w-fit text-sm underline">
+          {t.resetVault}
+        </Link>
       ) : null}
       {!snapshot && !error ? (
         <p role="status" className="text-sm">

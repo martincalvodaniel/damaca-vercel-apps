@@ -2,6 +2,12 @@
 
 Record observed evidence for completed iterations here. See [archived evidence](archive/2026-11-13/iteration-log.md) for iterations 01 and 02 and [offline, preview, and startup evidence](archive/2026-11-15/iteration-log.md) for iterations 03 through 05.
 
+## 16 — Start a new vault
+
+- Starting capacity was 94% of 5 hours and 81% of 7 days.
+- Added Google session renewal, a revision-bound reset authorization, atomic replacement and offline generation invalidation.
+- Passed scoped Biome, TypeScript, Bun tests, Webpack build, and HTTP integration against disposable MongoDB. The HTTP integration used synthetic sessions to check authorization and concurrent writes. Live Google consent and visual browser acceptance remain pending.
+
 ## 15 — Passkey prompt at vault entry
 
 - Starting capacity: 58% of 5 hours and 66% of 7 days.

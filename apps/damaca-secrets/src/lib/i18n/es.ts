@@ -1,6 +1,14 @@
 import type { MessageKey } from "./en"
 
 export const es = {
+  resetVault: "Empezar de cero",
+  resetExplanation:
+    "Esta operación sustituye la bóveda por una vacía y perderás el acceso a las credenciales anteriores. Conservarás tu cuenta de Google y el acceso a Secrets.",
+  resetFailed:
+    "No se pudo completar el reinicio. Vuelve a iniciar la verificación con Google.",
+  resetContinue: "Continuar con una bóveda vacía",
+  resetVerify: "Volver a verificar con Google",
+  resetRestart: "Reiniciar la verificación",
   description: "Una bóveda privada para las credenciales de tus cuentas.",
   mainNavigation: "Navegación principal",
   vault: "Bóveda",

@@ -9,6 +9,7 @@ import {
 const offlineSnapshot = z.strictObject({
   ...offlineLeaseFields,
   ownerId: z.string().min(1),
+  generation: z.number().int().nonnegative().optional(),
   revision: z.number().int().positive(),
   password: passwordKeySchema,
   entries: encryptedBoxSchema,
@@ -30,6 +31,7 @@ export function toOfflineSnapshot(
   if (!vault.encrypted) return
   return {
     ownerId: vault.ownerId,
+    ...(vault.generation ? { generation: vault.generation } : {}),
     revision: vault.revision,
     checkedAt: vault.checkedAt,
     expiresAt: vault.expiresAt,

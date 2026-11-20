@@ -28,20 +28,26 @@ if (
   )
 }
 
-async function createCookie(email: string, emailVerified = true) {
+async function createCookie(
+  email: string,
+  emailVerified = true,
+  existingUserId?: string
+) {
   const now = new Date()
   const token = crypto.randomUUID()
   const { adapter } = await (await getAuth()).$context
-  const user = await adapter.create<{ id: string }>({
-    model: COLLECTION_NAMES.authUsers,
-    data: {
-      name: "Fixture",
-      email,
-      emailVerified,
-      createdAt: now,
-      updatedAt: now,
-    },
-  })
+  const user = existingUserId
+    ? { id: existingUserId }
+    : await adapter.create<{ id: string }>({
+        model: COLLECTION_NAMES.authUsers,
+        data: {
+          name: "Fixture",
+          email,
+          emailVerified,
+          createdAt: now,
+          updatedAt: now,
+        },
+      })
   await adapter.create({
     model: COLLECTION_NAMES.authSessions,
     data: {
@@ -234,6 +240,69 @@ try {
   assert.deepEqual(
     vaultReadSchema.parse(await stored.json()).encrypted,
     fixture.encrypted
+  )
+  const resetRequest = (
+    method: "POST" | "PATCH",
+    cookie: string,
+    body: unknown
+  ) =>
+    fetch(`${origin}/api/vault`, {
+      method,
+      headers: { origin, cookie, "content-type": "application/json" },
+      body: JSON.stringify(body),
+    })
+  const startReset = await resetRequest("POST", user, "start")
+  assert.equal(startReset.status, 200)
+  const intent = startReset.headers
+    .getSetCookie()
+    .find((cookie) => cookie.startsWith("damaca-vault-reset="))
+    ?.split(";")[0]
+  assert.ok(intent)
+  assert.equal(
+    (await resetRequest("POST", `${user}; ${intent}`, "claim")).status,
+    403
+  )
+  const fresh = await createCookie(
+    "normal@example.com",
+    true,
+    userVault.ownerId
+  )
+  const claim = await resetRequest("POST", `${fresh}; ${intent}`, "claim")
+  assert.equal(claim.status, 200)
+  const grant = claim.headers
+    .getSetCookie()
+    .find((cookie) => cookie.startsWith("damaca-vault-reset="))
+    ?.split(";")[0]
+  assert.ok(grant)
+  const credential = `${fresh}; ${grant}`
+  const empty = await prepareVault(
+    userVault.ownerId,
+    "new fixture master password",
+    []
+  )
+  const resetPayload = { revision: 1, encrypted: empty.encrypted }
+  assert.equal(
+    (await resetRequest("PATCH", `${user}; ${grant}`, resetPayload)).status,
+    403
+  )
+  const results = await Promise.all([
+    resetRequest("PATCH", credential, resetPayload),
+    resetRequest("PATCH", credential, resetPayload),
+  ])
+  assert.deepEqual(
+    results.map((response) => response.status).sort(),
+    [200, 409]
+  )
+  const replaced = vaultReadSchema.parse(
+    await (await request("/api/vault", user)).json()
+  )
+  assert.equal(replaced.generation, 1)
+  assert.equal(replaced.revision, 2)
+  assert.deepEqual(replaced.encrypted, empty.encrypted)
+  assert.equal(
+    (await writeVault(user, { revision: 1, encrypted: fixture.encrypted }))
+      .status,
+    409
   )
   const adminVault = vaultReadSchema.parse(
     await (await request("/api/vault", admin)).json()
