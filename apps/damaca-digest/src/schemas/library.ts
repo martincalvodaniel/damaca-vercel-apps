@@ -39,9 +39,23 @@ function validRanges({
   )
 }
 
+const multiple = <T extends z.ZodType<string>>(item: T) =>
+  z.preprocess(
+    (value) => (typeof value === "string" ? [value] : value),
+    z
+      .array(item)
+
+      .transform((values) => [...new Set(values)])
+      .optional()
+  )
+
 export const libraryQuery = z
   .object({
     ...libraryFilters,
+    language: multiple(z.string().trim().min(1).max(35)),
+    access: multiple(accessStatus),
+    type: multiple(contentType),
+    reading: multiple(readingStatus),
     favorite: z.literal("true").optional(),
     page: z
       .string()
@@ -67,6 +81,7 @@ export const mcpReadingDigestQuery = z
   })
   .refine(validRanges, "Invalid date range.")
 
+export type McpLibraryQuery = z.output<typeof mcpLibraryQuery>
 export type LibraryQuery = z.output<typeof libraryQuery>
 
 export function parseLibraryQuery(
@@ -82,8 +97,15 @@ export function parseLibraryQuery(
 export function libraryPageHref(query: LibraryQuery, page: number) {
   const params = new URLSearchParams()
   for (const [key, value] of Object.entries(query)) {
-    if (key !== "page" && value !== undefined) params.set(key, String(value))
+    if (
+      key === "page" ||
+      value === undefined ||
+      (key === "sort" && value === "capture")
+    )
+      continue
+    for (const item of Array.isArray(value) ? value : [value])
+      params.append(key, String(item))
   }
   if (page > 1) params.set("page", String(page))
-  return params.size ? `/?${params.toString()}` : "/"
+  return params.size ? `/?${params.toString()}` : "/?reset=1"
 }

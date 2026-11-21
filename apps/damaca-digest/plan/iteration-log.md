@@ -2,20 +2,7 @@
 
 [Entregas archivadas el 2026-11-16](archive/2026-11-16/iteration-log.md).
 
-## 24 — Unificar los buscadores de Library y Topics
-
-- Búsqueda y gestión de Topics ahora comparten un panel con los estilos de Library. Ambos buscadores usan la misma lupa verde.
-- Biome, tipos, 50 pruebas, build e integración HTTP pasaron. Chrome comparó los estilos y comprobó los desplegables a 320 y 1280 px.
-
-## 25 — Abrir filtros y gestión de topics en modales
-
-- Los disparadores se sitúan a la izquierda de la lupa. Ambas modales usan una barra sticky para aplicar, limpiar y cerrar. Limpiar filtros conserva el término de búsqueda y limpiar la gestión de topics restablece el formulario.
-- Biome, tipos, 50 pruebas, build e integración HTTP pasaron. Chrome a 320 y 1280 px comprobó la pantalla completa, el foco, la barra sticky y las acciones de filtros y limpieza.
-
-## 26 — Fijar los buscadores y alinear las acciones
-
-- Los buscadores quedan arriba al desplazarse y debajo de la navegación en escritorio. La papelera de filtros queda a la izquierda de aplicar. La gestión de topics conserva aplicar y cerrar en las mismas posiciones.
-- Biome, tipos, 50 pruebas y build pasaron. Chrome verificó el desplazamiento y las coordenadas de las acciones a 320 y 1280 px.
+[Entregas archivadas el 2026-11-21](archive/2026-11-21/iteration-log.md).
 
 ## 27 — Cambiar de pestaña con un gesto horizontal
 
@@ -62,3 +49,8 @@
 
 - Topics muestra recuentos entre paréntesis y permite borrar los vacíos con confirmación. MongoDB serializa borrado y asignación mediante la revisión del vocabulario.
 - Pasaron Biome, tipos, 60 pruebas y el build de integración HTTP con replica set. Se comprobó el borrado desde la acción web, el caso concurrente y la protección de referencias directas, fusionadas e históricas.
+
+## 37 — Recordar filtros de Library y Topics
+
+- Library y Topics recuerdan la última selección aplicada por cuenta y navegador. Los filtros múltiples de Library usan OR dentro de cada campo. Las tarjetas enlazan al estado de lectura y al idioma.
+- Pasaron lint, tipos, 60 pruebas, build e integración HTTP con MongoDB desechable. La integración comprobó OR dentro del campo, AND entre campos, enlaces de tarjetas y el esquema escalar MCP. Chrome a 320 px comprobó teclado, descarte de cambios en el diálogo, restauración, limpieza, aislamiento por cuenta y navegación con almacenamiento bloqueado.

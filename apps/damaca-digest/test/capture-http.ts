@@ -8,7 +8,11 @@ import {
   allowArticleFetch,
   allowFirecrawl,
 } from "@/lib/db/article-fetch-rate"
-import { deleteArticle, saveArticle } from "@/lib/db/articles"
+import {
+  deleteArticle,
+  saveArticle,
+  updateArticleReading,
+} from "@/lib/db/articles"
 import { closeDatabaseConnection, getDatabase } from "@/lib/db/client"
 import { deleteEmptyTopic, listTopics, manageTopic } from "@/lib/db/topics"
 import { grantUserAccess, revokeUserAccess } from "@/lib/db/user-access"
@@ -890,6 +894,65 @@ try {
       ({ label }) => label === raceTopic.label
     )?.articleCount,
     1
+  )
+
+  for (const [name, language, readingStatus] of [
+    ["Spanish reading fixture", "es", "reading"],
+    ["Spanish read fixture", "es", "read"],
+    ["Spanish unread fixture", "es", "unread"],
+    ["English read fixture", "en", "read"],
+  ] as const) {
+    const saved = await saveArticle(first.ownerId, {
+      url: `https://example.org/${name.toLowerCase().replaceAll(" ", "-")}`,
+      title: name,
+      language,
+      accessStatus: "full",
+      summary: "Filter fixture",
+    })
+    assert.equal(
+      await updateArticleReading(first.ownerId, saved.articleId, 0, {
+        readingStatus,
+      }),
+      true
+    )
+  }
+  const filteredLibrary = async (search: string) => {
+    const response = await fetch(`${origin}/?${search}`, {
+      headers: { cookie: first.cookie },
+    })
+    assert.equal(response.status, 200)
+    return response.text()
+  }
+
+  const multi = await filteredLibrary(
+    "reading=reading&reading=read&language=es"
+  )
+  assert.match(multi, /Spanish reading fixture/)
+  assert.match(multi, /Spanish read fixture/)
+  assert.doesNotMatch(multi, /Spanish unread fixture|English read fixture/)
+  assert.match(multi, /Remove Reading: reading filter/)
+  assert.match(multi, /Remove Reading: read filter/)
+  assert.match(multi, /Filter by language: es/)
+  const single = await filteredLibrary("reading=unread&language=es")
+  assert.match(single, /Spanish unread fixture/)
+  assert.doesNotMatch(single, /Spanish reading fixture|English read fixture/)
+  const languageOnly = await filteredLibrary("language=es")
+  assert.match(
+    languageOnly,
+    /<a(?=[^>]*href="\/\?language=es&amp;reading=reading")(?=[^>]*aria-label="Filter by reading status: reading")/
+  )
+  const missingLanguage = await filteredLibrary("language=fr")
+  assert.match(missingLanguage, /name="language"[^>]*value="fr"/)
+  assert.match(missingLanguage, /No articles match/)
+  const scalarMcp = await invoke(reader, "search_articles", {
+    reading: "read",
+    language: "en",
+  })
+  assert.deepEqual(
+    scalarMcp.structuredContent.articles.map(
+      ({ title }: { title: string }) => title
+    ),
+    ["English read fixture"]
   )
 
   await revokeUserAccess("reader@example.com")
