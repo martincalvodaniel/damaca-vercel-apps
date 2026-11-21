@@ -22,7 +22,7 @@ import type {
   ArticleEdit,
   readingStatus,
 } from "@/schemas/article"
-import type { LibraryQuery } from "@/schemas/library"
+import type { LibraryQuery, McpLibraryQuery } from "@/schemas/library"
 
 type ArticleDetails = Omit<
   ArticleCapture,
@@ -391,7 +391,10 @@ export async function* iterateLibraryArticles(ownerId: string) {
   }
 }
 
-export async function listArticles(ownerId: string, query: LibraryQuery) {
+export async function listArticles(
+  ownerId: string,
+  query: LibraryQuery | McpLibraryQuery
+) {
   const filter: Filter<ArticleDocument> = { ownerId }
   if (query.q) filter.$text = { $search: query.q }
   if (query.author) filter.authors = exactText(query.author)
@@ -403,10 +406,11 @@ export async function listArticles(ownerId: string, query: LibraryQuery) {
     filter.$and = [
       { $or: topicFilters(await findTopicReferences(ownerId, query.topic)) },
     ]
-  if (query.language) filter.language = exactText(query.language)
-  if (query.type) filter.contentType = query.type
-  if (query.access) filter.accessStatus = query.access
-  if (query.reading) filter.readingStatus = query.reading
+  if (query.language)
+    filter.language = { $in: [query.language].flat().map(exactText) }
+  if (query.type) filter.contentType = { $in: [query.type].flat() }
+  if (query.access) filter.accessStatus = { $in: [query.access].flat() }
+  if (query.reading) filter.readingStatus = { $in: [query.reading].flat() }
   if (query.favorite) filter.favorite = true
   if (query.capturedFrom || query.capturedTo)
     filter.capturedAt = dateRange(query.capturedFrom, query.capturedTo)
@@ -425,4 +429,16 @@ export async function listArticles(ownerId: string, query: LibraryQuery) {
     items: documents.slice(0, pageSize).map(serialize),
     hasNext: documents.length > pageSize && query.page < 99_999,
   }
+}
+
+export async function listArticleLanguages(ownerId: string) {
+  const languages = await (await articles()).distinct("language", { ownerId })
+  return languages
+    .filter(
+      (language): language is string =>
+        typeof language === "string" &&
+        language.trim().length > 0 &&
+        language.length <= 35
+    )
+    .sort((a, b) => a.localeCompare(b))
 }

@@ -21,33 +21,44 @@ export function LibraryActiveFilters({ query }: { query: LibraryQuery }) {
   const keys = (Object.keys(labels) as (keyof typeof labels)[]).filter(
     (key) => query[key]
   )
-  if (!keys.length && !query.q) return null
+  if (!keys.length && !query.q && query.sort === "capture") return null
   return (
     <section
       className="flex flex-wrap items-center gap-x-2"
       aria-label="Active filters"
     >
-      {keys.map((key) => {
-        const text =
-          key === "favorite" ? labels[key] : `${labels[key]}: ${query[key]}`
-        return (
-          <Link
-            key={key}
-            aria-label={`Remove ${text} filter`}
-            href={libraryPageHref({ ...query, [key]: undefined }, 1)}
-            className="inline-flex min-h-11 max-w-full items-center text-xs font-medium"
-          >
-            <span className="break-all rounded-full border border-teal-200 bg-teal-50 px-2.5 py-1.5 text-teal-950 hover:border-teal-600 dark:border-teal-900 dark:bg-teal-950 dark:text-teal-100">
-              {text}{" "}
-              <span aria-hidden="true" className="ms-1">
-                ×
+      {keys.flatMap((key) => {
+        const values = query[key]
+        return (Array.isArray(values) ? values : [values]).map((value) => {
+          const text =
+            key === "favorite" ? labels[key] : `${labels[key]}: ${value}`
+          return (
+            <Link
+              key={`${key}:${value}`}
+              aria-label={`Remove ${text} filter`}
+              href={libraryPageHref(
+                {
+                  ...query,
+                  [key]: Array.isArray(values)
+                    ? values.filter((item) => item !== value)
+                    : undefined,
+                },
+                1
+              )}
+              className="inline-flex min-h-11 max-w-full items-center text-xs font-medium"
+            >
+              <span className="break-all rounded-full border border-teal-200 bg-teal-50 px-2.5 py-1.5 text-teal-950 hover:border-teal-600 dark:border-teal-900 dark:bg-teal-950 dark:text-teal-100">
+                {text}{" "}
+                <span aria-hidden="true" className="ms-1">
+                  ×
+                </span>
               </span>
-            </span>
-          </Link>
-        )
+            </Link>
+          )
+        })
       })}
       <Link
-        href="/"
+        href="/?reset=1"
         aria-label="Clear all filters"
         title="Clear all filters"
         className="digest-icon-button text-red-700 dark:text-red-300"

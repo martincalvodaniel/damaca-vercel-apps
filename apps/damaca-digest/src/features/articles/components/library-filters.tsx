@@ -1,9 +1,16 @@
+import { MultiFilterSelect } from "@/components/ui/multi-filter-select"
 import { SearchButton } from "@/components/ui/search-button"
 import { SearchDialog } from "@/components/ui/search-dialog"
 import { accessStatus, contentType, readingStatus } from "@/schemas/article"
 import type { LibraryQuery } from "@/schemas/library"
 
-export function LibraryFilters({ query }: { query: LibraryQuery }) {
+export function LibraryFilters({
+  query,
+  languages,
+}: {
+  query: LibraryQuery
+  languages: string[]
+}) {
   const dateFields = [
     ["capturedFrom", "Captured from"],
     ["capturedTo", "Captured through"],
@@ -14,16 +21,21 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
     ["author", "Author", 150],
     ["source", "Source or domain", 180],
     ["topic", "Topic", 100],
-    ["language", "Language", 35],
   ] as const
   const selectFields = [
     ["access", "Source access", accessStatus.options],
     ["type", "Content type", contentType.options],
     ["reading", "Reading status", readingStatus.options],
+    [
+      "language",
+      "Language",
+      [...new Set([...languages, ...(query.language ?? [])])],
+    ],
   ] as const
 
   return (
     <form action="/" className="digest-panel digest-search-panel">
+      <input type="hidden" name="reset" value="1" />
       <div className="digest-search-row">
         <label className="min-w-0 flex-1 text-sm">
           <input
@@ -40,7 +52,9 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
           label="Filters and sort"
           icon="filters"
           applyLabel="Apply filters"
-          clearHref={query.q ? `/?${new URLSearchParams({ q: query.q })}` : "/"}
+          clearHref={
+            query.q ? `/?${new URLSearchParams({ q: query.q })}` : "/?reset=1"
+          }
         >
           <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2 pb-2 text-sm">
             {textFields.map(([key, label, max]) => (
@@ -55,21 +69,13 @@ export function LibraryFilters({ query }: { query: LibraryQuery }) {
               </label>
             ))}
             {selectFields.map(([key, label, options]) => (
-              <label key={key}>
-                {label}
-                <select
-                  name={key}
-                  defaultValue={query[key] ?? ""}
-                  className="digest-search-field"
-                >
-                  <option value="">Any</option>
-                  {options.map((value) => (
-                    <option key={value} value={value}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <MultiFilterSelect
+                key={key}
+                name={key}
+                label={label}
+                options={options}
+                selected={query[key]}
+              />
             ))}
             <label>
               Sort

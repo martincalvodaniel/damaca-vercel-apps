@@ -1,9 +1,11 @@
+import { createHash } from "node:crypto"
 import Link from "next/link"
+import { RememberedFilters } from "@/components/ui/remembered-filters"
 import { LibraryActiveFilters } from "@/features/articles/components/library-active-filters"
 import { LibraryArticle } from "@/features/articles/components/library-article"
 import { LibraryFilters } from "@/features/articles/components/library-filters"
 import { requireAuthorizedSession } from "@/lib/auth/session"
-import { listArticles } from "@/lib/db/articles"
+import { listArticleLanguages, listArticles } from "@/lib/db/articles"
 import { createTopicLabelResolver } from "@/lib/db/topics"
 import {
   libraryPageHref,
@@ -24,21 +26,40 @@ export default async function LibraryPage({
   ])
   const parsed = parseLibraryQuery(params)
   const query = parsed.success ? parsed.data : libraryQuery.parse({})
-  const result = parsed.success
-    ? await listArticles(user.id, query)
-    : { items: [], hasNext: false }
+  const [result, languages] = await Promise.all([
+    parsed.success
+      ? listArticles(user.id, query)
+      : { items: [], hasNext: false },
+    listArticleLanguages(user.id),
+  ])
+  const restore =
+    params.reset !== "1" &&
+    !Object.keys(libraryQuery.shape).some((key) => params[key] !== undefined)
+  const appliedHref = libraryPageHref(query, 1)
   const labels = result.items.some(
     (article) => article.topicIds.length || article.proposedTopics?.length
   )
     ? await createTopicLabelResolver(user.id)
     : undefined
   const filtered = Object.keys(params).some(
-    (key) => key !== "sort" && !!params[key]
+    (key) => key !== "sort" && key !== "reset" && !!params[key]
   )
   return (
     <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
       <h1 className="sr-only">Library</h1>
-      <LibraryFilters query={query} />
+      <RememberedFilters
+        accountKey={createHash("sha256").update(user.id).digest("hex")}
+        path="/"
+        restore={restore}
+        applied={
+          parsed.success && !restore
+            ? appliedHref === "/?reset=1"
+              ? ""
+              : appliedHref
+            : undefined
+        }
+      />
+      <LibraryFilters key={appliedHref} query={query} languages={languages} />
       <LibraryActiveFilters query={query} />
       {!parsed.success ? (
         <p role="alert" className="digest-panel rounded-xl p-4">

@@ -42,14 +42,41 @@ export function LibraryArticle({
         ) : null}
         <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
           <AccessBadge status={article.accessStatus} />
-          {article.readingStatus !== "unread" ? (
-            <span className="text-xs capitalize text-zinc-600 dark:text-zinc-400">
-              {article.readingStatus}
-            </span>
-          ) : null}
         </div>
       </Link>
       <div className="mt-1 flex flex-wrap items-center gap-x-2">
+        <Link
+          href={libraryPageHref(
+            {
+              ...query,
+              reading: [
+                ...new Set([...(query.reading ?? []), article.readingStatus]),
+              ],
+            },
+            1
+          )}
+          className="inline-flex min-h-8 items-center text-xs capitalize underline underline-offset-2"
+          aria-label={`Filter by reading status: ${article.readingStatus}`}
+        >
+          {article.readingStatus}
+        </Link>
+        {article.language ? (
+          <Link
+            href={libraryPageHref(
+              {
+                ...query,
+                language: [
+                  ...new Set([...(query.language ?? []), article.language]),
+                ],
+              },
+              1
+            )}
+            className="inline-flex min-h-8 items-center text-xs underline underline-offset-2"
+            aria-label={`Filter by language: ${article.language}`}
+          >
+            {article.language}
+          </Link>
+        ) : null}
         {[...new Set(article.authors)].map((author) => (
           <Link
             key={author}

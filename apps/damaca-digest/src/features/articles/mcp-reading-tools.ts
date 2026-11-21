@@ -147,13 +147,10 @@ export function registerReadingTools(
       annotations,
       _meta: metadata,
     },
-    async ({ favorite, ...query }) => {
+    async (query) => {
       if (!canRead) return scopeRequired(readScope)
       try {
-        const page = await listArticles(ownerId, {
-          ...query,
-          favorite: favorite ? "true" : undefined,
-        })
+        const page = await listArticles(ownerId, query)
         return result({
           articles: page.items.map((article) => ({
             ...summary(article, base),
