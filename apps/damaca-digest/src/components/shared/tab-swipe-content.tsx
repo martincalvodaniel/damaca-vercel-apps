@@ -9,11 +9,18 @@ import {
   useRef,
 } from "react"
 import { navigationDestinations } from "@/config/navigation"
+import type { FilterPath } from "@/features/filters/remembered-query"
 
 const excludedTargets =
   "button, input, select, textarea, label, summary, dialog, [contenteditable], [role=button], [role=slider]"
 
-export function TabSwipeContent({ children }: { children: ReactNode }) {
+export function TabSwipeContent({
+  children,
+  filterDestinations,
+}: {
+  children: ReactNode
+  filterDestinations?: Partial<Record<FilterPath, string>>
+}) {
   const pathname = usePathname()
   const router = useRouter()
   const tab = navigationDestinations.findIndex(({ href }) => href === pathname)
@@ -62,9 +69,16 @@ export function TabSwipeContent({ children }: { children: ReactNode }) {
       suppressClick.current = true
       const destination =
         navigationDestinations[tab + (horizontal < 0 ? 1 : -1)]
-      if (destination) router.push(destination.href)
+      if (destination) {
+        const { href } = destination
+        router.push(
+          href === "/" || href === "/topics"
+            ? (filterDestinations?.[href] ?? href)
+            : href
+        )
+      }
     },
-    [router, tab]
+    [filterDestinations, router, tab]
   )
 
   const cancel = useCallback(() => {

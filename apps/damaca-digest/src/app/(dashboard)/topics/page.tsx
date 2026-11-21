@@ -1,8 +1,12 @@
-import { createHash } from "node:crypto"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { DigestIcon } from "@/components/ui/digest-icon"
 import { RememberedFilters } from "@/components/ui/remembered-filters"
 import { SearchButton } from "@/components/ui/search-button"
+import {
+  filterAccountKey,
+  readRememberedFilters,
+} from "@/features/filters/filter-cookies"
 import { filterTopicLabels } from "@/features/topics/catalog"
 import { TopicDeleteButton } from "@/features/topics/topic-delete-button"
 import { TopicManagement } from "@/features/topics/topic-management"
@@ -25,6 +29,14 @@ export default async function TopicsPage({
     requireAuthorizedSession(),
     searchParams,
   ])
+  const restore = q === undefined && reset === undefined && result === undefined
+  const accountKey = filterAccountKey(user.id)
+  if (restore) {
+    const saved = await readRememberedFilters(accountKey, "/topics")
+    if (saved) redirect(saved)
+    if (saved === undefined)
+      return <RememberedFilters accountKey={accountKey} path="/topics" />
+  }
   const topics = await listTopics(user.id, true)
   const query = topicSearch.safeParse(q)
   const filtered = query.success ? filterTopicLabels(topics, query.data) : []
@@ -36,18 +48,17 @@ export default async function TopicsPage({
         : undefined
   return (
     <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
-      <RememberedFilters
-        accountKey={createHash("sha256").update(user.id).digest("hex")}
-        path="/topics"
-        restore={q === undefined && reset === undefined && result === undefined}
-        applied={
-          query.success && (q !== undefined || reset === "1")
-            ? query.data
+      {query.success && (q !== undefined || reset === "1") ? (
+        <RememberedFilters
+          accountKey={accountKey}
+          path="/topics"
+          applied={
+            query.data
               ? `/topics?${new URLSearchParams({ q: query.data })}`
               : ""
-            : undefined
-        }
-      />
+          }
+        />
+      ) : null}
       <h1 className="sr-only">Topics</h1>
       {result === "in_use" || result === "delete_failed" ? (
         <p role="alert">

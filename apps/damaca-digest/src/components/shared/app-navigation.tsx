@@ -6,14 +6,21 @@ import { usePathname } from "next/navigation"
 import { AccountAvatar } from "@/components/shared/account-avatar"
 import { DigestIcon } from "@/components/ui/digest-icon"
 import { navigationDestinations } from "@/config/navigation"
+import type { FilterPath } from "@/features/filters/remembered-query"
 
 interface AppNavigationProps {
+  filterDestinations?: Partial<Record<FilterPath, string>>
   name?: string
   email?: string
   image?: string | null
 }
 
-export function AppNavigation({ name, email, image }: AppNavigationProps) {
+export function AppNavigation({
+  name,
+  email,
+  image,
+  filterDestinations,
+}: AppNavigationProps) {
   const pathname = usePathname()
   const inLibrary = pathname === "/" || pathname.startsWith("/articles/")
   return (
@@ -23,7 +30,7 @@ export function AppNavigation({ name, email, image }: AppNavigationProps) {
     >
       <div className="mx-auto flex h-full max-w-5xl items-center justify-between gap-4">
         <Link
-          href="/"
+          href={filterDestinations?.["/"] ?? "/"}
           className="hidden items-center gap-2 rounded text-lg font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700 md:flex"
         >
           <Image src="/icon.svg" width={32} height={32} alt="" unoptimized />
@@ -40,7 +47,12 @@ export function AppNavigation({ name, email, image }: AppNavigationProps) {
             return (
               <li key={destination.id} className="min-w-0 flex-1 md:flex-none">
                 <Link
-                  href={destination.href}
+                  href={
+                    destination.href === "/" || destination.href === "/topics"
+                      ? (filterDestinations?.[destination.href] ??
+                        destination.href)
+                      : destination.href
+                  }
                   aria-current={active ? current : undefined}
                   className={`flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-lg px-2 text-[11px] [&_svg]:size-4 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 md:flex-row md:gap-2 md:text-sm ${active ? "bg-teal-100 text-teal-950 dark:bg-teal-950 dark:text-teal-200" : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-slate-800"}`}
                 >

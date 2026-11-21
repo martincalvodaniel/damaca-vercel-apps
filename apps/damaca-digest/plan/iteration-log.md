@@ -54,3 +54,8 @@
 
 - Library y Topics recuerdan la última selección aplicada por cuenta y navegador. Los filtros múltiples de Library usan OR dentro de cada campo. Las tarjetas enlazan al estado de lectura y al idioma.
 - Pasaron lint, tipos, 60 pruebas, build e integración HTTP con MongoDB desechable. La integración comprobó OR dentro del campo, AND entre campos, enlaces de tarjetas y el esquema escalar MCP. Chrome a 320 px comprobó teclado, descarte de cambios en el diálogo, restauración, limpieza, aislamiento por cuenta y navegación con almacenamiento bloqueado.
+
+## 38 — Restaurar filtros antes de mostrar resultados
+
+- Library y Topics consultan sus preferencias antes de consultar los resultados. La primera visita migra el almacenamiento anterior con un indicador de carga; navegación y gestos pueden ir directamente a la selección aplicada.
+- Pasaron Biome, tipos, 62 pruebas, build e integración HTTP con MongoDB desechable. Chrome a 320 px comprobó migración, navegación, gesto, limpieza, teclado y aislamiento entre cuentas. La integración verificó la redirección antes de renderizar el listado, además de la prioridad de la URL.
