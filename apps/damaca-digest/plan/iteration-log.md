@@ -4,21 +4,6 @@
 
 [Entregas archivadas el 2026-11-21](archive/2026-11-21/iteration-log.md).
 
-## 27 — Cambiar de pestaña con un gesto horizontal
-
-- Las tres pestañas admiten gestos táctiles hacia la pestaña contigua, con límites en Library y Settings. La lupa de Topics queda centrada con el campo y el icono de gestión.
-- Biome, tipos, 50 pruebas y build pasaron. Chrome verificó los gestos en ambas direcciones, los límites, el desplazamiento vertical, los controles y las pantallas excluidas. La alineación se comprobó en móvil y escritorio.
-
-## 28 — Mover Captura a la navegación
-
-- Capture ocupa el primer destino y Library usa un icono de libros. Se retira el botón de captura del buscador. Los gestos mantienen el recorrido entre las tres pestañas existentes.
-- Biome, tipos, 50 pruebas y build pasaron. Chrome comprobó el orden, la apertura y selección de Capture a 320 y 1280 px y los gestos entre las tres pestañas.
-
-## 29 — Incluir Capture en el gesto horizontal
-
-- El gesto usa el mismo orden que la barra y ahora incluye Capture. El inicio sigue siendo Library.
-- Biome, tipos, 50 pruebas y build pasaron. Chrome verificó Capture y Library en ambos sentidos, el límite en Capture y el recorrido previo.
-
 ## 30 — Alinear el diseño de Capture
 
 - El formulario usa la misma fila y panel que los buscadores. Los encabezados quedan disponibles para lectores de pantalla y las acciones de captura y ChatGPT son iconos etiquetados.
@@ -64,3 +49,10 @@
 
 - Library pliega los chips bajo un contador en móvil y muestra las tarjetas con filas separadas. Fuente y acceso se pueden filtrar desde la tarjeta. La cruz de limpieza guarda el estado vacío antes de redirigir.
 - Pasaron Biome, tipos, 62 pruebas, build e integración HTTP. Chrome a 320 y 1280 px comprobó teclado, conservación del desplegable al quitar un valor, limpieza persistente y orden de las filas.
+
+## 40 — Mostrar los enlaces mencionados en el artículo
+
+- [Issue #4](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/4). Las capturas nuevas deduplican las referencias del cuerpo accesible. La ficha separa referencias, sugerencias de IA y lecturas relacionadas por topic. Las fichas antiguas muestran los enlaces que ya tenían. Las recapturas conservan la lista.
+- Pasaron Biome incremental, tipos, 63 pruebas, build Webpack e integración HTTP sobre MongoDB 8 desechable. El fixture verifica el guardado MCP, la deduplicación en la ficha y que una mejora de acceso conserve las referencias. Chrome comprobó las tres secciones, apertura en otra pestaña, recorrido con teclado y ausencia de desbordamiento a 320 y 1280 px.
+- La extracción Markdown de los proveedores usa la limpieza editorial existente. Queda pendiente la comprobación con proveedores reales y ChatGPT en Vercel.
+- Capacidad al inicio de la entrega, 91 % en 5 h y 57 % en 7 días.

@@ -274,3 +274,12 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: Library pliega los filtros activos en móvil y organiza fuente, estado, topics y referencias en filas; los enlaces de filtro conservan la selección.
+
+## 40 — Mostrar los enlaces mencionados en el artículo
+
+- Estado: `validated`.
+- Objetivo: [issue #4](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/4). Recopilar referencias editoriales en capturas nuevas y mostrarlas junto a los artículos relacionados por topic.
+- Rutas: `src/features/articles`, `src/features/sharing/shared-link.ts`, `src/lib/db/articles.ts`, pruebas y `plan/`.
+- Dependencias: contrato MCP y proveedores existentes.
+- Aceptación: deduplicar URLs sin tracking, conservar títulos y destinos funcionales, mostrar referencias externas por separado y preservar los enlaces existentes al recapturar.
+- Validación: Biome incremental, tipos, pruebas, build, integración HTTP y ficha responsiva.

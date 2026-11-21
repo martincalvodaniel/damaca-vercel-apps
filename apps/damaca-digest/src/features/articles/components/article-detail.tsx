@@ -2,9 +2,11 @@ import Link from "next/link"
 import { DigestIcon } from "@/components/ui/digest-icon"
 import { removeArticle, setArticleReading } from "@/features/articles/actions"
 import { AccessBadge } from "@/features/articles/components/access-badge"
+import { normalizeSourceLinks } from "@/features/articles/mentioned-links"
 import type { Article, RelatedArticle } from "@/lib/db/articles"
 import { nextReadingStatus } from "@/schemas/article"
 import { ArticleDeleteButton } from "./article-delete-button"
+import { ArticleLinkList } from "./article-link-list"
 
 const sectionTitle = "mb-2 text-lg font-semibold tracking-tight"
 export function ArticleDetail({
@@ -39,9 +41,19 @@ export function ArticleDetail({
     "reading"
   )
   const captured = article.capturedAt.toISOString()
-  const links = new Map(
-    article.relatedLinks?.map((link) => [`${link.origin}:${link.url}`, link])
+  const mentionedLinks = normalizeSourceLinks(
+    article.relatedLinks ?? [],
+    article.url,
+    article.canonicalUrl,
+    ...(article.suggestedCanonicalUrl ? [article.suggestedCanonicalUrl] : [])
   )
+  const suggestions = [
+    ...new Map(
+      article.relatedLinks
+        ?.filter((link) => link.origin === "ai_suggested")
+        .map((link) => [link.url, link])
+    ).values(),
+  ]
 
   return (
     <article className="mx-auto max-w-3xl space-y-3 break-words py-2 sm:space-y-4 sm:py-5">
@@ -158,7 +170,9 @@ export function ArticleDetail({
           ) : null}
         </div>
       ) : null}
-      {topics.length > 0 || links.size > 0 ? (
+      {topics.length > 0 ||
+      mentionedLinks.length > 0 ||
+      suggestions.length > 0 ? (
         <div className="digest-panel space-y-3 rounded-xl p-4 sm:p-6">
           {topics.length > 0 ? (
             <section aria-label="Topics">
@@ -179,33 +193,8 @@ export function ArticleDetail({
               </ul>
             </section>
           ) : null}
-          {links.size > 0 ? (
-            <section>
-              <h2 className="text-base font-semibold">Links</h2>
-              <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                {[...links].map(([key, link]) => (
-                  <li
-                    key={key}
-                    className="flex flex-wrap items-center justify-between gap-x-2"
-                  >
-                    <a
-                      className="inline-flex min-h-11 min-w-0 items-center text-sm underline underline-offset-4"
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {link.title ?? link.url}
-                    </a>
-                    <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                      {link.origin === "source"
-                        ? "Source reference"
-                        : "AI suggestion"}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
+          <ArticleLinkList title="Mentioned links" links={mentionedLinks} />
+          <ArticleLinkList title="AI link suggestions" links={suggestions} />
         </div>
       ) : null}
       {article.personalNotes ? (

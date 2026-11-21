@@ -18,6 +18,8 @@ La captura MCP, la biblioteca con búsqueda ponderada, filtros y paginación, la
 
 La biblioteca y la ficha incluyen temas, enlaces al original, acciones rápidas de lectura, relacionados y descargas en Markdown y JSON. Ajustes permite exportar toda la biblioteca. Las herramientas MCP permiten recuperar, buscar y relacionar fichas y agrupar capturas por periodo con el permiso OAuth `articles:read`.
 
+En la ficha, `Related articles` muestra hasta tres lecturas del mismo propietario que comparten algún topic, ordenadas por captura reciente. `Mentioned links` muestra referencias del cuerpo editorial accesible, y las sugerencias de IA tienen su propia sección. Las capturas nuevas guardan hasta 50 enlaces en el contrato existente. Las recapturas conservan la lista guardada.
+
 La PWA recibe enlaces de Compartir y prepara un prompt para ChatGPT. El usuario selecciona el conector y confirma el envío en el compositor. La copia puede abrir ChatGPT o dejar que el usuario vuelva a una sesión ya abierta.
 
 ## Recuperación de fuentes

@@ -5,8 +5,10 @@ import { JSDOM, VirtualConsole } from "jsdom"
 import TurndownService from "turndown"
 import { z } from "zod"
 import type { getArticleFetchEnv } from "@/config/env"
+import { normalizeSourceLinks } from "@/features/articles/mentioned-links"
 import { webUrl } from "@/schemas/article"
 import type { FetchDiagnostics } from "@/schemas/article-fetch"
+import { editorialContent } from "./content"
 import {
   directRequest,
   providerUrl,
@@ -50,17 +52,6 @@ function editorialLink(raw: string | null, base: string) {
 
 function sourceLink(url: string, title?: string) {
   return { url, title: text(title, 350), origin: "source" as const }
-}
-
-function sourceLinks(
-  links: Iterable<ReturnType<typeof sourceLink> | undefined>
-) {
-  const results = new Map<string, ReturnType<typeof sourceLink>>()
-  for (const link of links) {
-    if (link && !results.has(link.url)) results.set(link.url, link)
-    if (results.size === 50) break
-  }
-  return [...results.values()]
 }
 
 export function extractHtml(
@@ -134,7 +125,7 @@ export function extractHtml(
       content: parsed?.content
         ? new TurndownService().turndown(parsed.content)
         : undefined,
-      relatedLinks: sourceLinks(
+      relatedLinks: normalizeSourceLinks(
         Array.from(
           parsed?.content
             ? JSDOM.fragment(parsed.content).querySelectorAll("a[href]")
@@ -144,8 +135,9 @@ export function extractHtml(
           return href
             ? sourceLink(href, node.textContent ?? undefined)
             : undefined
-        })
-      ),
+        }),
+        url
+      ).slice(0, 50),
     }
   } finally {
     dom.window.close()
@@ -171,7 +163,6 @@ const firecrawlSchema = z.object({
   data: z
     .object({
       markdown: z.string().optional(),
-      links: z.array(z.string()).optional(),
       metadata: z.object({
         url: z.string().optional(),
         sourceURL: z.string().optional(),
@@ -237,16 +228,14 @@ function matchingUrl(
 }
 
 function markdownLinks(content: string, finalUrl: string) {
-  return sourceLinks(
-    Array.from(
-      content.matchAll(
-        /(?<!!)\[([^\]\n]{1,350})\]\((https?:\/\/[^\s)]{1,4096})\)/g
-      ),
-      ([, title, raw]) => {
-        const href = editorialLink(raw, finalUrl)
-        return href ? sourceLink(href, title) : undefined
-      }
-    )
+  return Array.from(
+    editorialContent(content).content.matchAll(
+      /(?<!!)\[([^\]\n]{1,350})\]\(([^\s)]{1,4096})\)/g
+    ),
+    ([, title, raw]) => {
+      const href = editorialLink(raw, finalUrl)
+      return href ? sourceLink(href, title) : undefined
+    }
   )
 }
 
@@ -296,7 +285,10 @@ export async function fetchCandidate(
         .filter(Boolean)
         .join("\n"),
       partial: !!(parsed.data.warning || article.warning),
-      relatedLinks: markdownLinks(article.content, finalUrl),
+      relatedLinks: normalizeSourceLinks(
+        markdownLinks(article.content, finalUrl),
+        finalUrl
+      ).slice(0, 50),
     }
   }
 
@@ -310,7 +302,7 @@ export async function fetchCandidate(
       },
       body: JSON.stringify({
         url: url.href,
-        formats: ["markdown", "links"],
+        formats: ["markdown"],
         onlyMainContent: true,
         proxy: "basic",
         storeInCache: false,
@@ -323,7 +315,7 @@ export async function fetchCandidate(
   const parsed = firecrawlSchema.safeParse(payload)
   if (!parsed.success || !parsed.data.success || !parsed.data.data)
     throw new RecoveryError("invalid_response")
-  const { markdown, metadata, links } = parsed.data.data
+  const { markdown, metadata } = parsed.data.data
   const status = metadata.statusCode
   if (status && [401, 403, 451].includes(status))
     throw new RecoveryError("blocked", status)
@@ -333,10 +325,6 @@ export async function fetchCandidate(
     url,
     config.hosts
   )
-  // Only retain references present in the extracted article body.
-  const inBody = markdownLinks(markdown ?? "", finalUrl)
-  const reported =
-    links && new Set(links.map((link) => editorialLink(link, finalUrl)))
   return {
     finalUrl,
     title: text(metadata.title, 350),
@@ -347,8 +335,9 @@ export async function fetchCandidate(
     content: markdown,
     httpStatus: status,
     partial: status === 206,
-    relatedLinks: reported?.size
-      ? inBody.filter((link) => reported.has(link.url))
-      : inBody,
+    relatedLinks: normalizeSourceLinks(
+      markdownLinks(markdown ?? "", finalUrl),
+      finalUrl
+    ).slice(0, 50),
   }
 }
