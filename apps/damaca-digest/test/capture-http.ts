@@ -979,6 +979,20 @@ try {
     languageOnly,
     /<a(?=[^>]*href="\/\?language=es&amp;reading=reading")(?=[^>]*aria-label="Filter by reading status: reading")/
   )
+  assert.match(multi, /3(?:<!-- -->)?\s*(?:<!-- -->)?active filters/)
+  for (const [label, expected] of [
+    ["Filter by source: example.org", "source=example.org"],
+    ["Filter by source access: full", "access=full"],
+  ]) {
+    const link = [...languageOnly.matchAll(/<a[^>]+>/g)]
+      .map(([markup]) => markup)
+      .find((markup) => markup.includes(`aria-label="${label}"`))
+    assert.ok(link)
+    const href = link.match(/href="([^"]+)"/)?.[1]
+    assert.ok(href)
+    assert.ok(href.includes("language=es") && href.includes(expected))
+  }
+  assert.match(languageOnly, /Captured <time/)
   const missingLanguage = await filteredLibrary("language=fr")
   assert.match(missingLanguage, /name="language"[^>]*value="fr"/)
   assert.match(missingLanguage, /No articles match/)

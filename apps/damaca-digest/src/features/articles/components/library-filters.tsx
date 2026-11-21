@@ -11,11 +11,15 @@ export function LibraryFilters({
   query: LibraryQuery
   languages: string[]
 }) {
-  const dateFields = [
-    ["capturedFrom", "Captured from"],
-    ["capturedTo", "Captured through"],
-    ["publishedFrom", "Published from"],
-    ["publishedTo", "Published through"],
+  const dateRanges = [
+    [
+      ["capturedFrom", "Captured from"],
+      ["capturedTo", "Captured through"],
+    ],
+    [
+      ["publishedFrom", "Published from"],
+      ["publishedTo", "Published through"],
+    ],
   ] as const
   const textFields = [
     ["author", "Author", 150],
@@ -90,16 +94,26 @@ export function LibraryFilters({
                 <option value="relevance">Search relevance</option>
               </select>
             </label>
-            {dateFields.map(([key, label]) => (
-              <label key={key} className="min-w-0">
-                {label}
-                <input
-                  type="date"
-                  name={key}
-                  defaultValue={query[key]}
-                  className="digest-search-field"
-                />
-              </label>
+            {dateRanges.map((range) => (
+              <div
+                key={range[0][0]}
+                className="col-span-full grid grid-cols-2 gap-2"
+              >
+                {range.map(([key, label]) => (
+                  <label
+                    key={key}
+                    className="flex min-w-0 flex-col justify-between"
+                  >
+                    {label}
+                    <input
+                      type="date"
+                      name={key}
+                      defaultValue={query[key]}
+                      className="digest-search-field min-w-0"
+                    />
+                  </label>
+                ))}
+              </div>
             ))}
             <label className="col-span-full inline-flex min-h-11 items-center gap-1.5">
               <input

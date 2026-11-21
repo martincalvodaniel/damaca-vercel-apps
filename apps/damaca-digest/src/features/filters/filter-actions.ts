@@ -48,3 +48,9 @@ export async function rememberFilters(
   if (migrate)
     redirect(normalized || emptyFilterHref(path), RedirectType.replace)
 }
+
+export async function clearLibraryFilters() {
+  const { user } = await requireAuthorizedSession()
+  await rememberFilters(filterAccountKey(user.id), "/", "")
+  redirect(emptyFilterHref("/"))
+}

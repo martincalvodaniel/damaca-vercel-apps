@@ -269,3 +269,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: Library y Topics recuperan su selección antes de consultar resultados; la migración mantiene las preferencias de navegador existentes.
+
+## 39 — Compactar los filtros y organizar las tarjetas
+
+- Estado: `validated`.
+- Aceptación: Library pliega los filtros activos en móvil y organiza fuente, estado, topics y referencias en filas; los enlaces de filtro conservan la selección.
