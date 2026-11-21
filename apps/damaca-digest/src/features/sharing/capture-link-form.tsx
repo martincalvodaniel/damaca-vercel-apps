@@ -64,11 +64,13 @@ export function CaptureLinkForm() {
           type="button"
           aria-label="Paste link"
           title="Paste link"
-          className="digest-icon-button shrink-0 sm:hidden"
+          className="group grid size-11 shrink-0 place-items-center rounded-lg sm:hidden"
           disabled={pasting}
           onClick={paste}
         >
-          <DigestIcon name="clipboard" />
+          <span className="digest-panel grid size-8 place-items-center rounded-lg group-hover:border-teal-600">
+            <DigestIcon name="clipboard" />
+          </span>
         </button>
         <button
           type="submit"
