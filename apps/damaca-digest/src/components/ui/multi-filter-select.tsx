@@ -12,24 +12,22 @@ export function MultiFilterSelect({
   return (
     <fieldset className="min-w-0 rounded-lg border border-(--panel-line) px-2 pb-1">
       <legend className="px-1">{label}</legend>
-      <div className="max-h-32 overflow-y-auto">
+      <div className="grid max-h-32 grid-cols-2 gap-x-2 overflow-y-auto">
         {options.length ? (
           options.map((value) => (
-            <label
-              key={value}
-              className="flex min-h-8 items-center gap-2 break-all"
-            >
+            <label key={value} className="flex min-h-8 items-center gap-2">
               <input
                 type="checkbox"
+                className="shrink-0"
                 name={name}
                 value={value}
                 defaultChecked={selected.includes(value)}
               />
-              <span>{value}</span>
+              <span className="min-w-0 wrap-anywhere">{value}</span>
             </label>
           ))
         ) : (
-          <p className="py-1">No values available.</p>
+          <p className="col-span-full py-1">No values available.</p>
         )}
       </div>
     </fieldset>
