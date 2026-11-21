@@ -1,8 +1,15 @@
 import "server-only"
 
-import { type Filter, MongoServerError, ObjectId, type Sort } from "mongodb"
+import {
+  type ClientSession,
+  type Filter,
+  MongoServerError,
+  ObjectId,
+  type Sort,
+} from "mongodb"
 import type { z } from "zod"
 import { normalizeArticleUrl } from "@/features/articles/normalize-url"
+import { withTopicTransaction } from "@/lib/db/client"
 import { COLLECTION_NAMES, getCollection } from "@/lib/db/collections"
 import {
   articleTopicLabels,
@@ -71,6 +78,16 @@ async function articles() {
 }
 
 export async function saveArticle(ownerId: string, input: ArticleCapture) {
+  return input.topics?.length
+    ? withTopicTransaction((session) => persistArticle(ownerId, input, session))
+    : persistArticle(ownerId, input)
+}
+
+async function persistArticle(
+  ownerId: string,
+  input: ArticleCapture,
+  session?: ClientSession
+) {
   const {
     url,
     canonicalUrl: suggested,
@@ -96,8 +113,11 @@ export async function saveArticle(ownerId: string, input: ArticleCapture) {
     sourceDomain: new URL(url).hostname,
   }
   const identity = { ownerId, canonicalUrl }
-  if (topics?.length) {
-    const existing = await collection.findOne(identity)
+  const existingWithTopics = session
+    ? await collection.findOne(identity, { session })
+    : null
+  if (session && topics?.length) {
+    const existing = existingWithTopics
     if (
       existing &&
       accessRank[input.accessStatus] <= accessRank[existing.accessStatus]
@@ -109,34 +129,39 @@ export async function saveArticle(ownerId: string, input: ArticleCapture) {
       }
     }
     if (!existing?.editedFields?.includes("topicIds")) {
-      details.topicIds = await registerTopics(ownerId, topics)
+      details.topicIds = await registerTopics(ownerId, topics, session)
     }
   }
 
   try {
-    const result = await collection.insertOne({
-      ...identity,
-      ...details,
-      url,
-      capturedAt: now,
-      updatedAt: now,
-      provenance,
-      readingStatus: "unread",
-      favorite: false,
-      revision: 0,
-    })
-    return {
-      articleId: result.insertedId.toHexString(),
-      status: "created" as const,
-      canonicalUrl,
+    if (!existingWithTopics) {
+      const result = await collection.insertOne(
+        {
+          ...identity,
+          ...details,
+          url,
+          capturedAt: now,
+          updatedAt: now,
+          provenance,
+          readingStatus: "unread",
+          favorite: false,
+          revision: 0,
+        },
+        { session }
+      )
+      return {
+        articleId: result.insertedId.toHexString(),
+        status: "created" as const,
+        canonicalUrl,
+      }
     }
   } catch (error) {
-    if (!(error instanceof MongoServerError) || error.code !== 11000)
+    if (session || !(error instanceof MongoServerError) || error.code !== 11000)
       throw error
   }
 
   for (let attempt = 0; attempt < 5; attempt += 1) {
-    const existing = await collection.findOne(identity)
+    const existing = await collection.findOne(identity, { session })
     if (!existing) throw new Error("Article changed during capture")
     const articleId = existing._id.toHexString()
     if (accessRank[input.accessStatus] <= accessRank[existing.accessStatus]) {
@@ -158,7 +183,8 @@ export async function saveArticle(ownerId: string, input: ArticleCapture) {
         $set: { ...enrichment, updatedAt: now, provenance },
         ...(clearAccessNote && { $unset: { accessNotes: "" } }),
         $inc: { revision: 1 },
-      }
+      },
+      { session }
     )
     if (result.modifiedCount)
       return { articleId, status: "updated" as const, canonicalUrl }
@@ -188,9 +214,23 @@ export async function editArticle(
   revision: number,
   input: ArticleEdit
 ) {
+  return input.topics
+    ? withTopicTransaction((session) =>
+        persistArticleEdit(ownerId, id, revision, input, session)
+      )
+    : persistArticleEdit(ownerId, id, revision, input)
+}
+
+async function persistArticleEdit(
+  ownerId: string,
+  id: string,
+  revision: number,
+  input: ArticleEdit,
+  session?: ClientSession
+) {
   const collection = await articles()
   const identity = { ownerId, _id: new ObjectId(id), revision }
-  const existing = await collection.findOne(identity)
+  const existing = await collection.findOne(identity, { session })
   if (!existing) return false
 
   const {
@@ -229,24 +269,29 @@ export async function editArticle(
     if (normalized === undefined) unset[field] = ""
     else Object.assign(set, { [field]: normalized })
   }
-  if (topics) {
+  if (topics && session) {
     const previousLabels = await articleTopicLabels(
       ownerId,
       existing.topicIds?.map((id) => id.toHexString()) ?? [],
-      existing.proposedTopics ?? []
+      existing.proposedTopics ?? [],
+      session
     )
     if (JSON.stringify(topics) !== JSON.stringify(previousLabels)) {
-      set.topicIds = await registerTopics(ownerId, topics)
+      set.topicIds = await registerTopics(ownerId, topics, session)
       unset.proposedTopics = ""
       edited.push("topicIds")
     }
   }
-  const result = await collection.updateOne(identity, {
-    $set: set,
-    $unset: unset,
-    $inc: { revision: 1 },
-    ...(edited.length && { $addToSet: { editedFields: { $each: edited } } }),
-  })
+  const result = await collection.updateOne(
+    identity,
+    {
+      $set: set,
+      $unset: unset,
+      $inc: { revision: 1 },
+      ...(edited.length && { $addToSet: { editedFields: { $each: edited } } }),
+    },
+    { session }
+  )
   return result.matchedCount === 1
 }
 
@@ -303,7 +348,7 @@ function topicFilters({
 }: TopicMatches): Filter<ArticleDocument>[] {
   return [
     { topicIds: { $in: ids } },
-    { topicIds: { $exists: false }, proposedTopics: { $in: legacyLabels } },
+    { "topicIds.0": { $exists: false }, proposedTopics: { $in: legacyLabels } },
   ]
 }
 

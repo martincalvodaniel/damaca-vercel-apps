@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { SearchButton } from "@/components/ui/search-button"
 import { filterTopicLabels } from "@/features/topics/catalog"
+import { TopicDeleteButton } from "@/features/topics/topic-delete-button"
 import { TopicManagement } from "@/features/topics/topic-management"
 import { requireAuthorizedSession } from "@/lib/auth/session"
 import { listTopics } from "@/lib/db/topics"
@@ -29,6 +30,13 @@ export default async function TopicsPage({
   return (
     <section className="mx-auto max-w-3xl space-y-3 py-2 sm:space-y-4 sm:py-5">
       <h1 className="sr-only">Topics</h1>
+      {result === "in_use" || result === "delete_failed" ? (
+        <p role="alert">
+          {result === "in_use"
+            ? "This topic now has articles and could not be deleted."
+            : "The topic could not be deleted. Try again."}
+        </p>
+      ) : null}
       {topics.length ? (
         <>
           <div className="digest-panel digest-search-panel digest-search-row">
@@ -69,15 +77,25 @@ export default async function TopicsPage({
                 key={topic.id}
                 className="digest-panel min-w-0 break-words rounded-xl px-2"
               >
-                <Link
-                  href={`/?${new URLSearchParams({ topic: topic.label })}`}
-                  className="flex min-h-8 items-center justify-between gap-3 font-medium hover:text-teal-800 dark:hover:text-teal-300"
-                >
-                  <span>{topic.label}</span>
+                <div className="flex min-h-8 items-center gap-2">
+                  <Link
+                    href={`/?${new URLSearchParams({ topic: topic.label })}`}
+                    className="min-w-0 grow font-medium hover:text-teal-800 dark:hover:text-teal-300"
+                  >
+                    {topic.label}
+                  </Link>
+                  {topic.articleCount === 0 ? (
+                    <TopicDeleteButton
+                      id={topic.id}
+                      label={topic.label}
+                      query={query.success ? query.data : undefined}
+                    />
+                  ) : null}
                   <span className="shrink-0 text-sm">
-                    {`${topic.articleCount} ${topic.articleCount === 1 ? "article" : "articles"}`}
+                    {`(${topic.articleCount})`}
+                    <span className="sr-only"> articles</span>
                   </span>
-                </Link>
+                </div>
                 {topic.aliases.length ? (
                   <p className="pb-2 text-sm text-zinc-600 dark:text-zinc-400">
                     Aliases: {topic.aliases.join(", ")}

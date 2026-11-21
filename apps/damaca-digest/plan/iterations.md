@@ -254,3 +254,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: las dos fichas recorren el mismo ciclo de lectura, el editor permite salir sin guardar y las acciones de borrado y limpieza usan iconos accesibles.
+
+## 36 — Borrar topics vacíos
+
+- Estado: `validated`.
+- Aceptación: papelera junto a (0), confirmación y protección de referencias concurrentes.

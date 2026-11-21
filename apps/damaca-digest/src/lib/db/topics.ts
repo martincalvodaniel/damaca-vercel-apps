@@ -1,11 +1,12 @@
 import "server-only"
 
-import { MongoServerError, ObjectId } from "mongodb"
+import { type ClientSession, MongoServerError, ObjectId } from "mongodb"
 import {
   changeTopic,
   type TopicEntry,
   topicCatalog,
 } from "@/features/topics/catalog"
+import { withTopicTransaction } from "@/lib/db/client"
 import { COLLECTION_NAMES, getCollection } from "@/lib/db/collections"
 import type { TopicChange } from "@/schemas/topic"
 
@@ -24,21 +25,26 @@ async function articleTopics() {
   return getCollection<TopicReferences>(COLLECTION_NAMES.articles)
 }
 
-async function legacyTopics(ownerId: string) {
-  const labels = await (await articleTopics()).distinct("proposedTopics", {
-    ownerId,
-    topicIds: { $exists: false },
-  })
+async function legacyTopics(ownerId: string, session?: ClientSession) {
+  const labels = await (await articleTopics()).distinct(
+    "proposedTopics",
+    {
+      ownerId,
+      "topicIds.0": { $exists: false },
+    },
+    { session }
+  )
   return labels
     .filter((label): label is string => typeof label === "string")
     .sort()
 }
 
-async function readCatalog(ownerId: string) {
-  const [vocabulary, legacyLabels] = await Promise.all([
-    (await vocabularies()).findOne({ _id: ownerId }),
-    legacyTopics(ownerId),
-  ])
+async function readCatalog(ownerId: string, session?: ClientSession) {
+  const vocabulary = await (await vocabularies()).findOne(
+    { _id: ownerId },
+    { session }
+  )
+  const legacyLabels = await legacyTopics(ownerId, session)
   return {
     ...topicCatalog(ownerId, vocabulary?.entries ?? [], legacyLabels),
     legacyLabels,
@@ -49,14 +55,15 @@ async function updateVocabulary<Result>(
   ownerId: string,
   update: (
     entries: TopicEntry[]
-  ) => { entries: TopicEntry[]; result: Result } | null
+  ) => { entries: TopicEntry[]; result: Result } | null,
+  session?: ClientSession
 ) {
   const [collection, legacyLabels] = await Promise.all([
     vocabularies(),
-    legacyTopics(ownerId),
+    legacyTopics(ownerId, session),
   ])
   for (let attempt = 0; attempt < 8; attempt += 1) {
-    const current = await collection.findOne({ _id: ownerId })
+    const current = await collection.findOne({ _id: ownerId }, { session })
     const entries = topicCatalog(
       ownerId,
       current?.entries ?? [],
@@ -67,22 +74,33 @@ async function updateVocabulary<Result>(
 
     if (!current) {
       try {
-        await collection.insertOne({
-          _id: ownerId,
-          revision: 0,
-          entries: next.entries,
-        })
+        await collection.insertOne(
+          {
+            _id: ownerId,
+            revision: 0,
+            entries: next.entries,
+          },
+          { session }
+        )
         return next.result
       } catch (error) {
-        if (!(error instanceof MongoServerError) || error.code !== 11000)
+        if (
+          session ||
+          !(error instanceof MongoServerError) ||
+          error.code !== 11000
+        )
           throw error
       }
     } else {
-      if (JSON.stringify(current.entries) === JSON.stringify(next.entries))
+      if (
+        !session &&
+        JSON.stringify(current.entries) === JSON.stringify(next.entries)
+      )
         return next.result
       const result = await collection.updateOne(
         { _id: ownerId, revision: current.revision },
-        { $set: { entries: next.entries }, $inc: { revision: 1 } }
+        { $set: { entries: next.entries }, $inc: { revision: 1 } },
+        { session }
       )
       if (result.matchedCount) return next.result
     }
@@ -90,19 +108,27 @@ async function updateVocabulary<Result>(
   throw new Error("Topic vocabulary changed during update")
 }
 
-export async function registerTopics(ownerId: string, labels: string[]) {
+export async function registerTopics(
+  ownerId: string,
+  labels: string[],
+  session: ClientSession
+) {
   if (!labels.length) return []
-  const ids = await updateVocabulary(ownerId, (entries) => {
-    const catalog = topicCatalog(ownerId, entries, labels)
-    const ids = labels.flatMap((label) => {
-      const entry = catalog.find(label)
-      return entry ? [entry.id] : []
-    })
-    return {
-      entries: catalog.entries,
-      result: [...new Set(ids)].map((id) => new ObjectId(id)),
-    }
-  })
+  const ids = await updateVocabulary(
+    ownerId,
+    (entries) => {
+      const catalog = topicCatalog(ownerId, entries, labels)
+      const ids = labels.flatMap((label) => {
+        const entry = catalog.find(label)
+        return entry ? [entry.id] : []
+      })
+      return {
+        entries: catalog.entries,
+        result: [...new Set(ids)].map((id) => new ObjectId(id)),
+      }
+    },
+    session
+  )
   return ids ?? []
 }
 
@@ -128,8 +154,11 @@ function referencedTopics(
   ]
 }
 
-export async function createTopicLabelResolver(ownerId: string) {
-  const catalog = await readCatalog(ownerId)
+export async function createTopicLabelResolver(
+  ownerId: string,
+  session?: ClientSession
+) {
+  const catalog = await readCatalog(ownerId, session)
   return (topicIds: string[], legacyLabels: string[]) =>
     referencedTopics(catalog, topicIds, legacyLabels).map(({ label }) => label)
 }
@@ -137,10 +166,11 @@ export async function createTopicLabelResolver(ownerId: string) {
 export async function articleTopicLabels(
   ownerId: string,
   topicIds: string[],
-  legacyLabels: string[]
+  legacyLabels: string[],
+  session?: ClientSession
 ) {
   if (!topicIds.length && !legacyLabels.length) return []
-  const resolve = await createTopicLabelResolver(ownerId)
+  const resolve = await createTopicLabelResolver(ownerId, session)
   return resolve(topicIds, legacyLabels)
 }
 
@@ -230,4 +260,36 @@ export async function listTopics(ownerId: string, includeCounts = false) {
     .sort(
       (a, b) => a.label.localeCompare(b.label, "en") || a.id.localeCompare(b.id)
     )
+}
+
+export async function deleteEmptyTopic(ownerId: string, topicId: string) {
+  return withTopicTransaction(async (session) => {
+    const catalog = await readCatalog(ownerId, session)
+    if (catalog.resolve(topicId)?.id !== topicId) return "missing"
+    const { ids, legacyLabels } = matchesForIds(catalog, new Set([topicId]))
+    const article = await (await articleTopics()).findOne(
+      {
+        ownerId,
+        $or: [
+          { topicIds: { $in: ids } },
+          {
+            "topicIds.0": { $exists: false },
+            proposedTopics: { $in: legacyLabels },
+          },
+        ],
+      },
+      { session, projection: { _id: 1 } }
+    )
+    if (article) return "in_use"
+    const removed = new Set(ids.map((id) => id.toHexString()))
+    const updated = await updateVocabulary(
+      ownerId,
+      (entries) => ({
+        entries: entries.filter(({ id }) => !removed.has(id)),
+        result: true,
+      }),
+      session
+    )
+    return updated ? "deleted" : "missing"
+  })
 }
