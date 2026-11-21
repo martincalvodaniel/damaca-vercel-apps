@@ -283,6 +283,7 @@ try {
     url,
     accessStatus: "full",
     summary: "Fixture summary",
+    relatedLinks: [{ url: "https://example.com/recapture", origin: "source" }],
     fetchDiagnostics,
   })
   assert.equal(full.status, "updated")
@@ -298,6 +299,7 @@ try {
     .findOne({ canonicalUrl: url })
   assert.deepEqual(persisted?.provenance.fetchDiagnostics, fetchDiagnostics)
   assert.equal(persisted?.content, undefined)
+  assert.equal(persisted?.relatedLinks, undefined)
 
   const owner = crypto.randomUUID()
   const leases = await Promise.all([
@@ -1005,6 +1007,49 @@ try {
       ({ title }: { title: string }) => title
     ),
     ["English read fixture"]
+  )
+
+  const mentioned = await save(token, {
+    url: "https://example.com/link-fixture",
+    accessStatus: "partial",
+    accessNotes: "Only the article introduction was available",
+    relatedLinks: [
+      { url: "https://example.com/guide?utm_source=fixture", origin: "source" },
+      {
+        url: "https://example.com/guide",
+        title: "Source guide",
+        origin: "source",
+      },
+      { url: "https://example.com/link-fixture#intro", origin: "source" },
+      { url: "https://example.com/suggestion", origin: "ai_suggested" },
+    ],
+  })
+  assert.equal(mentioned.status, "created")
+  const refreshed = await save(token, {
+    url: "https://example.com/link-fixture",
+    accessStatus: "full",
+    relatedLinks: [
+      { url: "https://example.com/replacement", origin: "source" },
+    ],
+  })
+  assert.equal(refreshed.status, "updated")
+  assert.equal(refreshed.articleId, mentioned.articleId)
+  const detail = await fetch(mentioned.detailUrl, {
+    headers: { cookie: first.cookie },
+  })
+  assert.equal(detail.status, 200)
+  const detailHtml = await detail.text()
+  assert.match(detailHtml, /Mentioned links/)
+  assert.match(detailHtml, /AI link suggestions/)
+  assert.match(detailHtml, /Source guide/)
+  assert.doesNotMatch(detailHtml, /https:\/\/example\.com\/replacement/)
+  assert.equal(
+    [...detailHtml.matchAll(/href="https:\/\/example\.com\/guide"/g)].length,
+    1
+  )
+  assert.doesNotMatch(
+    detailHtml,
+    /href="https:\/\/example\.com\/link-fixture#intro"/
   )
 
   await revokeUserAccess("reader@example.com")

@@ -206,6 +206,28 @@ it("adapts provider JSON and handles malformed, redirected and exhausted respons
     dns
   )
   expect(jina.content).toBe(excerpt)
+  const firecrawlReferences = await fetchCandidate(
+    "firecrawl",
+    url,
+    config,
+    signal,
+    request(
+      Response.json({
+        success: true,
+        data: {
+          markdown:
+            "[Navigation](/nav)\n\nThe archive links to [a map](/maps?utm_source=fixture#room) and [a copy](/maps#room) for visitors.",
+          metadata: { statusCode: 200, url },
+          links: ["/nav"],
+        },
+      })
+    ),
+    dns
+  )
+  expect(firecrawlReferences.relatedLinks).toEqual([
+    { url: new URL("/maps#room", url).href, title: "a map", origin: "source" },
+  ])
+
   await expect(
     fetchCandidate(
       "jina",

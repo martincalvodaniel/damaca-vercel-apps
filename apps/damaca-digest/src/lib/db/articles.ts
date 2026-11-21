@@ -8,6 +8,7 @@ import {
   type Sort,
 } from "mongodb"
 import type { z } from "zod"
+import { normalizeSourceLinks } from "@/features/articles/mentioned-links"
 import { normalizeArticleUrl } from "@/features/articles/normalize-url"
 import { withTopicTransaction } from "@/lib/db/client"
 import { COLLECTION_NAMES, getCollection } from "@/lib/db/collections"
@@ -94,6 +95,7 @@ async function persistArticle(
     publishedAt,
     topics,
     fetchDiagnostics,
+    relatedLinks,
     ...content
   } = input
   const canonicalUrl = normalizeArticleUrl(url)
@@ -139,6 +141,16 @@ async function persistArticle(
         {
           ...identity,
           ...details,
+          ...(relatedLinks && {
+            relatedLinks: [
+              ...normalizeSourceLinks(
+                relatedLinks,
+                url,
+                ...(suggested ? [suggested] : [])
+              ),
+              ...relatedLinks.filter((link) => link.origin === "ai_suggested"),
+            ],
+          }),
           url,
           capturedAt: now,
           updatedAt: now,
