@@ -8,8 +8,9 @@ import {
   allowArticleFetch,
   allowFirecrawl,
 } from "@/lib/db/article-fetch-rate"
-import { saveArticle } from "@/lib/db/articles"
+import { deleteArticle, saveArticle } from "@/lib/db/articles"
 import { closeDatabaseConnection, getDatabase } from "@/lib/db/client"
+import { deleteEmptyTopic, listTopics, manageTopic } from "@/lib/db/topics"
 import { grantUserAccess, revokeUserAccess } from "@/lib/db/user-access"
 import { serverActionForm } from "./server-action-form"
 import { createFixtureSession } from "./session-fixture"
@@ -20,7 +21,9 @@ const client = getChatGptClient()
 if (
   !/^http:\/\/127\.0\.0\.1:\d+$/.test(origin) ||
   !/^digest_capture_test_[a-z\d_]+$/.test(database.databaseName) ||
-  !/^mongodb:\/\/127\.0\.0\.1:\d+\/?$/.test(database.uri) ||
+  !/^mongodb:\/\/127\.0\.0\.1:\d+(?:\/\?directConnection=true|\/)?$/.test(
+    database.uri
+  ) ||
   allowedEmails !== "admin@example.com" ||
   client?.id !== "digest-test" ||
   client.redirectUri !== "https://chatgpt.com/connector/oauth/test"
@@ -539,7 +542,7 @@ try {
   const mergedPage = await fetch(topicsUrl, {
     headers: { cookie: first.cookie },
   })
-  assert.match(await mergedPage.text(), /2(?:<!-- -->)? articles/)
+  assert.match(await mergedPage.text(), /\(2\)/)
   const matchingTopics = await fetch(`${topicsUrl}?q=ARTIFICIAL+INTELLIGENCE`, {
     headers: { cookie: first.cookie },
   })
@@ -775,6 +778,119 @@ try {
     assert.equal(response.status, 303)
     assert.doesNotMatch(response.headers.get("location") ?? "", /failed/)
   }
+
+  const topicOwner = first.ownerId
+  const fixture = await saveArticle(topicOwner, {
+    url: "https://example.org/topic-deletion",
+    accessStatus: "full",
+    summary: "Fixture summary",
+    topics: ["Empty topic fixture"],
+  })
+  const targetSeed = await saveArticle(topicOwner, {
+    url: "https://example.org/topic-deletion-target",
+    accessStatus: "full",
+    summary: "Fixture summary",
+    topics: ["Merged topic fixture"],
+  })
+  assert.equal(await deleteArticle(topicOwner, targetSeed.articleId, 0), true)
+  const fixtureTopics = await listTopics(topicOwner, true)
+  const empty = fixtureTopics.find(
+    ({ label }) => label === "Empty topic fixture"
+  )
+  const mergeTarget = fixtureTopics.find(
+    ({ label }) => label === "Merged topic fixture"
+  )
+  assert.ok(empty && mergeTarget)
+  assert.equal(await deleteEmptyTopic(second.ownerId, empty.id), "missing")
+  assert.equal(await deleteEmptyTopic(topicOwner, empty.id), "in_use")
+  assert.equal(
+    await manageTopic(topicOwner, {
+      operation: "merge",
+      topicId: empty.id,
+      targetId: mergeTarget.id,
+    }),
+    true
+  )
+  assert.equal(await deleteEmptyTopic(topicOwner, mergeTarget.id), "in_use")
+  const engineeringTopic = (await listTopics(topicOwner)).find(
+    ({ label }) => label === "Engineering"
+  )
+  assert.ok(engineeringTopic)
+  assert.equal(
+    await deleteEmptyTopic(topicOwner, engineeringTopic.id),
+    "in_use"
+  )
+  assert.equal(await deleteArticle(topicOwner, fixture.articleId, 0), true)
+
+  const emptyTopicUrl = `${origin}/topics?q=Merged+topic+fixture`
+  const markedEmpty = await fetch(emptyTopicUrl, {
+    headers: { cookie: first.cookie },
+  })
+  const emptyHtml = await markedEmpty.text()
+  assert.match(emptyHtml, /aria-label="Delete topic: Merged topic fixture"/)
+  assert.match(emptyHtml, />\(\s*(?:<!-- -->)?0(?:<!-- -->)?\)</)
+  const topicDeleteForm = [...emptyHtml.matchAll(/<form[\s\S]*?<\/form>/g)]
+    .map(([markup]) => markup)
+    .find((markup) => markup.includes('aria-label="Confirm deletion"'))
+  assert.ok(topicDeleteForm)
+  const topicDeleteBody = serverActionForm(topicDeleteForm)
+  topicDeleteBody.set("topicId", mergeTarget.id)
+  topicDeleteBody.set("q", "Merged topic fixture")
+  const unconfirmedTopic = await fetch(emptyTopicUrl, {
+    method: "POST",
+    headers: { cookie: first.cookie, origin },
+    body: topicDeleteBody,
+    redirect: "manual",
+  })
+  assert.match(
+    unconfirmedTopic.headers.get("location") ?? "",
+    /result=delete_failed/
+  )
+  topicDeleteBody.set("confirm", "true")
+  const topicRemoved = await fetch(emptyTopicUrl, {
+    method: "POST",
+    headers: { cookie: first.cookie, origin },
+    body: topicDeleteBody,
+    redirect: "manual",
+  })
+  assert.equal(topicRemoved.status, 303)
+  assert.match(
+    topicRemoved.headers.get("location") ?? "",
+    /q=Merged\+topic\+fixture$/
+  )
+  assert.equal(
+    (await listTopics(topicOwner)).some(({ id }) => id === mergeTarget.id),
+    false
+  )
+
+  const concurrent = await saveArticle(topicOwner, {
+    url: "https://example.org/topic-race-old",
+    accessStatus: "full",
+    summary: "Fixture summary",
+    topics: ["Concurrent topic fixture"],
+  })
+  assert.equal(await deleteArticle(topicOwner, concurrent.articleId, 0), true)
+  const raceTopic = (await listTopics(topicOwner)).find(
+    ({ label }) => label === "Concurrent topic fixture"
+  )
+  assert.ok(raceTopic)
+  const [removal, captured] = await Promise.all([
+    deleteEmptyTopic(topicOwner, raceTopic.id),
+    saveArticle(topicOwner, {
+      url: "https://example.org/topic-race-new",
+      accessStatus: "full",
+      summary: "Fixture summary",
+      topics: [raceTopic.label],
+    }),
+  ])
+  assert.ok(removal === "deleted" || removal === "in_use")
+  assert.equal(captured.status, "created")
+  assert.equal(
+    (await listTopics(topicOwner, true)).find(
+      ({ label }) => label === raceTopic.label
+    )?.articleCount,
+    1
+  )
 
   await revokeUserAccess("reader@example.com")
   assert.equal((await call("tools/list", token)).status, 403)

@@ -1,6 +1,11 @@
 import "server-only"
 
-import { type Db, MongoClient } from "mongodb"
+import {
+  type ClientSession,
+  type Db,
+  MongoClient,
+  MongoServerError,
+} from "mongodb"
 import { getDatabaseEnv } from "@/config/env"
 import { ensureIndexes } from "@/lib/db/ensure-indexes"
 
@@ -85,6 +90,27 @@ export async function closeDatabaseConnection(): Promise<void> {
 
     if (databaseEnv.isDevelopment) {
       mongoGlobal.mongoClientPromise = undefined
+    }
+  }
+}
+
+export async function withTopicTransaction<T>(
+  operation: (session: ClientSession) => Promise<T>
+) {
+  await getDatabase()
+  const client = await getClientPromise()
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await client.withSession((session) =>
+        session.withTransaction(() => operation(session))
+      )
+    } catch (error) {
+      if (
+        !(error instanceof MongoServerError) ||
+        error.code !== 11000 ||
+        attempt === 5
+      )
+        throw error
     }
   }
 }

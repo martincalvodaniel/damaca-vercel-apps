@@ -8,7 +8,7 @@ export BETTER_AUTH_SECRET="$(openssl rand -hex 32)"
 export GOOGLE_CLIENT_ID=digest-fixture
 export GOOGLE_CLIENT_SECRET=digest-fixture
 export ALLOWED_EMAILS=admin@example.com
-export MONGODB_URI="mongodb://127.0.0.1:${digest_mongo_port}"
+export MONGODB_URI="mongodb://127.0.0.1:${digest_mongo_port}/?directConnection=true"
 export MONGODB_DB="digest_capture_test_$(date +%s)_$$"
 export CHATGPT_CLIENT_ID=digest-test
 export CHATGPT_CLIENT_SECRET="$(openssl rand -hex 32)"

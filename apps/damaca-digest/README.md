@@ -49,10 +49,11 @@ Si usas MongoDB local y el puerto 27017 está libre, puedes crear una instancia 
 ```bash
 docker run -d --name damaca-digest-mongo \
   -p 127.0.0.1:27017:27017 \
-  -v damaca-digest-mongo-data:/data/db mongo:8
+  -v damaca-digest-mongo-data:/data/db mongo:8 --replSet digest --bind_ip_all
+docker exec damaca-digest-mongo mongosh --eval 'rs.initiate({_id:"digest",members:[{_id:0,host:"localhost:27017"}]})'
 ```
 
-Usa `MONGODB_URI=mongodb://127.0.0.1:27017`. En sesiones posteriores arranca la instancia con `docker start damaca-digest-mongo` si está detenida. Un `MongoServerSelectionError` seguido de un 503 de inicio de sesión indica que el servidor no pudo seleccionar un servidor MongoDB antes de iniciar OAuth.
+Usa `MONGODB_URI=mongodb://127.0.0.1:27017/?directConnection=true`. En sesiones posteriores arranca la instancia con `docker start damaca-digest-mongo` si está detenida. Un `MongoServerSelectionError` seguido de un 503 de inicio de sesión indica que el servidor no pudo seleccionar un servidor MongoDB antes de iniciar OAuth.
 
 Configura en Google el origen `http://localhost:3009` y la URI de retorno `http://localhost:3009/api/auth/callback/google`. Añade los orígenes y retornos correspondientes cuando despliegues y configura los usuarios de prueba si la pantalla de consentimiento lo requiere.
 
@@ -136,7 +137,7 @@ ChatGPT puede invocar `list_topics` con una búsqueda opcional y una página par
 
 Para buscar por texto y filtros desde ChatGPT, habilita `search_articles` y `get_article`. Usa `find_related_articles` para buscar lecturas con temas en común a partir de un ID. Esas herramientas necesitan el scope `articles:read`. Después de desplegarlas, actualiza el conector y concede el nuevo permiso. Mantén `articles:write` para capturar y listar los topics de la captura. Las respuestas de las herramientas de lectura excluyen las notas personales. `get_reading_digest` agrupa las capturas de un intervalo inclusivo por fecha UTC y devuelve hasta 20 registros por página.
 
-Las pruebas HTTP usan un MongoDB desechable en loopback, credenciales ficticias y sesiones persistidas de prueba. Ejecutar desde la raíz con `DIGEST_TEST_MONGO_PORT=<puerto> bash apps/damaca-digest/test/run-capture-http.sh`. El runner compila y arranca Next, comprueba OAuth/MCP y el control de acceso web y termina el proceso local. El contenedor MongoDB desechable se elimina por separado. La prueba de Google y ChatGPT reales requiere un entorno HTTPS autorizado.
+Las asignaciones de topics y el borrado de topics vacíos usan transacciones MongoDB y requieren un replica set. Las pruebas HTTP usan un replica set desechable en loopback, credenciales ficticias y sesiones de prueba. Ejecutar desde la raíz con `bash apps/damaca-digest/test/run-topic-replica-http.sh`. El runner compila Next, comprueba OAuth/MCP y el control de acceso web y elimina el contenedor al terminar. La prueba de Google y ChatGPT reales requiere un entorno HTTPS autorizado.
 
 ## Relacionados y descargas
 

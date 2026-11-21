@@ -22,7 +22,9 @@ if (
   !/^(?:template_access_test|digest_capture_test)_[a-z0-9_]+$/.test(
     database.databaseName
   ) ||
-  !/^mongodb:\/\/(127\.0\.0\.1|localhost):\d+\/?$/.test(database.uri) ||
+  !/^mongodb:\/\/(127\.0\.0\.1|localhost):\d+(?:\/\?directConnection=true|\/)?$/.test(
+    database.uri
+  ) ||
   configuration.allowedEmails !== "admin@example.com"
 ) {
   throw new Error(
