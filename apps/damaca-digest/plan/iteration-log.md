@@ -59,3 +59,8 @@
 
 - Library y Topics consultan sus preferencias antes de consultar los resultados. La primera visita migra el almacenamiento anterior con un indicador de carga; navegación y gestos pueden ir directamente a la selección aplicada.
 - Pasaron Biome, tipos, 62 pruebas, build e integración HTTP con MongoDB desechable. Chrome a 320 px comprobó migración, navegación, gesto, limpieza, teclado y aislamiento entre cuentas. La integración verificó la redirección antes de renderizar el listado, además de la prioridad de la URL.
+
+## 39 — Compactar los filtros y organizar las tarjetas
+
+- Library pliega los chips bajo un contador en móvil y muestra las tarjetas con filas separadas. Fuente y acceso se pueden filtrar desde la tarjeta. La cruz de limpieza guarda el estado vacío antes de redirigir.
+- Pasaron Biome, tipos, 62 pruebas, build e integración HTTP. Chrome a 320 y 1280 px comprobó teclado, conservación del desplegable al quitar un valor, limpieza persistente y orden de las filas.
