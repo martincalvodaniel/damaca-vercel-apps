@@ -18,6 +18,7 @@
 
 ## Responsive UI
 
+- Apply the personal `damaca-web-ui` skill when designing, changing, or reviewing web UI. If unavailable in the current environment, use the responsive rules below. Follow explicit task and app requirements.
 - Design for narrow phones first. Fit as much useful information as possible in the initial viewport with compact margins, padding and gaps, simple layouts, and no repeated labels or copy. Keep text readable, controls easy to tap and content free of horizontal scrolling.
 - Check changed screens on a narrow phone and on desktop. Desktop layouts may use more spacing when it improves readability or grouping.
 
