@@ -264,3 +264,8 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 - Estado: `validated`.
 - Aceptación: restaurar filtros por cuenta y navegador, combinar selecciones del mismo campo con OR y permitir filtrar por estado e idioma desde las tarjetas.
+
+## 38 — Restaurar filtros antes de mostrar resultados
+
+- Estado: `validated`.
+- Aceptación: Library y Topics recuperan su selección antes de consultar resultados; la migración mantiene las preferencias de navegador existentes.

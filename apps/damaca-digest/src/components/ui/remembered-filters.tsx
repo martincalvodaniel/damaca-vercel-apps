@@ -1,36 +1,64 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
+import { rememberFilters } from "@/features/filters/filter-actions"
+import {
+  emptyFilterHref,
+  type FilterPath,
+  filterStorageKey,
+  normalizeRememberedHref,
+} from "@/features/filters/remembered-query"
 
 export function RememberedFilters({
   accountKey,
   path,
   applied,
-  restore,
 }: {
   accountKey: string
-  path: "/" | "/topics"
+  path: FilterPath
   applied?: string
-  restore: boolean
 }) {
   const router = useRouter()
+  const submitted = useRef<string | undefined>(undefined)
+  const migrating = applied === undefined
   useEffect(() => {
-    const key = `digest:filters:v1:${accountKey}:${path}`
-    try {
-      if (restore) {
-        const saved = localStorage.getItem(key)
-        if (saved?.startsWith(`${path}?`) && !saved.includes("#")) {
-          router.replace(saved, { scroll: false })
-        }
-      } else if (applied === "") {
-        localStorage.removeItem(key)
-      } else if (applied) {
-        localStorage.setItem(key, applied)
+    const key = filterStorageKey(accountKey, path)
+    const request = JSON.stringify([key, applied])
+    if (submitted.current === request) return
+    submitted.current = request
+    let legacy = ""
+    if (migrating) {
+      try {
+        legacy = normalizeRememberedHref(path, localStorage.getItem(key) ?? "")
+      } catch {
+        // Browsers may deny local storage access.
       }
-    } catch {
-      // Filters continue to work through the URL without storage.
     }
-  }, [accountKey, applied, path, restore, router])
-  return null
+    const source = window.location.href
+    void rememberFilters(accountKey, path, applied ?? legacy, migrating)
+      .then(() => {
+        if (submitted.current !== request) return
+        try {
+          localStorage.removeItem(key)
+        } catch {
+          // No legacy preference could be removed.
+        }
+      })
+      .catch(() => {
+        if (
+          migrating &&
+          submitted.current === request &&
+          window.location.href === source
+        ) {
+          router.replace(legacy || emptyFilterHref(path), { scroll: false })
+        }
+      })
+  }, [accountKey, applied, migrating, path, router])
+
+  return migrating ? (
+    <p role="status" className="mx-auto max-w-3xl py-4 text-sm">
+      Restoring filters…
+    </p>
+  ) : null
 }

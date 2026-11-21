@@ -1,14 +1,17 @@
 import type { ReactNode } from "react"
 import { AppNavigation } from "@/components/shared/app-navigation"
 import { TabSwipeContent } from "@/components/shared/tab-swipe-content"
+import type { FilterPath } from "@/features/filters/remembered-query"
 
 export function AppShell({
   children,
+  filterDestinations,
   name,
   email,
   image,
 }: {
   children: ReactNode
+  filterDestinations?: Partial<Record<FilterPath, string>>
   name?: string
   email?: string
   image?: string | null
@@ -21,8 +24,15 @@ export function AppShell({
       >
         Skip to main content
       </a>
-      <AppNavigation name={name} email={email} image={image} />
-      <TabSwipeContent>{children}</TabSwipeContent>
+      <AppNavigation
+        filterDestinations={filterDestinations}
+        name={name}
+        email={email}
+        image={image}
+      />
+      <TabSwipeContent filterDestinations={filterDestinations}>
+        {children}
+      </TabSwipeContent>
     </>
   )
 }

@@ -210,6 +210,44 @@ try {
   const first = await createFixtureSession("reader@example.com")
   const second = await createFixtureSession("admin@example.com")
   await grantUserAccess("reader@example.com")
+  const accountKey = createHash("sha256").update(first.ownerId).digest("hex")
+  const libraryCookie = `digest-filters-v1-library-${accountKey}`
+  const topicsCookie = `digest-filters-v1-topics-${accountKey}`
+  const fromBare = async (path: string, cookie: string) =>
+    fetch(`${origin}${path}`, {
+      headers: { cookie },
+      redirect: "manual",
+    })
+  const migrating = await fromBare("/", first.cookie)
+  const migratingHtml = await migrating.text()
+  assert.match(migratingHtml, /Restoring filters/)
+  assert.doesNotMatch(migratingHtml, /aria-label="Search articles"/)
+  const filtersCookie = `${libraryCookie}=${encodeURIComponent("/?reading=read&reading=reading")}; ${topicsCookie}=${encodeURIComponent("/topics?q=Saved")}`
+  const restoredLibrary = await fromBare(
+    "/",
+    `${first.cookie}; ${filtersCookie}`
+  )
+  assert.equal(restoredLibrary.status, 307)
+  assert.equal(
+    restoredLibrary.headers.get("location"),
+    "/?reading=read&reading=reading"
+  )
+  const restoredTopics = await fromBare(
+    "/topics",
+    `${first.cookie}; ${filtersCookie}`
+  )
+  assert.equal(restoredTopics.status, 307)
+  assert.equal(restoredTopics.headers.get("location"), "/topics?q=Saved")
+  const otherAccount = await fromBare("/", `${second.cookie}; ${filtersCookie}`)
+  assert.match(await otherAccount.text(), /Restoring filters/)
+  const explicit = await fromBare(
+    "/?reading=unread",
+    `${first.cookie}; ${filtersCookie}`
+  )
+  assert.equal(explicit.status, 200)
+  assert.match(await explicit.text(), /Remove Reading: unread filter/)
+  first.cookie += `; ${libraryCookie}=-; ${topicsCookie}=-`
+
   const token = await authorize(first.cookie, "post")
   const otherToken = await authorize(second.cookie, "basic")
   assert.equal((await call("tools/list", token)).status, 200)
