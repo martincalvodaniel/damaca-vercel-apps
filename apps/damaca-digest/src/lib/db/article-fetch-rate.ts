@@ -28,6 +28,20 @@ export function allowFirecrawl(
   )
 }
 
+export function consumeExternalFallbackConsent(
+  nonce: string,
+  expiresAt: number,
+  signal: AbortSignal
+) {
+  if (expiresAt <= Date.now()) return Promise.resolve(false)
+  return allowRateBucket(
+    `fetch:consent:${nonce}`,
+    new Date(expiresAt),
+    1,
+    signal
+  )
+}
+
 export async function acquireArticleFetch(ownerId: string, now = Date.now()) {
   const collection = await getCollection<{
     _id: string

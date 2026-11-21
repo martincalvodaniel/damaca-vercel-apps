@@ -26,6 +26,8 @@ La PWA recibe enlaces de Compartir y prepara un prompt para ChatGPT. El usuario 
 
 `fetch_article` añade respaldo de lectura a ChatGPT mediante HTTP directo, Jina Reader y Firecrawl. Mantiene el permiso de captura, los límites de red y el presupuesto de cada entorno. `save_article` admite diagnósticos opcionales declarados por el cliente sin conservar el cuerpo recuperado. La adopción de proveedores depende de las pruebas de recuperación y latencia en `int`.
 
+La lista de dominios conserva los fallbacks automáticos. Con el piloto de confirmación activado, ChatGPT puede ofrecer recuperación externa de una URL pública fuera de la lista y pedir permiso explícito. El token está limitado a esa URL, cuenta, entorno y proveedores, y caduca a los diez minutos.
+
 ## Verificaciones pendientes
 
 El usuario confirmó la escritura MCP desde ChatGPT en producción con fuentes de acceso completo, parcial y no disponible. Tras publicar la segunda fase, queda comprobar que el destino aparezca en Compartir en un Android real y que el enlace llegue a la ficha desde una sesión de ChatGPT con el conector actualizado. Quedan también por verificar el aislamiento entre entornos y la restauración de backups de infraestructura. Embeddings e integraciones de publicación quedan para entregas posteriores.

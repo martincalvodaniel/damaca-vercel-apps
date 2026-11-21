@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { createHash } from "node:crypto"
+import { createHash, randomUUID } from "node:crypto"
 import { getAuthEnv, getChatGptClient, getDatabaseEnv } from "@/config/env"
 import { installName } from "@/config/install-name"
 import { captureScope, getMcpUrls, readScope } from "@/lib/auth/mcp-config"
@@ -7,6 +7,7 @@ import {
   acquireArticleFetch,
   allowArticleFetch,
   allowFirecrawl,
+  consumeExternalFallbackConsent,
 } from "@/lib/db/article-fetch-rate"
 import {
   deleteArticle,
@@ -630,7 +631,7 @@ try {
   assert.match(writerRead._meta["mcp/www_authenticate"][0], /articles:read/)
   const reader = await authorize(first.cookie, "basic", readScope)
   const otherReader = await authorize(second.cookie, "post", readScope)
-  const recoveryUrl = "https://www.xda-developers.com/digest-http-fixture"
+  const recoveryUrl = "https://8.8.8.8/digest-http-fixture"
   const deniedFetch = await invoke(reader, "fetch_article", {
     url: recoveryUrl,
   })
@@ -644,6 +645,29 @@ try {
   assert.equal(recovery.structuredContent.accessStatus, "unavailable")
   assert.equal(recovery.structuredContent.content, undefined)
   assert.equal(recovery.structuredContent.attempts.length, 3)
+  const offer = recovery.structuredContent.externalFallbackOffer
+  assert.equal(offer.url, recoveryUrl)
+  assert.deepEqual(offer.providers, ["jina"])
+  assert.equal(recovery.structuredContent.attempts[1]?.reason, "policy")
+  const changedUrl = await invoke(token, "fetch_article", {
+    url: `${recoveryUrl}-different`,
+    externalFallbackToken: offer.token,
+  })
+  assert.equal(changedUrl.isError, true)
+  const rejectedOwner = await invoke(otherToken, "fetch_article", {
+    url: recoveryUrl,
+    externalFallbackToken: offer.token,
+  })
+  assert.equal(rejectedOwner.isError, true)
+  const nonce = randomUUID()
+  const expiry = Date.now() + 600_000
+  const signal = new AbortController().signal
+  const uses = await Promise.all(
+    Array.from({ length: 5 }, () =>
+      consumeExternalFallbackConsent(nonce, expiry, signal)
+    )
+  )
+  assert.equal(uses.filter(Boolean).length, 1)
   const unsaved = await invoke(reader, "get_article", { url: recoveryUrl })
   assert.equal(unsaved.structuredContent.article, null)
   const readByUrl = await invoke(reader, "get_article", {

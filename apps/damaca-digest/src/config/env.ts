@@ -100,6 +100,19 @@ function boundedInteger(
     : fallback
 }
 
+export function getExternalFallbackConsentEnv() {
+  if (process.env.ARTICLE_FETCH_EXTERNAL_CONFIRMATION_ENABLED !== "true")
+    return null
+  return {
+    secret: getRequiredEnv("BETTER_AUTH_SECRET"),
+    environment: JSON.stringify([
+      getAuthBaseUrl(),
+      process.env.VERCEL_ENV,
+      process.env.VERCEL_GIT_COMMIT_REF,
+    ]),
+  }
+}
+
 export function getArticleFetchEnv() {
   const firecrawlKey = process.env.FIRECRAWL_API_KEY?.trim()
   return {

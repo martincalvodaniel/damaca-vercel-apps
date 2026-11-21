@@ -28,5 +28,5 @@ export function resolveSharedLink({ url, text }: SharedLinkInput) {
 }
 
 export function capturePrompt(url: string, connector: string) {
-  return `Use @${connector} to read this article and save it in my library. If web reading fails or is partial, try fetch_article if available. Include the links mentioned in the article as source references and report any access limitations.\n\n${url}`
+  return `Use @${connector} to read this article and save it in my library. If web reading fails or is partial, try fetch_article if available. If fetch_article offers external fallback, show the URL and providers and wait for my explicit permission before sharing the URL or saving. Include the links mentioned in the article as source references and report any access limitations.\n\n${url}`
 }

@@ -418,3 +418,92 @@ it("removes navigation before applying the output limit", () => {
   expect(result.status).toBe("full")
   expect("content" in result && result.content).toBe(excerpt)
 })
+
+it("only sends an unlisted URL to the enabled providers covered by one consent", async () => {
+  const unlisted = { ...config, hosts: new Set<string>() }
+  const calls: string[] = []
+  const candidateFetcher: Parameters<typeof recoverArticle>[4] = async (
+    provider,
+    input,
+    providerConfig
+  ) => {
+    calls.push(provider)
+    if (provider === "direct") return { finalUrl: input }
+    expect(providerConfig.hosts.has(new URL(input).hostname)).toBe(true)
+    return { finalUrl: input, content: excerpt }
+  }
+  let reservations = 0
+  const reserve = async () => {
+    reservations++
+    return true
+  }
+  const offered = await recoverArticle(
+    url,
+    unlisted,
+    signal,
+    reserve,
+    candidateFetcher
+  )
+  expect(offered.attempts.map(({ reason }) => reason)).toEqual([
+    "no_content",
+    "policy",
+    "policy",
+  ])
+  expect(calls).toEqual(["direct"])
+  let uses = 0
+  const externalConsent = {
+    host: new URL(url).hostname,
+    providers: ["jina"] as const,
+    consume: async () => ++uses === 1,
+  }
+  const confirmed = await recoverArticle(
+    url,
+    unlisted,
+    signal,
+    reserve,
+    candidateFetcher,
+    externalConsent
+  )
+  expect(confirmed.accessStatus).toBe("full")
+  expect(calls).toEqual(["direct", "direct", "jina"])
+  await expect(
+    recoverArticle(
+      url,
+      unlisted,
+      signal,
+      reserve,
+      candidateFetcher,
+      externalConsent
+    )
+  ).rejects.toThrow()
+  expect(calls).toEqual(["direct", "direct", "jina", "direct"])
+  const disabled = {
+    ...unlisted,
+    enabled: { ...unlisted.enabled, jina: false },
+  }
+  const ignored = await recoverArticle(
+    url,
+    disabled,
+    signal,
+    reserve,
+    candidateFetcher,
+    externalConsent
+  )
+  expect(ignored.attempts.map(({ reason }) => reason)).toEqual([
+    "no_content",
+    "disabled",
+    "policy",
+  ])
+  expect(uses).toBe(2)
+  expect(reservations).toBe(0)
+  const denied = await recoverArticle(
+    url,
+    unlisted,
+    signal,
+    reserve,
+    async () => ({ finalUrl: url, challenge: true }),
+    externalConsent
+  )
+  expect(denied.attempts).toHaveLength(1)
+  expect(uses).toBe(2)
+})
