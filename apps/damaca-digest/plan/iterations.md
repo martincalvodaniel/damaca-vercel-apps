@@ -283,3 +283,12 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Dependencias: contrato MCP y proveedores existentes.
 - Aceptación: deduplicar URLs sin tracking, conservar títulos y destinos funcionales, mostrar referencias externas por separado y preservar los enlaces existentes al recapturar.
 - Validación: Biome incremental, tipos, pruebas, build, integración HTTP y ficha responsiva.
+
+## 41 — Confirmar la recuperación externa en ChatGPT
+
+- Estado: `validated`.
+- Objetivo: ofrecer recuperación de URLs públicas fuera de la lista tras una confirmación por enlace.
+- Rutas: configuración, recuperación MCP, contadores MongoDB, prompt de Capture y pruebas de Digest.
+- Dependencias: OAuth, controles de recuperación, clave de firma y TTL de MongoDB existentes.
+- Aceptación: contrato retrocompatible, envío autorizado de un solo uso y flag apagado por defecto.
+- Validación: Biome, tipos, fixtures, build e integración HTTP aislada.

@@ -4,11 +4,6 @@
 
 [Entregas archivadas el 2026-11-21](archive/2026-11-21/iteration-log.md).
 
-## 30 — Alinear el diseño de Capture
-
-- El formulario usa la misma fila y panel que los buscadores. Los encabezados quedan disponibles para lectores de pantalla y las acciones de captura y ChatGPT son iconos etiquetados.
-- Biome, tipos, 50 pruebas y build pasaron. Chrome comprobó la alineación del panel y los iconos al preparar un enlace a 320 y 1280 px.
-
 ## 31 — Abrir artículos en otra pestaña y aclarar los iconos de ChatGPT
 
 - Las fichas, originales y referencias abren otra pestaña. Capture usa la silueta de ChatGPT facilitada por el usuario y añade un distintivo de copia en la acción combinada.
@@ -56,3 +51,10 @@
 - Pasaron Biome incremental, tipos, 63 pruebas, build Webpack e integración HTTP sobre MongoDB 8 desechable. El fixture verifica el guardado MCP, la deduplicación en la ficha y que una mejora de acceso conserve las referencias. Chrome comprobó las tres secciones, apertura en otra pestaña, recorrido con teclado y ausencia de desbordamiento a 320 y 1280 px.
 - La extracción Markdown de los proveedores usa la limpieza editorial existente. Queda pendiente la comprobación con proveedores reales y ChatGPT en Vercel.
 - Capacidad al inicio de la entrega, 91 % en 5 h y 57 % en 7 días.
+
+## 41 — Confirmar la recuperación externa en ChatGPT
+
+- Digest ofrece el envío de URLs públicas fuera de la lista si queda un proveedor habilitado y se cumplen las reglas de URL y DNS. El permiso dura diez minutos y se consume una vez. El flag viene apagado.
+- Pasaron Biome incremental, tipos, 66 pruebas, build Webpack e integración HTTP con MongoDB 8 desechable. Los fixtures cubren oferta sin tráfico externo, envío confirmado simulado, aislamiento por URL y cuenta, caducidad, repetición y consumo concurrente.
+- Queda por validar el diálogo de ChatGPT con el conector actualizado en Preview.
+- Capacidad al inicio, 81 % en 5 h y 56 % en 7 días.

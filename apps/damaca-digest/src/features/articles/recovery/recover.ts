@@ -2,7 +2,9 @@ import "server-only"
 
 import type { getArticleFetchEnv } from "@/config/env"
 import { type FetchAttempt, fetchProvider } from "@/schemas/article-fetch"
+import { FallbackConsentUnavailable } from "./consent-error"
 import { editorialContent } from "./content"
+import type { ExternalProvider } from "./fallback-consent"
 import { providerUrl, RecoveryError, recoveryUrl } from "./network"
 import { type Candidate, fetchCandidate } from "./providers"
 
@@ -68,7 +70,12 @@ export async function recoverArticle(
   config: Config,
   signal: AbortSignal,
   reserveFirecrawl: (signal: AbortSignal) => Promise<boolean>,
-  candidateFetcher = fetchCandidate
+  candidateFetcher = fetchCandidate,
+  externalConsent?: {
+    host: string
+    providers: readonly ExternalProvider[]
+    consume: (signal: AbortSignal) => Promise<boolean>
+  }
 ) {
   recoveryUrl(input)
   const started = performance.now()
@@ -84,6 +91,7 @@ export async function recoverArticle(
       })
     | undefined
   let bestScore = 0
+  let consentUse: boolean | undefined
   for (const provider of fetchProvider.options) {
     signal.throwIfAborted()
     const remaining = config.totalMs - (performance.now() - started)
@@ -96,9 +104,16 @@ export async function recoverArticle(
       })
       continue
     }
+    const needsConsent = provider !== "direct" && !!externalConsent
+    const providerConfig =
+      needsConsent && externalConsent.providers.includes(provider)
+        ? { ...config, hosts: new Set([externalConsent.host]) }
+        : config
     if (provider !== "direct") {
       try {
-        providerUrl(input, config.hosts)
+        if (needsConsent && !externalConsent.providers.includes(provider))
+          throw new RecoveryError("policy")
+        providerUrl(input, providerConfig.hosts)
       } catch {
         attempts.push({
           provider,
@@ -118,6 +133,12 @@ export async function recoverArticle(
     )
     const attemptSignal = AbortSignal.any([signal, timeout])
     try {
+      if (needsConsent && consentUse === undefined) {
+        consentUse = await externalConsent
+          .consume(attemptSignal)
+          .catch(() => false)
+        if (!consentUse) throw new FallbackConsentUnavailable()
+      }
       if (
         provider === "firecrawl" &&
         !(await reserveFirecrawl(attemptSignal).catch(() => false))
@@ -134,7 +155,7 @@ export async function recoverArticle(
       const candidate = await candidateFetcher(
         provider,
         input,
-        config,
+        providerConfig,
         attemptSignal
       )
       attemptSignal.throwIfAborted()
@@ -173,6 +194,7 @@ export async function recoverArticle(
       if (result.status === "full" || result.protectedPage) break
     } catch (error) {
       signal.throwIfAborted()
+      if (error instanceof FallbackConsentUnavailable) throw error
       const reason = timeout.aborted
         ? "timeout"
         : error instanceof RecoveryError

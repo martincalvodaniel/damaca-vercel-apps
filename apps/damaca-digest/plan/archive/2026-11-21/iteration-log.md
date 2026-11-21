@@ -29,3 +29,8 @@
 
 - El gesto usa el mismo orden que la barra y ahora incluye Capture. El inicio sigue siendo Library.
 - Biome, tipos, 50 pruebas y build pasaron. Chrome verificó Capture y Library en ambos sentidos, el límite en Capture y el recorrido previo.
+
+## 30 — Alinear el diseño de Capture
+
+- El formulario usa la misma fila y panel que los buscadores. Los encabezados quedan disponibles para lectores de pantalla y las acciones de captura y ChatGPT son iconos etiquetados.
+- Biome, tipos, 50 pruebas y build pasaron. Chrome comprobó la alineación del panel y los iconos al preparar un enlace a 320 y 1280 px.
