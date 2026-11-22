@@ -41,6 +41,19 @@ describe("MongoDB index specifications", () => {
     ).toEqual({ ownerId: 1, canonicalUrl: 1 })
   })
 
+  it("indexes only articles with legacy topic labels", () => {
+    expect(
+      INDEX_SPECS.find((spec) => spec.options.name === "owner_legacy_topics")
+    ).toEqual({
+      collection: "articles",
+      keys: { ownerId: 1, proposedTopics: 1 },
+      options: {
+        name: "owner_legacy_topics",
+        partialFilterExpression: { proposedTopics: { $exists: true } },
+      },
+    })
+  })
+
   it("rejects duplicate names within a collection", () => {
     const specs: IndexSpec[] = [
       {

@@ -55,6 +55,14 @@ export const INDEX_SPECS: readonly IndexSpec[] = [
     options: { name: "owner_topic_ids" },
   },
   {
+    collection: "articles",
+    keys: { ownerId: 1, proposedTopics: 1 },
+    options: {
+      name: "owner_legacy_topics",
+      partialFilterExpression: { proposedTopics: { $exists: true } },
+    },
+  },
+  {
     collection: "capture_limits",
     keys: { expiresAt: 1 },
     options: { name: "capture_limit_ttl", expireAfterSeconds: 0 },

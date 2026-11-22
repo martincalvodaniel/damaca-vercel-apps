@@ -234,7 +234,7 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Rutas: servidor MCP, recuperación en `src/features/articles`, esquema y procedencia, contadores MongoDB, prompt de Capture, configuración y pruebas.
 - Dependencias: Readability, jsdom, Turndown e ipaddr.js en el catálogo Bun.
 - Validación: Biome incremental, tipos, pruebas con proveedores simulados, build e integración HTTP con MongoDB aislado.
-- Aceptación: recuperar fuentes públicas con Directo, Jina y Firecrawl en orden, con límites, protección de red, diagnóstico y guardado explícito compatible. [Evidencia local](iteration-log.md#32--recuperar-fuentes-de-artículos-desde-mcp).
+- Aceptación: recuperar fuentes públicas con Directo, Jina y Firecrawl en orden, con límites, protección de red, diagnóstico y guardado explícito compatible. [Evidencia local](archive/2026-11-22/iteration-log.md#32--recuperar-fuentes-de-artículos-desde-mcp).
 
 ## 33 — Medir el piloto de recuperación en int
 
@@ -317,6 +317,6 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 45 — Medir el coste del catálogo MCP
 
-- Estado: `pending`.
+- Estado: `validated`.
 - Objetivo: [#25](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/25).
 - Aceptación: medir con datos sintéticos y optimizar si se justifica, conservando alias y temas históricos.
