@@ -192,12 +192,7 @@ export function registerFetchTool(
           })
         )
         return {
-          content: [
-            {
-              type: "text" as const,
-              text: `Article source: ${validated.accessStatus}. ${validated.accessNotes ?? "See structured content."}${externalFallbackOffer ? " Ask the user to confirm sending the URL to the providers in externalFallbackOffer before using its token." : ""}`,
-            },
-          ],
+          content: [{ type: "text" as const, text: JSON.stringify(validated) }],
           structuredContent: validated,
         }
       } catch (error) {

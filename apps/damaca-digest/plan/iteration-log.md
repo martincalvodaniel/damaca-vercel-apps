@@ -68,3 +68,8 @@
 
 - [#23](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/23): lectura y captura autorizan el catálogo del propietario.
 - Biome, tipos, 67 pruebas y build webpack aprobados. La integración HTTP con MongoDB temporal verificó equivalencia entre ambos permisos y aislamiento de una segunda cuenta. La prueba MCP en memoria comprobó la denegación sin ninguno de los permisos.
+
+## 44 — Verificar respuestas MCP en clientes de solo texto
+
+- [#24](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/24): `fetch_article` devuelve el mismo JSON validado en texto y en `structuredContent`. La representación textual incluye la oferta cuando se emite. Las dos representaciones duplican el cuerpo en el transporte.
+- Biome, tipos, 67 pruebas y build webpack aprobados. La integración HTTP con MongoDB temporal verificó la oferta de consentimiento en ambos formatos sin llamar a extractores. Una prueba MCP en memoria con recuperación simulada verificó cuerpo y diagnósticos en ambos formatos.

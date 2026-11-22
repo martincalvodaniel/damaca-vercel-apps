@@ -311,7 +311,7 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 44 — Verificar respuestas MCP en clientes de solo texto
 
-- Estado: `pending`.
+- Estado: `validated`.
 - Objetivo: [#24](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/24).
 - Aceptación: comprobar recuperación y consentimiento en ambos formatos con datos simulados.
 
