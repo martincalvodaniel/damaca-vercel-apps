@@ -69,6 +69,8 @@
       "name": "@damaca/dalis-home-management",
       "version": "0.1.0",
       "dependencies": {
+        "@better-auth/oauth-provider": "catalog:",
+        "@modelcontextprotocol/sdk": "catalog:",
         "better-auth": "catalog:",
         "mongodb": "catalog:",
         "next": "catalog:",

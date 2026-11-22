@@ -27,6 +27,7 @@ in one responsive interface.
 ## Local setup
 
 Requirements:
+
 - Bun
 - A MongoDB database
 - Google OAuth credentials
@@ -136,3 +137,33 @@ bun run format
 ## Agent workflow
 
 Follow the [root agent workflow](../../plan/workflow.md) and [app instructions](AGENTS.md). Product plans and delivery evidence live in this app's `plan/` directory.
+
+## Conectar el menú a ChatGPT u otro agente
+
+El servidor privado está en `/api/integrations/mcp`. Su herramienta `get_menu`
+consulta la comida y la cena del menú compartido, con fechas de Europe/Madrid.
+Puedes preguntar «¿Qué hay mañana?», «¿Cuál fue el menú de la semana pasada?»,
+«¿Qué hay el miércoles que viene?» o «¿Qué hay el 15 de marzo?».
+
+1. En el entorno HTTPS de `int`, establece `BETTER_AUTH_URL` al origen estable de la
+   rama. Añade `<origen>/api/mcp-auth/callback/google` a los callbacks autorizados
+   del cliente Google usado por Dalis Home. Conserva el callback de la web.
+2. Configura `MCP_OAUTH_CLIENTS` en ese entorno como un array JSON de objetos
+   `{"id":"dalis-home-int","secret":"<secreto-aleatorio-de-al-menos-32-caracteres>","redirectUri":"<URL-HTTPS-del-cliente>"}`.
+   Usa el callback que indique ChatGPT o el cliente MCP. Para añadir otro cliente,
+   asigna un ID y secreto propios y registra su callback exacto. Las credenciales
+   se gestionan por entorno.
+3. Registra el servidor como conector privado con OAuth en el cliente MCP.
+   Usa el ID y secreto configurados, el permiso `menu:read` y `offline_access`
+   si el cliente solicita renovación. Inicia sesión con una cuenta de
+   `ALLOWED_EMAILS` y consiente el acceso al menú.
+
+`MCP_OAUTH_CLIENTS` es opcional. El acceso MCP se habilita al configurarlo.
+El inicio de sesión de conexión y sus datos OAuth son independientes de la
+sesión web. El usuario debe poder abrir las páginas de conexión desde una red
+que cumpla el filtro geográfico de Dalis Home.
+
+La prueba aislada usa un contenedor desechable `mongo:8`, credenciales ficticias
+y un cliente SDK. Desde la raíz, ejecuta
+`bash apps/dalis-home-management/test/run-menu-mcp-http.sh`. La prueba con
+Google y ChatGPT reales requiere configurar el entorno HTTPS con sus callbacks.

@@ -15,6 +15,19 @@ describe("MongoDB index specifications", () => {
     expect(() => validateIndexSpecs(INDEX_SPECS)).not.toThrow()
   })
 
+  it("registers OAuth token and consent lookups in MCP collections", () => {
+    expect(INDEX_SPECS).toContainEqual({
+      collection: "mcp_oauth_refresh_token",
+      keys: { token: 1 },
+      options: { name: "token_unique", unique: true },
+    })
+    expect(INDEX_SPECS).toContainEqual({
+      collection: "mcp_oauth_consent",
+      keys: { clientId: 1, userId: 1 },
+      options: { name: "client_user_asc" },
+    })
+  })
+
   it("registers household task list and calendar indexes", () => {
     expect(INDEX_SPECS).toContainEqual({
       collection: "household_tasks",

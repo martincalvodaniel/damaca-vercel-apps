@@ -12,7 +12,7 @@ export const config: VercelConfig = {
   regions: ["cdg1"],
   routes: [
     {
-      src: "/(.*)",
+      src: "/((?!(?:api/integrations/mcp|api/mcp-auth/(?:oauth2/token|jwks)|\\.well-known/(?:oauth-authorization-server/api/mcp-auth|oauth-protected-resource/api/integrations/mcp))$).*)",
       missing: [
         {
           type: "header",

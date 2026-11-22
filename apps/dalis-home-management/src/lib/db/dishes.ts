@@ -100,6 +100,21 @@ export async function listDishes(): Promise<Dish[]> {
   return documents.map((document) => toDish(document, inventoryItemsById))
 }
 
+export async function findDishNamesByIds(
+  ids: readonly string[]
+): Promise<Map<string, string>> {
+  if (ids.length === 0) return new Map()
+
+  const collection = await getCollection<DishDocument>(COLLECTION_NAMES.dishes)
+  const dishes = await collection
+    .find<Pick<DishDocument, "_id" | "name">>(
+      { _id: { $in: ids.map(toObjectId) } },
+      { projection: { name: 1 } }
+    )
+    .toArray()
+  return new Map(dishes.map(({ _id, name }) => [_id.toHexString(), name]))
+}
+
 export async function findDishById(id: string): Promise<Dish | null> {
   const collection = await getCollection<DishDocument>(COLLECTION_NAMES.dishes)
   const document = await collection.findOne({ _id: toObjectId(id) })

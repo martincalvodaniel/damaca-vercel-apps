@@ -45,6 +45,41 @@ export const OBSOLETE_INDEX_SPECS: readonly ObsoleteIndexSpec[] = [
 // collection or query pattern. Do not add speculative indexes.
 export const INDEX_SPECS: readonly IndexSpec[] = [
   {
+    collection: "mcp_user",
+    keys: { email: 1 },
+    options: { name: "email_unique", unique: true },
+  },
+  {
+    collection: "mcp_session",
+    keys: { token: 1 },
+    options: { name: "token_unique", unique: true },
+  },
+  {
+    collection: "mcp_account",
+    keys: { providerId: 1, accountId: 1 },
+    options: { name: "provider_account" },
+  },
+  {
+    collection: "mcp_verification",
+    keys: { identifier: 1 },
+    options: { name: "identifier_asc" },
+  },
+  {
+    collection: "mcp_oauth_refresh_token",
+    keys: { token: 1 },
+    options: { name: "token_unique", unique: true },
+  },
+  {
+    collection: "mcp_oauth_access_token",
+    keys: { token: 1 },
+    options: { name: "token_unique", unique: true },
+  },
+  {
+    collection: "mcp_oauth_consent",
+    keys: { clientId: 1, userId: 1 },
+    options: { name: "client_user_asc" },
+  },
+  {
     collection: "household_tasks",
     keys: { name: 1 },
     options: { name: "name_asc", collation: { locale: "es", strength: 1 } },
