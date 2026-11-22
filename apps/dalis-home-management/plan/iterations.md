@@ -1,5 +1,14 @@
 # Iteraciones
 
+## HM-23 — Consultar el menú por MCP
+
+- Estado: `validated`.
+- Objetivo: consultar comida y cena por día o semana desde ChatGPT y otros clientes MCP.
+- Rutas: menú, endpoint MCP, OAuth de conexión y configuración de despliegue de Dalis Home.
+- Aceptación: una herramienta de solo lectura con periodos relativos y fechas ISO, calendario de Madrid y autorización vigente. Sesiones web y de conexión independientes.
+- Validación: Biome incremental, tipos, pruebas, build, recorrido OAuth/MCP aislado y navegador. La comprobación con Google y ChatGPT reales corresponde a la activación del conector HTTPS.
+- Evidencia: [HM-23](iteration-log.md#hm-23--consultar-el-menú-por-mcp).
+
 ## HM-22 — Clonar platos
 
 - Estado: `validated`.
@@ -147,7 +156,7 @@ El contrato común de planificación para esta app se estableció en la entrega 
 - Dependencias: controles compactos y acciones autenticadas de HM-11/HM-12; sin dependencias nuevas ni cambios fuera de Home Management.
 - Aceptación: filtro y añadir antes del contador; restauración idempotente de archivadas; acciones del histórico en la misma fila de fecha; check reversible sin confirmación que crea/elimina el histórico; evento pendiente con borrar y asa al extremo derecho; eliminar estados redundantes.
 - Validación prevista: Biome incremental, tipos, tests, build Webpack y revisión del diff/documentación.
-- Evidencia: [HM-13](iteration-log.md#hm-13--controles-compactos-y-restauración-de-tareas).
+- Evidencia: [HM-13](archive/2026-11-22/iteration-log.md#hm-13--controles-compactos-y-restauración-de-tareas).
 
 ## HM-14 — Estados de check y orden de controles
 

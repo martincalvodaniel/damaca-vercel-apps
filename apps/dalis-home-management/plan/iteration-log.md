@@ -17,6 +17,18 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - [HM-10 — Sistema de color cohesionado y accesible](archive/2026-11-14/iteration-log.md#hm-10--sistema-de-color-cohesionado-y-accesible).
 - [HM-11 — Tareas recurrentes del hogar](archive/2026-11-14/iteration-log.md#hm-11--tareas-recurrentes-del-hogar).
 - [HM-12 — Densidad móvil coherente en Tareas](archive/2026-11-14/iteration-log.md#hm-12--densidad-móvil-coherente-en-tareas).
+- [HM-13 — Controles compactos y restauración de tareas](archive/2026-11-22/iteration-log.md#hm-13--controles-compactos-y-restauración-de-tareas).
+
+## HM-23 — Consultar el menú por MCP
+
+- Inicio: 2026-11-22, 10:25 CET, sobre `int` limpia. Capacidad inicial: 82% de 5h y 48% de 7d.
+- [Alcance y aceptación](iterations.md#hm-23--consultar-el-menú-por-mcp). `get_menu` consulta comida y cena por día ISO, semana ISO o periodo relativo. El servidor usa el calendario de Madrid y los repositorios del menú web. OAuth usa cookies y colecciones dedicadas.
+- Pruebas locales: 191 tests, incluidos cambios de semana y año, fecha bisiesta, huecos y referencias sin plato. Tipos y build de Next correctos.
+- `bash apps/dalis-home-management/test/run-menu-mcp-http.sh`: descubrimiento, consentimiento y denegación, renovación, catálogo y consulta MCP, validación de tokens y cuenta retirada. Confirmados los callbacks independientes de MCP y web.
+- Chrome con datos ficticios: ambas pantallas a 320, 390 y 1440 px en claro y oscuro, sin desbordamiento y con orden de foco verificado. El inicio por teclado abrió la autorización de Google con el callback MCP esperado, con la navegación externa interceptada.
+- `bun run lint --staged` y `git diff --cached --check` correctos.
+- El entorno HTTPS queda pendiente de registrar el callback de Google y configurar el cliente OAuth privado de ChatGPT. La validación local usa datos y credenciales ficticios.
+- Referencia remota previa a publicación: `882b6d788c0d89be93033d34ed1c9120a4ac5505`, igual a la base local.
 
 ## HM-22 — Clonar platos
 
@@ -25,13 +37,6 @@ Evidencia observada por entrega. El estado de cada iteración se consulta en `it
 - Tipos, 187 tests y build de la app con Webpack correctos. Biome comprobó los cinco TSX editados sin hallazgos tras aplicar su formato.
 - Chrome con componentes reales, datos ficticios y acciones simuladas: 320, 390 y 1440 px en claro y oscuro. Confirmados orden, foco visible, ausencia de desbordamiento, valores precargados, cancelación sin escritura y envío a creación sin actualizar el original. Sin escrituras en MongoDB.
 - Referencia remota previa a publicación: `4962cc364e5ea89e15960b2dac5a5ff2fb443fb7`, igual a la base local.
-
-## HM-13 — Controles compactos y restauración de tareas
-
-- Inicio 2026-11-02 sobre `int`, con HM-12 publicada como base y sin cambios fuera de Home Management. Alcance limitado a la nueva página y sus acciones de persistencia.
-- Reordenada la barra superior para colocar el filtro de archivadas/activas y añadir antes del contador. Las tareas archivadas muestran acción de restaurar; el servidor valida la transición y la hace idempotente.
-- El histórico alinea corrección y eliminación con la fecha en una única fila. En la lista diaria, el check queda a la izquierda del nombre y alterna completar/deshacer sin confirmación: completar genera la ejecución con hoy y deshacer elimina o devuelve a pendiente el registro correspondiente. Las programaciones pendientes muestran borrar inmediatamente antes del asa de arrastre al extremo derecho; se eliminan los textos redundantes de estado.
-- `bunx biome check --write` y comprobación Biome final sobre los archivos editados: correctos. `bun run type-check --filter=@damaca/dalis-home-management`: correcto. `bun run test --filter=@damaca/dalis-home-management`: 182 pruebas correctas, 0 fallos, incluyendo restauración idempotente. Build y publicación se verifican al cierre.
 
 ## HM-14 — Estados de check y orden de controles
 

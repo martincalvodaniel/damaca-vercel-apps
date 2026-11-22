@@ -1,10 +1,18 @@
 import { getSessionCookie } from "better-auth/cookies"
 import { type NextRequest, NextResponse } from "next/server"
 
+import { mcpAuthPath, mcpConnectPath, mcpPath } from "@/lib/auth/mcp-paths"
+
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
 
-  if (pathname.startsWith("/auth") || pathname.startsWith("/api/auth")) {
+  if (
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/api/auth") ||
+    pathname === mcpPath ||
+    pathname.startsWith(`${mcpAuthPath}/`) ||
+    pathname.startsWith(`${mcpConnectPath}/`)
+  ) {
     return NextResponse.next()
   }
 

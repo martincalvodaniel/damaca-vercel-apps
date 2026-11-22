@@ -2,6 +2,11 @@
 
 ## Estado vigente
 
+El MCP privado ofrece la consulta de comida y cena del calendario compartido por
+día o semana, con fechas relativas resueltas en Europe/Madrid. El acceso usa
+OAuth separado de la sesión web con cuentas de Google autorizadas. La
+configuración y verificación de cada entorno se documentan en [HM-23](iterations.md#hm-23--consultar-el-menú-por-mcp).
+
 El recetario permite clonar un plato para crear una variante con su nombre, ingredientes, cantidades y notas como punto de partida. La variante se guarda como plato independiente.
 
 Las completadas del día ofrecen corrección/eliminación y etiqueta de autor con sus colores comunes. El buscador de Tareas ignora mayúsculas y diacríticos.

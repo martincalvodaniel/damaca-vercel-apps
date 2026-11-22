@@ -65,3 +65,7 @@ export function getDatabaseEnv() {
     uri: getRequiredEnv("MONGODB_URI"),
   }
 }
+
+export function getMcpOAuthClientsConfig() {
+  return process.env.MCP_OAUTH_CLIENTS?.trim()
+}

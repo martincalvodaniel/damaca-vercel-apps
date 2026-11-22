@@ -3,7 +3,13 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "env": ["VERCEL_GIT_COMMIT_REF"]
+      "env": [
+        "VERCEL_GIT_COMMIT_REF",
+        "BETTER_AUTH_URL",
+        "ALLOWED_EMAILS",
+        "MONGODB_DB"
+      ],
+      "passThroughEnv": ["MCP_OAUTH_CLIENTS"]
     }
   }
 }
