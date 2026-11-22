@@ -63,3 +63,8 @@
 
 - [#22](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/22): descripciones de las siete herramientas, instrucciones del servidor abreviadas y metadatos de campos para búsqueda y consentimiento.
 - Biome en los cuatro archivos TypeScript editados, tipos, build y 66 pruebas de Digest aprobados. Un cliente MCP en memoria recibió las siete herramientas y la descripción de búsqueda en `tools/list`. Pendiente verificar la vista del conector publicado.
+
+## 43 — Consultar temas con permiso de lectura
+
+- [#23](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/23): lectura y captura autorizan el catálogo del propietario.
+- Biome, tipos, 67 pruebas y build webpack aprobados. La integración HTTP con MongoDB temporal verificó equivalencia entre ambos permisos y aislamiento de una segunda cuenta. La prueba MCP en memoria comprobó la denegación sin ninguno de los permisos.

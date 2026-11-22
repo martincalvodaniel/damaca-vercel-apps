@@ -303,7 +303,9 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 
 ## 43 — Consultar temas con permiso de lectura
 
-- Estado: `pending`.
+- Estado: `validated`.
+- Rutas: servidor MCP, ruta de integración y pruebas del contrato.
+- Validación: Biome, tipos, pruebas de permisos y build.
 - Objetivo: [#23](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/23).
 - Aceptación: permitir lectura o captura y verificar aislamiento y denegación.
 

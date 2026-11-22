@@ -4,7 +4,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
 import { scopeRequired } from "@/features/articles/mcp-scope"
 import { filterTopicLabels } from "@/features/topics/catalog"
-import { captureScope } from "@/lib/auth/mcp-config"
+import { captureScope, readScope } from "@/lib/auth/mcp-config"
 import { type ArticleCapture, captureArticle } from "@/schemas/article"
 import { topicSearch } from "@/schemas/topic"
 
@@ -21,7 +21,7 @@ type CaptureResult = z.infer<typeof captureResult>
 export function createArticleServer(
   save: (entry: ArticleCapture) => Promise<CaptureResult | null>,
   list: () => Promise<{ id: string; label: string; aliases: string[] }[]>,
-  canCapture: boolean
+  { canCapture, canRead }: { canCapture: boolean; canRead: boolean }
 ) {
   const server = new McpServer(
     { name: "Damaca Digest", version: "1.0.0" },
@@ -99,10 +99,15 @@ export function createArticleServer(
         idempotentHint: true,
         openWorldHint: false,
       },
-      _meta: { securitySchemes: [{ type: "oauth2", scopes: [captureScope] }] },
+      _meta: {
+        securitySchemes: [
+          { type: "oauth2", scopes: [readScope] },
+          { type: "oauth2", scopes: [captureScope] },
+        ],
+      },
     },
     async ({ query, page }) => {
-      if (!canCapture) return scopeRequired(captureScope)
+      if (!canRead && !canCapture) return scopeRequired(readScope)
       try {
         const matches = filterTopicLabels(await list(), query)
         const pageSize = 40

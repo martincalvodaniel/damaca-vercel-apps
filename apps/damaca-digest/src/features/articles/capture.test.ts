@@ -78,7 +78,7 @@ it("registers the capture schema and returns structured results over MCP", async
   const server = createArticleServer(
     async () => result,
     async () => [{ id: "fixture", label: "Engineering", aliases: [] }],
-    true
+    { canCapture: true, canRead: false }
   )
   await server.connect(serverTransport)
   await client.connect(clientTransport)
@@ -108,5 +108,47 @@ it("registers the capture schema and returns structured results over MCP", async
   } finally {
     await client.close()
     await server.close()
+  }
+})
+
+it("allows either library scope to list topics and denies requests without either", async () => {
+  const permissions = [
+    { canRead: true, canCapture: false },
+    { canRead: false, canCapture: true },
+    { canRead: false, canCapture: false },
+  ]
+  for (const access of permissions) {
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair()
+    const client = new Client({ name: "Digest scope test", version: "1.0.0" })
+    let calls = 0
+    const server = createArticleServer(
+      async () => null,
+      async () => {
+        calls += 1
+        return []
+      },
+      access
+    )
+    await server.connect(serverTransport)
+    await client.connect(clientTransport)
+    try {
+      const response = await client.callTool({
+        name: "list_topics",
+        arguments: {},
+      })
+      const allowed = access.canRead || access.canCapture
+      expect(response.isError ?? false).toBe(!allowed)
+      expect(response.structuredContent).toEqual(
+        allowed ? { topics: [], nextPage: null } : undefined
+      )
+      expect(
+        JSON.stringify(response._meta ?? {}).includes("articles:read")
+      ).toBe(!allowed)
+      expect(calls).toBe(allowed ? 1 : 0)
+    } finally {
+      await client.close()
+      await server.close()
+    }
   }
 })
