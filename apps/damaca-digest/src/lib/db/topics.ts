@@ -31,6 +31,7 @@ async function legacyTopics(ownerId: string, session?: ClientSession) {
     {
       ownerId,
       "topicIds.0": { $exists: false },
+      proposedTopics: { $exists: true },
     },
     { session }
   )

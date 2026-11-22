@@ -45,7 +45,7 @@ export async function POST(request: Request) {
           label,
           aliases,
         })),
-      owner.canCapture
+      { canCapture: owner.canCapture, canRead: owner.canRead }
     )
     registerFetchTool(server, owner.ownerId, owner.canCapture, request.signal)
     registerReadingTools(server, owner.ownerId, owner.canRead, resource)

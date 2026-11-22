@@ -631,6 +631,14 @@ try {
   assert.match(writerRead._meta["mcp/www_authenticate"][0], /articles:read/)
   const reader = await authorize(first.cookie, "basic", readScope)
   const otherReader = await authorize(second.cookie, "post", readScope)
+  assert.deepEqual(
+    await vocabularyFor(reader, "artificial intelligence"),
+    await vocabularyFor(token, "artificial intelligence")
+  )
+  assert.deepEqual(
+    await vocabularyFor(otherReader, "artificial intelligence"),
+    []
+  )
   const recoveryUrl = "https://8.8.8.8/digest-http-fixture"
   const deniedFetch = await invoke(reader, "fetch_article", {
     url: recoveryUrl,
@@ -642,6 +650,11 @@ try {
   })
   assert.equal(deniedDestination.isError, true)
   const recovery = await invoke(token, "fetch_article", { url: recoveryUrl })
+  assert.equal(recovery.content[0].type, "text")
+  assert.deepEqual(
+    JSON.parse(recovery.content[0].text),
+    recovery.structuredContent
+  )
   assert.equal(recovery.structuredContent.accessStatus, "unavailable")
   assert.equal(recovery.structuredContent.content, undefined)
   assert.equal(recovery.structuredContent.attempts.length, 3)

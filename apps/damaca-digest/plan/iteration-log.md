@@ -4,26 +4,7 @@
 
 [Entregas archivadas el 2026-11-21](archive/2026-11-21/iteration-log.md).
 
-## 31 — Abrir artículos en otra pestaña y aclarar los iconos de ChatGPT
-
-- Las fichas, originales y referencias abren otra pestaña. Capture usa la silueta de ChatGPT facilitada por el usuario y añade un distintivo de copia en la acción combinada.
-- Biome, tipos, 50 pruebas y build pasaron. Chrome comprobó la nueva pestaña, el icono servido y ambas variantes a 320 y 1280 px.
-
-## 32 — Recuperar fuentes de artículos desde MCP
-
-- Pasaron tipos, 57 pruebas, build con Turbopack e integración HTTP con Webpack, OAuth y MongoDB 8 desechable. Las fixtures cubren caché de proveedor desactivada, redirección hacia metadata, DNS mixto y fijación de IP, longitud HTML descomprimida, páginas de bloqueo, cuotas y cancelación. MongoDB confirmó el diagnóstico persistido, la ausencia de escritura al recuperar y que las recapturas conservan las ediciones.
-- El piloto externo requiere comprobar el tiempo efectivo en ChatGPT, la comparación con lectura nativa y Firecrawl con una clave de prueba. Los flags de fábrica quedan desactivados.
-
-## 34 — Rechazar interfaces como contenido editorial
-
-- Una fixture formada por controles de vídeo, publicidad y navegación reprodujo el falso positivo: el clasificador anterior devolvía `full` al superar doce palabras. La limpieza compartida ahora elimina controles y enlaces aislados antes del recorte y exige prosa editorial; los títulos y menús no cuentan como evidencia. Un resultado sin cuerpo útil deja disponible el parcial de un proveedor anterior.
-- Pasaron Biome incremental, tipos, 60 pruebas y build con integración HTTP/OAuth sobre MongoDB 8 desechable. Se cubren artículo breve, referencias inline, controles de vídeo y cookies, navegación extensa antes del cuerpo y conservación del parcial.
-- La URL pública exacta facilitada por el usuario se probó con Jina: 42.069 caracteres de entrada, 30.052 tras la limpieza, clasificados como `full` sin recorte. El cuerpo real de Firecrawl no estaba disponible para reproducirlo localmente; la regresión reproduce el contenido de interfaz descrito en la captura. Falta la comprobación en ChatGPT tras desplegar.
-
-## 35 — Unificar las acciones de lectura y edición
-
-- Lectura y edición comparten la secuencia de estados. El editor permite volver a la ficha sin guardar. La confirmación de borrado y el borrado de filtros usan botones de icono accesibles.
-- Pasaron Biome, tipos, 60 pruebas y la integración HTTP con build y MongoDB desechable. La integración recorre las cuatro transiciones desde la vista de lectura.
+[Entregas archivadas el 2026-11-22](archive/2026-11-22/iteration-log.md).
 
 ## 36 — Borrar topics vacíos
 
@@ -58,3 +39,24 @@
 - Pasaron Biome incremental, tipos, 66 pruebas, build Webpack e integración HTTP con MongoDB 8 desechable. Los fixtures cubren oferta sin tráfico externo, envío confirmado simulado, aislamiento por URL y cuenta, caducidad, repetición y consumo concurrente.
 - Queda por validar el diálogo de ChatGPT con el conector actualizado en Preview.
 - Capacidad al inicio, 81 % en 5 h y 56 % en 7 días.
+
+## 42 — Aclarar el contrato MCP para agentes
+
+- [#22](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/22): descripciones de las siete herramientas, instrucciones del servidor abreviadas y metadatos de campos para búsqueda y consentimiento.
+- Biome en los cuatro archivos TypeScript editados, tipos, build y 66 pruebas de Digest aprobados. Un cliente MCP en memoria recibió las siete herramientas y la descripción de búsqueda en `tools/list`. Pendiente verificar la vista del conector publicado.
+
+## 43 — Consultar temas con permiso de lectura
+
+- [#23](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/23): lectura y captura autorizan el catálogo del propietario.
+- Biome, tipos, 67 pruebas y build webpack aprobados. La integración HTTP con MongoDB temporal verificó equivalencia entre ambos permisos y aislamiento de una segunda cuenta. La prueba MCP en memoria comprobó la denegación sin ninguno de los permisos.
+
+## 44 — Verificar respuestas MCP en clientes de solo texto
+
+- [#24](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/24): `fetch_article` devuelve el mismo JSON validado en texto y en `structuredContent`. La representación textual incluye la oferta cuando se emite. Las dos representaciones duplican el cuerpo en el transporte.
+- Biome, tipos, 67 pruebas y build webpack aprobados. La integración HTTP con MongoDB temporal verificó la oferta de consentimiento en ambos formatos sin llamar a extractores. Una prueba MCP en memoria con recuperación simulada verificó cuerpo y diagnósticos en ambos formatos.
+
+## 45 — Medir el coste del catálogo MCP
+
+- [#25](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/25): índice parcial `owner_legacy_topics` para la consulta de etiquetas históricas. La consulta conserva el criterio de artículos sin IDs de tema.
+- Benchmark local de 30 consultas por escenario en MongoDB 8 aislado, con 50 etiquetas históricas, un alias fusionado y consultas alternas de alias e históricas. Con 2.000 artículos y 200 temas, la mediana pasó de 20,99 a 9,37 ms. Con 25.000 artículos y 2.000 temas, pasó de 187,25 a 19,33 ms y el p95 de 503,94 a 29,81 ms. La mediana del filtrado en memoria fue inferior a 1 ms. Son tiempos de repositorio y filtrado local.
+- Se conservaron el alias fusionado, los temas históricos y el tamaño de página. Pasaron Biome, tipos, 68 pruebas, build webpack e integración HTTP OAuth/MCP con MongoDB aislado.
