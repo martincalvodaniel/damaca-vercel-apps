@@ -58,3 +58,8 @@
 - Pasaron Biome incremental, tipos, 66 pruebas, build Webpack e integración HTTP con MongoDB 8 desechable. Los fixtures cubren oferta sin tráfico externo, envío confirmado simulado, aislamiento por URL y cuenta, caducidad, repetición y consumo concurrente.
 - Queda por validar el diálogo de ChatGPT con el conector actualizado en Preview.
 - Capacidad al inicio, 81 % en 5 h y 56 % en 7 días.
+
+## 42 — Aclarar el contrato MCP para agentes
+
+- [#22](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/22): descripciones de las siete herramientas, instrucciones del servidor abreviadas y metadatos de campos para búsqueda y consentimiento.
+- Biome en los cuatro archivos TypeScript editados, tipos, build y 66 pruebas de Digest aprobados. Un cliente MCP en memoria recibió las siete herramientas y la descripción de búsqueda en `tools/list`. Pendiente verificar la vista del conector publicado.

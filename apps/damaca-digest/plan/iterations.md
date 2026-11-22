@@ -292,3 +292,29 @@ Este archivo registra el estado de cada corte. Se aplica el [workflow común](..
 - Dependencias: OAuth, controles de recuperación, clave de firma y TTL de MongoDB existentes.
 - Aceptación: contrato retrocompatible, envío autorizado de un solo uso y flag apagado por defecto.
 - Validación: Biome, tipos, fixtures, build e integración HTTP aislada.
+
+## 42 — Aclarar el contrato MCP para agentes
+
+- Estado: `validated` (verificación local del contrato).
+- Objetivo: [#22](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/22), dentro del mapa [#21](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/21).
+- Rutas: declaraciones de herramientas MCP y esquemas de Digest.
+- Aceptación: las siete descripciones orientan la selección y detallan las restricciones que afectan a las llamadas, conservando el comportamiento.
+- Validación: Biome, tipos, pruebas, build y revisión de metadatos MCP.
+
+## 43 — Consultar temas con permiso de lectura
+
+- Estado: `pending`.
+- Objetivo: [#23](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/23).
+- Aceptación: permitir lectura o captura y verificar aislamiento y denegación.
+
+## 44 — Verificar respuestas MCP en clientes de solo texto
+
+- Estado: `pending`.
+- Objetivo: [#24](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/24).
+- Aceptación: comprobar recuperación y consentimiento en ambos formatos con datos simulados.
+
+## 45 — Medir el coste del catálogo MCP
+
+- Estado: `pending`.
+- Objetivo: [#25](https://github.com/martincalvodaniel/damaca-vercel-apps/issues/25).
+- Aceptación: medir con datos sintéticos y optimizar si se justifica, conservando alias y temas históricos.

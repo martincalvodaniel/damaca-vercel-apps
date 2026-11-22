@@ -2,11 +2,16 @@ import { z } from "zod"
 import { accessStatus, contentType, readingStatus } from "@/schemas/article"
 
 const filterText = (max: number) => z.string().trim().min(1).max(max).optional()
-const date = z.iso.date().optional()
+const date = z.iso
+  .date()
+  .optional()
+  .describe("Inclusive UTC date in YYYY-MM-DD format.")
 
 const libraryFilters = {
-  q: filterText(200),
-  topic: filterText(100),
+  q: filterText(200).describe(
+    "Keywords matched against title, authors, summary, source and takeaways."
+  ),
+  topic: filterText(100).describe("Topic label or alias from the library."),
   author: filterText(150),
   source: filterText(180),
   language: filterText(35),
